@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#100d16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="深淵樹迷宮">
+<link rel="manifest" href="manifest.webmanifest">
+<title>深淵樹迷宮：Abyssal Roots</title>
+<style>
+:root{
+  --bg:#100d16;--panel:#191420;--panel2:#241b2c;--line:#4b3c58;
+  --text:#f2edf7;--muted:#b7a9c1;--gold:#e1b85b;--danger:#d86171;
+  --good:#71c79a;--magic:#79a9ff;--rare:#d583ff;--legend:#ffad4d;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0,#292034 0,#100d16 48%,#09070d 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;overscroll-behavior:none}
+body{display:flex;justify-content:center}
+button{font:inherit;color:inherit}
+#app{width:min(100%,480px);min-height:100svh;padding:calc(env(safe-area-inset-top) + 4px) 8px calc(env(safe-area-inset-bottom) + 8px);overflow-x:hidden}
+header{display:flex;justify-content:space-between;align-items:end;margin:2px 2px 8px}
+h1{font-size:18px;margin:0;letter-spacing:.08em}
+.ver{font-size:10px;color:var(--muted)}
+#stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:6px}
+.stat{background:linear-gradient(180deg,#211928,#17121d);border:1px solid var(--line);border-radius:9px;padding:5px 6px;text-align:center;box-shadow:0 3px 12px #0007}
+.stat b{display:block;font-size:13px;color:var(--gold)}
+.stat small{font-size:9px;color:var(--muted)}
+#hero{display:block;margin-bottom:7px}
+.member{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:6px;overflow:hidden}
+.member.dead{filter:grayscale(1);opacity:.55}
+.member .name{font-size:11px;font-weight:700}
+.member .role{font-size:9px;color:var(--muted)}
+.bar{height:5px;background:#0c0910;border-radius:4px;overflow:hidden;margin-top:4px}
+.fill{height:100%;background:linear-gradient(90deg,#a02e42,#e66b77)}
+.member .hp{font-size:9px;margin-top:2px;text-align:right}
+#gameWrap{position:relative;border:1px solid #655271;border-radius:12px;overflow:hidden;background:#050407;box-shadow:0 10px 30px #000a}
+canvas{display:block;width:100%;height:auto;max-height:48svh;object-fit:contain;touch-action:none;image-rendering:pixelated}
+#floorBanner{position:absolute;inset:42% 12% auto;background:#100d16e8;border:1px solid var(--gold);border-radius:10px;text-align:center;padding:12px;font-weight:800;letter-spacing:.1em;pointer-events:none;opacity:0;transform:scale(.9);transition:.25s}
+#floorBanner.show{opacity:1;transform:scale(1)}
+#log{height:52px;overflow:hidden;background:#0e0b12;border:1px solid #372e40;border-radius:8px;margin:7px 0;padding:5px 7px;font-size:10px;line-height:1.35;color:#d4c9dc}
+#actions{display:grid;grid-template-columns:1fr 1.1fr;gap:8px;align-items:center}
+#dpad{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,42px);justify-content:center}
+.ctrl,.skill,.miniBtn,.choiceBtn,.modalBtn{border:1px solid #675574;background:linear-gradient(180deg,#32263c,#1b1521);border-radius:10px;box-shadow:0 4px 0 #0b080d,0 6px 12px #0007;font-weight:800}
+.ctrl:active,.skill:active,.miniBtn:active,.choiceBtn:active,.modalBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #0b080d}
+.ctrl{font-size:20px}
+#up{grid-column:2;grid-row:1}#left{grid-column:1;grid-row:2}#wait{grid-column:2;grid-row:2;font-size:12px}#right{grid-column:3;grid-row:2}#down{grid-column:2;grid-row:3}
+#skills{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.skill{min-height:54px;padding:5px;font-size:11px}
+.skill span{display:block;font-size:9px;color:var(--muted);font-weight:500;margin-top:2px}
+.skill:disabled{opacity:.45}
+#footerBtns{display:flex;gap:6px;margin-top:9px}
+.miniBtn{flex:1;padding:8px 5px;font-size:11px}
+.overlay{position:fixed;inset:0;background:#08060bcc;backdrop-filter:blur(5px);z-index:10;display:flex;align-items:flex-start;justify-content:center;padding:calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 10px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.card{width:min(100%,430px);max-height:none;overflow:visible;background:linear-gradient(180deg,#282031,#151019);border:1px solid #705f7c;border-radius:16px;padding:18px;box-shadow:0 20px 70px #000}
+.card h2{margin:0 0 8px;font-size:22px}
+.card p{font-size:13px;line-height:1.7;color:#d6cbdc}
+.card .sub{color:var(--gold);font-weight:700}
+.modalBtn{width:100%;padding:12px;margin-top:9px}
+.hidden{display:none!important}
+.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:11px;color:var(--muted);margin:10px 0}
+#inventoryList{display:grid;gap:7px}
+.itemRow{border:1px solid #51415d;border-radius:10px;background:#17111d;padding:9px}
+.itemRow .top{display:flex;justify-content:space-between;gap:6px;font-size:12px;font-weight:700}
+.itemRow .desc{font-size:10px;color:var(--muted);margin-top:4px}
+.itemRow button{margin-top:7px;width:100%;border:1px solid #665276;background:#2a2033;border-radius:8px;padding:7px}
+.common{color:#eee}.magic{color:var(--magic)}.rare{color:var(--rare)}.legendary{color:var(--legend)}
+#levelChoices{display:grid;gap:9px}
+.choiceBtn{text-align:left;padding:12px}
+.choiceBtn b{display:block;color:var(--gold);margin-bottom:4px}
+.choiceBtn small{color:var(--muted)}
+.note{font-size:10px;color:var(--muted);margin-top:10px}
+@media (max-height:760px){
+  #app{padding-top:4px}.member{padding:4px}#log{height:38px}#dpad{grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,36px)}.skill{min-height:45px}
+}
+
+.staminaBar{height:7px;background:#0b0910;border:1px solid #44384d;border-radius:5px;overflow:hidden;margin-top:5px}
+.staminaFill{height:100%;background:linear-gradient(90deg,#d5b443,#f2dd7c)}
+.intent{color:#ff7484;font-weight:800;animation:pulse .8s infinite alternate}
+@keyframes pulse{from{opacity:.55}to{opacity:1}}
+
+
+@media (max-height:820px){
+  header{margin-bottom:4px}
+  h1{font-size:16px}
+  #stats{gap:4px;margin-bottom:4px}
+  .stat{padding:4px}
+  #hero{margin-bottom:4px}
+  .member{padding:5px}
+  #log{height:34px;margin:4px 0}
+  #actions{gap:5px}
+  #dpad{grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,34px)}
+  .skill{min-height:42px;padding:4px}
+  #footerBtns{margin-top:5px}
+  .miniBtn{padding:6px 4px}
+  .card{padding:14px}
+  .card h2{font-size:20px}
+  .card p{font-size:12px;line-height:1.5}
+  .choiceBtn{padding:10px}
+}
+
+</style>
+</head>
+<body>
+<div id="app">
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 0.4.1 FIX</span></header>
+<section id="stats"></section>
+<section id="hero"></section>
+<div id="gameWrap">
+<canvas id="game" width="374" height="462" aria-label="ダンジョン"></canvas>
+<div id="floorBanner"></div>
+</div>
+<div id="log"></div>
+<section id="actions">
+  <div id="dpad">
+    <button class="ctrl" id="up">▲</button>
+    <button class="ctrl" id="left">◀</button>
+    <button class="ctrl" id="wait">休息</button>
+    <button class="ctrl" id="right">▶</button>
+    <button class="ctrl" id="down">▼</button>
+  </div>
+  <div id="skills">
+    <button class="skill" id="guard">構え<span>予兆を防御 / 気力3</span></button>
+    <button class="skill" id="volley">武器技<span>装備で変化 / CD5</span></button>
+    <button class="skill" id="heal">治癒<span>自分を回復 / CD7</span></button>
+    <button class="skill" id="search">探索<span>罠を看破 / CD6</span></button>
+  </div>
+</section>
+<div id="footerBtns">
+  <button class="miniBtn" id="inventoryBtn">装備・荷物</button>
+  <button class="miniBtn" id="saveBtn">保存</button>
+  <button class="miniBtn" id="helpBtn">遊び方</button>
+</div>
+</div>
+
+<div class="overlay" id="titleOverlay">
+  <div class="card">
+    <h2>深淵樹迷宮</h2>
+    <p class="sub">迷宮探索 × 完全ソロ × 予兆を読む戦闘 × 武器ビルド</p>
+    <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
+    <div class="legend">
+      <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
+      <div>Wizardry：暗闇・罠・死の重さ</div><div>Diablo：武器ビルド・接辞装備</div>
+    </div>
+    <button type="button" class="modalBtn" id="newGameBtn">新しい探索を始める</button>
+    <button type="button" class="modalBtn hidden" id="continueBtn">続きから</button>
+    <p class="note">画面はiPhone縦持ち向けです。スワイプまたは方向ボタンで移動します。</p>
+  </div>
+</div>
+
+
+<div class="overlay hidden" id="starterOverlay">
+  <div class="card">
+    <h2>最初の武器</h2>
+    <p>職業はありません。選んだ武器が、最初の戦い方になります。武器は迷宮内でいつでも持ち替えられます。</p>
+    <div id="starterChoices">
+      <button type="button" class="choiceBtn starterBtn" data-weapon="sword"><b>剣</b><small>気力3。隣接攻撃。撃破時に近くの敵へ追撃。</small></button>
+      <button type="button" class="choiceBtn starterBtn" data-weapon="spear"><b>槍</b><small>気力4。2マス先まで突け、敵の背後にも貫通。</small></button>
+      <button type="button" class="choiceBtn starterBtn" data-weapon="bow"><b>弓</b><small>気力4。直線4マス射撃。ただし隣接時は撃てない。</small></button>
+      <button type="button" class="choiceBtn starterBtn" data-weapon="staff"><b>杖</b><small>気力5。魔撃の周囲にも半分の損害。</small></button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="inventoryOverlay">
+  <div class="card">
+    <h2>装備・荷物</h2>
+    <p id="equipSummary"></p>
+    <div id="inventoryList"></div>
+    <button class="modalBtn" id="closeInventory">閉じる</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="levelOverlay">
+  <div class="card">
+    <h2>樹脈の恩恵</h2>
+    <p>探索者が成長しました。ひとつ選んでください。</p>
+    <div id="levelChoices"></div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="helpOverlay">
+  <div class="card">
+    <h2>遊び方</h2>
+    <p>
+      移動・待機・スキルを使うたびに1ターン進み、敵も行動します。方向入力は、武器の射程内に敵がいれば攻撃、いなければ移動です。攻撃にはスタミナを使い、敵の赤い予兆は次のターンに実行されます。
+      予兆を見て、退く・構える・先に倒すを選んでください。剣は軽快、槍は間合い、弓は近距離不可、杖は高消費の範囲攻撃です。階段 <b style="color:#e1b85b">▼</b> に乗ると次の階へ進みます。
+      主人公のHPが0になると、その探索は終了します。
+    </p>
+    <p>記号：<b>@</b>主人公 / <b>S</b>骸兵 / <b>W</b>獣 / <b>!</b>装備 / <b>◇</b>食料 / <b>^</b>発見済み罠</p>
+    <button class="modalBtn" id="closeHelp">閉じる</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="gameOverOverlay">
+  <div class="card">
+    <h2>探索者は深淵に消えた</h2>
+    <p id="gameOverText"></p>
+    <button class="modalBtn" id="restartBtn">新しい探索者で再挑戦</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+const COLS=17, ROWS=21, TILE=22;
+const canvas=document.getElementById("game"), ctx=canvas.getContext("2d");
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const dirs=[[0,-1],[1,0],[0,1],[-1,0]];
+const rarityData={
+ common:{label:"通常",mul:1,color:"#eeeeee"},
+ magic:{label:"魔法",mul:1.35,color:"#79a9ff"},
+ rare:{label:"希少",mul:1.75,color:"#d583ff"},
+ legendary:{label:"伝説",mul:2.35,color:"#ffad4d"}
+};
+const weaponData={
+ sword:{label:"剣",symbol:"剣",skill:"旋撃",skillDesc:"隣接全体 / 気力6",cost:3,minRange:1,maxRange:1},
+ spear:{label:"槍",symbol:"槍",skill:"貫突",skillDesc:"直線3マス / 気力7",cost:4,minRange:1,maxRange:2},
+ bow:{label:"弓",symbol:"弓",skill:"連射",skillDesc:"遠距離2射 / 気力7",cost:4,minRange:2,maxRange:4},
+ staff:{label:"杖",symbol:"杖",skill:"火花",skillDesc:"範囲魔撃 / 気力8",cost:5,minRange:1,maxRange:4}
+};
+let state=null, touchStart=null, bannerTimer=null;
+
+function rng(){ state.seed=(state.seed*1664525+1013904223)>>>0; return state.seed/4294967296; }
+function rint(a,b){return Math.floor(rng()*(b-a+1))+a}
+function choice(a){return a[Math.floor(rng()*a.length)]}
+function key(x,y){return x+","+y}
+function inside(x,y){return x>=0&&y>=0&&x<COLS&&y<ROWS}
+function tile(x,y){return inside(x,y)?state.map[y][x]:0}
+function addLog(t){state.log.unshift(t);state.log=state.log.slice(0,5);renderLog()}
+function freshState(){
+ return{
+  version:4,seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,
+  hunger:100,maxHunger:100,crit:.08,weapon:null,armor:null,inventory:[],
+  hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10},
+  cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",
+  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],stairs:{x:1,y:1},
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false
+ };
+}
+function carveRoom(map,x,y,w,h){
+ for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)map[yy][xx]=1;
+}
+function carveLine(map,a,b){
+ let x=a.x,y=a.y;
+ while(x!==b.x){map[y][x]=1;x+=Math.sign(b.x-x)}
+ while(y!==b.y){map[y][x]=1;y+=Math.sign(b.y-y)}
+ map[y][x]=1;
+}
+function randomFloorCell(minDist=0){
+ for(let tries=0;tries<800;tries++){
+  let x=rint(1,COLS-2),y=rint(1,ROWS-2);
+  if(tile(x,y)===1 && Math.abs(x-state.player.x)+Math.abs(y-state.player.y)>=minDist &&
+     !state.enemies.some(e=>e.x===x&&e.y===y) && !state.items.some(i=>i.x===x&&i.y===y) &&
+     !(state.stairs.x===x&&state.stairs.y===y)) return{x,y};
+ }
+ return{x:state.player.x,y:state.player.y};
+}
+function generateFloor(){
+ state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
+ state.rooms=[];
+ for(let i=0;i<9;i++){
+  const w=rint(3,6),h=rint(3,5),x=rint(1,COLS-w-1),y=rint(1,ROWS-h-1);
+  const room={x,y,w,h,cx:x+Math.floor(w/2),cy:y+Math.floor(h/2)};
+  if(state.rooms.some(r=>x<r.x+r.w+1&&x+w+1>r.x&&y<r.y+r.h+1&&y+h+1>r.y)){i--;if(i<-10)break;continue}
+  carveRoom(state.map,x,y,w,h);
+  if(state.rooms.length) carveLine(state.map,state.rooms[state.rooms.length-1],{x:room.cx,y:room.cy});
+  state.rooms.push(room);
+ }
+ if(state.rooms.length<2){
+  carveRoom(state.map,2,2,5,5);carveRoom(state.map,10,14,5,5);carveLine(state.map,{x:4,y:4},{x:12,y:16});
+  state.rooms=[{cx:4,cy:4},{cx:12,cy:16}];
+ }
+ const start=state.rooms[0],end=state.rooms[state.rooms.length-1];
+ state.player={x:start.cx,y:start.cy};state.stairs={x:end.cx,y:end.cy};
+ state.enemies=[];state.items=[];state.traps=[];state.visited={};state.visible={};
+ const enemyCount=5+state.floor*2;
+ for(let i=0;i<enemyCount;i++){
+  const p=randomFloorCell(6),type=rng()<.65?"skeleton":"warg";
+  state.enemies.push({
+   id:"e"+state.floor+"-"+i,x:p.x,y:p.y,type,
+   name:type==="skeleton"?"骸兵":"穴獣",
+   hp:(type==="skeleton"?10:8)+state.floor*3,maxHp:(type==="skeleton"?10:8)+state.floor*3,
+   atk:(type==="skeleton"?4:5)+Math.floor(state.floor*.8),
+   def:type==="skeleton"?1+Math.floor(state.floor/4):0,
+   xp:5+state.floor*2,intent:null,stagger:0
+  });
+ }
+ const itemCount=4+Math.floor(state.floor/2);
+ for(let i=0;i<itemCount;i++){
+  const p=randomFloorCell(3);
+  state.items.push(rng()<.28?{x:p.x,y:p.y,type:"food",name:"乾燥肉"}:{x:p.x,y:p.y,type:"gear",gear:rollGear()});
+ }
+ for(let i=0;i<2+Math.floor(state.floor/3);i++){
+  const p=randomFloorCell(3);state.traps.push({x:p.x,y:p.y,revealed:false,spent:false});
+ }
+ updateVision();showFloorBanner("第 "+state.floor+" 層");
+ saveGame();render();
+}
+function rollGear(){
+ const roll=rng();let rarity=roll<.62?"common":roll<.88?"magic":roll<.98?"rare":"legendary";
+ const slot=rng()<.58?"weapon":"armor";
+ const prefixes=slot==="weapon"?["錆びた","鋭利な","血吸いの","星喰いの"]:["継ぎ接ぎの","堅牢な","影縫いの","古王の"];
+ const suffixes=["力","守り","飢え耐え","会心"];
+ const rd=rarityData[rarity],base=1+Math.floor(state.floor*.8);
+ let atk=0,def=0,hunger=0,crit=0,weaponType=null,name="";
+ if(slot==="weapon"){
+  weaponType=choice(["sword","spear","bow","staff"]);
+  const baseNames={sword:"剣",spear:"槍",bow:"短弓",staff:"杖"};
+  name=choice(prefixes)+" "+baseNames[weaponType];
+  atk=Math.max(1,Math.round((base+rint(1,3))*rd.mul));
+ }else{
+  name=choice(prefixes)+" "+choice(["革鎧","鎖帷子","外套","骨鎧"]);
+  def=Math.max(1,Math.round((1+Math.floor(base/2))*rd.mul));
+ }
+ if(rarity!=="common"){
+  const affix=choice(suffixes);
+  if(affix==="力")atk+=rint(1,3);
+  if(affix==="守り")def+=rint(1,2);
+  if(affix==="飢え耐え")hunger+=rint(5,15);
+  if(affix==="会心")crit+=.03;
+ }
+ return{id:"g"+Date.now()+Math.floor(rng()*99999),slot,rarity,name,weaponType,atk,def,hunger,crit};
+}
+function updateVision(){
+ state.visible={};
+ const r=5;
+ for(let y=state.player.y-r;y<=state.player.y+r;y++)for(let x=state.player.x-r;x<=state.player.x+r;x++){
+  if(!inside(x,y))continue;
+  if(Math.hypot(x-state.player.x,y-state.player.y)<=r+.4){state.visible[key(x,y)]=1;state.visited[key(x,y)]=1}
+ }
+}
+function enemyAt(x,y){return state.enemies.find(e=>e.x===x&&e.y===y)}
+function itemAt(x,y){return state.items.find(i=>i.x===x&&i.y===y)}
+function activeTrapAt(x,y){return state.traps.find(t=>t.x===x&&t.y===y&&!t.spent)}
+function equippedAtk(){return state.weapon?.atk||0}
+function equippedDef(){return state.armor?.def||0}
+function totalAtk(){return state.hero.atk+equippedAtk()}
+function totalDef(){return state.hero.def+equippedDef()}
+function totalCrit(){return state.crit+(state.weapon?.crit||0)+(state.armor?.crit||0)}
+function effectiveMaxHunger(){return state.maxHunger+(state.weapon?.hunger||0)+(state.armor?.hunger||0)}
+function weaponType(){return state.weapon?.weaponType||"sword"}
+function enemyAtDistance(dx,dy,distance){
+ return enemyAt(state.player.x+dx*distance,state.player.y+dy*distance);
+}
+function pathClear(dx,dy,distance){
+ for(let i=1;i<=distance;i++)if(tile(state.player.x+dx*i,state.player.y+dy*i)!==1)return false;
+ return true;
+}
+function directionTarget(dx,dy){
+ const wd=weaponData[weaponType()];
+ for(let d=1;d<=wd.maxRange;d++){
+  if(!pathClear(dx,dy,d))break;
+  const e=enemyAtDistance(dx,dy,d);
+  if(e){
+   if(d<wd.minRange)return{blocked:e,distance:d};
+   return{enemy:e,distance:d};
+  }
+ }
+ return null;
+}
+function spendStamina(cost){
+ if(state.hero.stamina<cost){
+  addLog("気力が足りない。休息して立て直す必要がある。");
+  return false;
+ }
+ state.hero.stamina-=cost;
+ return true;
+}
+function recoverStamina(amount){
+ state.hero.stamina=Math.min(state.hero.maxStamina,state.hero.stamina+amount);
+}
+function damageEnemy(e,damage,label=""){
+ const dmg=Math.max(1,Math.round(damage)-e.def);
+ e.hp-=dmg;
+ if(e.intent&&dmg>=Math.max(5,Math.floor(e.maxHp*.28))){
+  e.intent=null;e.stagger=1;addLog(e.name+"の攻撃態勢を崩した！");
+ }
+ addLog((label?label+" ":"")+e.name+"に "+dmg+" ダメージ。");
+ if(e.hp<=0)defeatEnemy(e);
+ return dmg;
+}
+function defeatEnemy(e){
+ if(!state.enemies.includes(e))return;
+ state.enemies=state.enemies.filter(x=>x!==e);
+ state.xp+=e.xp;state.gold+=rint(2,8)+state.floor;
+ addLog(e.name+"を倒した。");
+ if(rng()<.28)state.items.push({x:e.x,y:e.y,type:"gear",gear:rollGear()});
+ checkLevel();
+}
+function adjacentEnemiesAround(x,y){
+ return dirs.map(([dx,dy])=>enemyAt(x+dx,y+dy)).filter(Boolean);
+}
+function weaponAttack(e,dx,dy,distance){
+ const wt=weaponType();
+ let base=state.hero.atk+rint(-1,2)+equippedAtk();
+ const crit=rng()<totalCrit();
+ if(crit)base=Math.round(base*1.7);
+ const label=crit?"会心！":"";
+ if(wt==="staff"){
+  const main=Math.max(1,Math.round(base*1.05));
+  damageEnemy(e,main,label||"魔撃");
+  for(const other of adjacentEnemiesAround(e.x,e.y)){
+   if(other!==e&&state.enemies.includes(other))damageEnemy(other,Math.max(1,Math.floor(base*.5)),"余波");
+  }
+  return;
+ }
+ if(wt==="spear"){
+  damageEnemy(e,Math.round(base*.92),label||"刺突");
+  const behind=enemyAt(e.x+dx,e.y+dy);
+  if(behind&&state.enemies.includes(behind))damageEnemy(behind,Math.max(1,Math.floor(base*.55)),"貫通");
+  return;
+ }
+ if(wt==="bow"){
+  const rangePenalty=Math.max(0,distance-1);
+  damageEnemy(e,Math.max(1,base-rangePenalty),label||"射撃");
+  return;
+ }
+ const wasAlive=e.hp>0;
+ damageEnemy(e,Math.round(base*1.05),label||"斬撃");
+ if(wasAlive&&!state.enemies.includes(e)){
+  const second=adjacentEnemiesAround(e.x,e.y).find(x=>state.enemies.includes(x));
+  if(second)damageEnemy(second,Math.max(1,Math.floor(base*.55)),"追撃");
+ }
+}
+function move(dx,dy){
+ if(!canAct())return;
+ const target=directionTarget(dx,dy);
+ if(target?.blocked){
+  addLog("近すぎて弓を引けない。距離を取る必要がある。");
+  return;
+ }
+ if(target?.enemy){
+  const cost=weaponData[weaponType()].cost;
+  if(!spendStamina(cost))return;
+  state.lastAction="attack";
+  weaponAttack(target.enemy,dx,dy,target.distance);
+  endTurn();return;
+ }
+ const nx=state.player.x+dx,ny=state.player.y+dy;
+ if(tile(nx,ny)!==1){addLog("壁が行く手を塞いでいる。");return}
+ state.player.x=nx;state.player.y=ny;state.lastAction="move";
+ pickup();triggerTrap();
+ if(state.gameOver){render();return}
+ if(nx===state.stairs.x&&ny===state.stairs.y){
+  state.floor++;state.hunger=Math.min(effectiveMaxHunger(),state.hunger+12);recoverStamina(state.hero.maxStamina);generateFloor();return
+ }
+ endTurn();
+}
+function waitTurn(){
+ if(!canAct())return;
+ state.lastAction="rest";recoverStamina(5);
+ addLog("呼吸を整え、気力を回復した。");
+ endTurn();
+}
+function enemyTurn(){
+ for(const e of [...state.enemies]){
+  if(e.stagger>0){e.stagger--;continue}
+  const dist=Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y);
+
+  if(e.intent){
+   const stillInRange=dist===1;
+   if(stillInRange){
+    const name=e.intent==="heavy"?"叩き潰し":"飛びかかり";
+    enemyAttack(e,e.intent==="heavy"?1.45:1.0,name);
+    if(state.gameOver)return;
+   }else{
+    addLog(e.name+"の攻撃は空を切った。");
+   }
+   e.intent=null;
+   continue;
+  }
+
+  if(dist===1){
+   e.intent=e.type==="skeleton"?"heavy":"lunge";
+   addLog(e.name+"が "+(e.intent==="heavy"?"武器を大きく振り上げた！":"低く身構えた！"));
+   continue;
+  }
+
+  let options=[];
+  if(dist<=7){
+   const dx=Math.sign(state.player.x-e.x),dy=Math.sign(state.player.y-e.y);
+   options=Math.abs(state.player.x-e.x)>Math.abs(state.player.y-e.y)?[[dx,0],[0,dy]]:[[0,dy],[dx,0]];
+  }else options=[...dirs].sort(()=>rng()-.5);
+
+  for(const [dx,dy] of options){
+   const nx=e.x+dx,ny=e.y+dy;
+   if(tile(nx,ny)===1&&!enemyAt(nx,ny)&&!(nx===state.player.x&&ny===state.player.y)){
+    e.x=nx;e.y=ny;break;
+   }
+  }
+ }
+}
+function enemyAttack(e,mult=1,label="攻撃"){
+ let dmg=Math.max(1,Math.round((e.atk+rint(-1,2))*mult)-totalDef());
+ if(state.guardTurns>0){
+  dmg=Math.max(0,Math.floor(dmg*.25));
+  addLog("構えで "+label+" を受け流した！");
+  state.guardTurns=0;
+ }
+ state.hero.hp=Math.max(0,state.hero.hp-dmg);
+ addLog(e.name+"の"+label+"。"+dmg+" ダメージ。");
+ if(state.hero.hp<=0){
+  addLog("探索者は倒れた。");
+  state.gameOver=true;
+  localStorage.removeItem("abyssalRootsSoloV4Save");
+  $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
+  $("gameOverOverlay").classList.remove("hidden");
+ }
+}
+function pickup(){
+ const item=itemAt(state.player.x,state.player.y);if(!item)return;
+ state.items=state.items.filter(i=>i!==item);
+ if(item.type==="food"){
+  state.hunger=Math.min(effectiveMaxHunger(),state.hunger+35);addLog("乾燥肉を食べ、空腹が和らいだ。");
+ }else{
+  if(state.inventory.length>=12){addLog("荷物が一杯で、装備を残した。");state.items.push(item);return}
+  state.inventory.push(item.gear);addLog(`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。`);
+ }
+}
+function triggerTrap(){
+ const t=activeTrapAt(state.player.x,state.player.y);if(!t)return;
+ t.revealed=true;t.spent=true;
+ const dmg=4+state.floor*2;
+ state.hero.hp=Math.max(0,state.hero.hp-dmg);
+ addLog("罠が作動！ "+dmg+" ダメージ。");
+ if(state.hero.hp<=0){
+  addLog("探索者は罠で倒れた。");
+  state.gameOver=true;
+  localStorage.removeItem("abyssalRootsSoloV4Save");
+  $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
+  $("gameOverOverlay").classList.remove("hidden");
+ }
+}
+function endTurn(){
+ state.turn++;state.hunger=Math.max(0,state.hunger-1);
+ if(state.lastAction==="move")recoverStamina(1);
+ if(state.lastAction==="guard")recoverStamina(1);
+ if(state.hunger===0&&state.turn%3===0){
+  state.hero.hp=Math.max(0,state.hero.hp-1);addLog("飢えが体力を削る。");
+  if(state.hero.hp<=0){
+   state.gameOver=true;localStorage.removeItem("abyssalRootsSoloV4Save");
+   $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
+   $("gameOverOverlay").classList.remove("hidden");render();return;
+  }
+ }
+ enemyTurn();
+ for(const k in state.cooldowns)state.cooldowns[k]=Math.max(0,state.cooldowns[k]-1);
+ state.guardTurns=Math.max(0,state.guardTurns-1);
+ updateVision();saveGame();render();
+}
+function useSkill(name){
+ if(!canAct()||state.cooldowns[name]>0)return;
+ if(name==="guard"){
+  if(!spendStamina(3))return;
+  state.guardTurns=1;state.lastAction="guard";
+  addLog("足を止め、次の攻撃を受け流す構えを取った。");
+ }
+ if(name==="volley"){
+  const skillCost={sword:6,spear:7,bow:7,staff:8}[weaponType()];
+  if(!spendStamina(skillCost))return;
+  state.lastAction="skill";
+  const wt=weaponType(),base=8+state.level*2+equippedAtk();
+  let hit=false;
+  if(wt==="sword"){
+   const targets=adjacentEnemiesAround(state.player.x,state.player.y);
+   if(!targets.length){recoverStamina(skillCost);addLog("旋撃の届く敵がいない。");return}
+   targets.forEach(e=>{if(state.enemies.includes(e))damageEnemy(e,Math.round(base*.9),"旋撃")});hit=true;
+  }
+  if(wt==="spear"){
+   for(const [dx,dy] of dirs){
+    for(let d=1;d<=3;d++){
+     if(!pathClear(dx,dy,d))break;
+     const e=enemyAtDistance(dx,dy,d);
+     if(e){damageEnemy(e,base,"貫突");hit=true}
+    }
+   }
+   if(!hit){recoverStamina(skillCost);addLog("貫突の直線上に敵がいない。");return}
+  }
+  if(wt==="bow"){
+   const candidates=state.enemies.map(e=>({e,d:Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)}))
+    .filter(o=>o.d<=6&&state.visible[key(o.e.x,o.e.y)]).sort((a,b)=>a.d-b.d);
+   if(!candidates.length){recoverStamina(skillCost);addLog("連射できる敵が見えない。");return}
+   for(let i=0;i<2;i++){
+    const target=candidates.find(o=>state.enemies.includes(o.e));
+    if(!target)break;damageEnemy(target.e,Math.round(base*.72),"連射");hit=true;
+   }
+  }
+  if(wt==="staff"){
+   const candidates=state.enemies.map(e=>({e,d:Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)}))
+    .filter(o=>o.d<=5&&state.visible[key(o.e.x,o.e.y)]).sort((a,b)=>a.d-b.d);
+   if(!candidates.length){recoverStamina(skillCost);addLog("火花を放つ相手が見えない。");return}
+   const center=candidates[0].e;
+   damageEnemy(center,base,"火花");hit=true;
+   for(const other of adjacentEnemiesAround(center.x,center.y)){
+    if(other!==center&&state.enemies.includes(other))damageEnemy(other,Math.round(base*.65),"爆ぜ");
+   }
+  }
+  if(hit)state.cooldowns.volley=6;
+ }
+ if(name==="heal"){
+  if(!spendStamina(4))return;
+  state.lastAction="heal";
+  const amount=9+state.level*2;
+  state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+amount);
+  state.cooldowns.heal=8;addLog("傷を押さえ、HPを "+amount+" 回復した。");
+ }
+ if(name==="search"){
+  if(!spendStamina(2))return;
+  state.lastAction="search";
+  let found=0;state.traps.forEach(t=>{if(!t.spent&&Math.abs(t.x-state.player.x)+Math.abs(t.y-state.player.y)<=5){t.revealed=true;found++}});
+  state.cooldowns.search=7;addLog(found?`周囲の罠を ${found} 個見破った。`:"怪しい仕掛けは見つからない。");
+ }
+ endTurn();
+}
+function checkLevel(){
+ if(state.xp<state.nextXp)return;
+ state.level++;state.xp-=state.nextXp;state.nextXp=Math.round(state.nextXp*1.45);
+ showLevelChoices();
+}
+const perks=[
+ {name:"剛力の枝",desc:"攻撃力 +2",apply(){state.hero.atk+=2}},
+ {name:"生命の枝",desc:"最大HP +9、現在HPも回復",apply(){state.hero.maxHp+=9;state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+9)}},
+ {name:"鉄皮の枝",desc:"防御力 +1",apply(){state.hero.def+=1}},
+ {name:"飢え知らず",desc:"最大満腹度 +20、満腹度回復",apply(){state.maxHunger+=20;state.hunger=Math.min(effectiveMaxHunger(),state.hunger+30)}},
+ {name:"凶星の枝",desc:"会心率 +5%",apply(){state.crit+=.05}},
+ {name:"息吹の枝",desc:"最大気力 +2、気力を全回復",apply(){state.hero.maxStamina+=2;state.hero.stamina=state.hero.maxStamina}}
+];
+function showLevelChoices(){
+ const pool=[...perks].sort(()=>rng()-.5).slice(0,3),box=$("levelChoices");box.innerHTML="";
+ pool.forEach(p=>{const b=document.createElement("button");b.className="choiceBtn";b.innerHTML=`<b>${p.name}</b><small>${p.desc}</small>`;b.onclick=()=>{p.apply();$("levelOverlay").classList.add("hidden");addLog("樹脈が探索者を強めた。");saveGame();render()};box.appendChild(b)});
+ $("levelOverlay").classList.remove("hidden");
+}
+function equipItem(id){
+ const g=state.inventory.find(i=>i.id===id);if(!g)return;
+ const old=state[g.slot];state[g.slot]=g;state.inventory=state.inventory.filter(i=>i!==g);if(old)state.inventory.push(old);state.hunger=Math.min(state.hunger,effectiveMaxHunger());
+ renderInventory();saveGame();render();
+}
+
+function makeStarterWeapon(type){
+ const names={sword:"旅人の剣",spear:"古い槍",bow:"狩人の短弓",staff:"灰色の杖"};
+ const atk={sword:3,spear:3,bow:2,staff:4};
+ return{id:"starter-"+type,slot:"weapon",rarity:"common",name:names[type],weaponType:type,atk:atk[type],def:0,hunger:0,crit:0};
+}
+function chooseStarter(type){
+ if(!state)state=freshState();
+ if(!weaponData[type])return;
+ $("starterOverlay").classList.add("hidden");
+ state.weapon=makeStarterWeapon(type);
+ state.hero.role=weaponData[type].label+"使い";
+ state.log=["「"+state.weapon.name+"」を手に、ひとりで迷宮へ入った。"];
+ generateFloor();
+}
+
+function renderInventory(){
+ $("equipSummary").innerHTML=`武器：${state.weapon?state.weapon.name+"［"+weaponData[state.weapon.weaponType].label+"］ (攻+"+state.weapon.atk+")":"なし"}<br>防具：${state.armor?state.armor.name+" (防+"+state.armor.def+")":"なし"}`;
+ const box=$("inventoryList");box.innerHTML="";
+ if(!state.inventory.length)box.innerHTML='<p class="note">荷物は空です。</p>';
+ state.inventory.forEach(g=>{
+  const row=document.createElement("div");row.className="itemRow";
+  row.innerHTML=`<div class="top"><span class="${g.rarity}">${rarityData[g.rarity].label}・${g.name}</span><span>${g.slot==="weapon"?"武器":"防具"}</span></div>
+  <div class="desc">${g.weaponType?"型："+weaponData[g.weaponType].label+" / ":""}攻撃 +${g.atk} / 防御 +${g.def}${g.hunger?" / 最大満腹 +"+g.hunger:""}${g.crit?" / 会心 +"+Math.round(g.crit*100)+"%":""}</div>
+  <button>装備する</button>`;
+  row.querySelector("button").onclick=()=>equipItem(g.id);box.appendChild(row);
+ });
+}
+function canAct(){return state&&!state.gameOver&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")}
+function saveGame(){if(state&&!state.gameOver)localStorage.setItem("abyssalRootsSoloV4Save",JSON.stringify(state))}
+function loadGame(){
+ try{const s=JSON.parse(localStorage.getItem("abyssalRootsSoloV4Save"));if(!s||s.version!==4||!s.hero||typeof s.hero.stamina!=="number"||!s.weapon?.weaponType)return false;state=s;updateVision();render();return true}catch(e){return false}
+}
+function showFloorBanner(t){$("floorBanner").textContent=t;$("floorBanner").classList.add("show");clearTimeout(bannerTimer);bannerTimer=setTimeout(()=>$("floorBanner").classList.remove("show"),1000)}
+function renderStats(){
+ $("stats").innerHTML=`
+ <div class="stat"><b>${state.floor}</b><small>階層</small></div>
+ <div class="stat"><b>${state.level}</b><small>探索者Lv</small></div>
+ <div class="stat"><b>${state.hunger}/${effectiveMaxHunger()}</b><small>満腹</small></div>
+ <div class="stat"><b>${state.gold}G</b><small>戦利金</small></div>`;
+}
+function renderHero(){
+ const h=state.hero;
+ const danger=state.enemies.filter(e=>e.intent&&Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)===1).length;
+ $("hero").innerHTML=`<div class="member ${h.hp<=0?"dead":""}">
+  <div class="name">${h.name}${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
+  <div class="role">${h.role}　攻${h.atk+equippedAtk()}　防${h.def+equippedDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}</div>
+  <div class="bar"><div class="fill" style="width:${100*h.hp/h.maxHp}%"></div></div>
+  <div class="hp">HP ${h.hp}/${h.maxHp}</div>
+  <div class="staminaBar"><div class="staminaFill" style="width:${100*h.stamina/h.maxStamina}%"></div></div>
+  <div class="hp">気力 ${h.stamina}/${h.maxStamina}　通常攻撃消費 ${weaponData[weaponType()].cost}</div>
+ </div>`;
+}
+function renderLog(){$("log").innerHTML=state?state.log.map((x,i)=>`<div style="opacity:${1-i*.16}">› ${x}</div>`).join(""):""}
+function draw(){
+ ctx.fillStyle="#050407";ctx.fillRect(0,0,canvas.width,canvas.height);
+ for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+  const k=key(x,y),vis=state.visible[k],seen=state.visited[k];
+  if(!seen){ctx.fillStyle="#050407";ctx.fillRect(x*TILE,y*TILE,TILE,TILE);continue}
+  if(tile(x,y)===0){ctx.fillStyle=vis?"#211b28":"#100d14";ctx.fillRect(x*TILE,y*TILE,TILE,TILE);ctx.strokeStyle=vis?"#352b3d":"#17121b";ctx.strokeRect(x*TILE+.5,y*TILE+.5,TILE-1,TILE-1)}
+  else{ctx.fillStyle=vis?((x+y)%2?"#17131c":"#1c1722"):"#0d0a10";ctx.fillRect(x*TILE,y*TILE,TILE,TILE)}
+ }
+ const drawText=(t,x,y,color,size=15)=>{ctx.font=`700 ${size}px -apple-system`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle=color;ctx.fillText(t,x*TILE+TILE/2,y*TILE+TILE/2+1)};
+ if(state.visible[key(state.stairs.x,state.stairs.y)])drawText("▼",state.stairs.x,state.stairs.y,"#e1b85b",17);
+ state.traps.forEach(t=>{if(t.revealed&&!t.spent&&state.visible[key(t.x,t.y)])drawText("^",t.x,t.y,"#d86171",16)});
+ state.items.forEach(i=>{if(state.visible[key(i.x,i.y)])drawText(i.type==="food"?"◇":"!",i.x,i.y,i.type==="food"?"#71c79a":rarityData[i.gear.rarity].color,17)});
+ state.enemies.forEach(e=>{if(state.visible[key(e.x,e.y)]){
+  drawText(e.type==="skeleton"?"S":"W",e.x,e.y,e.intent?"#ff5368":(e.type==="skeleton"?"#d8d0df":"#d86171"),15);
+  if(e.intent){ctx.strokeStyle="#ff5368";ctx.lineWidth=2;ctx.strokeRect(e.x*TILE+2,e.y*TILE+2,TILE-4,TILE-4)}
+  ctx.fillStyle="#25080d";ctx.fillRect(e.x*TILE+3,e.y*TILE+2,TILE-6,3);ctx.fillStyle="#cf5163";ctx.fillRect(e.x*TILE+3,e.y*TILE+2,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
+ }});
+ drawText("@",state.player.x,state.player.y,"#f3d67e",17);
+}
+function renderSkills(){
+ for(const k of ["guard","heal","search"]){
+  const b=$(k);b.disabled=state.cooldowns[k]>0 || (k==="guard"&&state.hero.stamina<3) || (k==="heal"&&state.hero.stamina<4) || (k==="search"&&state.hero.stamina<2);
+  b.firstChild.textContent=({guard:"構え",heal:"治癒",search:"探索"}[k])+(state.cooldowns[k]>0?" "+state.cooldowns[k]:"")
+ }
+ const wd=weaponData[weaponType()],b=$("volley");
+ b.disabled=state.cooldowns.volley>0 || state.hero.stamina<{sword:6,spear:7,bow:7,staff:8}[weaponType()];
+ b.firstChild.textContent=wd.skill+(state.cooldowns.volley>0?" "+state.cooldowns.volley:"");
+ b.querySelector("span").textContent=wd.skillDesc;
+}
+function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();draw()}
+function startNew(){state=freshState();$("titleOverlay").classList.add("hidden");$("gameOverOverlay").classList.add("hidden");$("starterOverlay").classList.remove("hidden");render()}
+$("newGameBtn").onclick=startNew;$("restartBtn").onclick=startNew;document.querySelectorAll(".starterBtn").forEach(b=>{
+ b.addEventListener("click",ev=>{
+  ev.preventDefault();
+  ev.stopPropagation();
+  const type=b.getAttribute("data-weapon");
+  if(type)chooseStarter(type);
+ });
+});
+$("continueBtn").onclick=()=>{if(loadGame())$("titleOverlay").classList.add("hidden")};
+$("inventoryBtn").onclick=()=>{if(!state)return;renderInventory();$("inventoryOverlay").classList.remove("hidden")};
+$("closeInventory").onclick=()=>$("inventoryOverlay").classList.add("hidden");
+$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");
+$("saveBtn").onclick=()=>{saveGame();addLog("探索記録を保存した。")};
+$("up").onclick=()=>move(0,-1);$("down").onclick=()=>move(0,1);$("left").onclick=()=>move(-1,0);$("right").onclick=()=>move(1,0);$("wait").onclick=waitTurn;
+$("guard").onclick=()=>useSkill("guard");$("volley").onclick=()=>useSkill("volley");$("heal").onclick=()=>useSkill("heal");$("search").onclick=()=>useSkill("search");
+canvas.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchStart={x:t.clientX,y:t.clientY}},{passive:true});
+canvas.addEventListener("touchend",e=>{if(!touchStart)return;const t=e.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;touchStart=null;if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;if(Math.abs(dx)>Math.abs(dy))move(Math.sign(dx),0);else move(0,Math.sign(dy))},{passive:true});
+addEventListener("keydown",e=>{const m={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]};if(m[e.key]){e.preventDefault();move(...m[e.key])}});
+if(localStorage.getItem("abyssalRootsSoloV4Save"))$("continueBtn").classList.remove("hidden");
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
