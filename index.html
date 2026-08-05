@@ -38,8 +38,105 @@ h1{font-size:18px;margin:0;letter-spacing:.08em}
 .member .hp{font-size:9px;margin-top:2px;text-align:right}
 #gameWrap{position:relative;border:1px solid #655271;border-radius:12px;overflow:hidden;background:#050407;box-shadow:0 10px 30px #000a}
 canvas{display:block;width:100%;height:auto;max-height:48svh;object-fit:contain;touch-action:none;image-rendering:pixelated}
-#floorBanner{position:absolute;inset:42% 12% auto;background:#100d16e8;border:1px solid var(--gold);border-radius:10px;text-align:center;padding:12px;font-weight:800;letter-spacing:.1em;pointer-events:none;opacity:0;transform:scale(.9);transition:.25s}
-#floorBanner.show{opacity:1;transform:scale(1)}
+#floorBanner{
+ position:absolute;
+ top:25%;
+ left:7%;
+ right:7%;
+ z-index:6;
+ min-height:150px;
+ padding:15px 16px 14px;
+ border:1px solid rgba(225,184,91,.82);
+ border-radius:14px;
+ background:
+  linear-gradient(180deg,rgba(24,18,30,.96),rgba(10,8,14,.92)),
+  radial-gradient(circle at 50% 0,rgba(225,184,91,.18),transparent 66%);
+ box-shadow:0 16px 40px rgba(0,0,0,.72),inset 0 0 28px rgba(225,184,91,.05);
+ backdrop-filter:blur(5px);
+ text-align:center;
+ pointer-events:none;
+ opacity:0;
+ transform:translateY(12px) scale(.965);
+}
+#floorBanner.show{
+ animation:floorDescentSequence 5.8s cubic-bezier(.22,.72,.2,1) both;
+}
+@keyframes floorDescentSequence{
+ 0%{opacity:0;transform:translateY(16px) scale(.95);filter:blur(2px)}
+ 9%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+ 75%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+ 100%{opacity:0;transform:translateY(-10px) scale(1.012);filter:blur(.5px)}
+}
+.floorBannerKicker{
+ color:#bda7c5;
+ font-size:8px;
+ letter-spacing:.24em;
+ text-transform:uppercase;
+}
+.floorBannerDepth{
+ margin-top:5px;
+ color:#f6e4a9;
+ font-size:15px;
+ font-weight:800;
+ letter-spacing:.16em;
+ text-shadow:0 2px 9px rgba(0,0,0,.8);
+}
+.floorBannerTitle{
+ margin-top:2px;
+ color:#fff7df;
+ font-size:22px;
+ font-weight:900;
+ letter-spacing:.08em;
+ line-height:1.2;
+ text-shadow:0 3px 12px rgba(0,0,0,.9);
+}
+.floorBannerMeta{
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+ gap:5px;
+ margin-top:8px;
+}
+.floorBannerMeta span{
+ padding:2px 7px;
+ border:1px solid rgba(115,91,126,.72);
+ border-radius:999px;
+ background:rgba(18,13,23,.82);
+ color:#d8cadc;
+ font-size:8px;
+ letter-spacing:.03em;
+}
+.floorBannerGoal{
+ margin-top:9px;
+ padding-top:8px;
+ border-top:1px solid rgba(104,83,113,.52);
+ color:#ddd0e1;
+ font-size:9px;
+ line-height:1.55;
+ letter-spacing:.01em;
+}
+.floorBannerGoal b{
+ color:#e1b85b;
+}
+.floorBannerBoss{
+ border-color:rgba(216,97,113,.88)!important;
+ box-shadow:0 16px 44px rgba(50,0,10,.72),inset 0 0 34px rgba(216,97,113,.08)!important;
+}
+.floorBannerRest{
+ border-color:rgba(113,199,154,.82)!important;
+ box-shadow:0 16px 40px rgba(0,30,18,.68),inset 0 0 30px rgba(113,199,154,.07)!important;
+}
+@media(max-width:390px){
+ #floorBanner{
+  top:22%;
+  left:5%;
+  right:5%;
+  min-height:140px;
+  padding:13px 12px;
+ }
+ .floorBannerTitle{font-size:20px}
+ .floorBannerGoal{font-size:8px}
+}
 #log{height:52px;overflow:hidden;background:#0e0b12;border:1px solid #372e40;border-radius:8px;margin:7px 0;padding:5px 7px;font-size:10px;line-height:1.35;color:#d4c9dc}
 #actions{display:grid;grid-template-columns:1fr 1.1fr;gap:8px;align-items:center}
 #dpad{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,42px);justify-content:center}
@@ -931,11 +1028,125 @@ body{
  .helpKeys{grid-template-columns:1fr}
 }
 
+
+/* v3.8.9.3 STASH & STAIRS UX */
+.hubFold{
+ margin:10px 0;
+ border:1px solid #50415a;
+ border-radius:10px;
+ background:#100c14;
+ overflow:hidden;
+}
+.hubFold summary{
+ list-style:none;
+ cursor:pointer;
+ user-select:none;
+ padding:11px 12px;
+ background:linear-gradient(180deg,#1c1522,#130e18);
+ color:#efe4f2;
+ font-weight:700;
+ font-size:12px;
+}
+.hubFold summary::-webkit-details-marker{display:none}
+.hubFold summary::after{
+ content:"開く ＋";
+ float:right;
+ color:#cbb9d2;
+ font-size:10px;
+}
+.hubFold[open] summary::after{content:"閉じる －"}
+.hubFold #stashList{padding:7px}
+.stashSummaryLine{
+ margin-bottom:7px;
+ padding:7px 8px;
+ border:1px solid #493a52;
+ border-radius:8px;
+ background:#151019;
+ color:#cfc1d5;
+ font-size:10px;
+ line-height:1.45;
+}
+.stashGearName{
+ font-weight:700;
+ text-shadow:0 1px 2px rgba(0,0,0,.75);
+}
+.stashActions{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:5px;
+ margin-top:7px;
+}
+.stashActions button{min-width:0}
+.stashShardValue{
+ color:#f0d37a;
+ font-weight:700;
+}
+.stairConfirmHint{
+ color:#f0d37a;
+ font-weight:700;
+}
+@media(max-width:600px){
+ .hubFold summary{padding:9px 10px;font-size:11px}
+ .hubFold #stashList{padding:5px}
+ .stashActions{gap:4px}
+}
+
+
+/* v3.8.9.4 EVENT & LIGHT ROLES */
+.eventResultBox{
+ margin:10px 0;
+ padding:11px;
+ border:1px solid #705b78;
+ border-radius:10px;
+ background:linear-gradient(180deg,#1a1320,#100c14);
+ color:#e8deeb;
+ line-height:1.65;
+ font-size:11px;
+}
+.eventResultBox b{color:#f4dda1}
+.eventResultChanges{
+ margin-top:8px;
+ padding:8px;
+ border-left:3px solid #c39f55;
+ border-radius:6px;
+ background:#171119;
+ color:#f0e3c2;
+}
+.eventResultChanges span{
+ display:inline-block;
+ margin:2px 5px 2px 0;
+ padding:2px 6px;
+ border:1px solid #594863;
+ border-radius:999px;
+ background:#120e16;
+ white-space:nowrap;
+}
+.lightRoleGuide{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:6px;
+ margin-top:8px;
+}
+.lightRoleCard{
+ padding:8px;
+ border:1px solid #4c3e56;
+ border-radius:8px;
+ background:#130e18;
+ color:#d8ccdc;
+ font-size:10px;
+ line-height:1.5;
+}
+.lightRoleCard b{color:#ffe2a2}
+@media(max-width:600px){
+ .eventResultBox{padding:9px;font-size:10px}
+ .lightRoleGuide{grid-template-columns:1fr;gap:4px}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.8.9.2 HELP UX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.8.9.5 FLOOR DESCENT</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -975,7 +1186,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 遊び方の見やすさ改善</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 階層移動演出の強化</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -1067,7 +1278,7 @@ body{
         <ul>
           <li><b>方向入力</b>は、敵が射程にいれば攻撃、いなければ移動です。</li>
           <li><b>1回行動するたびに1ターン進行</b>し、敵も動きます。</li>
-          <li><b>階段 ▼</b> に乗ると次の階へ進みます。</li>
+          <li><b>階段 ▼</b> に進もうとすると確認が出ます。移動後は階層名・環境・目標が約6秒表示されますが、その間も操作できます。</li>
           <li><b>5階ごとに番人戦</b>があります。最初の20階には階ごとの目標もあります。</li>
           <li><b>主人公のHPが0でその探索は終了</b>です。</li>
         </ul>
@@ -1083,7 +1294,13 @@ body{
           <li><b>スキル</b>：武器や状況に応じて使う強行動です。気力を消費します。</li>
           <li><b>クイック欄</b>：治癒薬・壺などを即使用できます。</li>
           <li><b>射程ボタン</b>：武器の攻撃範囲を表示します。</li>
-          <li><b>灯火ボタン</b>：消灯 / 松明 / ランタン / 魔導灯を切り替えます。明るいほど見やすい代わりに見つかりやすくなります。</li>
+          <li><b>灯火ボタン</b>：消灯 / 松明 / ランタン / 魔導灯を切り替えます。視野だけでなく、それぞれ固有の用途があります。</li>
+          <div class="lightRoleGuide">
+           <div class="lightRoleCard"><b>消灯・隠密</b><br>燃料不要。敵の感知距離を縮めますが、暗闇で攻撃を外す危険があります。</div>
+           <div class="lightRoleCard"><b>松明・退魔</b><br>燃料効率が良く、亡者へのダメージが15%上がります。</div>
+           <div class="lightRoleCard"><b>ランタン・探索</b><br>比較的静かで、周囲2マスの罠を自動発見します。</div>
+           <div class="lightRoleCard"><b>魔導灯・看破</b><br>最も広く、隠し通路を看破しますが、燃費と敵の感知が悪化します。</div>
+          </div>
           <li><b>敵や物をタップ</b>すると詳細確認できます。</li>
         </ul>
         <div class="helpKeys">
@@ -1218,6 +1435,8 @@ body{
     <h2 id="eventTitle">迷宮の事件</h2>
     <p id="eventText"></p>
     <div id="eventChoices"></div>
+    <div id="eventResult" class="eventResultBox hidden"></div>
+    <button type="button" class="modalBtn hidden" id="closeEvent">結果を確認して閉じる</button>
   </div>
 </div>
 
@@ -1227,7 +1446,10 @@ body{
     <p>帰還すると現在の探索は終了し、HP・気力・充足が完全回復します。持ち帰った装備と恒久強化を整え、次の探索へ出発してください。</p>
     <div id="hubSummary"></div>
     <div id="hubUpgrades"></div>
-    <div id="stashList"></div>
+    <details class="hubFold" id="stashPanel" open>
+      <summary id="stashSummary">持ち帰り倉庫</summary>
+      <div id="stashList"></div>
+    </details>
     <div id="codexList"></div>
     <button type="button" class="modalBtn hidden" id="returnToAbyssBtn">現在の探索へ戻る</button>
     <button type="button" class="modalBtn" id="researchBtn">深淵研究</button><button type="button" class="modalBtn" id="adaptBtn">深淵適応を選ぶ</button><button type="button" class="modalBtn" id="newRunBtn">新しい探索を始める</button>
@@ -2153,17 +2375,79 @@ function cameraOrigin(){
 
 
 const lightData={
- none:{label:"消灯",radius:2,noise:0,fuelUse:0,color:"rgba(110,100,130,.12)"},
- torch:{label:"松明",radius:5,noise:2,fuelUse:1,color:"rgba(255,170,80,.26)"},
- lantern:{label:"ランタン",radius:7,noise:4,fuelUse:1,color:"rgba(255,220,140,.30)"},
- arcane:{label:"魔導灯",radius:9,noise:6,fuelUse:2,color:"rgba(120,190,255,.28)"}
+ none:{
+  label:"消灯",role:"隠密",radius:2,noise:0,detectionMod:-2,fuelUse:0,fuelInterval:0,
+  color:"rgba(110,100,130,.12)",
+  desc:"燃料不要。敵の感知距離を縮めるが、暗闇で攻撃を外すことがある。"
+ },
+ torch:{
+  label:"松明",role:"退魔",radius:5,noise:2,detectionMod:0,fuelUse:1,fuelInterval:2,
+  color:"rgba(255,170,80,.26)",
+  desc:"2ターンに燃料1。亡者へのダメージ+15%。狭い場所で戦いやすい。"
+ },
+ lantern:{
+  label:"ランタン",role:"探索",radius:7,noise:1,detectionMod:-1,fuelUse:1,fuelInterval:1,
+  color:"rgba(255,220,140,.30)",
+  desc:"1ターンに燃料1。比較的静かで、周囲2マスの罠を自動発見する。"
+ },
+ arcane:{
+  label:"魔導灯",role:"看破",radius:9,noise:6,detectionMod:2,fuelUse:2,fuelInterval:1,
+  color:"rgba(120,190,255,.28)",
+  desc:"1ターンに燃料2。最広域で、周囲2マスの隠し通路を自動看破するが敵を強く引き寄せる。"
+ }
 };
 function currentLight(){
  if(!state?.light?.on||state.light.fuel<=0)return lightData.none;
  return lightData[state.light.type]||lightData.torch;
 }
+function renderLightButton(){
+ const light=currentLight();
+ const button=$("lightBtn");
+ if(!button)return;
+ button.textContent=light.label;
+ button.title=`${light.role}：${light.desc}`;
+}
 function visionRadius(){
  return Math.max(2,currentLight().radius+(state.hero.perception||0)+bodyVisionBonus()+totalBondVision()+(hasAbyssAdaptation("nightEyes")&&!state.light.on?2:0)+(tagTier("light")>=3?1:0)+(currentBiomeKey()==="crypt"?-1:currentBiomeKey()==="frost"?1:0)+(mutation()?.vision||0));
+}
+function revealTrapsByLight(radius){
+ let found=0;
+ for(const trap of state.traps||[]){
+  if(trap.spent||trap.revealed)continue;
+  if(Math.abs(trap.x-state.player.x)+Math.abs(trap.y-state.player.y)<=radius){
+   trap.revealed=true;
+   found++;
+  }
+ }
+ if(found){
+  gainObservation("trap",found);
+  addLog(`ランタンの安定した光が罠を${found}個照らし出した。`);
+ }
+ return found;
+}
+function revealSecretsByLight(radius){
+ let found=0;
+ for(const wall of state.secretWalls||[]){
+  if(wall.revealed)continue;
+  if(Math.abs(wall.x-state.player.x)+Math.abs(wall.y-state.player.y)<=radius){
+   wall.revealed=true;
+   state.map[wall.y][wall.x]=1;
+   found++;
+  }
+ }
+ if(found){
+  gainTraining("perception",found*2);
+  addLog(`魔導灯が隠し通路を${found}か所看破した。`);
+ }
+ return found;
+}
+function applyLightUtility(){
+ const light=currentLight();
+ if(light===lightData.lantern)revealTrapsByLight(2);
+ if(light===lightData.arcane)revealSecretsByLight(2);
+}
+function lightDamageMultiplier(enemy){
+ return currentLight()===lightData.torch&&enemy?.faction==="undead"?1.15:1;
 }
 function cycleLight(){
  if(!state)return;
@@ -2172,17 +2456,22 @@ function cycleLight(){
  const next=order[(order.indexOf(current)+1)%order.length];
  if(next==="none"){state.light.on=false}
  else{state.light.on=true;state.light.type=next}
- $("lightBtn").textContent=currentLight().label;
- addLog("光源を「"+currentLight().label+"」へ切り替えた。");
+ renderLightButton();
+ const light=currentLight();
+ addLog(`光源を「${light.label}」へ変更。${light.role}：${light.desc}`);
+ applyLightUtility();
  updateVision();queueSave?.();render();
 }
 function consumeLightFuel(){
- const l=currentLight();
- if(l.fuelUse<=0)return;
- state.light.fuel=Math.max(0,state.light.fuel-l.fuelUse);
+ const light=currentLight();
+ if(light.fuelUse<=0)return;
+ const interval=Math.max(1,light.fuelInterval||1);
+ if(state.turn%interval!==0)return;
+ state.light.fuel=Math.max(0,state.light.fuel-light.fuelUse);
  if(state.light.fuel===0&&state.light.on){
   state.light.on=false;
-  addLog("光源の燃料が尽きた。");
+  renderLightButton();
+  addLog("光源の燃料が尽き、消灯した。");
  }
 }
 function refillLight(){
@@ -2265,7 +2554,8 @@ function autonomousEnemyTurn(e){
 function enemyDetectionRadius(e){
  const base={skeleton:4,warg:5,mage:7,bomber:4,warden:8}[e.type]||4;
  // 光の騒音は以前より弱くし、敵がマップ全体から集まらないようにする。
- return Math.max(1,base+Math.ceil(currentLight().noise*.45)+(e.elite==="swift"?1:0)-(tagTier("shadow")>=3?1:0));
+ const light=currentLight();
+ return Math.max(1,base+Math.ceil(light.noise*.35)+(light.detectionMod||0)+(e.elite==="swift"?1:0)-(tagTier("shadow")>=3?1:0));
 }
 function clearLineBetween(ax,ay,bx,by,maxRange){
  const dist=Math.abs(ax-bx)+Math.abs(ay-by);
@@ -2480,16 +2770,91 @@ function addFloorEvents(){
  state.events.push({x:p.x,y:p.y,eventId:def.id,used:false});
 }
 function eventAt(x,y){return state.events.find(e=>e.x===x&&e.y===y&&!e.used)}
+function eventStateSnapshot(){
+ const c=state.consumables||{};
+ return{
+  hp:state.hero.hp,maxHp:state.hero.maxHp,
+  stamina:state.hero.stamina,maxStamina:state.hero.maxStamina,
+  attack:state.hero.atk,defense:state.hero.def,crit:state.crit,
+  gold:state.gold,xp:state.xp,shards:state.meta.shards,
+  hunger:state.hunger,provisions:state.provisions||0,
+  inventory:state.inventory.length,
+  potion:c.potion||0,identify:c.identify||0,purify:c.purify||0,
+  bomb:c.bomb||0,retreat:c.retreat||0,oil:c.oil||0
+ };
+}
+function formatEventDelta(value,percent=false){
+ if(percent)return`${value>0?"+":""}${Math.round(value*100)}%`;
+ return`${value>0?"+":""}${value}`;
+}
+function describeEventChanges(before,after){
+ const definitions=[
+  ["hp","HP"],["maxHp","最大HP"],["stamina","気力"],["maxStamina","最大気力"],
+  ["attack","攻撃"],["defense","防御"],["crit","会心率",true],
+  ["gold","所持金"],["xp","経験値"],["shards","深淵の欠片"],
+  ["hunger","充足"],["provisions","携行糧"],["inventory","装備"],
+  ["potion","治癒薬"],["identify","鑑定紙片"],["purify","解呪の灰"],
+  ["bomb","火炎壺"],["retreat","帰還標"],["oil","灯油"]
+ ];
+ const changes=[];
+ for(const [key,label,percent] of definitions){
+  const delta=(after[key]??0)-(before[key]??0);
+  if(delta!==0)changes.push(`${label} ${formatEventDelta(delta,percent)}`);
+ }
+ return changes;
+}
 function triggerEvent(){
  const node=eventAt(state.player.x,state.player.y);if(!node)return;
  const def=eventDefs.find(e=>e.id===node.eventId);if(!def)return;
- node.used=true;$("eventTitle").textContent=def.title;$("eventText").textContent=def.text;
- const box=$("eventChoices");box.innerHTML="";
- def.choices.forEach(c=>{
-  if(c.available&&!c.available())return;
-  const b=document.createElement("button");b.type="button";b.className="choiceBtn";b.textContent=c.label;
-  b.onclick=()=>{c.run();state.meta.marks[c.mark]=(state.meta.marks[c.mark]||0)+1;state.meta.eventHistory.push({id:def.id,title:def.title,choice:c.label,floor:state.floor});gainObservation("event",1);saveMeta();saveGame();$("eventOverlay").classList.add("hidden");render()};
-  box.appendChild(b);
+
+ node.used=true;
+ $("eventTitle").textContent=def.title;
+ $("eventText").textContent=def.text;
+ $("eventResult").classList.add("hidden");
+ $("eventResult").innerHTML="";
+ $("closeEvent").classList.add("hidden");
+
+ const box=$("eventChoices");
+ box.innerHTML="";
+
+ def.choices.forEach(choice=>{
+  if(choice.available&&!choice.available())return;
+  const button=document.createElement("button");
+  button.type="button";
+  button.className="choiceBtn";
+  button.textContent=choice.label;
+  button.onclick=()=>{
+   const before=eventStateSnapshot();
+   const previousLog=state.log[0];
+   choice.run();
+   const narrative=state.log[0]!==previousLog?state.log[0]:"迷宮は静かに選択を受け入れた。";
+   const after=eventStateSnapshot();
+   const changes=describeEventChanges(before,after);
+
+   state.meta.marks[choice.mark]=(state.meta.marks[choice.mark]||0)+1;
+   state.meta.eventHistory.push({
+    id:def.id,title:def.title,choice:choice.label,floor:state.floor,
+    result:narrative,changes
+   });
+   gainObservation("event",1);
+
+   box.innerHTML="";
+   $("eventText").textContent=`「${choice.label}」を選んだ。`;
+   $("eventResult").innerHTML=`
+    <b>${narrative}</b>
+    <div class="eventResultChanges">${
+     changes.length
+      ?changes.map(change=>`<span>${change}</span>`).join("")
+      :"<span>数値上の変化なし</span>"
+    }</div>`;
+   $("eventResult").classList.remove("hidden");
+   $("closeEvent").classList.remove("hidden");
+
+   const logChanges=changes.length?changes.join(" / "):"数値変化なし";
+   addLog(`事件「${def.title}」：${choice.label} → ${logChanges}`);
+   saveMeta();saveGame();render();
+  };
+  box.appendChild(button);
  });
  $("eventOverlay").classList.remove("hidden");
 }
@@ -2678,8 +3043,9 @@ function generateFloor(){
  spawnFloorBoss();
  spawnNemesis();
  updateVision();
- const mutationText=mutation()?"【"+mutation().label+"】":"";
- gainObservation("biome",state.floor%5===1?1:0);renderFloorGoal();showFloorBanner("第 "+state.floor+" 層【"+floorPlan().title+"】"+"【"+currentBiome().label+"】"+mutationText+(adaptation()?"【"+adaptation().label+"】":""));
+ gainObservation("biome",state.floor%5===1?1:0);
+ renderFloorGoal();
+ showFloorBanner();
  saveGame();render();
 }
 
@@ -3258,7 +3624,9 @@ function damageEnemy(e,damage,label=""){
   addLog("暗闇で攻撃を外した。");
   return;
  }
- const guardMul=(e.type==="skeleton"&&e.guarding)?0.45:1;damage=applyTraitDamage(damage,e)*biomeDamageModifier(equippedElement())*tagDamageMultiplier(e);const dmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul*(mutation()?.damageMul||1)));
+ const guardMul=(e.type==="skeleton"&&e.guarding)?0.45:1;
+ damage=applyTraitDamage(damage,e)*biomeDamageModifier(equippedElement())*tagDamageMultiplier(e)*lightDamageMultiplier(e);
+ const dmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul*(mutation()?.damageMul||1)));
  e.hp-=dmg;spawnAttackEffect(e.x,e.y,label);triggerHitFx(e.x,e.y,dmg>=10);sfx("hit");
  if(weaponType()==="sword"&&masteryLevel("sword")>=1&&rng()<.10)recoverStamina(1);
  if(weaponType()==="staff"&&masteryLevel("staff")>=3&&rng()<.25)recoverStamina(1);applyElementHit(e,dmg);
@@ -3651,6 +4019,7 @@ function endTurn(){
  state.hunger=Math.max(0,state.hunger-actualHungerDrain);
  updateHungerStageNotification();
  if(!lungPause)consumeLightFuel();
+ applyLightUtility();
  if(state.lastAction==="move")recoverStamina(hasTalent("marathon")?2:1);
  if(state.lastAction==="guard")recoverStamina(1);
  if(state.hunger===0&&state.turn%2===0){
@@ -3858,12 +4227,30 @@ function move(dx,dy){
  }
  const nx=state.player.x+dx,ny=state.player.y+dy;
  if(tile(nx,ny)!==1){addLog("壁が行く手を塞いでいる。");return}
+
+ const steppingOntoStairs=nx===state.stairs.x&&ny===state.stairs.y;
+ if(steppingOntoStairs){
+  if(state.floor%5===0&&!state.bossDefeated){
+   addLog("番人を倒さなければ先へ進めない。");
+   return;
+  }
+  const nextFloor=state.floor+1;
+  const goal=firstTwentyPlan[nextFloor];
+  const nextLabel=goal?`「${goal.title}」`:`第${nextFloor}層`;
+  const accepted=confirm(
+   `${nextLabel}へ進みますか？\n\n一度進むと現在の階層には戻れません。`
+  );
+  if(!accepted){
+   addLog("階段の手前で足を止めた。");
+   return;
+  }
+ }
+
  startMoveAnim(dx,dy);sfx("step");gainTraining("endurance",1);
  state.player.x=nx;state.player.y=ny;state.lastAction="move";
  revealNearbyTraps();pickup();triggerTrap();triggerSpecialTile();triggerEvent();useShortcutIfPresent();
  if(state.gameOver){render();return}
  if(nx===state.stairs.x&&ny===state.stairs.y){
-  if(state.floor%5===0&&!state.bossDefeated){addLog("番人を倒さなければ先へ進めない。");endTurn();return}
   const previousFloor=state.floor;
   try{
    state.floor++;state.meta.shards+=1;state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);updateAdaptationPoints();saveMeta();
@@ -3986,13 +4373,13 @@ const perks=[
  {name:"剛力の枝",desc:"攻撃力 +2",apply(){state.hero.atk+=2}},
  {name:"生命の枝",desc:"最大HP +9、現在HPも回復",apply(){state.hero.maxHp+=9;state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+9)}},
  {name:"鉄皮の枝",desc:"防御力 +1",apply(){state.hero.def+=1}},
- {name:"遠征糧秣",desc:"最大充足 +120、携行糧 +60手",apply(){state.maxHunger+=120;state.provisions=(state.provisions||0)+60}},
+ {name:"遠征糧秣",desc:"携行糧 +120手（今の探索時間を即座に延長）",apply(){state.provisions=(state.provisions||0)+120}},
  {name:"凶星の枝",desc:"会心率 +5%",apply(){state.crit+=.05}},
  {name:"息吹の枝",desc:"最大気力 +2、気力を全回復",apply(){state.hero.maxStamina+=2;state.hero.stamina=effectiveMaxStamina()}}
 ];
 function showLevelChoices(){
  const pool=[...perks].sort(()=>rng()-.5).slice(0,3),box=$("levelChoices");box.innerHTML="";
- pool.forEach(p=>{const b=document.createElement("button");b.className="choiceBtn";b.innerHTML=`<b>${p.name}</b><small>${p.desc}</small>`;b.onclick=()=>{p.apply();$("levelOverlay").classList.add("hidden");addLog("樹脈が探索者を強めた。");saveGame();render()};box.appendChild(b)});
+ pool.forEach(p=>{const b=document.createElement("button");b.className="choiceBtn";b.innerHTML=`<b>${p.name}</b><small>${p.desc}</small>`;b.onclick=()=>{p.apply();$("levelOverlay").classList.add("hidden");addLog(`成長「${p.name}」を獲得：${p.desc}`);saveGame();render()};box.appendChild(b)});
  $("levelOverlay").classList.remove("hidden");
 }
 function gearLabel(g){
@@ -4252,9 +4639,13 @@ function returnToLighthouse(){
  $("hubOverlay").classList.remove("hidden");
  addLog(`${source.label}から灯台へ帰還した。探索は終了し、HP・気力・充足が完全回復した。`);
 }
+function stashSalvageValue(g){
+ return{common:1,magic:2,rare:4,legendary:8}[g?.rarity]||1;
+}
 function salvageStash(index){
  const g=state.meta.stash[index];if(!g)return;
- const value={common:1,magic:2,rare:4,legendary:8}[g.rarity]||1;
+ const value=stashSalvageValue(g);
+ if(!confirm(`「${gearLabel(g)}」を分解して、深淵の欠片を${value}個得ますか？`))return;
  state.meta.shards+=value;
  if(state.meta.heirloom?.id===g.id)state.meta.heirloom=null;
  state.meta.stash.splice(index,1);
@@ -4311,14 +4702,36 @@ function renderHub(){
    <div class="desc">${desc}</div><button type="button" data-upgrade="${id}">強化する</button></div>`;
  }).join("");
  $("hubUpgrades").querySelectorAll("[data-upgrade]").forEach(b=>b.onclick=()=>buyMetaUpgrade(b.dataset.upgrade));
- $("stashList").innerHTML='<h3>持ち帰り倉庫</h3>'+
-  (m.stash?.length?m.stash.map((g,i)=>`
-   <div class="itemRow">
-    <div class="top"><span>${gearLabel(g)}</span><span>${equippedSlotLabel(g.slot)}</span></div>
-    <div class="desc">ILv${g.itemLevel||1} / 必要Lv${g.requiredLevel||1} / 攻${g.atk} / 防${g.def} / ${g.rarity}${m.heirloom?.id===g.id?" / 継承中":""}<br>${tagSummaryHtml(g.tags)}<br><span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0} / ${bondTraitSummary(g)}</span></div>
-    <button type="button" data-heirloom="${i}">次回へ持ち込む</button>
-    <button type="button" data-salvage="${i}">分解する</button>
-   </div>`).join(""):'<p class="note">持ち帰った装備はありません。</p>');
+ const stashItems=m.stash||[];
+ const totalStashShards=stashItems.reduce((sum,g)=>sum+stashSalvageValue(g),0);
+ $("stashSummary").textContent=`持ち帰り倉庫 ${stashItems.length}/20・全分解 ${totalStashShards}欠片`;
+ $("stashList").innerHTML=`<div class="stashSummaryLine">
+  装備名の色でレア度を確認できます。分解ボタンには獲得する欠片数を表示しています。
+ </div>`+
+  (stashItems.length?stashItems.map((g,i)=>{
+   const rarity=rarityData[g.rarity]||rarityData.common;
+   const stats=applyBondTraitStats(g);
+   const salvage=stashSalvageValue(g);
+   const inherited=m.heirloom?.id===g.id;
+   return`
+   <div class="itemRow ${inherited?"protectedItem":""}">
+    <div class="top">
+     <span class="stashGearName ${g.rarity||"common"}">${rarity.label}・${gearLabel(g)}</span>
+     <span>${equippedSlotLabel(g.slot)}${inherited?"・継承中":""}</span>
+    </div>
+    <div class="desc">
+     ILv${g.itemLevel||1} / 必要Lv${g.requiredLevel||1} / 推奨度 ${Math.round(gearScore(g))}<br>
+     攻${stats.atk} / 防${stats.def}${g.hunger?` / 最大充足 +${gearSupplyBonus(g)}`:""}${g.crit?` / 会心 +${Math.round(g.crit*100)}%`:""}<br>
+     ${tagSummaryHtml(g.tags)}<br>
+     <span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0} / ${bondTraitSummary(g)}</span><br>
+     分解価値：<span class="stashShardValue">${salvage}欠片</span>
+    </div>
+    <div class="stashActions">
+     <button type="button" data-heirloom="${i}">${inherited?"継承中":"次回へ持ち込む"}</button>
+     <button type="button" data-salvage="${i}">分解 +${salvage}欠片</button>
+    </div>
+   </div>`;
+  }).join(""):'<p class="note">持ち帰った装備はありません。</p>');
  $("stashList").querySelectorAll("[data-heirloom]").forEach(b=>b.onclick=()=>setHeirloom(Number(b.dataset.heirloom)));
  $("stashList").querySelectorAll("[data-salvage]").forEach(b=>b.onclick=()=>salvageStash(Number(b.dataset.salvage)));
  const researchRows=Object.keys(researchData).map(type=>`${researchData[type].label} Lv${researchLevel(type)}`).join(" / ");
@@ -4539,7 +4952,43 @@ function loadGame(){
   updateVision();render();return true;
  }catch(e){return false}
 }
-function showFloorBanner(t){$("floorBanner").textContent=t;$("floorBanner").classList.add("show");clearTimeout(bannerTimer);bannerTimer=setTimeout(()=>$("floorBanner").classList.remove("show"),1000)}
+function floorBannerKicker(plan){
+ if(plan.boss)return"WARDEN DEPTH・番人の階";
+ if(plan.rest)return"SUPPLY DEPTH・補給と静寂";
+ return"DESCENT・深淵への降下";
+}
+function showFloorBanner(){
+ const banner=$("floorBanner");
+ if(!banner||!state)return;
+
+ const plan=floorPlan();
+ const biome=currentBiome();
+ const extra=[];
+ if(mutation())extra.push(`異変：${mutation().label}`);
+ if(adaptation())extra.push(`環境適応：${adaptation().label}`);
+
+ banner.classList.remove("show","floorBannerBoss","floorBannerRest");
+ void banner.offsetWidth;
+
+ if(plan.boss)banner.classList.add("floorBannerBoss");
+ if(plan.rest)banner.classList.add("floorBannerRest");
+
+ banner.innerHTML=`
+  <div class="floorBannerKicker">${floorBannerKicker(plan)}</div>
+  <div class="floorBannerDepth">第 ${state.floor} 層</div>
+  <div class="floorBannerTitle">${plan.title}</div>
+  <div class="floorBannerMeta">
+   <span>${biome.label}</span>
+   ${extra.map(label=>`<span>${label}</span>`).join("")}
+  </div>
+  <div class="floorBannerGoal"><b>この階の指針</b><br>${plan.goal}</div>`;
+
+ banner.classList.add("show");
+ clearTimeout(bannerTimer);
+ bannerTimer=setTimeout(()=>{
+  banner.classList.remove("show","floorBannerBoss","floorBannerRest");
+ },5900);
+}
 function renderStats(){
  const hs=hungerStage();
  $("stats").innerHTML=`
@@ -4554,7 +5003,7 @@ function renderHero(){
  $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
-  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　${currentLight().label}:${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}</div>
+  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}</div>
   <div class="resourceGrid">
    <div class="resourceCell hpResource">
     <div class="resourceHeader"><b>HP</b><span class="resourceValue">${h.hp}/${h.maxHp}</span></div>
@@ -5297,7 +5746,7 @@ function startNew(){
   $("eventOverlay").classList.add("hidden");
   $("inspectOverlay").classList.add("hidden");
   $("starterOverlay").classList.remove("hidden");
-  $("lightBtn").textContent=currentLight().label;
+  renderLightButton();
   render();
  }catch(error){
   console.error("New run initialization failed",error);
@@ -5352,7 +5801,7 @@ $("footerBtns").addEventListener("click",event=>{
  $("menuBtn").textContent="メニュー";
 });
 
-$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("researchBtn").onclick=openResearchFromHub;$("closeResearch").onclick=()=>closeHubSubOverlay("researchOverlay");$("closeAdapt").onclick=()=>closeHubSubOverlay("adaptOverlay");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
+$("closeEvent").onclick=()=>{$("eventOverlay").classList.add("hidden");render()};$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("researchBtn").onclick=openResearchFromHub;$("closeResearch").onclick=()=>closeHubSubOverlay("researchOverlay");$("closeAdapt").onclick=()=>closeHubSubOverlay("adaptOverlay");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
 $("saveBtn").onclick=()=>{saveGame();addLog("探索記録を保存した。")};
 $("up").onclick=()=>move(0,-1);$("down").onclick=()=>move(0,1);$("left").onclick=()=>move(-1,0);$("right").onclick=()=>move(1,0);$("wait").onclick=waitTurn;
 $("guard").onclick=()=>useSkill("guard");$("volley").onclick=()=>useSkill("volley");$("heal").onclick=()=>useSkill("heal");$("search").onclick=()=>useSkill("search");
