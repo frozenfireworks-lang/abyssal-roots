@@ -1524,7 +1524,7 @@ body{
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.3.1 LOADOUT UI HOTFIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.3.2 LIGHTHOUSE RESUME</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -1565,7 +1565,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 灯台の装備UI視認性改善</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 帰還・灯台状態から再開</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2412,6 +2412,113 @@ function loadMeta(){
 function saveMeta(){
  if(state?.meta)localStorage.setItem("abyssalRootsMeta",JSON.stringify(state.meta));
 }
+const ACTIVE_SAVE_KEY="abyssalRootsSoloV4Save";
+const HUB_SESSION_KEY="abyssalRootsSoloV4Lighthouse";
+function readLighthouseSession(){
+ try{
+  const raw=localStorage.getItem(HUB_SESSION_KEY);
+  if(!raw)return null;
+  const session=JSON.parse(raw);
+  if(!session||session.version!==1)return null;
+  return session;
+ }catch(error){
+  return null;
+ }
+}
+function currentLighthousePhase(){
+ if(!$("gameOverOverlay").classList.contains("hidden"))return"debrief";
+ return"hub";
+}
+function saveLighthouseSession(phase=currentLighthousePhase()){
+ if(!state?.expeditionEnded)return;
+ saveMeta();
+ const report=state.meta?.lastExpeditionReport||null;
+ localStorage.setItem(HUB_SESSION_KEY,JSON.stringify({
+  version:1,
+  phase:phase==="debrief"?"debrief":"hub",
+  outcome:report?.outcome||null,
+  report,
+  savedAt:Date.now()
+ }));
+ updateContinueAvailability();
+}
+function clearLighthouseSession(){
+ localStorage.removeItem(HUB_SESSION_KEY);
+}
+function hasActiveExpeditionSave(){
+ return !!localStorage.getItem(ACTIVE_SAVE_KEY);
+}
+function hasLighthouseSession(){
+ return !!readLighthouseSession();
+}
+function migrateLegacyLighthouseSession(){
+ if(hasActiveExpeditionSave()||hasLighthouseSession())return false;
+ const meta=loadMeta();
+ const report=meta?.lastExpeditionReport;
+ if(!report)return false;
+ localStorage.setItem(HUB_SESSION_KEY,JSON.stringify({
+  version:1,
+  phase:"hub",
+  outcome:report.outcome||null,
+  report,
+  savedAt:Date.now(),
+  migratedFromLegacy:true
+ }));
+ return true;
+}
+function updateContinueAvailability(){
+ const button=$("continueBtn");
+ if(!button)return;
+ const active=hasActiveExpeditionSave();
+ const lighthouse=hasLighthouseSession();
+ button.classList.toggle("hidden",!active&&!lighthouse);
+ button.textContent=active
+  ?"続きから（探索中）"
+  :lighthouse
+   ?"続きから（灯台）"
+   :"続きから";
+}
+function restoreLighthouseSession(){
+ const session=readLighthouseSession();
+ if(!session)return false;
+
+ const meta=loadMeta()||defaultMeta();
+ state=freshState();
+ state.meta=meta;
+ ensureMetaLoadouts(state.meta);
+ state.expeditionEnded=true;
+ state.gameOver=session.outcome==="death";
+ state.hero.hp=state.hero.maxHp;
+ state.hero.stamina=effectiveMaxStamina();
+ state.hunger=effectiveMaxHunger();
+ state.provisions=0;
+
+ $("titleOverlay").classList.add("hidden");
+ $("starterOverlay").classList.add("hidden");
+ $("eventOverlay").classList.add("hidden");
+ $("inspectOverlay").classList.add("hidden");
+ $("inventoryOverlay").classList.add("hidden");
+ $("researchOverlay").classList.add("hidden");
+ $("adaptOverlay").classList.add("hidden");
+ $("hubOverlay").classList.add("hidden");
+ $("gameOverOverlay").classList.add("hidden");
+
+ renderLightButton();
+ render();
+
+ const report=session.report||state.meta.lastExpeditionReport;
+ if(session.phase==="debrief"&&report){
+  state.meta.lastExpeditionReport=report;
+  showExpeditionReport(report);
+ }else{
+  renderHub();
+  $("returnToAbyssBtn").classList.add("hidden");
+  $("closeHub").classList.add("hidden");
+  $("hubOverlay").classList.remove("hidden");
+  saveLighthouseSession("hub");
+ }
+ return true;
+}
 function defaultMeta(){
  const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
  meta.appearance=defaultAppearance();
@@ -2715,6 +2822,7 @@ function openLighthouseAfterDebrief(){
  $("returnToAbyssBtn").classList.add("hidden");
  $("closeHub").classList.add("hidden");
  $("hubOverlay").classList.remove("hidden");
+ saveLighthouseSession("hub");
 }
 function finishExpeditionDeath(cause,killer=null){
  if(state.gameOver)return;
@@ -2725,8 +2833,10 @@ function finishExpeditionDeath(cause,killer=null){
  const report=buildExpeditionReport("death",{cause});
  state.meta.lastExpeditionReport=report;
  saveMeta();
- localStorage.removeItem("abyssalRootsSoloV4Save");
+ localStorage.removeItem(ACTIVE_SAVE_KEY);
+ localStorage.removeItem("abyssalRootsSoloV4Backup");
  showExpeditionReport(report);
+ saveLighthouseSession("debrief");
 }
 function freshState(){
  const newState={
@@ -5544,9 +5654,11 @@ function returnToLighthouse(){
  state.hungerRecoveryBuffer=0;
  state.hero.stamina=effectiveMaxStamina();
  saveMeta();
- localStorage.removeItem("abyssalRootsSoloV4Save");
+ localStorage.removeItem(ACTIVE_SAVE_KEY);
+ localStorage.removeItem("abyssalRootsSoloV4Backup");
  addLog(`${source.label}から灯台へ帰還した。探索は終了し、HP・気力・充足が完全回復した。`);
  showExpeditionReport(report);
+ saveLighthouseSession("debrief");
 }
 function stashSalvageValue(g){
  return{common:1,magic:2,rare:4,legendary:8}[g?.rarity]||1;
@@ -5692,8 +5804,8 @@ function renderLighthouseLoadout(){
  const clearBtn=$("clearNextLoadout");
  copyBtn.onclick=copyReturnedLoadoutToNext;
  clearBtn.onclick=clearAllNextLoadout;
- const hasReturned=Object.values(returnedLoadout).some(Boolean);
- const hasNext=Object.values(nextLoadout).some(Boolean);
+ const hasReturned=Object.values(returned).some(Boolean);
+ const hasNext=Object.values(next).some(Boolean);
  copyBtn.disabled=!hasReturned;
  clearBtn.disabled=!hasNext;
  copyBtn.title=hasReturned?"帰還時の装備を次回出撃へ一括設定します。":"帰還時の装備が無いため設定できません。";
@@ -5798,6 +5910,7 @@ function renderHub(){
 function openHub(){if(!state)return;returnToLighthouse()}
 function startFreshRunFromHub(){
  saveMeta();
+ clearLighthouseSession();
  state=freshState();
  $("hubOverlay").classList.add("hidden");
  $("titleOverlay").classList.add("hidden");
@@ -5885,10 +5998,19 @@ let saveTimer=null;
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveGame(),120)}
 function saveSnapshot(){try{if(state)localStorage.setItem("abyssalRootsSoloV4Backup",JSON.stringify(state))}catch(e){}}
 function loadBackup(){try{const raw=localStorage.getItem("abyssalRootsSoloV4Backup");return raw?JSON.parse(raw):null}catch(e){return null}}
-function saveGame(){if(state&&!state.gameOver&&!state.expeditionEnded){saveSnapshot();localStorage.setItem("abyssalRootsSoloV4Save",JSON.stringify(state))}}
+function saveGame(){
+ if(!state)return;
+ if(!state.gameOver&&!state.expeditionEnded){
+  saveSnapshot();
+  localStorage.setItem(ACTIVE_SAVE_KEY,JSON.stringify(state));
+  updateContinueAvailability();
+ }else if(state.expeditionEnded){
+  saveLighthouseSession();
+ }
+}
 function loadGame(){
  try{
-  let s=JSON.parse(localStorage.getItem("abyssalRootsSoloV4Save"));if(!s)s=loadBackup();
+  let s=JSON.parse(localStorage.getItem(ACTIVE_SAVE_KEY));if(!s)s=loadBackup();
   if(!s||s.version!==4||!s.hero||typeof s.hero.stamina!=="number"||!s.weapon?.weaponType)return false;
   state=s;
   if(!state.consumables)state.consumables={potion:1,identify:0,purify:0,bomb:1};
@@ -6873,6 +6995,7 @@ function renderSkills(){
 function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();renderFloorGoal();renderReturnAccess();draw()}
 function startNew(){
  try{
+  clearLighthouseSession();
   state=freshState();
   $("titleOverlay").classList.add("hidden");
   $("gameOverOverlay").classList.add("hidden");
@@ -6895,7 +7018,25 @@ $("newGameBtn").onclick=event=>{event.preventDefault();ensureAudio();startAmbien
   if(type)chooseStarter(type);
  });
 });
-$("continueBtn").onclick=()=>{if(loadGame()){$("titleOverlay").classList.add("hidden");$("soundBtn").textContent=state.audio?.enabled?"音ON":"音OFF";if(state.audio?.enabled){ensureAudio();startAmbient()}$("lightBtn").textContent=currentLight().label}};
+$("continueBtn").onclick=()=>{
+ let restored=false;
+ if(hasActiveExpeditionSave()){
+  restored=loadGame();
+  if(restored){
+   $("titleOverlay").classList.add("hidden");
+   $("soundBtn").textContent=state.audio?.enabled?"音ON":"音OFF";
+   if(state.audio?.enabled){ensureAudio();startAmbient()}
+   renderLightButton();
+  }
+ }
+ if(!restored&&hasLighthouseSession()){
+  restored=restoreLighthouseSession();
+ }
+ if(!restored){
+  updateContinueAvailability();
+  alert("再開できる保存状態が見つかりませんでした。");
+ }
+};
 $("inventoryBtn").onclick=()=>{if(!state)return;renderInventory();$("inventoryOverlay").classList.remove("hidden")};
 $("closeInventory").onclick=()=>$("inventoryOverlay").classList.add("hidden");
 $("closeAppearance").onclick=()=>$("appearanceOverlay").classList.add("hidden");
@@ -6951,7 +7092,8 @@ window.visualViewport?.addEventListener("scroll",updateVisualHeight,{passive:tru
 document.addEventListener("visibilitychange",()=>{if(document.hidden)saveGame()});
 window.addEventListener("pagehide",()=>saveGame());
 
-if(localStorage.getItem("abyssalRootsSoloV4Save"))$("continueBtn").classList.remove("hidden");
+migrateLegacyLighthouseSession();
+updateContinueAvailability();
 requestAnimationFrame(tickContinuousAnimation);
 
 // iPhone Safariのダブルタップ拡大・ピンチ拡大を抑止する。
