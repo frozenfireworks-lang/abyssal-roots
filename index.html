@@ -698,11 +698,244 @@ body{
  .itemRow .itemActions{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
+
+/* v3.8.8.4 HUD BAR FIX */
+.resourceGrid{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+ gap:7px;
+ margin-top:5px;
+}
+.resourceCell{
+ min-width:0;
+ padding:4px 6px;
+ border:1px solid #403449;
+ border-radius:7px;
+ background:rgba(9,7,12,.62);
+}
+.resourceHeader{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ min-width:0;
+ gap:5px;
+ margin-bottom:3px;
+ font-size:8px;
+ line-height:1;
+ white-space:nowrap;
+}
+.resourceHeader b{
+ overflow:hidden;
+ text-overflow:ellipsis;
+ font-size:8px;
+}
+.resourceValue{
+ flex:none;
+ font-variant-numeric:tabular-nums;
+ color:#e6dce9;
+}
+.resourceCell .bar,
+.resourceCell .staminaBar{
+ display:block;
+ width:100%;
+ height:6px;
+ margin:0;
+ box-sizing:border-box;
+}
+.resourceNote{
+ min-height:8px;
+ margin-top:3px;
+ overflow:hidden;
+ color:#a99bb0;
+ font-size:7px;
+ line-height:1.1;
+ white-space:nowrap;
+ text-overflow:ellipsis;
+}
+@media(max-width:600px){
+ .member.hasPortrait{
+  padding-left:39px!important;
+ }
+ .resourceGrid{
+  gap:4px;
+  margin-top:3px;
+ }
+ .resourceCell{
+  padding:3px 4px;
+  border-radius:6px;
+ }
+ .resourceHeader,
+ .resourceHeader b{
+  font-size:7px;
+ }
+ .resourceCell .bar,
+ .resourceCell .staminaBar{
+  width:100%!important;
+  height:5px;
+  margin:0!important;
+ }
+ .resourceNote{
+  min-height:7px;
+  margin-top:2px;
+  font-size:6px;
+ }
+}
+@media(max-width:390px) and (max-height:700px){
+ .resourceGrid{gap:3px;margin-top:2px}
+ .resourceCell{padding:2px 3px}
+ .resourceCell .bar,
+ .resourceCell .staminaBar{height:4px}
+ .resourceNote{display:none}
+}
+
+
+/* v3.8.9.1 HUB & RETURN HOTFIX */
+#hubOverlay{z-index:20}
+#researchOverlay,#adaptOverlay{z-index:40}
+#hubBtn:disabled{
+ opacity:.42;
+ filter:grayscale(1);
+ transform:none;
+ box-shadow:0 2px 0 #0b080d;
+}
+.hubStatusBox{
+ margin:8px 0;
+ padding:9px;
+ border:1px solid #55435f;
+ border-radius:9px;
+ background:#130e18;
+ color:#d5c9dc;
+ font-size:11px;
+ line-height:1.55;
+}
+
+
+/* v3.8.9.2 HELP UX */
+.helpLead{
+ margin:6px 0 10px;
+ padding:10px;
+ border:1px solid #5b4a66;
+ border-radius:10px;
+ background:#140f18;
+ color:#e8deec;
+}
+.helpLead b{color:#fff1c8}
+.helpQuick{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:6px;
+ margin:10px 0 12px;
+}
+.helpQuickCard{
+ min-width:0;
+ padding:8px 7px;
+ border:1px solid #4f4158;
+ border-radius:9px;
+ background:#120d16;
+ text-align:left;
+}
+.helpQuickCard b{
+ display:block;
+ margin-bottom:4px;
+ color:#f3e2a6;
+ font-size:11px;
+}
+.helpQuickCard small{
+ display:block;
+ color:#c9bbcf;
+ line-height:1.45;
+ font-size:10px;
+}
+.helpSection{
+ margin-top:8px;
+ border:1px solid #4a3c53;
+ border-radius:10px;
+ background:#100c14;
+ overflow:hidden;
+}
+.helpSection summary{
+ list-style:none;
+ cursor:pointer;
+ user-select:none;
+ padding:10px 12px;
+ font-weight:700;
+ color:#efe5f2;
+ background:linear-gradient(180deg,#1a1420,#120d16);
+}
+.helpSection summary::-webkit-details-marker{display:none}
+.helpSection summary::after{
+ content:"＋";
+ float:right;
+ color:#d6bfd8;
+}
+.helpSection[open] summary::after{content:"－"}
+.helpBody{
+ padding:10px 12px 12px;
+ color:#d8cddd;
+ line-height:1.65;
+ font-size:11px;
+}
+.helpBody p{margin:0 0 8px}
+.helpBody ul{
+ margin:0 0 8px 16px;
+ padding:0;
+}
+.helpBody li{margin:0 0 6px}
+.helpNote{
+ margin-top:8px;
+ padding:8px 9px;
+ border-left:3px solid #c4a15a;
+ background:#171117;
+ color:#eadfc3;
+ border-radius:6px;
+}
+.helpBadges{
+ display:flex;
+ flex-wrap:wrap;
+ gap:5px;
+ margin:4px 0 8px;
+}
+.helpBadge{
+ display:inline-block;
+ padding:2px 7px;
+ border:1px solid #5b4a66;
+ border-radius:999px;
+ background:#17111c;
+ color:#d8cddd;
+ font-size:10px;
+}
+.helpKeys{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:6px;
+ margin-top:8px;
+}
+.helpKey{
+ padding:7px 8px;
+ border:1px solid #4a3c53;
+ border-radius:8px;
+ background:#140f18;
+ color:#d8cddd;
+ font-size:10px;
+ line-height:1.45;
+}
+.helpKey b{color:#fff1c8}
+@media(max-width:600px){
+ .helpQuick{
+  grid-template-columns:1fr;
+  gap:5px;
+ }
+ .helpQuickCard b{font-size:10px}
+ .helpQuickCard small{font-size:9px}
+ .helpBody{font-size:10px}
+ .helpKeys{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.8.8.3 START & WALL HOTFIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.8.9.2 HELP UX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -742,7 +975,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 新規開始・壁タイル描画の修正</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 遊び方の見やすさ改善</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -807,21 +1040,144 @@ body{
 <div class="overlay hidden" id="helpOverlay">
   <div class="card">
     <h2>遊び方</h2>
-    <p>
-      移動・待機・スキルを使うたびに1ターン進み、敵も行動します。方向入力は、武器の射程内に敵がいれば攻撃、いなければ移動です。攻撃にはスタミナを使い、敵の赤い予兆は次のターンに実行されます。
-      予兆を見て、退く・構える・先に倒すを選んでください。剣は軽快、槍は間合い、弓は近距離不可、杖は高消費の範囲攻撃です。階段 <b style="color:#e1b85b">▼</b> に乗ると次の階へ進みます。
-      荷物が満杯になったら装備画面で不要品を現地分解できます。素材は現在の探索だけ有効な荷物拡張・武器防具の仮補強・鑑定に使え、余りは帰還時に欠片へ変換されます。希少品は自動保護されます。空腹は60%以上なら充足、30〜59%で空腹、1〜29%で飢餓、0で枯渇です。空腹になるほど最大気力・気力回復・攻防・治療効果が低下し、枯渇すると気力が戻らずHPも継続して減ります。未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。迷宮は大型化され、探索スキルで隠し通路を発見できます。⇵はショートカットです。盤面はピクセル表現になり、攻撃・爆発・炎上には画面演出があります。効果音と環境音は画面下の音ボタンで切り替えられます。灯台では深淵の欠片を使い、永久強化・図鑑・倉庫を利用できます。帰還には祭壇、ボス撃破後、または帰還標が必要です。あなたを倒した敵は宿敵となり、次の探索でさらに強くなって現れることがあります。迷宮は武器・属性・構え・爆発物の使用傾向を記録し、次の探索で対策を変えます。5階ごとにバイオームが切り替わり、敵・資源・視界・属性相性が変化します。紫色の印では偶発事件が発生し、選択は灯台と迷宮に記録されます。射程ボタンで武器範囲を表示でき、マップ上の敵や物をタップすると詳細を確認できます。灯火ボタンで消灯・松明・ランタン・魔導灯を切り替えられます。強い光ほど視野が広い代わりに敵へ見つかりやすくなります。ただし敵は壁越しには認識せず、見失うと数ターン捜索した後に追跡を諦めます。弓は比較的静かです。亡者・獣群・異形・番人は互いに敵対し、プレイヤーが離れていても巡回や縄張り争いを行います。敵は時間経過で安全な遠方へ再出現しますが、階層ごとの個体数と再生数には上限があります。階層深度が敵レベルと装備レベルの基準になります。格下の敵ほど経験値が減り、6レベル以上低い敵からは経験値を得られません。装備にはアイテムレベルと必要レベルがあります。装備には炎・毒・光・影・骨・雷タグが付き、装備中の合計が3・6・10に達すると段階効果が発動します。剣・槍・弓・杖には永続熟練度があります。さらに装備中の各アイテムは撃破数で成長します。さらに移動・近接戦・遠距離戦・探索など、実際の行動は身体鍛錬として蓄積されます。さらに到達深度10・25・50・80階以降の節目で深淵適応点を得て永続特性を選べます。さらに敵・罠・装備・事件・バイオームを観察すると研究点が貯まります。最初の20階には階ごとの目標、4・9・14・19階の補給階、5階ごとの番人戦があります。薬・壺はクイックボタンから即使用でき、姿ボタンから探索者アイコンを変更できます。不要装備は現地分解して素材へ変え、荷物拡張・仮補強・鑑定へ利用できます。
-    </p>
-    <p>探索者の姿は最初は全員同じです。外套色は深淵の欠片で、特別な輪郭は5・10・15・20層の番人が残す姿片で解放されます。<br>記号：<b>@</b>主人公 / <b>S</b>盾骸兵 / <b>W</b>穴獣 / <b>M</b>骨術師 / <b>B</b>爆ぜ虫 / <b>!</b>装備 / <b>◇</b>食料 / <b>^</b>罠</p>
+
+    <div class="helpLead">
+      <b>このゲームは「長く潜るほど危険になる完全ソロ探索」です。</b><br>
+      充足が尽きる前に、戦利品を持って帰るか、さらに奥へ進むかを判断してください。
+    </div>
+
+    <div class="helpQuick">
+      <div class="helpQuickCard">
+        <b>① まずやること</b>
+        <small>武器を選んで探索開始。敵を避けつつ装備を拾い、階段 <span style="color:#e1b85b">▼</span> を目指します。</small>
+      </div>
+      <div class="helpQuickCard">
+        <b>② 何に気を付ける？</b>
+        <small>HPだけでなく、気力と充足も重要です。長居しすぎると立ち行かなくなります。</small>
+      </div>
+      <div class="helpQuickCard">
+        <b>③ いつ帰る？</b>
+        <small>祭壇・番人撃破後・帰還標があれば帰還可能。帰還するとその探索は終了します。</small>
+      </div>
+    </div>
+
+    <details class="helpSection" open>
+      <summary>最初に覚えること</summary>
+      <div class="helpBody">
+        <ul>
+          <li><b>方向入力</b>は、敵が射程にいれば攻撃、いなければ移動です。</li>
+          <li><b>1回行動するたびに1ターン進行</b>し、敵も動きます。</li>
+          <li><b>階段 ▼</b> に乗ると次の階へ進みます。</li>
+          <li><b>5階ごとに番人戦</b>があります。最初の20階には階ごとの目標もあります。</li>
+          <li><b>主人公のHPが0でその探索は終了</b>です。</li>
+        </ul>
+        <div class="helpNote">迷ったら「敵を1体ずつ処理」「荷物が増えたら整理」「危なくなったら帰還」を意識すると安定します。</div>
+      </div>
+    </details>
+
+    <details class="helpSection" open>
+      <summary>基本操作とUI</summary>
+      <div class="helpBody">
+        <ul>
+          <li><b>待機</b>：その場で1ターン進めます。敵の行動を誘ったり、間合い調整に使えます。</li>
+          <li><b>スキル</b>：武器や状況に応じて使う強行動です。気力を消費します。</li>
+          <li><b>クイック欄</b>：治癒薬・壺などを即使用できます。</li>
+          <li><b>射程ボタン</b>：武器の攻撃範囲を表示します。</li>
+          <li><b>灯火ボタン</b>：消灯 / 松明 / ランタン / 魔導灯を切り替えます。明るいほど見やすい代わりに見つかりやすくなります。</li>
+          <li><b>敵や物をタップ</b>すると詳細確認できます。</li>
+        </ul>
+        <div class="helpKeys">
+          <div class="helpKey"><b>HP</b><br>0になるとその探索は終了。</div>
+          <div class="helpKey"><b>気力</b><br>攻撃・スキルの燃料。空腹だと回復しにくくなります。</div>
+          <div class="helpKey"><b>充足</b><br>1回の探索で使える総行動時間。帰還しない限り基本的に減るだけです。</div>
+          <div class="helpKey"><b>携行糧</b><br>充足が減る前に消費される予備時間です。</div>
+        </div>
+      </div>
+    </details>
+
+    <details class="helpSection">
+      <summary>戦闘の基本</summary>
+      <div class="helpBody">
+        <div class="helpBadges">
+          <span class="helpBadge">赤い予兆 = 次ターンに攻撃</span>
+          <span class="helpBadge">青い範囲 = 自分の攻撃</span>
+          <span class="helpBadge">構える / 退く / 先に倒す</span>
+        </div>
+        <ul>
+          <li>敵の<b>赤い予兆</b>は「次のターンにそこへ攻撃が来る」サインです。</li>
+          <li>見えたら、<b>避ける・構える・先に倒す</b>のどれかを選びます。</li>
+          <li><b>剣</b>：扱いやすい近接。<br><b>槍</b>：間合いを取りやすい。<br><b>弓</b>：遠距離向けだが近距離不可。<br><b>杖</b>：高消費だが範囲攻撃が可能。</li>
+          <li>爆薬樽や油は炎で誘爆します。敵を巻き込めますが、自分も危険です。</li>
+          <li>金色の敵は<b>エリート</b>です。特殊能力を持ちます。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="helpSection">
+      <summary>探索・空腹・帰還</summary>
+      <div class="helpBody">
+        <ul>
+          <li><b>充足は探索時間の上限</b>です。迷宮内で完全回復することはできません。</li>
+          <li>状態は <b>40%以上:充足 / 15〜39%:空腹 / 1〜14%:飢餓 / 0:枯渇</b> です。</li>
+          <li>空腹になるほど、攻防・気力回復・治療効率が落ちます。枯渇すると非常に危険です。</li>
+          <li>乾燥肉はその場で回復するのではなく、<b>携行糧</b>として探索時間を延長します。</li>
+          <li><b>帰還条件</b>は「祭壇」「番人撃破後」「帰還標」のいずれかです。</li>
+          <li>帰還すると探索は終了し、<b>HP・気力・充足が完全回復</b>します。</li>
+        </ul>
+        <div class="helpNote">このゲームは「帰らずに粘るほど強くなる」のではなく、「どこで帰るか」が大きな判断になります。</div>
+      </div>
+    </details>
+
+    <details class="helpSection">
+      <summary>荷物整理・装備・成長</summary>
+      <div class="helpBody">
+        <ul>
+          <li>荷物が満杯になったら、不要装備を<b>現地分解</b>して素材にできます。</li>
+          <li>素材はその探索中だけ有効な<b>荷物拡張・武器仮補強・防具仮補強・鑑定</b>に使えます。</li>
+          <li>余った素材は帰還時に<b>深淵の欠片</b>へ変換されます。</li>
+          <li>未鑑定装備は性能も呪いも不明です。呪具は解呪するまで外せません。</li>
+          <li>装備には<b>必要レベル・アイテムレベル・タグ・熟練・絆</b>があります。</li>
+          <li>3レベルごとに才能を選び、灯台では欠片で永久強化ができます。</li>
+          <li>深度10・25・50・80で<b>深淵適応</b>、観察で<b>研究点</b>も増えます。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="helpSection">
+      <summary>敵・部屋・世界の特徴</summary>
+      <div class="helpBody">
+        <ul>
+          <li><b>盾骸兵</b>は正面に強く、<b>穴獣</b>は回り込み、<b>骨術師</b>は距離を取り、<b>爆ぜ虫</b>は自爆します。</li>
+          <li>特殊部屋には<b>祭壇・宝物庫・水没・崩落</b>があります。</li>
+          <li>2階以降は<b>階層異変</b>が発生し、5階ごとに<b>バイオーム</b>が変わります。</li>
+          <li>敵は壁越しには見えず、見失うとしばらく捜索してから追跡を諦めます。</li>
+          <li>亡者・獣群・異形・番人は互いに敵対し、プレイヤー不在でも争うことがあります。</li>
+          <li>あなたを倒した敵は<b>宿敵</b>となり、次の探索で再登場する場合があります。</li>
+          <li>迷宮は、あなたの武器や属性の使い方に応じて対策を変えてきます。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="helpSection">
+      <summary>記号と見方</summary>
+      <div class="helpBody">
+        <p>探索者の姿は最初は全員同じです。外套色は欠片で、特別な輪郭は番人の姿片で解放されます。</p>
+        <div class="helpKeys">
+          <div class="helpKey"><b>@</b><br>主人公</div>
+          <div class="helpKey"><b>S</b><br>盾骸兵</div>
+          <div class="helpKey"><b>W</b><br>穴獣</div>
+          <div class="helpKey"><b>M</b><br>骨術師</div>
+          <div class="helpKey"><b>B</b><br>爆ぜ虫</div>
+          <div class="helpKey"><b>!</b><br>装備</div>
+          <div class="helpKey"><b>◇</b><br>食料</div>
+          <div class="helpKey"><b>^</b><br>罠</div>
+        </div>
+      </div>
+    </details>
+
     <button class="modalBtn" id="closeHelp">閉じる</button>
   </div>
 </div>
-
-
-
-
-
-
 
 <div class="overlay hidden" id="researchOverlay">
   <div class="card">
@@ -837,6 +1193,7 @@ body{
     <h2>深淵適応</h2>
     <p id="adaptText"></p>
     <div id="adaptChoices" class="bondChoice"></div>
+    <button type="button" class="modalBtn" id="closeAdapt">灯台へ戻る</button>
   </div>
 </div>
 
@@ -867,14 +1224,14 @@ body{
 <div class="overlay hidden" id="hubOverlay">
   <div class="card">
     <h2>深淵の灯台</h2>
-    <p>帰還時に装備を倉庫へ持ち帰れます。帰還には祭壇・ボス撃破・帰還標のいずれかが必要です。</p>
+    <p>帰還すると現在の探索は終了し、HP・気力・充足が完全回復します。持ち帰った装備と恒久強化を整え、次の探索へ出発してください。</p>
     <div id="hubSummary"></div>
     <div id="hubUpgrades"></div>
     <div id="stashList"></div>
     <div id="codexList"></div>
-    <button type="button" class="modalBtn" id="returnToAbyssBtn">現在の探索へ戻る</button>
+    <button type="button" class="modalBtn hidden" id="returnToAbyssBtn">現在の探索へ戻る</button>
     <button type="button" class="modalBtn" id="researchBtn">深淵研究</button><button type="button" class="modalBtn" id="adaptBtn">深淵適応を選ぶ</button><button type="button" class="modalBtn" id="newRunBtn">新しい探索を始める</button>
-    <button type="button" class="modalBtn" id="closeHub">閉じる</button>
+    <button type="button" class="modalBtn hidden" id="closeHub">閉じる</button>
   </div>
 </div>
 
@@ -1008,29 +1365,64 @@ function updateAdaptationPoints(){
 function availableAdaptations(){
  return Object.keys(abyssAdaptationData).filter(id=>!hasAbyssAdaptation(id));
 }
+function showHubSubOverlay(id){
+ $("hubOverlay").classList.add("hidden");
+ $(id).classList.remove("hidden");
+}
+function closeHubSubOverlay(id){
+ $(id).classList.add("hidden");
+ renderHub();
+ $("hubOverlay").classList.remove("hidden");
+}
+function openResearchFromHub(){
+ renderResearch();
+ showHubSubOverlay("researchOverlay");
+}
 function openAdaptationChoice(){
  updateAdaptationPoints();
- if((state.meta.adaptationPoints||0)<=0){addLog("新しい適応点はない。");return}
+ const points=state.meta.adaptationPoints||0;
  const pool=availableAdaptations();
- if(!pool.length){addLog("すべての深淵適応を獲得している。");return}
- const choices=pool.sort(()=>rng()-.5).slice(0,3);
- $("adaptText").textContent="到達深度により得た適応点を使い、永続特性を1つ選びます。";
- const box=$("adaptChoices");box.innerHTML="";
+ const box=$("adaptChoices");
+ box.innerHTML="";
+
+ if(points<=0){
+  const reached=adaptationMilestoneCount(state.meta.bestFloor||1);
+  const nextDepth=adaptationDepthMilestones[reached];
+  $("adaptText").textContent=nextDepth
+   ?`未使用の適応点はありません。次の適応点は第${nextDepth}層へ到達すると獲得できます。`
+   :"未使用の適応点はありません。すべての深度節目へ到達しています。";
+  box.innerHTML=`<div class="hubStatusBox">${adaptationSummaryHtml()}</div>`;
+  showHubSubOverlay("adaptOverlay");
+  return;
+ }
+
+ if(!pool.length){
+  $("adaptText").textContent="すべての深淵適応を獲得しています。";
+  box.innerHTML=`<div class="hubStatusBox">${adaptationSummaryHtml()}</div>`;
+  showHubSubOverlay("adaptOverlay");
+  return;
+ }
+
+ const choices=[...pool].sort(()=>rng()-.5).slice(0,3);
+ $("adaptText").textContent=`未使用点 ${points}。到達深度によって得た適応点を使い、永続特性を1つ選びます。`;
  for(const id of choices){
   const data=abyssAdaptationData[id];
   const b=document.createElement("button");
-  b.type="button";b.className="choiceBtn";
+  b.type="button";
+  b.className="choiceBtn";
   b.innerHTML=`<b>${data.label}</b><small>${data.desc}</small>`;
   b.onclick=()=>{
-   state.meta.abyssAdaptations.push(id);
-   state.meta.adaptationPoints=Math.max(0,state.meta.adaptationPoints-1);
-   $("adaptOverlay").classList.add("hidden");
+   state.meta.abyssAdaptations=state.meta.abyssAdaptations||[];
+   if(!state.meta.abyssAdaptations.includes(id))state.meta.abyssAdaptations.push(id);
+   state.meta.adaptationPoints=Math.max(0,(state.meta.adaptationPoints||0)-1);
    addLog("深淵適応「"+data.label+"」を得た。");
-   saveMeta();render();
+   saveMeta();
+   render();
+   closeHubSubOverlay("adaptOverlay");
   };
   box.appendChild(b);
  }
- $("adaptOverlay").classList.remove("hidden");
+ showHubSubOverlay("adaptOverlay");
 }
 function adaptationSummaryHtml(){
  const owned=state.meta?.abyssAdaptations||[];
@@ -1399,7 +1791,7 @@ function saveMeta(){
  if(state?.meta)localStorage.setItem("abyssalRootsMeta",JSON.stringify(state.meta));
 }
 function defaultMeta(){
- const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
+ const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
  meta.appearance=defaultAppearance();
  return meta;
 }
@@ -1425,6 +1817,7 @@ function applyMetaToFreshState(newState){
  newState.hero.hp=newState.hero.maxHp;
  newState.hero.maxStamina+=meta.upgrades.focus+Math.floor(trainingRankFromXp(meta.bodyTraining?.focus||0)/3);
  newState.hero.stamina=newState.hero.maxStamina;
+ newState.maxHunger+=(meta.upgrades.supply||0)*120;
  if(meta.heirloom){
   const g=JSON.parse(JSON.stringify(meta.heirloom));
   if((g.requiredLevel||1)<=newState.level){
@@ -1436,17 +1829,21 @@ function applyMetaToFreshState(newState){
  const freshEquipped=[newState.weapon,newState.armor,...Object.values(newState.equipment||{})].filter(Boolean);
  const swiftBonus=freshEquipped.reduce((sum,g)=>sum+((g.bondTraits||[]).includes("swift")?1:0),0);
  newState.hero.stamina=newState.hero.maxStamina+swiftBonus;
+ const gearSupply=Math.min(240,freshEquipped.reduce((sum,g)=>sum+(g.hunger||0)*3,0));
+ newState.hunger=newState.maxHunger+gearSupply;
+ newState.provisions=0;
+ newState.expeditionEnded=false;
  return newState;
 }
 
 function freshState(){
  const newState={
   version:4,seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,
-  hunger:100,maxHunger:100,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:1,oil:1},
+  hunger:720,maxHunger:720,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",
   map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
  return applyMetaToFreshState(newState);
 }
@@ -1663,7 +2060,7 @@ function throwBomb(){
 
 function chooseFloorMutation(){
  if(state.floor===1){state.floorMutation=null;return}
- const pool=Object.keys(floorMutationData);
+ const pool=Object.keys(floorMutationData).filter(id=>state.floor>=6||id!=="famine");
  state.floorMutation=choice(pool);
 }
 function mutation(){
@@ -2071,7 +2468,7 @@ const eventDefs=[
  ]},
  {id:"hungry_altar",title:"飢えた祭壇",text:"祭壇の溝には、まだ温かい血が流れている。",choices:[
   {label:"血を捧げる",mark:"defiance",run(){state.hero.hp=Math.max(1,state.hero.hp-10);state.hero.atk+=2;addLog("祭壇が力を返した。")}},
-  {label:"食料を供える",mark:"mercy",available(){return state.hunger>=30},run(){state.hunger-=30;state.meta.shards+=3;addLog("祭壇の気配が穏やかになった。")}},
+  {label:"食料を供える",mark:"mercy",available(){return state.hunger>=90},run(){state.hunger-=90;state.meta.shards+=3;addLog("祭壇の気配が穏やかになった。")}},
   {label:"供物を盗む",mark:"greed",run(){state.consumables.potion++;state.consumables.bomb++;addLog("背後で何かが笑った。")}}
  ]}
 ];
@@ -2259,13 +2656,13 @@ function generateFloor(){
   const p=randomFloorCell(3);
   if(!p)break;
   let itemRoll=rng();if(currentBiomeKey()==="fungal"&&rng()<.35)itemRoll=.25;if(currentBiomeKey()==="crypt"&&rng()<.22)itemRoll=.45;
-  if(itemRoll<.22)state.items.push({x:p.x,y:p.y,type:"food",name:"乾燥肉"});
-  else if(itemRoll<.34)state.items.push({x:p.x,y:p.y,type:"potion",name:"治癒薬"});
-  else if(itemRoll<.42)state.items.push({x:p.x,y:p.y,type:"identify",name:"鑑定紙片"});
-  else if(itemRoll<.47)state.items.push({x:p.x,y:p.y,type:"purify",name:"解呪の灰"});
-  else if(itemRoll<.55)state.items.push({x:p.x,y:p.y,type:"bomb",name:"火炎壺"});
-  else if(itemRoll<.58)state.items.push({x:p.x,y:p.y,type:"retreat",name:"帰還標"});
-  else if(itemRoll<.63)state.items.push({x:p.x,y:p.y,type:"oil",name:"灯油"});
+  if(itemRoll<.12)state.items.push({x:p.x,y:p.y,type:"food",name:"乾燥肉"});
+  else if(itemRoll<.24)state.items.push({x:p.x,y:p.y,type:"potion",name:"治癒薬"});
+  else if(itemRoll<.32)state.items.push({x:p.x,y:p.y,type:"identify",name:"鑑定紙片"});
+  else if(itemRoll<.37)state.items.push({x:p.x,y:p.y,type:"purify",name:"解呪の灰"});
+  else if(itemRoll<.45)state.items.push({x:p.x,y:p.y,type:"bomb",name:"火炎壺"});
+  else if(itemRoll<.48)state.items.push({x:p.x,y:p.y,type:"retreat",name:"帰還標"});
+  else if(itemRoll<.53)state.items.push({x:p.x,y:p.y,type:"oil",name:"灯油"});
   else state.items.push({x:p.x,y:p.y,type:"gear",gear:rollGear()});
  }
  for(let i=0;i<plannedTrapCount();i++){
@@ -2598,7 +2995,11 @@ function equippedDef(){return allEquippedItems().reduce((sum,g)=>sum+applyBondTr
 function totalAtk(){return Math.round(hungerAdjustedAttack(state.hero.atk+equippedAtk()+bodyAttackBonus()+(state.fieldForgeAtk||0)))}
 function totalDef(){let d=state.hero.def+equippedDef()+(state.fieldForgeDef||0)+(tagTier("bone")>=3?1:0)-hungerStage().defPenalty;if(hasTalent("survivor")&&state.hero.hp<=state.hero.maxHp*.25)d+=3;if(state.weapon?.trait==="glass")d=Math.max(0,d-2);return Math.max(0,d)}
 function totalCrit(){return state.crit+allEquippedItems().reduce((sum,g)=>sum+(g.crit||0),0)+(tagTier("shadow")>=6?.08:0)}
-function effectiveMaxHunger(){return state.maxHunger+allEquippedItems().reduce((sum,g)=>sum+(g.hunger||0),0)}
+function gearSupplyBonus(g){return Math.max(0,(g?.hunger||0)*3)}
+function effectiveMaxHunger(){
+ const gearBonus=Math.min(240,allEquippedItems().reduce((sum,g)=>sum+gearSupplyBonus(g),0));
+ return state.maxHunger+gearBonus;
+}
 const hungerStageData={
  fed:{label:"充足",color:"#8fd49a",attack:1,defPenalty:0,heal:1,staminaPenalty:0,staminaRecovery:1,desc:"能力低下なし"},
  hungry:{label:"空腹",color:"#e3cb71",attack:.95,defPenalty:0,heal:.85,staminaPenalty:1,staminaRecovery:.70,desc:"最大気力-1 / 気力回復70% / 攻撃95% / 回復85%"},
@@ -2608,8 +3009,8 @@ const hungerStageData={
 function hungerStage(hungerValue=state.hunger){
  const max=Math.max(1,effectiveMaxHunger());
  const ratio=Math.max(0,hungerValue)/max;
- if(ratio>=.60)return{id:"fed",...hungerStageData.fed,ratio};
- if(ratio>=.30)return{id:"hungry",...hungerStageData.hungry,ratio};
+ if(ratio>=.40)return{id:"fed",...hungerStageData.fed,ratio};
+ if(ratio>=.15)return{id:"hungry",...hungerStageData.hungry,ratio};
  if(hungerValue>0)return{id:"starving",...hungerStageData.starving,ratio};
  return{id:"depleted",...hungerStageData.depleted,ratio:0};
 }
@@ -3200,7 +3601,12 @@ function enemyAttack(e,mult=1,label="攻撃"){
 function pickup(){
  const item=itemAt(state.player.x,state.player.y);if(!item)return;
  state.items=state.items.filter(i=>i!==item);
- if(item.type==="food"){spawnPickupEffect("food");state.hunger=Math.min(effectiveMaxHunger(),state.hunger+35);updateHungerStageNotification();addLog("乾燥肉を食べ、空腹が和らいだ。");return}
+ if(item.type==="food"){
+  spawnPickupEffect("food");
+  state.provisions=(state.provisions||0)+40;
+  addLog("乾燥肉を携行糧へ加えた。充足消費を40手分肩代わりする。");
+  return
+ }
  if(item.type==="potion"){spawnPickupEffect("potion");state.consumables.potion++;addLog("治癒薬を拾った。");return}
  if(item.type==="identify"){spawnPickupEffect("identify");state.consumables.identify++;addLog("鑑定紙片を拾った。");return}
  if(item.type==="purify"){spawnPickupEffect("purify");state.consumables.purify++;addLog("解呪の灰を拾った。");return}
@@ -3235,10 +3641,16 @@ function triggerTrap(){
 function endTurn(){
  state.turn++;
  const hungerDrain=(mutation()?.hungerDrain||1);
- const actualHungerDrain=hasAbyssAdaptation("deepLungs")&&state.turn%10===0?0:hungerDrain;
+ const lungPause=hasAbyssAdaptation("deepLungs")&&state.turn%10===0;
+ let actualHungerDrain=lungPause?0:hungerDrain;
+ if(actualHungerDrain>0&&(state.provisions||0)>0){
+  const covered=Math.min(state.provisions,actualHungerDrain);
+  state.provisions-=covered;
+  actualHungerDrain-=covered;
+ }
  state.hunger=Math.max(0,state.hunger-actualHungerDrain);
  updateHungerStageNotification();
- if(!(hasAbyssAdaptation("deepLungs")&&state.turn%10===0))consumeLightFuel();
+ if(!lungPause)consumeLightFuel();
  if(state.lastAction==="move")recoverStamina(hasTalent("marathon")?2:1);
  if(state.lastAction==="guard")recoverStamina(1);
  if(state.hunger===0&&state.turn%2===0){
@@ -3455,7 +3867,7 @@ function move(dx,dy){
   const previousFloor=state.floor;
   try{
    state.floor++;state.meta.shards+=1;state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);updateAdaptationPoints();saveMeta();
-   state.hunger=Math.min(effectiveMaxHunger(),state.hunger+12);updateHungerStageNotification();
+   updateHungerStageNotification();
    recoverStamina(state.hero.maxStamina);generateFloor();
   }catch(error){
    console.error("Floor generation failed",error);state.floor=previousFloor;
@@ -3574,7 +3986,7 @@ const perks=[
  {name:"剛力の枝",desc:"攻撃力 +2",apply(){state.hero.atk+=2}},
  {name:"生命の枝",desc:"最大HP +9、現在HPも回復",apply(){state.hero.maxHp+=9;state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+9)}},
  {name:"鉄皮の枝",desc:"防御力 +1",apply(){state.hero.def+=1}},
- {name:"飢え知らず",desc:"最大満腹度 +20、満腹度回復",apply(){state.maxHunger+=20;state.hunger=Math.min(effectiveMaxHunger(),state.hunger+30)}},
+ {name:"遠征糧秣",desc:"最大充足 +120、携行糧 +60手",apply(){state.maxHunger+=120;state.provisions=(state.provisions||0)+60}},
  {name:"凶星の枝",desc:"会心率 +5%",apply(){state.crit+=.05}},
  {name:"息吹の枝",desc:"最大気力 +2、気力を全回復",apply(){state.hero.maxStamina+=2;state.hero.stamina=effectiveMaxStamina()}}
 ];
@@ -3644,7 +4056,7 @@ function equipItem(id){
 function makeStarterWeapon(type){
  const names={sword:"旅人の剣",spear:"古い槍",bow:"狩人の短弓",staff:"灰色の杖"};
  const atk={sword:3,spear:3,bow:2,staff:4};
- return{id:"starter-"+type,slot:"weapon",rarity:"common",name:names[type],weaponType:type,atk:atk[type],def:0,hunger:0,crit:0,identified:true,cursed:false,element:null,trait:null,kills:0,itemLevel:1,requiredLevel:1,tags:emptyTags(),bondTraits:[],bondPending:0,locked:true};
+ return{id:"starter-"+type,slot:"weapon",rarity:"common",name:names[type],weaponType:type,atk:atk[type],def:0,hunger:0,crit:0,identified:true,cursed:false,element:null,trait:null,kills:0,itemLevel:1,requiredLevel:1,tags:emptyTags(),bondTraits:[],bondPending:0,locked:true,origin:"starter",bankable:false};
 }
 function chooseStarter(type){
  if(!state)state=freshState();
@@ -3672,7 +4084,7 @@ function salvageValue(g){
 function gearScore(g){
  if(!g)return 0;
  const stats=applyBondTraitStats(g);
- return stats.atk*2.2+stats.def*2+(g.hunger||0)*.12+(g.crit||0)*100+
+ return stats.atk*2.2+stats.def*2+gearSupplyBonus(g)*.12+(g.crit||0)*100+
         gearTagPower(g)*1.35+(rarityOrder[g.rarity]||0)*5+bondStage(g)*3+(g.identified?1:-2);
 }
 function sortedInventoryItems(){
@@ -3755,18 +4167,58 @@ function pickupGroundItemFromInventory(){
  pickup();
  saveGame();renderInventory();render();
 }
-function canReturnNow(){
+function currentReturnSource(){
+ if(!state||state.expeditionEnded||state.gameOver)return null;
  const onShrine=specialAt(state.player.x,state.player.y)?.type==="shrine";
- return state.floor===1||state.bossDefeated||onShrine||(state.consumables.retreat||0)>0;
+ if(state.bossDefeated)return{id:"boss",label:"番人撃破後"};
+ if(onShrine)return{id:"shrine",label:"帰還可能な祭壇"};
+ if((state.consumables.retreat||0)>0)return{id:"marker",label:"帰還標"};
+ return null;
+}
+function canReturnNow(){
+ return !!currentReturnSource();
+}
+function renderReturnAccess(){
+ const button=$("hubBtn");
+ if(!button||!state)return;
+ const source=currentReturnSource();
+ button.disabled=!source;
+ button.textContent=source?"帰還":"帰還不可";
+ button.title=source
+  ?`${source.label}を使って探索を終了する`
+  :"番人撃破後、祭壇、または帰還標が必要";
+}
+function isStarterGear(g){
+ return !!g&&(g.bankable===false||g.origin==="starter"||String(g.id||"").startsWith("starter-"));
 }
 function bankCurrentRun(){
- const candidates=[...new Map([...allEquippedItems(),...state.inventory].filter(Boolean).map(g=>[g.id,g])).values()];
+ state.meta.stash=state.meta.stash||[];
+ const candidates=[...new Map(
+  [...allEquippedItems(),...state.inventory]
+   .filter(g=>g&&!isStarterGear(g))
+   .map(g=>[g.id,g])
+ ).values()];
+
+ const stashIndexById=new Map(state.meta.stash.map((g,index)=>[g.id,index]));
  for(const g of candidates){
-  if(state.meta.stash.length>=20)break;
   const copy=cloneGear(g);
-  copy.cursed=false;copy.identified=true;
-  state.meta.stash.push(copy);
+  copy.cursed=false;
+  copy.identified=true;
+
+  if(stashIndexById.has(copy.id)){
+   const index=stashIndexById.get(copy.id);
+   state.meta.stash[index]=copy;
+  }else{
+   if(state.meta.stash.length>=20)break;
+   stashIndexById.set(copy.id,state.meta.stash.length);
+   state.meta.stash.push(copy);
+  }
+
+  if(state.meta.heirloom?.id===copy.id){
+   state.meta.heirloom=cloneGear(copy);
+  }
  }
+
  const recoveredShards=Math.floor((state.fieldScrap||0)/5);
  if(recoveredShards>0){
   state.meta.shards+=recoveredShards;
@@ -3776,19 +4228,29 @@ function bankCurrentRun(){
  saveMeta();
 }
 function returnToLighthouse(){
- if(!canReturnNow()){
-  addLog("ここからは帰還できない。祭壇・ボス撃破後・帰還標が必要だ。");
+ const source=currentReturnSource();
+ if(!source){
+  addLog("ここからは帰還できない。番人撃破後・祭壇・帰還標のいずれかが必要だ。");
+  renderReturnAccess();
   return;
  }
- const onShrine=specialAt(state.player.x,state.player.y)?.type==="shrine";
- if(state.floor>1&&!state.bossDefeated&&!onShrine){
-  if((state.consumables.retreat||0)<=0){addLog("帰還標がない。");return}
-  state.consumables.retreat--;
+ if(source.id==="marker"){
+  state.consumables.retreat=Math.max(0,(state.consumables.retreat||0)-1);
  }
  bankCurrentRun();
+ state.expeditionEnded=true;
+ state.hero.hp=state.hero.maxHp;
+ state.hunger=effectiveMaxHunger();
+ state.provisions=0;
+ state.hungerStageId="fed";
+ state.hungerRecoveryBuffer=0;
+ state.hero.stamina=effectiveMaxStamina();
+ localStorage.removeItem("abyssalRootsSoloV4Save");
  renderHub();
+ $("returnToAbyssBtn").classList.add("hidden");
+ $("closeHub").classList.add("hidden");
  $("hubOverlay").classList.remove("hidden");
- addLog("探索成果を灯台へ持ち帰った。");
+ addLog(`${source.label}から灯台へ帰還した。探索は終了し、HP・気力・充足が完全回復した。`);
 }
 function salvageStash(index){
  const g=state.meta.stash[index];if(!g)return;
@@ -3823,10 +4285,14 @@ function codexInsight(type,count){
 }
 function renderHub(){
  const m=state.meta||defaultMeta();
+ $("researchBtn").textContent=`深淵研究（${m.research?.points||0}点）`;
+ $("adaptBtn").textContent=(m.adaptationPoints||0)>0
+  ?`深淵適応を選ぶ（${m.adaptationPoints}点）`
+  :"深淵適応を確認";
  $("hubSummary").innerHTML=`
   <div class="itemRow">
    <div class="top"><span>探索記録</span><span>欠片 ${m.shards}</span></div>
-   <div class="desc">最高到達 ${m.bestFloor}層 / 総撃破 ${m.totalKills}</div>
+   <div class="desc">最高到達 ${m.bestFloor}層 / 総撃破 ${m.totalKills}<br>帰還によりHP・気力・充足は完全回復。次は新しい探索として出発します。</div>
   </div>`+
   (m.adaptation?`<div class="itemRow"><div class="top"><span>迷宮の適応</span><span>${adaptationData[m.adaptation]?.label||m.adaptation}</span></div>
   <div class="desc">${adaptationData[m.adaptation]?.desc||""}</div></div>`:"")+
@@ -3836,7 +4302,8 @@ function renderHub(){
  const upgrades=[
   ["vitality","灯火の生命","次回以降 最大HP +4"],
   ["focus","静謐の焦点","次回以降 最大気力 +1"],
-  ["pack","回収箱","次回以降 荷物上限 +2"]
+  ["pack","回収箱","次回以降 荷物上限 +2"],
+  ["supply","遠征糧袋","次回以降 最大充足 +120"]
  ];
  $("hubUpgrades").innerHTML=upgrades.map(([id,name,desc])=>{
   const lvl=m.upgrades[id]||0,cost=upgradeCost(lvl);
@@ -3908,7 +4375,7 @@ function renderInventory(){
  $("salvageCommonBtn").onclick=salvageCommonInventory;
 
  $("consumableList").innerHTML=`<div class="itemRow"><div class="top"><span>消耗品</span><span>所持金 ${state.gold}G</span></div>
- <div class="desc">治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0} / 帰還標 ${state.consumables.retreat||0} / 灯油 ${state.consumables.oil||0}</div>
+ <div class="desc">携行糧 ${state.provisions||0}手 / 治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0} / 帰還標 ${state.consumables.retreat||0} / 灯油 ${state.consumables.oil||0}</div>
  <div class="desc">荷物 ${state.inventory.length}/${inventoryCapacity()}　保護 ${state.inventory.filter(g=>g.locked).length}</div>
  <button type="button" id="usePotionBtn">治癒薬を使う</button><button type="button" id="oilBtn">灯油を補充</button><button type="button" id="bombBtn">火炎壺を投げる</button><button type="button" id="purifyBtn">装備中の呪いを解く</button></div>`;
  $("usePotionBtn").onclick=usePotion;$("oilBtn").onclick=refillLight;$("bombBtn").onclick=()=>{$("inventoryOverlay").classList.add("hidden");throwBomb()};$("purifyBtn").onclick=purifyEquipped;
@@ -3943,7 +4410,7 @@ function renderInventory(){
   const trait=g.trait?` / 固有 ${g.trait}`:"";
   const unknownHint=hasTalent("keen_eye")?`攻撃 +${g.atk} / 防御 +${g.def} までは見抜ける。`:"性能不明。";
   const detail=g.identified
-   ?`ILv${g.itemLevel||1} / 必要Lv${g.requiredLevel||1} / 推奨度 ${Math.round(gearScore(g))} / ${g.weaponType?"型："+weaponData[g.weaponType].label+" / ":""}攻撃 +${g.atk} / 防御 +${g.def}${g.hunger?" / 最大満腹 +"+g.hunger:""}${g.crit?" / 会心 +"+Math.round(g.crit*100)+"%":""}${elem}${trait}<br>${tagSummaryHtml(g.tags)}<br><span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0}${nextBondKills(g)?` / 次:${nextBondKills(g)}`:" / 最大"}</span><br>進化:${bondTraitSummary(g)}<br>${compareText(g)}<br>${tagComparisonHtml(g)}`
+   ?`ILv${g.itemLevel||1} / 必要Lv${g.requiredLevel||1} / 推奨度 ${Math.round(gearScore(g))} / ${g.weaponType?"型："+weaponData[g.weaponType].label+" / ":""}攻撃 +${g.atk} / 防御 +${g.def}${g.hunger?" / 最大充足 +"+gearSupplyBonus(g):""}${g.crit?" / 会心 +"+Math.round(g.crit*100)+"%":""}${elem}${trait}<br>${tagSummaryHtml(g.tags)}<br><span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0}${nextBondKills(g)?` / 次:${nextBondKills(g)}`:" / 最大"}</span><br>進化:${bondTraitSummary(g)}<br>${compareText(g)}<br>${tagComparisonHtml(g)}`
    :`${unknownHint} 鑑定紙片1枚、現地素材2、または8Gで鑑定可能。装備して確かめることもできる。`;
   row.innerHTML=`<div class="top">${title}<span>${g.locked?"🔒 ":""}${equippedSlotLabel(g.slot)}</span></div><div class="desc">${detail}</div>
    <div class="itemActions">
@@ -3959,12 +4426,12 @@ function renderInventory(){
   box.appendChild(row);
  });
 }
-function canAct(){return state&&!state.gameOver&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
+function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
 let saveTimer=null;
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveGame(),120)}
 function saveSnapshot(){try{if(state)localStorage.setItem("abyssalRootsSoloV4Backup",JSON.stringify(state))}catch(e){}}
 function loadBackup(){try{const raw=localStorage.getItem("abyssalRootsSoloV4Backup");return raw?JSON.parse(raw):null}catch(e){return null}}
-function saveGame(){if(state&&!state.gameOver){saveSnapshot();localStorage.setItem("abyssalRootsSoloV4Save",JSON.stringify(state))}}
+function saveGame(){if(state&&!state.gameOver&&!state.expeditionEnded){saveSnapshot();localStorage.setItem("abyssalRootsSoloV4Save",JSON.stringify(state))}}
 function loadGame(){
  try{
   let s=JSON.parse(localStorage.getItem("abyssalRootsSoloV4Save"));if(!s)s=loadBackup();
@@ -3984,6 +4451,8 @@ function loadGame(){
   if(state.armor&&!state.equipment.body)state.equipment.body=state.armor;
   if(!state.meta)state.meta=loadMeta()||defaultMeta();
   if(!state.meta.stash)state.meta.stash=[];
+  if(!state.meta.upgrades)state.meta.upgrades={vitality:0,focus:0,pack:0,supply:0};
+  if(typeof state.meta.upgrades.supply!=="number")state.meta.upgrades.supply=0;
   if(typeof state.meta.heirloom==="undefined")state.meta.heirloom=null;
   if(typeof state.meta.nemesis==="undefined")state.meta.nemesis=null;
   if(!state.meta.nemesisHistory)state.meta.nemesisHistory=[];
@@ -4018,6 +4487,14 @@ function loadGame(){
   if(typeof state.hero.boneLastStandUsed!=="boolean")state.hero.boneLastStandUsed=false;
   if(typeof state.hungerStageId!=="string")state.hungerStageId=hungerStage().id;
   if(typeof state.hungerRecoveryBuffer!=="number")state.hungerRecoveryBuffer=0;
+  if(typeof state.provisions!=="number")state.provisions=0;
+  if(typeof state.expeditionEnded!=="boolean")state.expeditionEnded=false;
+  if((state.maxHunger||0)<300){
+   const oldMax=Math.max(1,state.maxHunger||100);
+   const oldRatio=clamp((state.hunger??oldMax)/oldMax,0,1);
+   state.maxHunger=720+(state.meta.upgrades.supply||0)*120;
+   state.hunger=Math.round(state.maxHunger*oldRatio);
+  }
   if(typeof state.fieldScrap!=="number")state.fieldScrap=0;
   if(typeof state.packExpansion!=="number")state.packExpansion=0;
   if(typeof state.fieldForgeAtk!=="number")state.fieldForgeAtk=0;
@@ -4046,6 +4523,10 @@ function loadGame(){
    if(g.slot==="armor")g.slot="body";
    if(typeof g.requiredLevel!=="number")g.requiredLevel=itemRequiredLevel(g.itemLevel);
    if(typeof g.locked!=="boolean")g.locked=(rarityOrder[g.rarity]||0)>=2;
+   if(String(g.id||"").startsWith("starter-")){
+    g.origin="starter";
+    g.bankable=false;
+   }
    if(!g.tags)g.tags=rollGearTags(g.rarity||"common",g.element||null,g.slot||"weapon");
    else g.tags=normalizeTags(g.tags);
    if(!g.bondTraits)g.bondTraits=[];
@@ -4064,7 +4545,7 @@ function renderStats(){
  $("stats").innerHTML=`
  <div class="stat"><b>${state.floor}</b><small>${currentBiome().label}</small></div><div class="stat"><b>${state.enemies.length}/${floorEnemyCap()}</b><small>生態</small></div>
  <div class="stat"><b>${state.level}</b><small>探索者Lv</small></div>
- <div class="stat" title="${hs.desc}"><b style="color:${hs.color}">${state.hunger}/${effectiveMaxHunger()}</b><small style="color:${hs.color}">${hs.label}</small></div>
+ <div class="stat" title="${hs.desc}"><b style="color:${hs.color}">${state.hunger}/${effectiveMaxHunger()}</b><small style="color:${hs.color}">${hs.label}${state.provisions?`・糧${state.provisions}`:""}</small></div>
  <div class="stat"><b>${state.gold}G</b><small>戦利金</small></div>`;
 }
 function renderHero(){
@@ -4073,11 +4554,19 @@ function renderHero(){
  $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
-  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>空腹:${hungerStage().label}　${hungerStage().desc}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　${currentLight().label}:${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}</div>
-  <div class="bar"><div class="fill" style="width:${100*h.hp/h.maxHp}%"></div></div>
-  <div class="hp">HP ${h.hp}/${h.maxHp}</div>
-  <div class="staminaBar"><div class="staminaFill" style="width:${100*h.stamina/effectiveMaxStamina()}%"></div></div>
-  <div class="hp">気力 ${h.stamina}/${effectiveMaxStamina()}　通常攻撃消費 ${weaponData[weaponType()].cost}</div>
+  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　${currentLight().label}:${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}</div>
+  <div class="resourceGrid">
+   <div class="resourceCell hpResource">
+    <div class="resourceHeader"><b>HP</b><span class="resourceValue">${h.hp}/${h.maxHp}</span></div>
+    <div class="bar"><div class="fill" style="width:${100*h.hp/h.maxHp}%"></div></div>
+    <div class="resourceNote">生命力</div>
+   </div>
+   <div class="resourceCell staminaResource">
+    <div class="resourceHeader"><b>気力</b><span class="resourceValue">${h.stamina}/${effectiveMaxStamina()}</span></div>
+    <div class="staminaBar"><div class="staminaFill" style="width:${100*h.stamina/effectiveMaxStamina()}%"></div></div>
+    <div class="resourceNote">通常攻撃消費 ${weaponData[weaponType()].cost}</div>
+   </div>
+  </div>
  </div>`;
  drawHeroPortrait();
 }
@@ -4798,7 +5287,7 @@ function renderSkills(){
  $("quickPotion").disabled=(state.consumables.potion||0)<=0;
  $("quickBomb").disabled=(state.consumables.bomb||0)<=0;
 }
-function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();renderFloorGoal();draw()}
+function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();renderFloorGoal();renderReturnAccess();draw()}
 function startNew(){
  try{
   state=freshState();
@@ -4863,7 +5352,7 @@ $("footerBtns").addEventListener("click",event=>{
  $("menuBtn").textContent="メニュー";
 });
 
-$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("researchBtn").onclick=()=>{renderResearch();$("researchOverlay").classList.remove("hidden")};$("closeResearch").onclick=()=>$("researchOverlay").classList.add("hidden");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
+$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("researchBtn").onclick=openResearchFromHub;$("closeResearch").onclick=()=>closeHubSubOverlay("researchOverlay");$("closeAdapt").onclick=()=>closeHubSubOverlay("adaptOverlay");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
 $("saveBtn").onclick=()=>{saveGame();addLog("探索記録を保存した。")};
 $("up").onclick=()=>move(0,-1);$("down").onclick=()=>move(0,1);$("left").onclick=()=>move(-1,0);$("right").onclick=()=>move(1,0);$("wait").onclick=waitTurn;
 $("guard").onclick=()=>useSkill("guard");$("volley").onclick=()=>useSkill("volley");$("heal").onclick=()=>useSkill("heal");$("search").onclick=()=>useSkill("search");
