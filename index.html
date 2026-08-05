@@ -104,7 +104,7 @@ canvas{display:block;width:100%;height:auto;max-height:48svh;object-fit:contain;
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 0.4.2 FLOOR FIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 0.5 ENEMY ROLES</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -137,7 +137,7 @@ canvas{display:block;width:100%;height:auto;max-height:48svh;object-fit:contain;
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 予兆を読む戦闘 × 武器ビルド</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 敵役割AI × 武器ビルド</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -186,9 +186,9 @@ canvas{display:block;width:100%;height:auto;max-height:48svh;object-fit:contain;
     <p>
       移動・待機・スキルを使うたびに1ターン進み、敵も行動します。方向入力は、武器の射程内に敵がいれば攻撃、いなければ移動です。攻撃にはスタミナを使い、敵の赤い予兆は次のターンに実行されます。
       予兆を見て、退く・構える・先に倒すを選んでください。剣は軽快、槍は間合い、弓は近距離不可、杖は高消費の範囲攻撃です。階段 <b style="color:#e1b85b">▼</b> に乗ると次の階へ進みます。
-      主人公のHPが0になると、その探索は終了します。
+      主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。
     </p>
-    <p>記号：<b>@</b>主人公 / <b>S</b>骸兵 / <b>W</b>獣 / <b>!</b>装備 / <b>◇</b>食料 / <b>^</b>発見済み罠</p>
+    <p>記号：<b>@</b>主人公 / <b>S</b>盾骸兵 / <b>W</b>穴獣 / <b>M</b>骨術師 / <b>B</b>爆ぜ虫 / <b>!</b>装備 / <b>◇</b>食料 / <b>^</b>罠</p>
     <button class="modalBtn" id="closeHelp">閉じる</button>
   </div>
 </div>
@@ -297,15 +297,23 @@ function generateFloor(){
  state.enemies=[];state.items=[];state.traps=[];state.visited={};state.visible={};
  const enemyCount=5+state.floor*2;
  for(let i=0;i<enemyCount;i++){
-  const p=randomFloorCell(6),type=rng()<.65?"skeleton":"warg";
+  const p=randomFloorCell(6);
   if(!p)break;
+  const roll=rng();
+  const type=roll<.38?"skeleton":roll<.68?"warg":roll<.86?"mage":"bomber";
+  const base={
+   skeleton:{name:"盾骸兵",hp:14,atk:4,def:3,xp:7},
+   warg:{name:"穴獣",hp:9,atk:5,def:0,xp:6},
+   mage:{name:"骨術師",hp:8,atk:6,def:0,xp:8},
+   bomber:{name:"爆ぜ虫",hp:6,atk:8,def:0,xp:7}
+  }[type];
   state.enemies.push({
    id:"e"+state.floor+"-"+i,x:p.x,y:p.y,type,
-   name:type==="skeleton"?"骸兵":"穴獣",
-   hp:(type==="skeleton"?10:8)+state.floor*3,maxHp:(type==="skeleton"?10:8)+state.floor*3,
-   atk:(type==="skeleton"?4:5)+Math.floor(state.floor*.8),
-   def:type==="skeleton"?1+Math.floor(state.floor/4):0,
-   xp:5+state.floor*2,intent:null,stagger:0
+   name:base.name,
+   hp:base.hp+state.floor*3,maxHp:base.hp+state.floor*3,
+   atk:base.atk+Math.floor(state.floor*.8),
+   def:base.def+Math.floor(state.floor/5),
+   xp:base.xp+state.floor*2,intent:null,stagger:0,guarding:false
   });
  }
  const itemCount=4+Math.floor(state.floor/2);
@@ -396,8 +404,8 @@ function recoverStamina(amount){
  state.hero.stamina=Math.min(state.hero.maxStamina,state.hero.stamina+amount);
 }
 function damageEnemy(e,damage,label=""){
- const dmg=Math.max(1,Math.round(damage)-e.def);
- e.hp-=dmg;
+ const guardMul=(e.type==="skeleton"&&e.guarding)?0.45:1;const dmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul));
+ e.hp-=dmg;if(e.type==="skeleton"&&e.guarding)addLog(e.name+"が盾で威力を殺した。");
  if(e.intent&&dmg>=Math.max(5,Math.floor(e.maxHp*.28))){
   e.intent=null;e.stagger=1;addLog(e.name+"の攻撃態勢を崩した！");
  }
@@ -490,41 +498,119 @@ function waitTurn(){
  addLog("呼吸を整え、気力を回復した。");
  endTurn();
 }
+
+function distanceToPlayer(e){
+ return Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y);
+}
+function tryMoveEnemy(e,options){
+ for(const [dx,dy] of options){
+  const nx=e.x+dx,ny=e.y+dy;
+  if(tile(nx,ny)===1&&!enemyAt(nx,ny)&&!(nx===state.player.x&&ny===state.player.y)){
+   e.x=nx;e.y=ny;return true;
+  }
+ }
+ return false;
+}
+function stepTowardPlayer(e){
+ const dx=Math.sign(state.player.x-e.x),dy=Math.sign(state.player.y-e.y);
+ const options=Math.abs(state.player.x-e.x)>Math.abs(state.player.y-e.y)?[[dx,0],[0,dy]]:[[0,dy],[dx,0]];
+ return tryMoveEnemy(e,options);
+}
+function stepAwayFromPlayer(e){
+ const dx=-Math.sign(state.player.x-e.x),dy=-Math.sign(state.player.y-e.y);
+ return tryMoveEnemy(e,[[dx,0],[0,dy],...dirs.sort(()=>rng()-.5)]);
+}
+function flankPlayer(e){
+ const px=state.player.x-e.x,py=state.player.y-e.y;
+ const options=Math.abs(px)>=Math.abs(py)?[[0,Math.sign(py)||1],[0,-(Math.sign(py)||1)]]:[[Math.sign(px)||1,0],[-(Math.sign(px)||1),0]];
+ if(!tryMoveEnemy(e,options))stepTowardPlayer(e);
+}
+function lineOfSightToPlayer(e,maxRange=5){
+ if(e.x===state.player.x){
+  const dir=Math.sign(state.player.y-e.y),dist=Math.abs(state.player.y-e.y);
+  if(dist>maxRange)return false;
+  for(let i=1;i<dist;i++)if(tile(e.x,e.y+dir*i)!==1||enemyAt(e.x,e.y+dir*i))return false;
+  return true;
+ }
+ if(e.y===state.player.y){
+  const dir=Math.sign(state.player.x-e.x),dist=Math.abs(state.player.x-e.x);
+  if(dist>maxRange)return false;
+  for(let i=1;i<dist;i++)if(tile(e.x+dir*i,e.y)!==1||enemyAt(e.x+dir*i,e.y))return false;
+  return true;
+ }
+ return false;
+}
+function bomberExplosion(e){
+ const targets=[...state.enemies].filter(other=>other!==e&&Math.abs(other.x-e.x)+Math.abs(other.y-e.y)<=1);
+ const playerHit=Math.abs(state.player.x-e.x)+Math.abs(state.player.y-e.y)<=1;
+ addLog(e.name+"が爆発した！");
+ if(playerHit){
+  let dmg=Math.max(1,e.atk-totalDef());
+  if(state.guardTurns>0){dmg=Math.floor(dmg*.25);state.guardTurns=0;addLog("構えで爆風を受け流した！")}
+  state.hero.hp=Math.max(0,state.hero.hp-dmg);addLog("爆風で "+dmg+" ダメージ。");
+ }
+ for(const other of targets){
+  other.hp-=Math.max(2,Math.floor(e.atk*.8)-other.def);
+  if(other.hp<=0)defeatEnemy(other);
+ }
+ state.enemies=state.enemies.filter(x=>x!==e);
+ if(state.hero.hp<=0){
+  state.gameOver=true;localStorage.removeItem("abyssalRootsSoloV4Save");
+  $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
+  $("gameOverOverlay").classList.remove("hidden");
+ }
+}
+
 function enemyTurn(){
  for(const e of [...state.enemies]){
+  if(!state.enemies.includes(e))continue;
+  e.guarding=false;
   if(e.stagger>0){e.stagger--;continue}
-  const dist=Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y);
+  const dist=distanceToPlayer(e);
 
   if(e.intent){
-   const stillInRange=dist===1;
-   if(stillInRange){
-    const name=e.intent==="heavy"?"叩き潰し":"飛びかかり";
-    enemyAttack(e,e.intent==="heavy"?1.45:1.0,name);
+   if(e.intent==="explode"){
+    if(dist<=1)bomberExplosion(e);
+    else{addLog(e.name+"の爆発は届かなかった。");e.intent=null}
     if(state.gameOver)return;
-   }else{
-    addLog(e.name+"の攻撃は空を切った。");
+    continue;
    }
-   e.intent=null;
-   continue;
+   if(e.intent==="bolt"){
+    if(lineOfSightToPlayer(e,5))enemyAttack(e,1.1,"骨弾");
+    else addLog(e.name+"の骨弾は遮られた。");
+    e.intent=null;if(state.gameOver)return;continue;
+   }
+   if(dist===1){
+    const name=e.intent==="heavy"?"盾打ち":"飛びかかり";
+    enemyAttack(e,e.intent==="heavy"?1.35:1.0,name);
+    if(state.gameOver)return;
+   }else addLog(e.name+"の攻撃は空を切った。");
+   e.intent=null;continue;
   }
 
-  if(dist===1){
-   e.intent=e.type==="skeleton"?"heavy":"lunge";
-   addLog(e.name+"が "+(e.intent==="heavy"?"武器を大きく振り上げた！":"低く身構えた！"));
-   continue;
+  if(e.type==="bomber"){
+   if(dist===1){e.intent="explode";addLog(e.name+"の腹部が赤く膨らんだ！");continue}
+   stepTowardPlayer(e);continue;
   }
 
-  let options=[];
-  if(dist<=7){
-   const dx=Math.sign(state.player.x-e.x),dy=Math.sign(state.player.y-e.y);
-   options=Math.abs(state.player.x-e.x)>Math.abs(state.player.y-e.y)?[[dx,0],[0,dy]]:[[0,dy],[dx,0]];
-  }else options=[...dirs].sort(()=>rng()-.5);
-
-  for(const [dx,dy] of options){
-   const nx=e.x+dx,ny=e.y+dy;
-   if(tile(nx,ny)===1&&!enemyAt(nx,ny)&&!(nx===state.player.x&&ny===state.player.y)){
-    e.x=nx;e.y=ny;break;
+  if(e.type==="mage"){
+   if(lineOfSightToPlayer(e,5)&&dist>=2){
+    e.intent="bolt";addLog(e.name+"が骨弾の詠唱を始めた！");continue;
    }
+   if(dist===1){stepAwayFromPlayer(e);continue}
+   stepTowardPlayer(e);continue;
+  }
+
+  if(e.type==="warg"){
+   if(dist===1){e.intent="lunge";addLog(e.name+"が低く身構えた！");continue}
+   if(dist<=3){flankPlayer(e);continue}
+   stepTowardPlayer(e);continue;
+  }
+
+  if(e.type==="skeleton"){
+   if(dist===1){e.intent="heavy";addLog(e.name+"が盾を構えて武器を振り上げた！");continue}
+   if(dist===2){e.guarding=true;stepTowardPlayer(e);continue}
+   stepTowardPlayer(e);continue;
   }
  }
 }
@@ -740,7 +826,9 @@ function draw(){
  state.traps.forEach(t=>{if(t.revealed&&!t.spent&&state.visible[key(t.x,t.y)])drawText("^",t.x,t.y,"#d86171",16)});
  state.items.forEach(i=>{if(state.visible[key(i.x,i.y)])drawText(i.type==="food"?"◇":"!",i.x,i.y,i.type==="food"?"#71c79a":rarityData[i.gear.rarity].color,17)});
  state.enemies.forEach(e=>{if(state.visible[key(e.x,e.y)]){
-  drawText(e.type==="skeleton"?"S":"W",e.x,e.y,e.intent?"#ff5368":(e.type==="skeleton"?"#d8d0df":"#d86171"),15);
+  const symbol={skeleton:"S",warg:"W",mage:"M",bomber:"B"}[e.type]||"?";
+  const baseColor={skeleton:"#d8d0df",warg:"#d86171",mage:"#9f8cff",bomber:"#ffb24d"}[e.type]||"#fff";
+  drawText(symbol,e.x,e.y,e.intent?"#ff5368":baseColor,15);
   if(e.intent){ctx.strokeStyle="#ff5368";ctx.lineWidth=2;ctx.strokeRect(e.x*TILE+2,e.y*TILE+2,TILE-4,TILE-4)}
   ctx.fillStyle="#25080d";ctx.fillRect(e.x*TILE+3,e.y*TILE+2,TILE-6,3);ctx.fillStyle="#cf5163";ctx.fillRect(e.x*TILE+3,e.y*TILE+2,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
  }});
