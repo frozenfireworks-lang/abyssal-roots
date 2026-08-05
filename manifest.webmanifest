@@ -1,17 +1,10 @@
 {
-  "name": "深淵樹迷宮：Abyssal Roots",
-  "short_name": "深淵樹迷宮",
+  "name": "深淵樹迷宮",
+  "short_name": "深淵樹",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#100d16",
-  "theme_color": "#100d16",
+  "background_color": "#09060d",
+  "theme_color": "#0b0810",
   "orientation": "portrait",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "icons": []
 }

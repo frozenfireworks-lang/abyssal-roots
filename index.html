@@ -280,11 +280,100 @@ body::after{
 .trainingGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;margin-top:5px}
 .trainingCell{padding:5px;border:1px solid #3c3044;border-radius:7px;background:#17111d;font-size:9px}
 .trainingCell b{display:block;color:#efd375;font-size:11px}
+
+.adaptBox{margin-top:6px;padding:7px;border:1px solid #4f3b59;border-radius:8px;background:#110c17}
+.adaptChip{display:inline-block;margin:2px 3px 2px 0;padding:3px 6px;border-radius:999px;background:#281d30;border:1px solid #685176;font-size:9px}
+.adaptReady{border-color:#d7b85b;color:#f0d37a}
+
+:root{
+ --safe-top:env(safe-area-inset-top,0px);
+ --safe-bottom:env(safe-area-inset-bottom,0px);
+ --vvh:100dvh;
+}
+html,body{
+ width:100%;
+ min-height:100%;
+ margin:0;
+ overflow-x:hidden;
+ overflow-y:auto !important;
+ -webkit-overflow-scrolling:touch;
+ overscroll-behavior-y:auto;
+ background:#09060d;
+}
+body{
+ min-height:calc(var(--vvh) + 180px);
+ padding:var(--safe-top) 0 calc(180px + var(--safe-bottom));
+ touch-action:pan-y;
+}
+#app{
+ height:auto !important;
+ min-height:var(--vvh);
+ overflow:visible !important;
+ padding-top:var(--safe-top);
+ padding-bottom:calc(28px + var(--safe-bottom));
+}
+#gameWrap{
+ position:sticky;
+ top:var(--safe-top);
+ z-index:2;
+ max-height:54svh;
+ background:#09060d;
+ box-shadow:0 8px 24px rgba(0,0,0,.45);
+}
+#game{
+ max-height:54svh;
+ width:100%;
+ object-fit:contain;
+}
+#log{
+ max-height:118px;
+ min-height:74px;
+ overflow-y:auto !important;
+ -webkit-overflow-scrolling:touch;
+ overscroll-behavior:contain;
+ touch-action:pan-y !important;
+ scrollbar-width:thin;
+}
+#controls,.quickBar,#footerBtns{
+ position:relative;
+ z-index:4;
+}
+#footerBtns{
+ margin-bottom:calc(18px + var(--safe-bottom));
+}
+.safariScrollHint{
+ margin:8px 10px 4px;
+ padding:7px 9px;
+ border:1px solid #493a52;
+ border-radius:8px;
+ background:#120d18;
+ color:#bfaecb;
+ font-size:10px;
+ text-align:center;
+}
+@media (display-mode:standalone){
+ body{
+  min-height:var(--vvh);
+  padding-bottom:var(--safe-bottom);
+  overflow-y:auto !important;
+ }
+ .safariScrollHint{display:none}
+ #gameWrap{top:var(--safe-top)}
+}
+@supports(-webkit-touch-callout:none){
+ body::after{
+  content:"";
+  display:block;
+  height:180px;
+  pointer-events:none;
+ }
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.4 BODY TRAINING</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.6 IPHONE UI</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -312,7 +401,7 @@ body::after{
 <button type="button" class="miniBtn" id="quickBomb">壺</button>
 <button type="button" class="miniBtn" id="quickSearch">探索</button>
 </div>
-<div id="footerBtns">
+<div class="safariScrollHint">下へ少しスワイプするとSafariのツールバーが縮みます。ホーム画面追加なら全画面で遊べます。</div><div id="footerBtns">
   <button class="miniBtn" id="inventoryBtn">装備・荷物</button>
   <button class="miniBtn" id="saveBtn">保存</button>
   <button class="miniBtn" id="helpBtn">遊び方</button><button class="miniBtn" id="soundBtn">音ON</button><button class="miniBtn" id="hubBtn">帰還</button><button class="miniBtn" id="lightBtn">灯火</button><button class="miniBtn" id="rangeBtn">射程OFF</button>
@@ -322,7 +411,7 @@ body::after{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 行動成長 × 身体鍛錬</p>
+    <p class="sub">迷宮探索 × 完全ソロ × iPhone最適化 × PWA全画面</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -372,7 +461,7 @@ body::after{
     <p>
       移動・待機・スキルを使うたびに1ターン進み、敵も行動します。方向入力は、武器の射程内に敵がいれば攻撃、いなければ移動です。攻撃にはスタミナを使い、敵の赤い予兆は次のターンに実行されます。
       予兆を見て、退く・構える・先に倒すを選んでください。剣は軽快、槍は間合い、弓は近距離不可、杖は高消費の範囲攻撃です。階段 <b style="color:#e1b85b">▼</b> に乗ると次の階へ進みます。
-      未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。迷宮は大型化され、探索スキルで隠し通路を発見できます。⇵はショートカットです。盤面はピクセル表現になり、攻撃・爆発・炎上には画面演出があります。効果音と環境音は画面下の音ボタンで切り替えられます。灯台では深淵の欠片を使い、永久強化・図鑑・倉庫を利用できます。帰還には祭壇、ボス撃破後、または帰還標が必要です。あなたを倒した敵は宿敵となり、次の探索でさらに強くなって現れることがあります。迷宮は武器・属性・構え・爆発物の使用傾向を記録し、次の探索で対策を変えます。5階ごとにバイオームが切り替わり、敵・資源・視界・属性相性が変化します。紫色の印では偶発事件が発生し、選択は灯台と迷宮に記録されます。射程ボタンで武器範囲を表示でき、マップ上の敵や物をタップすると詳細を確認できます。灯火ボタンで消灯・松明・ランタン・魔導灯を切り替えられます。強い光ほど視野が広い代わりに敵へ見つかりやすくなります。ただし敵は壁越しには認識せず、見失うと数ターン捜索した後に追跡を諦めます。弓は比較的静かです。亡者・獣群・異形・番人は互いに敵対し、プレイヤーが離れていても巡回や縄張り争いを行います。敵は時間経過で安全な遠方へ再出現しますが、階層ごとの個体数と再生数には上限があります。階層深度が敵レベルと装備レベルの基準になります。格下の敵ほど経験値が減り、6レベル以上低い敵からは経験値を得られません。装備にはアイテムレベルと必要レベルがあります。装備には炎・毒・光・影・骨・雷タグが付き、装備中の合計が3・6・10に達すると段階効果が発動します。剣・槍・弓・杖には永続熟練度があります。さらに装備中の各アイテムは撃破数で成長します。さらに移動・近接戦・遠距離戦・探索など、実際に繰り返した行動が持久・筋力・集中・知覚の永続鍛錬として蓄積されます。薬・壺・探索はクイックボタンから即使用できます。
+      未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。迷宮は大型化され、探索スキルで隠し通路を発見できます。⇵はショートカットです。盤面はピクセル表現になり、攻撃・爆発・炎上には画面演出があります。効果音と環境音は画面下の音ボタンで切り替えられます。灯台では深淵の欠片を使い、永久強化・図鑑・倉庫を利用できます。帰還には祭壇、ボス撃破後、または帰還標が必要です。あなたを倒した敵は宿敵となり、次の探索でさらに強くなって現れることがあります。迷宮は武器・属性・構え・爆発物の使用傾向を記録し、次の探索で対策を変えます。5階ごとにバイオームが切り替わり、敵・資源・視界・属性相性が変化します。紫色の印では偶発事件が発生し、選択は灯台と迷宮に記録されます。射程ボタンで武器範囲を表示でき、マップ上の敵や物をタップすると詳細を確認できます。灯火ボタンで消灯・松明・ランタン・魔導灯を切り替えられます。強い光ほど視野が広い代わりに敵へ見つかりやすくなります。ただし敵は壁越しには認識せず、見失うと数ターン捜索した後に追跡を諦めます。弓は比較的静かです。亡者・獣群・異形・番人は互いに敵対し、プレイヤーが離れていても巡回や縄張り争いを行います。敵は時間経過で安全な遠方へ再出現しますが、階層ごとの個体数と再生数には上限があります。階層深度が敵レベルと装備レベルの基準になります。格下の敵ほど経験値が減り、6レベル以上低い敵からは経験値を得られません。装備にはアイテムレベルと必要レベルがあります。装備には炎・毒・光・影・骨・雷タグが付き、装備中の合計が3・6・10に達すると段階効果が発動します。剣・槍・弓・杖には永続熟練度があります。さらに装備中の各アイテムは撃破数で成長します。さらに移動・近接戦・遠距離戦・探索など、実際の行動は身体鍛錬として蓄積されます。さらに到達深度10・25・50・80階以降の節目で深淵適応点を得て、暗闇・毒・罠・宿敵などへの永続特性を選べます。薬・壺・探索はクイックボタンから即使用できます。
     </p>
     <p>記号：<b>@</b>主人公 / <b>S</b>盾骸兵 / <b>W</b>穴獣 / <b>M</b>骨術師 / <b>B</b>爆ぜ虫 / <b>!</b>装備 / <b>◇</b>食料 / <b>^</b>罠</p>
     <button class="modalBtn" id="closeHelp">閉じる</button>
@@ -382,6 +471,15 @@ body::after{
 
 
 
+
+
+<div class="overlay hidden" id="adaptOverlay">
+  <div class="card">
+    <h2>深淵適応</h2>
+    <p id="adaptText"></p>
+    <div id="adaptChoices" class="bondChoice"></div>
+  </div>
+</div>
 
 <div class="overlay hidden" id="bondOverlay">
   <div class="card">
@@ -416,7 +514,7 @@ body::after{
     <div id="stashList"></div>
     <div id="codexList"></div>
     <button type="button" class="modalBtn" id="returnToAbyssBtn">現在の探索へ戻る</button>
-    <button type="button" class="modalBtn" id="newRunBtn">新しい探索を始める</button>
+    <button type="button" class="modalBtn" id="adaptBtn">深淵適応を選ぶ</button><button type="button" class="modalBtn" id="newRunBtn">新しい探索を始める</button>
     <button type="button" class="modalBtn" id="closeHub">閉じる</button>
   </div>
 </div>
@@ -518,6 +616,78 @@ function trainingSummaryHtml(){
  }</div></div>`;
 }
 
+
+const abyssAdaptationData={
+ nightEyes:{label:"夜目",desc:"消灯時の視野+2"},
+ toxinBlood:{label:"毒血",desc:"毒ダメージを35%軽減"},
+ trapSense:{label:"罠感知",desc:"近くの罠を自動で可視化"},
+ factionScent:{label:"縄張り嗅覚",desc:"敵勢力同士の争いを遠くから察知"},
+ scavenger:{label:"深層回収",desc:"再生個体の装備ドロップ率上昇"},
+ steadyHeart:{label:"不屈心",desc:"宿敵から受けるダメージを15%軽減"},
+ echoStep:{label:"残響歩法",desc:"移動音による発見距離を1短縮"},
+ paleFlame:{label:"蒼白火",desc:"炎上耐性を得て炎タグ効果も維持"},
+ deepLungs:{label:"深層肺",desc:"食料・灯油の消費を10%軽減"},
+ relicMind:{label:"遺物共鳴",desc:"名品以上の装備タグ+1扱い"}
+};
+const adaptationDepthMilestones=[10,25,50,80,120,170,230,300,400,520];
+function hasAbyssAdaptation(id){return (state.meta?.abyssAdaptations||[]).includes(id)}
+function adaptationMilestoneCount(bestFloor){
+ let count=0;
+ for(const d of adaptationDepthMilestones)if(bestFloor>=d)count++;
+ return count;
+}
+function updateAdaptationPoints(){
+ const reached=adaptationMilestoneCount(state.meta.bestFloor||1);
+ const old=state.meta.adaptationMilestone||0;
+ if(reached>old){
+  state.meta.adaptationPoints=(state.meta.adaptationPoints||0)+(reached-old);
+  state.meta.adaptationMilestone=reached;
+  addLog("深淵への適応点を "+(reached-old)+" 得た。");
+  saveMeta();
+ }
+}
+function availableAdaptations(){
+ return Object.keys(abyssAdaptationData).filter(id=>!hasAbyssAdaptation(id));
+}
+function openAdaptationChoice(){
+ updateAdaptationPoints();
+ if((state.meta.adaptationPoints||0)<=0){addLog("新しい適応点はない。");return}
+ const pool=availableAdaptations();
+ if(!pool.length){addLog("すべての深淵適応を獲得している。");return}
+ const choices=pool.sort(()=>rng()-.5).slice(0,3);
+ $("adaptText").textContent="到達深度により得た適応点を使い、永続特性を1つ選びます。";
+ const box=$("adaptChoices");box.innerHTML="";
+ for(const id of choices){
+  const data=abyssAdaptationData[id];
+  const b=document.createElement("button");
+  b.type="button";b.className="choiceBtn";
+  b.innerHTML=`<b>${data.label}</b><small>${data.desc}</small>`;
+  b.onclick=()=>{
+   state.meta.abyssAdaptations.push(id);
+   state.meta.adaptationPoints=Math.max(0,state.meta.adaptationPoints-1);
+   $("adaptOverlay").classList.add("hidden");
+   addLog("深淵適応「"+data.label+"」を得た。");
+   saveMeta();render();
+  };
+  box.appendChild(b);
+ }
+ $("adaptOverlay").classList.remove("hidden");
+}
+function adaptationSummaryHtml(){
+ const owned=state.meta?.abyssAdaptations||[];
+ return `<div class="adaptBox"><b>深淵適応</b><br>
+ ${owned.length?owned.map(id=>`<span class="adaptChip">${abyssAdaptationData[id]?.label||id}</span>`).join(""):'<span class="compareSame">未獲得</span>'}
+ ${(state.meta?.adaptationPoints||0)>0?`<br><span class="adaptChip adaptReady">未使用点 ${state.meta.adaptationPoints}</span>`:""}
+ </div>`;
+}
+function revealNearbyTraps(){
+ if(!hasAbyssAdaptation("trapSense"))return;
+ for(const t of state.traps||[]){
+  if(t.spent||t.revealed)continue;
+  if(Math.abs(t.x-state.player.x)+Math.abs(t.y-state.player.y)<=2)t.revealed=true;
+ }
+}
+
 const masteryMilestones=[0,25,75,180,360,700];
 const masteryPerks={
  sword:[
@@ -599,7 +769,7 @@ function saveMeta(){
  if(state?.meta)localStorage.setItem("abyssalRootsMeta",JSON.stringify(state.meta));
 }
 function defaultMeta(){
- return{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0}};
+ return{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0};
 }
 function applyMetaToFreshState(newState){
  const meta=loadMeta()||defaultMeta();
@@ -643,7 +813,7 @@ function freshState(){
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",
   map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false}
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false}
  };
  return applyMetaToFreshState(newState);
 }
@@ -718,7 +888,7 @@ function triggerSpecialTile(){
  if(t.type==="collapse"){
   t.used=true;
   const dmg=4+state.floor;
-  if(tagTier("bone")>=6)dmg=Math.max(0,Math.round(dmg*.88));
+  if(tagTier("bone")>=6)dmg=Math.max(0,Math.round(dmg*.88));if(e.nemesis&&hasAbyssAdaptation("steadyHeart"))dmg=Math.max(0,Math.round(dmg*.85));
  if(tagTier("bone")>=10&&!state.hero.boneLastStandUsed&&dmg>=state.hero.hp){
   state.hero.boneLastStandUsed=true;dmg=Math.max(0,state.hero.hp-1);addLog("骨の加護が致命傷を防いだ！");
  }
@@ -918,7 +1088,7 @@ function currentLight(){
  return lightData[state.light.type]||lightData.torch;
 }
 function visionRadius(){
- return Math.max(2,currentLight().radius+(state.hero.perception||0)+bodyVisionBonus()+totalBondVision()+(tagTier("light")>=3?1:0)+(currentBiomeKey()==="crypt"?-1:currentBiomeKey()==="frost"?1:0)+(mutation()?.vision||0));
+ return Math.max(2,currentLight().radius+(state.hero.perception||0)+bodyVisionBonus()+totalBondVision()+(hasAbyssAdaptation("nightEyes")&&!state.light.on?2:0)+(tagTier("light")>=3?1:0)+(currentBiomeKey()==="crypt"?-1:currentBiomeKey()==="frost"?1:0)+(mutation()?.vision||0));
 }
 function cycleLight(){
  if(!state)return;
@@ -984,13 +1154,13 @@ function enemyCanSeeEnemy(e,target){
 function enemyAttackEnemy(attacker,target,mult=1,label="襲撃"){
  const dmg=Math.max(1,Math.round((attacker.atk+rint(-1,2))*mult)-target.def);
  target.hp-=dmg;
- if(state.visible[key(attacker.x,attacker.y)]||state.visible[key(target.x,target.y)])addLog(attacker.name+"と"+target.name+"が争っている。");
+ if(state.visible[key(attacker.x,attacker.y)]||state.visible[key(target.x,target.y)]||hasAbyssAdaptation("factionScent"))addLog(attacker.name+"と"+target.name+"が争っている。");
  if(target.hp<=0){
   const killer=attacker;
   addRemains(target);
   state.enemies=state.enemies.filter(x=>x!==target);
   killer.hp=Math.min(killer.maxHp,killer.hp+Math.max(1,Math.floor(dmg*.15)));
-  if(rng()<.18)state.items.push({x:target.x,y:target.y,type:"gear",gear:rollGear(target.level||floorTargetLevel())});
+  if(rng()<(hasAbyssAdaptation("scavenger")&&target.respawned?.32:.18))state.items.push({x:target.x,y:target.y,type:"gear",gear:rollGear(target.level||floorTargetLevel())});
  }
 }
 function moveTowardEnemy(e,target){
@@ -1042,7 +1212,7 @@ function enemyHearsPlayer(e){
  if(state.lastAction==="bomb")return d<=9;
  if(state.lastAction==="attack")return d<=5;
  if(state.lastAction==="bow_attack")return d<=(masteryLevel("bow")>=1?2:3);
- if(state.lastAction==="move"&&e.type==="warg")return d<=6;
+ if(state.lastAction==="move"&&e.type==="warg")return d<=(hasAbyssAdaptation("echoStep")?5:6);
  return false;
 }
 function updateEnemyAwareness(e){
@@ -1508,6 +1678,9 @@ function equippedTags(){
   if(!g)continue;
   const tags=normalizeTags(g.tags);
   for(const k of Object.keys(out))out[k]+=tags[k];
+  if(hasAbyssAdaptation("relicMind")&&bondStage(g)>=3){
+   const primary=bondPrimaryTag(g);out[primary]+=1;
+  }
  }
  return out;
 }
@@ -1759,7 +1932,7 @@ function updateStatuses(){
    addLog(e.name+"が炎上で "+dmg+" ダメージ。");
   }
   if(e.status.poison>0){
-   let dmg=2+Math.floor(state.floor/4);if(tagTier("venom")>=6)dmg=Math.round(dmg*1.35);
+   let dmg=2+Math.floor(state.floor/4);if(tagTier("venom")>=6)dmg=Math.round(dmg*1.35);if(hasAbyssAdaptation("toxinBlood"))dmg=Math.max(1,Math.round(dmg*.65));
    e.hp-=dmg;e.status.poison--;
    addLog(e.name+"が毒で "+dmg+" ダメージ。");
   }
@@ -2019,6 +2192,24 @@ function tickContinuousAnimation(){
  draw();
  requestAnimationFrame(tickContinuousAnimation);
 
+function updateVisualHeight(){
+ const h=window.visualViewport?.height||window.innerHeight;
+ document.documentElement.style.setProperty("--vvh",h+"px");
+}
+updateVisualHeight();
+window.addEventListener("resize",updateVisualHeight,{passive:true});
+window.visualViewport?.addEventListener("resize",updateVisualHeight,{passive:true});
+window.visualViewport?.addEventListener("scroll",updateVisualHeight,{passive:true});
+
+window.addEventListener("load",()=>{
+ setTimeout(()=>{
+  if(!window.matchMedia("(display-mode: standalone)").matches){
+   window.scrollTo({top:2,behavior:"auto"});
+  }
+ },220);
+});
+
+
 function refreshViewportHeight(){
  document.documentElement.style.setProperty("--visual-height",(window.visualViewport?.height||window.innerHeight)+"px");
 }
@@ -2051,13 +2242,13 @@ function move(dx,dy){
  const nx=state.player.x+dx,ny=state.player.y+dy;
  if(tile(nx,ny)!==1){addLog("壁が行く手を塞いでいる。");return}
  startMoveAnim(dx,dy);sfx("step");gainTraining("endurance",1);state.player.x=nx;state.player.y=ny;state.lastAction="move";
- pickup();triggerTrap();triggerSpecialTile();triggerEvent();useShortcutIfPresent();
+ revealNearbyTraps();pickup();triggerTrap();triggerSpecialTile();triggerEvent();useShortcutIfPresent();
  if(state.gameOver){render();return}
  if(nx===state.stairs.x&&ny===state.stairs.y){
   if(state.floor%5===0&&!state.bossDefeated){addLog("番人を倒さなければ先へ進めない。");endTurn();return}
   const previousFloor=state.floor;
   try{
-   state.floor++;state.meta.shards+=1;state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);saveMeta();
+   state.floor++;state.meta.shards+=1;state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);updateAdaptationPoints();saveMeta();
    state.hunger=Math.min(effectiveMaxHunger(),state.hunger+12);
    recoverStamina(state.hero.maxStamina);
    generateFloor();
@@ -2362,7 +2553,11 @@ function triggerTrap(){
  }
 }
 function endTurn(){
- state.turn++;state.hunger=Math.max(0,state.hunger-(mutation()?.hungerDrain||1));consumeLightFuel();
+ state.turn++;
+ const hungerDrain=(mutation()?.hungerDrain||1);
+ const actualHungerDrain=hasAbyssAdaptation("deepLungs")&&state.turn%10===0?0:hungerDrain;
+ state.hunger=Math.max(0,state.hunger-actualHungerDrain);
+ if(!(hasAbyssAdaptation("deepLungs")&&state.turn%10===0))consumeLightFuel();
  if(state.lastAction==="move")recoverStamina(hasTalent("marathon")?2:1);
  if(state.lastAction==="guard")recoverStamina(1);
  if(state.hunger===0&&state.turn%3===0){
@@ -2635,6 +2830,8 @@ function renderHub(){
    </div>`).join(""):'<p class="note">持ち帰った装備はありません。</p>');
  $("stashList").querySelectorAll("[data-heirloom]").forEach(b=>b.onclick=()=>setHeirloom(Number(b.dataset.heirloom)));
  $("stashList").querySelectorAll("[data-salvage]").forEach(b=>b.onclick=()=>salvageStash(Number(b.dataset.salvage)));
+ const adaptationRows=(m.abyssAdaptations||[]).map(id=>abyssAdaptationData[id]?.label||id).join(" / ")||"未獲得";
+ $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>深淵適応</span><span>未使用 ${m.adaptationPoints||0}</span></div><div class="desc">${adaptationRows}</div></div>`;
  const trainingRows=Object.keys(trainingData).map(type=>`${trainingData[type].label} R${trainingRank(type)} (${trainingXp(type)})`).join(" / ");
  $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>身体鍛錬</span><span>永続</span></div><div class="desc">${trainingRows}</div></div>`;
  const masteryRows=Object.keys(weaponData).map(type=>`<div>${weaponData[type].label} Lv${masteryLevel(type)} (${masteryXp(type)})</div>`).join("");
@@ -2686,7 +2883,7 @@ function renderInventory(){
   row.querySelector(".equipBtn").onclick=()=>equipItem(g.id);box.appendChild(row);
  });
 }
-function canAct(){return state&&!state.gameOver&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")}
+function canAct(){return state&&!state.gameOver&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")}
 let saveTimer=null;
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveGame(),120)}
 function saveSnapshot(){try{if(state)localStorage.setItem("abyssalRootsSoloV4Backup",JSON.stringify(state))}catch(e){}}
@@ -2720,6 +2917,9 @@ function loadGame(){
   if(!state.meta.marks)state.meta.marks={mercy:0,greed:0,defiance:0,curiosity:0};
   if(!state.meta.mastery)state.meta.mastery={sword:0,spear:0,bow:0,staff:0};
   if(!state.meta.bodyTraining)state.meta.bodyTraining={endurance:0,strength:0,focus:0,perception:0};
+  if(!state.meta.abyssAdaptations)state.meta.abyssAdaptations=[];
+  if(typeof state.meta.adaptationPoints!=="number")state.meta.adaptationPoints=0;
+  if(typeof state.meta.adaptationMilestone!=="number")state.meta.adaptationMilestone=adaptationMilestoneCount(state.meta.bestFloor||1);
   if(!state.events)state.events=[];
   if(!state.remains)state.remains=[];
   if(!state.ecology)state.ecology={spawnClock:0,totalRespawns:0,killsThisFloor:0};
@@ -3268,7 +3468,7 @@ canvas.addEventListener("click",event=>{
 $("quickPotion").onclick=usePotion;
 $("quickBomb").onclick=throwBomb;
 $("quickSearch").onclick=()=>useSkill("search");
-$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
+$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
 $("saveBtn").onclick=()=>{saveGame();addLog("探索記録を保存した。")};
 $("up").onclick=()=>move(0,-1);$("down").onclick=()=>move(0,1);$("left").onclick=()=>move(-1,0);$("right").onclick=()=>move(1,0);$("wait").onclick=waitTurn;
 $("guard").onclick=()=>useSkill("guard");$("volley").onclick=()=>useSkill("volley");$("heal").onclick=()=>useSkill("heal");$("search").onclick=()=>useSkill("search");
@@ -3312,6 +3512,10 @@ window.addEventListener("load",()=>{
   setTimeout(()=>window.scrollTo(0,1),100);
 });
 
+
+if("serviceWorker" in navigator){
+ window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+}
 </script>
 </body>
 </html>
