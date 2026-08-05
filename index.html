@@ -702,7 +702,7 @@ body{
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.8.8 FIELD SALVAGE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.8.8.1 START HOTFIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -742,7 +742,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 現地分解・荷物整理・即席工房</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 新規開始・操作処理の安定化</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -3234,6 +3234,226 @@ function endTurn(){
  state.guardTurns=Math.max(0,state.guardTurns-1);
  updateVision();saveGame();render();
 }
+
+function ensureVisualState(){
+ state.visual=state.visual||{};
+ if(!Array.isArray(state.visual.effects))state.visual.effects=[];
+ return state.visual;
+}
+function startMoveAnim(dx,dy){
+ const v=ensureVisualState();
+ v.moveDx=dx;v.moveDy=dy;v.moveFrames=0;
+}
+function startAttackAnim(dx,dy){
+ const v=ensureVisualState();
+ v.attackDx=dx;v.attackDy=dy;v.attackFrames=6;
+}
+function startDamageAnim(){
+ const v=ensureVisualState();
+ v.damageFrames=6;
+}
+function addVisualEffect(effect){
+ const v=ensureVisualState();
+ const life=effect.life||18;
+ v.effects.push({...effect,life,maxLife:life});
+ if(v.effects.length>56)v.effects=v.effects.slice(-56);
+}
+function spawnHeroEffect(kind){
+ addVisualEffect({kind,x:state.player.x,y:state.player.y,life:kind==="search"?24:18});
+}
+function spawnTileEffect(x,y,kind,life=18){
+ addVisualEffect({kind,x,y,life});
+}
+function spawnPickupEffect(type){
+ const kind={
+  food:"pickup_food",potion:"pickup_potion",identify:"pickup_scroll",purify:"pickup_star",
+  bomb:"pickup_bomb",retreat:"pickup_return",oil:"pickup_oil",gear:"pickup_gear"
+ }[type]||"pickup_gear";
+ spawnHeroEffect(kind);
+}
+function spawnAttackEffect(x,y,label=""){
+ const wt=weaponType();
+ let kind="slash";
+ if(wt==="bow")kind="shot";
+ if(wt==="staff")kind="arcane";
+ if(label.includes("火花")||label.includes("爆ぜ")||label.includes("魔撃")||label.includes("余波"))kind="arcane";
+ if(label.includes("連射")||label.includes("射撃"))kind="shot";
+ if(label.includes("貫突")||label.includes("刺突")||label.includes("貫通"))kind="pierce";
+ spawnTileEffect(x,y,kind,16);
+}
+function normalizeCells(cells){
+ const seen=new Set(),out=[];
+ for(const c of cells||[]){
+  if(!c)continue;
+  const k=key(c.x,c.y);
+  if(seen.has(k))continue;
+  seen.add(k);out.push({x:c.x,y:c.y});
+ }
+ return out;
+}
+function lineCells(x1,y1,x2,y2){
+ const dx=Math.sign(x2-x1),dy=Math.sign(y2-y1),cells=[];
+ let x=x1+dx,y=y1+dy,guard=0;
+ while(guard++<20){
+  cells.push({x,y});
+  if(x===x2&&y===y2)break;
+  x+=dx;y+=dy;
+ }
+ return normalizeCells(cells);
+}
+function crossAreaCells(x,y){
+ return normalizeCells([{x,y},...dirs.map(([dx,dy])=>({x:x+dx,y:y+dy}))]);
+}
+function spawnCellsEffect(cells,kind,life=16){
+ for(const c of normalizeCells(cells)){
+  if(c.x<0||c.y<0||c.x>=COLS||c.y>=ROWS)continue;
+  spawnTileEffect(c.x,c.y,kind,life);
+ }
+}
+function spawnPlayerAttackCells(cells,kind="player_zone",life=16){
+ spawnCellsEffect(cells,kind,life);
+}
+function spawnEnemyAttackCells(cells,kind="enemy_zone",life=18){
+ spawnCellsEffect(cells,kind,life);
+}
+function updateVisualEffects(){
+ const v=ensureVisualState();
+ v.time=(v.time||0)+1;
+ if((v.moveFrames||0)>0)v.moveFrames--;
+ if((v.attackFrames||0)>0)v.attackFrames--;
+ if((v.damageFrames||0)>0)v.damageFrames--;
+ if((v.shake||0)>0)v.shake=Math.max(0,v.shake-1);
+ if((v.flash||0)>0)v.flash=Math.max(0,v.flash-1);
+ v.effects=(v.effects||[]).map(e=>({...e,life:e.life-1})).filter(e=>e.life>0);
+}
+function drawVisualEffects(cam){
+ const v=ensureVisualState();
+ const sx=x=>(x-cam.x)*TILE,sy=y=>(y-cam.y)*TILE;
+ const inView=(x,y)=>x>=cam.x&&x<cam.x+VIEW_COLS&&y>=cam.y&&y<cam.y+VIEW_ROWS;
+ for(const ef of v.effects){
+  if(!inView(ef.x,ef.y))continue;
+  const px=sx(ef.x),py=sy(ef.y),p=ef.life/ef.maxLife,age=1-p;
+  ctx.save();ctx.globalAlpha=Math.max(.1,p);
+  if(ef.kind.startsWith("pickup_")){
+   const color={
+    pickup_food:"#83dca7",pickup_potion:"#ff8ea8",pickup_scroll:"#93c9ff",pickup_star:"#f5df87",
+    pickup_bomb:"#ff9a62",pickup_return:"#8ce2d7",pickup_oil:"#ffe2a0",pickup_gear:"#ddd1ff"
+   }[ef.kind]||"#ddd";
+   const rise=age*8;ctx.strokeStyle=color;ctx.lineWidth=1.5;
+   ctx.beginPath();ctx.arc(px+11,py+11-rise,4+age*3,0,Math.PI*2);ctx.stroke();
+   ctx.fillStyle=color;ctx.fillRect(px+7,py+8-rise,2,2);ctx.fillRect(px+13,py+6-rise,2,2);ctx.fillRect(px+11,py+4-rise,2,2);
+  }else if(ef.kind==="heal"){
+   ctx.strokeStyle="#8af2ae";ctx.lineWidth=2;ctx.beginPath();ctx.arc(px+11,py+11,5+age*6,0,Math.PI*2);ctx.stroke();
+   ctx.fillStyle="#d9ffe4";ctx.fillRect(px+10,py+6-age*2,2,10);ctx.fillRect(px+6,py+10-age*2,10,2);
+  }else if(ef.kind==="search"){
+   ctx.strokeStyle="#86d8ff";ctx.lineWidth=1.5;ctx.strokeRect(px+2-age*2,py+2-age*2,TILE-4+age*4,TILE-4+age*4);
+   ctx.beginPath();ctx.arc(px+11,py+11,3+age*8,0,Math.PI*2);ctx.stroke();
+  }else if(ef.kind==="guard"){
+   ctx.strokeStyle="#f0d37a";ctx.lineWidth=2;ctx.strokeRect(px+4,py+4,14,14);
+   ctx.fillStyle="rgba(240,211,122,.22)";ctx.fillRect(px+7,py+6,8,10);
+  }else if(ef.kind==="stamina"){
+   ctx.strokeStyle="#f4d98f";ctx.lineWidth=2;ctx.beginPath();ctx.arc(px+11,py+11,6+age*4,Math.PI*.1,Math.PI*1.45);ctx.stroke();
+   ctx.fillStyle="#fff4bc";ctx.fillRect(px+14,py+7,2,4);
+  }else if(ef.kind==="hurt"||ef.kind==="trap"){
+   ctx.strokeStyle=ef.kind==="trap"?"#ff8a7a":"#ff6776";ctx.lineWidth=2;
+   ctx.beginPath();ctx.moveTo(px+6,py+6);ctx.lineTo(px+16,py+16);ctx.moveTo(px+16,py+6);ctx.lineTo(px+6,py+16);ctx.stroke();
+  }else if(ef.kind==="bomb"||ef.kind==="enemy_blast"){
+   ctx.strokeStyle=ef.kind==="enemy_blast"?"#ff6e62":"#ffb060";ctx.lineWidth=2;
+   ctx.beginPath();ctx.arc(px+11,py+11,4+age*8,0,Math.PI*2);ctx.stroke();
+   ctx.fillStyle=ef.kind==="enemy_blast"?"rgba(255,72,72,.28)":"rgba(255,132,72,.22)";ctx.fillRect(px+4,py+4,14,14);
+  }else if(ef.kind==="arcane"){
+   ctx.strokeStyle="#b78cff";ctx.lineWidth=2;
+   ctx.beginPath();ctx.moveTo(px+11,py+4);ctx.lineTo(px+13,py+9);ctx.lineTo(px+18,py+11);ctx.lineTo(px+13,py+13);ctx.lineTo(px+11,py+18);ctx.lineTo(px+9,py+13);ctx.lineTo(px+4,py+11);ctx.lineTo(px+9,py+9);ctx.closePath();ctx.stroke();
+  }else if(ef.kind==="shot"||ef.kind==="enemy_bolt"){
+   ctx.strokeStyle=ef.kind==="enemy_bolt"?"#ff7f95":"#bfe8ff";ctx.lineWidth=2;
+   ctx.beginPath();ctx.moveTo(px+4,py+11);ctx.lineTo(px+18,py+11);ctx.stroke();
+   ctx.fillStyle=ef.kind==="enemy_bolt"?"#ffd0da":"#fff7cf";ctx.fillRect(px+15,py+9,3,4);
+  }else if(ef.kind==="pierce"){
+   ctx.strokeStyle="#ffe39a";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+5,py+16);ctx.lineTo(px+16,py+5);ctx.stroke();
+  }else if(ef.kind==="player_zone"||ef.kind==="enemy_zone"){
+   const enemy=ef.kind==="enemy_zone";
+   ctx.fillStyle=enemy?"rgba(255,70,92,.20)":"rgba(104,198,255,.20)";ctx.fillRect(px+1,py+1,TILE-2,TILE-2);
+   ctx.strokeStyle=enemy?"rgba(255,132,145,.98)":"rgba(170,232,255,.95)";ctx.lineWidth=1.5;ctx.strokeRect(px+2.5,py+2.5,TILE-5,TILE-5);
+  }else{
+   ctx.strokeStyle="#fff0d5";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+5,py+16);ctx.lineTo(px+16,py+5);ctx.stroke();
+  }
+  ctx.restore();
+ }
+}
+function tickContinuousAnimation(){
+ if(state){updateVisualEffects();draw()}
+ requestAnimationFrame(tickContinuousAnimation);
+}
+function updateVisualHeight(){
+ const h=window.visualViewport?.height||window.innerHeight;
+ document.documentElement.style.setProperty("--vvh",h+"px");
+}
+function refreshViewportHeight(){
+ document.documentElement.style.setProperty("--visual-height",(window.visualViewport?.height||window.innerHeight)+"px");
+}
+function move(dx,dy){
+ if(!canAct())return;
+ const target=directionTarget(dx,dy);
+ if(target?.blocked){addLog("近すぎて弓を引けない。距離を取る必要がある。");return}
+ if(target?.enemy){
+  startAttackAnim(dx,dy);gainMastery(weaponType(),1);
+  if(weaponType()==="sword"||weaponType()==="spear")gainTraining("strength",2);else gainTraining("focus",2);
+  recordUsage(weaponType());if(equippedElement())recordUsage(equippedElement());sfx(weaponType()==="staff"?"magic":"attack");
+  const cost=weaponData[weaponType()].cost;if(!spendStamina(cost))return;
+  state.lastAction=weaponType()==="bow"?"bow_attack":"attack";
+  weaponAttack(target.enemy,dx,dy,target.distance);endTurn();return;
+ }
+ const nx=state.player.x+dx,ny=state.player.y+dy;
+ if(tile(nx,ny)!==1){addLog("壁が行く手を塞いでいる。");return}
+ startMoveAnim(dx,dy);sfx("step");gainTraining("endurance",1);
+ state.player.x=nx;state.player.y=ny;state.lastAction="move";
+ revealNearbyTraps();pickup();triggerTrap();triggerSpecialTile();triggerEvent();useShortcutIfPresent();
+ if(state.gameOver){render();return}
+ if(nx===state.stairs.x&&ny===state.stairs.y){
+  if(state.floor%5===0&&!state.bossDefeated){addLog("番人を倒さなければ先へ進めない。");endTurn();return}
+  const previousFloor=state.floor;
+  try{
+   state.floor++;state.meta.shards+=1;state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);updateAdaptationPoints();saveMeta();
+   state.hunger=Math.min(effectiveMaxHunger(),state.hunger+12);updateHungerStageNotification();
+   recoverStamina(state.hero.maxStamina);generateFloor();
+  }catch(error){
+   console.error("Floor generation failed",error);state.floor=previousFloor;
+   addLog("階層生成に失敗したため、階段手前へ戻された。");saveGame();render();
+  }
+  return;
+ }
+ endTurn();
+}
+function waitTurn(){
+ if(!canAct())return;
+ state.lastAction="rest";gainTraining("endurance",2);recoverStamina(5);
+ addLog("呼吸を整え、気力を回復した。");endTurn();
+}
+function tryMoveEnemy(e,options){
+ for(const [dx,dy] of options){
+  const nx=e.x+dx,ny=e.y+dy;
+  if(tile(nx,ny)===1&&!enemyAt(nx,ny)&&!(nx===state.player.x&&ny===state.player.y)){
+   e.x=nx;e.y=ny;return true;
+  }
+ }
+ return false;
+}
+function distanceToPlayer(e){return Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)}
+function stepTowardPlayer(e){
+ const dx=Math.sign(state.player.x-e.x),dy=Math.sign(state.player.y-e.y);
+ const options=Math.abs(state.player.x-e.x)>Math.abs(state.player.y-e.y)?[[dx,0],[0,dy]]:[[0,dy],[dx,0]];
+ return tryMoveEnemy(e,options);
+}
+function stepAwayFromPlayer(e){
+ const dx=-Math.sign(state.player.x-e.x),dy=-Math.sign(state.player.y-e.y);
+ return tryMoveEnemy(e,[[dx,0],[0,dy],...[...dirs].sort(()=>rng()-.5)]);
+}
+function flankPlayer(e){
+ const px=state.player.x-e.x,py=state.player.y-e.y;
+ const options=Math.abs(px)>=Math.abs(py)?[[0,Math.sign(py)||1],[0,-(Math.sign(py)||1)]]:[[Math.sign(px)||1,0],[-(Math.sign(px)||1),0]];
+ if(!tryMoveEnemy(e,options))stepTowardPlayer(e);
+}
+
 function useSkill(name){
  if(!canAct()||state.cooldowns[name]>0)return;
  if(name==="guard"){
@@ -3762,6 +3982,8 @@ function loadGame(){
   if(typeof state.fieldForgeAtk!=="number")state.fieldForgeAtk=0;
   if(typeof state.fieldForgeDef!=="number")state.fieldForgeDef=0;
   if(typeof state.inventorySort!=="string")state.inventorySort="score";
+  state.visual=state.visual||{};
+  if(!Array.isArray(state.visual.effects))state.visual.effects=[];
   updateHungerStageNotification(true);
   if(typeof state.consumables.oil!=="number")state.consumables.oil=1;
   if(typeof state.consumables.retreat!=="number")state.consumables.retreat=1;
@@ -4542,6 +4764,15 @@ $("guard").onclick=()=>useSkill("guard");$("volley").onclick=()=>useSkill("volle
 canvas.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchStart={x:t.clientX,y:t.clientY}},{passive:true});
 canvas.addEventListener("touchend",e=>{if(!touchStart)return;const t=e.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;touchStart=null;if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;if(Math.abs(dx)>Math.abs(dy))move(Math.sign(dx),0);else move(0,Math.sign(dy))},{passive:true});
 addEventListener("keydown",e=>{const m={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]};if(m[e.key]){e.preventDefault();move(...m[e.key])}});
+
+updateVisualHeight();
+refreshViewportHeight();
+window.addEventListener("resize",()=>{updateVisualHeight();refreshViewportHeight()},{passive:true});
+window.visualViewport?.addEventListener("resize",()=>{updateVisualHeight();refreshViewportHeight()},{passive:true});
+window.visualViewport?.addEventListener("scroll",updateVisualHeight,{passive:true});
+document.addEventListener("visibilitychange",()=>{if(document.hidden)saveGame()});
+window.addEventListener("pagehide",()=>saveGame());
+
 if(localStorage.getItem("abyssalRootsSoloV4Save"))$("continueBtn").classList.remove("hidden");
 requestAnimationFrame(tickContinuousAnimation);
 
