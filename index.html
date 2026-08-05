@@ -104,7 +104,7 @@ canvas{display:block;width:100%;height:auto;max-height:48svh;object-fit:contain;
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 0.4.1 FIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 0.4.2 FLOOR FIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -250,27 +250,47 @@ function carveLine(map,a,b){
 }
 function randomFloorCell(minDist=0){
  for(let tries=0;tries<800;tries++){
-  let x=rint(1,COLS-2),y=rint(1,ROWS-2);
+  const x=rint(1,COLS-2),y=rint(1,ROWS-2);
   if(tile(x,y)===1 && Math.abs(x-state.player.x)+Math.abs(y-state.player.y)>=minDist &&
      !state.enemies.some(e=>e.x===x&&e.y===y) && !state.items.some(i=>i.x===x&&i.y===y) &&
      !(state.stairs.x===x&&state.stairs.y===y)) return{x,y};
  }
- return{x:state.player.x,y:state.player.y};
+ return null;
 }
 function generateFloor(){
  state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
  state.rooms=[];
- for(let i=0;i<9;i++){
+
+ // 部屋数ではなく試行回数に上限を設ける。
+ // 旧処理は配置失敗時にカウンターを戻していたため、
+ // 条件次第で永久ループになり階層移動時にフリーズしていた。
+ const targetRooms=7;
+ const maxRoomAttempts=120;
+ let attempts=0;
+ while(state.rooms.length<targetRooms && attempts<maxRoomAttempts){
+  attempts++;
   const w=rint(3,6),h=rint(3,5),x=rint(1,COLS-w-1),y=rint(1,ROWS-h-1);
   const room={x,y,w,h,cx:x+Math.floor(w/2),cy:y+Math.floor(h/2)};
-  if(state.rooms.some(r=>x<r.x+r.w+1&&x+w+1>r.x&&y<r.y+r.h+1&&y+h+1>r.y)){i--;if(i<-10)break;continue}
+  const overlaps=state.rooms.some(r=>x<r.x+r.w+1&&x+w+1>r.x&&y<r.y+r.h+1&&y+h+1>r.y);
+  if(overlaps)continue;
   carveRoom(state.map,x,y,w,h);
-  if(state.rooms.length) carveLine(state.map,state.rooms[state.rooms.length-1],{x:room.cx,y:room.cy});
+  if(state.rooms.length){
+   const prev=state.rooms[state.rooms.length-1];
+   carveLine(state.map,{x:prev.cx,y:prev.cy},{x:room.cx,y:room.cy});
+  }
   state.rooms.push(room);
  }
+
+ // 配置運が悪くても必ず遊べる固定構造へフォールバックする。
  if(state.rooms.length<2){
-  carveRoom(state.map,2,2,5,5);carveRoom(state.map,10,14,5,5);carveLine(state.map,{x:4,y:4},{x:12,y:16});
-  state.rooms=[{cx:4,cy:4},{cx:12,cy:16}];
+  state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
+  carveRoom(state.map,2,2,5,5);
+  carveRoom(state.map,10,14,5,5);
+  carveLine(state.map,{x:4,y:4},{x:12,y:16});
+  state.rooms=[
+   {x:2,y:2,w:5,h:5,cx:4,cy:4},
+   {x:10,y:14,w:5,h:5,cx:12,cy:16}
+  ];
  }
  const start=state.rooms[0],end=state.rooms[state.rooms.length-1];
  state.player={x:start.cx,y:start.cy};state.stairs={x:end.cx,y:end.cy};
@@ -278,6 +298,7 @@ function generateFloor(){
  const enemyCount=5+state.floor*2;
  for(let i=0;i<enemyCount;i++){
   const p=randomFloorCell(6),type=rng()<.65?"skeleton":"warg";
+  if(!p)break;
   state.enemies.push({
    id:"e"+state.floor+"-"+i,x:p.x,y:p.y,type,
    name:type==="skeleton"?"骸兵":"穴獣",
@@ -290,10 +311,13 @@ function generateFloor(){
  const itemCount=4+Math.floor(state.floor/2);
  for(let i=0;i<itemCount;i++){
   const p=randomFloorCell(3);
+  if(!p)break;
   state.items.push(rng()<.28?{x:p.x,y:p.y,type:"food",name:"乾燥肉"}:{x:p.x,y:p.y,type:"gear",gear:rollGear()});
  }
  for(let i=0;i<2+Math.floor(state.floor/3);i++){
-  const p=randomFloorCell(3);state.traps.push({x:p.x,y:p.y,revealed:false,spent:false});
+  const p=randomFloorCell(3);
+  if(!p)break;
+  state.traps.push({x:p.x,y:p.y,revealed:false,spent:false});
  }
  updateVision();showFloorBanner("第 "+state.floor+" 層");
  saveGame();render();
@@ -444,7 +468,19 @@ function move(dx,dy){
  pickup();triggerTrap();
  if(state.gameOver){render();return}
  if(nx===state.stairs.x&&ny===state.stairs.y){
-  state.floor++;state.hunger=Math.min(effectiveMaxHunger(),state.hunger+12);recoverStamina(state.hero.maxStamina);generateFloor();return
+  const previousFloor=state.floor;
+  try{
+   state.floor++;
+   state.hunger=Math.min(effectiveMaxHunger(),state.hunger+12);
+   recoverStamina(state.hero.maxStamina);
+   generateFloor();
+  }catch(error){
+   console.error("Floor generation failed",error);
+   state.floor=previousFloor;
+   addLog("階層生成に失敗したため、階段手前へ戻された。");
+   saveGame();render();
+  }
+  return
  }
  endTurn();
 }
