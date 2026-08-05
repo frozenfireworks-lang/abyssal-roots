@@ -158,11 +158,26 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
   vertical-align:middle;
 }
 
+
+#gameWrap::after{
+  content:"";
+  position:absolute;inset:0;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 46%,transparent 0 35%,rgba(4,2,7,.18) 68%,rgba(0,0,0,.38) 100%);
+  mix-blend-mode:multiply;
+}
+
+
+#footerBtns{flex-wrap:wrap}
+#footerBtns .miniBtn{min-width:22%}
+.lightPulse{animation:lightPulse 1.6s ease-in-out infinite alternate}
+@keyframes lightPulse{from{filter:brightness(.92)}to{filter:brightness(1.08)}}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 1.2 VISUAL REFORGE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 2.0 EVENTS</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -188,14 +203,14 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
 <div id="footerBtns">
   <button class="miniBtn" id="inventoryBtn">装備・荷物</button>
   <button class="miniBtn" id="saveBtn">保存</button>
-  <button class="miniBtn" id="helpBtn">遊び方</button>
+  <button class="miniBtn" id="helpBtn">遊び方</button><button class="miniBtn" id="soundBtn">音ON</button><button class="miniBtn" id="hubBtn">帰還</button>
 </div>
 </div>
 
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × ピクセル迷宮 × 光と演出</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 偶発事件 × 世界の痕跡</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -245,10 +260,34 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
     <p>
       移動・待機・スキルを使うたびに1ターン進み、敵も行動します。方向入力は、武器の射程内に敵がいれば攻撃、いなければ移動です。攻撃にはスタミナを使い、敵の赤い予兆は次のターンに実行されます。
       予兆を見て、退く・構える・先に倒すを選んでください。剣は軽快、槍は間合い、弓は近距離不可、杖は高消費の範囲攻撃です。階段 <b style="color:#e1b85b">▼</b> に乗ると次の階へ進みます。
-      未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。迷宮は大型化され、探索スキルで隠し通路を発見できます。⇵はショートカットです。盤面はピクセル表現になり、攻撃・爆発・炎上には画面演出があります。
+      未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。迷宮は大型化され、探索スキルで隠し通路を発見できます。⇵はショートカットです。盤面はピクセル表現になり、攻撃・爆発・炎上には画面演出があります。効果音と環境音は画面下の音ボタンで切り替えられます。灯台では深淵の欠片を使い、永久強化・図鑑・倉庫を利用できます。帰還には祭壇、ボス撃破後、または帰還標が必要です。あなたを倒した敵は宿敵となり、次の探索でさらに強くなって現れることがあります。迷宮は武器・属性・構え・爆発物の使用傾向を記録し、次の探索で対策を変えます。5階ごとにバイオームが切り替わり、敵・資源・視界・属性相性が変化します。紫色の印では偶発事件が発生し、選択は灯台と迷宮に記録されます。
     </p>
     <p>記号：<b>@</b>主人公 / <b>S</b>盾骸兵 / <b>W</b>穴獣 / <b>M</b>骨術師 / <b>B</b>爆ぜ虫 / <b>!</b>装備 / <b>◇</b>食料 / <b>^</b>罠</p>
     <button class="modalBtn" id="closeHelp">閉じる</button>
+  </div>
+</div>
+
+
+
+<div class="overlay hidden" id="eventOverlay">
+  <div class="card">
+    <h2 id="eventTitle">迷宮の事件</h2>
+    <p id="eventText"></p>
+    <div id="eventChoices"></div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="hubOverlay">
+  <div class="card">
+    <h2>深淵の灯台</h2>
+    <p>帰還時に装備を倉庫へ持ち帰れます。帰還には祭壇・ボス撃破・帰還標のいずれかが必要です。</p>
+    <div id="hubSummary"></div>
+    <div id="hubUpgrades"></div>
+    <div id="stashList"></div>
+    <div id="codexList"></div>
+    <button type="button" class="modalBtn" id="returnToAbyssBtn">現在の探索へ戻る</button>
+    <button type="button" class="modalBtn" id="newRunBtn">新しい探索を始める</button>
+    <button type="button" class="modalBtn" id="closeHub">閉じる</button>
   </div>
 </div>
 
@@ -313,15 +352,57 @@ function key(x,y){return x+","+y}
 function inside(x,y){return x>=0&&y>=0&&x<COLS&&y<ROWS}
 function tile(x,y){return inside(x,y)?state.map[y][x]:0}
 function addLog(t){state.log.unshift(t);state.log=state.log.slice(0,5);renderLog()}
+
+function loadMeta(){
+ try{
+  return JSON.parse(localStorage.getItem("abyssalRootsMeta"))||null;
+ }catch(e){return null}
+}
+function saveMeta(){
+ if(state?.meta)localStorage.setItem("abyssalRootsMeta",JSON.stringify(state.meta));
+}
+function defaultMeta(){
+ return{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0}};
+}
+function applyMetaToFreshState(newState){
+ const meta=loadMeta()||defaultMeta();
+ newState.meta=meta;
+ const usage=meta.usage||emptyUsage();
+ const weaponKeys=["sword","spear","bow","staff"];
+ const elementKeys=["fire","frost","storm","venom","blood"];
+ const topWeapon=[...weaponKeys].sort((a,b)=>(usage[b]||0)-(usage[a]||0))[0];
+ const topElement=[...elementKeys].sort((a,b)=>(usage[b]||0)-(usage[a]||0))[0];
+ const candidates=[];
+ if((usage[topWeapon]||0)>=12)candidates.push("anti_"+topWeapon);
+ if((usage[topElement]||0)>=10)candidates.push("anti_"+topElement);
+ if((usage.guard||0)>=10)candidates.push("anti_guard");
+ if((usage.bomb||0)>=8)candidates.push("anti_bomb");
+ if((meta.marks?.greed||0)>=5)candidates.push("anti_bomb");
+ if((meta.marks?.defiance||0)>=5)candidates.push("anti_guard");
+ meta.adaptation=candidates.length?choice(candidates):null;
+ newState.meta=meta;
+ newState.hero.maxHp+=meta.upgrades.vitality*4;
+ newState.hero.hp=newState.hero.maxHp;
+ newState.hero.maxStamina+=meta.upgrades.focus;
+ newState.hero.stamina=newState.hero.maxStamina;
+ if(meta.heirloom){
+  const g=JSON.parse(JSON.stringify(meta.heirloom));
+  newState.weapon=g.slot==="weapon"?g:newState.weapon;
+  newState.armor=g.slot==="armor"?g:newState.armor;
+ }
+ return newState;
+}
+
 function freshState(){
- return{
+ const newState={
   version:4,seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,
-  hunger:100,maxHunger:100,crit:.08,weapon:null,armor:null,inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1},
+  hunger:100,maxHunger:100,crit:.08,weapon:null,armor:null,inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:1},
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[]},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",
-  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,visual:{flash:0,shake:0,hitX:null,hitY:null}
+  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0}
  };
+ return applyMetaToFreshState(newState);
 }
 function carveRoom(map,x,y,w,h){
  for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)map[yy][xx]=1;
@@ -362,7 +443,7 @@ function spawnFloorBoss(){
  const p=randomFloorCell(8);
  if(!p)return;
  state.enemies.push({
-  id:"boss-"+state.floor,x:p.x,y:p.y,type:"warden",name:"深層の番人",
+  id:"boss-"+state.floor,x:p.x,y:p.y,type:"warden",name:currentBiome().label+"の番人",
   hp:48+state.floor*8,maxHp:48+state.floor*8,
   atk:9+Math.floor(state.floor*1.1),def:4+Math.floor(state.floor/4),
   xp:30+state.floor*5,intent:null,stagger:0,guarding:false,boss:true,phase:1
@@ -393,7 +474,7 @@ function triggerSpecialTile(){
  if(t.type==="collapse"){
   t.used=true;
   const dmg=4+state.floor;
-  state.hero.hp=Math.max(0,state.hero.hp-dmg);
+  state.hero.hp=Math.max(0,state.hero.hp-dmg);startDamageAnim();sfx("hurt");
   addLog("崩落！ "+dmg+" ダメージ。");
  }
  if(t.type==="treasure"){
@@ -407,11 +488,14 @@ function envAt(x,y,type=null){
  return state.environment.find(o=>o.x===x&&o.y===y&&(!type||o.type===type));
 }
 function addEnvironmentObjects(){
- const count=2+Math.floor(state.floor/2)+(mutation()?.environmentBonus||0);
+ let biomeEnv=currentBiomeKey()==="furnace"?3:currentBiomeKey()==="fungal"?1:0;
+ const count=Math.max(0,2+Math.floor(state.floor/2)+(mutation()?.environmentBonus||0)+biomeEnv-(state.meta?.adaptation==="anti_bomb"?2:0));
  for(let i=0;i<count;i++){
   const p=randomFloorCell(3);
   if(!p)break;
-  const type=rng()<.55?"barrel":"oil";
+  let type=rng()<.55?"barrel":"oil";
+  if(currentBiomeKey()==="furnace")type=rng()<.68?"barrel":"oil";
+  if(currentBiomeKey()==="fungal")type="oil";
   state.environment.push({x:p.x,y:p.y,type,active:true,burning:false,timer:0});
  }
 }
@@ -427,7 +511,7 @@ function igniteAt(x,y,source="炎"){
 function explodeBarrel(barrel){
  if(!barrel.active)return;
  barrel.active=false;
- addLog("爆薬樽が炸裂した！");triggerHitFx(barrel.x,barrel.y,true);
+ addLog("爆薬樽が炸裂した！");triggerHitFx(barrel.x,barrel.y,true);sfx("explode");
  const cells=[[0,0],...dirs];
  for(const [dx,dy] of cells){
   const tx=barrel.x+dx,ty=barrel.y+dy;
@@ -490,7 +574,7 @@ function throwBomb(){
   if(barrels.length)target=barrels[0].o;
  }
  if(!target){addLog("火炎壺を投げる対象が見つからない。");return}
- state.consumables.bomb--;
+ state.consumables.bomb--;recordUsage("bomb");
  addLog("火炎壺を投げた！");
  const enemy=enemyAt(target.x,target.y);
  if(enemy){
@@ -574,6 +658,188 @@ function cameraOrigin(){
  };
 }
 
+
+const biomeData={
+ crypt:{label:"石葬墓廟",desc:"盾骸兵と骨術師が多い。暗く、解呪品が出やすい。",wall:"#30283a",floor:"#17141d",accent:"#81728f"},
+ furnace:{label:"灼熱炉心",desc:"炎・爆薬樽・爆ぜ虫が多い。氷属性が有利。",wall:"#3b2627",floor:"#211516",accent:"#d86b45"},
+ frost:{label:"凍結回廊",desc:"視界が広いが、敵の凍結耐性が高い。炎属性が有利。",wall:"#243441",floor:"#121c24",accent:"#75b7d8"},
+ fungal:{label:"菌糸庭園",desc:"毒と回復資源が多い。毒耐性個体が現れる。",wall:"#293228",floor:"#171d17",accent:"#78a765"}
+};
+function currentBiomeKey(){
+ const zone=Math.floor((state.floor-1)/5)%4;
+ return["crypt","furnace","frost","fungal"][zone];
+}
+function currentBiome(){return biomeData[currentBiomeKey()]}
+function biomeDamageModifier(element){
+ const b=currentBiomeKey();
+ if(b==="furnace"&&element==="frost")return 1.35;
+ if(b==="furnace"&&element==="fire")return .72;
+ if(b==="frost"&&element==="fire")return 1.35;
+ if(b==="frost"&&element==="frost")return .72;
+ if(b==="fungal"&&element==="venom")return .65;
+ if(b==="crypt"&&element==="blood")return .8;
+ return 1;
+}
+
+const adaptationData={
+ anti_bow:{label:"近接侵食",desc:"弓の多用を感知。俊足個体と接近戦が増える。"},
+ anti_guard:{label:"腐食打撃",desc:"構えの多用を感知。受け流しを削る重撃が増える。"},
+ anti_bomb:{label:"湿潤化",desc:"爆発物の多用を感知。油と樽が減る。"},
+ anti_fire:{label:"耐火殻",desc:"炎属性の多用を感知。敵の炎上時間が短くなる。"},
+ anti_frost:{label:"砕氷血",desc:"氷属性の多用を感知。凍結耐性個体が増える。"},
+ anti_storm:{label:"避雷骨",desc:"雷属性の多用を感知。連鎖距離が短くなる。"},
+ anti_venom:{label:"清浄肉",desc:"毒属性の多用を感知。毒継続時間が短くなる。"},
+ anti_blood:{label:"乾血呪",desc:"吸血の多用を感知。回復量が減る。"},
+ anti_staff:{label:"沈黙圧",desc:"杖の多用を感知。術師と遠距離妨害が増える。"},
+ anti_spear:{label:"接近崩し",desc:"槍の多用を感知。回り込み個体が増える。"},
+ anti_sword:{label:"鉄殻増殖",desc:"剣の多用を感知。盾骸兵が増える。"}
+};
+function emptyUsage(){
+ return{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0};
+}
+function recordUsage(key,amount=1){
+ if(!state?.meta)return;
+ state.meta.usage=state.meta.usage||emptyUsage();
+ state.meta.usage[key]=(state.meta.usage[key]||0)+amount;
+ saveMeta();
+}
+function computeAdaptation(){
+ const u=state.meta.usage||emptyUsage();
+ const weaponKeys=["sword","spear","bow","staff"];
+ const elementKeys=["fire","frost","storm","venom","blood"];
+ const topWeapon=weaponKeys.sort((a,b)=>(u[b]||0)-(u[a]||0))[0];
+ const topElement=elementKeys.sort((a,b)=>(u[b]||0)-(u[a]||0))[0];
+ const candidates=[];
+ if((u[topWeapon]||0)>=12)candidates.push("anti_"+topWeapon);
+ if((u[topElement]||0)>=10)candidates.push("anti_"+topElement);
+ if((u.guard||0)>=10)candidates.push("anti_guard");
+ if((u.bomb||0)>=8)candidates.push("anti_bomb");
+ state.meta.adaptation=candidates.length?choice(candidates):null;
+ saveMeta();
+}
+function adaptation(){return state.meta?.adaptation?adaptationData[state.meta.adaptation]:null}
+
+const nemesisTitles=["鎖喰らい","灯狩り","墓暴き","欠片喰い","深闇歩き","血濡れ"];
+function createNemesisFromEnemy(e){
+ const title=choice(nemesisTitles);
+ const stolen=state.weapon?cloneGear(state.weapon):null;
+ state.meta.nemesis={
+  name:title+"の"+e.name,
+  baseType:e.type,
+  hpBonus:Math.max(12,Math.floor(e.maxHp*.55)),
+  atkBonus:Math.max(2,Math.floor(e.atk*.35)),
+  defBonus:Math.max(1,Math.floor(e.def*.5)),
+  kills:1,
+  stolenGear:stolen,
+  floor:Math.max(2,state.floor)
+ };
+ state.meta.nemesisHistory.push({
+  name:state.meta.nemesis.name,
+  createdFloor:state.floor,
+  status:"alive"
+ });
+ saveMeta();
+}
+function spawnNemesis(){
+ const n=state.meta?.nemesis;
+ if(!n)return;
+ if(state.floor<Math.max(2,n.floor-1))return;
+ if(rng()>.32)return;
+ const p=randomFloorCell(8);
+ if(!p)return;
+ const base={
+  skeleton:{hp:16,atk:5,def:3},
+  warg:{hp:12,atk:6,def:1},
+  mage:{hp:11,atk:7,def:1},
+  bomber:{hp:10,atk:8,def:0},
+  warden:{hp:26,atk:9,def:4}
+ }[n.baseType]||{hp:16,atk:6,def:2};
+ const enemy={
+  id:"nemesis-"+Date.now(),x:p.x,y:p.y,type:n.baseType,name:n.name,
+  hp:base.hp+n.hpBonus+state.floor*3,
+  maxHp:base.hp+n.hpBonus+state.floor*3,
+  atk:base.atk+n.atkBonus+Math.floor(state.floor*.8),
+  def:base.def+n.defBonus,
+  xp:25+state.floor*5,intent:null,stagger:0,guarding:false,
+  elite:"nemesis",nemesis:true,status:{}
+ };
+ state.enemies.push(enemy);
+ addLog("背後から、聞き覚えのある気配が近づいている……");
+}
+function nemesisColor(e){return e.nemesis?"#ff4f73":null}
+function recordNemesisVictory(e){
+ const n=state.meta.nemesis;
+ if(!n)return;
+ const hist=[...state.meta.nemesisHistory].reverse().find(h=>h.name===n.name&&h.status==="alive");
+ if(hist)hist.status="defeated";
+ state.meta.shards+=10;
+ if(n.stolenGear&&state.meta.stash.length<20){
+  n.stolenGear.cursed=false;n.stolenGear.identified=true;
+  state.meta.stash.push(n.stolenGear);
+  addLog("宿敵から奪われた装備を取り戻した。");
+ }
+ state.meta.nemesis=null;
+ saveMeta();
+ addLog("宿敵を討ち果たした！ 深淵の欠片を10得た。");
+}
+function maybePromoteKiller(e){
+ if(e?.nemesis){
+  const n=state.meta.nemesis;
+  if(n){n.kills=(n.kills||1)+1;n.hpBonus+=6;n.atkBonus+=1;n.floor=Math.max(n.floor,state.floor);saveMeta()}
+  return;
+ }
+ if(!state.meta.nemesis&&e)createNemesisFromEnemy(e);
+}
+
+
+const eventDefs=[
+ {id:"wounded_rival",title:"傷ついた追跡者",text:"壁際に、こちらを追っていたはずの敵が倒れている。武器は手放していない。",choices:[
+  {label:"治療する",mark:"mercy",available(){return state.consumables.potion>0},run(){state.consumables.potion--;state.meta.shards+=2;addLog("敵は何も言わず、深闇へ消えた。")}},
+  {label:"止めを刺す",mark:"defiance",run(){state.gold+=12;state.xp+=8;addLog("迷宮はその選択を記憶した。")}},
+  {label:"武器だけ奪う",mark:"greed",run(){state.inventory.push(rollGear());addLog("使えそうな装備を奪った。")}}
+ ]},
+ {id:"sealed_archive",title:"封じられた記録庫",text:"朽ちた石板が、まだ微かな光を放っている。触れれば何かが起きる。",choices:[
+  {label:"読み解く",mark:"curiosity",run(){state.meta.shards+=3;state.crit+=.01;addLog("断片的な知識が頭に流れ込んだ。")}},
+  {label:"砕く",mark:"defiance",run(){state.consumables.purify++;addLog("石板の灰から解呪の素材を得た。")}},
+  {label:"持ち帰る",mark:"greed",run(){state.meta.shards+=5;state.hero.hp=Math.max(1,state.hero.hp-6);addLog("石板の呪いが体を蝕んだ。")}}
+ ]},
+ {id:"echo_well",title:"反響する井戸",text:"底の見えない井戸から、自分の声に似た囁きが返ってくる。",choices:[
+  {label:"名を告げる",mark:"curiosity",run(){state.hero.maxStamina++;state.hero.stamina=state.hero.maxStamina;addLog("声は名前を覚えた。")}},
+  {label:"欠片を投げる",mark:"mercy",available(){return state.meta.shards>0},run(){state.meta.shards--;state.consumables.identify+=2;addLog("二枚の鑑定紙片が浮かんだ。")}},
+  {label:"立ち去る",mark:"defiance",run(){addLog("何も起こらなかった。")}}
+ ]},
+ {id:"hungry_altar",title:"飢えた祭壇",text:"祭壇の溝には、まだ温かい血が流れている。",choices:[
+  {label:"血を捧げる",mark:"defiance",run(){state.hero.hp=Math.max(1,state.hero.hp-10);state.hero.atk+=2;addLog("祭壇が力を返した。")}},
+  {label:"食料を供える",mark:"mercy",available(){return state.hunger>=30},run(){state.hunger-=30;state.meta.shards+=3;addLog("祭壇の気配が穏やかになった。")}},
+  {label:"供物を盗む",mark:"greed",run(){state.consumables.potion++;state.consumables.bomb++;addLog("背後で何かが笑った。")}}
+ ]}
+];
+function addFloorEvents(){
+ state.events=[];
+ if(state.floor===1||rng()>=.7)return;
+ const p=randomFloorCell(5);if(!p)return;
+ const def=choice(eventDefs);
+ state.events.push({x:p.x,y:p.y,eventId:def.id,used:false});
+}
+function eventAt(x,y){return state.events.find(e=>e.x===x&&e.y===y&&!e.used)}
+function triggerEvent(){
+ const node=eventAt(state.player.x,state.player.y);if(!node)return;
+ const def=eventDefs.find(e=>e.id===node.eventId);if(!def)return;
+ node.used=true;$("eventTitle").textContent=def.title;$("eventText").textContent=def.text;
+ const box=$("eventChoices");box.innerHTML="";
+ def.choices.forEach(c=>{
+  if(c.available&&!c.available())return;
+  const b=document.createElement("button");b.type="button";b.className="choiceBtn";b.textContent=c.label;
+  b.onclick=()=>{c.run();state.meta.marks[c.mark]=(state.meta.marks[c.mark]||0)+1;state.meta.eventHistory.push({id:def.id,title:def.title,choice:c.label,floor:state.floor});saveMeta();saveGame();$("eventOverlay").classList.add("hidden");render()};
+  box.appendChild(b);
+ });
+ $("eventOverlay").classList.remove("hidden");
+}
+function dominantMark(){
+ const entries=Object.entries(state.meta?.marks||{}).sort((a,b)=>b[1]-a[1]);
+ return entries.length&&entries[0][1]>0?entries[0][0]:null;
+}
+
 function generateFloor(){
  chooseFloorMutation();
  state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
@@ -625,13 +891,23 @@ function generateFloor(){
  }
  const start=state.rooms[0],end=state.rooms[state.rooms.length-1];
  state.player={x:start.cx,y:start.cy};state.stairs={x:end.cx,y:end.cy};
- state.enemies=[];state.items=[];state.traps=[];state.specialTiles=[];state.environment=[];state.secretWalls=[];state.shortcuts=[];state.visited={};state.visible={};state.bossDefeated=false;
+ state.enemies=[];state.items=[];state.traps=[];state.specialTiles=[];state.environment=[];state.secretWalls=[];state.shortcuts=[];state.events=[];state.visited={};state.visible={};state.bossDefeated=false;
  const enemyCount=5+state.floor*2;
  for(let i=0;i<enemyCount;i++){
   const p=randomFloorCell(6);
   if(!p)break;
   const roll=rng();
-  const type=roll<.38?"skeleton":roll<.68?"warg":roll<.86?"mage":"bomber";
+  let type=roll<.38?"skeleton":roll<.68?"warg":roll<.86?"mage":"bomber";
+  const biome=currentBiomeKey();
+  if(biome==="crypt"&&rng()<.42)type=rng()<.65?"skeleton":"mage";
+  if(biome==="furnace"&&rng()<.4)type=rng()<.65?"bomber":"warg";
+  if(biome==="frost"&&rng()<.34)type=rng()<.55?"warg":"skeleton";
+  if(biome==="fungal"&&rng()<.38)type=rng()<.6?"warg":"mage";
+  const ad=state.meta?.adaptation;
+  if(ad==="anti_sword"&&rng()<.34)type="skeleton";
+  if(ad==="anti_spear"&&rng()<.34)type="warg";
+  if(ad==="anti_bow"&&rng()<.36)type="warg";
+  if(ad==="anti_staff"&&rng()<.34)type="mage";
   const base={
    skeleton:{name:"盾骸兵",hp:14,atk:4,def:3,xp:7},
    warg:{name:"穴獣",hp:9,atk:5,def:0,xp:6},
@@ -653,12 +929,13 @@ function generateFloor(){
  for(let i=0;i<itemCount;i++){
   const p=randomFloorCell(3);
   if(!p)break;
-  const itemRoll=rng();
+  let itemRoll=rng();if(currentBiomeKey()==="fungal"&&rng()<.35)itemRoll=.25;if(currentBiomeKey()==="crypt"&&rng()<.22)itemRoll=.45;
   if(itemRoll<.22)state.items.push({x:p.x,y:p.y,type:"food",name:"乾燥肉"});
   else if(itemRoll<.34)state.items.push({x:p.x,y:p.y,type:"potion",name:"治癒薬"});
   else if(itemRoll<.42)state.items.push({x:p.x,y:p.y,type:"identify",name:"鑑定紙片"});
   else if(itemRoll<.47)state.items.push({x:p.x,y:p.y,type:"purify",name:"解呪の灰"});
   else if(itemRoll<.55)state.items.push({x:p.x,y:p.y,type:"bomb",name:"火炎壺"});
+  else if(itemRoll<.58)state.items.push({x:p.x,y:p.y,type:"retreat",name:"帰還標"});
   else state.items.push({x:p.x,y:p.y,type:"gear",gear:rollGear()});
  }
  for(let i=0;i<2+Math.floor(state.floor/3);i++){
@@ -668,11 +945,13 @@ function generateFloor(){
  }
  addSpecialRoom();
  addSecretsAndShortcuts();
+ addFloorEvents();
  addEnvironmentObjects();
  spawnFloorBoss();
+ spawnNemesis();
  updateVision();
  const mutationText=mutation()?"【"+mutation().label+"】":"";
- showFloorBanner((state.floor%5===0?"第 "+state.floor+" 層・番人の間":"第 "+state.floor+" 層")+mutationText);
+ showFloorBanner((state.floor%5===0?"第 "+state.floor+" 層・番人の間":"第 "+state.floor+" 層")+"【"+currentBiome().label+"】"+mutationText+(adaptation()?"【"+adaptation().label+"】":""));
  saveGame();render();
 }
 function rollGear(){
@@ -709,7 +988,7 @@ function rollGear(){
 }
 function updateVision(){
  state.visible={};
- const r=Math.max(2,5+(mutation()?.vision||0));
+ const biomeVision=currentBiomeKey()==="crypt"?-1:currentBiomeKey()==="frost"?1:0;const r=Math.max(2,5+(mutation()?.vision||0)+biomeVision);
  for(let y=state.player.y-r;y<=state.player.y+r;y++)for(let x=state.player.x-r;x<=state.player.x+r;x++){
   if(!inside(x,y))continue;
   if(Math.hypot(x-state.player.x,y-state.player.y)<=r+.4){state.visible[key(x,y)]=1;state.visited[key(x,y)]=1}
@@ -763,22 +1042,22 @@ function applyElementHit(e,damage){
  if(!element)return;
  e.status=e.status||{};
  if(element==="fire"){
-  e.status.burning=Math.max(e.status.burning||0,3);
+  e.status.burning=Math.max(e.status.burning||0,state.meta?.adaptation==="anti_fire"?1:3);
   igniteAt(e.x,e.y,"炎属性");
  }
  if(element==="frost"){
-  e.status.frozen=Math.max(e.status.frozen||0,2);
+  e.status.frozen=Math.max(e.status.frozen||0,(state.meta?.adaptation==="anti_frost"||currentBiomeKey()==="frost")?1:2);
   addLog(e.name+"の動きが凍りついた。");
  }
  if(element==="storm"){
-  const nearby=state.enemies.find(o=>o!==e&&Math.abs(o.x-e.x)+Math.abs(o.y-e.y)<=2);
+  const chainRange=state.meta?.adaptation==="anti_storm"?1:2;const nearby=state.enemies.find(o=>o!==e&&Math.abs(o.x-e.x)+Math.abs(o.y-e.y)<=chainRange);
   if(nearby){nearby.hp-=Math.max(1,Math.floor(damage*.4));addLog("雷が "+nearby.name+" へ連鎖した。");if(nearby.hp<=0)defeatEnemy(nearby)}
  }
  if(element==="venom"){
-  e.status.poison=Math.max(e.status.poison||0,4);
+  e.status.poison=Math.max(e.status.poison||0,(state.meta?.adaptation==="anti_venom"||currentBiomeKey()==="fungal")?2:4);
  }
  if(element==="blood"){
-  const heal=Math.max(1,Math.floor(damage*.12));
+  const healRate=state.meta?.adaptation==="anti_blood"?.06:.12;const heal=Math.max(1,Math.floor(damage*healRate));
   state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+heal);
  }
 }
@@ -823,6 +1102,64 @@ function showTalentChoices(){
 }
 
 
+
+let audioCtx=null,ambientNodes=null;
+function ensureAudio(){
+ if(!state?.audio?.enabled)return false;
+ if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+ if(audioCtx.state==="suspended")audioCtx.resume();
+ state.audio.started=true;
+ return true;
+}
+function tone(freq=220,duration=.08,type="square",volume=.04,slide=0){
+ if(!ensureAudio())return;
+ const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+ osc.type=type;osc.frequency.setValueAtTime(freq,audioCtx.currentTime);
+ if(slide)osc.frequency.linearRampToValueAtTime(Math.max(30,freq+slide),audioCtx.currentTime+duration);
+ gain.gain.setValueAtTime(volume,audioCtx.currentTime);
+ gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+duration);
+ osc.connect(gain).connect(audioCtx.destination);osc.start();osc.stop(audioCtx.currentTime+duration);
+}
+function noise(duration=.12,volume=.025){
+ if(!ensureAudio())return;
+ const len=Math.floor(audioCtx.sampleRate*duration),buffer=audioCtx.createBuffer(1,len,audioCtx.sampleRate);
+ const data=buffer.getChannelData(0);
+ for(let i=0;i<len;i++)data[i]=(Math.random()*2-1)*(1-i/len);
+ const src=audioCtx.createBufferSource(),gain=audioCtx.createGain();
+ src.buffer=buffer;gain.gain.value=volume;src.connect(gain).connect(audioCtx.destination);src.start();
+}
+function sfx(name){
+ if(!state?.audio?.enabled)return;
+ if(name==="step")tone(95,.035,"square",.018,-20);
+ if(name==="attack")tone(180,.07,"sawtooth",.035,120);
+ if(name==="hit"){tone(90,.09,"square",.045,-40);noise(.05,.02)}
+ if(name==="hurt"){tone(120,.16,"sawtooth",.045,-80)}
+ if(name==="pickup"){tone(520,.06,"sine",.025,180)}
+ if(name==="stairs"){tone(220,.12,"sine",.03,220);setTimeout(()=>tone(440,.16,"sine",.025,180),80)}
+ if(name==="explode"){tone(70,.22,"sawtooth",.06,-35);noise(.22,.05)}
+ if(name==="magic"){tone(360,.14,"triangle",.035,260)}
+ if(name==="boss"){tone(65,.4,"sawtooth",.05,-10)}
+}
+function startAmbient(){
+ if(!ensureAudio()||ambientNodes)return;
+ const osc=audioCtx.createOscillator(),gain=audioCtx.createGain(),filter=audioCtx.createBiquadFilter();
+ osc.type="sine";osc.frequency.value=45;
+ gain.gain.value=.008;filter.type="lowpass";filter.frequency.value=140;
+ osc.connect(filter).connect(gain).connect(audioCtx.destination);osc.start();
+ ambientNodes={osc,gain,filter};
+}
+function stopAmbient(){
+ if(!ambientNodes)return;
+ try{ambientNodes.osc.stop()}catch(e){}
+ ambientNodes=null;
+}
+function toggleSound(){
+ state.audio.enabled=!state.audio.enabled;
+ $("soundBtn").textContent=state.audio.enabled?"音ON":"音OFF";
+ if(state.audio.enabled){ensureAudio();startAmbient();sfx("pickup")}else stopAmbient();
+ saveGame();
+}
+
 function triggerHitFx(x,y,strong=false){
  state.visual=state.visual||{flash:0,shake:0,hitX:null,hitY:null};
  state.visual.flash=strong?5:3;
@@ -859,8 +1196,8 @@ const spritePatterns={
 };
 
 function damageEnemy(e,damage,label=""){
- const guardMul=(e.type==="skeleton"&&e.guarding)?0.45:1;damage=applyTraitDamage(damage,e);const dmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul*(mutation()?.damageMul||1)));
- e.hp-=dmg;triggerHitFx(e.x,e.y,dmg>=10);applyElementHit(e,dmg);if(e.type==="skeleton"&&e.guarding)addLog(e.name+"が盾で威力を殺した。");
+ const guardMul=(e.type==="skeleton"&&e.guarding)?0.45:1;damage=applyTraitDamage(damage,e)*biomeDamageModifier(equippedElement());const dmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul*(mutation()?.damageMul||1)));
+ e.hp-=dmg;triggerHitFx(e.x,e.y,dmg>=10);sfx("hit");applyElementHit(e,dmg);if(e.type==="skeleton"&&e.guarding)addLog(e.name+"が盾で威力を殺した。");
  if(e.intent&&dmg>=Math.max(5,Math.floor(e.maxHp*.28))){
   e.intent=null;e.stagger=1;addLog(e.name+"の攻撃態勢を崩した！");
  }
@@ -870,10 +1207,16 @@ function damageEnemy(e,damage,label=""){
 }
 function defeatEnemy(e){
  if(!state.enemies.includes(e))return;
- const wasBoss=!!e.boss;
+ const wasBoss=!!e.boss;const wasNemesis=!!e.nemesis;
  state.enemies=state.enemies.filter(x=>x!==e);
  state.xp+=e.xp;state.gold+=rint(2,8)+state.floor;if(state.weapon)state.weapon.kills=(state.weapon.kills||0)+1;
+ state.meta.totalKills++;
+ state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
+ state.meta.codex[e.type]=(state.meta.codex[e.type]||0)+1;
+ if(e.boss||e.elite)state.meta.shards+=e.boss?5:1;
+ saveMeta();
  addLog(e.name+"を倒した。");
+ if(wasNemesis)recordNemesisVictory(e);
  if(e.elite==="volatile"){
   const ghost={x:e.x,y:e.y,active:true};
   explodeBarrel(ghost);
@@ -922,6 +1265,32 @@ function weaponAttack(e,dx,dy,distance){
   if(second)damageEnemy(second,Math.max(1,Math.floor(base*.55)),"追撃");
  }
 }
+
+function startMoveAnim(dx,dy){
+ state.visual=state.visual||{};
+ state.visual.moveDx=dx;state.visual.moveDy=dy;
+ state.visual.moveFrames=5;
+}
+function startAttackAnim(dx,dy){
+ state.visual=state.visual||{};
+ state.visual.attackDx=dx;state.visual.attackDy=dy;
+ state.visual.attackFrames=6;
+}
+function startDamageAnim(){
+ state.visual=state.visual||{};
+ state.visual.damageFrames=6;
+}
+function tickContinuousAnimation(){
+ if(!state)return;
+ state.visual=state.visual||{};
+ state.visual.time=(state.visual.time||0)+1;
+ if((state.visual.moveFrames||0)>0)state.visual.moveFrames--;
+ if((state.visual.attackFrames||0)>0)state.visual.attackFrames--;
+ if((state.visual.damageFrames||0)>0)state.visual.damageFrames--;
+ draw();
+ requestAnimationFrame(tickContinuousAnimation);
+}
+
 function move(dx,dy){
  if(!canAct())return;
  const target=directionTarget(dx,dy);
@@ -930,6 +1299,7 @@ function move(dx,dy){
   return;
  }
  if(target?.enemy){
+  startAttackAnim(dx,dy);recordUsage(weaponType());if(equippedElement())recordUsage(equippedElement());sfx(weaponType()==="staff"?"magic":"attack");
   const cost=weaponData[weaponType()].cost;
   if(!spendStamina(cost))return;
   state.lastAction="attack";
@@ -938,14 +1308,14 @@ function move(dx,dy){
  }
  const nx=state.player.x+dx,ny=state.player.y+dy;
  if(tile(nx,ny)!==1){addLog("壁が行く手を塞いでいる。");return}
- state.player.x=nx;state.player.y=ny;state.lastAction="move";
- pickup();triggerTrap();triggerSpecialTile();useShortcutIfPresent();
+ startMoveAnim(dx,dy);sfx("step");state.player.x=nx;state.player.y=ny;state.lastAction="move";
+ pickup();triggerTrap();triggerSpecialTile();triggerEvent();useShortcutIfPresent();
  if(state.gameOver){render();return}
  if(nx===state.stairs.x&&ny===state.stairs.y){
   if(state.floor%5===0&&!state.bossDefeated){addLog("番人を倒さなければ先へ進めない。");endTurn();return}
   const previousFloor=state.floor;
   try{
-   state.floor++;
+   state.floor++;state.meta.shards+=1;state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);saveMeta();
    state.hunger=Math.min(effectiveMaxHunger(),state.hunger+12);
    recoverStamina(state.hero.maxStamina);
    generateFloor();
@@ -1022,7 +1392,8 @@ function bomberExplosion(e){
  }
  state.enemies=state.enemies.filter(x=>x!==e);
  if(state.hero.hp<=0){
-  state.gameOver=true;localStorage.removeItem("abyssalRootsSoloV4Save");
+  maybePromoteKiller(e);
+  state.gameOver=true;saveMeta();localStorage.removeItem("abyssalRootsSoloV4Save");
   $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
   $("gameOverOverlay").classList.remove("hidden");
  }
@@ -1099,7 +1470,8 @@ function enemyTurn(){
 function enemyAttack(e,mult=1,label="攻撃"){
  let dmg=Math.max(1,Math.round((e.atk+rint(-1,2))*mult*(mutation()?.damageMul||1))-totalDef());
  if(state.guardTurns>0){
-  dmg=Math.max(0,Math.floor(dmg*.25));
+  const guardRate=state.meta?.adaptation==="anti_guard"?.5:.25;
+  dmg=Math.max(0,Math.floor(dmg*guardRate));
   addLog("構えで "+label+" を受け流した！");
   state.guardTurns=0;
  }
@@ -1111,6 +1483,7 @@ function enemyAttack(e,mult=1,label="攻撃"){
  }
  addLog(e.name+"の"+label+"。"+dmg+" ダメージ。");
  if(state.hero.hp<=0){
+  maybePromoteKiller(e);
   addLog("探索者は倒れた。");
   state.gameOver=true;
   localStorage.removeItem("abyssalRootsSoloV4Save");
@@ -1126,9 +1499,10 @@ function pickup(){
  if(item.type==="identify"){state.consumables.identify++;addLog("鑑定紙片を拾った。");return}
  if(item.type==="purify"){state.consumables.purify++;addLog("解呪の灰を拾った。");return}
  if(item.type==="bomb"){state.consumables.bomb=(state.consumables.bomb||0)+1;addLog("火炎壺を拾った。");return}
- if(state.inventory.length>=12){addLog("荷物が一杯で、装備を残した。");state.items.push(item);return}
+ if(item.type==="retreat"){state.consumables.retreat=(state.consumables.retreat||0)+1;addLog("帰還標を拾った。");return}
+ if(state.inventory.length>=12+(state.meta?.upgrades?.pack||0)*2){addLog("荷物が一杯で、装備を残した。");state.items.push(item);return}
  state.inventory.push(item.gear);
- addLog(item.gear.identified?`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。`:"正体不明の装備を拾った。");
+ sfx("pickup");addLog(item.gear.identified?`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。`:"正体不明の装備を拾った。");
 }
 function triggerTrap(){
  const t=activeTrapAt(state.player.x,state.player.y);if(!t)return;
@@ -1151,7 +1525,7 @@ function endTurn(){
  if(state.hunger===0&&state.turn%3===0){
   state.hero.hp=Math.max(0,state.hero.hp-1);addLog("飢えが体力を削る。");
   if(state.hero.hp<=0){
-   state.gameOver=true;localStorage.removeItem("abyssalRootsSoloV4Save");
+   state.gameOver=true;saveMeta();localStorage.removeItem("abyssalRootsSoloV4Save");
    $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
    $("gameOverOverlay").classList.remove("hidden");render();return;
   }
@@ -1168,6 +1542,7 @@ function useSkill(name){
  if(!canAct()||state.cooldowns[name]>0)return;
  if(name==="guard"){
   if(!spendStamina(3))return;
+  recordUsage("guard");
   if(hasTalent("guard_regen"))recoverStamina(2);
   state.guardTurns=1;state.lastAction="guard";
   addLog("足を止め、次の攻撃を受け流す構えを取った。");
@@ -1216,6 +1591,7 @@ function useSkill(name){
  }
  if(name==="heal"){
   if(!spendStamina(4))return;
+  recordUsage("heal");
   state.lastAction="heal";
   const amount=9+state.level*2;
   state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+amount);
@@ -1309,10 +1685,129 @@ function chooseStarter(type){
  generateFloor();
 }
 
+
+
+function cloneGear(g){return g?JSON.parse(JSON.stringify(g)):null}
+function canReturnNow(){
+ const onShrine=specialAt(state.player.x,state.player.y)?.type==="shrine";
+ return state.floor===1||state.bossDefeated||onShrine||(state.consumables.retreat||0)>0;
+}
+function bankCurrentRun(){
+ const candidates=[state.weapon,state.armor,...state.inventory].filter(Boolean);
+ for(const g of candidates){
+  if(state.meta.stash.length>=20)break;
+  const copy=cloneGear(g);
+  copy.cursed=false;copy.identified=true;
+  state.meta.stash.push(copy);
+ }
+ state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
+ saveMeta();
+}
+function returnToLighthouse(){
+ if(!canReturnNow()){
+  addLog("ここからは帰還できない。祭壇・ボス撃破後・帰還標が必要だ。");
+  return;
+ }
+ const onShrine=specialAt(state.player.x,state.player.y)?.type==="shrine";
+ if(state.floor>1&&!state.bossDefeated&&!onShrine){
+  if((state.consumables.retreat||0)<=0){addLog("帰還標がない。");return}
+  state.consumables.retreat--;
+ }
+ bankCurrentRun();
+ renderHub();
+ $("hubOverlay").classList.remove("hidden");
+ addLog("探索成果を灯台へ持ち帰った。");
+}
+function salvageStash(index){
+ const g=state.meta.stash[index];if(!g)return;
+ const value={common:1,magic:2,rare:4,legendary:8}[g.rarity]||1;
+ state.meta.shards+=value;
+ if(state.meta.heirloom?.id===g.id)state.meta.heirloom=null;
+ state.meta.stash.splice(index,1);
+ saveMeta();renderHub();
+}
+function setHeirloom(index){
+ const g=state.meta.stash[index];if(!g)return;
+ state.meta.heirloom=cloneGear(g);
+ saveMeta();renderHub();
+}
+
+function upgradeCost(level){return 5+level*5}
+function buyMetaUpgrade(type){
+ const lvl=state.meta.upgrades[type]||0,cost=upgradeCost(lvl);
+ if(state.meta.shards<cost){addLog("深淵の欠片が足りない。");return}
+ state.meta.shards-=cost;state.meta.upgrades[type]=lvl+1;saveMeta();
+ addLog("灯台の力が強まった。次の探索から反映される。");
+ renderHub();
+}
+function codexName(type){
+ return{skeleton:"盾骸兵",warg:"穴獣",mage:"骨術師",bomber:"爆ぜ虫",warden:"深層の番人"}[type]||type;
+}
+function codexInsight(type,count){
+ if(count>=30)return"行動と弱点をほぼ把握した。";
+ if(count>=10)return"基本行動を理解した。";
+ if(count>=3)return"特徴が少し分かってきた。";
+ return"情報不足。";
+}
+function renderHub(){
+ const m=state.meta||defaultMeta();
+ $("hubSummary").innerHTML=`
+  <div class="itemRow">
+   <div class="top"><span>探索記録</span><span>欠片 ${m.shards}</span></div>
+   <div class="desc">最高到達 ${m.bestFloor}層 / 総撃破 ${m.totalKills}</div>
+  </div>`+
+  (m.adaptation?`<div class="itemRow"><div class="top"><span>迷宮の適応</span><span>${adaptationData[m.adaptation]?.label||m.adaptation}</span></div>
+  <div class="desc">${adaptationData[m.adaptation]?.desc||""}</div></div>`:"")+
+  (m.nemesis?`<div class="itemRow"><div class="top"><span>宿敵</span><span>${m.nemesis.kills||1}勝</span></div>
+  <div class="desc">${m.nemesis.name}<br>最後に確認：${m.nemesis.floor}層付近</div></div>`:
+  '<div class="itemRow"><div class="top"><span>宿敵</span><span>不在</span></div><div class="desc">現在、あなたを追う存在はいない。</div></div>');
+ const upgrades=[
+  ["vitality","灯火の生命","次回以降 最大HP +4"],
+  ["focus","静謐の焦点","次回以降 最大気力 +1"],
+  ["pack","回収箱","次回以降 荷物上限 +2"]
+ ];
+ $("hubUpgrades").innerHTML=upgrades.map(([id,name,desc])=>{
+  const lvl=m.upgrades[id]||0,cost=upgradeCost(lvl);
+  return`<div class="itemRow"><div class="top"><span>${name} Lv${lvl}</span><span>${cost}欠片</span></div>
+   <div class="desc">${desc}</div><button type="button" data-upgrade="${id}">強化する</button></div>`;
+ }).join("");
+ $("hubUpgrades").querySelectorAll("[data-upgrade]").forEach(b=>b.onclick=()=>buyMetaUpgrade(b.dataset.upgrade));
+ $("stashList").innerHTML='<h3>持ち帰り倉庫</h3>'+
+  (m.stash?.length?m.stash.map((g,i)=>`
+   <div class="itemRow">
+    <div class="top"><span>${gearLabel(g)}</span><span>${g.slot==="weapon"?"武器":"防具"}</span></div>
+    <div class="desc">攻${g.atk} / 防${g.def} / ${g.rarity}${m.heirloom?.id===g.id?" / 継承中":""}</div>
+    <button type="button" data-heirloom="${i}">次回へ持ち込む</button>
+    <button type="button" data-salvage="${i}">分解する</button>
+   </div>`).join(""):'<p class="note">持ち帰った装備はありません。</p>');
+ $("stashList").querySelectorAll("[data-heirloom]").forEach(b=>b.onclick=()=>setHeirloom(Number(b.dataset.heirloom)));
+ $("stashList").querySelectorAll("[data-salvage]").forEach(b=>b.onclick=()=>salvageStash(Number(b.dataset.salvage)));
+ const markLabels={mercy:"慈悲",greed:"欲望",defiance:"反抗",curiosity:"探究"};
+ const dom=dominantMark();
+ $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>世界の印</span><span>${dom?markLabels[dom]:"未定"}</span></div>
+ <div class="desc">慈悲 ${m.marks?.mercy||0} / 欲望 ${m.marks?.greed||0} / 反抗 ${m.marks?.defiance||0} / 探究 ${m.marks?.curiosity||0}</div></div>`;
+ const entries=Object.entries(m.codex||{});
+ $("codexList").innerHTML='' +'<h3>深淵図鑑</h3>'+(entries.length?entries.map(([type,count])=>
+  `<div class="itemRow"><div class="top"><span>${codexName(type)}</span><span>${count}体</span></div><div class="desc">${codexInsight(type,count)}</div></div>`
+ ).join(""):'<p class="note">まだ記録はありません。</p>')+
+ `<h3>事件記録</h3>`+
+ ((m.eventHistory||[]).slice(-8).reverse().map(e=>`<div class="itemRow"><div class="top"><span>${e.title}</span><span>${e.floor}層</span></div><div class="desc">${e.choice}</div></div>`).join("")||'<p class="note">まだ事件記録はありません。</p>');
+}
+function openHub(){if(!state)return;returnToLighthouse()}
+function startFreshRunFromHub(){
+ const meta=state.meta||loadMeta()||defaultMeta();
+ state=freshState();state.meta=meta;
+ $("hubOverlay").classList.add("hidden");
+ $("titleOverlay").classList.add("hidden");
+ $("gameOverOverlay").classList.add("hidden");
+ $("starterOverlay").classList.remove("hidden");
+ render();
+}
+
 function renderInventory(){
  $("equipSummary").innerHTML=`武器：${state.weapon?gearLabel(state.weapon)+" (攻+"+state.weapon.atk+")":"なし"}<br>防具：${state.armor?gearLabel(state.armor)+" (防+"+state.armor.def+")":"なし"}`;
  $("consumableList").innerHTML=`<div class="itemRow"><div class="top"><span>消耗品</span><span>所持金 ${state.gold}G</span></div>
- <div class="desc">治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0}</div>
+ <div class="desc">治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0} / 帰還標 ${state.consumables.retreat||0}</div><div class="desc">荷物 ${state.inventory.length}/${12+(state.meta?.upgrades?.pack||0)*2}</div>
  <button type="button" id="usePotionBtn">治癒薬を使う</button><button type="button" id="bombBtn">火炎壺を投げる</button><button type="button" id="purifyBtn">装備中の呪いを解く</button></div>`;
  $("usePotionBtn").onclick=usePotion;$("bombBtn").onclick=()=>{$("inventoryOverlay").classList.add("hidden");throwBomb()};$("purifyBtn").onclick=purifyEquipped;
  const box=$("inventoryList");box.innerHTML="";
@@ -1330,7 +1825,7 @@ function renderInventory(){
   row.querySelector(".equipBtn").onclick=()=>equipItem(g.id);box.appendChild(row);
  });
 }
-function canAct(){return state&&!state.gameOver&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")}
+function canAct(){return state&&!state.gameOver&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")}
 function saveGame(){if(state&&!state.gameOver)localStorage.setItem("abyssalRootsSoloV4Save",JSON.stringify(state))}
 function loadGame(){
  try{
@@ -1344,7 +1839,20 @@ function loadGame(){
   if(!state.hero.talents)state.hero.talents=[];
   if(!state.secretWalls)state.secretWalls=[];
   if(!state.shortcuts)state.shortcuts=[];
-  if(!state.visual)state.visual={flash:0,shake:0,hitX:null,hitY:null};
+  if(!state.visual)state.visual={flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0};
+  if(!state.audio)state.audio={enabled:true,started:false};
+  if(!state.meta)state.meta=loadMeta()||defaultMeta();
+  if(!state.meta.stash)state.meta.stash=[];
+  if(typeof state.meta.heirloom==="undefined")state.meta.heirloom=null;
+  if(typeof state.meta.nemesis==="undefined")state.meta.nemesis=null;
+  if(!state.meta.nemesisHistory)state.meta.nemesisHistory=[];
+  if(!state.meta.usage)state.meta.usage=emptyUsage();
+  if(typeof state.meta.adaptation==="undefined")state.meta.adaptation=null;
+  if(!state.meta.eventHistory)state.meta.eventHistory=[];
+  if(!state.meta.marks)state.meta.marks={mercy:0,greed:0,defiance:0,curiosity:0};
+  if(!state.events)state.events=[];
+  if(typeof state.consumables.retreat!=="number")state.consumables.retreat=1;
+  saveMeta();
   for(const g of [...state.inventory,state.weapon,state.armor].filter(Boolean)){if(typeof g.element==="undefined")g.element=null;if(typeof g.trait==="undefined")g.trait=null;if(typeof g.kills!=="number")g.kills=0;}
   for(const g of [...state.inventory,state.weapon,state.armor].filter(Boolean)){
    if(typeof g.identified!=="boolean")g.identified=true;
@@ -1356,7 +1864,7 @@ function loadGame(){
 function showFloorBanner(t){$("floorBanner").textContent=t;$("floorBanner").classList.add("show");clearTimeout(bannerTimer);bannerTimer=setTimeout(()=>$("floorBanner").classList.remove("show"),1000)}
 function renderStats(){
  $("stats").innerHTML=`
- <div class="stat"><b>${state.floor}</b><small>${mutation()?mutation().label:"階層"}</small></div>
+ <div class="stat"><b>${state.floor}</b><small>${currentBiome().label}</small></div>
  <div class="stat"><b>${state.level}</b><small>探索者Lv</small></div>
  <div class="stat"><b>${state.hunger}/${effectiveMaxHunger()}</b><small>満腹</small></div>
  <div class="stat"><b>${state.gold}G</b><small>戦利金</small></div>`;
@@ -1365,7 +1873,7 @@ function renderHero(){
  const h=state.hero;
  const danger=state.enemies.filter(e=>e.intent&&Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)===1).length;
  $("hero").innerHTML=`<div class="member ${h.hp<=0?"dead":""}">
-  <div class="name">${h.name} <span class="visualBadge">PIXEL</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
+  <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
   <div class="role">${h.role}　攻${h.atk+equippedAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>才能:${(h.talents||[]).length}</div>
   <div class="bar"><div class="fill" style="width:${100*h.hp/h.maxHp}%"></div></div>
   <div class="hp">HP ${h.hp}/${h.maxHp}</div>
@@ -1376,6 +1884,7 @@ function renderHero(){
 function renderLog(){$("log").innerHTML=state?state.log.map((x,i)=>`<div style="opacity:${1-i*.16}">› ${x}</div>`).join(""):""}
 function draw(){
  const cam=cameraOrigin();
+ const t=(state.visual?.time||0);
  const shake=state.visual?.shake>0?Math.round((Math.random()-.5)*state.visual.shake*2):0;
  ctx.save();
  ctx.translate(shake,shake);
@@ -1391,16 +1900,16 @@ function draw(){
    ctx.fillStyle="#040306";ctx.fillRect(px,py,TILE,TILE);continue;
   }
   if(tile(x,y)===0){
-   ctx.fillStyle=vis?"#302439":"#17111d";ctx.fillRect(px,py,TILE,TILE);
-   ctx.fillStyle=vis?"#4a3855":"#211727";
+   ctx.fillStyle=vis?currentBiome().wall:"#17111d";ctx.fillRect(px,py,TILE,TILE);
+   ctx.fillStyle=vis?currentBiome().accent:"#211727";
    ctx.fillRect(px,py,TILE,4);
    ctx.fillRect(px,py,4,TILE);
    ctx.fillStyle=vis?"#241a2c":"#100b15";
    ctx.fillRect(px+5,py+6,TILE-7,TILE-8);
    if((x+y)%3===0){ctx.fillStyle="#5b4667";ctx.fillRect(px+7,py+9,6,2)}
   }else{
-   const floorA=vis?"#19141f":"#0d0a11";
-   const floorB=vis?"#1f1926":"#100c14";
+   const baseFloor=currentBiome().floor;const floorA=vis?baseFloor:"#0d0a11";
+   const floorB=vis?baseFloor:"#100c14";
    ctx.fillStyle=((x+y)&1)?floorA:floorB;ctx.fillRect(px,py,TILE,TILE);
    ctx.fillStyle=vis?"#2a2131":"#151019";
    ctx.fillRect(px+2,py+2,2,2);
@@ -1431,6 +1940,9 @@ function draw(){
   if(state.visible[key(q.bx,q.by)])drawText("⇵",q.bx,q.by,"#89d1c0",15);
  });
 
+ state.events.forEach(ev=>{if(!ev.used&&state.visible[key(ev.x,ev.y)]){
+  const x=sx(ev.x),y=sy(ev.y);ctx.fillStyle="#d4a7ff";ctx.beginPath();ctx.arc(x+11,y+11,5,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#6d3f86";ctx.strokeRect(x+6.5,y+6.5,9,9);
+ }});
  state.specialTiles.forEach(t=>{if(state.visible[key(t.x,t.y)]){
   const x=sx(t.x),y=sy(t.y);
   if(t.type==="shrine"){ctx.fillStyle="#d9bb66";ctx.fillRect(x+9,y+4,4,14);ctx.fillRect(x+5,y+8,12,4)}
@@ -1445,7 +1957,13 @@ function draw(){
    ctx.fillStyle="#7c4f2f";ctx.fillRect(x+6,y+4,10,15);ctx.fillStyle="#b47a44";ctx.fillRect(x+5,y+7,12,2);ctx.fillRect(x+5,y+15,12,2);
   }else{
    ctx.fillStyle=o.burning?"#f35b2f":"#4a3d52";ctx.beginPath();ctx.ellipse(x+11,y+14,8,5,0,0,Math.PI*2);ctx.fill();
-   if(o.burning){ctx.fillStyle="#ffd45a";ctx.fillRect(x+10,y+5,3,8);ctx.fillRect(x+7,y+9,3,5);ctx.fillRect(x+13,y+8,3,6)}
+   if(o.burning){
+    const flick=Math.sin(t*.22+o.x*1.7+o.y)*2;
+    ctx.fillStyle="#ffd45a";
+    ctx.fillRect(x+10,y+5+flick,3,8);
+    ctx.fillRect(x+7,y+9-flick*.4,3,5);
+    ctx.fillRect(x+13,y+8+flick*.3,3,6)
+   }
   }
  }});
 
@@ -1462,20 +1980,34 @@ function draw(){
  state.enemies.forEach(e=>{if(state.visible[key(e.x,e.y)]){
   const x=sx(e.x),y=sy(e.y);
   const base={skeleton:"#d8d0df",warg:"#d86171",mage:"#9f8cff",bomber:"#ffb24d",warden:"#f2d06b"}[e.type]||"#fff";
-  const main=e.intent?"#ff5368":(eliteColor(e)||base);
+  const main=e.intent?"#ff5368":(nemesisColor(e)||eliteColor(e)||base);
   const pal={"1":"#17131c","2":main,"3":"#5c465f","4":"#d7c7e0"};
   const pat=spritePatterns[e.type]||spritePatterns.skeleton;
-  drawSpritePixel(ctx,x+5,y+4,pat,pal,e.type==="warden"?2:2);
-  if(e.intent){ctx.strokeStyle="#ff5368";ctx.lineWidth=2;ctx.strokeRect(x+2,y+2,TILE-4,TILE-4)}
+  const ebob=Math.sin(t*.1+e.x*.7+e.y)*.8;drawSpritePixel(ctx,x+5,y+4+ebob,pat,pal,2);
+  if(e.intent||e.nemesis){ctx.strokeStyle=e.nemesis?"#ff4f73":"#ff5368";ctx.lineWidth=e.nemesis?3:2;ctx.strokeRect(x+2,y+2,TILE-4,TILE-4)}
   ctx.fillStyle="#25080d";ctx.fillRect(x+3,y+1,TILE-6,3);
   ctx.fillStyle="#cf5163";ctx.fillRect(x+3,y+1,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
  }});
 
  if(inView(state.player.x,state.player.y)){
-  const x=sx(state.player.x),y=sy(state.player.y);
-  const pal={"1":"#16111d","2":"#f3d67e","3":"#77567c","4":"#c9b8d2"};
-  drawSpritePixel(ctx,x+6,y+4,spritePatterns.hero,pal,2);
-  ctx.strokeStyle="#f3d67e";ctx.globalAlpha=.35;ctx.strokeRect(x+2.5,y+2.5,TILE-5,TILE-5);ctx.globalAlpha=1;
+  let x=sx(state.player.x),y=sy(state.player.y);
+  const mf=state.visual?.moveFrames||0;
+  const af=state.visual?.attackFrames||0;
+  if(mf>0){
+   const p=mf/5;
+   x-=state.visual.moveDx*TILE*p;
+   y-=state.visual.moveDy*TILE*p;
+  }
+  if(af>0){
+   const swing=Math.sin((1-af/6)*Math.PI);
+   x+=state.visual.attackDx*5*swing;
+   y+=state.visual.attackDy*5*swing;
+  }
+  const bob=Math.sin(t*.12)*.7;
+  const hurt=(state.visual?.damageFrames||0)>0;
+  const pal={"1":"#16111d","2":hurt?"#ff7d8d":"#f3d67e","3":"#77567c","4":"#c9b8d2"};
+  drawSpritePixel(ctx,x+6,y+4+bob,spritePatterns.hero,pal,2);
+  ctx.strokeStyle=hurt?"#ff6a7d":"#f3d67e";ctx.globalAlpha=.28;ctx.strokeRect(x+2.5,y+2.5,TILE-5,TILE-5);ctx.globalAlpha=1;
  }
 
  if(state.visual?.flash>0&&state.visual.hitX!==null&&inView(state.visual.hitX,state.visual.hitY)){
@@ -1483,6 +2015,53 @@ function draw(){
   ctx.globalAlpha=.25+.1*state.visual.flash;
   ctx.fillStyle="#fff";ctx.fillRect(x,y,TILE,TILE);ctx.globalAlpha=1;
  }
+ for(let i=0;i<10;i++){
+  const bx=((i*91+t*.18)%(canvas.width+40))-20;
+  const by=((i*57+t*.11)%(canvas.height+40))-20;
+  if(currentBiomeKey()==="furnace"){
+   ctx.globalAlpha=.09;ctx.fillStyle="#ff7a42";ctx.fillRect(bx,by,2,2);
+  }else if(currentBiomeKey()==="frost"){
+   ctx.globalAlpha=.08;ctx.fillStyle="#d8f1ff";ctx.fillRect(bx,by,2,2);
+  }else if(currentBiomeKey()==="fungal"){
+   ctx.globalAlpha=.06;ctx.fillStyle="#a8e28f";ctx.beginPath();ctx.arc(bx,by,2,0,Math.PI*2);ctx.fill();
+  }
+ }
+ for(let i=0;i<18;i++){
+  const fx=((i*73+t*.28)%(canvas.width+60))-30;
+  const fy=((i*41+Math.sin(t*.02+i)*30)%(canvas.height+40))-20;
+  ctx.globalAlpha=.035+(i%3)*.012;
+  ctx.fillStyle="#d5c7e0";
+  ctx.beginPath();ctx.ellipse(fx,fy,22+(i%4)*7,5+(i%3)*2,0,0,Math.PI*2);ctx.fill();
+ }
+ ctx.globalAlpha=1;
+
+ // 動的ライティング
+ ctx.save();
+ ctx.globalCompositeOperation="multiply";
+ const darkness=ctx.createRadialGradient(
+  sx(state.player.x)+TILE/2,sy(state.player.y)+TILE/2,34,
+  sx(state.player.x)+TILE/2,sy(state.player.y)+TILE/2,150
+ );
+ darkness.addColorStop(0,"rgba(255,255,255,0)");
+ darkness.addColorStop(.55,"rgba(95,78,110,.12)");
+ darkness.addColorStop(1,"rgba(0,0,0,.72)");
+ ctx.fillStyle=darkness;ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.restore();
+
+ ctx.save();
+ ctx.globalCompositeOperation="screen";
+ const pulse=(Math.sin(t*.09)+1)*.5;
+ for(const o of state.environment){
+  if(!o.active||!o.burning||!inView(o.x,o.y))continue;
+  const lx=sx(o.x)+TILE/2,ly=sy(o.y)+TILE/2;
+  const glow=ctx.createRadialGradient(lx,ly,2,lx,ly,38+pulse*8);
+  glow.addColorStop(0,"rgba(255,210,90,.38)");
+  glow.addColorStop(.5,"rgba(255,100,40,.16)");
+  glow.addColorStop(1,"rgba(255,60,20,0)");
+  ctx.fillStyle=glow;ctx.fillRect(lx-50,ly-50,100,100);
+ }
+ ctx.restore();
+
  ctx.restore();
 }
 function renderSkills(){
@@ -1495,9 +2074,9 @@ function renderSkills(){
  b.firstChild.textContent=wd.skill+(state.cooldowns.volley>0?" "+state.cooldowns.volley:"");
  b.querySelector("span").textContent=wd.skillDesc;
 }
-function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();draw();if(state.visual?.flash>0||state.visual?.shake>0)requestAnimationFrame(tickVisual)}
+function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();draw()}
 function startNew(){state=freshState();$("titleOverlay").classList.add("hidden");$("gameOverOverlay").classList.add("hidden");$("starterOverlay").classList.remove("hidden");render()}
-$("newGameBtn").onclick=startNew;$("restartBtn").onclick=startNew;document.querySelectorAll(".starterBtn").forEach(b=>{
+$("newGameBtn").onclick=()=>{ensureAudio();startAmbient();startNew()};$("restartBtn").onclick=startNew;document.querySelectorAll(".starterBtn").forEach(b=>{
  b.addEventListener("click",ev=>{
   ev.preventDefault();
   ev.stopPropagation();
@@ -1505,10 +2084,10 @@ $("newGameBtn").onclick=startNew;$("restartBtn").onclick=startNew;document.query
   if(type)chooseStarter(type);
  });
 });
-$("continueBtn").onclick=()=>{if(loadGame())$("titleOverlay").classList.add("hidden")};
+$("continueBtn").onclick=()=>{if(loadGame()){$("titleOverlay").classList.add("hidden");$("soundBtn").textContent=state.audio?.enabled?"音ON":"音OFF";if(state.audio?.enabled){ensureAudio();startAmbient()}}};
 $("inventoryBtn").onclick=()=>{if(!state)return;renderInventory();$("inventoryOverlay").classList.remove("hidden")};
 $("closeInventory").onclick=()=>$("inventoryOverlay").classList.add("hidden");
-$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");
+$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
 $("saveBtn").onclick=()=>{saveGame();addLog("探索記録を保存した。")};
 $("up").onclick=()=>move(0,-1);$("down").onclick=()=>move(0,1);$("left").onclick=()=>move(-1,0);$("right").onclick=()=>move(1,0);$("wait").onclick=waitTurn;
 $("guard").onclick=()=>useSkill("guard");$("volley").onclick=()=>useSkill("volley");$("heal").onclick=()=>useSkill("heal");$("search").onclick=()=>useSkill("search");
@@ -1516,6 +2095,7 @@ canvas.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchStart=
 canvas.addEventListener("touchend",e=>{if(!touchStart)return;const t=e.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;touchStart=null;if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;if(Math.abs(dx)>Math.abs(dy))move(Math.sign(dx),0);else move(0,Math.sign(dy))},{passive:true});
 addEventListener("keydown",e=>{const m={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]};if(m[e.key]){e.preventDefault();move(...m[e.key])}});
 if(localStorage.getItem("abyssalRootsSoloV4Save"))$("continueBtn").classList.remove("hidden");
+requestAnimationFrame(tickContinuousAnimation);
 
 // iPhone Safariのダブルタップ拡大・ピンチ拡大を抑止する。
 
