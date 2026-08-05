@@ -702,7 +702,7 @@ body{
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.8.8.1 START HOTFIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.8.8.2 DRAW HOTFIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -742,7 +742,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 新規開始・操作処理の安定化</p>
+    <p class="sub">迷宮探索 × 完全ソロ × アイテム描画・視界表示の安定化</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -1722,7 +1722,19 @@ function useShortcutIfPresent(){
  s.used=true;addLog("古い昇降路を使い、迷宮を大きく横切った。");
  updateVision();return true;
 }
+function repairPlayerPosition(){
+ if(state?.player&&Number.isFinite(state.player.x)&&Number.isFinite(state.player.y)&&inside(state.player.x,state.player.y)&&tile(state.player.x,state.player.y)===1)return;
+ const fallback=state?.rooms?.[0];
+ if(fallback){
+  state.player={x:fallback.cx,y:fallback.cy};
+ }else{
+  state.player={x:1,y:1};
+ }
+ updateVision();
+ addLog("探索者の位置情報を安全な場所へ復旧した。");
+}
 function cameraOrigin(){
+ repairPlayerPosition();
  return{
   x:clamp(state.player.x-Math.floor(VIEW_COLS/2),0,COLS-VIEW_COLS),
   y:clamp(state.player.y-Math.floor(VIEW_ROWS/2),0,ROWS-VIEW_ROWS)
@@ -2194,7 +2206,7 @@ function generateFloor(){
  }
  const start=state.rooms[0],end=state.rooms[state.rooms.length-1];
  state.player={x:start.cx,y:start.cy};state.stairs={x:end.cx,y:end.cy};
- state.visual.moveFrames=0;state.enemies=[];state.items=[];state.remains=[];state.ecology={spawnClock:0,totalRespawns:0,killsThisFloor:0};state.traps=[];state.specialTiles=[];state.environment=[];state.secretWalls=[];state.shortcuts=[];state.events=[];state.visited={};state.visible={};state.bossDefeated=false;
+ state.visual=state.visual||{};state.visual.moveFrames=0;state.visual.attackFrames=0;state.visual.damageFrames=0;state.visual.flash=0;state.visual.shake=0;state.visual.hitX=null;state.visual.hitY=null;state.visual.effects=[];state.enemies=[];state.items=[];state.remains=[];state.ecology={spawnClock:0,totalRespawns:0,killsThisFloor:0};state.traps=[];state.specialTiles=[];state.environment=[];state.secretWalls=[];state.shortcuts=[];state.events=[];state.visited={};state.visible={};state.bossDefeated=false;
  const enemyCount=plannedEnemyCount();
  for(let i=0;i<enemyCount;i++){
   const p=randomFloorCell(6);
@@ -3380,8 +3392,24 @@ function drawVisualEffects(cam){
   ctx.restore();
  }
 }
+let visualLoopErrorReported=false;
 function tickContinuousAnimation(){
- if(state){updateVisualEffects();draw()}
+ try{
+  if(state){updateVisualEffects();draw()}
+  visualLoopErrorReported=false;
+ }catch(error){
+  if(!visualLoopErrorReported){
+   console.error("Continuous visual loop recovered from an error",error);
+   visualLoopErrorReported=true;
+  }
+  if(state?.visual){
+   state.visual.effects=[];
+   state.visual.flash=0;
+   state.visual.shake=0;
+   state.visual.hitX=null;
+   state.visual.hitY=null;
+  }
+ }
  requestAnimationFrame(tickContinuousAnimation);
 }
 function updateVisualHeight(){
@@ -3983,7 +4011,9 @@ function loadGame(){
   if(typeof state.fieldForgeDef!=="number")state.fieldForgeDef=0;
   if(typeof state.inventorySort!=="string")state.inventorySort="score";
   state.visual=state.visual||{};
-  if(!Array.isArray(state.visual.effects))state.visual.effects=[];
+  /* 一時エフェクトはセーブ対象として復元しない。 */
+  state.visual.effects=[];
+  state.visual.flash=0;state.visual.shake=0;state.visual.hitX=null;state.visual.hitY=null;
   updateHungerStageNotification(true);
   if(typeof state.consumables.oil!=="number")state.consumables.oil=1;
   if(typeof state.consumables.retreat!=="number")state.consumables.retreat=1;
@@ -4214,40 +4244,77 @@ function drawEnemySprite(e,x,y,t){
  ctx.restore();
 }
 function drawItemSprite(item,x,y,t){
+ if(!item)return;
+ const type=item.type||"unknown";
  const pulse=.84+Math.sin(t*.12+x+y)*.08;
- ctx.save();
- ctx.globalAlpha=.16;
- ctx.fillStyle= item.type==="gear" ? (rarityData[item.gear.rarity]?.color||"#cfcfcf") : "#e8d9b4";
- ctx.beginPath();ctx.arc(x+11,y+11,7*pulse,0,Math.PI*2);ctx.fill();
- ctx.globalAlpha=1;
+ const gear=item.gear||null;
+ const rarityColor=gear?(rarityData[gear.rarity]?.color||"#cfcfcf"):"#e8d9b4";
 
- if(item.type==="food"){
-  ctx.fillStyle="#7fd3a0";ctx.beginPath();ctx.arc(x+11,y+12,5,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle="#315c36";ctx.fillRect(x+10,y+8,2,2);
-  ctx.fillStyle="#d7ffd9";ctx.fillRect(x+12,y+7,2,2);
- }else if(item.type==="potion"){
-  ctx.fillStyle="#f27c96";ctx.fillRect(x+8,y+8,7,9);
-  ctx.fillStyle="#fff4fb";ctx.fillRect(x+10,y+5,3,4);
-  ctx.fillStyle="#ffd5dd";ctx.fillRect(x+9,y+10,2,4);
- }else if(item.type==="identify"){
-  ctx.fillStyle="#84bfff";ctx.fillRect(x+8,y+6,6,10);
-  ctx.fillStyle="#eef6ff";ctx.fillRect(x+9,y+8,4,1);ctx.fillRect(x+9,y+11,4,1);
-  ctx.fillStyle="#26446a";ctx.fillRect(x+10,y+14,2,2);
- }else if(item.type==="purify"){
-  ctx.strokeStyle="#f4df85";ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(x+11,y+4);ctx.lineTo(x+13,y+9);ctx.lineTo(x+18,y+11);ctx.lineTo(x+13,y+13);ctx.lineTo(x+11,y+18);ctx.lineTo(x+9,y+13);ctx.lineTo(x+4,y+11);ctx.lineTo(x+9,y+9);ctx.closePath();ctx.stroke();
- }else if(item.type==="bomb"){
-  ctx.fillStyle="#2e2830";ctx.beginPath();ctx.arc(x+11,y+13,6,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle="#ff925d";ctx.fillRect(x+12,y+4,2,6);
-  ctx.strokeStyle="#ffe09a";ctx.beginPath();ctx.moveTo(x+13,y+4);ctx.lineTo(x+16,y+2);ctx.stroke();
- }else{
-  const rc=rarityData[item.gear.rarity]?.color||"#ddd";
-  ctx.strokeStyle=rc;ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(x+11,y+4);ctx.lineTo(x+11,y+16);ctx.stroke();
-  ctx.fillStyle=rc;ctx.fillRect(x+8,y+14,7,3);ctx.fillRect(x+8,y+7,6,2);
-  ctx.fillStyle="#f7f4ef";ctx.fillRect(x+10,y+4,2,2);
+ ctx.save();
+ try{
+  ctx.globalAlpha=.16;
+  ctx.fillStyle=rarityColor;
+  ctx.beginPath();ctx.arc(x+11,y+11,7*pulse,0,Math.PI*2);ctx.fill();
+  ctx.globalAlpha=1;
+
+  if(type==="food"){
+   ctx.fillStyle="#7fd3a0";ctx.beginPath();ctx.arc(x+11,y+12,5,0,Math.PI*2);ctx.fill();
+   ctx.fillStyle="#315c36";ctx.fillRect(x+10,y+8,2,2);
+   ctx.fillStyle="#d7ffd9";ctx.fillRect(x+12,y+7,2,2);
+
+  }else if(type==="potion"){
+   ctx.fillStyle="#f27c96";ctx.fillRect(x+8,y+8,7,9);
+   ctx.fillStyle="#fff4fb";ctx.fillRect(x+10,y+5,3,4);
+   ctx.fillStyle="#ffd5dd";ctx.fillRect(x+9,y+10,2,4);
+
+  }else if(type==="identify"){
+   ctx.fillStyle="#84bfff";ctx.fillRect(x+8,y+6,6,10);
+   ctx.fillStyle="#eef6ff";ctx.fillRect(x+9,y+8,4,1);ctx.fillRect(x+9,y+11,4,1);
+   ctx.fillStyle="#26446a";ctx.fillRect(x+10,y+14,2,2);
+
+  }else if(type==="purify"){
+   ctx.strokeStyle="#f4df85";ctx.lineWidth=2;
+   ctx.beginPath();ctx.moveTo(x+11,y+4);ctx.lineTo(x+13,y+9);ctx.lineTo(x+18,y+11);
+   ctx.lineTo(x+13,y+13);ctx.lineTo(x+11,y+18);ctx.lineTo(x+9,y+13);
+   ctx.lineTo(x+4,y+11);ctx.lineTo(x+9,y+9);ctx.closePath();ctx.stroke();
+
+  }else if(type==="bomb"){
+   ctx.fillStyle="#2e2830";ctx.beginPath();ctx.arc(x+11,y+13,6,0,Math.PI*2);ctx.fill();
+   ctx.fillStyle="#ff925d";ctx.fillRect(x+12,y+4,2,6);
+   ctx.strokeStyle="#ffe09a";ctx.beginPath();ctx.moveTo(x+13,y+4);ctx.lineTo(x+16,y+2);ctx.stroke();
+
+  }else if(type==="retreat"){
+   // 帰還標：青緑の方位標と帰還矢印。
+   ctx.strokeStyle="#83e0d3";ctx.lineWidth=2;
+   ctx.strokeRect(x+6,y+5,10,12);
+   ctx.beginPath();ctx.moveTo(x+12,y+8);ctx.lineTo(x+8,y+11);ctx.lineTo(x+12,y+14);ctx.stroke();
+   ctx.fillStyle="#d7fff9";ctx.fillRect(x+13,y+10,3,2);
+   ctx.fillStyle="#3b817b";ctx.fillRect(x+9,y+3,4,2);
+
+  }else if(type==="oil"){
+   // 灯油：琥珀色の小瓶と炎滴。
+   ctx.fillStyle="#b97c37";ctx.fillRect(x+8,y+7,7,10);
+   ctx.fillStyle="#f1d08a";ctx.fillRect(x+10,y+4,3,4);
+   ctx.fillStyle="#ffd56d";ctx.fillRect(x+10,y+10,3,5);
+   ctx.fillStyle="#fff0b0";ctx.fillRect(x+11,y+9,1,3);
+   ctx.strokeStyle="#6a421f";ctx.strokeRect(x+7.5,y+6.5,8,11);
+
+  }else if(type==="gear"&&gear){
+   const rc=rarityColor;
+   ctx.strokeStyle=rc;ctx.lineWidth=2;
+   ctx.beginPath();ctx.moveTo(x+11,y+4);ctx.lineTo(x+11,y+16);ctx.stroke();
+   ctx.fillStyle=rc;ctx.fillRect(x+8,y+14,7,3);ctx.fillRect(x+8,y+7,6,2);
+   ctx.fillStyle="#f7f4ef";ctx.fillRect(x+10,y+4,2,2);
+
+  }else{
+   // 将来新しいアイテム種が増えても描画処理を停止させない汎用箱。
+   ctx.fillStyle="#887b91";ctx.fillRect(x+6,y+7,11,10);
+   ctx.strokeStyle="#e2d6e9";ctx.lineWidth=1.5;ctx.strokeRect(x+6.5,y+7.5,10,9);
+   ctx.fillStyle="#f0d37a";ctx.fillRect(x+10,y+10,3,3);
+  }
+ }finally{
+  ctx.restore();
  }
- ctx.restore();
 }
 function drawTrapTile(x,y,t){
  ctx.save();
