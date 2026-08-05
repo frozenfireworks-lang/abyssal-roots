@@ -702,7 +702,7 @@ body{
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.8.8.2 DRAW HOTFIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.8.8.3 START & WALL HOTFIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -742,7 +742,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × アイテム描画・視界表示の安定化</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 新規開始・壁タイル描画の修正</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -1384,7 +1384,10 @@ function rint(a,b){return Math.floor(rng()*(b-a+1))+a}
 function choice(a){return a[Math.floor(rng()*a.length)]}
 function key(x,y){return x+","+y}
 function inside(x,y){return x>=0&&y>=0&&x<COLS&&y<ROWS}
-function tile(x,y){return inside(x,y)?state.map[y][x]:0}
+function tile(x,y){
+ if(!inside(x,y)||!state?.map||!Array.isArray(state.map[y]))return 0;
+ return state.map[y][x]??0;
+}
 function addLog(t){state.log.unshift(t);state.log=state.log.slice(0,5);renderLog()}
 
 function loadMeta(){
@@ -1723,21 +1726,31 @@ function useShortcutIfPresent(){
  updateVision();return true;
 }
 function repairPlayerPosition(){
+ // 武器選択前はまだマップが存在しない。ここでは位置修復を行わない。
+ if(!state?.map?.length||!state.map.some(row=>Array.isArray(row)&&row.includes(1)))return;
  if(state?.player&&Number.isFinite(state.player.x)&&Number.isFinite(state.player.y)&&inside(state.player.x,state.player.y)&&tile(state.player.x,state.player.y)===1)return;
  const fallback=state?.rooms?.[0];
  if(fallback){
   state.player={x:fallback.cx,y:fallback.cy};
  }else{
-  state.player={x:1,y:1};
+  const firstFloor=[];
+  for(let y=0;y<state.map.length;y++){
+   for(let x=0;x<(state.map[y]?.length||0);x++){
+    if(state.map[y][x]===1){firstFloor.push({x,y});break}
+   }
+   if(firstFloor.length)break;
+  }
+  state.player=firstFloor[0]||{x:1,y:1};
  }
  updateVision();
  addLog("探索者の位置情報を安全な場所へ復旧した。");
 }
 function cameraOrigin(){
+ if(!state?.map?.length)return{x:0,y:0};
  repairPlayerPosition();
  return{
-  x:clamp(state.player.x-Math.floor(VIEW_COLS/2),0,COLS-VIEW_COLS),
-  y:clamp(state.player.y-Math.floor(VIEW_ROWS/2),0,ROWS-VIEW_ROWS)
+  x:clamp(state.player.x-Math.floor(VIEW_COLS/2),0,Math.max(0,COLS-VIEW_COLS)),
+  y:clamp(state.player.y-Math.floor(VIEW_ROWS/2),0,Math.max(0,ROWS-VIEW_ROWS))
  };
 }
 
@@ -4089,53 +4102,79 @@ function wallMask(x,y){
 
 function drawWallTile(px,py,x,y,vis){
  const biome=currentBiome();
- const base=vis?biome.wall:"#17111d";
- const edge=vis?biome.accent:"#2a2030";
- const inner=vis?"#151019":"#0d0911";
- const topGlow=vis?"rgba(255,255,255,.06)":"rgba(255,255,255,.02)";
- ctx.fillStyle=base;ctx.fillRect(px,py,TILE,TILE);
+ const surface=vis?biome.wall:"#151019";
+ const accent=vis?biome.accent:"#2a2030";
+ const dark=vis?"rgba(0,0,0,.28)":"rgba(0,0,0,.38)";
 
- const mask=wallMask(x,y);
- ctx.fillStyle=edge;
- if(!(mask&1))ctx.fillRect(px,py,TILE,4);
- if(!(mask&8))ctx.fillRect(px,py,4,TILE);
- if(!(mask&2))ctx.fillRect(px,py+TILE-4,TILE,4);
- if(!(mask&4))ctx.fillRect(px+TILE-4,py,4,TILE);
+ // 壁の塊は全面を同じ色で塗る。隣接壁との間に明るい枠を作らない。
+ ctx.fillStyle=surface;
+ ctx.fillRect(px,py,TILE,TILE);
 
- ctx.fillStyle=inner;ctx.fillRect(px+3,py+3,TILE-6,TILE-6);
- ctx.fillStyle=topGlow;ctx.fillRect(px+3,py+3,TILE-6,2);
- ctx.fillStyle="rgba(0,0,0,.22)";ctx.fillRect(px+3,py+TILE-5,TILE-6,2);
+ // 石材の濃淡。タイル端には触れないため、壁同士の継ぎ目にはならない。
+ const variation=((x*17+y*29)%5)-2;
+ ctx.fillStyle=variation>0?"rgba(255,255,255,.018)":"rgba(0,0,0,.045)";
+ ctx.fillRect(px+3,py+3,TILE-6,TILE-6);
 
- // brick pattern
- ctx.globalAlpha=vis?0.55:0.3;
- ctx.fillStyle=vis?"rgba(255,255,255,.04)":"rgba(255,255,255,.02)";
- ctx.fillRect(px+5,py+6,6,2); ctx.fillRect(px+12,py+6,4,2);
- ctx.fillRect(px+7,py+10,5,2); ctx.fillRect(px+13,py+13,3,2);
- ctx.fillRect(px+5,py+14,5,2);
- ctx.globalAlpha=1;
-
- // cracks and biome flavor
- ctx.strokeStyle=vis?"rgba(0,0,0,.35)":"rgba(0,0,0,.25)";
- if((x*13+y*7)%4===0){
-   ctx.beginPath();ctx.moveTo(px+6,py+6);ctx.lineTo(px+10,py+9);ctx.lineTo(px+8,py+14);ctx.stroke();
- }
- if(currentBiomeKey()==="crypt"){
-   ctx.strokeStyle="rgba(187,173,210,.45)";
-   if((x+y)%5===0){ctx.beginPath();ctx.moveTo(px+11,py+5);ctx.lineTo(px+11,py+16);ctx.moveTo(px+7,py+10);ctx.lineTo(px+15,py+10);ctx.stroke();}
- }else if(currentBiomeKey()==="fungal"){
-   ctx.fillStyle="rgba(132,190,106,.5)";
-   ctx.beginPath();ctx.arc(px+7,py+15,2,0,Math.PI*2);ctx.fill();
-   ctx.beginPath();ctx.arc(px+15,py+8,1.6,0,Math.PI*2);ctx.fill();
- }else if(currentBiomeKey()==="furnace"){
-   ctx.fillStyle="rgba(255,114,70,.35)";
-   ctx.fillRect(px+6,py+15,10,1);
-   ctx.fillRect(px+8,py+13,6,1);
- }else if(currentBiomeKey()==="frost"){
-   ctx.strokeStyle="rgba(149,216,246,.55)";
-   ctx.beginPath();ctx.moveTo(px+6,py+15);ctx.lineTo(px+10,py+11);ctx.lineTo(px+12,py+14);ctx.lineTo(px+16,py+9);ctx.stroke();
+ ctx.fillStyle=dark;
+ if((x+y)%2===0){
+  ctx.fillRect(px+4,py+8,TILE-8,1);
+  ctx.fillRect(px+10,py+4,1,4);
+  ctx.fillRect(px+7,py+9,1,6);
  }else{
-   ctx.strokeStyle="rgba(111,146,94,.35)";
-   if((x*5+y*3)%3===0){ctx.beginPath();ctx.moveTo(px+5,py+16);ctx.lineTo(px+9,py+13);ctx.lineTo(px+12,py+9);ctx.stroke();}
+  ctx.fillRect(px+4,py+12,TILE-8,1);
+  ctx.fillRect(px+8,py+4,1,8);
+  ctx.fillRect(px+14,py+13,1,5);
+ }
+
+ // 歩ける床に面している側だけを壁面の縁として描く。
+ const north=tile(x,y-1)===1;
+ const south=tile(x,y+1)===1;
+ const west=tile(x-1,y)===1;
+ const east=tile(x+1,y)===1;
+
+ ctx.save();
+ ctx.globalAlpha=vis?.52:.28;
+ ctx.fillStyle=accent;
+ if(north)ctx.fillRect(px,py,TILE,2);
+ if(west)ctx.fillRect(px,py,2,TILE);
+ ctx.globalAlpha=vis?.34:.20;
+ if(south)ctx.fillRect(px,py+TILE-2,TILE,2);
+ if(east)ctx.fillRect(px+TILE-2,py,2,TILE);
+ ctx.restore();
+
+ // 床側へ落ちる短い影で、壁と通路の境界だけを明確化。
+ ctx.fillStyle=vis?"rgba(0,0,0,.42)":"rgba(0,0,0,.32)";
+ if(north)ctx.fillRect(px,py+2,TILE,2);
+ if(west)ctx.fillRect(px+2,py,2,TILE);
+ if(south)ctx.fillRect(px,py+TILE-4,TILE,2);
+ if(east)ctx.fillRect(px+TILE-4,py,2,TILE);
+
+ // バイオーム装飾も明るい白ではなく、壁面内部の低彩度表現にする。
+ if(currentBiomeKey()==="crypt"){
+  ctx.strokeStyle=vis?"rgba(142,126,158,.28)":"rgba(90,76,102,.18)";
+  ctx.lineWidth=1;
+  if((x+y)%5===0){
+   ctx.beginPath();
+   ctx.moveTo(px+11,py+6);ctx.lineTo(px+11,py+16);
+   ctx.moveTo(px+7,py+11);ctx.lineTo(px+15,py+11);
+   ctx.stroke();
+  }
+ }else if(currentBiomeKey()==="fungal"){
+  ctx.fillStyle=vis?"rgba(112,158,94,.34)":"rgba(65,88,57,.20)";
+  ctx.beginPath();ctx.arc(px+7,py+15,2,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(px+15,py+8,1.5,0,Math.PI*2);ctx.fill();
+ }else if(currentBiomeKey()==="furnace"){
+  ctx.fillStyle=vis?"rgba(197,72,48,.25)":"rgba(98,44,36,.17)";
+  ctx.fillRect(px+6,py+15,10,1);
+  ctx.fillRect(px+8,py+13,6,1);
+ }else if(currentBiomeKey()==="frost"){
+  ctx.strokeStyle=vis?"rgba(110,170,198,.30)":"rgba(64,102,120,.18)";
+  ctx.beginPath();ctx.moveTo(px+6,py+15);ctx.lineTo(px+10,py+11);ctx.lineTo(px+12,py+14);ctx.lineTo(px+16,py+9);ctx.stroke();
+ }else{
+  ctx.strokeStyle=vis?"rgba(85,118,72,.25)":"rgba(48,70,42,.16)";
+  if((x*5+y*3)%3===0){
+   ctx.beginPath();ctx.moveTo(px+5,py+16);ctx.lineTo(px+9,py+13);ctx.lineTo(px+12,py+9);ctx.stroke();
+  }
  }
 }
 function drawFloorTile(px,py,x,y,vis){
