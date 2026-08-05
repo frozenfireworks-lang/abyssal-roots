@@ -120,11 +120,49 @@ html,body{overscroll-behavior:none}
 .ctrl,.skill,.miniBtn,#dpad,#skills,#footerBtns{touch-action:manipulation!important;-ms-touch-action:manipulation!important}
 .overlay,.card{touch-action:pan-y!important}
 
+
+header{
+  padding:6px 8px;
+  background:linear-gradient(180deg,#241a2d,#16101d);
+  border:1px solid #51415d;
+  border-radius:12px;
+  box-shadow:0 6px 18px #0008;
+}
+h1{font-size:17px;text-shadow:0 2px 4px #000}
+#gameWrap{
+  border:2px solid #6b5579;
+  background:#050407;
+  box-shadow:0 0 0 1px #0a070d inset,0 12px 34px #000b;
+}
+.stat,.member{
+  background:linear-gradient(180deg,#241b2d,#15101b);
+}
+.skill,.ctrl,.miniBtn{
+  background:linear-gradient(180deg,#3a2b46,#201728);
+  border-color:#756082;
+}
+.skill:not(:disabled):active,.ctrl:active,.miniBtn:active{
+  filter:brightness(1.2);
+}
+#log{
+  background:linear-gradient(180deg,#120d17,#0a070d);
+  border-color:#493752;
+}
+.visualBadge{
+  display:inline-block;
+  padding:1px 5px;
+  border-radius:999px;
+  background:#35263f;
+  color:#f0d47a;
+  font-size:8px;
+  vertical-align:middle;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 1.1 MAZE REBUILD</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 1.2 VISUAL REFORGE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -157,7 +195,7 @@ html,body{overscroll-behavior:none}
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 大型迷宮 × 隠し通路</p>
+    <p class="sub">迷宮探索 × 完全ソロ × ピクセル迷宮 × 光と演出</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -207,7 +245,7 @@ html,body{overscroll-behavior:none}
     <p>
       移動・待機・スキルを使うたびに1ターン進み、敵も行動します。方向入力は、武器の射程内に敵がいれば攻撃、いなければ移動です。攻撃にはスタミナを使い、敵の赤い予兆は次のターンに実行されます。
       予兆を見て、退く・構える・先に倒すを選んでください。剣は軽快、槍は間合い、弓は近距離不可、杖は高消費の範囲攻撃です。階段 <b style="color:#e1b85b">▼</b> に乗ると次の階へ進みます。
-      未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。迷宮は大型化され、探索スキルで隠し通路を発見できます。⇵はショートカットです。
+      未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。迷宮は大型化され、探索スキルで隠し通路を発見できます。⇵はショートカットです。盤面はピクセル表現になり、攻撃・爆発・炎上には画面演出があります。
     </p>
     <p>記号：<b>@</b>主人公 / <b>S</b>盾骸兵 / <b>W</b>穴獣 / <b>M</b>骨術師 / <b>B</b>爆ぜ虫 / <b>!</b>装備 / <b>◇</b>食料 / <b>^</b>罠</p>
     <button class="modalBtn" id="closeHelp">閉じる</button>
@@ -282,7 +320,7 @@ function freshState(){
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[]},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",
   map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,visual:{flash:0,shake:0,hitX:null,hitY:null}
  };
 }
 function carveRoom(map,x,y,w,h){
@@ -389,7 +427,7 @@ function igniteAt(x,y,source="炎"){
 function explodeBarrel(barrel){
  if(!barrel.active)return;
  barrel.active=false;
- addLog("爆薬樽が炸裂した！");
+ addLog("爆薬樽が炸裂した！");triggerHitFx(barrel.x,barrel.y,true);
  const cells=[[0,0],...dirs];
  for(const [dx,dy] of cells){
   const tx=barrel.x+dx,ty=barrel.y+dy;
@@ -784,9 +822,45 @@ function showTalentChoices(){
  $("levelOverlay").classList.remove("hidden");
 }
 
+
+function triggerHitFx(x,y,strong=false){
+ state.visual=state.visual||{flash:0,shake:0,hitX:null,hitY:null};
+ state.visual.flash=strong?5:3;
+ state.visual.shake=strong?4:2;
+ state.visual.hitX=x;state.visual.hitY=y;
+ render();
+}
+function tickVisual(){
+ if(!state?.visual)return;
+ if(state.visual.flash>0||state.visual.shake>0){
+  state.visual.flash=Math.max(0,state.visual.flash-1);
+  state.visual.shake=Math.max(0,state.visual.shake-1);
+  draw();
+  requestAnimationFrame(tickVisual);
+ }
+}
+function drawSpritePixel(ctx,x,y,pattern,palette,scale=2){
+ for(let py=0;py<pattern.length;py++){
+  for(let px=0;px<pattern[py].length;px++){
+   const ch=pattern[py][px];
+   if(ch===" ")continue;
+   ctx.fillStyle=palette[ch]||"#fff";
+   ctx.fillRect(x+px*scale,y+py*scale,scale,scale);
+  }
+ }
+}
+const spritePatterns={
+ hero:[" 11 ","1221","1331"," 33 "," 44 "],
+ skeleton:[" 11 ","1221"," 22 ","3443"," 33 "],
+ warg:["1  1","1111","1221"," 33 ","3  3"],
+ mage:[" 11 ","1221"," 33 ","3443"," 44 "],
+ bomber:[" 11 ","1221","1331"," 44 ","4  4"],
+ warden:[" 111 ","12221","13331","34443","4 4 4"]
+};
+
 function damageEnemy(e,damage,label=""){
  const guardMul=(e.type==="skeleton"&&e.guarding)?0.45:1;damage=applyTraitDamage(damage,e);const dmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul*(mutation()?.damageMul||1)));
- e.hp-=dmg;applyElementHit(e,dmg);if(e.type==="skeleton"&&e.guarding)addLog(e.name+"が盾で威力を殺した。");
+ e.hp-=dmg;triggerHitFx(e.x,e.y,dmg>=10);applyElementHit(e,dmg);if(e.type==="skeleton"&&e.guarding)addLog(e.name+"が盾で威力を殺した。");
  if(e.intent&&dmg>=Math.max(5,Math.floor(e.maxHp*.28))){
   e.intent=null;e.stagger=1;addLog(e.name+"の攻撃態勢を崩した！");
  }
@@ -1270,6 +1344,7 @@ function loadGame(){
   if(!state.hero.talents)state.hero.talents=[];
   if(!state.secretWalls)state.secretWalls=[];
   if(!state.shortcuts)state.shortcuts=[];
+  if(!state.visual)state.visual={flash:0,shake:0,hitX:null,hitY:null};
   for(const g of [...state.inventory,state.weapon,state.armor].filter(Boolean)){if(typeof g.element==="undefined")g.element=null;if(typeof g.trait==="undefined")g.trait=null;if(typeof g.kills!=="number")g.kills=0;}
   for(const g of [...state.inventory,state.weapon,state.armor].filter(Boolean)){
    if(typeof g.identified!=="boolean")g.identified=true;
@@ -1290,7 +1365,7 @@ function renderHero(){
  const h=state.hero;
  const danger=state.enemies.filter(e=>e.intent&&Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)===1).length;
  $("hero").innerHTML=`<div class="member ${h.hp<=0?"dead":""}">
-  <div class="name">${h.name}${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
+  <div class="name">${h.name} <span class="visualBadge">PIXEL</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
   <div class="role">${h.role}　攻${h.atk+equippedAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>才能:${(h.talents||[]).length}</div>
   <div class="bar"><div class="fill" style="width:${100*h.hp/h.maxHp}%"></div></div>
   <div class="hp">HP ${h.hp}/${h.maxHp}</div>
@@ -1300,59 +1375,115 @@ function renderHero(){
 }
 function renderLog(){$("log").innerHTML=state?state.log.map((x,i)=>`<div style="opacity:${1-i*.16}">› ${x}</div>`).join(""):""}
 function draw(){
- ctx.fillStyle="#050407";ctx.fillRect(0,0,canvas.width,canvas.height);
  const cam=cameraOrigin();
+ const shake=state.visual?.shake>0?Math.round((Math.random()-.5)*state.visual.shake*2):0;
+ ctx.save();
+ ctx.translate(shake,shake);
+ ctx.fillStyle="#050407";ctx.fillRect(-8,-8,canvas.width+16,canvas.height+16);
+
  const sx=x=>(x-cam.x)*TILE,sy=y=>(y-cam.y)*TILE;
+ const inView=(x,y)=>x>=cam.x&&x<cam.x+VIEW_COLS&&y>=cam.y&&y<cam.y+VIEW_ROWS;
+
  for(let vy=0;vy<VIEW_ROWS;vy++)for(let vx=0;vx<VIEW_COLS;vx++){
   const x=cam.x+vx,y=cam.y+vy,k=key(x,y),vis=state.visible[k],seen=state.visited[k];
-  if(!seen){ctx.fillStyle="#050407";ctx.fillRect(vx*TILE,vy*TILE,TILE,TILE);continue}
+  const px=vx*TILE,py=vy*TILE;
+  if(!seen){
+   ctx.fillStyle="#040306";ctx.fillRect(px,py,TILE,TILE);continue;
+  }
   if(tile(x,y)===0){
-   ctx.fillStyle=vis?"#211b28":"#100d14";ctx.fillRect(vx*TILE,vy*TILE,TILE,TILE);
-   ctx.strokeStyle=vis?"#352b3d":"#17121b";ctx.strokeRect(vx*TILE+.5,vy*TILE+.5,TILE-1,TILE-1)
+   ctx.fillStyle=vis?"#302439":"#17111d";ctx.fillRect(px,py,TILE,TILE);
+   ctx.fillStyle=vis?"#4a3855":"#211727";
+   ctx.fillRect(px,py,TILE,4);
+   ctx.fillRect(px,py,4,TILE);
+   ctx.fillStyle=vis?"#241a2c":"#100b15";
+   ctx.fillRect(px+5,py+6,TILE-7,TILE-8);
+   if((x+y)%3===0){ctx.fillStyle="#5b4667";ctx.fillRect(px+7,py+9,6,2)}
   }else{
-   ctx.fillStyle=vis?((x+y)%2?"#17131c":"#1c1722"):"#0d0a10";
-   ctx.fillRect(vx*TILE,vy*TILE,TILE,TILE)
+   const floorA=vis?"#19141f":"#0d0a11";
+   const floorB=vis?"#1f1926":"#100c14";
+   ctx.fillStyle=((x+y)&1)?floorA:floorB;ctx.fillRect(px,py,TILE,TILE);
+   ctx.fillStyle=vis?"#2a2131":"#151019";
+   ctx.fillRect(px+2,py+2,2,2);
+   if((x*7+y*3)%11===0)ctx.fillRect(px+13,py+15,4,1);
   }
  }
- const inView=(x,y)=>x>=cam.x&&x<cam.x+VIEW_COLS&&y>=cam.y&&y<cam.y+VIEW_ROWS;
+
  const drawText=(t,x,y,color,size=15)=>{
   if(!inView(x,y))return;
   ctx.font=`700 ${size}px -apple-system`;ctx.textAlign="center";ctx.textBaseline="middle";
   ctx.fillStyle=color;ctx.fillText(t,sx(x)+TILE/2,sy(y)+TILE/2+1)
  };
- if(state.visible[key(state.stairs.x,state.stairs.y)])drawText("▼",state.stairs.x,state.stairs.y,"#e1b85b",17);
- state.traps.forEach(t=>{if(t.revealed&&!t.spent&&state.visible[key(t.x,t.y)])drawText("^",t.x,t.y,"#d86171",16)});
+
+ if(state.visible[key(state.stairs.x,state.stairs.y)]){
+  const x=sx(state.stairs.x),y=sy(state.stairs.y);
+  ctx.fillStyle="#0a0710";ctx.fillRect(x+4,y+4,14,14);
+  ctx.strokeStyle="#e1b85b";ctx.strokeRect(x+5.5,y+5.5,11,11);
+  ctx.fillStyle="#e1b85b";ctx.fillRect(x+8,y+8,6,2);ctx.fillRect(x+10,y+10,4,2);ctx.fillRect(x+11,y+12,2,4);
+ }
+
+ state.traps.forEach(t=>{if(t.revealed&&!t.spent&&state.visible[key(t.x,t.y)]){
+  const x=sx(t.x),y=sy(t.y);ctx.strokeStyle="#d86171";ctx.beginPath();ctx.moveTo(x+5,y+17);ctx.lineTo(x+11,y+6);ctx.lineTo(x+17,y+17);ctx.stroke()
+ }});
+
  state.secretWalls.forEach(w=>{if(w.revealed&&state.visible[key(w.x,w.y)])drawText("·",w.x,w.y,"#bfaad0",14)});
  state.shortcuts.forEach(q=>{
   if(state.visible[key(q.ax,q.ay)])drawText("⇵",q.ax,q.ay,"#89d1c0",15);
   if(state.visible[key(q.bx,q.by)])drawText("⇵",q.bx,q.by,"#89d1c0",15);
  });
+
  state.specialTiles.forEach(t=>{if(state.visible[key(t.x,t.y)]){
-  const symbol={shrine:"†",treasure:"□",flood:"≈",collapse:"×"}[t.type];
-  const color={shrine:"#f3d67e",treasure:"#e1b85b",flood:"#71a9d8",collapse:"#b88c72"}[t.type];
-  drawText(symbol,t.x,t.y,color,17);
+  const x=sx(t.x),y=sy(t.y);
+  if(t.type==="shrine"){ctx.fillStyle="#d9bb66";ctx.fillRect(x+9,y+4,4,14);ctx.fillRect(x+5,y+8,12,4)}
+  if(t.type==="treasure"){ctx.fillStyle="#8e6236";ctx.fillRect(x+4,y+8,14,10);ctx.fillStyle="#d5af50";ctx.fillRect(x+4,y+8,14,3);ctx.fillRect(x+10,y+11,2,4)}
+  if(t.type==="flood"){ctx.strokeStyle="#69a6d1";for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(x+3,y+7+i*5);ctx.quadraticCurveTo(x+8,y+3+i*5,x+13,y+7+i*5);ctx.quadraticCurveTo(x+17,y+11+i*5,x+20,y+7+i*5);ctx.stroke()}}
+  if(t.type==="collapse"){ctx.fillStyle="#8f705f";ctx.fillRect(x+4,y+5,6,5);ctx.fillRect(x+12,y+12,7,6);ctx.fillRect(x+6,y+15,5,4)}
  }});
+
  state.environment.forEach(o=>{if(o.active&&state.visible[key(o.x,o.y)]){
-  const symbol=o.type==="barrel"?"◎":(o.burning?"炎":"~");
-  const color=o.type==="barrel"?"#c88b52":(o.burning?"#ff6a3d":"#6e6676");
-  drawText(symbol,o.x,o.y,color,16);
- }});
- state.items.forEach(i=>{if(state.visible[key(i.x,i.y)]){
-  const symbol=i.type==="food"?"◇":i.type==="potion"?"♥":i.type==="identify"?"?":i.type==="purify"?"✦":i.type==="bomb"?"●":"!";
-  const color=i.type==="food"?"#71c79a":i.type==="potion"?"#ff7188":i.type==="identify"?"#7fb7ff":i.type==="purify"?"#f4df85":i.type==="bomb"?"#ff8a55":rarityData[i.gear.rarity].color;
-  drawText(symbol,i.x,i.y,color,17);
- }});
- state.enemies.forEach(e=>{if(state.visible[key(e.x,e.y)]){
-  const symbol={skeleton:"S",warg:"W",mage:"M",bomber:"B",warden:"Ω"}[e.type]||"?";
-  const baseColor={skeleton:"#d8d0df",warg:"#d86171",mage:"#9f8cff",bomber:"#ffb24d",warden:"#f2d06b"}[e.type]||"#fff";
-  drawText(symbol,e.x,e.y,e.intent?"#ff5368":(eliteColor(e)||baseColor),15);
-  if(e.intent&&inView(e.x,e.y)){ctx.strokeStyle="#ff5368";ctx.lineWidth=2;ctx.strokeRect(sx(e.x)+2,sy(e.y)+2,TILE-4,TILE-4)}
-  if(inView(e.x,e.y)){
-   ctx.fillStyle="#25080d";ctx.fillRect(sx(e.x)+3,sy(e.y)+2,TILE-6,3);
-   ctx.fillStyle="#cf5163";ctx.fillRect(sx(e.x)+3,sy(e.y)+2,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
+  const x=sx(o.x),y=sy(o.y);
+  if(o.type==="barrel"){
+   ctx.fillStyle="#7c4f2f";ctx.fillRect(x+6,y+4,10,15);ctx.fillStyle="#b47a44";ctx.fillRect(x+5,y+7,12,2);ctx.fillRect(x+5,y+15,12,2);
+  }else{
+   ctx.fillStyle=o.burning?"#f35b2f":"#4a3d52";ctx.beginPath();ctx.ellipse(x+11,y+14,8,5,0,0,Math.PI*2);ctx.fill();
+   if(o.burning){ctx.fillStyle="#ffd45a";ctx.fillRect(x+10,y+5,3,8);ctx.fillRect(x+7,y+9,3,5);ctx.fillRect(x+13,y+8,3,6)}
   }
  }});
- drawText("@",state.player.x,state.player.y,"#f3d67e",17);
+
+ state.items.forEach(i=>{if(state.visible[key(i.x,i.y)]){
+  const x=sx(i.x),y=sy(i.y);
+  if(i.type==="food"){ctx.fillStyle="#71c79a";ctx.beginPath();ctx.arc(x+11,y+11,5,0,Math.PI*2);ctx.fill()}
+  else if(i.type==="potion"){ctx.fillStyle="#ff7188";ctx.fillRect(x+8,y+8,7,9);ctx.fillStyle="#eee";ctx.fillRect(x+10,y+5,3,4)}
+  else if(i.type==="identify"){drawText("?",i.x,i.y,"#7fb7ff",17)}
+  else if(i.type==="purify"){drawText("✦",i.x,i.y,"#f4df85",17)}
+  else if(i.type==="bomb"){ctx.fillStyle="#2d2730";ctx.beginPath();ctx.arc(x+11,y+13,6,0,Math.PI*2);ctx.fill();ctx.fillStyle="#ff8a55";ctx.fillRect(x+12,y+4,2,6)}
+  else{ctx.fillStyle=rarityData[i.gear.rarity].color;ctx.fillRect(x+9,y+5,4,13);ctx.fillRect(x+6,y+14,10,3)}
+ }});
+
+ state.enemies.forEach(e=>{if(state.visible[key(e.x,e.y)]){
+  const x=sx(e.x),y=sy(e.y);
+  const base={skeleton:"#d8d0df",warg:"#d86171",mage:"#9f8cff",bomber:"#ffb24d",warden:"#f2d06b"}[e.type]||"#fff";
+  const main=e.intent?"#ff5368":(eliteColor(e)||base);
+  const pal={"1":"#17131c","2":main,"3":"#5c465f","4":"#d7c7e0"};
+  const pat=spritePatterns[e.type]||spritePatterns.skeleton;
+  drawSpritePixel(ctx,x+5,y+4,pat,pal,e.type==="warden"?2:2);
+  if(e.intent){ctx.strokeStyle="#ff5368";ctx.lineWidth=2;ctx.strokeRect(x+2,y+2,TILE-4,TILE-4)}
+  ctx.fillStyle="#25080d";ctx.fillRect(x+3,y+1,TILE-6,3);
+  ctx.fillStyle="#cf5163";ctx.fillRect(x+3,y+1,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
+ }});
+
+ if(inView(state.player.x,state.player.y)){
+  const x=sx(state.player.x),y=sy(state.player.y);
+  const pal={"1":"#16111d","2":"#f3d67e","3":"#77567c","4":"#c9b8d2"};
+  drawSpritePixel(ctx,x+6,y+4,spritePatterns.hero,pal,2);
+  ctx.strokeStyle="#f3d67e";ctx.globalAlpha=.35;ctx.strokeRect(x+2.5,y+2.5,TILE-5,TILE-5);ctx.globalAlpha=1;
+ }
+
+ if(state.visual?.flash>0&&state.visual.hitX!==null&&inView(state.visual.hitX,state.visual.hitY)){
+  const x=sx(state.visual.hitX),y=sy(state.visual.hitY);
+  ctx.globalAlpha=.25+.1*state.visual.flash;
+  ctx.fillStyle="#fff";ctx.fillRect(x,y,TILE,TILE);ctx.globalAlpha=1;
+ }
+ ctx.restore();
 }
 function renderSkills(){
  for(const k of ["guard","heal","search"]){
@@ -1364,7 +1495,7 @@ function renderSkills(){
  b.firstChild.textContent=wd.skill+(state.cooldowns.volley>0?" "+state.cooldowns.volley:"");
  b.querySelector("span").textContent=wd.skillDesc;
 }
-function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();draw()}
+function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();draw();if(state.visual?.flash>0||state.visual?.shake>0)requestAnimationFrame(tickVisual)}
 function startNew(){state=freshState();$("titleOverlay").classList.add("hidden");$("gameOverOverlay").classList.add("hidden");$("starterOverlay").classList.remove("hidden");render()}
 $("newGameBtn").onclick=startNew;$("restartBtn").onclick=startNew;document.querySelectorAll(".starterBtn").forEach(b=>{
  b.addEventListener("click",ev=>{
