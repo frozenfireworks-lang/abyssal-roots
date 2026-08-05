@@ -180,11 +180,26 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
 }
 #gameWrap{position:relative}
 
+
+#game{
+  width:100%;
+  aspect-ratio:374/462;
+  display:block;
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  transform:translateZ(0);
+  backface-visibility:hidden;
+}
+#gameWrap{
+  contain:layout paint;
+  overflow:hidden;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 2.0.1 SYNC & VISUAL</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 2.0.2 STABLE VISUAL</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -217,7 +232,7 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 座標同期 × 強化ビジュアル</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 安定描画 × 高精細ピクセル</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -1170,7 +1185,7 @@ function toggleSound(){
 function triggerHitFx(x,y,strong=false){
  state.visual=state.visual||{flash:0,shake:0,hitX:null,hitY:null};
  state.visual.flash=strong?5:3;
- state.visual.shake=strong?4:2;
+ state.visual.shake=strong?3:1;
  state.visual.hitX=x;state.visual.hitY=y;
  render();
 }
@@ -1295,6 +1310,8 @@ function tickContinuousAnimation(){
  if((state.visual.moveFrames||0)>0)state.visual.moveFrames--;
  if((state.visual.attackFrames||0)>0)state.visual.attackFrames--;
  if((state.visual.damageFrames||0)>0)state.visual.damageFrames--;
+ if((state.visual.shake||0)>0)state.visual.shake=Math.max(0,state.visual.shake-1);
+ if((state.visual.flash||0)>0)state.visual.flash=Math.max(0,state.visual.flash-1);
  draw();
  requestAnimationFrame(tickContinuousAnimation);
 }
@@ -1890,10 +1907,97 @@ function renderHero(){
  </div>`;
 }
 function renderLog(){$("log").innerHTML=state?state.log.map((x,i)=>`<div style="opacity:${1-i*.16}">› ${x}</div>`).join(""):""}
+
+function wallMask(x,y){
+ let mask=0;
+ if(tile(x,y-1)===0)mask|=1;
+ if(tile(x+1,y)===0)mask|=2;
+ if(tile(x,y+1)===0)mask|=4;
+ if(tile(x-1,y)===0)mask|=8;
+ return mask;
+}
+function drawWallTile(px,py,x,y,vis){
+ const biome=currentBiome();
+ const base=vis?biome.wall:"#17111d";
+ const edge=vis?biome.accent:"#2a2030";
+ const inner=vis?"#17121c":"#0d0911";
+ ctx.fillStyle=base;ctx.fillRect(px,py,TILE,TILE);
+ const mask=wallMask(x,y);
+ ctx.fillStyle=edge;
+ if(!(mask&1))ctx.fillRect(px,py,TILE,4);
+ if(!(mask&8))ctx.fillRect(px,py,4,TILE);
+ ctx.fillStyle=inner;ctx.fillRect(px+4,py+4,TILE-7,TILE-7);
+ ctx.globalAlpha=vis?.36:.18;
+ ctx.fillStyle=edge;
+ if((x*13+y*7)%5===0)ctx.fillRect(px+7,py+8,8,2);
+ if((x*5+y*11)%7===0)ctx.fillRect(px+11,py+12,2,6);
+ ctx.globalAlpha=1;
+}
+function drawFloorTile(px,py,x,y,vis){
+ const biome=currentBiome();
+ ctx.fillStyle=vis?biome.floor:"#0d0a11";ctx.fillRect(px,py,TILE,TILE);
+ ctx.fillStyle=vis?"rgba(255,255,255,.035)":"rgba(255,255,255,.015)";
+ if((x+y)%2===0)ctx.fillRect(px,py,TILE,1);
+ ctx.fillStyle=vis?"rgba(0,0,0,.13)":"rgba(0,0,0,.2)";
+ ctx.fillRect(px,py+TILE-2,TILE,2);
+ ctx.fillStyle=vis?biome.accent:"#211727";
+ ctx.globalAlpha=.18;
+ if((x*7+y*3)%11===0)ctx.fillRect(px+12,py+14,5,1);
+ if((x*3+y*5)%17===0)ctx.fillRect(px+5,py+6,2,2);
+ ctx.globalAlpha=1;
+}
+function drawHeroSprite(x,y,hurt,t){
+ const bob=Math.sin(t*.12)*.65;
+ const body=hurt?"#ff7d8d":"#e6c86f";
+ const cloak="#75527d",dark="#17111d",skin="#d9c4bc",metal="#c8d0d6";
+ ctx.globalAlpha=.42;ctx.fillStyle="#000";ctx.beginPath();ctx.ellipse(x+11,y+19,7,3,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ const aura=ctx.createRadialGradient(x+11,y+11,1,x+11,y+11,18);
+ aura.addColorStop(0,"rgba(243,214,126,.22)");aura.addColorStop(1,"rgba(243,214,126,0)");
+ ctx.fillStyle=aura;ctx.fillRect(x-7,y-7,36,36);
+ ctx.fillStyle=dark;ctx.fillRect(x+8,y+4+bob,7,4);
+ ctx.fillStyle=skin;ctx.fillRect(x+9,y+6+bob,5,4);
+ ctx.fillStyle=body;ctx.fillRect(x+7,y+10+bob,9,6);
+ ctx.fillStyle=cloak;ctx.fillRect(x+6,y+13+bob,11,6);
+ ctx.fillStyle=dark;ctx.fillRect(x+7,y+19+bob,3,3);ctx.fillRect(x+14,y+19+bob,3,3);
+ ctx.fillStyle=metal;ctx.fillRect(x+16,y+10+bob,2,8);ctx.fillRect(x+14,y+11+bob,6,2);
+ ctx.strokeStyle=hurt?"#ff6a7d":"#f3d67e";ctx.globalAlpha=.32;ctx.strokeRect(x+2.5,y+2.5,TILE-5,TILE-5);ctx.globalAlpha=1;
+}
+function drawEnemySprite(e,x,y,t){
+ const bob=Math.sin(t*.1+e.x*.7+e.y)*.65;
+ const base={skeleton:"#cfd1d8",warg:"#bd5c68",mage:"#8c79d8",bomber:"#d99a42",warden:"#d5b74f"}[e.type]||"#ddd";
+ const accent=e.nemesis?"#ff4f73":(eliteColor(e)||base);
+ ctx.globalAlpha=.35;ctx.fillStyle="#000";ctx.beginPath();ctx.ellipse(x+11,y+18,7,3,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ if(e.type==="skeleton"){
+  ctx.fillStyle="#dedee2";ctx.fillRect(x+8,y+4+bob,7,5);
+  ctx.fillStyle="#26212b";ctx.fillRect(x+9,y+6+bob,2,2);ctx.fillRect(x+13,y+6+bob,2,2);
+  ctx.fillStyle=accent;ctx.fillRect(x+7,y+10+bob,9,7);
+  ctx.fillStyle="#6f5c72";ctx.fillRect(x+5,y+10+bob,3,9);
+ }else if(e.type==="warg"){
+  ctx.fillStyle=accent;ctx.fillRect(x+5,y+9+bob,13,7);
+  ctx.fillRect(x+7,y+5+bob,8,5);
+  ctx.fillStyle="#f1d7d7";ctx.fillRect(x+13,y+7+bob,2,2);
+  ctx.fillStyle="#4a2830";ctx.fillRect(x+5,y+16+bob,3,4);ctx.fillRect(x+14,y+16+bob,3,4);
+ }else if(e.type==="mage"){
+  ctx.fillStyle="#d9d5df";ctx.fillRect(x+8,y+4+bob,7,5);
+  ctx.fillStyle=accent;ctx.fillRect(x+6,y+9+bob,11,10);
+  ctx.fillStyle="#c5b4ff";ctx.fillRect(x+15,y+8+bob,2,10);
+ }else if(e.type==="bomber"){
+  ctx.fillStyle=accent;ctx.beginPath();ctx.arc(x+11,y+12+bob,7,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#3a2526";ctx.fillRect(x+8,y+7+bob,2,2);ctx.fillRect(x+13,y+7+bob,2,2);
+  ctx.fillStyle="#ffcf72";ctx.fillRect(x+10,y+3+bob,3,5);
+ }else{
+  ctx.fillStyle=accent;ctx.fillRect(x+5,y+5+bob,13,14);
+  ctx.fillStyle="#2a2025";ctx.fillRect(x+8,y+7+bob,7,3);
+  ctx.fillStyle="#f5df78";ctx.fillRect(x+9,y+8+bob,2,2);ctx.fillRect(x+13,y+8+bob,2,2);
+ }
+ if(e.intent||e.nemesis){ctx.strokeStyle=e.nemesis?"#ff4f73":"#ff5368";ctx.lineWidth=e.nemesis?3:2;ctx.strokeRect(x+2,y+2,TILE-4,TILE-4)}
+}
+
 function draw(){
  const cam=cameraOrigin();
  const t=(state.visual?.time||0);
- const shake=state.visual?.shake>0?Math.round((Math.random()-.5)*state.visual.shake*2):0;
+ const shakeAmount=Math.min(3,state.visual?.shake||0);
+ const shake=shakeAmount>0?((state.visual.time%2===0?1:-1)*shakeAmount):0;
  ctx.save();
  ctx.translate(shake,shake);
  ctx.fillStyle="#050407";ctx.fillRect(-8,-8,canvas.width+16,canvas.height+16);
@@ -1907,21 +2011,9 @@ function draw(){
   if(!seen){
    ctx.fillStyle="#040306";ctx.fillRect(px,py,TILE,TILE);continue;
   }
-  if(tile(x,y)===0){
-   ctx.fillStyle=vis?currentBiome().wall:"#17111d";ctx.fillRect(px,py,TILE,TILE);
-   ctx.fillStyle=vis?currentBiome().accent:"#211727";
-   ctx.fillRect(px,py,TILE,4);
-   ctx.fillRect(px,py,4,TILE);
-   ctx.fillStyle=vis?"#241a2c":"#100b15";
-   ctx.fillRect(px+5,py+6,TILE-7,TILE-8);
-   if((x+y)%3===0){ctx.fillStyle="#5b4667";ctx.fillRect(px+7,py+9,6,2)}
-  }else{
-   const baseFloor=currentBiome().floor;const floorA=vis?baseFloor:"#0d0a11";
-   const floorB=vis?baseFloor:"#100c14";
-   ctx.fillStyle=((x+y)&1)?floorA:floorB;ctx.fillRect(px,py,TILE,TILE);
-   ctx.fillStyle=vis?"#2a2131":"#151019";
-   ctx.fillRect(px+2,py+2,2,2);
-   if((x*7+y*3)%11===0)ctx.fillRect(px+13,py+15,4,1);
+  if(tile(x,y)===0)drawWallTile(px,py,x,y,vis);
+  else{
+   drawFloorTile(px,py,x,y,vis);
    if(vis&&currentBiomeKey()==="crypt"&&(x*5+y*7)%23===0){ctx.fillStyle="#7e7188";ctx.fillRect(px+9,py+7,2,8);ctx.fillRect(px+6,py+10,8,2)}
    if(vis&&currentBiomeKey()==="furnace"&&(x*3+y*11)%19===0){ctx.fillStyle="#7d3025";ctx.fillRect(px+4,py+16,13,2)}
    if(vis&&currentBiomeKey()==="frost"&&(x*7+y*2)%17===0){ctx.strokeStyle="#83c5df";ctx.beginPath();ctx.moveTo(px+6,py+16);ctx.lineTo(px+11,py+7);ctx.lineTo(px+16,py+16);ctx.stroke()}
@@ -1991,14 +2083,7 @@ function draw(){
 
  state.enemies.forEach(e=>{if(state.visible[key(e.x,e.y)]){
   const x=sx(e.x),y=sy(e.y);
-  const base={skeleton:"#d8d0df",warg:"#d86171",mage:"#9f8cff",bomber:"#ffb24d",warden:"#f2d06b"}[e.type]||"#fff";
-  const main=e.intent?"#ff5368":(nemesisColor(e)||eliteColor(e)||base);
-  const pal={"1":"#17131c","2":main,"3":"#5c465f","4":"#d7c7e0"};
-  const pat=spritePatterns[e.type]||spritePatterns.skeleton;
-  const ebob=Math.sin(t*.1+e.x*.7+e.y)*.8;
-  ctx.globalAlpha=.35;ctx.fillStyle="#000";ctx.beginPath();ctx.ellipse(x+11,y+18,7,3,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-  drawSpritePixel(ctx,x+5,y+4+ebob,pat,pal,2);
-  if(e.intent||e.nemesis){ctx.strokeStyle=e.nemesis?"#ff4f73":"#ff5368";ctx.lineWidth=e.nemesis?3:2;ctx.strokeRect(x+2,y+2,TILE-4,TILE-4)}
+  drawEnemySprite(e,x,y,t);
   ctx.fillStyle="#25080d";ctx.fillRect(x+3,y+1,TILE-6,3);
   ctx.fillStyle="#cf5163";ctx.fillRect(x+3,y+1,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
  }});
@@ -2011,15 +2096,8 @@ function draw(){
    x+=state.visual.attackDx*5*swing;
    y+=state.visual.attackDy*5*swing;
   }
-  const bob=Math.sin(t*.12)*.7;
   const hurt=(state.visual?.damageFrames||0)>0;
-  const pal={"1":"#16111d","2":hurt?"#ff7d8d":"#f3d67e","3":"#77567c","4":"#c9b8d2"};
-  ctx.globalAlpha=.42;ctx.fillStyle="#000";ctx.beginPath();ctx.ellipse(x+11,y+19,7,3,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-  const aura=ctx.createRadialGradient(x+11,y+11,1,x+11,y+11,17);
-  aura.addColorStop(0,"rgba(243,214,126,.23)");aura.addColorStop(1,"rgba(243,214,126,0)");
-  ctx.fillStyle=aura;ctx.fillRect(x-6,y-6,34,34);
-  drawSpritePixel(ctx,x+6,y+4+bob,spritePatterns.hero,pal,2);
-  ctx.strokeStyle=hurt?"#ff6a7d":"#f3d67e";ctx.globalAlpha=.28;ctx.strokeRect(x+2.5,y+2.5,TILE-5,TILE-5);ctx.globalAlpha=1;
+  drawHeroSprite(x,y,hurt,t);
  }
 
  if(state.visual?.flash>0&&state.visual.hitX!==null&&inView(state.visual.hitX,state.visual.hitY)){
