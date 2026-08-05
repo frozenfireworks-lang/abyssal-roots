@@ -173,11 +173,18 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
 .lightPulse{animation:lightPulse 1.6s ease-in-out infinite alternate}
 @keyframes lightPulse{from{filter:brightness(.92)}to{filter:brightness(1.08)}}
 
+
+.coordBadge{
+ display:inline-block;margin-left:5px;padding:1px 6px;border-radius:999px;
+ background:#15101b;border:1px solid #56435f;color:#bde8d7;font-size:9px
+}
+#gameWrap{position:relative}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 2.0 EVENTS</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 2.0.1 SYNC & VISUAL</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -210,7 +217,7 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 偶発事件 × 世界の痕跡</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 座標同期 × 強化ビジュアル</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -647,7 +654,7 @@ function useShortcutIfPresent(){
  const s=state.shortcuts.find(q=>(q.ax===state.player.x&&q.ay===state.player.y)||(q.bx===state.player.x&&q.by===state.player.y));
  if(!s)return false;
  const atA=s.ax===state.player.x&&s.ay===state.player.y;
- state.player={x:atA?s.bx:s.ax,y:atA?s.by:s.ay};
+ state.player={x:atA?s.bx:s.ax,y:atA?s.by:s.ay};state.visual.moveFrames=0;
  s.used=true;addLog("古い昇降路を使い、迷宮を大きく横切った。");
  updateVision();return true;
 }
@@ -891,7 +898,7 @@ function generateFloor(){
  }
  const start=state.rooms[0],end=state.rooms[state.rooms.length-1];
  state.player={x:start.cx,y:start.cy};state.stairs={x:end.cx,y:end.cy};
- state.enemies=[];state.items=[];state.traps=[];state.specialTiles=[];state.environment=[];state.secretWalls=[];state.shortcuts=[];state.events=[];state.visited={};state.visible={};state.bossDefeated=false;
+ state.visual.moveFrames=0;state.enemies=[];state.items=[];state.traps=[];state.specialTiles=[];state.environment=[];state.secretWalls=[];state.shortcuts=[];state.events=[];state.visited={};state.visible={};state.bossDefeated=false;
  const enemyCount=5+state.floor*2;
  for(let i=0;i<enemyCount;i++){
   const p=randomFloorCell(6);
@@ -1268,8 +1275,9 @@ function weaponAttack(e,dx,dy,distance){
 
 function startMoveAnim(dx,dy){
  state.visual=state.visual||{};
+ // 入力連打時の表示座標ずれを防ぐため、移動は即時同期する。
  state.visual.moveDx=dx;state.visual.moveDy=dy;
- state.visual.moveFrames=5;
+ state.visual.moveFrames=0;
 }
 function startAttackAnim(dx,dy){
  state.visual=state.visual||{};
@@ -1873,7 +1881,7 @@ function renderHero(){
  const h=state.hero;
  const danger=state.enemies.filter(e=>e.intent&&Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)===1).length;
  $("hero").innerHTML=`<div class="member ${h.hp<=0?"dead":""}">
-  <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
+  <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
   <div class="role">${h.role}　攻${h.atk+equippedAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>才能:${(h.talents||[]).length}</div>
   <div class="bar"><div class="fill" style="width:${100*h.hp/h.maxHp}%"></div></div>
   <div class="hp">HP ${h.hp}/${h.maxHp}</div>
@@ -1914,6 +1922,10 @@ function draw(){
    ctx.fillStyle=vis?"#2a2131":"#151019";
    ctx.fillRect(px+2,py+2,2,2);
    if((x*7+y*3)%11===0)ctx.fillRect(px+13,py+15,4,1);
+   if(vis&&currentBiomeKey()==="crypt"&&(x*5+y*7)%23===0){ctx.fillStyle="#7e7188";ctx.fillRect(px+9,py+7,2,8);ctx.fillRect(px+6,py+10,8,2)}
+   if(vis&&currentBiomeKey()==="furnace"&&(x*3+y*11)%19===0){ctx.fillStyle="#7d3025";ctx.fillRect(px+4,py+16,13,2)}
+   if(vis&&currentBiomeKey()==="frost"&&(x*7+y*2)%17===0){ctx.strokeStyle="#83c5df";ctx.beginPath();ctx.moveTo(px+6,py+16);ctx.lineTo(px+11,py+7);ctx.lineTo(px+16,py+16);ctx.stroke()}
+   if(vis&&currentBiomeKey()==="fungal"&&(x*2+y*5)%17===0){ctx.fillStyle="#78a765";ctx.beginPath();ctx.arc(px+10,py+13,3,Math.PI,0);ctx.fill();ctx.fillRect(px+9,py+13,2,5)}
   }
  }
 
@@ -1983,7 +1995,9 @@ function draw(){
   const main=e.intent?"#ff5368":(nemesisColor(e)||eliteColor(e)||base);
   const pal={"1":"#17131c","2":main,"3":"#5c465f","4":"#d7c7e0"};
   const pat=spritePatterns[e.type]||spritePatterns.skeleton;
-  const ebob=Math.sin(t*.1+e.x*.7+e.y)*.8;drawSpritePixel(ctx,x+5,y+4+ebob,pat,pal,2);
+  const ebob=Math.sin(t*.1+e.x*.7+e.y)*.8;
+  ctx.globalAlpha=.35;ctx.fillStyle="#000";ctx.beginPath();ctx.ellipse(x+11,y+18,7,3,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  drawSpritePixel(ctx,x+5,y+4+ebob,pat,pal,2);
   if(e.intent||e.nemesis){ctx.strokeStyle=e.nemesis?"#ff4f73":"#ff5368";ctx.lineWidth=e.nemesis?3:2;ctx.strokeRect(x+2,y+2,TILE-4,TILE-4)}
   ctx.fillStyle="#25080d";ctx.fillRect(x+3,y+1,TILE-6,3);
   ctx.fillStyle="#cf5163";ctx.fillRect(x+3,y+1,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
@@ -1991,13 +2005,7 @@ function draw(){
 
  if(inView(state.player.x,state.player.y)){
   let x=sx(state.player.x),y=sy(state.player.y);
-  const mf=state.visual?.moveFrames||0;
   const af=state.visual?.attackFrames||0;
-  if(mf>0){
-   const p=mf/5;
-   x-=state.visual.moveDx*TILE*p;
-   y-=state.visual.moveDy*TILE*p;
-  }
   if(af>0){
    const swing=Math.sin((1-af/6)*Math.PI);
    x+=state.visual.attackDx*5*swing;
@@ -2006,6 +2014,10 @@ function draw(){
   const bob=Math.sin(t*.12)*.7;
   const hurt=(state.visual?.damageFrames||0)>0;
   const pal={"1":"#16111d","2":hurt?"#ff7d8d":"#f3d67e","3":"#77567c","4":"#c9b8d2"};
+  ctx.globalAlpha=.42;ctx.fillStyle="#000";ctx.beginPath();ctx.ellipse(x+11,y+19,7,3,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  const aura=ctx.createRadialGradient(x+11,y+11,1,x+11,y+11,17);
+  aura.addColorStop(0,"rgba(243,214,126,.23)");aura.addColorStop(1,"rgba(243,214,126,0)");
+  ctx.fillStyle=aura;ctx.fillRect(x-6,y-6,34,34);
   drawSpritePixel(ctx,x+6,y+4+bob,spritePatterns.hero,pal,2);
   ctx.strokeStyle=hurt?"#ff6a7d":"#f3d67e";ctx.globalAlpha=.28;ctx.strokeRect(x+2.5,y+2.5,TILE-5,TILE-5);ctx.globalAlpha=1;
  }
@@ -2034,6 +2046,24 @@ function draw(){
   ctx.beginPath();ctx.ellipse(fx,fy,22+(i%4)*7,5+(i%3)*2,0,0,Math.PI*2);ctx.fill();
  }
  ctx.globalAlpha=1;
+
+ // 小型ミニマップ（探索済み位置と現在地を同期表示）
+ ctx.save();
+ const mmW=74,mmH=82,mmX=canvas.width-mmW-5,mmY=5;
+ ctx.globalAlpha=.82;ctx.fillStyle="#09070d";ctx.fillRect(mmX,mmY,mmW,mmH);
+ ctx.strokeStyle=currentBiome().accent;ctx.strokeRect(mmX+.5,mmY+.5,mmW-1,mmH-1);
+ const scale=Math.min((mmW-8)/COLS,(mmH-8)/ROWS);
+ for(const k of Object.keys(state.visited)){
+  const [mx,my]=k.split(",").map(Number);
+  if(tile(mx,my)!==1)continue;
+  ctx.fillStyle=state.visible[k]?"#8d7a99":"#403647";
+  ctx.fillRect(mmX+4+mx*scale,mmY+4+my*scale,Math.max(1,scale),Math.max(1,scale));
+ }
+ ctx.fillStyle="#f3d67e";
+ ctx.fillRect(mmX+3+state.player.x*scale,mmY+3+state.player.y*scale,3,3);
+ ctx.fillStyle="#e1b85b";
+ ctx.fillRect(mmX+4+state.stairs.x*scale,mmY+4+state.stairs.y*scale,2,2);
+ ctx.restore();
 
  // 動的ライティング
  ctx.save();
