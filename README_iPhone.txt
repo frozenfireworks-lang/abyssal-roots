@@ -1,21 +1,11 @@
-深淵樹迷宮 v3.6 IPHONE UI
+深淵樹迷宮 v3.8 FIRST 20 PASS
 
-Safari対策
-- ページ全体を確実に縦スクロール可能へ変更
-- Safariの下部ツールバーを縮めやすい追加スクロール領域
-- ログ欄を独立スクロール領域へ変更
-- visualViewportの高さ変化へ追従
-- safe-area-inset対応
-- マップは画面上部へ追従表示
+- 最初の20階に階層テーマと目標を追加
+- 敵数を最大24体へ制限、1階は4体
+- 4・9・14・19階は補給階
+- 補給階は敵・罠を減らし、薬・食料・灯油を確定配置
+- 3・8・12・16・19階に装備を確定配置
+- 5・10・15・20階を番人戦の節目に設定
+- 旧セーブ維持
 
-PWA対応
-- manifest.webmanifest追加
-- Service Worker追加
-- ホーム画面へ追加するとSafariの上下バーなしで全画面表示
-- オフラインキャッシュ対応
-
-GitHub更新対象
-- index.html
-- manifest.webmanifest
-- sw.js
-今回は3ファイルすべて上書き・追加してください。
+GitHub: index.html / manifest.webmanifest / sw.js / icon.svg を上書き
