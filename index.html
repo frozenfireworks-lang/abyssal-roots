@@ -1290,11 +1290,139 @@ body{
  .loadoutSlotGrid{grid-template-columns:1fr}
 }
 
+
+/* v3.9.2 EXPEDITION DEBRIEF */
+.expeditionReportCard{
+ max-height:min(88vh,760px);
+ overflow-y:auto;
+}
+.expeditionResultLead{
+ margin:4px 0 10px;
+ color:#d8cddd;
+ line-height:1.55;
+}
+.expeditionOutcome{
+ padding:11px;
+ border:1px solid #5b4a65;
+ border-radius:11px;
+ background:linear-gradient(180deg,#19131e,#100c14);
+ text-align:center;
+}
+.expeditionOutcome.return{
+ border-color:#6cae83;
+ box-shadow:inset 0 0 24px rgba(92,180,120,.06);
+}
+.expeditionOutcome.death{
+ border-color:#a94f62;
+ box-shadow:inset 0 0 24px rgba(194,62,84,.07);
+}
+.expeditionOutcome b{
+ display:block;
+ color:#f7e7ae;
+ font-size:18px;
+ letter-spacing:.08em;
+}
+.expeditionOutcome small{
+ display:block;
+ margin-top:4px;
+ color:#cbbfd0;
+ font-size:9px;
+ line-height:1.5;
+}
+.expeditionMetricGrid{
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:5px;
+ margin:8px 0;
+}
+.expeditionMetric{
+ min-width:0;
+ padding:7px 4px;
+ border:1px solid #46394f;
+ border-radius:8px;
+ background:#110d15;
+ text-align:center;
+}
+.expeditionMetric b{
+ display:block;
+ overflow:hidden;
+ color:#f1e5f3;
+ font-size:13px;
+ white-space:nowrap;
+ text-overflow:ellipsis;
+}
+.expeditionMetric small{
+ display:block;
+ margin-top:2px;
+ color:#9f91a7;
+ font-size:7px;
+}
+.expeditionSection{
+ margin-top:7px;
+ padding:8px 9px;
+ border:1px solid #46394f;
+ border-radius:9px;
+ background:#120e16;
+ color:#d7cadb;
+ font-size:10px;
+ line-height:1.55;
+}
+.expeditionSection h3{
+ margin:0 0 5px;
+ color:#eadff0;
+ font-size:10px;
+}
+.expeditionPills{
+ display:flex;
+ flex-wrap:wrap;
+ gap:4px;
+}
+.expeditionPill{
+ display:inline-block;
+ padding:2px 6px;
+ border:1px solid #55445f;
+ border-radius:999px;
+ background:#0d0a11;
+ color:#d8ccd9;
+ font-size:8px;
+}
+.expeditionPill.good{
+ border-color:#557a60;
+ color:#aee0b9;
+}
+.expeditionPill.bad{
+ border-color:#814b57;
+ color:#eca2b1;
+}
+.expeditionHighlight{
+ margin:3px 0 0 15px;
+ padding:0;
+}
+.expeditionHighlight li{
+ margin:0 0 4px;
+}
+#lastReportBody{
+ padding:7px;
+}
+#lastReportBody .expeditionOutcome{
+ padding:8px;
+}
+#lastReportBody .expeditionOutcome b{
+ font-size:13px;
+}
+#lastReportBody .expeditionMetricGrid{
+ grid-template-columns:repeat(4,minmax(0,1fr));
+}
+@media(max-width:390px){
+ .expeditionMetricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #lastReportBody .expeditionMetricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.1 LIGHTHOUSE LOADOUT</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.2 EXPEDITION DEBRIEF</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -1335,7 +1463,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 灯台での次回装備編成</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 帰還・死亡後の探索結果</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -1429,7 +1557,7 @@ body{
           <li><b>1回行動するたびに1ターン進行</b>し、敵も動きます。</li>
           <li><b>階段 ▼</b> に進もうとすると確認が出ます。移動後は階層名・環境・目標が約6秒表示されますが、その間も操作できます。</li>
           <li><b>5階ごとに番人戦</b>があります。最初の20階には階ごとの目標もあります。</li>
-          <li><b>主人公のHPが0でその探索は終了</b>です。</li>
+          <li><b>主人公のHPが0でその探索は終了</b>です。帰還・死亡後には、撃破数・戦闘結果・持ち帰り・喪失をまとめた探索結果が表示されます。</li>
         </ul>
         <div class="helpNote">迷ったら「敵を1体ずつ処理」「荷物が増えたら整理」「危なくなったら帰還」を意識すると安定します。</div>
       </div>
@@ -1598,6 +1726,11 @@ body{
     <div id="hubSummary"></div>
     <div id="hubUpgrades"></div>
 
+    <details class="hubFold" id="lastReportPanel">
+      <summary id="lastReportSummary">前回の探索結果</summary>
+      <div id="lastReportBody"></div>
+    </details>
+
     <details class="hubFold" id="loadoutPanel" open>
       <summary id="loadoutSummary">出撃準備</summary>
       <div id="loadoutPlanner"></div>
@@ -1615,10 +1748,12 @@ body{
 </div>
 
 <div class="overlay hidden" id="gameOverOverlay">
-  <div class="card">
-    <h2>探索者は深淵に消えた</h2>
-    <p id="gameOverText"></p>
-    <button class="modalBtn" id="restartBtn">新しい探索者で再挑戦</button>
+  <div class="card expeditionReportCard">
+    <h2 id="expeditionResultTitle">探索結果</h2>
+    <p id="gameOverText" class="expeditionResultLead"></p>
+    <div id="expeditionResultBody"></div>
+    <button class="modalBtn" id="debriefHubBtn">灯台へ進む</button>
+    <button class="modalBtn hidden" id="restartBtn">新しい探索者で再挑戦</button>
   </div>
 </div>
 
@@ -2170,7 +2305,7 @@ function saveMeta(){
  if(state?.meta)localStorage.setItem("abyssalRootsMeta",JSON.stringify(state.meta));
 }
 function defaultMeta(){
- const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
+ const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
  meta.appearance=defaultAppearance();
  return meta;
 }
@@ -2305,6 +2440,183 @@ function applyMetaToFreshState(newState){
  return newState;
 }
 
+function createRunStats(meta){
+ return{
+  startShards:meta?.shards||0,
+  startTotalKills:meta?.totalKills||0,
+  startResearchPoints:meta?.research?.points||0,
+  startEventCount:meta?.eventHistory?.length||0,
+  startStashIds:(meta?.stash||[]).map(g=>g.id),
+  damageDealt:0,
+  damageTaken:0,
+  itemsFound:0,
+  gearFound:0,
+  trapsTriggered:0,
+  eventsResolved:0,
+  bossesDefeated:0,
+  startedAt:Date.now()
+ };
+}
+function ensureRunStats(){
+ if(!state.runStats)state.runStats=createRunStats(state.meta||defaultMeta());
+ return state.runStats;
+}
+function uniqueRunGear(){
+ return[...new Map(
+  [...allEquippedItems(),...state.inventory]
+   .filter(Boolean)
+   .map(g=>[g.id,g])
+ ).values()];
+}
+function newlyFoundRunGear(){
+ const stats=ensureRunStats();
+ const original=new Set(stats.startStashIds||[]);
+ return uniqueRunGear().filter(g=>!isStarterGear(g)&&!original.has(g.id));
+}
+function signedValue(value){
+ return`${value>0?"+":""}${value}`;
+}
+function formatReportDate(timestamp){
+ try{
+  return new Date(timestamp).toLocaleString("ja-JP",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"});
+ }catch(error){
+  return"";
+ }
+}
+function buildExpeditionReport(outcome,details={}){
+ const stats=ensureRunStats();
+ const combat=state.combatStats||{dodges:0,guards:0,breaks:0,crits:0};
+ const bank=details.bank||null;
+ const lostGear=outcome==="death"?newlyFoundRunGear().length:(bank?.leftBehind||0);
+ const report={
+  outcome,
+  timestamp:Date.now(),
+  floor:state.floor,
+  floorTitle:floorPlan().title,
+  biome:currentBiome().label,
+  level:state.level,
+  turns:state.turn,
+  kills:Math.max(0,(state.meta.totalKills||0)-(stats.startTotalKills||0)),
+  bosses:stats.bossesDefeated||0,
+  gold:state.gold||0,
+  damageDealt:stats.damageDealt||0,
+  damageTaken:stats.damageTaken||0,
+  itemsFound:stats.itemsFound||0,
+  gearFound:stats.gearFound||0,
+  traps:stats.trapsTriggered||0,
+  events:Math.max(stats.eventsResolved||0,(state.meta.eventHistory?.length||0)-(stats.startEventCount||0)),
+  dodges:combat.dodges||0,
+  guards:combat.guards||0,
+  breaks:combat.breaks||0,
+  crits:combat.crits||0,
+  shardDelta:(state.meta.shards||0)-(stats.startShards||0),
+  researchDelta:(state.meta.research?.points||0)-(stats.startResearchPoints||0),
+  source:details.source||"",
+  cause:details.cause||"",
+  newGear:bank?.newGear||0,
+  updatedGear:bank?.updatedGear||0,
+  scrapShards:bank?.scrapShards||0,
+  lostGear,
+  highlights:[]
+ };
+
+ if(report.bosses>0)report.highlights.push(`番人を${report.bosses}体撃破`);
+ if(report.dodges>0)report.highlights.push(`予兆攻撃を${report.dodges}回回避`);
+ if(report.breaks>0)report.highlights.push(`敵の攻撃態勢を${report.breaks}回崩した`);
+ if(report.crits>0)report.highlights.push(`会心を${report.crits}回発生`);
+ if(outcome==="return"&&report.newGear>0)report.highlights.push(`新しい装備を${report.newGear}個持ち帰った`);
+ if(outcome==="death"&&report.lostGear>0)report.highlights.push(`新規入手装備を${report.lostGear}個失った`);
+ if(!report.highlights.length)report.highlights.push("探索記録が灯台へ刻まれた");
+
+ return report;
+}
+function expeditionReportHtml(report,compact=false){
+ if(!report)return'<p class="note">まだ完了した探索はありません。</p>';
+ const returned=report.outcome==="return";
+ const title=returned?"帰還成功":"探索失敗";
+ const subtitle=returned
+  ?`${report.source||"深淵"}から戦利品を持ち帰った。`
+  :(report.cause||"探索者は深淵に倒れた。");
+ const retained=returned
+  ?[
+    `<span class="expeditionPill good">新規装備 ${report.newGear}</span>`,
+    `<span class="expeditionPill good">装備更新 ${report.updatedGear}</span>`,
+    `<span class="expeditionPill good">素材変換 +${report.scrapShards}欠片</span>`,
+    report.lostGear?`<span class="expeditionPill bad">倉庫満杯で残置 ${report.lostGear}</span>`:""
+   ].filter(Boolean).join("")
+  :[
+    `<span class="expeditionPill good">倉庫装備は維持</span>`,
+    `<span class="expeditionPill good">研究・恒久成長は維持</span>`,
+    report.lostGear?`<span class="expeditionPill bad">新規装備喪失 ${report.lostGear}</span>`:
+      `<span class="expeditionPill">新規装備の喪失なし</span>`
+   ].join("");
+
+ return`
+  <div class="expeditionOutcome ${report.outcome}">
+   <b>${title}・第${report.floor}層</b>
+   <small>${report.floorTitle} / ${report.biome}<br>${subtitle}${compact?`<br>${formatReportDate(report.timestamp)}`:""}</small>
+  </div>
+  <div class="expeditionMetricGrid">
+   <div class="expeditionMetric"><b>${report.turns}</b><small>経過ターン</small></div>
+   <div class="expeditionMetric"><b>${report.kills}</b><small>撃破</small></div>
+   <div class="expeditionMetric"><b>Lv${report.level}</b><small>到達レベル</small></div>
+   <div class="expeditionMetric"><b>${report.gold}G</b><small>探索内所持金</small></div>
+  </div>
+  <div class="expeditionSection">
+   <h3>戦闘記録</h3>
+   <div class="expeditionPills">
+    <span class="expeditionPill">与ダメージ ${report.damageDealt}</span>
+    <span class="expeditionPill">被ダメージ ${report.damageTaken}</span>
+    <span class="expeditionPill">回避 ${report.dodges}</span>
+    <span class="expeditionPill">構え ${report.guards}</span>
+    <span class="expeditionPill">崩し ${report.breaks}</span>
+    <span class="expeditionPill">会心 ${report.crits}</span>
+   </div>
+  </div>
+  <div class="expeditionSection">
+   <h3>${returned?"持ち帰った成果":"残ったもの・失ったもの"}</h3>
+   <div class="expeditionPills">${retained}</div>
+   <div class="expeditionPills" style="margin-top:5px">
+    <span class="expeditionPill ${report.shardDelta>=0?"good":"bad"}">欠片 ${signedValue(report.shardDelta)}</span>
+    <span class="expeditionPill ${report.researchDelta>=0?"good":"bad"}">研究点 ${signedValue(report.researchDelta)}</span>
+    <span class="expeditionPill">拾得 ${report.itemsFound}</span>
+    <span class="expeditionPill">装備発見 ${report.gearFound}</span>
+    <span class="expeditionPill">事件 ${report.events}</span>
+    <span class="expeditionPill">罠作動 ${report.traps}</span>
+   </div>
+  </div>
+  ${compact?"":`<div class="expeditionSection">
+   <h3>今回の記録</h3>
+   <ul class="expeditionHighlight">${report.highlights.map(item=>`<li>${item}</li>`).join("")}</ul>
+  </div>`}`;
+}
+function showExpeditionReport(report){
+ $("expeditionResultTitle").textContent=report.outcome==="return"?"灯台への帰還":"探索者は深淵に消えた";
+ $("gameOverText").textContent=report.outcome==="return"
+  ?"今回の探索成果を確認してから、灯台で次の装備を整えます。"
+  :"失ったものと残った成長を確認し、灯台から次の探索へ備えます。";
+ $("expeditionResultBody").innerHTML=expeditionReportHtml(report,false);
+ $("gameOverOverlay").classList.remove("hidden");
+}
+function openLighthouseAfterDebrief(){
+ $("gameOverOverlay").classList.add("hidden");
+ renderHub();
+ $("returnToAbyssBtn").classList.add("hidden");
+ $("closeHub").classList.add("hidden");
+ $("hubOverlay").classList.remove("hidden");
+}
+function finishExpeditionDeath(cause,killer=null){
+ if(state.gameOver)return;
+ if(killer)maybePromoteKiller(killer);
+ state.gameOver=true;
+ state.expeditionEnded=true;
+ state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
+ const report=buildExpeditionReport("death",{cause});
+ state.meta.lastExpeditionReport=report;
+ saveMeta();
+ localStorage.removeItem("abyssalRootsSoloV4Save");
+ showExpeditionReport(report);
+}
 function freshState(){
  const newState={
   version:4,seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,
@@ -2312,9 +2624,11 @@ function freshState(){
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",combatStats:{dodges:0,guards:0,breaks:0,crits:0},
   map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
- return applyMetaToFreshState(newState);
+ const prepared=applyMetaToFreshState(newState);
+ prepared.runStats=createRunStats(prepared.meta);
+ return prepared;
 }
 function carveRoom(map,x,y,w,h){
  for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)map[yy][xx]=1;
@@ -2408,6 +2722,7 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
   addLog("骨の加護が致命傷を防いだ！");
  }
  state.hero.hp=Math.max(0,state.hero.hp-dmg);
+ ensureRunStats().damageTaken+=dmg;
  if(dmg>0){
   gainTraining("endurance",Math.min(3,dmg));
   spawnHeroEffect(options.trap?"trap":"hurt");
@@ -2519,10 +2834,7 @@ function updateEnvironment(){
   }
  }
  if(state.hero.hp<=0&&!state.gameOver){
-  state.gameOver=true;
-  localStorage.removeItem("abyssalRootsSoloV4Save");
-  $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
-  $("gameOverOverlay").classList.remove("hidden");
+  finishExpeditionDeath("燃える油に焼かれた。");
  }
 }
 function throwBomb(){
@@ -3102,6 +3414,7 @@ function triggerEvent(){
    const before=eventStateSnapshot();
    const previousLog=state.log[0];
    choice.run();
+   ensureRunStats().eventsResolved++;
    const narrative=state.log[0]!==previousLog?state.log[0]:"迷宮は静かに選択を受け入れた。";
    const after=eventStateSnapshot();
    const changes=describeEventChanges(before,after);
@@ -3904,6 +4217,7 @@ function damageEnemy(e,damage,label=""){
  const guardMul=(e.type==="skeleton"&&e.guarding)?0.45:1;
  damage=applyTraitDamage(damage,e)*biomeDamageModifier(equippedElement())*tagDamageMultiplier(e)*lightDamageMultiplier(e);
  const dmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul*(mutation()?.damageMul||1)));
+ ensureRunStats().damageDealt+=dmg;
  e.hp-=dmg;
  const wasCritical=String(label).includes("会心");
  spawnAttackEffect(e.x,e.y,label);
@@ -3985,6 +4299,7 @@ function defeatEnemy(e){
   explodeBarrel(ghost);
  }
  if(wasBoss){
+  ensureRunStats().bossesDefeated++;
   state.bossDefeated=true;
   state.items.push({x:e.x,y:e.y,type:"gear",gear:rollGear(e.level||floorTargetLevel())});
   state.items.push({x:e.x,y:e.y,type:"purify",name:"解呪の灰"});
@@ -4062,10 +4377,7 @@ function bomberExplosion(e){
  }
  state.enemies=state.enemies.filter(x=>x!==e);
  if(state.hero.hp<=0){
-  maybePromoteKiller(e);
-  state.gameOver=true;saveMeta();localStorage.removeItem("abyssalRootsSoloV4Save");
-  $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
-  $("gameOverOverlay").classList.remove("hidden");
+  finishExpeditionDeath(`${e.name}の爆発に巻き込まれた。`,e);
  }
 }
 
@@ -4269,35 +4581,33 @@ function enemyAttack(e,mult=1,label="攻撃"){
  }
  addLog(e.name+"の"+label+"。"+dmg+" ダメージ。");
  if(state.hero.hp<=0){
-  maybePromoteKiller(e);
   addLog("探索者は倒れた。");
-  state.gameOver=true;
-  localStorage.removeItem("abyssalRootsSoloV4Save");
-  $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
-  $("gameOverOverlay").classList.remove("hidden");
+  finishExpeditionDeath(`${e.name}の${label}に倒れた。`,e);
  }
 }
 function pickup(){
  const item=itemAt(state.player.x,state.player.y);if(!item)return;
  state.items=state.items.filter(i=>i!==item);
- if(item.type==="food"){
+ if(item.type==="food"){ensureRunStats().itemsFound++;
   spawnPickupEffect("food");
   state.provisions=(state.provisions||0)+40;
   addLog("乾燥肉を携行糧へ加えた。充足消費を40手分肩代わりする。");
   return
  }
- if(item.type==="potion"){spawnPickupEffect("potion");state.consumables.potion++;addLog("治癒薬を拾った。");return}
- if(item.type==="identify"){spawnPickupEffect("identify");state.consumables.identify++;addLog("鑑定紙片を拾った。");return}
- if(item.type==="purify"){spawnPickupEffect("purify");state.consumables.purify++;addLog("解呪の灰を拾った。");return}
- if(item.type==="bomb"){spawnPickupEffect("bomb");state.consumables.bomb=(state.consumables.bomb||0)+1;addLog("火炎壺を拾った。");return}
- if(item.type==="retreat"){spawnPickupEffect("retreat");state.consumables.retreat=(state.consumables.retreat||0)+1;addLog("帰還標を拾った。");return}
- if(item.type==="oil"){spawnPickupEffect("oil");state.consumables.oil=(state.consumables.oil||0)+1;addLog("灯油を拾った。");return}
+ if(item.type==="potion"){ensureRunStats().itemsFound++;spawnPickupEffect("potion");state.consumables.potion++;addLog("治癒薬を拾った。");return}
+ if(item.type==="identify"){ensureRunStats().itemsFound++;spawnPickupEffect("identify");state.consumables.identify++;addLog("鑑定紙片を拾った。");return}
+ if(item.type==="purify"){ensureRunStats().itemsFound++;spawnPickupEffect("purify");state.consumables.purify++;addLog("解呪の灰を拾った。");return}
+ if(item.type==="bomb"){ensureRunStats().itemsFound++;spawnPickupEffect("bomb");state.consumables.bomb=(state.consumables.bomb||0)+1;addLog("火炎壺を拾った。");return}
+ if(item.type==="retreat"){ensureRunStats().itemsFound++;spawnPickupEffect("retreat");state.consumables.retreat=(state.consumables.retreat||0)+1;addLog("帰還標を拾った。");return}
+ if(item.type==="oil"){ensureRunStats().itemsFound++;spawnPickupEffect("oil");state.consumables.oil=(state.consumables.oil||0)+1;addLog("灯油を拾った。");return}
  if(state.inventory.length>=inventoryCapacity()){
   addLog("荷物が満杯だ。装備を足元へ残し、整理画面を開いた。");
   state.items.push(item);
   setTimeout(()=>{renderInventory();$("inventoryOverlay").classList.remove("hidden")},0);
   return
  }
+ ensureRunStats().itemsFound++;
+ ensureRunStats().gearFound++;
  spawnPickupEffect("gear");
  if(typeof item.gear.locked!=="boolean")item.gear.locked=(rarityOrder[item.gear.rarity]||0)>=2;
  state.inventory.push(item.gear);
@@ -4305,16 +4615,14 @@ function pickup(){
 }
 function triggerTrap(){
  const t=activeTrapAt(state.player.x,state.player.y);if(!t)return;
+ ensureRunStats().trapsTriggered++;
  t.revealed=true;t.spent=true;gainTraining("perception",2);gainObservation("trap",1);
  spawnTileEffect(state.player.x,state.player.y,"trap",18);
  const dmg=applyHeroDamage(4+state.floor*2,null,{trap:true});
  addLog("罠が作動！ "+dmg+" ダメージ。");
  if(state.hero.hp<=0){
   addLog("探索者は罠で倒れた。");
-  state.gameOver=true;
-  localStorage.removeItem("abyssalRootsSoloV4Save");
-  $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
-  $("gameOverOverlay").classList.remove("hidden");
+  finishExpeditionDeath("迷宮の罠に倒れた。");
  }
 }
 function endTurn(){
@@ -4336,9 +4644,8 @@ function endTurn(){
  if(state.hunger===0&&state.turn%2===0){
   state.hero.hp=Math.max(0,state.hero.hp-2);spawnHeroEffect("hurt");addLog("枯渇で身体が削られ、HPを2失った。");
   if(state.hero.hp<=0){
-   state.gameOver=true;saveMeta();localStorage.removeItem("abyssalRootsSoloV4Save");
-   $("gameOverText").textContent=`到達：第${state.floor}層 / レベル${state.level} / ${state.gold}G`;
-   $("gameOverOverlay").classList.remove("hidden");render();return;
+   finishExpeditionDeath("充足が尽き、枯渇によって倒れた。");
+   render();return;
   }
  }
  updateStatuses();
@@ -4934,6 +5241,7 @@ function bankCurrentRun(){
  ).values()];
 
  const stashIndexById=new Map(state.meta.stash.map((g,index)=>[g.id,index]));
+ let newGear=0,updatedGear=0,leftBehind=0;
  for(const g of candidates){
   const copy=cloneGear(g);
   copy.cursed=false;
@@ -4942,10 +5250,15 @@ function bankCurrentRun(){
   if(stashIndexById.has(copy.id)){
    const index=stashIndexById.get(copy.id);
    state.meta.stash[index]=copy;
+   updatedGear++;
   }else{
-   if(state.meta.stash.length>=20)break;
+   if(state.meta.stash.length>=20){
+    leftBehind++;
+    continue;
+   }
    stashIndexById.set(copy.id,state.meta.stash.length);
    state.meta.stash.push(copy);
+   newGear++;
   }
 
   const selectedSlot=selectedLoadoutSlot(state.meta,copy.id);
@@ -4959,6 +5272,13 @@ function bankCurrentRun(){
  }
  state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
  saveMeta();
+ return{
+  newGear,
+  updatedGear,
+  leftBehind,
+  scrapShards:recoveredShards,
+  candidates:candidates.length
+ };
 }
 function returnToLighthouse(){
  const source=currentReturnSource();
@@ -4970,20 +5290,20 @@ function returnToLighthouse(){
  if(source.id==="marker"){
   state.consumables.retreat=Math.max(0,(state.consumables.retreat||0)-1);
  }
- bankCurrentRun();
+ const bank=bankCurrentRun();
  state.expeditionEnded=true;
+ const report=buildExpeditionReport("return",{source:source.label,bank});
+ state.meta.lastExpeditionReport=report;
  state.hero.hp=state.hero.maxHp;
  state.hunger=effectiveMaxHunger();
  state.provisions=0;
  state.hungerStageId="fed";
  state.hungerRecoveryBuffer=0;
  state.hero.stamina=effectiveMaxStamina();
+ saveMeta();
  localStorage.removeItem("abyssalRootsSoloV4Save");
- renderHub();
- $("returnToAbyssBtn").classList.add("hidden");
- $("closeHub").classList.add("hidden");
- $("hubOverlay").classList.remove("hidden");
  addLog(`${source.label}から灯台へ帰還した。探索は終了し、HP・気力・充足が完全回復した。`);
+ showExpeditionReport(report);
 }
 function stashSalvageValue(g){
  return{common:1,magic:2,rare:4,legendary:8}[g?.rarity]||1;
@@ -5136,6 +5456,13 @@ function renderHub(){
  $("adaptBtn").textContent=(m.adaptationPoints||0)>0
   ?`深淵適応を選ぶ（${m.adaptationPoints}点）`
   :"深淵適応を確認";
+ const lastReport=m.lastExpeditionReport;
+ $("lastReportSummary").textContent=lastReport
+  ?`前回の探索結果・${lastReport.outcome==="return"?"帰還":"死亡"} 第${lastReport.floor}層`
+  :"前回の探索結果";
+ $("lastReportBody").innerHTML=lastReport
+  ?expeditionReportHtml(lastReport,true)
+  :'<p class="note">完了した探索はまだありません。</p>';
  $("hubSummary").innerHTML=`
   <div class="itemRow">
    <div class="top"><span>探索記録</span><span>欠片 ${m.shards}</span></div>
@@ -5331,6 +5658,7 @@ function loadGame(){
   if(typeof state.meta.upgrades.supply!=="number")state.meta.upgrades.supply=0;
   if(typeof state.meta.heirloom==="undefined")state.meta.heirloom=null;
   ensureMetaLoadouts(state.meta);
+  if(typeof state.meta.lastExpeditionReport==="undefined")state.meta.lastExpeditionReport=null;
   if(typeof state.meta.nemesis==="undefined")state.meta.nemesis=null;
   if(!state.meta.nemesisHistory)state.meta.nemesisHistory=[];
   if(!state.meta.usage)state.meta.usage=emptyUsage();
@@ -5378,6 +5706,7 @@ function loadGame(){
   if(typeof state.fieldForgeDef!=="number")state.fieldForgeDef=0;
   if(typeof state.inventorySort!=="string")state.inventorySort="score";
   if(!state.combatStats)state.combatStats={dodges:0,guards:0,breaks:0,crits:0};
+  if(!state.runStats)state.runStats=createRunStats(state.meta);
   for(const enemy of state.enemies||[]){
    if(!Array.isArray(enemy.intentCells))enemy.intentCells=[];
    if(enemy.intent&&!enemy.intentTarget)enemy.intentTarget={x:state.player.x,y:state.player.y};
@@ -6288,6 +6617,7 @@ function startNew(){
   state=freshState();
   $("titleOverlay").classList.add("hidden");
   $("gameOverOverlay").classList.add("hidden");
+  $("expeditionResultBody").innerHTML="";
   $("hubOverlay").classList.add("hidden");
   $("eventOverlay").classList.add("hidden");
   $("inspectOverlay").classList.add("hidden");
@@ -6298,7 +6628,7 @@ function startNew(){
   alert("新しい探索の初期化に失敗しました。ページを再読み込みしてください。");
  }
 }
-$("newGameBtn").onclick=event=>{event.preventDefault();ensureAudio();startAmbient();startNew()};$("restartBtn").onclick=startNew;document.querySelectorAll(".starterBtn").forEach(b=>{
+$("newGameBtn").onclick=event=>{event.preventDefault();ensureAudio();startAmbient();startNew()};$("restartBtn").onclick=startNew;$("debriefHubBtn").onclick=openLighthouseAfterDebrief;document.querySelectorAll(".starterBtn").forEach(b=>{
  b.addEventListener("click",ev=>{
   ev.preventDefault();
   ev.stopPropagation();
