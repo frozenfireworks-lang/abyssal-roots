@@ -124,7 +124,7 @@ html,body{overscroll-behavior:none}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 1.0 BUILDS</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 1.1 MAZE REBUILD</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -157,7 +157,7 @@ html,body{overscroll-behavior:none}
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 才能ビルド × 属性反応</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 大型迷宮 × 隠し通路</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -207,7 +207,7 @@ html,body{overscroll-behavior:none}
     <p>
       移動・待機・スキルを使うたびに1ターン進み、敵も行動します。方向入力は、武器の射程内に敵がいれば攻撃、いなければ移動です。攻撃にはスタミナを使い、敵の赤い予兆は次のターンに実行されます。
       予兆を見て、退く・構える・先に倒すを選んでください。剣は軽快、槍は間合い、弓は近距離不可、杖は高消費の範囲攻撃です。階段 <b style="color:#e1b85b">▼</b> に乗ると次の階へ進みます。
-      未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。
+      未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。迷宮は大型化され、探索スキルで隠し通路を発見できます。⇵はショートカットです。
     </p>
     <p>記号：<b>@</b>主人公 / <b>S</b>盾骸兵 / <b>W</b>穴獣 / <b>M</b>骨術師 / <b>B</b>爆ぜ虫 / <b>!</b>装備 / <b>◇</b>食料 / <b>^</b>罠</p>
     <button class="modalBtn" id="closeHelp">閉じる</button>
@@ -224,7 +224,7 @@ html,body{overscroll-behavior:none}
 
 <script>
 "use strict";
-const COLS=17, ROWS=21, TILE=22;
+const COLS=35, ROWS=39, VIEW_COLS=17, VIEW_ROWS=21, TILE=22;
 const canvas=document.getElementById("game"), ctx=canvas.getContext("2d");
 const $=id=>document.getElementById(id);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -281,7 +281,7 @@ function freshState(){
   hunger:100,maxHunger:100,crit:.08,weapon:null,armor:null,inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1},
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[]},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",
-  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,
+  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,
   player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false
  };
 }
@@ -491,45 +491,103 @@ function eliteColor(e){
  return e.elite?"#ffd36b":null;
 }
 
+
+function addSecretsAndShortcuts(){
+ state.secretWalls=[];state.shortcuts=[];
+ const candidates=[];
+ for(let y=2;y<ROWS-2;y++)for(let x=2;x<COLS-2;x++){
+  if(tile(x,y)!==0)continue;
+  const horizontal=tile(x-1,y)===1&&tile(x+1,y)===1;
+  const vertical=tile(x,y-1)===1&&tile(x,y+1)===1;
+  if(horizontal||vertical)candidates.push({x,y});
+ }
+ candidates.sort(()=>rng()-.5);
+ for(const p of candidates.slice(0,Math.min(4,1+Math.floor(state.floor/4)))){
+  state.secretWalls.push({x:p.x,y:p.y,revealed:false});
+ }
+ const rooms=[...state.rooms].sort(()=>rng()-.5);
+ for(let i=0;i<Math.min(3,Math.floor(rooms.length/5));i++){
+  const a=rooms[i],b=rooms[rooms.length-1-i];
+  if(a&&b&&a!==b)state.shortcuts.push({ax:a.cx,ay:a.cy,bx:b.cx,by:b.cy,used:false});
+ }
+}
+function revealSecretNearPlayer(){
+ let found=0;
+ for(const w of state.secretWalls){
+  if(!w.revealed&&Math.abs(w.x-state.player.x)+Math.abs(w.y-state.player.y)<=1){
+   w.revealed=true;state.map[w.y][w.x]=1;found++;
+  }
+ }
+ if(found)addLog("壁の継ぎ目が崩れ、隠し通路が現れた。");
+ return found;
+}
+function useShortcutIfPresent(){
+ const s=state.shortcuts.find(q=>(q.ax===state.player.x&&q.ay===state.player.y)||(q.bx===state.player.x&&q.by===state.player.y));
+ if(!s)return false;
+ const atA=s.ax===state.player.x&&s.ay===state.player.y;
+ state.player={x:atA?s.bx:s.ax,y:atA?s.by:s.ay};
+ s.used=true;addLog("古い昇降路を使い、迷宮を大きく横切った。");
+ updateVision();return true;
+}
+function cameraOrigin(){
+ return{
+  x:clamp(state.player.x-Math.floor(VIEW_COLS/2),0,COLS-VIEW_COLS),
+  y:clamp(state.player.y-Math.floor(VIEW_ROWS/2),0,ROWS-VIEW_ROWS)
+ };
+}
+
 function generateFloor(){
  chooseFloorMutation();
  state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
  state.rooms=[];
 
- // 部屋数ではなく試行回数に上限を設ける。
- // 旧処理は配置失敗時にカウンターを戻していたため、
- // 条件次第で永久ループになり階層移動時にフリーズしていた。
- const targetRooms=7;
- const maxRoomAttempts=120;
+ // 深度に応じて迷宮規模を拡張する。
+ const targetRooms=Math.min(18,10+Math.floor(state.floor/3));
+ const maxRoomAttempts=260;
  let attempts=0;
  while(state.rooms.length<targetRooms && attempts<maxRoomAttempts){
   attempts++;
-  const w=rint(3,6),h=rint(3,5),x=rint(1,COLS-w-1),y=rint(1,ROWS-h-1);
-  const room={x,y,w,h,cx:x+Math.floor(w/2),cy:y+Math.floor(h/2)};
-  const overlaps=state.rooms.some(r=>x<r.x+r.w+1&&x+w+1>r.x&&y<r.y+r.h+1&&y+h+1>r.y);
+  const large=rng()<.18;
+  const w=large?rint(7,10):rint(4,7);
+  const h=large?rint(6,9):rint(4,7);
+  const x=rint(1,COLS-w-2),y=rint(1,ROWS-h-2);
+  const room={x,y,w,h,cx:x+Math.floor(w/2),cy:y+Math.floor(h/2),large};
+  const overlaps=state.rooms.some(r=>x<r.x+r.w+2&&x+w+2>r.x&&y<r.y+r.h+2&&y+h+2>r.y);
   if(overlaps)continue;
   carveRoom(state.map,x,y,w,h);
-  if(state.rooms.length){
-   const prev=state.rooms[state.rooms.length-1];
-   carveLine(state.map,{x:prev.cx,y:prev.cy},{x:room.cx,y:room.cy});
-  }
   state.rooms.push(room);
  }
 
- // 配置運が悪くても必ず遊べる固定構造へフォールバックする。
+ // 全部屋を最近傍接続し、追加接続でループを作る。
+ for(let i=1;i<state.rooms.length;i++){
+  const room=state.rooms[i];
+  let nearest=state.rooms[0],best=9999;
+  for(let j=0;j<i;j++){
+   const other=state.rooms[j];
+   const d=Math.abs(room.cx-other.cx)+Math.abs(room.cy-other.cy);
+   if(d<best){best=d;nearest=other}
+  }
+  carveLine(state.map,{x:nearest.cx,y:nearest.cy},{x:room.cx,y:room.cy});
+ }
+ const extraLinks=Math.max(3,Math.floor(state.rooms.length/3));
+ for(let i=0;i<extraLinks;i++){
+  const a=choice(state.rooms),b=choice(state.rooms);
+  if(a!==b)carveLine(state.map,{x:a.cx,y:a.cy},{x:b.cx,y:b.cy});
+ }
+
  if(state.rooms.length<2){
   state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
-  carveRoom(state.map,2,2,5,5);
-  carveRoom(state.map,10,14,5,5);
-  carveLine(state.map,{x:4,y:4},{x:12,y:16});
+  carveRoom(state.map,2,2,7,7);
+  carveRoom(state.map,COLS-10,ROWS-10,7,7);
+  carveLine(state.map,{x:5,y:5},{x:COLS-7,y:ROWS-7});
   state.rooms=[
-   {x:2,y:2,w:5,h:5,cx:4,cy:4},
-   {x:10,y:14,w:5,h:5,cx:12,cy:16}
+   {x:2,y:2,w:7,h:7,cx:5,cy:5},
+   {x:COLS-10,y:ROWS-10,w:7,h:7,cx:COLS-7,cy:ROWS-7}
   ];
  }
  const start=state.rooms[0],end=state.rooms[state.rooms.length-1];
  state.player={x:start.cx,y:start.cy};state.stairs={x:end.cx,y:end.cy};
- state.enemies=[];state.items=[];state.traps=[];state.specialTiles=[];state.environment=[];state.visited={};state.visible={};state.bossDefeated=false;
+ state.enemies=[];state.items=[];state.traps=[];state.specialTiles=[];state.environment=[];state.secretWalls=[];state.shortcuts=[];state.visited={};state.visible={};state.bossDefeated=false;
  const enemyCount=5+state.floor*2;
  for(let i=0;i<enemyCount;i++){
   const p=randomFloorCell(6);
@@ -571,6 +629,7 @@ function generateFloor(){
   state.traps.push({x:p.x,y:p.y,revealed:false,spent:false});
  }
  addSpecialRoom();
+ addSecretsAndShortcuts();
  addEnvironmentObjects();
  spawnFloorBoss();
  updateVision();
@@ -806,7 +865,7 @@ function move(dx,dy){
  const nx=state.player.x+dx,ny=state.player.y+dy;
  if(tile(nx,ny)!==1){addLog("壁が行く手を塞いでいる。");return}
  state.player.x=nx;state.player.y=ny;state.lastAction="move";
- pickup();triggerTrap();triggerSpecialTile();
+ pickup();triggerTrap();triggerSpecialTile();useShortcutIfPresent();
  if(state.gameOver){render();return}
  if(nx===state.stairs.x&&ny===state.stairs.y){
   if(state.floor%5===0&&!state.bossDefeated){addLog("番人を倒さなければ先へ進めない。");endTurn();return}
@@ -1092,7 +1151,7 @@ function useSkill(name){
   if(!spendStamina(2))return;
   state.lastAction="search";
   let found=0;state.traps.forEach(t=>{if(!t.spent&&Math.abs(t.x-state.player.x)+Math.abs(t.y-state.player.y)<=5){t.revealed=true;found++}});
-  state.cooldowns.search=7;addLog(found?`周囲の罠を ${found} 個見破った。`:"怪しい仕掛けは見つからない。");
+  const secrets=revealSecretNearPlayer();state.cooldowns.search=7;addLog(found||secrets?`周囲を調べ、罠 ${found}・隠し通路 ${secrets} を発見した。`:"怪しい仕掛けは見つからない。");
  }
  endTurn();
 }
@@ -1209,6 +1268,8 @@ function loadGame(){
   if(!state.environment)state.environment=[];
   if(typeof state.floorMutation==="undefined")state.floorMutation=null;
   if(!state.hero.talents)state.hero.talents=[];
+  if(!state.secretWalls)state.secretWalls=[];
+  if(!state.shortcuts)state.shortcuts=[];
   for(const g of [...state.inventory,state.weapon,state.armor].filter(Boolean)){if(typeof g.element==="undefined")g.element=null;if(typeof g.trait==="undefined")g.trait=null;if(typeof g.kills!=="number")g.kills=0;}
   for(const g of [...state.inventory,state.weapon,state.armor].filter(Boolean)){
    if(typeof g.identified!=="boolean")g.identified=true;
@@ -1240,15 +1301,32 @@ function renderHero(){
 function renderLog(){$("log").innerHTML=state?state.log.map((x,i)=>`<div style="opacity:${1-i*.16}">› ${x}</div>`).join(""):""}
 function draw(){
  ctx.fillStyle="#050407";ctx.fillRect(0,0,canvas.width,canvas.height);
- for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
-  const k=key(x,y),vis=state.visible[k],seen=state.visited[k];
-  if(!seen){ctx.fillStyle="#050407";ctx.fillRect(x*TILE,y*TILE,TILE,TILE);continue}
-  if(tile(x,y)===0){ctx.fillStyle=vis?"#211b28":"#100d14";ctx.fillRect(x*TILE,y*TILE,TILE,TILE);ctx.strokeStyle=vis?"#352b3d":"#17121b";ctx.strokeRect(x*TILE+.5,y*TILE+.5,TILE-1,TILE-1)}
-  else{ctx.fillStyle=vis?((x+y)%2?"#17131c":"#1c1722"):"#0d0a10";ctx.fillRect(x*TILE,y*TILE,TILE,TILE)}
+ const cam=cameraOrigin();
+ const sx=x=>(x-cam.x)*TILE,sy=y=>(y-cam.y)*TILE;
+ for(let vy=0;vy<VIEW_ROWS;vy++)for(let vx=0;vx<VIEW_COLS;vx++){
+  const x=cam.x+vx,y=cam.y+vy,k=key(x,y),vis=state.visible[k],seen=state.visited[k];
+  if(!seen){ctx.fillStyle="#050407";ctx.fillRect(vx*TILE,vy*TILE,TILE,TILE);continue}
+  if(tile(x,y)===0){
+   ctx.fillStyle=vis?"#211b28":"#100d14";ctx.fillRect(vx*TILE,vy*TILE,TILE,TILE);
+   ctx.strokeStyle=vis?"#352b3d":"#17121b";ctx.strokeRect(vx*TILE+.5,vy*TILE+.5,TILE-1,TILE-1)
+  }else{
+   ctx.fillStyle=vis?((x+y)%2?"#17131c":"#1c1722"):"#0d0a10";
+   ctx.fillRect(vx*TILE,vy*TILE,TILE,TILE)
+  }
  }
- const drawText=(t,x,y,color,size=15)=>{ctx.font=`700 ${size}px -apple-system`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle=color;ctx.fillText(t,x*TILE+TILE/2,y*TILE+TILE/2+1)};
+ const inView=(x,y)=>x>=cam.x&&x<cam.x+VIEW_COLS&&y>=cam.y&&y<cam.y+VIEW_ROWS;
+ const drawText=(t,x,y,color,size=15)=>{
+  if(!inView(x,y))return;
+  ctx.font=`700 ${size}px -apple-system`;ctx.textAlign="center";ctx.textBaseline="middle";
+  ctx.fillStyle=color;ctx.fillText(t,sx(x)+TILE/2,sy(y)+TILE/2+1)
+ };
  if(state.visible[key(state.stairs.x,state.stairs.y)])drawText("▼",state.stairs.x,state.stairs.y,"#e1b85b",17);
  state.traps.forEach(t=>{if(t.revealed&&!t.spent&&state.visible[key(t.x,t.y)])drawText("^",t.x,t.y,"#d86171",16)});
+ state.secretWalls.forEach(w=>{if(w.revealed&&state.visible[key(w.x,w.y)])drawText("·",w.x,w.y,"#bfaad0",14)});
+ state.shortcuts.forEach(q=>{
+  if(state.visible[key(q.ax,q.ay)])drawText("⇵",q.ax,q.ay,"#89d1c0",15);
+  if(state.visible[key(q.bx,q.by)])drawText("⇵",q.bx,q.by,"#89d1c0",15);
+ });
  state.specialTiles.forEach(t=>{if(state.visible[key(t.x,t.y)]){
   const symbol={shrine:"†",treasure:"□",flood:"≈",collapse:"×"}[t.type];
   const color={shrine:"#f3d67e",treasure:"#e1b85b",flood:"#71a9d8",collapse:"#b88c72"}[t.type];
@@ -1268,8 +1346,11 @@ function draw(){
   const symbol={skeleton:"S",warg:"W",mage:"M",bomber:"B",warden:"Ω"}[e.type]||"?";
   const baseColor={skeleton:"#d8d0df",warg:"#d86171",mage:"#9f8cff",bomber:"#ffb24d",warden:"#f2d06b"}[e.type]||"#fff";
   drawText(symbol,e.x,e.y,e.intent?"#ff5368":(eliteColor(e)||baseColor),15);
-  if(e.intent){ctx.strokeStyle="#ff5368";ctx.lineWidth=2;ctx.strokeRect(e.x*TILE+2,e.y*TILE+2,TILE-4,TILE-4)}
-  ctx.fillStyle="#25080d";ctx.fillRect(e.x*TILE+3,e.y*TILE+2,TILE-6,3);ctx.fillStyle="#cf5163";ctx.fillRect(e.x*TILE+3,e.y*TILE+2,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
+  if(e.intent&&inView(e.x,e.y)){ctx.strokeStyle="#ff5368";ctx.lineWidth=2;ctx.strokeRect(sx(e.x)+2,sy(e.y)+2,TILE-4,TILE-4)}
+  if(inView(e.x,e.y)){
+   ctx.fillStyle="#25080d";ctx.fillRect(sx(e.x)+3,sy(e.y)+2,TILE-6,3);
+   ctx.fillStyle="#cf5163";ctx.fillRect(sx(e.x)+3,sy(e.y)+2,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
+  }
  }});
  drawText("@",state.player.x,state.player.y,"#f3d67e",17);
 }
