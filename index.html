@@ -195,11 +195,18 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
   overflow:hidden;
 }
 
+
+.tacticalNote{font-size:11px;color:#c8b9d2;line-height:1.55}
+.statusTag{
+ display:inline-block;margin:2px 3px 2px 0;padding:2px 5px;border-radius:999px;
+ background:#2a2032;border:1px solid #5e4b69;font-size:9px
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 2.0.2 STABLE VISUAL</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 2.1.1 NEW RUN FIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -225,14 +232,14 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
 <div id="footerBtns">
   <button class="miniBtn" id="inventoryBtn">装備・荷物</button>
   <button class="miniBtn" id="saveBtn">保存</button>
-  <button class="miniBtn" id="helpBtn">遊び方</button><button class="miniBtn" id="soundBtn">音ON</button><button class="miniBtn" id="hubBtn">帰還</button>
+  <button class="miniBtn" id="helpBtn">遊び方</button><button class="miniBtn" id="soundBtn">音ON</button><button class="miniBtn" id="hubBtn">帰還</button><button class="miniBtn" id="rangeBtn">射程OFF</button>
 </div>
 </div>
 
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 安定描画 × 高精細ピクセル</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 攻撃予測 × タップ調査</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -282,7 +289,7 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
     <p>
       移動・待機・スキルを使うたびに1ターン進み、敵も行動します。方向入力は、武器の射程内に敵がいれば攻撃、いなければ移動です。攻撃にはスタミナを使い、敵の赤い予兆は次のターンに実行されます。
       予兆を見て、退く・構える・先に倒すを選んでください。剣は軽快、槍は間合い、弓は近距離不可、杖は高消費の範囲攻撃です。階段 <b style="color:#e1b85b">▼</b> に乗ると次の階へ進みます。
-      未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。迷宮は大型化され、探索スキルで隠し通路を発見できます。⇵はショートカットです。盤面はピクセル表現になり、攻撃・爆発・炎上には画面演出があります。効果音と環境音は画面下の音ボタンで切り替えられます。灯台では深淵の欠片を使い、永久強化・図鑑・倉庫を利用できます。帰還には祭壇、ボス撃破後、または帰還標が必要です。あなたを倒した敵は宿敵となり、次の探索でさらに強くなって現れることがあります。迷宮は武器・属性・構え・爆発物の使用傾向を記録し、次の探索で対策を変えます。5階ごとにバイオームが切り替わり、敵・資源・視界・属性相性が変化します。紫色の印では偶発事件が発生し、選択は灯台と迷宮に記録されます。
+      未鑑定装備は性能も呪いも不明です。安全に鑑定するか、危険を承知で装備してください。呪具は解呪するまで外せません。主人公のHPが0になると、その探索は終了します。盾骸兵は正面を受け、穴獣は回り込み、骨術師は距離を取り、爆ぜ虫は隣接後に自爆します。特殊部屋には祭壇・宝物庫・水没・崩落があり、5階ごとに番人が出現します。爆薬樽と油は炎で連鎖し、敵も巻き込めます。2階以降は階層異変が発生し、金色の敵は特殊能力を持つエリートです。3レベルごとに才能を選び、属性装備で炎・氷・雷・毒・吸血の反応を起こせます。迷宮は大型化され、探索スキルで隠し通路を発見できます。⇵はショートカットです。盤面はピクセル表現になり、攻撃・爆発・炎上には画面演出があります。効果音と環境音は画面下の音ボタンで切り替えられます。灯台では深淵の欠片を使い、永久強化・図鑑・倉庫を利用できます。帰還には祭壇、ボス撃破後、または帰還標が必要です。あなたを倒した敵は宿敵となり、次の探索でさらに強くなって現れることがあります。迷宮は武器・属性・構え・爆発物の使用傾向を記録し、次の探索で対策を変えます。5階ごとにバイオームが切り替わり、敵・資源・視界・属性相性が変化します。紫色の印では偶発事件が発生し、選択は灯台と迷宮に記録されます。射程ボタンで武器範囲を表示でき、マップ上の敵や物をタップすると詳細を確認できます。
     </p>
     <p>記号：<b>@</b>主人公 / <b>S</b>盾骸兵 / <b>W</b>穴獣 / <b>M</b>骨術師 / <b>B</b>爆ぜ虫 / <b>!</b>装備 / <b>◇</b>食料 / <b>^</b>罠</p>
     <button class="modalBtn" id="closeHelp">閉じる</button>
@@ -290,6 +297,15 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
 </div>
 
 
+
+
+<div class="overlay hidden" id="inspectOverlay">
+  <div class="card">
+    <h2 id="inspectTitle">調査</h2>
+    <div id="inspectBody"></div>
+    <button type="button" class="modalBtn" id="closeInspect">閉じる</button>
+  </div>
+</div>
 
 <div class="overlay hidden" id="eventOverlay">
   <div class="card">
@@ -401,7 +417,7 @@ function applyMetaToFreshState(newState){
  if((usage.bomb||0)>=8)candidates.push("anti_bomb");
  if((meta.marks?.greed||0)>=5)candidates.push("anti_bomb");
  if((meta.marks?.defiance||0)>=5)candidates.push("anti_guard");
- meta.adaptation=candidates.length?choice(candidates):null;
+ meta.adaptation=candidates.length?candidates[Math.floor(Math.random()*candidates.length)]:null;
  newState.meta=meta;
  newState.hero.maxHp+=meta.upgrades.vitality*4;
  newState.hero.hp=newState.hero.maxHp;
@@ -422,7 +438,7 @@ function freshState(){
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[]},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",
   map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0}
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0},codex:{},stash:[],heirloom:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false}
  };
  return applyMetaToFreshState(newState);
 }
@@ -1850,7 +1866,7 @@ function renderInventory(){
   row.querySelector(".equipBtn").onclick=()=>equipItem(g.id);box.appendChild(row);
  });
 }
-function canAct(){return state&&!state.gameOver&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")}
+function canAct(){return state&&!state.gameOver&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")}
 function saveGame(){if(state&&!state.gameOver)localStorage.setItem("abyssalRootsSoloV4Save",JSON.stringify(state))}
 function loadGame(){
  try{
@@ -1864,7 +1880,8 @@ function loadGame(){
   if(!state.hero.talents)state.hero.talents=[];
   if(!state.secretWalls)state.secretWalls=[];
   if(!state.shortcuts)state.shortcuts=[];
-  if(!state.visual)state.visual={flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0};
+  if(!state.visual)state.visual={flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false};
+  if(typeof state.visual.showRange!=="boolean")state.visual.showRange=false;
   if(!state.audio)state.audio={enabled:true,started:false};
   if(!state.meta)state.meta=loadMeta()||defaultMeta();
   if(!state.meta.stash)state.meta.stash=[];
@@ -1993,6 +2010,92 @@ function drawEnemySprite(e,x,y,t){
  if(e.intent||e.nemesis){ctx.strokeStyle=e.nemesis?"#ff4f73":"#ff5368";ctx.lineWidth=e.nemesis?3:2;ctx.strokeRect(x+2,y+2,TILE-4,TILE-4)}
 }
 
+
+function enemyIntentCells(e){
+ const cells=[];
+ if(!e.intent)return cells;
+ if(e.intent==="bolt"){
+  const dx=Math.sign(state.player.x-e.x),dy=Math.sign(state.player.y-e.y);
+  if(e.x===state.player.x||e.y===state.player.y){
+   for(let i=1;i<=5;i++){
+    const x=e.x+dx*i,y=e.y+dy*i;
+    if(tile(x,y)!==1)break;
+    cells.push({x,y});
+    if(x===state.player.x&&y===state.player.y)break;
+   }
+  }
+  return cells;
+ }
+ if(e.intent==="explode"){
+  cells.push({x:e.x,y:e.y});
+  for(const [dx,dy] of dirs)cells.push({x:e.x+dx,y:e.y+dy});
+  return cells;
+ }
+ for(const [dx,dy] of dirs)cells.push({x:e.x+dx,y:e.y+dy});
+ return cells;
+}
+function weaponPreviewCells(){
+ if(!state.visual?.showRange)return[];
+ const wd=weaponData[weaponType()];
+ const out=[];
+ for(const [dx,dy] of dirs){
+  for(let d=wd.minRange;d<=wd.maxRange;d++){
+   const x=state.player.x+dx*d,y=state.player.y+dy*d;
+   if(tile(x,y)!==1)break;
+   out.push({x,y});
+  }
+ }
+ return out;
+}
+function enemyStatusTags(e){
+ const tags=[];
+ if(e.intent)tags.push("予兆:"+e.intent);
+ if(e.elite)tags.push("エリート:"+e.elite);
+ if(e.nemesis)tags.push("宿敵");
+ if(e.status?.burning>0)tags.push("炎上 "+e.status.burning);
+ if(e.status?.poison>0)tags.push("毒 "+e.status.poison);
+ if(e.status?.frozen>0)tags.push("凍結 "+e.status.frozen);
+ return tags;
+}
+function inspectTileAt(x,y){
+ if(x<0||y<0||x>=COLS||y>=ROWS)return;
+ const enemy=enemyAt(x,y);
+ const item=itemAt(x,y);
+ const special=specialAt(x,y);
+ const env=envAt(x,y);
+ let title="床";
+ let body=`<p class="tacticalNote">座標 X${x} Y${y}</p>`;
+ if(enemy){
+  title=enemy.name;
+  const tags=enemyStatusTags(enemy);
+  body+=`<p>HP ${enemy.hp}/${enemy.maxHp}<br>攻撃 ${enemy.atk} / 防御 ${enemy.def}</p>`;
+  body+=tags.length?tags.map(t=>`<span class="statusTag">${t}</span>`).join(""):'<p class="tacticalNote">状態異常なし</p>';
+  body+=`<p class="tacticalNote">${enemy.nemesis?"あなたを追い続ける宿敵。":enemy.elite?"通常個体より強い変異個体。":"迷宮に棲む敵。"}</p>`;
+ }else if(item){
+  title=item.name||"落とし物";
+  body+=`<p>${item.type==="gear"?(item.gear.identified?gearLabel(item.gear):"未鑑定装備"):item.type}</p>`;
+ }else if(special){
+  const names={shrine:"祭壇",treasure:"宝物庫",flood:"水没区画",collapse:"崩落区画"};
+  title=names[special.type]||"特殊地点";
+  body+=`<p class="tacticalNote">${special.used?"既に利用済み。":"まだ利用できる。"}</p>`;
+ }else if(env){
+  title=env.type==="barrel"?"爆薬樽":env.burning?"燃える油":"油だまり";
+  body+=`<p class="tacticalNote">${env.type==="barrel"?"炎で爆発し、周囲を巻き込む。":"炎で燃え広がる。"}</p>`;
+ }else if(x===state.stairs.x&&y===state.stairs.y){
+  title="深層への階段";
+ }else{
+  body+=`<p class="tacticalNote">${tile(x,y)===0?"壁":"通行可能な床"}</p>`;
+ }
+ $("inspectTitle").textContent=title;
+ $("inspectBody").innerHTML=body;
+ $("inspectOverlay").classList.remove("hidden");
+}
+function toggleRangePreview(){
+ state.visual.showRange=!state.visual.showRange;
+ $("rangeBtn").textContent=state.visual.showRange?"射程ON":"射程OFF";
+ draw();
+}
+
 function draw(){
  const cam=cameraOrigin();
  const t=(state.visual?.time||0);
@@ -2026,6 +2129,26 @@ function draw(){
   ctx.font=`700 ${size}px -apple-system`;ctx.textAlign="center";ctx.textBaseline="middle";
   ctx.fillStyle=color;ctx.fillText(t,sx(x)+TILE/2,sy(y)+TILE/2+1)
  };
+
+ // 武器射程プレビュー
+ for(const c of weaponPreviewCells()){
+  if(!inView(c.x,c.y)||!state.visible[key(c.x,c.y)])continue;
+  ctx.fillStyle="rgba(87,178,219,.18)";
+  ctx.fillRect(sx(c.x)+2,sy(c.y)+2,TILE-4,TILE-4);
+  ctx.strokeStyle="rgba(120,214,255,.55)";
+  ctx.strokeRect(sx(c.x)+3.5,sy(c.y)+3.5,TILE-7,TILE-7);
+ }
+
+ // 敵の次ターン攻撃範囲
+ for(const e of state.enemies){
+  for(const c of enemyIntentCells(e)){
+   if(!inView(c.x,c.y)||!state.visible[key(c.x,c.y)])continue;
+   ctx.fillStyle=e.intent==="explode"?"rgba(255,122,48,.23)":"rgba(255,68,94,.18)";
+   ctx.fillRect(sx(c.x)+1,sy(c.y)+1,TILE-2,TILE-2);
+   ctx.strokeStyle=e.intent==="explode"?"rgba(255,161,75,.8)":"rgba(255,90,110,.72)";
+   ctx.strokeRect(sx(c.x)+2.5,sy(c.y)+2.5,TILE-5,TILE-5);
+  }
+ }
 
  if(state.visible[key(state.stairs.x,state.stairs.y)]){
   const x=sx(state.stairs.x),y=sy(state.stairs.y);
@@ -2086,6 +2209,9 @@ function draw(){
   drawEnemySprite(e,x,y,t);
   ctx.fillStyle="#25080d";ctx.fillRect(x+3,y+1,TILE-6,3);
   ctx.fillStyle="#cf5163";ctx.fillRect(x+3,y+1,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
+  if(e.status?.burning>0){ctx.fillStyle="#ff7a3d";ctx.fillRect(x+3,y+5,3,3)}
+  if(e.status?.poison>0){ctx.fillStyle="#79c76b";ctx.fillRect(x+7,y+5,3,3)}
+  if(e.status?.frozen>0){ctx.fillStyle="#86d4ff";ctx.fillRect(x+11,y+5,3,3)}
  }});
 
  if(inView(state.player.x,state.player.y)){
@@ -2183,8 +2309,22 @@ function renderSkills(){
  b.querySelector("span").textContent=wd.skillDesc;
 }
 function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();draw()}
-function startNew(){state=freshState();$("titleOverlay").classList.add("hidden");$("gameOverOverlay").classList.add("hidden");$("starterOverlay").classList.remove("hidden");render()}
-$("newGameBtn").onclick=()=>{ensureAudio();startAmbient();startNew()};$("restartBtn").onclick=startNew;document.querySelectorAll(".starterBtn").forEach(b=>{
+function startNew(){
+ try{
+  state=freshState();
+  $("titleOverlay").classList.add("hidden");
+  $("gameOverOverlay").classList.add("hidden");
+  $("hubOverlay").classList.add("hidden");
+  $("eventOverlay").classList.add("hidden");
+  $("inspectOverlay").classList.add("hidden");
+  $("starterOverlay").classList.remove("hidden");
+  render();
+ }catch(error){
+  console.error("New run initialization failed",error);
+  alert("新しい探索の初期化に失敗しました。ページを再読み込みしてください。");
+ }
+}
+$("newGameBtn").onclick=event=>{event.preventDefault();ensureAudio();startAmbient();startNew()};$("restartBtn").onclick=startNew;document.querySelectorAll(".starterBtn").forEach(b=>{
  b.addEventListener("click",ev=>{
   ev.preventDefault();
   ev.stopPropagation();
@@ -2195,7 +2335,18 @@ $("newGameBtn").onclick=()=>{ensureAudio();startAmbient();startNew()};$("restart
 $("continueBtn").onclick=()=>{if(loadGame()){$("titleOverlay").classList.add("hidden");$("soundBtn").textContent=state.audio?.enabled?"音ON":"音OFF";if(state.audio?.enabled){ensureAudio();startAmbient()}}};
 $("inventoryBtn").onclick=()=>{if(!state)return;renderInventory();$("inventoryOverlay").classList.remove("hidden")};
 $("closeInventory").onclick=()=>$("inventoryOverlay").classList.add("hidden");
-$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
+
+canvas.addEventListener("click",event=>{
+ if(!state||!$("inspectOverlay").classList.contains("hidden"))return;
+ const rect=canvas.getBoundingClientRect();
+ const px=(event.clientX-rect.left)*(canvas.width/rect.width);
+ const py=(event.clientY-rect.top)*(canvas.height/rect.height);
+ const cam=cameraOrigin();
+ const x=cam.x+Math.floor(px/TILE),y=cam.y+Math.floor(py/TILE);
+ inspectTileAt(x,y);
+});
+
+$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
 $("saveBtn").onclick=()=>{saveGame();addLog("探索記録を保存した。")};
 $("up").onclick=()=>move(0,-1);$("down").onclick=()=>move(0,1);$("left").onclick=()=>move(-1,0);$("right").onclick=()=>move(1,0);$("wait").onclick=waitTurn;
 $("guard").onclick=()=>useSkill("guard");$("volley").onclick=()=>useSkill("volley");$("heal").onclick=()=>useSkill("heal");$("search").onclick=()=>useSkill("search");
