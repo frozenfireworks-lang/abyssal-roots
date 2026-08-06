@@ -1773,11 +1773,114 @@ body{
  .insuranceSlotGrid{grid-template-columns:1fr}
 }
 
+
+/* v3.9.9 MORTAL WARNING */
+#lastStandBtn{
+ border-color:#8d6a47;
+ background:linear-gradient(180deg,#402c1f,#271a13);
+ color:#ffe0aa;
+}
+#lastStandBtn.armed{
+ border-color:#e0b253;
+ background:linear-gradient(180deg,#57391d,#33200e);
+ color:#fff1b7;
+ animation:lastStandPulse .8s ease-in-out infinite alternate;
+}
+#lastStandBtn.used{
+ border-color:#514755;
+ background:linear-gradient(180deg,#27222a,#18151b);
+ color:#867c8b;
+}
+#lastStandBtn.lethalReady{
+ border-color:#e66a79;
+ background:linear-gradient(180deg,#52212a,#2e1218);
+ color:#ffd4da;
+ box-shadow:0 0 13px rgba(230,74,94,.35),0 3px 0 #0b080d;
+}
+@keyframes lastStandPulse{from{filter:brightness(.96)}to{filter:brightness(1.18)}}
+.member.mortalDanger{
+ border-color:#a84656;
+ box-shadow:inset 0 0 24px rgba(165,43,61,.11);
+}
+.mortalWarning{
+ display:inline-block;margin-left:4px;padding:1px 5px;border:1px solid #9c4b59;
+ border-radius:999px;background:#2b1017;color:#ffc0ca;font-size:7px;
+ animation:mortalWarnPulse .72s ease-in-out infinite alternate;
+}
+.mortalWarning.certain{border-color:#e05b69;background:#420e17;color:#fff0f2}
+@keyframes mortalWarnPulse{from{opacity:.76}to{opacity:1}}
+.threatReadout{
+ margin-top:4px;padding:5px 7px;border:1px solid #4e4057;border-radius:7px;
+ background:#100c14;color:#cdbfd2;font-size:8px;line-height:1.45;
+}
+.threatReadout.warning{border-color:#8b5b45;color:#f0c494}
+.threatReadout.lethal{border-color:#a94757;background:#211016;color:#ffc0ca}
+.threatReadout b{color:#f1d890}
+.lastStandState{
+ display:inline-block;margin-left:5px;padding:1px 5px;border:1px solid #5c4b65;
+ border-radius:999px;color:#d4c5d8;font-size:7px;
+}
+.lastStandState.ready{border-color:#9b7043;color:#f1d196}
+.lastStandState.armed{border-color:#d1a544;color:#fff0ae}
+.lastStandState.used{border-color:#4d4352;color:#827889}
+.lastStandState.exhausted{border-color:#765060;color:#e2a7b3}
+
+
+/* v3.10.0 DEATH ECHO */
+#deathEchoBody{padding:7px}
+.deathEchoEmpty{
+ padding:8px 9px;border:1px solid #45394d;border-radius:8px;
+ background:#100c14;color:#9f92a5;font-size:9px;line-height:1.55
+}
+.deathEchoCard{
+ padding:9px;border:1px solid #596779;border-radius:10px;
+ background:linear-gradient(180deg,#111821,#0b0f15);
+ box-shadow:inset 0 0 22px rgba(79,164,191,.06)
+}
+.deathEchoCard.ready{
+ border-color:#6ba9b9;
+ box-shadow:inset 0 0 24px rgba(82,185,211,.1)
+}
+.deathEchoTop{
+ display:flex;align-items:center;justify-content:space-between;gap:7px
+}
+.deathEchoName{color:#c9eff9;font-size:11px;font-weight:900}
+.deathEchoFloor{
+ flex:none;padding:2px 6px;border:1px solid #567a86;border-radius:999px;
+ color:#bfe5ee;font-size:8px
+}
+.deathEchoCause{
+ margin-top:5px;color:#b5a9bb;font-size:8px;line-height:1.45
+}
+.deathEchoGearList{display:grid;gap:4px;margin-top:7px}
+.deathEchoGear{
+ padding:6px 7px;border:1px solid #3e4c58;border-radius:7px;
+ background:#0a1016;color:#d5dfe5;font-size:8px;line-height:1.45
+}
+.deathEchoGear b{color:#e8f8ff}
+.deathEchoGuard{
+ margin-top:7px;padding:6px 7px;border-left:3px solid #7b5f86;border-radius:6px;
+ background:#141018;color:#d0c3d5;font-size:8px;line-height:1.5
+}
+.deathEchoGuard.defeated{
+ border-left-color:#568868;background:#0f1712;color:#c8e0cc
+}
+.deathEchoWarning{
+ margin-top:7px;padding:6px 7px;border:1px solid #7c4652;border-radius:7px;
+ background:#1d0e13;color:#e7abb6;font-size:8px;line-height:1.5
+}
+.deathEchoPill{
+ display:inline-block;margin:3px 4px 0 0;padding:2px 6px;border:1px solid #53646f;
+ border-radius:999px;color:#c9e7ee;font-size:7px
+}
+.deathEchoPill.bad{border-color:#7d4955;color:#e7a5b1}
+.deathEchoPill.good{border-color:#4f7e61;color:#bfe2c6}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.8 RISK & EXTRACTION</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.0 DEATH ECHO</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -1805,11 +1908,12 @@ body{
 <div class="quickBar">
 <button type="button" class="miniBtn" id="quickPotion">薬</button>
 <button type="button" class="miniBtn" id="quickBomb">壺</button>
-<button type="button" class="miniBtn" id="appearanceBtn">姿</button>
+<button type="button" class="miniBtn" id="lastStandBtn">踏留 1</button>
 <button type="button" class="miniBtn" id="menuBtn" aria-expanded="false">メニュー</button>
 </div>
 <div class="safariScrollHint">下へ少しスワイプするとSafariのツールバーが縮みます。ホーム画面追加なら全画面で遊べます。</div><div id="footerBtns">
   <button class="miniBtn" id="inventoryBtn">装備・荷物</button>
+  <button class="miniBtn" id="appearanceBtn">姿</button>
   <button class="miniBtn" id="saveBtn">保存</button>
   <button class="miniBtn" id="helpBtn">遊び方</button><button class="miniBtn" id="soundBtn">音ON</button><button class="miniBtn" id="hubBtn">帰還</button><button class="miniBtn" id="lightBtn">灯火</button><button class="miniBtn" id="rangeBtn">射程OFF</button>
 </div>
@@ -1818,7 +1922,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 帰還制限・装備保険・魂還石</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 死亡装備の遺響回収</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -1980,6 +2084,12 @@ body{
           <li>帰還すると探索は終了し、<b>HP・気力・充足が完全回復</b>します。</li>
           <li><b>欠片保険</b>は最大3部位まで指定でき、出撃時に性能依存の保険料を支払います。死亡時のみ現在状態を倉庫へ回収します。</li>
           <li><b>魂還石</b>は深層番人から極低確率で入手できます。携行設定中はHP0の瞬間に1個消費し、死亡を緊急帰還へ置き換えます。</li>
+          <li><b>致死予測</b>は、現在プレイヤーを狙って固定されている敵予兆の合計被害範囲です。移動で予兆から外れれば予測も消えます。</li>
+          <li><b>決死の踏み止まり</b>は探索中1回、気力5を使って次の敵行動へ備えます。致命傷をHP1で耐えて残りの敵行動を中断しますが、発動しなくても使い切りです。</li>
+          <li><b>遺響回収</b>：死亡時、保険対象外の新規装備から推奨度上位3個が死亡階層へ残ります。次の探索で同じ階へ到達し、遺響守を倒して墓標へ触れると回収できます。</li>
+          <li>遺響は1件だけ保持されます。回収前に再び死亡すると以前の遺響は消滅し、新しい死亡地点へ置き換わります。</li>
+          <li>遺響から回収した装備は荷物へ戻るだけです。灯台へ帰還する前に死亡すると再び失います。</li>
+          <li>踏み止まり発動後は3行動の衰弱となり、最大気力-2・攻撃力18%低下が発生します。</li>
         </ul>
         <div class="helpNote">このゲームは「帰らずに粘るほど強くなる」のではなく、「どこで帰るか」が大きな判断になります。</div>
       </div>
@@ -2106,6 +2216,11 @@ body{
     <details class="hubFold" id="lastReportPanel">
       <summary id="lastReportSummary">前回の探索結果</summary>
       <div id="lastReportBody"></div>
+    </details>
+
+    <details class="hubFold" id="deathEchoPanel" open>
+      <summary id="deathEchoSummary">遺響回収</summary>
+      <div id="deathEchoBody"></div>
     </details>
 
     <details class="hubFold" id="loadoutPanel" open>
@@ -3076,7 +3191,7 @@ function restoreLighthouseSession(){
  return true;
 }
 function defaultMeta(){
- const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
+ const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
  meta.appearance=defaultAppearance();
  return meta;
 }
@@ -3395,6 +3510,7 @@ function createRunStats(meta){
   bossesDefeated:0,
   objectivesCompleted:0,
   routesCompleted:0,
+  deathEchoRecovered:0,
   startedAt:Date.now()
  };
 }
@@ -3414,6 +3530,229 @@ function newlyFoundRunGear(){
  const original=new Set(stats.startStashIds||[]);
  return uniqueRunGear().filter(g=>!isStarterGear(g)&&!original.has(g.id));
 }
+function ensureDeathEchoMeta(meta=state?.meta){
+ if(!meta)return null;
+ if(typeof meta.deathEcho==="undefined")meta.deathEcho=null;
+ if(!Array.isArray(meta.deathEchoHistory))meta.deathEchoHistory=[];
+ if(meta.deathEcho){
+  if(!Array.isArray(meta.deathEcho.gear))meta.deathEcho.gear=[];
+  if(typeof meta.deathEcho.guardDefeated!=="boolean")meta.deathEcho.guardDefeated=false;
+  if(typeof meta.deathEcho.recovered!=="boolean")meta.deathEcho.recovered=false;
+ }
+ return meta.deathEcho;
+}
+function activeDeathEcho(meta=state?.meta){
+ const echo=ensureDeathEchoMeta(meta);
+ return echo&&!echo.recovered?echo:null;
+}
+function deathEchoForCurrentFloor(){
+ const echo=activeDeathEcho();
+ return echo&&echo.floor===state.floor?echo:null;
+}
+function deathEchoGuardSnapshot(killer){
+ const allowed=["skeleton","warg","mage","bomber"];
+ const baseType=allowed.includes(killer?.type)?killer.type:"skeleton";
+ return{
+  baseType,
+  originalName:killer?.name||"深淵の残響",
+  name:killer?.name?`${killer.name}の遺響`:"遺響守",
+  level:Math.max(1,killer?.level||state.floor),
+  hpBonus:Math.max(5,Math.floor((killer?.maxHp||18)*.28)),
+  atkBonus:Math.max(1,Math.floor((killer?.atk||6)*.18)),
+  defBonus:Math.max(0,Math.floor((killer?.def||2)*.2))
+ };
+}
+function createDeathEchoFromCurrentRun(cause,killer=null){
+ ensureDeathEchoMeta(state.meta);
+ const previous=activeDeathEcho();
+ const candidates=newlyFoundRunGear().sort((a,b)=>gearScore(b)-gearScore(a));
+ const preserved=candidates.slice(0,3).map(gear=>{
+  const copy=cloneGear(gear);
+  copy.locked=true;
+  copy.deathEchoRecovered=false;
+  return copy;
+ });
+ const replaced=previous?.gear?.length||0;
+
+ if(previous){
+  state.meta.deathEchoHistory.push({
+   id:previous.id,
+   floor:previous.floor,
+   gearCount:previous.gear?.length||0,
+   status:"faded",
+   timestamp:Date.now()
+  });
+  state.meta.deathEchoHistory=state.meta.deathEchoHistory.slice(-12);
+ }
+
+ if(!preserved.length){
+  state.meta.deathEcho=null;
+  return{
+   stored:0,
+   abandoned:candidates.length,
+   replaced,
+   targetFloor:null,
+   echo:null
+  };
+ }
+
+ const echo={
+  id:`echo-${Date.now()}-${Math.floor(rng()*99999)}`,
+  floor:state.floor,
+  floorTitle:floorPlan().title,
+  biome:currentBiome().label,
+  cause,
+  createdAt:Date.now(),
+  gear:preserved,
+  guard:deathEchoGuardSnapshot(killer),
+  guardDefeated:false,
+  recovered:false
+ };
+ state.meta.deathEcho=echo;
+ return{
+  stored:preserved.length,
+  abandoned:Math.max(0,candidates.length-preserved.length),
+  replaced,
+  targetFloor:echo.floor,
+  echo
+ };
+}
+function deathEchoSpawnPoint(){
+ const valid=(point)=>{
+  if(!point||!inside(point.x,point.y)||tile(point.x,point.y)!==1)return false;
+  if(state.player.x===point.x&&state.player.y===point.y)return false;
+  if(state.stairs.x===point.x&&state.stairs.y===point.y)return false;
+  if(enemyAt(point.x,point.y)||itemAt(point.x,point.y)||specialAt(point.x,point.y)||envAt(point.x,point.y))return false;
+  if(activeTrapAt(point.x,point.y))return false;
+  return true;
+ };
+ const roomCandidates=(state.rooms||[]).slice(1).reverse().map(room=>({x:room.cx,y:room.cy}));
+ for(const point of roomCandidates)if(valid(point))return point;
+
+ const candidates=[];
+ for(let y=1;y<ROWS-1;y++)for(let x=1;x<COLS-1;x++){
+  if(!valid({x,y}))continue;
+  candidates.push({x,y,d:Math.abs(x-state.player.x)+Math.abs(y-state.player.y)});
+ }
+ candidates.sort((a,b)=>b.d-a.d);
+ return candidates[0]?{x:candidates[0].x,y:candidates[0].y}:null;
+}
+function deathEchoGuardCell(cache){
+ for(let radius=1;radius<=3;radius++){
+  for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+   if(Math.abs(dx)+Math.abs(dy)!==radius)continue;
+   const x=cache.x+dx,y=cache.y+dy;
+   if(!inside(x,y)||tile(x,y)!==1)continue;
+   if(state.player.x===x&&state.player.y===y)continue;
+   if(state.stairs.x===x&&state.stairs.y===y)continue;
+   if(enemyAt(x,y)||itemAt(x,y)||specialAt(x,y)||envAt(x,y)||activeTrapAt(x,y))continue;
+   return{x,y};
+  }
+ }
+ return null;
+}
+function spawnDeathEchoGuard(echo,cache){
+ if(!echo||echo.guardDefeated)return null;
+ const existing=(state.enemies||[]).find(enemy=>enemy.echoGuard&&enemy.echoId===echo.id);
+ if(existing)return existing;
+ const p=deathEchoGuardCell(cache);
+ if(!p)return null;
+ const type=echo.guard?.baseType||"skeleton";
+ const base={
+  skeleton:{hp:18,atk:6,def:3,xp:12},
+  warg:{hp:14,atk:7,def:1,xp:11},
+  mage:{hp:13,atk:8,def:1,xp:13},
+  bomber:{hp:11,atk:9,def:0,xp:12}
+ }[type]||{hp:18,atk:6,def:3,xp:12};
+ const level=Math.max(floorTargetLevel(),echo.guard?.level||state.floor);
+ const enemy={
+  id:`echo-guard-${echo.id}`,x:p.x,y:p.y,type,
+  name:echo.guard?.name||"遺響守",level,
+  hp:base.hp+level*3+(echo.guard?.hpBonus||0),
+  maxHp:base.hp+level*3+(echo.guard?.hpBonus||0),
+  atk:base.atk+Math.floor(level*.8)+(echo.guard?.atkBonus||0),
+  def:base.def+Math.floor(level/5)+(echo.guard?.defBonus||0),
+  xp:base.xp+level*3,intent:null,intentCells:[],intentTarget:null,
+  stagger:0,guarding:false,alert:6,lastSeen:{x:state.player.x,y:state.player.y},
+  elite:"echo",echoGuard:true,echoId:echo.id,status:{},
+  faction:"guardian",home:{x:p.x,y:p.y},patrol:0,rivalId:null
+ };
+ state.enemies.push(enemy);
+ return enemy;
+}
+function spawnDeathEchoFloor(){
+ const echo=deathEchoForCurrentFloor();
+ if(!echo)return false;
+ if((state.specialTiles||[]).some(tile=>tile.type==="death_echo"&&tile.echoId===echo.id))return false;
+ const point=deathEchoSpawnPoint();
+ if(!point)return false;
+ const tile={
+  x:point.x,y:point.y,type:"death_echo",used:false,
+  echoId:echo.id,sealed:!echo.guardDefeated
+ };
+ state.specialTiles.push(tile);
+ const guard=spawnDeathEchoGuard(echo,tile);
+ if(!guard&&!echo.guardDefeated){
+  echo.guardDefeated=true;
+  tile.sealed=false;
+  addLog("遺響守を再構成できなかったため、遺響の封印が自然に解けた。");
+ }else{
+  addLog(`第${state.floor}層に、失った装備を宿す遺響が現れた。`);
+  if(guard)addLog(`${guard.name}が遺響を守っている。`);
+ }
+ return true;
+}
+function markDeathEchoGuardDefeated(enemy){
+ if(!enemy?.echoGuard)return false;
+ const echo=activeDeathEcho();
+ if(!echo||echo.id!==enemy.echoId)return false;
+ echo.guardDefeated=true;
+ const tile=(state.specialTiles||[]).find(t=>t.type==="death_echo"&&t.echoId===echo.id);
+ if(tile)tile.sealed=false;
+ saveMeta();
+ showCombatToast("遺響の封印解除","墓標へ触れれば装備を回収できる","objective");
+ addLog("遺響守を倒し、失った装備を宿す墓標の封印を解いた。");
+ return true;
+}
+function recoverDeathEcho(tile){
+ const echo=activeDeathEcho();
+ if(!echo||tile.echoId!==echo.id){
+  tile.used=true;
+  addLog("遺響はすでに消えている。");
+  return false;
+ }
+ const guard=(state.enemies||[]).find(enemy=>enemy.echoGuard&&enemy.echoId===echo.id);
+ if(guard||!echo.guardDefeated){
+  if(!guard)spawnDeathEchoGuard(echo,tile);
+  showCombatToast("遺響は封印中",`${echo.guard?.name||"遺響守"}を倒す必要がある`,"miss");
+  addLog("墓標へ手を伸ばしたが、遺響守の封印に阻まれた。");
+  return false;
+ }
+
+ let recovered=0;
+ for(const stored of echo.gear||[]){
+  const gear=cloneGear(stored);
+  gear.locked=true;
+  gear.origin="death_echo";
+  gear.deathEchoRecovered=true;
+  state.inventory.push(gear);
+  recovered++;
+ }
+ tile.used=true;
+ ensureRunStats().itemsFound+=recovered;
+ ensureRunStats().gearFound+=recovered;
+ ensureRunStats().deathEchoRecovered=(ensureRunStats().deathEchoRecovered||0)+recovered;
+ state.meta.deathEchoHistory.push({
+  id:echo.id,floor:echo.floor,gearCount:recovered,status:"recovered",timestamp:Date.now()
+ });
+ state.meta.deathEchoHistory=state.meta.deathEchoHistory.slice(-12);
+ state.meta.deathEcho=null;
+ saveMeta();
+ spawnHeroEffect("pickup_gear");
+ showCombatToast("遺響回収",`${recovered}個の装備を荷物へ取り戻した`,"objective");
+ addLog(`遺響から${recovered}個の装備を回収した。帰還するまで再び失う可能性がある。`);
+ return true;
+}
 function signedValue(value){
  return`${value>0?"+":""}${value}`;
 }
@@ -3426,7 +3765,7 @@ function formatReportDate(timestamp){
 }
 function buildExpeditionReport(outcome,details={}){
  const stats=ensureRunStats();
- const combat=state.combatStats||{dodges:0,guards:0,breaks:0,crits:0};
+ const combat=state.combatStats||{dodges:0,guards:0,breaks:0,crits:0,lastStands:0};
  const bank=details.bank||null;
  const lostGear=outcome==="death"?newlyFoundRunGear().length:(bank?.leftBehind||0);
  const report={
@@ -3454,6 +3793,7 @@ function buildExpeditionReport(outcome,details={}){
   guards:combat.guards||0,
   breaks:combat.breaks||0,
   crits:combat.crits||0,
+  lastStands:combat.lastStands||0,
   shardDelta:(state.meta.shards||0)-(stats.startShards||0),
   researchDelta:(state.meta.research?.points||0)-(stats.startResearchPoints||0),
   source:details.source||"",
@@ -3467,18 +3807,27 @@ function buildExpeditionReport(outcome,details={}){
   insurancePremium:details.insurance?.premium||state.protectionContract?.premium||0,
   rescued:!!details.rescued,
   soulAnchorConsumed:details.insurance?.consumed||0,
+  echoStored:details.echo?.stored||0,
+  echoAbandoned:details.echo?.abandoned||0,
+  echoReplaced:details.echo?.replaced||0,
+  echoTargetFloor:details.echo?.targetFloor||null,
+  deathEchoRecovered:stats.deathEchoRecovered||0,
   highlights:[]
  };
 
  if(report.bosses>0)report.highlights.push(`番人を${report.bosses}体撃破`);
  if(report.routesCompleted>0)report.highlights.push(`進路を${report.routesCompleted}区間踏破`);
  if(report.dodges>0)report.highlights.push(`予兆攻撃を${report.dodges}回回避`);
+ if(report.lastStands>0)report.highlights.push("決死の踏み止まりで致命傷を耐えた");
  if(report.breaks>0)report.highlights.push(`敵の攻撃態勢を${report.breaks}回崩した`);
  if(report.crits>0)report.highlights.push(`会心を${report.crits}回発生`);
  if(outcome==="return"&&report.newGear>0)report.highlights.push(`新しい装備を${report.newGear}個持ち帰った`);
  if(outcome==="death"&&report.lostGear>0)report.highlights.push(`新規入手装備を${report.lostGear}個失った`);
  if(report.insuredRecovered>0)report.highlights.push(`装備保険で${report.insuredRecovered}部位を回収`);
  if(report.rescued)report.highlights.push("魂還石が致死傷を緊急帰還へ置き換えた");
+ if(report.echoStored>0)report.highlights.push(`失った装備${report.echoStored}個が第${report.echoTargetFloor}層の遺響へ残った`);
+ if(report.echoReplaced>0)report.highlights.push(`以前の遺響装備${report.echoReplaced}個が消滅した`);
+ if(report.deathEchoRecovered>0)report.highlights.push(`過去の遺響から装備${report.deathEchoRecovered}個を奪還した`);
  if(!report.highlights.length)report.highlights.push("探索記録が灯台へ刻まれた");
 
  return report;
@@ -3506,8 +3855,10 @@ function expeditionReportHtml(report,compact=false){
     `<span class="expeditionPill good">研究・恒久成長は維持</span>`,
     report.insuredRecovered?`<span class="expeditionPill good">保険回収 ${report.insuredRecovered}部位</span>`:"",
     report.insuranceMissed?`<span class="expeditionPill bad">保険回収失敗 ${report.insuranceMissed}</span>`:"",
-    report.lostGear?`<span class="expeditionPill bad">新規装備喪失 ${report.lostGear}</span>`:
-      `<span class="expeditionPill">新規装備の喪失なし</span>`
+    report.echoStored?`<span class="expeditionPill good">遺響に残存 ${report.echoStored}</span>`:"",
+    report.echoAbandoned?`<span class="expeditionPill bad">即時喪失 ${report.echoAbandoned}</span>`:"",
+    report.echoReplaced?`<span class="expeditionPill bad">以前の遺響消滅 ${report.echoReplaced}</span>`:"",
+    !report.lostGear?`<span class="expeditionPill">新規装備の喪失なし</span>`:""
    ].filter(Boolean).join("");
 
  return`
@@ -3530,9 +3881,11 @@ function expeditionReportHtml(report,compact=false){
     <span class="expeditionPill">構え ${report.guards}</span>
     <span class="expeditionPill">崩し ${report.breaks}</span>
     <span class="expeditionPill">会心 ${report.crits}</span>
+    <span class="expeditionPill">踏み止まり ${report.lastStands||0}</span>
     <span class="expeditionPill">目標達成 ${report.objectives||0}</span>
     <span class="expeditionPill">進路踏破 ${report.routesCompleted||0}</span>
     <span class="expeditionPill">熟練 狩${report.routeMastery?.hunt||0}・観${report.routeMastery?.archive||0}・補${report.routeMastery?.supply||0}</span>
+    <span class="expeditionPill">遺響回収 ${report.deathEchoRecovered||0}</span>
    </div>
   </div>
   <div class="expeditionSection">
@@ -3573,10 +3926,11 @@ function finishExpeditionDeath(cause,killer=null){
  if(completeSoulAnchorRescue(cause))return;
  if(killer)maybePromoteKiller(killer);
  const insurance=recoverInsuredGearOnDeath();
+ const echo=createDeathEchoFromCurrentRun(cause,killer);
  state.gameOver=true;
  state.expeditionEnded=true;
  state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
- const report=buildExpeditionReport("death",{cause,insurance});
+ const report=buildExpeditionReport("death",{cause,insurance,echo});
  state.meta.lastExpeditionReport=report;
  saveMeta();
  localStorage.removeItem(ACTIVE_SAVE_KEY);
@@ -3588,10 +3942,10 @@ function freshState(){
  const newState={
   version:4,seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,
   hunger:720,maxHunger:720,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
-  hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false},
-  cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,crits:0},
+  hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false,lastStandUsed:false,lastStandArmed:false,lastStandInvulnerable:false,lastStandTriggeredThisTurn:false,exhaustedTurns:0},
+  cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,crits:0,lastStands:0},
   map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
  const prepared=applyMetaToFreshState(newState);
  prepared.runStats=createRunStats(prepared.meta);
@@ -3785,7 +4139,8 @@ function ensureBossProgressIntegrity(source="turn"){
 
 let combatToastTimer=null;
 function ensureCombatStats(){
- state.combatStats=state.combatStats||{dodges:0,guards:0,breaks:0,crits:0};
+ state.combatStats=state.combatStats||{dodges:0,guards:0,breaks:0,crits:0,lastStands:0};
+ if(typeof state.combatStats.lastStands!=="number")state.combatStats.lastStands=0;
  return state.combatStats;
 }
 function showCombatToast(title,detail="",kind=""){
@@ -3802,7 +4157,103 @@ function showCombatToast(title,detail="",kind=""){
 function spawnCombatText(x,y,textValue,style="damage",life=34){
  addVisualEffect({kind:"combat_text",x,y,text:textValue,textStyle:style,life});
 }
+function intentDamageMultiplier(intent){
+ return{
+  lunge:1,heavy:1.35,bolt:1.1,explode:1,
+  chain_sweep:1.25,grave_volley:1.18,
+  furnace_slam:1.42,root_cage:1.12
+ }[intent]||1;
+}
+function estimateMitigatedHeroDamage(raw,sourceEnemy=null,options={}){
+ let dmg=Math.max(0,Math.round(raw));
+ if(options.guardable&&state.guardTurns>0){
+  const guardRate=state.meta?.adaptation==="anti_guard"?.5:.25;
+  dmg=Math.max(0,Math.floor(dmg*guardRate));
+ }
+ if(tagTier("bone")>=6)dmg=Math.max(0,Math.round(dmg*.88));
+ if(sourceEnemy?.nemesis&&hasAbyssAdaptation("steadyHeart"))dmg=Math.max(0,Math.round(dmg*.85));
+ if(options.trap)dmg=Math.max(0,Math.round(dmg*(1-researchTrapReduction())));
+ return dmg;
+}
+function estimateIntentDamage(enemy,roll=2){
+ if(!enemy?.intent||!enemyIntentHitsPlayer(enemy))return 0;
+ let raw=0;
+ if(enemy.intent==="explode"){
+  raw=Math.max(1,enemy.atk-totalDef());
+  if(hasTalent("bombproof"))raw=Math.floor(raw*.5);
+ }else{
+  const mult=intentDamageMultiplier(enemy.intent);
+  raw=Math.max(1,Math.round((enemy.atk+roll)*mult*(mutation()?.damageMul||1))-totalDef());
+ }
+ return estimateMitigatedHeroDamage(raw,enemy,{guardable:true});
+}
+function currentThreatForecast(){
+ if(!state)return{count:0,min:0,max:0,possibleLethal:false,certainLethal:false,sources:[]};
+ const sources=[];
+ let min=0,max=0;
+ for(const enemy of state.enemies||[]){
+  if(!enemy.intent||!enemyIntentHitsPlayer(enemy))continue;
+  const low=estimateIntentDamage(enemy,-1);
+  const high=estimateIntentDamage(enemy,2);
+  min+=low;max+=high;
+  sources.push({id:enemy.id,name:enemy.name,intent:enemyIntentDisplayName(enemy.intent),min:low,max:high});
+ }
+ const hp=state.hero?.hp||0;
+ return{
+  count:sources.length,min,max,sources,
+  possibleLethal:max>=hp&&hp>0,
+  certainLethal:min>=hp&&hp>0
+ };
+}
+function lastStandStatus(){
+ const hero=state.hero;
+ if(hero.lastStandArmed)return{label:"構え中",className:"armed"};
+ if(hero.lastStandUsed)return{label:"使用済み",className:"used"};
+ return{label:"残り1回",className:"ready"};
+}
+function canArmLastStand(){
+ return canAct()&&!state.hero.lastStandUsed&&!state.hero.lastStandArmed&&state.hero.stamina>=5;
+}
+function armLastStand(){
+ if(!canAct())return;
+ if(state.hero.lastStandUsed){
+  addLog("決死の踏み止まりは、この探索ですでに使い切っている。");
+  return;
+ }
+ if(state.hero.stamina<5){
+  addLog("決死の踏み止まりには気力5が必要。");
+  return;
+ }
+ if(!spendStamina(5))return;
+ state.hero.lastStandUsed=true;
+ state.hero.lastStandArmed=true;
+ state.hero.lastStandTriggeredThisTurn=false;
+ state.lastAction="laststand";
+ showCombatToast("決死の踏み止まり","次の敵行動中、一度だけ致命傷をHP1で耐える","guard");
+ addLog("気力5を費やし、致命傷へ備えて踏み止まった。発動しなくても使用回数は戻らない。");
+ endTurn();
+}
+function triggerManualLastStand(incomingDamage){
+ const hero=state.hero;
+ if(!hero.lastStandArmed||hero.lastStandInvulnerable||incomingDamage<hero.hp)return false;
+ hero.lastStandArmed=false;
+ hero.lastStandTriggeredThisTurn=true;
+ hero.lastStandInvulnerable=true;
+ hero.exhaustedTurns=Math.max(hero.exhaustedTurns||0,3);
+ hero.stamina=0;
+ state.enemyTurnInterrupted=true;
+ ensureCombatStats().lastStands++;
+ spawnHeroEffect("guard");
+ spawnCombatText(state.player.x,state.player.y,"LAST STAND","guard",54);
+ showCombatToast("踏み止まった","HP1で生存・残りの敵行動を中断・衰弱3行動","critical");
+ addLog("決死の踏み止まりが致命傷を防いだ。HP1で生存したが、3行動の衰弱を負った。");
+ return true;
+}
 function applyHeroDamage(raw,sourceEnemy=null,options={}){
+ if(state.hero.lastStandInvulnerable){
+  spawnCombatText(state.player.x,state.player.y,"NO DAMAGE","guard",26);
+  return 0;
+ }
  let dmg=Math.max(0,Math.round(raw));
  if(options.guardable&&state.guardTurns>0){
   const incoming=dmg;
@@ -3824,6 +4275,9 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
   state.hero.boneLastStandUsed=true;
   dmg=Math.max(0,state.hero.hp-1);
   addLog("骨の加護が致命傷を防いだ！");
+ }
+ if(triggerManualLastStand(dmg)){
+  dmg=Math.max(0,state.hero.hp-1);
  }
  state.hero.hp=Math.max(0,state.hero.hp-dmg);
  ensureRunStats().damageTaken+=dmg;
@@ -3867,6 +4321,9 @@ function triggerSpecialTile(){
  if(t.type==="treasure"){
   t.used=true;
   addLog("宝物庫の封印が解けた。");
+ }
+ if(t.type==="death_echo"){
+  recoverDeathEcho(t);
  }
 }
 
@@ -4198,10 +4655,10 @@ function factionsHostile(a,b){
  return false;
 }
 function hostileEnemyNear(e,range=6){
- if(e?.boss)return null;
+ if(e?.boss||e?.echoGuard)return null;
  let best=null,bestDist=999;
  for(const other of state.enemies){
-  if(other===e||other?.boss||!factionsHostile(e.faction,other.faction))continue;
+  if(other===e||other?.boss||other?.echoGuard||!factionsHostile(e.faction,other.faction))continue;
   const d=Math.abs(other.x-e.x)+Math.abs(other.y-e.y);
   if(d<bestDist&&d<=range){best=other;bestDist=d}
  }
@@ -4216,10 +4673,10 @@ function enemyAttackEnemy(attacker,target,mult=1,label="襲撃"){
  if(!attacker||!target)return false;
 
  // 番人は階層進行の必須対象なので、勢力戦では攻撃・撃破されない。
- if(attacker.boss||target.boss){
+ if(attacker.boss||target.boss||attacker.echoGuard||target.echoGuard){
   attacker.rivalId=null;
   target.rivalId=null;
-  if(target.boss&&target.hp<=0)target.hp=1;
+  if((target.boss||target.echoGuard)&&target.hp<=0)target.hp=1;
   return false;
  }
 
@@ -4240,7 +4697,7 @@ function moveTowardEnemy(e,target){
  return moveTowardPoint(e,{x:target.x,y:target.y});
 }
 function autonomousEnemyTurn(e){
- if(e?.boss)return false;
+ if(e?.boss||e?.echoGuard)return false;
  const rival=hostileEnemyNear(e,7);
  if(!rival)return false;
  if(enemyCanSeeEnemy(e,rival)){
@@ -4889,6 +5346,7 @@ function generateFloor(){
  spawnFloorBoss();
  ensureBossProgressIntegrity("generation");
  spawnNemesis();
+ spawnDeathEchoFloor();
  updateVision();
  state.floorStats=createFloorStats();
  state.floorObjective={...createFloorObjective(),floor:state.floor};
@@ -5231,10 +5689,12 @@ function hungerStage(hungerValue=state.hunger){
  return{id:"depleted",...hungerStageData.depleted,ratio:0};
 }
 function effectiveMaxStamina(){
- return Math.max(3,state.hero.maxStamina-hungerStage().staminaPenalty);
+ const exhaustionPenalty=(state.hero.exhaustedTurns||0)>0?2:0;
+ return Math.max(3,state.hero.maxStamina-hungerStage().staminaPenalty-exhaustionPenalty);
 }
 function hungerAdjustedAttack(value){
- return Math.max(1,value*hungerStage().attack);
+ const exhaustion=(state.hero.exhaustedTurns||0)>0?.82:1;
+ return Math.max(1,value*hungerStage().attack*exhaustion);
 }
 function hungerAdjustedHealing(value){
  return Math.max(1,Math.round(value*hungerStage().heal));
@@ -5534,7 +5994,7 @@ function updateRemains(){
 
 function defeatEnemy(e){
  if(!state.enemies.includes(e))return;
- const wasBoss=!!e.boss;const wasNemesis=!!e.nemesis;
+ const wasBoss=!!e.boss;const wasNemesis=!!e.nemesis;const wasEchoGuard=!!e.echoGuard;
  spreadTagDeathEffects(e);
  addRemains(e);
  state.enemies=state.enemies.filter(x=>x!==e);
@@ -5558,6 +6018,7 @@ function defeatEnemy(e){
  saveMeta();
  addLog(e.name+"を倒した。");
  if(wasNemesis)recordNemesisVictory(e);
+ if(wasEchoGuard)markDeathEchoGuardDefeated(e);
  if(e.elite==="volatile"){
   const ghost={x:e.x,y:e.y,active:true};
   explodeBarrel(ghost);
@@ -5958,6 +6419,7 @@ function performWardenTurn(enemy,dist){
 }
 function enemyTurn(){
  for(const e of [...state.enemies]){
+  if(state.enemyTurnInterrupted)break;
   if(!state.enemies.includes(e))continue;
   e.guarding=false;
   if(e.status?.frozen>0){e.status.frozen--;addLog(e.name+"は凍結して動けない。");continue}
@@ -6126,6 +6588,13 @@ function triggerTrap(){
 }
 function endTurn(){
  state.turn++;
+ state.enemyTurnInterrupted=false;
+ state.hero.lastStandTriggeredThisTurn=false;
+ state.hero.lastStandInvulnerable=false;
+ if((state.hero.exhaustedTurns||0)>0){
+  state.hero.exhaustedTurns--;
+  clampStaminaForHunger();
+ }
  ensureBossProgressIntegrity("turn-start");
  updateFloorObjective();
  const hungerDrain=(mutation()?.hungerDrain||1);
@@ -6156,6 +6625,11 @@ function endTurn(){
  if(state.gameOver){render();return}
  enemyTurn();
  ensureBossProgressIntegrity("turn-end");
+ if(state.hero.lastStandArmed&&!state.hero.lastStandTriggeredThisTurn){
+  state.hero.lastStandArmed=false;
+  addLog("決死の踏み止まりは発動しないまま解けた。");
+ }
+ state.hero.lastStandInvulnerable=false;
  for(const k in state.cooldowns)state.cooldowns[k]=Math.max(0,state.cooldowns[k]-1);
  state.guardTurns=Math.max(0,state.guardTurns-1);
  updateVision();saveGame();render();
@@ -7162,6 +7636,47 @@ function renderRouteMastery(meta=state.meta){
    ${Object.keys(routeData).map(id=>routeMasteryCardHtml(id,meta)).join("")}
   </div>`;
 }
+function renderDeathEcho(meta=state.meta){
+ const echo=activeDeathEcho(meta);
+ if(!echo){
+  $("deathEchoSummary").textContent="遺響回収・なし";
+  $("deathEchoBody").innerHTML=`
+   <div class="deathEchoEmpty">
+    現在回収できる遺響はありません。死亡時、保険で守られなかった新規装備のうち
+    推奨度が高い最大3個が死亡階層へ残ります。
+   </div>`;
+  return;
+ }
+ const guardReady=!!echo.guardDefeated;
+ $("deathEchoSummary").textContent=`遺響回収・第${echo.floor}層・装備${echo.gear.length}個`;
+ $("deathEchoBody").innerHTML=`
+  <div class="deathEchoCard ${guardReady?"ready":""}">
+   <div class="deathEchoTop">
+    <span class="deathEchoName">失われた探索者の遺響</span>
+    <span class="deathEchoFloor">第${echo.floor}層</span>
+   </div>
+   <div class="deathEchoCause">
+    ${echo.floorTitle||"深層"} / ${echo.biome||"不明"}<br>
+    ${echo.cause||"死亡原因は記録されていない。"}
+   </div>
+   <div class="deathEchoGearList">
+    ${(echo.gear||[]).map(gear=>`
+     <div class="deathEchoGear">
+      <b>${rarityData[gear.rarity]?.label||"通常"}・${gearLabel(gear)}</b><br>
+      ${equippedSlotLabel(gear.slot)} / ILv${gear.itemLevel||1} / 推奨度 ${Math.round(gearScore(gear))}
+     </div>`).join("")}
+   </div>
+   <div class="deathEchoGuard ${guardReady?"defeated":""}">
+    ${guardReady
+     ?`遺響守は撃破済みです。第${echo.floor}層の墓標へ触れるだけで回収できます。`
+     :`守護敵：${echo.guard?.name||"遺響守"}。墓標の封印を解くには撃破が必要です。`}
+   </div>
+   <div class="deathEchoWarning">
+    回収前にもう一度死亡すると、この遺響は消え、新しい死亡地点の遺響へ置き換わります。
+    回収した装備も灯台へ帰還するまでは再び失う可能性があります。
+   </div>
+  </div>`;
+}
 function renderHub(){
  const m=state.meta||defaultMeta();
  ensureMetaLoadouts(m);
@@ -7170,6 +7685,7 @@ function renderHub(){
  renderLighthouseLoadout();
  renderInsurance(m);
  renderRouteMastery(m);
+ renderDeathEcho(m);
  $("researchBtn").textContent=`深淵研究（${m.research?.points||0}点）`;
  $("adaptBtn").textContent=(m.adaptationPoints||0)>0
   ?`深淵適応を選ぶ（${m.adaptationPoints}点）`
@@ -7404,6 +7920,7 @@ function loadGame(){
   if(!state.meta.mastery)state.meta.mastery={sword:0,spear:0,bow:0,staff:0};
   ensureRouteMastery(state.meta);
   ensureInsuranceMeta(state.meta);
+  ensureDeathEchoMeta(state.meta);
   if(!state.meta.bodyTraining)state.meta.bodyTraining={endurance:0,strength:0,focus:0,perception:0};
   if(!state.meta.abyssAdaptations)state.meta.abyssAdaptations=[];
   if(typeof state.meta.adaptationPoints!=="number")state.meta.adaptationPoints=0;
@@ -7428,6 +7945,11 @@ function loadGame(){
   if(!state.light)state.light={type:"torch",fuel:80,on:true};
   if(typeof state.hero.perception!=="number")state.hero.perception=0;
   if(typeof state.hero.boneLastStandUsed!=="boolean")state.hero.boneLastStandUsed=false;
+  if(typeof state.hero.lastStandUsed!=="boolean")state.hero.lastStandUsed=false;
+  if(typeof state.hero.lastStandArmed!=="boolean")state.hero.lastStandArmed=false;
+  if(typeof state.hero.lastStandInvulnerable!=="boolean")state.hero.lastStandInvulnerable=false;
+  if(typeof state.hero.lastStandTriggeredThisTurn!=="boolean")state.hero.lastStandTriggeredThisTurn=false;
+  if(typeof state.hero.exhaustedTurns!=="number")state.hero.exhaustedTurns=0;
   if(typeof state.hungerStageId!=="string")state.hungerStageId=hungerStage().id;
   if(typeof state.hungerRecoveryBuffer!=="number")state.hungerRecoveryBuffer=0;
   if(typeof state.provisions!=="number")state.provisions=0;
@@ -7444,10 +7966,12 @@ function loadGame(){
   if(typeof state.fieldForgeDef!=="number")state.fieldForgeDef=0;
   if(typeof state.inventorySort!=="string")state.inventorySort="score";
   if(typeof state.protectionContract==="undefined")state.protectionContract=null;
-  if(!state.combatStats)state.combatStats={dodges:0,guards:0,breaks:0,crits:0};
+  if(!state.combatStats)state.combatStats={dodges:0,guards:0,breaks:0,crits:0,lastStands:0};
+  if(typeof state.combatStats.lastStands!=="number")state.combatStats.lastStands=0;
   if(!state.runStats)state.runStats=createRunStats(state.meta);
   if(typeof state.runStats.objectivesCompleted!=="number")state.runStats.objectivesCompleted=0;
   if(typeof state.runStats.routesCompleted!=="number")state.runStats.routesCompleted=0;
+  if(typeof state.runStats.deathEchoRecovered!=="number")state.runStats.deathEchoRecovered=0;
   if(!state.floorStats)state.floorStats=createFloorStats();
   if(!state.floorObjective)state.floorObjective={...createFloorObjective(),floor:state.floor};
   if(typeof state.routePlan==="undefined")state.routePlan=null;
@@ -7541,6 +8065,7 @@ function showFloorBanner(){
   const route=activeRoute();
   extra.push(`進路：${route.label}${isRouteFinaleFloor()?"・終点":state.routePlan?.completed?"・踏破":""}`);
  }
+ if(deathEchoForCurrentFloor())extra.push("遺響：失った装備の回収地点");
 
  banner.classList.remove("show","floorBannerBoss","floorBannerRest");
  void banner.offsetWidth;
@@ -7575,10 +8100,18 @@ function renderStats(){
 function renderHero(){
  const h=state.hero;
  const danger=state.enemies.filter(e=>e.intent&&Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)===1).length;
- $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""}">
+ const threat=currentThreatForecast();
+ const stand=lastStandStatus();
+ const threatClass=threat.certainLethal?"lethal":threat.possibleLethal?"warning":"";
+ const threatText=threat.count
+  ?`予測被害 <b>${threat.min===threat.max?threat.max:`${threat.min}〜${threat.max}`}</b> / ${threat.count}予兆${
+    threat.certainLethal?"・確定致死圏":threat.possibleLethal?"・致死の可能性":""
+   }`
+  :"現在プレイヤーを狙う固定予兆なし";
+ $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
-  <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
-  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}</div>
+  <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}${threat.possibleLethal?` <span class="mortalWarning ${threat.certainLethal?"certain":""}">${threat.certainLethal?"確定致死":"致死圏"}</span>`:""}</div>
+  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)} <span class="lastStandState ${stand.className}">踏留:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
   <div class="resourceGrid">
    <div class="resourceCell hpResource">
     <div class="resourceHeader"><b>HP</b><span class="resourceValue">${h.hp}/${h.maxHp}</span></div>
@@ -7591,6 +8124,11 @@ function renderHero(){
     <div class="resourceNote">通常攻撃消費 ${weaponData[weaponType()].cost}</div>
    </div>
   </div>
+  <div class="threatReadout ${threatClass}">${threatText}${
+   threat.possibleLethal&&!h.lastStandUsed
+    ?`<br>「踏留」を使うと気力5を消費し、次の敵行動中の致命傷を一度だけHP1で耐えます。`
+    :""
+  }</div>
  </div>`;
  drawHeroPortrait();
 }
@@ -7740,7 +8278,7 @@ function drawHeroSprite(x,y,hurt,t){
 function drawEnemySprite(e,x,y,t){
  const bob=Math.sin(t*.1+e.x*.7+e.y)*.65;
  const base=e.bossColor||{skeleton:"#d5d8e1",warg:"#c76673",mage:"#9a84e4",bomber:"#e2a24d",warden:"#dbc45b"}[e.type]||"#ddd";
- const accent=e.nemesis?"#ff4f73":(e.bossColor||eliteColor(e)||base);
+ const accent=e.echoGuard?"#69d8eb":e.nemesis?"#ff4f73":(e.bossColor||eliteColor(e)||base);
 
  ctx.save();
  ctx.globalAlpha=.32;ctx.fillStyle="#000";ctx.beginPath();ctx.ellipse(x+11,y+18,7,3,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
@@ -7795,9 +8333,9 @@ function drawEnemySprite(e,x,y,t){
   ctx.lineWidth=2;
   ctx.strokeRect(x+1.5,y+1.5,TILE-3,TILE-3);
  }
- if(e.intent||e.nemesis){
-  ctx.strokeStyle=e.nemesis?"#ff4f73":"#ff5368";
-  ctx.lineWidth=e.nemesis?3:2;
+ if(e.intent||e.nemesis||e.echoGuard){
+  ctx.strokeStyle=e.echoGuard?"#69d8eb":e.nemesis?"#ff4f73":"#ff5368";
+  ctx.lineWidth=(e.nemesis||e.echoGuard)?3:2;
   ctx.strokeRect(x+2,y+2,TILE-4,TILE-4);
  }
  ctx.restore();
@@ -7917,6 +8455,18 @@ function drawSpecialTileSprite(tileData,x,y,t){
  }else if(tileData.type==="collapse"){
   ctx.fillStyle="#8f705f";ctx.fillRect(x+4,y+5,6,5);ctx.fillRect(x+12,y+12,7,6);ctx.fillRect(x+6,y+15,5,4);
   ctx.fillStyle="#c89c77";ctx.fillRect(x+6,y+7,2,1);ctx.fillRect(x+14,y+13,2,1);
+ }else if(tileData.type==="death_echo"){
+  const pulse=.75+Math.sin(t*.16+tileData.x)*.18;
+  ctx.globalAlpha=.16+pulse*.08;
+  ctx.fillStyle="#7ee6ff";ctx.beginPath();ctx.arc(x+11,y+11,9,0,Math.PI*2);ctx.fill();
+  ctx.globalAlpha=1;
+  ctx.fillStyle="#415362";ctx.fillRect(x+6,y+7,10,12);
+  ctx.fillStyle="#86dbea";ctx.fillRect(x+9,y+3,4,13);
+  ctx.fillRect(x+5,y+8,12,3);
+  ctx.fillStyle=tileData.sealed?"#d486ef":"#b9fff0";
+  ctx.fillRect(x+10,y+12,2,4);
+  ctx.strokeStyle=tileData.sealed?"#bd70d9":"#7ee6c5";
+  ctx.strokeRect(x+3.5,y+3.5,15,16);
  }
 }
 function drawEnvironmentSprite(o,x,y,t){
@@ -8099,6 +8649,7 @@ function enemyStatusTags(e){
  if(e.intent)tags.push("予兆:"+e.intent);
  if(e.elite)tags.push("エリート:"+e.elite);
  if(e.nemesis)tags.push("宿敵");
+ if(e.echoGuard)tags.push("遺響守");
  if(e.boss)tags.push(`番人:${wardenProfileFor(e).short}`);
  if(e.phase===2)tags.push("第二形態");
  if(e.status?.burning>0)tags.push("炎上 "+e.status.burning);
@@ -8129,14 +8680,25 @@ function inspectTileAt(x,y){
     body+=`<div class="routeFinaleSummary"><b>進路終点・${route.finaleName}</b><br>${route.finaleBoss}<br><span class="bondStage">踏破報酬：${route.finaleReward}</span></div>`;
    }
   }
-  body+=`<p class="tacticalNote">${enemy.nemesis?"あなたを追い続ける宿敵。":enemy.boss?"階層ごとに固有の戦法を持つ深層番人。":enemy.elite?"通常個体より強い変異個体。":"迷宮に棲む敵。"}</p>`;
+  body+=`<p class="tacticalNote">${enemy.echoGuard?"失った装備を宿す遺響を守る。通常敵との勢力争いには参加しない。":enemy.nemesis?"あなたを追い続ける宿敵。":enemy.boss?"階層ごとに固有の戦法を持つ深層番人。":enemy.elite?"通常個体より強い変異個体。":"迷宮に棲む敵。"}</p>`;
  }else if(item){
   title=item.name||"落とし物";
   body+=`<p>${item.type==="gear"?(item.gear.identified?gearLabel(item.gear):"未鑑定装備"):item.type}</p>`;
  }else if(special){
-  const names={shrine:"祭壇",treasure:"宝物庫",flood:"水没区画",collapse:"崩落区画"};
+  const names={shrine:"祭壇",treasure:"宝物庫",flood:"水没区画",collapse:"崩落区画",death_echo:"遺響の墓標"};
   title=names[special.type]||"特殊地点";
-  body+=`<p class="tacticalNote">${special.used?"既に利用済み。":"まだ利用できる。"}</p>`;
+  if(special.type==="death_echo"){
+   const echo=activeDeathEcho();
+   body+=`<p class="tacticalNote">${
+    special.used
+     ?"装備を回収した後の空の墓標。"
+     :echo?.guardDefeated
+      ?`封印解除済み。触れると装備${echo.gear?.length||0}個を荷物へ回収する。`
+      :`遺響守を倒すまで封印されている。`
+   }</p>`;
+  }else{
+   body+=`<p class="tacticalNote">${special.used?"既に利用済み。":"まだ利用できる。"}</p>`;
+  }
  }else if(env){
   title=env.type==="barrel"?"爆薬樽":env.burning?"燃える油":"油だまり";
   body+=`<p class="tacticalNote">${env.type==="barrel"?"炎で爆発し、周囲を巻き込む。":"炎で燃え広がる。"}</p>`;
@@ -8482,6 +9044,21 @@ function renderSkills(){
  $("quickBomb").textContent=`壺 ${state.consumables.bomb||0}`;
  $("quickPotion").disabled=(state.consumables.potion||0)<=0;
  $("quickBomb").disabled=(state.consumables.bomb||0)<=0;
+
+ const standBtn=$("lastStandBtn");
+ const threat=currentThreatForecast();
+ standBtn.classList.toggle("armed",!!state.hero.lastStandArmed);
+ standBtn.classList.toggle("used",!!state.hero.lastStandUsed&&!state.hero.lastStandArmed);
+ standBtn.classList.toggle("lethalReady",!!threat.possibleLethal&&!state.hero.lastStandUsed&&state.hero.stamina>=5);
+ standBtn.textContent=state.hero.lastStandArmed?"踏留 構え中":state.hero.lastStandUsed?"踏留 済":"踏留 1";
+ standBtn.disabled=!canArmLastStand();
+ standBtn.title=state.hero.lastStandUsed
+  ?"この探索では使用済みです。"
+  :state.hero.stamina<5
+   ?"気力5が必要です。"
+   :threat.possibleLethal
+    ?"致死予測あり。次の敵行動へ決死の構えを取ります。"
+    :"次の敵行動中、一度だけ致命傷をHP1で耐えます。発動しなくても使用済みになります。";
 }
 function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();renderFloorGoal();renderReturnAccess();draw()}
 function startNew(){
@@ -8554,6 +9131,7 @@ canvas.addEventListener("click",event=>{
 
 $("quickPotion").onclick=usePotion;
 $("quickBomb").onclick=throwBomb;
+$("lastStandBtn").onclick=armLastStand;
 $("appearanceBtn").onclick=()=>{
  if(!state)return;
  renderAppearance();
