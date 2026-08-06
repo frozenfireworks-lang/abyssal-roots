@@ -2085,11 +2085,115 @@ body{
  background:#0d151a;color:#c6dce3;font-size:8px;line-height:1.5;
 }
 
+
+/* v3.10.4 EXTRACTION PROMPT */
+.returnPrompt{
+ position:absolute;
+ left:50%;
+ bottom:6px;
+ z-index:7;
+ width:min(92%,342px);
+ min-height:42px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:7px;
+ padding:6px 7px 6px 9px;
+ border:1px solid rgba(102,139,151,.82);
+ border-radius:9px;
+ background:rgba(10,15,20,.76);
+ box-shadow:0 6px 18px rgba(0,0,0,.52),inset 0 0 18px rgba(83,177,201,.05);
+ backdrop-filter:blur(3px);
+ transform:translateX(-50%);
+ pointer-events:none;
+}
+.returnPrompt.ready{
+ border-color:rgba(103,196,166,.9);
+ background:rgba(8,20,17,.78);
+}
+.returnPrompt.free{
+ border-color:rgba(225,184,91,.9);
+ background:rgba(25,19,10,.78);
+}
+.returnPrompt.blocked{
+ border-color:rgba(145,75,91,.8);
+ background:rgba(27,11,16,.76);
+}
+.returnPrompt.playerBehind{
+ background:rgba(8,12,16,.38);
+ box-shadow:0 3px 11px rgba(0,0,0,.28);
+}
+.returnPromptText{
+ min-width:0;
+ line-height:1.25;
+}
+.returnPromptText b{
+ display:block;
+ overflow:hidden;
+ color:#e8f8fc;
+ font-size:10px;
+ white-space:nowrap;
+ text-overflow:ellipsis;
+}
+.returnPromptText small{
+ display:block;
+ margin-top:2px;
+ overflow:hidden;
+ color:#b9cbd1;
+ font-size:7px;
+ line-height:1.3;
+ white-space:nowrap;
+ text-overflow:ellipsis;
+}
+.returnPrompt.ready .returnPromptText b{color:#bff1d3}
+.returnPrompt.free .returnPromptText b{color:#ffe2a0}
+.returnPrompt.blocked .returnPromptText b{color:#efb2bd}
+#returnPromptBtn{
+ flex:none;
+ min-width:80px;
+ min-height:30px;
+ padding:5px 8px;
+ border:1px solid #68ad94;
+ border-radius:7px;
+ background:linear-gradient(180deg,#214e40,#123126);
+ color:#e9fff4;
+ font-size:9px;
+ font-weight:800;
+ pointer-events:auto;
+ touch-action:manipulation;
+}
+.returnPrompt.free #returnPromptBtn{
+ border-color:#c49b48;
+ background:linear-gradient(180deg,#5b421d,#38270f);
+ color:#fff0bb;
+}
+.returnPrompt.blocked #returnPromptBtn{
+ border-color:#5c4650;
+ background:#251920;
+ color:#8f8188;
+}
+#returnPromptBtn:disabled{opacity:.68}
+@media(max-width:390px){
+ .returnPrompt{
+  bottom:4px;
+  min-height:38px;
+  padding:4px 5px 4px 7px;
+ }
+ .returnPromptText b{font-size:9px}
+ .returnPromptText small{font-size:6.5px}
+ #returnPromptBtn{
+  min-width:72px;
+  min-height:28px;
+  padding:4px 6px;
+  font-size:8px;
+ }
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.3.2 STAIR RETURN HOTFIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.4 EXTRACTION PROMPT</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2097,6 +2201,13 @@ body{
 <div id="floorBanner"></div>
 <div id="combatToast" aria-live="polite"></div>
 <div class="floorGoal" id="floorGoal"><b>探索目標</b><br>深淵へ踏み出す。</div>
+<div class="returnPrompt hidden" id="returnPrompt" aria-live="polite">
+  <div class="returnPromptText">
+    <b id="returnPromptTitle">帰還</b>
+    <small id="returnPromptDetail"></small>
+  </div>
+  <button type="button" id="returnPromptBtn">帰還する</button>
+</div>
 </div>
 <div id="log"></div>
 <section id="actions">
@@ -2131,7 +2242,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 階段隣接からの帰還</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 帰還条件の常時案内</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2292,6 +2403,7 @@ body{
           <li><b>帰還条件</b>は「祭壇上」「番人撃破後の階段に隣接」「目標達成済み階段に隣接して帰還楔を消費」のいずれかです。</li>
           <li>帰還すると探索は終了し、<b>HP・気力・充足が完全回復</b>します。</li>
           <li>階段マスへ入ると階層移動の確認が始まるため、帰還操作は階段の<b>上下左右に隣接したマス</b>から行います。斜め位置からは使用できません。</li>
+          <li>帰還地点へ近づくと、ゲーム画面下部に専用案内が表示されます。階段封印・帰還楔不足・無料帰還・楔消費後の残数をその場で確認できます。</li>
           <li><b>欠片保険</b>は最大3部位まで指定でき、出撃時に性能依存の保険料を支払います。死亡時のみ現在状態を倉庫へ回収します。</li>
           <li><b>魂還石</b>は深層番人から極低確率で入手できます。携行設定中はHP0の瞬間に1個消費し、死亡を緊急帰還へ置き換えます。</li>
           <li><b>致死予測</b>は、現在プレイヤーを狙って固定されている敵予兆の合計被害範囲です。移動で予兆から外れれば予測も消えます。</li>
@@ -8047,36 +8159,113 @@ function pickupGroundItemFromInventory(){
  pickup();
  saveGame();renderInventory();render();
 }
-function currentReturnSource(){
- if(!state||state.expeditionEnded||state.gameOver)return null;
+function returnAccessStatus(){
+ if(!state||state.expeditionEnded||state.gameOver){
+  return{near:false,ready:false,id:null,title:"帰還不可",detail:"探索中ではありません。"};
+ }
  const onShrine=specialAt(state.player.x,state.player.y)?.type==="shrine";
+ if(onShrine){
+  return{
+   near:true,ready:true,id:"shrine",free:true,
+   label:"帰還可能な祭壇",
+   title:"祭壇から無料帰還",
+   detail:"帰還楔は消費しません。"
+  };
+ }
+
  const stairDistance=
   Math.abs(state.player.x-state.stairs.x)+
   Math.abs(state.player.y-state.stairs.y);
- const besideStairs=stairDistance===1;
- const stairsUnlocked=floorObjectiveComplete();
+ if(stairDistance!==1){
+  return{near:false,ready:false,id:null,title:"帰還不可",detail:"階段の上下左右へ移動してください。"};
+ }
 
- if(onShrine)return{id:"shrine",label:"帰還可能な祭壇"};
- if(besideStairs&&state.bossDefeated){
-  return{id:"boss",label:"番人撃破後の階段前"};
+ if(state.bossDefeated){
+  return{
+   near:true,ready:true,id:"boss",free:true,
+   label:"番人撃破後の階段前",
+   title:"番人撃破・無料帰還",
+   detail:"帰還楔は消費しません。"
+  };
  }
- if(besideStairs&&stairsUnlocked&&(state.consumables.retreat||0)>0){
-  return{id:"marker",label:"帰還楔を打てる階段前"};
+
+ if(!floorObjectiveComplete()){
+  return{
+   near:true,ready:false,id:"locked",free:false,
+   title:"階段はまだ封印中",
+   detail:"現在階の階段解放条件を達成してください。"
+  };
  }
- return null;
+
+ const wedges=state.consumables.retreat||0;
+ if(wedges<=0){
+  return{
+   near:true,ready:false,id:"no_marker",free:false,
+   title:"帰還楔がありません",
+   detail:"帰還楔を1個入手すると、ここから帰還できます。"
+  };
+ }
+
+ return{
+  near:true,ready:true,id:"marker",free:false,
+  label:"帰還楔を打てる階段前",
+  title:"帰還可能・帰還楔×1",
+  detail:`所持${wedges}個 → 帰還後${wedges-1}個`
+ };
+}
+function currentReturnSource(){
+ const status=returnAccessStatus();
+ if(!status.ready)return null;
+ return{id:status.id,label:status.label};
 }
 function canReturnNow(){
  return !!currentReturnSource();
 }
+function renderReturnPrompt(){
+ const panel=$("returnPrompt");
+ const title=$("returnPromptTitle");
+ const detail=$("returnPromptDetail");
+ const button=$("returnPromptBtn");
+ if(!panel||!title||!detail||!button||!state)return;
+
+ const status=returnAccessStatus();
+ panel.classList.toggle("hidden",!status.near);
+ panel.classList.toggle("ready",!!status.ready&&!status.free);
+ panel.classList.toggle("free",!!status.ready&&!!status.free);
+ panel.classList.toggle("blocked",!!status.near&&!status.ready);
+
+ if(!status.near)return;
+
+ title.textContent=status.title;
+ detail.textContent=status.detail;
+ button.disabled=!status.ready;
+ button.textContent=status.ready
+  ?(status.free?"無料で帰還":"楔を使って帰還")
+  :"帰還不可";
+
+ const cam=cameraOrigin();
+ const screenX=state.player.x-cam.x;
+ const screenY=state.player.y-cam.y;
+ const behind=
+  screenY>=VIEW_ROWS-4&&
+  screenX>=2&&screenX<=VIEW_COLS-3;
+ panel.classList.toggle("playerBehind",behind);
+}
 function renderReturnAccess(){
  const button=$("hubBtn");
  if(!button||!state)return;
- const source=currentReturnSource();
+ const status=returnAccessStatus();
+ const source=status.ready?currentReturnSource():null;
  button.disabled=!source;
- button.textContent=source?"帰還":"帰還不可";
+ button.textContent=source
+  ?(status.free?"無料帰還":"帰還・楔1")
+  :(status.near&&status.id==="locked"?"階段封印":
+    status.near&&status.id==="no_marker"?"楔なし":"帰還不可");
  button.title=source
   ?`${source.label}から探索を終了する`
-  :"祭壇上、または解放済み階段に上下左右で隣接すると帰還できます";
+  :status.near?status.detail:
+   "祭壇上、または解放済み階段に上下左右で隣接すると帰還できます";
+ renderReturnPrompt();
 }
 function isStarterGear(g){
  return !!g&&(g.bankable===false||g.origin==="starter"||String(g.id||"").startsWith("starter-"));
@@ -9956,6 +10145,7 @@ canvas.addEventListener("click",event=>{
 $("quickPotion").onclick=usePotion;
 $("quickBomb").onclick=throwBomb;
 $("lastStandBtn").onclick=armLastStand;
+$("returnPromptBtn").onclick=returnToLighthouse;
 $("appearanceBtn").onclick=()=>{
  if(!state)return;
  renderAppearance();
