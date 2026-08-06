@@ -2539,11 +2539,96 @@ body{
  color:#d8b779;
 }
 
+
+/* v3.10.9 RETURN CONFIRM & RATION CAP */
+.returnConfirmCard{
+ width:min(100%,400px);
+ border-color:#5f7e86;
+ background:linear-gradient(180deg,#18242a,#0d1317);
+}
+.returnConfirmCard h2{color:#ccecf3}
+.returnConfirmSource{
+ padding:8px 9px;
+ border:1px solid #4f7078;
+ border-radius:8px;
+ background:#101b20;
+ color:#d5edf2;
+ font-size:10px;
+ line-height:1.5;
+}
+.returnConfirmGrid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:6px;
+ margin-top:8px;
+}
+.returnConfirmStat{
+ padding:7px 5px;
+ border:1px solid #3e5961;
+ border-radius:8px;
+ background:#0e171b;
+ text-align:center;
+}
+.returnConfirmStat b{
+ display:block;
+ color:#e6f7fa;
+ font-size:14px;
+}
+.returnConfirmStat small{
+ display:block;
+ margin-top:2px;
+ color:#9fb3b9;
+ font-size:8px;
+}
+.returnConfirmWarning{
+ margin-top:8px;
+ padding:8px 9px;
+ border-left:3px solid #b87048;
+ border-radius:6px;
+ background:#24180f;
+ color:#f0c39d;
+ font-size:9px;
+ line-height:1.55;
+}
+.returnConfirmWarning.danger{
+ border-color:#b64d5e;
+ background:#271117;
+ color:#f3b2bd;
+}
+.returnConfirmNote{
+ margin-top:8px;
+ color:#a9b8bc;
+ font-size:8px;
+ line-height:1.5;
+}
+.returnConfirmActions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:10px;
+}
+.returnConfirmActions .modalBtn{margin-top:0}
+.returnConfirmCancel{
+ border-color:#5a656b;
+ background:linear-gradient(180deg,#2b3337,#181e21);
+ color:#dde5e8;
+}
+.returnConfirmExecute{
+ border-color:#568995;
+ background:linear-gradient(180deg,#24505a,#15323a);
+ color:#eaffff;
+}
+.rationCapacity{
+ display:inline-block;
+ margin-left:3px;
+ color:#e8d990;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.8 APPEARANCE 104</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.9 RATION PACK & RETURN CONFIRM</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2594,7 +2679,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 104種の姿部品</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 携行糧上限・帰還確認</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2647,6 +2732,17 @@ body{
     <div id="consumableList"></div>
     <div id="inventoryList"></div>
     <button class="modalBtn" id="closeInventory">閉じる</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="returnConfirmOverlay">
+  <div class="card returnConfirmCard" role="dialog" aria-modal="true" aria-labelledby="returnConfirmTitle">
+    <h2 id="returnConfirmTitle">灯台帰還の確認</h2>
+    <div id="returnConfirmBody"></div>
+    <div class="returnConfirmActions">
+      <button type="button" class="modalBtn returnConfirmCancel" id="cancelReturnConfirm">探索を続ける</button>
+      <button type="button" class="modalBtn returnConfirmExecute" id="confirmReturnConfirm">帰還を確定</button>
+    </div>
   </div>
 </div>
 
@@ -2783,11 +2879,15 @@ body{
           <li>ログは常に最新の内容から表示されます。短いiPhone画面では最新2件を優先表示します。</li>
           <li>燃料0の状態で灯油を拾うと、その1本を自動補充して光源を再点灯します。燃料が残っている時は携行品として保存します。</li>
           <li><b>充足バランス</b>：基礎最大充足は840です。乾燥肉は携行糧60手、休息階の目標報酬も携行糧60手になります。</li>
+          <li><b>携行糧上限</b>：基礎240手です。灯台の「遠征糧袋」1Lvごとに+60。補給路では期間中+180、補給路熟練1・5でさらに各+60されます。</li>
+          <li>携行糧が満杯の場合、乾燥肉は消滅せず足元へ残ります。少しだけ入る場合は入る分だけ収納し、残りを足元へ残します。</li>
           <li>装備の「飢え耐え」は従来より強く最大充足へ反映されます。消費2倍の「飢餓」変異は第11層以降にだけ出現します。</li>
           <li><b>欠片保険</b>は最大3部位まで指定でき、出撃時に性能依存の保険料を支払います。死亡時のみ現在状態を倉庫へ回収します。</li>
           <li><b>魂還石</b>は深層番人から極低確率で入手できます。携行設定中はHP0の瞬間に1個消費し、死亡を緊急帰還へ置き換えます。</li>
           <li><b>致死予測</b>は、現在プレイヤーを狙って固定されている敵予兆の合計被害範囲です。移動で予兆から外れれば予測も消えます。</li>
           <li><b>踏み止まり</b>は気力5を使って次の敵行動へ備えます。致命傷を耐えるとHPを最大HPの25%まで立て直し、気力+3、残りの敵行動中断、2行動の衰弱が発生します。発動しなくても使い切りです。</li>
+          <li>踏み止まりボタンは必ず効果説明と現在値を表示する確認画面を経由します。クリック情報によって確認を飛ばすことはありません。</li>
+          <li>帰還ボタンも確認画面を経由します。楔消費、持ち帰り装備、倉庫あふれ、素材から得る欠片を確認してから確定します。</li>
           <li>ボタンを押すと確認画面が開き、現在HP・固定予測被害・使用後の気力を確認できます。「気力5で構える」を押した時だけ実行します。</li>
           <li><b>死亡時は餓死を含め、装備中・荷物内の非初期装備がすべて全損対象</b>です。未携行の倉庫装備だけが安全です。</li>
           <li><b>遺響回収</b>：死亡時、保険対象外の携行装備から推奨度上位3個が死亡階層へ残ります。次の探索で同じ階へ到達し、遺響守を倒して墓標へ触れると回収できます。</li>
@@ -3024,10 +3124,10 @@ const routeData={
  },
  supply:{
   id:"supply",label:"残灯の補給路",short:"補給路",
-  desc:"敵を減らし、薬・食料・灯油を多く確保できる。装備発見は少なくなる。",
+  desc:"敵を減らし、薬・食料・灯油を多く確保できる。期間中は携行糧上限も大きく広がるが、装備発見は少なくなる。",
   enemyBonus:-2,enemyAtk:0,eliteBonus:-.05,itemBonus:3,trapBonus:-1,secretBonus:0,eventBonus:0,
   itemShift:-.18,observationMul:1,objectiveScrap:0,
-  effects:["敵-2","物資+3","罠-1","装備出現減"],
+  effects:["敵-2","物資+3","罠-1","携行糧上限+180","装備出現減"],
   finaleName:"灯火の野営",
   finaleBoss:"番人階へ到達時にHP25%回復・気力全快・携行糧+80・燃料+25。",
   finaleReward:"治癒薬+1 / 灯油+1 / 携行糧+100 / 深淵の欠片+1"
@@ -3053,9 +3153,9 @@ const routeMasteryData={
  supply:{
   label:"残灯の補給路",short:"補給路",
   nodes:[
-   {at:1,name:"荷造り",desc:"補給路の物資数をさらに+1。"},
+   {at:1,name:"荷造り",desc:"補給路の物資数をさらに+1、期間中の携行糧上限をさらに+60。"},
    {at:3,name:"安全経路",desc:"補給路の罠をさらに-1。"},
-   {at:5,name:"灯台備蓄",desc:"選択時に携行糧+40、終点報酬の携行糧を100から150へ強化。"}
+   {at:5,name:"灯台備蓄",desc:"期間中の携行糧上限をさらに+60。選択時に携行糧+40、終点報酬を100から150へ強化。"}
   ]
  }
 };
@@ -3118,11 +3218,48 @@ function routeMasteryChoiceHtml(id){
   ${next?`次の解放：${next.at}回・${next.name}`:"全段階解放済み"}
  </span>`;
 }
+function supplyRouteCapacityActive(){
+ const plan=state?.routePlan;
+ if(!plan||plan.id!=="supply")return false;
+ const floor=state.floor||1;
+ return floor>=plan.chosenAfterFloor&&floor<=plan.endFloor;
+}
+function provisionCapacity(){
+ const base=240;
+ const permanent=(state?.meta?.upgrades?.supply||0)*60;
+ if(!supplyRouteCapacityActive())return base+permanent;
+ const routeBonus=180;
+ const mastery=routeMasteryLevel("supply");
+ const masteryBonus=(mastery>=1?60:0)+(mastery>=5?60:0);
+ return base+permanent+routeBonus+masteryBonus;
+}
+function gainProvisions(amount){
+ amount=Math.max(0,Math.floor(amount||0));
+ const before=Math.max(0,state.provisions||0);
+ const cap=provisionCapacity();
+ const room=Math.max(0,cap-before);
+ const gained=Math.min(room,amount);
+ state.provisions=before+gained;
+ return{
+  requested:amount,
+  before,
+  after:state.provisions,
+  cap,
+  gained,
+  overflow:Math.max(0,amount-gained)
+ };
+}
+function provisionGainSummary(result){
+ if(!result||result.requested<=0)return"携行糧の変化なし";
+ if(result.gained===result.requested)return`携行糧+${result.gained}`;
+ if(result.gained>0)return`携行糧+${result.gained}（上限で${result.overflow}残余）`;
+ return`携行糧は上限${result.cap}`;
+}
 function applyRouteSelectionMasteryBonus(id){
  if(id!=="supply"||routeMasteryLevel("supply")<5)return null;
- state.provisions=(state.provisions||0)+40;
- addLog("進路熟練「灯台備蓄」により、補給路へ携行糧40を追加した。");
- return{provisions:40};
+ const gain=gainProvisions(40);
+ addLog(`進路熟練「灯台備蓄」により、補給路へ${provisionGainSummary(gain)}。`);
+ return{provisions:gain.gained,requested:40,overflow:gain.overflow};
 }
 function activeRoute(){
  const plan=state?.routePlan;
@@ -3168,9 +3305,9 @@ function prepareRouteFinaleFloor(){
   state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+heal);
   state.hero.stamina=effectiveMaxStamina();
   state.hungerRecoveryBuffer=0;
-  state.provisions=(state.provisions||0)+80;
+  const provisionGain=gainProvisions(80);
   state.light.fuel=Math.min(100,(state.light.fuel||0)+25);
-  addLog(`灯火の野営でHPを${state.hero.hp-beforeHp}回復し、気力全快・携行糧+80・燃料+25。`);
+  addLog(`灯火の野営でHPを${state.hero.hp-beforeHp}回復し、気力全快・${provisionGainSummary(provisionGain)}・燃料+25。`);
   showCombatToast("進路終点・補給完了","灯火の野営が番人戦への備えを整えた","objective");
  }else{
   addLog(`進路終点「${route.finaleName}」へ到達した。${route.finaleBoss}`);
@@ -3243,9 +3380,9 @@ function completeRouteAtBoss(enemy,rewardGear){
   state.consumables.potion=(state.consumables.potion||0)+1;
   state.consumables.oil=(state.consumables.oil||0)+1;
   const provisionReward=masteryBefore>=5?150:100;
-  state.provisions=(state.provisions||0)+provisionReward;
+  const provisionGain=gainProvisions(provisionReward);
   state.meta.shards+=1;
-  rewardSummary=`治癒薬+1 / 灯油+1 / 携行糧+${provisionReward} / 欠片+1`;
+  rewardSummary=`治癒薬+1 / 灯油+1 / ${provisionGainSummary(provisionGain)} / 欠片+1`;
  }
 
  const masteryGain=gainRouteMastery(route.id);
@@ -4714,7 +4851,10 @@ function prepareLabyrinthReactionForExpedition(){
 
  state.reactionApplied=true;
  if(data.startPotion)state.consumables.potion=(state.consumables.potion||0)+data.startPotion;
- if(data.startProvisions)state.provisions=(state.provisions||0)+data.startProvisions;
+ if(data.startProvisions){
+  const provisionGain=gainProvisions(data.startProvisions);
+  if(provisionGain.overflow)addLog(`迷宮反応の携行糧は上限により${provisionGain.gained}/${provisionGain.requested}手を収納した。`);
+ }
  if(data.startScrap)state.fieldScrap=(state.fieldScrap||0)+data.startScrap;
  if(data.perceptionBonus)state.hero.perception=(state.hero.perception||0)+data.perceptionBonus;
  if(data.staminaBonus){
@@ -6985,7 +7125,8 @@ function completeFloorObjective(method="primary"){
  objective.completed=true;objective.claimed=true;objective.completionMethod=method;
  state.meta.shards+=(objective.reward.shards||0);
  state.fieldScrap=(state.fieldScrap||0)+(objective.reward.scrap||0);
- state.provisions=(state.provisions||0)+(objective.reward.provisions||0);
+ const provisionGain=gainProvisions(objective.reward.provisions||0);
+ if(provisionGain.overflow)addLog(`階層報酬の携行糧は上限により${provisionGain.gained}/${provisionGain.requested}手を収納した。`);
  const run=ensureRunStats();run.objectivesCompleted=(run.objectivesCompleted||0)+1;
  spawnCombatText(state.player.x,state.player.y,"UNSEALED","dodge",48);
  showCombatToast("階層目標達成",`${method==="fallback"?"踏破による代替達成・":""}階段解放 / ${floorObjectiveRewardText(objective)}`,"objective");
@@ -8671,10 +8812,31 @@ function enemyAttack(e,mult=1,label="攻撃"){
 function pickup(){
  const item=itemAt(state.player.x,state.player.y);if(!item)return;
  state.items=state.items.filter(i=>i!==item);
- if(item.type==="food"){ensureRunStats().itemsFound++;recordFloorPickup(false);
+ if(item.type==="food"){
+  const amount=Math.max(1,Math.floor(item.provisions||60));
+  const gain=gainProvisions(amount);
+
+  if(gain.gained<=0){
+   item.provisions=amount;
+   state.items.push(item);
+   addLog(`携行糧は上限${gain.cap}手。乾燥肉は足元へ残した。`);
+   return
+  }
+
+  if(!item.provisionCounted){
+   ensureRunStats().itemsFound++;
+   recordFloorPickup(false);
+  }
   spawnPickupEffect("food");
-  state.provisions=(state.provisions||0)+60;
-  addLog("乾燥肉を携行糧へ加えた。充足消費を60手分肩代わりする。");
+
+  if(gain.overflow>0){
+   item.provisions=gain.overflow;
+   item.provisionCounted=true;
+   state.items.push(item);
+   addLog(`乾燥肉から携行糧を${gain.gained}手収納した。残り${gain.overflow}手分は足元へ残した。`);
+  }else{
+   addLog(`乾燥肉を携行糧へ加えた。携行糧+${gain.gained}（${gain.after}/${gain.cap}手）。`);
+  }
   return
  }
  if(item.type==="potion"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("potion");state.consumables.potion++;addLog("治癒薬を拾った。");return}
@@ -9028,8 +9190,8 @@ function chooseDescentRoute(id){
  state.routeHistory=state.routeHistory||[];
  state.routeHistory.push({...state.routePlan,label:route.label});
  const masteryBonus=applyRouteSelectionMasteryBonus(id);
- addLog(`進路「${route.label}」を選択。${route.desc}${masteryBonus?` 熟練補給：携行糧+${masteryBonus.provisions}。`:""}`);
- showCombatToast("進路決定",`${route.label}・第${state.routePlan.startFloor}〜${state.routePlan.endFloor}層`,"objective");
+ addLog(`進路「${route.label}」を選択。${route.desc}${id==="supply"?` 携行糧上限は${provisionCapacity()}手。`:""}${masteryBonus?` 熟練補給：携行糧+${masteryBonus.provisions}。`:""}`);
+ showCombatToast("進路決定",`${route.label}・第${state.routePlan.startFloor}〜${state.routePlan.endFloor}層${id==="supply"?`・糧上限${provisionCapacity()}`:""}`,"objective");
  pendingRouteDescent=null;
  $("routeOverlay").classList.add("hidden");
  performStairDescent(pending.dx,pending.dy,pending.nx,pending.ny);
@@ -9356,7 +9518,7 @@ const perks=[
  {name:"剛力の枝",desc:"攻撃力 +2",apply(){state.hero.atk+=2}},
  {name:"生命の枝",desc:"最大HP +9、現在HPも回復",apply(){state.hero.maxHp+=9;state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+9)}},
  {name:"鉄皮の枝",desc:"防御力 +1",apply(){state.hero.def+=1}},
- {name:"遠征糧秣",desc:"携行糧 +120手（今の探索時間を即座に延長）",apply(){state.provisions=(state.provisions||0)+120}},
+ {name:"遠征糧秣",desc:"携行糧を最大120手補充（上限まで）",apply(){const gain=gainProvisions(120);addLog(`遠征糧秣：${provisionGainSummary(gain)}。`)}},
  {name:"凶星の枝",desc:"会心率 +5%",apply(){state.crit+=.05}},
  {name:"息吹の枝",desc:"最大気力 +2、気力を全回復",apply(){state.hero.maxStamina+=2;state.hero.stamina=effectiveMaxStamina()}}
 ];
@@ -9717,7 +9879,73 @@ function returnAccessStatus(){
 function currentReturnSource(){
  const status=returnAccessStatus();
  if(!status.ready)return null;
- return{id:status.id,label:status.label};
+ return{id:status.id,label:status.label,free:!!status.free,detail:status.detail};
+}
+function closeReturnConfirm(){
+ $("returnConfirmOverlay").classList.add("hidden");
+}
+function returnCarryPreview(){
+ const carried=[...new Map(
+  [...allEquippedItems(),...state.inventory]
+   .filter(g=>g&&!isStarterGear(g))
+   .map(g=>[g.id,g])
+ ).values()];
+ const stashIds=new Set((state.meta.stash||[]).map(g=>g.id));
+ const newGear=carried.filter(g=>!stashIds.has(g.id));
+ const available=Math.max(0,20-(state.meta.stash||[]).length);
+ return{
+  carried:carried.length,
+  newGear:newGear.length,
+  updated:carried.length-newGear.length,
+  available,
+  overflow:Math.max(0,newGear.length-available),
+  shardConversion:Math.floor((state.fieldScrap||0)/5)
+ };
+}
+function openReturnConfirm(){
+ const source=currentReturnSource();
+ if(!source){
+  addLog("ここからは帰還できない。祭壇上、または解放済み階段の上下左右に立つ必要がある。");
+  renderReturnAccess();
+  return false;
+ }
+ const preview=returnCarryPreview();
+ const markerCost=source.id==="marker"?1:0;
+ const markerAfter=Math.max(0,(state.consumables.retreat||0)-markerCost);
+ const danger=preview.overflow>0;
+
+ $("returnConfirmTitle").textContent=source.free?"無料帰還の確認":"帰還楔を使う確認";
+ $("returnConfirmBody").innerHTML=`
+  <div class="returnConfirmSource">
+   <b>${source.label}</b><br>
+   第${state.floor}層で探索を終了し、灯台へ帰還します。帰還後はこの階層へ戻れません。
+  </div>
+  <div class="returnConfirmGrid">
+   <div class="returnConfirmStat"><b>${markerCost?`${state.consumables.retreat||0}→${markerAfter}`:"消費なし"}</b><small>帰還楔</small></div>
+   <div class="returnConfirmStat"><b>${preview.carried}</b><small>持ち帰り装備</small></div>
+   <div class="returnConfirmStat"><b>${state.meta.stash?.length||0}/20</b><small>現在の倉庫</small></div>
+   <div class="returnConfirmStat"><b>+${preview.shardConversion}</b><small>素材から得る欠片</small></div>
+  </div>
+  ${danger
+   ?`<div class="returnConfirmWarning danger">
+      倉庫の空きは${preview.available}枠ですが、新規装備は${preview.newGear}個あります。
+      <b>${preview.overflow}個は倉庫へ保存できず、帰還時に失われます。</b>
+     </div>`
+   :`<div class="returnConfirmWarning">
+      新規装備${preview.newGear}個・既存更新${preview.updated}個を灯台へ持ち帰ります。
+      倉庫の空きは${preview.available}枠です。
+     </div>`}
+  <div class="returnConfirmNote">
+   帰還するとHP・気力・充足は完全回復し、携行糧と今回限りの現地強化は失われます。
+   ${markerCost?"「帰還を確定」を押した時だけ帰還楔を1個消費します。":"この帰還では帰還楔を消費しません。"}
+  </div>`;
+ $("confirmReturnConfirm").textContent=markerCost?"楔1個で帰還":"無料帰還を確定";
+ $("returnConfirmOverlay").classList.remove("hidden");
+ return true;
+}
+function confirmReturnToLighthouse(){
+ closeReturnConfirm();
+ return returnToLighthouse(true);
 }
 function canReturnNow(){
  return !!currentReturnSource();
@@ -9831,7 +10059,8 @@ function bankCurrentRun(){
   candidates:candidates.length
  };
 }
-function returnToLighthouse(){
+function returnToLighthouse(confirmed=false){
+ if(!confirmed)return openReturnConfirm();
  const source=currentReturnSource();
  if(!source){
   addLog("ここからは帰還できない。祭壇上、または解放済み階段の上下左右に立つ必要がある。");
@@ -10200,7 +10429,7 @@ function renderHub(){
   ["vitality","灯火の生命","次回以降 最大HP +4"],
   ["focus","静謐の焦点","次回以降 最大気力 +1"],
   ["pack","回収箱","次回以降 荷物上限 +2"],
-  ["supply","遠征糧袋","次回以降 最大充足 +120"]
+  ["supply","遠征糧袋","次回以降 最大充足 +120 / 携行糧上限 +60"]
  ];
  $("hubUpgrades").innerHTML=upgrades.map(([id,name,desc])=>{
   const lvl=m.upgrades[id]||0,cost=upgradeCost(lvl);
@@ -10314,7 +10543,7 @@ function renderInventory(){
  $("salvageCommonBtn").onclick=()=>salvageCommonInventory();
 
  $("consumableList").innerHTML=`<div class="itemRow"><div class="top"><span>消耗品</span><span>所持金 ${state.gold}G</span></div>
- <div class="desc">携行糧 ${state.provisions||0}手 / 治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0} / 帰還楔 ${state.consumables.retreat||0} / 灯油 ${state.consumables.oil||0}</div>
+ <div class="desc">携行糧 ${state.provisions||0}/${provisionCapacity()}手 / 治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0} / 帰還楔 ${state.consumables.retreat||0} / 灯油 ${state.consumables.oil||0}</div>
  <div class="desc">荷物 ${state.inventory.length}/${inventoryCapacity()}　保護 ${state.inventory.filter(g=>g.locked).length}</div>
  <button type="button" id="usePotionBtn">治癒薬を使う</button><button type="button" id="oilBtn">灯油を補充</button><button type="button" id="bombBtn">火炎壺を投げる</button><button type="button" id="purifyBtn">装備中の呪いを解く</button></div>`;
  $("usePotionBtn").onclick=usePotion;$("oilBtn").onclick=refillLight;$("bombBtn").onclick=()=>{$("inventoryOverlay").classList.add("hidden");throwBomb()};$("purifyBtn").onclick=purifyEquipped;
@@ -10366,7 +10595,7 @@ function renderInventory(){
   box.appendChild(row);
  });
 }
-function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
+function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("returnConfirmOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
 let saveTimer=null;
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveGame(),120)}
 function saveSnapshot(){try{if(state)localStorage.setItem("abyssalRootsSoloV4Backup",JSON.stringify(state))}catch(e){}}
@@ -10635,7 +10864,7 @@ function renderStats(){
  $("stats").innerHTML=`
  <div class="stat"><b>${state.floor}</b><small>${currentBiome().label}</small></div><div class="stat"><b>${state.enemies.length}/${floorEnemyCap()}</b><small>生態</small></div>
  <div class="stat"><b>${state.level}</b><small>探索者Lv</small></div>
- <div class="stat" title="${hs.desc}"><b style="color:${hs.color}">${state.hunger}/${effectiveMaxHunger()}</b><small style="color:${hs.color}">${hs.label}${state.provisions?`・糧${state.provisions}`:""}</small></div>
+ <div class="stat" title="${hs.desc}"><b style="color:${hs.color}">${state.hunger}/${effectiveMaxHunger()}</b><small style="color:${hs.color}">${hs.label}<span class="rationCapacity">・糧${state.provisions||0}/${provisionCapacity()}</span></small></div>
  <div class="stat"><b>${state.gold}G</b><small>戦利金</small></div>`;
 }
 function renderHero(){
@@ -10654,7 +10883,7 @@ function renderHero(){
  $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}${threat.possibleLethal?` <span class="mortalWarning ${threat.certainLethal?"certain":""}">${threat.certainLethal?"確定致死":"致死圏"}</span>`:""}</div>
-  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${reaction?` <span class="labyrinthReactionBadge ${labyrinthReactionData[reaction.id]?.tone==="death"?"danger":""}">反応:${reactionShortLabel(reaction)}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
+  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}/${provisionCapacity()}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${reaction?` <span class="labyrinthReactionBadge ${labyrinthReactionData[reaction.id]?.tone==="death"?"danger":""}">反応:${reactionShortLabel(reaction)}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
   <div class="resourceGrid">
    <div class="resourceCell hpResource">
     <div class="resourceHeader"><b>HP</b><span class="resourceValue">${h.hp}/${h.maxHp}</span></div>
@@ -11720,10 +11949,12 @@ canvas.addEventListener("click",event=>{
 
 $("quickPotion").onclick=usePotion;
 $("quickBomb").onclick=throwBomb;
-$("lastStandBtn").onclick=armLastStand;
+$("lastStandBtn").onclick=()=>armLastStand();
 $("cancelLastStand").onclick=closeLastStandConfirm;
 $("confirmLastStand").onclick=confirmLastStand;
-$("returnPromptBtn").onclick=returnToLighthouse;
+$("cancelReturnConfirm").onclick=closeReturnConfirm;
+$("confirmReturnConfirm").onclick=confirmReturnToLighthouse;
+$("returnPromptBtn").onclick=()=>returnToLighthouse();
 $("appearanceBtn").onclick=()=>{
  if(!state)return;
  renderAppearance();
