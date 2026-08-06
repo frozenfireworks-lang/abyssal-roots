@@ -1670,7 +1670,7 @@ body{
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.6 ROUTE VERDICTS</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.6.1 BOSS SOFTLOCK HOTFIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -1711,7 +1711,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 進路終点の試練と踏破報酬</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 番人消失・進行不能修正</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -1900,7 +1900,7 @@ body{
           <li>特殊部屋には<b>祭壇・宝物庫・水没・崩落</b>があります。</li>
           <li>2階以降は<b>階層異変</b>が発生し、5階ごとに<b>バイオーム</b>が変わります。</li>
           <li>敵は壁越しには見えず、見失うとしばらく捜索してから追跡を諦めます。</li>
-          <li>亡者・獣群・異形・番人は互いに敵対し、プレイヤー不在でも争うことがあります。</li>
+          <li>亡者・獣群・異形は互いに敵対し、プレイヤー不在でも争います。番人は進行不能防止のため勢力争いには参加しません。</li>
           <li>あなたを倒した敵は<b>宿敵</b>となり、次の探索で再登場する場合があります。</li>
           <li>迷宮は、あなたの武器や属性の使い方に応じて対策を変えてきます。</li>
         </ul>
@@ -3253,31 +3253,115 @@ function wardenProfileKeyForFloor(floor=state.floor){
 function wardenProfileFor(enemy=null){
  return wardenProfiles[enemy?.wardenKey||wardenProfileKeyForFloor(enemy?.bossFloor||state.floor)]||wardenProfiles.chain;
 }
-function spawnFloorBoss(){
- if(state.floor%5!==0)return;
- const p=randomFloorCell(8);
- if(!p)return;
+function livingFloorBoss(){
+ return(state.enemies||[]).find(enemy=>enemy?.boss&&enemy.hp>0)||null;
+}
+function bossSpawnCell(){
+ const valid=(point)=>{
+  if(!point||!inside(point.x,point.y)||tile(point.x,point.y)!==1)return false;
+  if(state.player.x===point.x&&state.player.y===point.y)return false;
+  return !enemyAt(point.x,point.y);
+ };
+
+ const candidates=[
+  state.stairs,
+  ...(state.rooms||[]).slice().reverse().map(room=>({x:room.cx,y:room.cy}))
+ ];
+ for(const point of candidates){
+  if(valid(point))return{x:point.x,y:point.y};
+ }
+
+ const floorCells=[];
+ for(let y=1;y<ROWS-1;y++)for(let x=1;x<COLS-1;x++){
+  if(valid({x,y})){
+   floorCells.push({
+    x,y,
+    distance:Math.abs(x-state.player.x)+Math.abs(y-state.player.y)
+   });
+  }
+ }
+ floorCells.sort((a,b)=>b.distance-a.distance);
+ if(floorCells.length)return{x:floorCells[0].x,y:floorCells[0].y};
+
+ // 壊れた旧セーブでも必ず復元できる最終手段。
+ for(const [dx,dy] of [...dirs,[1,1],[-1,1],[1,-1],[-1,-1]]){
+  const x=state.player.x+dx,y=state.player.y+dy;
+  if(!inside(x,y))continue;
+  const occupant=enemyAt(x,y);
+  if(occupant)continue;
+  state.map[y]=state.map[y]||Array(COLS).fill(0);
+  state.map[y][x]=1;
+  state.traps=(state.traps||[]).filter(trap=>trap.x!==x||trap.y!==y);
+  state.environment=(state.environment||[]).filter(object=>object.x!==x||object.y!==y);
+  return{x,y};
+ }
+ return null;
+}
+function spawnFloorBoss(recovery=false){
+ if(state.floor%5!==0||state.bossDefeated)return null;
+ const existing=livingFloorBoss();
+ if(existing)return existing;
+
+ const p=bossSpawnCell();
+ if(!p)return null;
+
  const bossLevel=rollEnemyLevel(true);
  const profile=wardenProfileFor();
  const baseHp=48+bossLevel*8;
  const baseAtk=9+Math.floor(bossLevel*1.1);
  const baseDef=4+Math.floor(bossLevel/4);
  const boss={
-  id:"boss-"+state.floor,x:p.x,y:p.y,type:"warden",name:profile.name,level:bossLevel,
+  id:`boss-${state.floor}-${recovery?"recovered":"spawned"}`,
+  x:p.x,y:p.y,type:"warden",name:profile.name,level:bossLevel,
   hp:Math.round(baseHp*profile.hp),maxHp:Math.round(baseHp*profile.hp),
   atk:Math.round(baseAtk*profile.atk),def:Math.round(baseDef*profile.def),
   xp:30+bossLevel*5,intent:null,intentCells:[],intentTarget:null,
   stagger:0,guarding:false,boss:true,phase:1,phaseTriggered:false,
   bossFloor:state.floor,wardenKey:profile.key,bossCycle:0,summonsMade:0,
   bossColor:profile.color,bossAccent:profile.accent,
+  recoveredFromSoftlock:!!recovery,
   alert:0,lastSeen:null,faction:"guardian",home:{x:p.x,y:p.y},patrol:0,rivalId:null,status:{}
  };
  applyRouteFinaleToBoss(boss);
  state.enemies.push(boss);
  state.stairs={x:p.x,y:p.y};
  state.bossDefeated=false;
- addLog(profile.intro);
- addLog(`番人「${profile.name}」：${profile.hint}`);
+
+ if(recovery){
+  addLog(`迷宮が消失していた番人「${profile.name}」を階段前へ再構成した。`);
+  showCombatToast("番人を復元",`${profile.name}が階段前へ再出現した`,"objective");
+ }else{
+  addLog(profile.intro);
+  addLog(`番人「${profile.name}」：${profile.hint}`);
+ }
+ return boss;
+}
+function ensureBossProgressIntegrity(source="turn"){
+ if(!state||state.gameOver||state.expeditionEnded||state.floor%5!==0)return false;
+
+ // 目標達成済みなら旧データの撃破フラグだけを補正する。
+ if(state.floorObjective?.type==="boss"&&state.floorObjective.completed){
+  if(!state.bossDefeated)state.bossDefeated=true;
+  return false;
+ }
+ if(state.bossDefeated)return false;
+
+ const boss=livingFloorBoss();
+ if(boss)return false;
+
+ const recovered=spawnFloorBoss(true);
+ if(recovered){
+  updateVision();
+  renderFloorGoal();
+  return true;
+ }
+
+ // 通常は到達しないが、完全に壊れたマップでも進行不能にはしない。
+ state.bossDefeated=true;
+ addLog("番人を再構成できなかったため、迷宮が階段の封印を解除した。");
+ updateFloorObjective();
+ showCombatToast("封印を緊急解除","番人データの破損を検知した","objective");
+ return true;
 }
 
 let combatToastTimer=null;
@@ -3695,9 +3779,10 @@ function factionsHostile(a,b){
  return false;
 }
 function hostileEnemyNear(e,range=6){
+ if(e?.boss)return null;
  let best=null,bestDist=999;
  for(const other of state.enemies){
-  if(other===e||!factionsHostile(e.faction,other.faction))continue;
+  if(other===e||other?.boss||!factionsHostile(e.faction,other.faction))continue;
   const d=Math.abs(other.x-e.x)+Math.abs(other.y-e.y);
   if(d<bestDist&&d<=range){best=other;bestDist=d}
  }
@@ -3709,6 +3794,16 @@ function enemyCanSeeEnemy(e,target){
  return clearLineBetween(e.x,e.y,target.x,target.y,radius);
 }
 function enemyAttackEnemy(attacker,target,mult=1,label="襲撃"){
+ if(!attacker||!target)return false;
+
+ // 番人は階層進行の必須対象なので、勢力戦では攻撃・撃破されない。
+ if(attacker.boss||target.boss){
+  attacker.rivalId=null;
+  target.rivalId=null;
+  if(target.boss&&target.hp<=0)target.hp=1;
+  return false;
+ }
+
  const dmg=Math.max(1,Math.round((attacker.atk+rint(-1,2))*mult)-target.def);
  target.hp-=dmg;
  if(state.visible[key(attacker.x,attacker.y)]||state.visible[key(target.x,target.y)]||hasAbyssAdaptation("factionScent"))addLog(attacker.name+"と"+target.name+"が争っている。");
@@ -3719,12 +3814,14 @@ function enemyAttackEnemy(attacker,target,mult=1,label="襲撃"){
   killer.hp=Math.min(killer.maxHp,killer.hp+Math.max(1,Math.floor(dmg*.15)));
   if(rng()<(hasAbyssAdaptation("scavenger")&&target.respawned?.32:.18))state.items.push({x:target.x,y:target.y,type:"gear",gear:rollGear(target.level||floorTargetLevel())});
  }
+ return true;
 }
 function moveTowardEnemy(e,target){
  if(!target)return false;
  return moveTowardPoint(e,{x:target.x,y:target.y});
 }
 function autonomousEnemyTurn(e){
+ if(e?.boss)return false;
  const rival=hostileEnemyNear(e,7);
  if(!rival)return false;
  if(enemyCanSeeEnemy(e,rival)){
@@ -4074,7 +4171,7 @@ const firstTwentyPlan={
  12:{title:"未鑑定装備",goal:"装備・鑑定・解呪のリスクを判断する。"},
  13:{title:"敵の捜索",goal:"視線を切り、追跡を振り切って有利な位置を取る。"},
  14:{title:"静かな階",goal:"回復と装備比較を済ませ、消耗を抑える。",rest:true},
- 15:{title:"第三の番人",goal:"敵勢力と環境物を番人戦へ持ち込む。",boss:true},
+ 15:{title:"第三の番人",goal:"炎・油・爆薬樽などの環境物を番人戦へ利用する。",boss:true},
  16:{title:"熟練の選択",goal:"主力武器を伸ばすか、別武器を試すか決める。"},
  17:{title:"深層研究",goal:"敵を調査し、研究情報を実戦へ活かす。"},
  18:{title:"危険な密度",goal:"全滅させず、戦う相手を選んで進む。"},
@@ -4363,6 +4460,7 @@ function generateFloor(){
  applyFloorPacingRewards();
  prepareRouteFinaleFloor();
  spawnFloorBoss();
+ ensureBossProgressIntegrity("generation");
  spawnNemesis();
  updateVision();
  state.floorStats=createFloorStats();
@@ -5595,6 +5693,7 @@ function triggerTrap(){
 }
 function endTurn(){
  state.turn++;
+ ensureBossProgressIntegrity("turn-start");
  updateFloorObjective();
  const hungerDrain=(mutation()?.hungerDrain||1);
  const lungPause=hasAbyssAdaptation("deepLungs")&&state.turn%10===0;
@@ -5623,6 +5722,7 @@ function endTurn(){
  updateEcology();
  if(state.gameOver){render();return}
  enemyTurn();
+ ensureBossProgressIntegrity("turn-end");
  for(const k in state.cooldowns)state.cooldowns[k]=Math.max(0,state.cooldowns[k]-1);
  state.guardTurns=Math.max(0,state.guardTurns-1);
  updateVision();saveGame();render();
@@ -5923,6 +6023,7 @@ function move(dx,dy){
 
  const steppingOntoStairs=nx===state.stairs.x&&ny===state.stairs.y;
  if(steppingOntoStairs){
+  ensureBossProgressIntegrity("stairs");
   updateFloorObjective();
   if(!floorObjectiveComplete()){
    const objective=ensureFloorObjective(),progress=floorObjectiveProgress();
@@ -6801,6 +6902,7 @@ function loadGame(){
     if(enemy.boss)applyRouteFinaleToBoss(enemy);
    }
   }
+  ensureBossProgressIntegrity("load");
   updateFloorObjective();
   for(const enemy of state.enemies||[]){
    if(!Array.isArray(enemy.intentCells))enemy.intentCells=[];
