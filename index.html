@@ -2505,11 +2505,45 @@ body{
  .reactionControlGrid button{min-height:35px;font-size:7.5px}
 }
 
+
+/* v3.10.8 APPEARANCE 104 */
+.appearancePreviewWrap{
+ position:sticky;
+ top:-1px;
+ z-index:4;
+ box-shadow:0 7px 16px rgba(0,0,0,.48);
+}
+.appearanceCollectionCount{
+ display:inline-block;
+ margin-left:5px;
+ padding:1px 6px;
+ border:1px solid #655370;
+ border-radius:999px;
+ background:#17111e;
+ color:#cfc1d7;
+ font-size:8px;
+ vertical-align:1px;
+}
+.appearanceChoice.secretRevealed{
+ border-color:#8a6ba0;
+ box-shadow:inset 0 0 12px rgba(169,112,205,.10);
+}
+.appearanceChoice.dropLocked{
+ border-color:#7d6341;
+ background:linear-gradient(180deg,#1d1710,#120f0c);
+}
+.appearanceChoice.highCost{
+ border-color:#746247;
+}
+.appearanceChoice .rarityHint{
+ color:#d8b779;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.7 APPEARANCE EXPANSION</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.8 APPEARANCE 104</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2560,7 +2594,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 姿の大拡張</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 104種の姿部品</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2590,7 +2624,7 @@ body{
 <div class="overlay hidden" id="appearanceOverlay">
   <div class="card appearanceCard">
     <h2>探索者の姿</h2>
-    <p>姿は <b>外套色</b>・<b>輪郭</b>・<b>紋章</b> の3系統で構成されます。深淵の欠片を大量に投じて恒久解放するもの、番人から激レアで落ちるもの、条件が伏せられた秘密の姿もあります。</p>
+    <p>姿は <b>外套色48色</b>・<b>輪郭32種</b>・<b>紋章24種</b>、合計104種の部品で構成されます。最大36,864通りを自由に組み合わせられます。高額な恒久解放、条件シークレット、番人の純運激レア枠があります。</p>
     <div class="appearancePreviewWrap">
       <canvas id="appearancePreview" width="96" height="96" aria-label="探索者アイコンのプレビュー"></canvas>
       <div id="appearanceSummary"></div>
@@ -2819,7 +2853,7 @@ body{
     <details class="helpSection">
       <summary>記号と見方</summary>
       <div class="helpBody">
-        <p>探索者の姿は最初は全員同じですが、外套色・輪郭・紋章を深淵の欠片や希少な姿片で解放し、自由に組み合わせられます。</p>
+        <p>探索者の姿は、外套色48色・輪郭32種・紋章24種の合計104部品から自由に組み合わせられます。全解放時は36,864通りです。高額解放、秘密条件、純運の激レア番人ドロップがあります。</p>
         <div class="helpKeys">
           <div class="helpKey"><b>@</b><br>主人公</div>
           <div class="helpKey"><b>S</b><br>盾骸兵</div>
@@ -3593,7 +3627,35 @@ const appearanceColorData={
  orchid:{label:"蘭紫",cost:72,body:"#b57ad1",cloak:"#432455",trim:"#f4d4ff",aura:"rgba(244,212,255,.30)"},
  frost:{label:"霜銀",cost:78,body:"#a8c1d4",cloak:"#4f6370",trim:"#ffffff",aura:"rgba(255,255,255,.26)"},
  sunset:{label:"夕灼",cost:84,body:"#d98657",cloak:"#5c3040",trim:"#ffdcb1",aura:"rgba(255,220,177,.30)"},
- abyss:{label:"深淵星",cost:96,body:"#6b76c2",cloak:"#161c3f",trim:"#9df3ff",aura:"rgba(157,243,255,.32)"}
+ abyss:{label:"深淵星",cost:96,body:"#6b76c2",cloak:"#161c3f",trim:"#9df3ff",aura:"rgba(157,243,255,.32)"},
+ sand:{label:"砂金",cost:105,body:"#c8aa72",cloak:"#69573a",trim:"#f5ddb0",aura:"rgba(245,221,176,.24)"},
+ lavender:{label:"薄藤",cost:112,body:"#ad9ac8",cloak:"#504563",trim:"#eadcff",aura:"rgba(234,220,255,.25)"},
+ mint:{label:"薄荷",cost:120,body:"#85c6ac",cloak:"#345e54",trim:"#d0ffea",aura:"rgba(208,255,234,.25)"},
+ wine:{label:"葡萄酒",cost:128,body:"#a35b70",cloak:"#4b2433",trim:"#f0b6c8",aura:"rgba(240,182,200,.25)"},
+ ink:{label:"墨藍",cost:136,body:"#596b84",cloak:"#202a3b",trim:"#b9d0ef",aura:"rgba(185,208,239,.24)"},
+ coral:{label:"珊瑚",cost:145,body:"#dc867c",cloak:"#713f44",trim:"#ffd0c8",aura:"rgba(255,208,200,.27)"},
+ teal:{label:"青碧",cost:155,body:"#46a5a5",cloak:"#1c5057",trim:"#a9ffff",aura:"rgba(169,255,255,.27)"},
+ plum:{label:"梅紫",cost:165,body:"#a26b9d",cloak:"#492f52",trim:"#f2c7ee",aura:"rgba(242,199,238,.27)"},
+ bronze:{label:"古銅",cost:176,body:"#a67b51",cloak:"#4f3825",trim:"#e7bd84",aura:"rgba(231,189,132,.27)"},
+ pearl:{label:"真珠",cost:188,body:"#d9d1d7",cloak:"#746c75",trim:"#fffaff",aura:"rgba(255,250,255,.26)"},
+ smoke:{label:"煙晶",cost:200,body:"#8a8b91",cloak:"#37383f",trim:"#d6d8df",aura:"rgba(214,216,223,.24)"},
+ neon:{label:"電光翠",cost:215,body:"#70d46d",cloak:"#1d5429",trim:"#d7ff9b",aura:"rgba(215,255,155,.32)"},
+ sakura:{label:"桜霞",cost:230,body:"#dfa7ba",cloak:"#6b4254",trim:"#ffe0eb",aura:"rgba(255,224,235,.30)"},
+ glacier:{label:"氷河",cost:245,body:"#7ec4df",cloak:"#315668",trim:"#e4faff",aura:"rgba(228,250,255,.32)"},
+ forest:{label:"深森",cost:260,body:"#557b58",cloak:"#203b2c",trim:"#b8e39c",aura:"rgba(184,227,156,.27)"},
+ bloodmoon:{label:"血月",cost:280,body:"#b44752",cloak:"#481b27",trim:"#ff9e9e",aura:"rgba(255,158,158,.32)"},
+ lemon:{label:"雷檸",cost:300,body:"#d3cf57",cloak:"#595823",trim:"#ffffb0",aura:"rgba(255,255,176,.32)"},
+ indigo:{label:"藍晶",cost:320,body:"#5960a8",cloak:"#24294e",trim:"#c7caff",aura:"rgba(199,202,255,.32)"},
+ copper:{label:"赤銅",cost:340,body:"#b56e4c",cloak:"#552d25",trim:"#f0b28b",aura:"rgba(240,178,139,.30)"},
+ celestial:{label:"天青",cost:365,body:"#6fa8dc",cloak:"#294868",trim:"#e6f4ff",aura:"rgba(230,244,255,.34)"},
+ voidrose:{label:"虚薔薇",cost:390,body:"#9d557e",cloak:"#35172b",trim:"#ffb4df",aura:"rgba(255,180,223,.34)"},
+ storm:{label:"嵐鉄",cost:420,body:"#687b8d",cloak:"#222e3a",trim:"#c9e8ff",aura:"rgba(201,232,255,.31)"},
+ venom:{label:"毒蛍",cost:450,body:"#7cbf4b",cloak:"#294b1e",trim:"#d7ff80",aura:"rgba(215,255,128,.35)"},
+ bone:{label:"骨白",cost:480,body:"#cfc6ae",cloak:"#625b50",trim:"#fff4d6",aura:"rgba(255,244,214,.28)"},
+ dusk:{label:"黄昏",cost:520,body:"#99728f",cloak:"#3b2d4a",trim:"#f0c2c6",aura:"rgba(240,194,198,.34)"},
+ dawn:{label:"暁光",cost:560,body:"#e0a36a",cloak:"#6b3e34",trim:"#fff0b8",aura:"rgba(255,240,184,.36)"},
+ phantom:{label:"幽世",cost:620,body:"#8ca4ad",cloak:"#26343c",trim:"#d2ffff",aura:"rgba(210,255,255,.36)"},
+ prismatic:{label:"万華",cost:720,body:"#ba91d6",cloak:"#344f68",trim:"#fff2a3",aura:"rgba(255,242,163,.40)"}
 };
 const appearanceRequirementData={
  always:{label:"常時",check:meta=>true},
@@ -3601,13 +3663,27 @@ const appearanceRequirementData={
  best10:{label:"到達深度 10",check:meta=>(meta?.bestFloor||1)>=10},
  best15:{label:"到達深度 15",check:meta=>(meta?.bestFloor||1)>=15},
  best20:{label:"到達深度 20",check:meta=>(meta?.bestFloor||1)>=20},
+ best25:{label:"到達深度 25",check:meta=>(meta?.bestFloor||1)>=25},
+ best30:{label:"到達深度 30",check:meta=>(meta?.bestFloor||1)>=30},
  kills30:{label:"累計討伐 30",check:meta=>(meta?.totalKills||0)>=30},
  kills80:{label:"累計討伐 80",check:meta=>(meta?.totalKills||0)>=80},
  kills150:{label:"累計討伐 150",check:meta=>(meta?.totalKills||0)>=150},
  kills300:{label:"累計討伐 300",check:meta=>(meta?.totalKills||0)>=300},
+ kills600:{label:"累計討伐 600",check:meta=>(meta?.totalKills||0)>=600},
+ kills1000:{label:"累計討伐 1000",check:meta=>(meta?.totalKills||0)>=1000},
  research6:{label:"深淵研究 合計6",check:meta=>appearanceResearchLevel(meta)>=6},
  research12:{label:"深淵研究 合計12",check:meta=>appearanceResearchLevel(meta)>=12},
- death1:{label:"1回以上の死亡経験",check:meta=>((meta?.deathEchoHistory?.length||0)>0)||!!meta?.deathEcho}
+ research18:{label:"深淵研究 合計18",check:meta=>appearanceResearchLevel(meta)>=18},
+ research24:{label:"深淵研究 合計24",check:meta=>appearanceResearchLevel(meta)>=24},
+ death1:{label:"1回以上の死亡経験",check:meta=>appearanceDeathCount(meta)>=1},
+ death3:{label:"3回以上の死亡経験",check:meta=>appearanceDeathCount(meta)>=3},
+ events10:{label:"事件記録 10",check:meta=>appearanceEventCount(meta)>=10},
+ events25:{label:"事件記録 25",check:meta=>appearanceEventCount(meta)>=25},
+ mastery20:{label:"武器熟練 合計20",check:meta=>appearanceMasteryTotal(meta)>=20},
+ mastery50:{label:"武器熟練 合計50",check:meta=>appearanceMasteryTotal(meta)>=50},
+ routes10:{label:"進路熟練 合計10",check:meta=>appearanceRouteMasteryTotal(meta)>=10},
+ marks10:{label:"行動傾向 合計10",check:meta=>appearanceMarksTotal(meta)>=10},
+ adaptation3:{label:"深層適応 3種",check:meta=>appearanceAdaptationCount(meta)>=3}
 };
 const appearanceShapeData={
  common:{label:"凡人の外套",source:"初期",desc:"名も記録もない探索者の共通姿。",unlockType:"default"},
@@ -3621,9 +3697,27 @@ const appearanceShapeData={
  duelist:{label:"決闘者の羽飾",source:"深淵の欠片",desc:"細い外套と片側だけの羽飾りが特徴。",unlockType:"cost",cost:30,requirement:"kills80"},
  seeker:{label:"灯追いの旅衣",source:"深淵の欠片",desc:"額灯と前垂れを備えた探索向けの旅衣。",unlockType:"cost",cost:34,requirement:"best10"},
  mourner:{label:"弔いの面紗",source:"秘匿条件",desc:"薄い面紗に死者への祈りを重ねた姿。",unlockType:"cost",cost:42,requirement:"death1",hidden:true},
- warden:{label:"番人の角冑",source:"番人の激レア姿片",desc:"重い角冑と厚い肩当てを持つ守護者の姿。",unlockType:"drop",requirement:"best15",hidden:true},
- eclipse:{label:"蝕環の典礼装",source:"深層番人の激レア姿片",desc:"日蝕の輪を背負う秘匿の典礼装束。",unlockType:"drop",requirement:"best20",hidden:true},
- antler:{label:"獣枝の隠れ装",source:"迷宮の激レア姿片",desc:"獣の枝角を戴く、記録外の隠れ姿。",unlockType:"drop",requirement:"kills150",hidden:true}
+ warden:{label:"番人の角冑",source:"番人の激レア姿片",desc:"重い角冑と厚い肩当てを持つ守護者の姿。",unlockType:"drop",requirement:"best15",hidden:true,dropTier:"rare"},
+ eclipse:{label:"蝕環の典礼装",source:"深層番人の超激レア姿片",desc:"日蝕の輪を背負う秘匿の典礼装束。",unlockType:"drop",requirement:"best20",hidden:true,dropTier:"ultra"},
+ antler:{label:"獣枝の隠れ装",source:"迷宮の激レア姿片",desc:"獣の枝角を戴く、記録外の隠れ姿。",unlockType:"drop",requirement:"kills150",hidden:true,dropTier:"rare"},
+ alchemist:{label:"灰薬師の作業衣",source:"深淵の欠片",desc:"薬瓶帯と広い袖を持つ、研究者向けの装い。",unlockType:"cost",cost:48,requirement:"research12"},
+ sentinel:{label:"石壁の歩哨装",source:"深淵の欠片",desc:"四角い肩甲と厚手の外套を備えた防衛装束。",unlockType:"cost",cost:56,requirement:"best15"},
+ oracle:{label:"星読の頭巾",source:"深淵の欠片",desc:"長い頭布と星見の飾りを持つ予見者の姿。",unlockType:"cost",cost:64,requirement:"research18"},
+ executioner:{label:"断罪者の覆面",source:"秘匿条件",desc:"巨大な頭巾と片肩の重装を持つ暗い輪郭。",unlockType:"cost",cost:72,requirement:"kills150",hidden:true},
+ nomad:{label:"砂渡りの旅装",source:"深淵の欠片",desc:"布を幾重にも巻き、長旅へ適応した姿。",unlockType:"cost",cost:80,requirement:"events10"},
+ beast:{label:"獣皮の荒装",source:"深淵の欠片",desc:"毛皮の肩と獣耳を模した荒々しい装束。",unlockType:"cost",cost:92,requirement:"kills300"},
+ cathedral:{label:"大聖堂の祭衣",source:"深淵の欠片",desc:"高い襟と垂れ布を持つ重厚な祭礼装。",unlockType:"cost",cost:110,requirement:"best20"},
+ jester:{label:"狂言師の二角帽",source:"秘匿条件",desc:"左右非対称の二角帽と裂けた外套。",unlockType:"cost",cost:125,requirement:"events25",hidden:true},
+ shell:{label:"殻守の甲衣",source:"深淵の欠片",desc:"背に殻状の装甲を負う深層適応者の姿。",unlockType:"cost",cost:140,requirement:"adaptation3"},
+ raven:{label:"黒羽の隠密装",source:"番人の激レア姿片",desc:"黒い嘴面と羽肩を備えた夜の輪郭。",unlockType:"drop",requirement:"best10",hidden:true,dropTier:"rare"},
+ phantom:{label:"透影の幽装",source:"深層番人の超激レア姿片",desc:"輪郭の一部が透けた、死亡記憶に近い姿。",unlockType:"drop",requirement:"death3",hidden:true,dropTier:"ultra"},
+ monarch:{label:"深淵王の礼装",source:"深層番人の超激レア姿片",desc:"小冠と長い裾を持つ、支配者めいた輪郭。",unlockType:"drop",requirement:"best25",hidden:true,dropTier:"ultra"},
+ lantern:{label:"灯籠負いの巡装",source:"深淵の欠片",desc:"背負い灯と左右の吊り布を持つ探索装。",unlockType:"cost",cost:160,requirement:"routes10"},
+ drake:{label:"古竜の鱗装",source:"最深部番人の神話級姿片",desc:"角・鱗肩・長尾を持つ神話級の輪郭。",unlockType:"drop",requirement:"best30",hidden:true,dropTier:"mythic"},
+ bone:{label:"白骨司祭の法衣",source:"秘匿条件",desc:"骨冠と肋骨飾りを持つ不吉な祭服。",unlockType:"cost",cost:180,requirement:"death3",hidden:true},
+ frostborn:{label:"氷冠の遠征装",source:"番人の激レア姿片",desc:"氷柱の冠と厚い防寒布を持つ輪郭。",unlockType:"drop",requirement:"research18",hidden:true,dropTier:"rare"},
+ voidwalker:{label:"虚無歩きの外套",source:"最深部番人の神話級姿片",desc:"体の縁が欠け、暗い空隙を引く神話級の姿。",unlockType:"drop",requirement:"kills600",hidden:true,dropTier:"mythic"},
+ saint:{label:"根聖者の光衣",source:"秘匿条件",desc:"細い光輪と長い聖衣を纏う秘匿輪郭。",unlockType:"cost",cost:220,requirement:"marks10",hidden:true}
 };
 const appearanceSigilData={
  none:{label:"無紋",source:"初期",desc:"余計な印を持たない標準状態。",unlockType:"default"},
@@ -3635,16 +3729,45 @@ const appearanceSigilData={
  bloom:{label:"花葬紋",source:"深淵の欠片",desc:"散る花弁を象った柔らかな印。",unlockType:"cost",cost:26,requirement:"death1",hidden:true,draw:"bloom"},
  chain:{label:"鎖縫い紋",source:"深淵の欠片",desc:"胸元を横切る細かな鎖状の印。",unlockType:"cost",cost:30,requirement:"kills80",draw:"chain"},
  moon:{label:"半月紋",source:"深淵の欠片",desc:"肩上に淡い半月が浮かぶ。",unlockType:"cost",cost:36,requirement:"research12",draw:"moon"},
- star:{label:"星晶紋",source:"番人の希少紋片",desc:"星が散るような希少な紋章。",unlockType:"drop",requirement:"best15",hidden:true,draw:"star"},
- root:{label:"根脈紋",source:"番人の希少紋片",desc:"細い根が胸元から足元へ伸びる。",unlockType:"drop",requirement:"best20",hidden:true,draw:"root"},
- shard:{label:"裂晶紋",source:"深淵の激レア紋片",desc:"体の周りへ割れた晶片を漂わせる。",unlockType:"drop",requirement:"kills150",hidden:true,draw:"shard"},
- sun:{label:"暁輝紋",source:"深淵の激レア紋片",desc:"小さな太陽のような輝きを宿す。",unlockType:"drop",requirement:"kills300",hidden:true,draw:"sun"}
+ star:{label:"星晶紋",source:"番人の希少紋片",desc:"星が散るような希少な紋章。",unlockType:"drop",requirement:"best15",hidden:true,dropTier:"rare",draw:"star"},
+ root:{label:"根脈紋",source:"番人の希少紋片",desc:"細い根が胸元から足元へ伸びる。",unlockType:"drop",requirement:"best20",hidden:true,dropTier:"rare",draw:"root"},
+ shard:{label:"裂晶紋",source:"深淵の超激レア紋片",desc:"体の周りへ割れた晶片を漂わせる。",unlockType:"drop",requirement:"kills150",hidden:true,dropTier:"ultra",draw:"shard"},
+ sun:{label:"暁輝紋",source:"深淵の神話級紋片",desc:"小さな太陽のような輝きを宿す。",unlockType:"drop",requirement:"kills300",hidden:true,dropTier:"mythic",draw:"sun"},
+ frost:{label:"氷華紋",source:"深淵の欠片",desc:"胸元に小さな氷晶を咲かせる。",unlockType:"cost",cost:44,requirement:"best15",draw:"frost"},
+ venom:{label:"毒牙紋",source:"深淵の欠片",desc:"毒滴と牙を組み合わせた危険な印。",unlockType:"cost",cost:50,requirement:"kills150",draw:"venom"},
+ spiral:{label:"螺旋紋",source:"深淵の欠片",desc:"深淵へ沈む螺旋を胸元に刻む。",unlockType:"cost",cost:58,requirement:"research18",draw:"spiral"},
+ crown:{label:"小冠紋",source:"深淵の欠片",desc:"頭上に小さな冠影を浮かべる。",unlockType:"cost",cost:68,requirement:"best20",draw:"crown"},
+ skull:{label:"骸印",source:"秘匿条件",desc:"小さな頭蓋を思わせる不吉な印。",unlockType:"cost",cost:76,requirement:"death3",hidden:true,draw:"skull"},
+ wing:{label:"片翼紋",source:"深淵の欠片",desc:"片側だけに白い翼線を伸ばす。",unlockType:"cost",cost:88,requirement:"marks10",draw:"wing"},
+ hourglass:{label:"砂時計紋",source:"深淵の欠片",desc:"時間の砂が落ちるような縦長の印。",unlockType:"cost",cost:100,requirement:"events25",draw:"hourglass"},
+ mirror:{label:"鏡界紋",source:"番人の激レア紋片",desc:"左右反転した光片を漂わせる秘匿紋。",unlockType:"drop",requirement:"research12",hidden:true,dropTier:"rare",draw:"mirror"},
+ eclipse:{label:"蝕月紋",source:"深層番人の超激レア紋片",desc:"黒い円を細い光が縁取る。",unlockType:"drop",requirement:"best25",hidden:true,dropTier:"ultra",draw:"eclipse"},
+ comet:{label:"彗星紋",source:"深層番人の超激レア紋片",desc:"肩から後方へ彗星の尾を引く。",unlockType:"drop",requirement:"best30",hidden:true,dropTier:"ultra",draw:"comet"},
+ void:{label:"虚孔紋",source:"最深部番人の神話級紋片",desc:"胸元に小さな空白の穴が浮かぶ。",unlockType:"drop",requirement:"kills600",hidden:true,dropTier:"mythic",draw:"void"}
 };
 const appearanceRelicMilestones={5:"hood",10:"mask",15:"mantle",20:"root"};
 
 function appearanceResearchLevel(meta){
  const lv=meta?.research?.levels||{};
  return (lv.anatomy||0)+(lv.ecology||0)+(lv.arcana||0)+(lv.survival||0);
+}
+function appearanceDeathCount(meta){
+ return meta?.deathEchoHistory?.length||0;
+}
+function appearanceEventCount(meta){
+ return meta?.eventHistory?.length||0;
+}
+function appearanceMasteryTotal(meta){
+ return Object.values(meta?.mastery||{}).reduce((sum,value)=>sum+(Number(value)||0),0);
+}
+function appearanceRouteMasteryTotal(meta){
+ return Object.values(meta?.routeMastery||{}).reduce((sum,value)=>sum+(Number(value)||0),0);
+}
+function appearanceMarksTotal(meta){
+ return Object.values(meta?.marks||{}).reduce((sum,value)=>sum+(Number(value)||0),0);
+}
+function appearanceAdaptationCount(meta){
+ return meta?.abyssAdaptations?.length||0;
 }
 function appearanceRequirementMet(requirementId,meta=state?.meta||defaultMeta()){
  const rule=appearanceRequirementData[requirementId]||appearanceRequirementData.always;
@@ -3660,7 +3783,8 @@ function defaultAppearance(){
   sigil:"none",
   unlockedShapes:["common"],
   unlockedColors:["ash"],
-  unlockedSigils:["none"]
+  unlockedSigils:["none"],
+  revealedSecrets:[]
  };
 }
 function ensureAppearanceMeta(meta){
@@ -3670,6 +3794,7 @@ function ensureAppearanceMeta(meta){
  if(!Array.isArray(a.unlockedShapes))a.unlockedShapes=["common"];
  if(!Array.isArray(a.unlockedColors))a.unlockedColors=["ash"];
  if(!Array.isArray(a.unlockedSigils))a.unlockedSigils=["none"];
+ if(!Array.isArray(a.revealedSecrets))a.revealedSecrets=[];
  if(!a.unlockedShapes.includes("common"))a.unlockedShapes.unshift("common");
  if(!a.unlockedColors.includes("ash"))a.unlockedColors.unshift("ash");
  if(!a.unlockedSigils.includes("none"))a.unlockedSigils.unshift("none");
@@ -3706,6 +3831,51 @@ function appearanceCanBuy(data,collection,id){
  const unlocked=collection.includes(id);
  return !unlocked&&data.unlockType==="cost"&&appearanceRequirementMet(data.requirement,state?.meta);
 }
+function appearanceSecretToken(kind,id){
+ return`${kind}:${id}`;
+}
+function updateAppearanceSecretReveals(){
+ const appearance=currentAppearance();
+ let changed=false;
+ const groups=[
+  ["shape",appearanceShapeData,appearance.unlockedShapes],
+  ["sigil",appearanceSigilData,appearance.unlockedSigils]
+ ];
+ for(const [kind,map,unlocked] of groups){
+  for(const [id,data] of Object.entries(map)){
+   if(!data.hidden||unlocked.includes(id))continue;
+   const token=appearanceSecretToken(kind,id);
+   if(appearance.revealedSecrets.includes(token))continue;
+   if(!appearanceRequirementMet(data.requirement,state.meta))continue;
+   appearance.revealedSecrets.push(token);
+   addLog(`秘匿された${kind==="shape"?"輪郭":"紋章"}「${data.label}」の解放条件が判明した。`);
+   changed=true;
+  }
+ }
+ if(changed)saveMeta();
+ return changed;
+}
+function appearanceCollectionSort(dataMap,selectedId,unlockedList){
+ return Object.entries(dataMap).sort(([idA,dataA],[idB,dataB])=>{
+  const score=(id,data)=>{
+   const unlocked=unlockedList.includes(id);
+   const buyable=appearanceCanBuy(data,unlockedList,id);
+   const requirement=appearanceRequirementMet(data.requirement,state?.meta);
+   if(id===selectedId)return 0;
+   if(unlocked)return 1;
+   if(buyable)return 2;
+   if(requirement)return data.unlockType==="drop"?3:4;
+   if(data.hidden)return 6;
+   return 5;
+  };
+  return score(idA,dataA)-score(idB,dataB);
+ });
+}
+function appearanceDropTierLabel(tier){
+ if(tier==="mythic")return"神話級・完全運";
+ if(tier==="ultra")return"超激レア・完全運";
+ return"激レア・完全運";
+}
 function drawBaseExplorer(g,palette,dark,skin,hurt,bob){
  g.fillStyle=dark;g.fillRect(8,4+bob,7,4);
  g.fillStyle=skin;g.fillRect(9,6+bob,5,4);
@@ -3738,6 +3908,28 @@ function drawAppearanceSigil(g,sigil,palette,dark,bob){
    g.fillStyle="#d3b2ff";g.fillRect(6,8+bob,2,2);g.fillRect(15,9+bob,2,2);g.fillRect(8,17+bob,1,2);g.fillRect(14,17+bob,1,2);break;
   case "sun":
    g.fillStyle="#ffe07a";g.fillRect(10,12+bob,3,3);g.fillRect(11,10+bob,1,2);g.fillRect(11,15+bob,1,2);g.fillRect(8,13+bob,2,1);g.fillRect(13,13+bob,2,1);break;
+  case "frost":
+   g.fillStyle="#d9f7ff";g.fillRect(11,11+bob,1,6);g.fillRect(8,14+bob,7,1);g.fillRect(9,12+bob,1,1);g.fillRect(13,12+bob,1,1);g.fillRect(9,16+bob,1,1);g.fillRect(13,16+bob,1,1);break;
+  case "venom":
+   g.fillStyle="#a9ef65";g.fillRect(10,12+bob,3,3);g.fillRect(9,15+bob,1,2);g.fillRect(13,15+bob,1,2);g.fillStyle="#23251a";g.fillRect(11,13+bob,1,1);break;
+  case "spiral":
+   g.strokeStyle="#d9b6ff";g.strokeRect(9.5,11.5+bob,4,4);g.fillStyle="#d9b6ff";g.fillRect(10,12+bob,2,1);g.fillRect(12,14+bob,2,1);break;
+  case "crown":
+   g.fillStyle="#ffe49b";g.fillRect(9,12+bob,6,2);g.fillRect(9,10+bob,1,2);g.fillRect(11,9+bob,1,3);g.fillRect(14,10+bob,1,2);break;
+  case "skull":
+   g.fillStyle="#eee5d5";g.fillRect(9,12+bob,6,4);g.fillStyle="#2a2020";g.fillRect(10,13+bob,1,1);g.fillRect(13,13+bob,1,1);g.fillRect(11,15+bob,2,1);break;
+  case "wing":
+   g.fillStyle="#f3f5ff";g.fillRect(13,11+bob,1,6);g.fillRect(14,12+bob,2,1);g.fillRect(15,13+bob,2,1);g.fillRect(14,15+bob,2,1);break;
+  case "hourglass":
+   g.fillStyle="#e6c98a";g.fillRect(9,11+bob,6,1);g.fillRect(10,12+bob,4,1);g.fillRect(11,13+bob,2,2);g.fillRect(10,15+bob,4,1);g.fillRect(9,16+bob,6,1);break;
+  case "mirror":
+   g.fillStyle="#c6f1ff";g.fillRect(8,12+bob,2,4);g.fillRect(14,12+bob,2,4);g.globalAlpha=.5;g.fillRect(11,11+bob,2,6);g.globalAlpha=1;break;
+  case "eclipse":
+   g.fillStyle="#f0db8b";g.fillRect(9,11+bob,6,6);g.fillStyle="#18141e";g.fillRect(11,11+bob,4,6);break;
+  case "comet":
+   g.fillStyle="#e4f5ff";g.fillRect(8,15+bob,2,1);g.fillRect(10,14+bob,2,1);g.fillRect(12,13+bob,2,1);g.fillRect(14,11+bob,2,2);break;
+  case "void":
+   g.fillStyle="#08070d";g.fillRect(9,11+bob,6,6);g.strokeStyle="#a68cff";g.strokeRect(8.5,10.5+bob,7,7);break;
  }
 }
 function drawExplorerFigure(g,x,y,scale=1,hurt=false,bob=0,showAura=true){
@@ -3835,6 +4027,91 @@ function drawExplorerFigure(g,x,y,scale=1,hurt=false,bob=0,showAura=true){
    g.fillRect(4,4+bob,2,1);g.fillRect(17,4+bob,2,1);
    g.fillStyle=palette.cloak;g.fillRect(5,13+bob,14,7);
    break;
+  case "alchemist":
+   g.fillStyle=palette.cloak;g.fillRect(5,13+bob,14,7);
+   g.fillStyle=palette.trim;g.fillRect(5,10+bob,2,7);g.fillRect(16,10+bob,2,7);
+   g.fillStyle="#8ed5df";g.fillRect(5,15+bob,2,2);g.fillStyle="#d9a2ef";g.fillRect(17,15+bob,2,2);
+   break;
+  case "sentinel":
+   g.fillStyle=metal;g.fillRect(4,11+bob,5,7);g.fillRect(14,11+bob,5,7);
+   g.fillStyle=palette.cloak;g.fillRect(7,13+bob,10,7);
+   g.fillStyle=palette.trim;g.fillRect(8,4+bob,7,2);
+   break;
+  case "oracle":
+   g.fillStyle=palette.cloak;g.fillRect(6,2+bob,11,4);g.fillRect(5,13+bob,14,7);
+   g.fillStyle=palette.trim;g.fillRect(11,1+bob,1,4);g.fillRect(9,3+bob,5,1);
+   break;
+  case "executioner":
+   g.fillStyle=dark;g.fillRect(6,2+bob,11,10);
+   g.fillStyle=palette.trim;g.fillRect(9,7+bob,5,1);
+   g.fillStyle=palette.cloak;g.fillRect(4,12+bob,7,8);g.fillRect(11,14+bob,8,6);
+   break;
+  case "nomad":
+   g.fillStyle=palette.cloak;g.fillRect(5,4+bob,13,4);g.fillRect(4,13+bob,15,7);
+   g.fillStyle=palette.trim;g.fillRect(5,8+bob,13,1);g.fillRect(8,13+bob,2,7);
+   break;
+  case "beast":
+   g.fillStyle=palette.trim;g.fillRect(7,2+bob,2,3);g.fillRect(14,2+bob,2,3);
+   g.fillStyle=palette.cloak;g.fillRect(4,11+bob,5,7);g.fillRect(14,11+bob,5,7);g.fillRect(6,14+bob,12,6);
+   break;
+  case "cathedral":
+   g.fillStyle=palette.trim;g.fillRect(7,2+bob,9,3);g.fillRect(6,5+bob,11,2);
+   g.fillStyle=palette.cloak;g.fillRect(4,12+bob,16,8);
+   g.fillStyle=palette.trim;g.fillRect(10,12+bob,3,8);
+   break;
+  case "jester":
+   g.fillStyle=palette.trim;g.fillRect(5,2+bob,5,2);g.fillRect(13,2+bob,5,2);
+   g.fillRect(5,1+bob,1,2);g.fillRect(17,1+bob,1,2);
+   g.fillStyle=palette.cloak;g.fillRect(5,13+bob,6,7);g.fillStyle=palette.body;g.fillRect(11,13+bob,7,7);
+   break;
+  case "shell":
+   g.fillStyle=metal;g.fillRect(4,8+bob,5,10);g.fillRect(15,8+bob,5,10);g.fillRect(6,12+bob,12,8);
+   g.fillStyle=palette.trim;g.fillRect(5,9+bob,2,8);g.fillRect(17,9+bob,2,8);
+   break;
+  case "raven":
+   g.fillStyle=dark;g.fillRect(7,4+bob,10,6);g.fillRect(15,7+bob,4,2);
+   g.fillStyle=palette.cloak;g.fillRect(3,11+bob,7,7);g.fillRect(13,11+bob,7,7);g.fillRect(6,15+bob,11,5);
+   g.fillStyle=palette.trim;g.fillRect(4,12+bob,2,1);g.fillRect(17,12+bob,2,1);
+   break;
+  case "phantom":
+   g.globalAlpha=.62;g.fillStyle=palette.cloak;g.fillRect(5,4+bob,13,16);
+   g.globalAlpha=.35;g.fillStyle=palette.trim;g.fillRect(3,10+bob,4,8);g.fillRect(17,12+bob,4,8);g.globalAlpha=1;
+   break;
+  case "monarch":
+   g.fillStyle=palette.trim;g.fillRect(8,1+bob,7,2);g.fillRect(8,0+bob,1,2);g.fillRect(11,0+bob,1,2);g.fillRect(14,0+bob,1,2);
+   g.fillStyle=palette.cloak;g.fillRect(3,12+bob,17,8);g.fillStyle=palette.trim;g.fillRect(10,12+bob,3,8);
+   break;
+  case "lantern":
+   g.fillStyle=palette.cloak;g.fillRect(5,13+bob,14,7);
+   g.fillStyle="#ffc56d";g.fillRect(3,8+bob,3,5);g.fillRect(17,8+bob,3,5);
+   g.fillStyle=metal;g.fillRect(4,7+bob,1,1);g.fillRect(18,7+bob,1,1);
+   break;
+  case "drake":
+   g.fillStyle=palette.trim;g.fillRect(6,1+bob,2,5);g.fillRect(15,1+bob,2,5);
+   g.fillRect(4,12+bob,5,5);g.fillRect(14,12+bob,5,5);
+   g.fillStyle=palette.cloak;g.fillRect(6,13+bob,12,7);
+   g.fillStyle=palette.trim;g.fillRect(18,17+bob,4,2);
+   break;
+  case "bone":
+   g.fillStyle="#eee6d4";g.fillRect(7,2+bob,9,6);g.fillRect(4,11+bob,4,7);g.fillRect(16,11+bob,4,7);
+   g.fillStyle=dark;g.fillRect(9,5+bob,2,1);g.fillRect(13,5+bob,1,1);
+   g.fillStyle=palette.cloak;g.fillRect(6,14+bob,12,6);
+   break;
+  case "frostborn":
+   g.fillStyle="#d9f6ff";g.fillRect(7,1+bob,2,5);g.fillRect(11,0+bob,2,5);g.fillRect(15,1+bob,2,5);
+   g.fillStyle=palette.cloak;g.fillRect(4,12+bob,16,8);
+   g.fillStyle=palette.trim;g.fillRect(5,12+bob,3,2);g.fillRect(16,12+bob,3,2);
+   break;
+  case "voidwalker":
+   g.globalAlpha=.55;g.fillStyle=palette.cloak;g.fillRect(5,4+bob,14,16);
+   g.globalAlpha=1;g.fillStyle="#08070d";g.fillRect(7,8+bob,3,4);g.fillRect(14,13+bob,4,5);
+   g.fillStyle=palette.trim;g.fillRect(4,5+bob,1,3);g.fillRect(19,9+bob,1,4);
+   break;
+  case "saint":
+   g.strokeStyle="#fff0ac";g.globalAlpha=.75;g.strokeRect(7.5,1.5+bob,8,3);g.globalAlpha=1;
+   g.fillStyle=palette.cloak;g.fillRect(4,12+bob,16,8);
+   g.fillStyle=palette.trim;g.fillRect(10,11+bob,3,9);g.fillRect(6,13+bob,2,5);g.fillRect(16,13+bob,2,5);
+   break;
  }
 
  drawAppearanceSigil(g,sigil,palette,dark,bob);
@@ -3866,7 +4143,8 @@ function drawAppearancePreview(){
  drawExplorerFigure(g,4,4,4,false,0,true);
 }
 function renderAppearanceCategory(targetId,dataMap,selectedId,unlockedList,keyName,unlockTypeName){
- const html=Object.entries(dataMap).map(([id,data])=>{
+ const entries=appearanceCollectionSort(dataMap,selectedId,unlockedList);
+ const html=entries.map(([id,data])=>{
   const unlocked=unlockedList.includes(id);
   const selected=selectedId===id;
   const visibleName=appearanceEntryVisibleName(data,unlocked);
@@ -3875,9 +4153,15 @@ function renderAppearanceCategory(targetId,dataMap,selectedId,unlockedList,keyNa
   const canBuy=appearanceCanBuy(data,unlockedList,id);
   const disabled=(!unlocked&&!canBuy&&data.unlockType!=="default")?'disabled':'';
   const swatch=keyName==="color"?`<span class="appearanceSwatch" style="background:${data.body}"></span>`:"";
-  return `<button type="button" class="appearanceChoice ${selected?"selected":""} ${unlocked?"":"locked"}" data-${keyName}="${id}" ${disabled}>
+  const secretKnown=data.hidden&&appearanceRequirementMet(data.requirement,state?.meta);
+  const dropClass=data.unlockType==="drop"&&!unlocked?"dropLocked":"";
+  const highCost=data.cost>=100&&!unlocked?"highCost":"";
+  const rarity=data.unlockType==="drop"&&!unlocked
+   ?`<br><span class="rarityHint">${appearanceDropTierLabel(data.dropTier)}</span>`
+   :"";
+  return `<button type="button" class="appearanceChoice ${selected?"selected":""} ${unlocked?"":"locked"} ${secretKnown?"secretRevealed":""} ${dropClass} ${highCost}" data-${keyName}="${id}" ${disabled}>
    <b>${swatch}${visibleName}</b>
-   <small>${action}<br>${visibleDesc}</small>
+   <small>${action}<br>${visibleDesc}${rarity}</small>
   </button>`;
  }).join("");
  $(targetId).innerHTML=html;
@@ -3890,6 +4174,7 @@ function attemptAppearancePurchase(kind,id,data,appearance){
  return true;
 }
 function renderAppearance(){
+ updateAppearanceSecretReveals();
  const a=currentAppearance();
  const color=appearanceColorData[a.color];
  const shape=appearanceShapeData[a.shape];
@@ -3899,7 +4184,8 @@ function renderAppearance(){
   `色：${color.label}<br>`+
   `紋章：${sigil.label}<br>`+
   `深淵の欠片：${state.meta.shards||0}<br>`+
-  `解放済み：色 ${a.unlockedColors.length} / 輪郭 ${a.unlockedShapes.length} / 紋章 ${a.unlockedSigils.length}`;
+  `解放済み：色 ${a.unlockedColors.length}/${Object.keys(appearanceColorData).length} / 輪郭 ${a.unlockedShapes.length}/${Object.keys(appearanceShapeData).length} / 紋章 ${a.unlockedSigils.length}/${Object.keys(appearanceSigilData).length}<br>`+
+  `現在可能な組合せ：${(a.unlockedColors.length*a.unlockedShapes.length*a.unlockedSigils.length).toLocaleString()}通り / 全36,864通り`;
 
  renderAppearanceCategory("appearanceColors",appearanceColorData,a.color,a.unlockedColors,"color","外套色");
  renderAppearanceCategory("appearanceShapes",appearanceShapeData,a.shape,a.unlockedShapes,"shape","輪郭");
@@ -3945,30 +4231,55 @@ function renderAppearance(){
  });
  drawAppearancePreview();
 }
+function appearanceDropTierRoll(){
+ const floor=Math.max(1,state?.floor||1);
+ const rare=.04+Math.min(.03,floor*.0015);
+ const ultra=.012+Math.min(.012,Math.max(0,floor-10)*.0008);
+ const mythic=.003+Math.min(.004,Math.max(0,floor-20)*.0004);
+ const roll=rng();
+ if(roll<mythic)return"mythic";
+ if(roll<mythic+ultra)return"ultra";
+ if(roll<mythic+ultra+rare)return"rare";
+ return null;
+}
 function grantAppearanceBossDrop(){
  const appearance=ensureAppearanceMeta(state.meta);
  const pool=[];
  for(const [id,data] of Object.entries(appearanceShapeData)){
   if(data.unlockType==="drop"&&!appearance.unlockedShapes.includes(id)&&appearanceRequirementMet(data.requirement,state.meta)){
-   pool.push({type:"shape",id,data});
+   pool.push({type:"shape",id,data,tier:data.dropTier||"rare"});
   }
  }
  for(const [id,data] of Object.entries(appearanceSigilData)){
   if(data.unlockType==="drop"&&!appearance.unlockedSigils.includes(id)&&appearanceRequirementMet(data.requirement,state.meta)){
-   pool.push({type:"sigil",id,data});
+   pool.push({type:"sigil",id,data,tier:data.dropTier||"rare"});
   }
  }
  if(!pool.length)return null;
- const chance=.08+(state.floor>=10?.03:0)+(state.floor>=20?.03:0);
- if(rng()>=chance)return null;
- const pick=pool[rint(0,pool.length-1)];
+
+ const rolledTier=appearanceDropTierRoll();
+ if(!rolledTier)return null;
+
+ const tierOrder=rolledTier==="mythic"
+  ?["mythic","ultra","rare"]
+  :rolledTier==="ultra"
+   ?["ultra","rare"]
+   :["rare"];
+ let candidates=[];
+ for(const tier of tierOrder){
+  candidates=pool.filter(entry=>entry.tier===tier);
+  if(candidates.length)break;
+ }
+ if(!candidates.length)return null;
+
+ const pick=candidates[rint(0,candidates.length-1)];
  if(pick.type==="shape"){
   appearance.unlockedShapes.push(pick.id);
-  addLog(`激レア姿片「${pick.data.label}」を入手した！`);
+  addLog(`${appearanceDropTierLabel(pick.tier)}姿片「${pick.data.label}」を入手した！`);
   addLog("姿の記録に秘匿輪郭が追加された。");
  }else{
   appearance.unlockedSigils.push(pick.id);
-  addLog(`激レア紋片「${pick.data.label}」を入手した！`);
+  addLog(`${appearanceDropTierLabel(pick.tier)}紋片「${pick.data.label}」を入手した！`);
   addLog("姿の記録に秘匿紋章が追加された。");
  }
  saveMeta();
