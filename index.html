@@ -1524,7 +1524,7 @@ body{
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.3.2 LIGHTHOUSE RESUME</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.4 WARDEN ARCHETYPES</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -1565,7 +1565,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 帰還・灯台状態から再開</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 四種の深層番人</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -1660,7 +1660,7 @@ body{
           <li><b>階層目標</b>を達成すると階段の封印が解けます。進捗は画面左上に表示され、達成時に欠片・現地素材などを獲得します。</li>
           <li>番人階以外は、指定行動が難しい場合でも迷宮を十分に踏破すれば代替達成できます。</li>
           <li><b>階段 ▼</b> へ進む前には確認が出ます。移動後は次の階層名・環境・目標が約6秒表示されます。</li>
-          <li><b>5階ごとに番人戦</b>があります。最初の20階には階ごとの目標もあります。</li>
+          <li><b>5階ごとに番人戦</b>があります。5・10・15・20層の番人は、それぞれ異なる予兆・第二形態・固有報酬を持ちます。</li>
           <li><b>主人公のHPが0でその探索は終了</b>です。帰還・死亡後には、撃破数・戦闘結果・持ち帰り・喪失をまとめた探索結果が表示されます。</li>
         </ul>
         <div class="helpNote">迷ったら「敵を1体ずつ処理」「荷物が増えたら整理」「危なくなったら帰還」を意識すると安定します。</div>
@@ -1748,6 +1748,7 @@ body{
       <div class="helpBody">
         <ul>
           <li><b>盾骸兵</b>は正面に強く、<b>穴獣</b>は回り込み、<b>骨術師</b>は距離を取り、<b>爆ぜ虫</b>は自爆します。</li>
+          <li><b>鎖縛の門衛</b>は広い近接、<b>墓標の神託者</b>は射線と召喚、<b>熔炉の巨像</b>は炎上地形、<b>根冠の王</b>は動かない判断を要求します。</li>
           <li>特殊部屋には<b>祭壇・宝物庫・水没・崩落</b>があります。</li>
           <li>2階以降は<b>階層異変</b>が発生し、5階ごとに<b>バイオーム</b>が変わります。</li>
           <li>敵は壁越しには見えず、見失うとしばらく捜索してから追跡を諦めます。</li>
@@ -2885,20 +2886,70 @@ function addSpecialRoom(){
   state.items.push({x:p.x,y:p.y,type:"gear",gear:rollGear()});
  }
 }
+const wardenProfiles={
+ chain:{
+  key:"chain",short:"鎖番",name:"鎖縛の門衛",
+  desc:"鎖薙ぎで周囲を広く制圧する近接番人。",
+  hint:"距離2以内の鎖薙ぎは外側へ離脱するか、構え・態勢崩しで対処する。",
+  intro:"階層の奥から、石床を削る鎖の音が響いている。",
+  phase:"鎖縛の門衛が鎖を解き、薙ぎ払いの間合いを広げた！",
+  color:"#d3ba58",accent:"#fff0a8",hp:1.00,atk:1.00,def:1.00,bonusShards:1
+ },
+ oracle:{
+  key:"oracle",short:"神託",name:"墓標の神託者",
+  desc:"墓標列を固定し、亡者を呼び戻す遠隔番人。",
+  hint:"紫の墓標列から横へ外れる。召喚された亡者を放置しすぎない。",
+  intro:"骨の祈りが重なり、遠くで墓標が一斉にこちらを向いた。",
+  phase:"墓標の神託者が第二の声を開き、亡者を呼び戻した！",
+  color:"#9d82df",accent:"#efe0ff",hp:.92,atk:1.08,def:.90,bonusShards:2
+ },
+ furnace:{
+  key:"furnace",short:"熔炉",name:"熔炉の巨像",
+  desc:"着弾地点を炎上させ、戦場そのものを狭める重装番人。",
+  hint:"橙色の斜交差から離れ、生成された炎を番人や爆薬樽へ利用する。",
+  intro:"空気が焼け、巨大な炉心の鼓動が階層全体を揺らしている。",
+  phase:"熔炉の巨像の外殻が割れ、炉心が露出した！",
+  color:"#dc7442",accent:"#ffe0a1",hp:1.18,atk:1.14,def:1.18,bonusShards:3
+ },
+ root:{
+  key:"root",short:"根冠",name:"根冠の王",
+  desc:"周囲を囲む根檻と広い薙ぎ払いを交互に使う深層の王。",
+  hint:"緑の根檻は中心に留まれば安全。第二形態では鎖状の広範囲攻撃も混ざる。",
+  intro:"床下の根が脈打ち、階層そのものが王の呼吸を始めた。",
+  phase:"根冠の王が床へ根を下ろし、階層全体と一体化した！",
+  color:"#70ae63",accent:"#e0f5a5",hp:1.32,atk:1.18,def:1.08,bonusShards:5
+ }
+};
+function wardenProfileKeyForFloor(floor=state.floor){
+ const index=(Math.max(1,Math.floor(floor/5))-1)%4;
+ return["chain","oracle","furnace","root"][index];
+}
+function wardenProfileFor(enemy=null){
+ return wardenProfiles[enemy?.wardenKey||wardenProfileKeyForFloor(enemy?.bossFloor||state.floor)]||wardenProfiles.chain;
+}
 function spawnFloorBoss(){
  if(state.floor%5!==0)return;
  const p=randomFloorCell(8);
  if(!p)return;
  const bossLevel=rollEnemyLevel(true);
+ const profile=wardenProfileFor();
+ const baseHp=48+bossLevel*8;
+ const baseAtk=9+Math.floor(bossLevel*1.1);
+ const baseDef=4+Math.floor(bossLevel/4);
  state.enemies.push({
-  id:"boss-"+state.floor,x:p.x,y:p.y,type:"warden",name:currentBiome().label+"の番人",level:bossLevel,
-  hp:48+bossLevel*8,maxHp:48+bossLevel*8,
-  atk:9+Math.floor(bossLevel*1.1),def:4+Math.floor(bossLevel/4),
-  xp:30+bossLevel*5,intent:null,stagger:0,guarding:false,boss:true,phase:1,alert:0,lastSeen:null,faction:"guardian",home:{x:p.x,y:p.y},patrol:0,rivalId:null
+  id:"boss-"+state.floor,x:p.x,y:p.y,type:"warden",name:profile.name,level:bossLevel,
+  hp:Math.round(baseHp*profile.hp),maxHp:Math.round(baseHp*profile.hp),
+  atk:Math.round(baseAtk*profile.atk),def:Math.round(baseDef*profile.def),
+  xp:30+bossLevel*5,intent:null,intentCells:[],intentTarget:null,
+  stagger:0,guarding:false,boss:true,phase:1,phaseTriggered:false,
+  bossFloor:state.floor,wardenKey:profile.key,bossCycle:0,summonsMade:0,
+  bossColor:profile.color,bossAccent:profile.accent,
+  alert:0,lastSeen:null,faction:"guardian",home:{x:p.x,y:p.y},patrol:0,rivalId:null,status:{}
  });
  state.stairs={x:p.x,y:p.y};
  state.bossDefeated=false;
- addLog("階層の奥から、重い鎖の音が響いている。");
+ addLog(profile.intro);
+ addLog(`番人「${profile.name}」：${profile.hint}`);
 }
 
 let combatToastTimer=null;
@@ -4646,10 +4697,32 @@ function defeatEnemy(e){
  if(wasBoss){
   ensureRunStats().bossesDefeated++;
   state.bossDefeated=true;
-  state.items.push({x:e.x,y:e.y,type:"gear",gear:rollGear(e.level||floorTargetLevel())});
-  state.items.push({x:e.x,y:e.y,type:"purify",name:"解呪の灰"});
+  const profile=wardenProfileFor(e);
+  const rewardGear=rollGear((e.level||floorTargetLevel())+1);
+  if(["oracle","furnace","root"].includes(profile.key)&&(rarityOrder[rewardGear.rarity]||0)<2){
+   const oldMul=rarityData[rewardGear.rarity]?.mul||1;
+   const newMul=rarityData.rare.mul;
+   rewardGear.atk=Math.round(rewardGear.atk*newMul/oldMul);
+   rewardGear.def=Math.round(rewardGear.def*newMul/oldMul);
+   rewardGear.rarity="rare";
+   rewardGear.locked=true;
+  }
+  state.items.push({x:e.x,y:e.y,type:"gear",gear:rewardGear});
+  if(profile.key==="chain"){
+   state.items.push({x:e.x,y:e.y,type:"purify",name:"解呪の灰"});
+  }else if(profile.key==="oracle"){
+   state.items.push({x:e.x,y:e.y,type:"identify",name:"鑑定紙片"});
+   state.consumables.identify++;
+  }else if(profile.key==="furnace"){
+   state.items.push({x:e.x,y:e.y,type:"bomb",name:"火炎壺"});
+   state.items.push({x:e.x,y:e.y,type:"oil",name:"灯油"});
+  }else if(profile.key==="root"){
+   state.items.push({x:e.x,y:e.y,type:"retreat",name:"帰還標"});
+  }
+  state.meta.shards+=profile.bonusShards||0;
   grantAppearanceRelicForBoss();
-  addLog("番人が崩れ、階段の封印が解けた！");
+  addLog(`${profile.name}が崩れ、階段の封印が解けた！`);
+  addLog(`番人固有報酬：深淵の欠片+${profile.bonusShards||0}。`);
  }else if(rng()<.28)state.items.push({x:e.x,y:e.y,type:"gear",gear:rollGear(e.level||floorTargetLevel())});
  checkLevel();
 }
@@ -4805,6 +4878,209 @@ function updateEcology(){
  if(rng()<.72)spawnEcologyEnemy();
 }
 
+function bossMinionCount(enemy){
+ return state.enemies.filter(other=>other!==enemy&&other.summonedBy===enemy.id).length;
+}
+function bossSummonCell(enemy){
+ const candidates=[];
+ for(let radius=1;radius<=3;radius++){
+  for(let dy=-radius;dy<=radius;dy++){
+   for(let dx=-radius;dx<=radius;dx++){
+    if(Math.abs(dx)+Math.abs(dy)!==radius)continue;
+    const x=enemy.x+dx,y=enemy.y+dy;
+    if(tile(x,y)!==1)continue;
+    if(state.player.x===x&&state.player.y===y)continue;
+    if(enemyAt(x,y))continue;
+    candidates.push({x,y});
+   }
+  }
+  if(candidates.length)break;
+ }
+ return candidates.length?choice(candidates):null;
+}
+function summonWardenMinion(enemy,type){
+ const p=bossSummonCell(enemy);
+ if(!p)return false;
+ const base={
+  skeleton:{name:"墓守の骸兵",hp:12,atk:4,def:3,xp:4},
+  mage:{name:"神託の骨術師",hp:9,atk:6,def:1,xp:5},
+  warg:{name:"根走りの穴獣",hp:10,atk:5,def:1,xp:4},
+  bomber:{name:"炉心の爆ぜ虫",hp:8,atk:7,def:0,xp:4}
+ }[type]||{name:"番人の従者",hp:10,atk:5,def:1,xp:4};
+ const level=Math.max(1,(enemy.level||floorTargetLevel())-1);
+ state.enemies.push({
+  id:`summon-${enemy.id}-${state.turn}-${Math.floor(rng()*9999)}`,
+  x:p.x,y:p.y,type,name:base.name,level,
+  hp:base.hp+level*2,maxHp:base.hp+level*2,
+  atk:base.atk+Math.floor(level*.65),def:base.def+Math.floor(level/6),
+  xp:base.xp+level,intent:null,intentCells:[],intentTarget:null,
+  stagger:0,guarding:false,alert:4,lastSeen:{x:state.player.x,y:state.player.y},
+  faction:"guardian",home:{x:p.x,y:p.y},patrol:0,rivalId:null,status:{},
+  summonedBy:enemy.id
+ });
+ enemy.summonsMade=(enemy.summonsMade||0)+1;
+ spawnCombatText(p.x,p.y,"SUMMON","break",38);
+ return true;
+}
+function addBossBurningGround(cells){
+ let made=0;
+ for(const c of cells){
+  if(made>=3)break;
+  if(tile(c.x,c.y)!==1)continue;
+  if(state.stairs.x===c.x&&state.stairs.y===c.y)continue;
+  if(envAt(c.x,c.y))continue;
+  state.environment.push({x:c.x,y:c.y,type:"oil",active:true,burning:true,timer:3,bossMade:true});
+  made++;
+ }
+ if(made)addLog(`炉心の飛沫が${made}か所の床を炎上させた。`);
+}
+function enterWardenPhaseTwo(enemy){
+ if(enemy.phaseTriggered||enemy.hp>=enemy.maxHp*.5)return false;
+ enemy.phaseTriggered=true;
+ enemy.phase=2;
+ enemy.atk+=2;
+ const profile=wardenProfileFor(enemy);
+ showCombatToast("番人第二形態",profile.name,"critical");
+ addLog(profile.phase);
+
+ if(profile.key==="chain"){
+  enemy.def+=1;
+ }else if(profile.key==="oracle"){
+  summonWardenMinion(enemy,"skeleton");
+  summonWardenMinion(enemy,"mage");
+ }else if(profile.key==="furnace"){
+  for(let i=0;i<2;i++){
+   const p=bossSummonCell(enemy);
+   if(p)state.environment.push({x:p.x,y:p.y,type:"barrel",active:true,burning:false,timer:0,bossMade:true});
+  }
+  addLog("巨像の外殻から爆薬樽が転がり落ちた。");
+ }else if(profile.key==="root"){
+  summonWardenMinion(enemy,"warg");
+  summonWardenMinion(enemy,"mage");
+ }
+ return true;
+}
+function resolveWardenIntent(enemy,intent,cells,playerInTarget){
+ if(!["chain_sweep","grave_volley","furnace_slam","root_cage"].includes(intent))return false;
+
+ if(intent==="chain_sweep"){
+  spawnEnemyAttackCells(cells,"enemy_heavy",22);
+  if(playerInTarget)enemyAttack(enemy,1.25,"鎖薙ぎ");
+  else registerIntentDodge(enemy,intent);
+  clearEnemyIntent(enemy);
+  return true;
+ }
+
+ if(intent==="grave_volley"){
+  spawnEnemyAttackCells(cells,"enemy_bolt",22);
+  if(playerInTarget){
+   enemyAttack(enemy,1.18,"墓標列");
+   state.hero.stamina=Math.max(0,state.hero.stamina-1);
+   addLog("墓標の冷気で気力を1失った。");
+  }else registerIntentDodge(enemy,intent);
+  clearEnemyIntent(enemy);
+  return true;
+ }
+
+ if(intent==="furnace_slam"){
+  spawnEnemyAttackCells(cells,"enemy_blast",24);
+  if(playerInTarget)enemyAttack(enemy,1.42,"炉心落とし");
+  else registerIntentDodge(enemy,intent);
+  addBossBurningGround(cells);
+  clearEnemyIntent(enemy);
+  return true;
+ }
+
+ if(intent==="root_cage"){
+  spawnEnemyAttackCells(cells,"enemy_zone",24);
+  if(playerInTarget){
+   enemyAttack(enemy,1.12,"根檻");
+   state.hero.stamina=Math.max(0,state.hero.stamina-2);
+   addLog("根が足へ絡み、気力を2失った。");
+  }else{
+   const target=enemy.intentTarget;
+   const stayed=target&&state.player.x===target.x&&state.player.y===target.y;
+   if(stayed){
+    spawnCombatText(state.player.x,state.player.y,"STAY","dodge",42);
+    showCombatToast("根檻を見切った","動かず中心へ留まった","dodge");
+    addLog("根檻の中心へ留まり、閉じる根をやり過ごした。");
+    ensureCombatStats().dodges++;
+    recoverStamina(1);
+   }else registerIntentDodge(enemy,intent);
+  }
+  clearEnemyIntent(enemy);
+  return true;
+ }
+ return false;
+}
+function performWardenTurn(enemy,dist){
+ const profile=wardenProfileFor(enemy);
+ enterWardenPhaseTwo(enemy);
+ enemy.bossCycle=(enemy.bossCycle||0)+1;
+
+ if(profile.key==="chain"){
+  if(enemy.phase>=2&&dist<=2){
+   setEnemyIntent(enemy,"chain_sweep");
+   addLog("鎖縛の門衛が鎖を大きく巡らせた！");
+   return;
+  }
+  if(dist===1){
+   setEnemyIntent(enemy,enemy.phase>=2?"heavy":"lunge");
+   addLog(enemy.phase>=2?"門衛が鎖柄を振り上げた！":"門衛が鎖を引いた！");
+   return;
+  }
+  stepTowardPlayer(enemy);
+  return;
+ }
+
+ if(profile.key==="oracle"){
+  if(enemy.phase>=2&&bossMinionCount(enemy)<2&&enemy.bossCycle%4===0){
+   if(summonWardenMinion(enemy,enemy.bossCycle%8===0?"mage":"skeleton")){
+    addLog("墓標の神託者が亡者を呼び戻した。");
+    return;
+   }
+  }
+  if(dist===1){
+   stepAwayFromPlayer(enemy);
+   return;
+  }
+  if(dist<=6){
+   setEnemyIntent(enemy,"grave_volley");
+   addLog("墓標の神託者が紫の墓標列を定めた！");
+   return;
+  }
+  stepTowardPlayer(enemy);
+  return;
+ }
+
+ if(profile.key==="furnace"){
+  if(dist<=5){
+   setEnemyIntent(enemy,"furnace_slam");
+   addLog("熔炉の巨像が炉心を持ち上げ、着弾地点を灼いた！");
+   return;
+  }
+  stepTowardPlayer(enemy);
+  return;
+ }
+
+ if(profile.key==="root"){
+  const useCage=enemy.phase===1||enemy.bossCycle%2===1;
+  if(useCage){
+   setEnemyIntent(enemy,"root_cage");
+   addLog("根冠の王が探索者の周囲へ根檻を伸ばした！");
+   return;
+  }
+  if(dist<=2){
+   setEnemyIntent(enemy,"chain_sweep");
+   addLog("根冠の王が根の大環を薙ぎ払う！");
+   return;
+  }
+  stepTowardPlayer(enemy);
+  return;
+ }
+
+ stepTowardPlayer(enemy);
+}
 function enemyTurn(){
  for(const e of [...state.enemies]){
   if(!state.enemies.includes(e))continue;
@@ -4863,6 +5139,11 @@ function enemyTurn(){
     continue;
    }
 
+   if(e.type==="warden"&&resolveWardenIntent(e,intent,cells,playerInTarget)){
+    if(state.gameOver)return;
+    continue;
+   }
+
    if(!playerInTarget){
     registerIntentDodge(e,intent);
     continue;
@@ -4877,13 +5158,8 @@ function enemyTurn(){
   }
 
   if(e.type==="warden"){
-   if(e.phase===1&&e.hp<e.maxHp*.5){e.phase=2;e.atk+=3;addLog("深層の番人が鎖を引きちぎり、激昂した！")}
-   if(dist===1){
-    setEnemyIntent(e,e.phase===2?"heavy":"lunge");
-    addLog(e.phase===2?"番人が両腕を振り上げた！":"番人が鎖を引いた！");
-    continue;
-   }
-   stepTowardPlayer(e);continue;
+   performWardenTurn(e,dist);
+   continue;
   }
 
   if(e.elite==="swift"&&state.turn%2===0&&dist>1){
@@ -6087,6 +6363,17 @@ function loadGame(){
   for(const enemy of state.enemies||[]){
    if(!Array.isArray(enemy.intentCells))enemy.intentCells=[];
    if(enemy.intent&&!enemy.intentTarget)enemy.intentTarget={x:state.player.x,y:state.player.y};
+   if(enemy.type==="warden"){
+    const profile=wardenProfileFor(enemy);
+    if(!enemy.wardenKey)enemy.wardenKey=profile.key;
+    if(!enemy.bossFloor)enemy.bossFloor=state.floor;
+    if(typeof enemy.phaseTriggered!=="boolean")enemy.phaseTriggered=enemy.phase>=2;
+    if(typeof enemy.bossCycle!=="number")enemy.bossCycle=0;
+    if(typeof enemy.summonsMade!=="number")enemy.summonsMade=0;
+    if(!enemy.bossColor)enemy.bossColor=profile.color;
+    if(!enemy.bossAccent)enemy.bossAccent=profile.accent;
+    enemy.name=profile.name;
+   }
   }
   state.visual=state.visual||{};
   /* 一時エフェクトはセーブ対象として復元しない。 */
@@ -6339,8 +6626,8 @@ function drawHeroSprite(x,y,hurt,t){
 }
 function drawEnemySprite(e,x,y,t){
  const bob=Math.sin(t*.1+e.x*.7+e.y)*.65;
- const base={skeleton:"#d5d8e1",warg:"#c76673",mage:"#9a84e4",bomber:"#e2a24d",warden:"#dbc45b"}[e.type]||"#ddd";
- const accent=e.nemesis?"#ff4f73":(eliteColor(e)||base);
+ const base=e.bossColor||{skeleton:"#d5d8e1",warg:"#c76673",mage:"#9a84e4",bomber:"#e2a24d",warden:"#dbc45b"}[e.type]||"#ddd";
+ const accent=e.nemesis?"#ff4f73":(e.bossColor||eliteColor(e)||base);
 
  ctx.save();
  ctx.globalAlpha=.32;ctx.fillStyle="#000";ctx.beginPath();ctx.ellipse(x+11,y+18,7,3,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
@@ -6378,8 +6665,15 @@ function drawEnemySprite(e,x,y,t){
   ctx.fillStyle=accent;ctx.fillRect(x+5,y+5+bob,13,14);
   ctx.fillStyle="#3a3034";ctx.fillRect(x+7,y+5+bob,9,3);
   ctx.fillStyle="#2a2025";ctx.fillRect(x+8,y+8+bob,7,3);
-  ctx.fillStyle="#f5df78";ctx.fillRect(x+9,y+8+bob,2,2);ctx.fillRect(x+13,y+8+bob,2,2);
-  ctx.fillStyle="#d7c07c";ctx.fillRect(x+11,y+12+bob,2,5);
+  ctx.fillStyle=e.bossAccent||"#f5df78";ctx.fillRect(x+9,y+8+bob,2,2);ctx.fillRect(x+13,y+8+bob,2,2);
+  ctx.fillStyle=e.bossAccent||"#d7c07c";ctx.fillRect(x+11,y+12+bob,2,5);
+  if(e.wardenKey==="oracle"){
+   ctx.fillStyle="#d9c2ff";ctx.fillRect(x+5,y+3+bob,3,2);ctx.fillRect(x+15,y+3+bob,3,2);
+  }else if(e.wardenKey==="furnace"){
+   ctx.fillStyle="#ff9a4c";ctx.fillRect(x+8,y+13+bob,2,4);ctx.fillRect(x+14,y+13+bob,2,4);
+  }else if(e.wardenKey==="root"){
+   ctx.strokeStyle="#b7e07f";ctx.beginPath();ctx.moveTo(x+5,y+5+bob);ctx.lineTo(x+2,y+2+bob);ctx.moveTo(x+18,y+5+bob);ctx.lineTo(x+21,y+2+bob);ctx.stroke();
+  }
   ctx.strokeStyle="#fff1a8";ctx.strokeRect(x+4.5,y+4.5,14,15);
  }
 
@@ -6572,7 +6866,11 @@ function drawStairsTile(x,y,t){
 }
 
 function enemyIntentDisplayName(intent){
- return{lunge:"飛びかかり",heavy:"強打",bolt:"骨弾",explode:"爆発"}[intent]||"攻撃";
+ return{
+  lunge:"飛びかかり",heavy:"強打",bolt:"骨弾",explode:"爆発",
+  chain_sweep:"鎖薙ぎ",grave_volley:"墓標列",
+  furnace_slam:"炉心落とし",root_cage:"根檻"
+ }[intent]||"攻撃";
 }
 function buildEnemyIntentCells(e,intent,target={x:state.player.x,y:state.player.y}){
  const cells=[];
@@ -6592,6 +6890,42 @@ function buildEnemyIntentCells(e,intent,target={x:state.player.x,y:state.player.
  if(intent==="explode"){
   cells.push({x:e.x,y:e.y});
   for(const [dx,dy] of dirs)cells.push({x:e.x+dx,y:e.y+dy});
+  return normalizeCells(cells);
+ }
+ if(intent==="chain_sweep"){
+  for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
+   const distance=Math.abs(dx)+Math.abs(dy);
+   if(distance>=1&&distance<=2&&tile(e.x+dx,e.y+dy)===1)cells.push({x:e.x+dx,y:e.y+dy});
+  }
+  return normalizeCells(cells);
+ }
+ if(intent==="grave_volley"){
+  const dx=target.x-e.x,dy=target.y-e.y;
+  if(Math.abs(dx)>=Math.abs(dy)){
+   for(let offset=-1;offset<=1;offset++){
+    const x=target.x+offset,y=target.y;
+    if(tile(x,y)===1)cells.push({x,y});
+   }
+  }else{
+   for(let offset=-1;offset<=1;offset++){
+    const x=target.x,y=target.y+offset;
+    if(tile(x,y)===1)cells.push({x,y});
+   }
+  }
+  return normalizeCells(cells);
+ }
+ if(intent==="furnace_slam"){
+  cells.push({x:target.x,y:target.y});
+  for(const [dx,dy] of [[-1,-1],[1,-1],[-1,1],[1,1]]){
+   if(tile(target.x+dx,target.y+dy)===1)cells.push({x:target.x+dx,y:target.y+dy});
+  }
+  return normalizeCells(cells);
+ }
+ if(intent==="root_cage"){
+  for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+   if(dx===0&&dy===0)continue;
+   if(tile(target.x+dx,target.y+dy)===1)cells.push({x:target.x+dx,y:target.y+dy});
+  }
   return normalizeCells(cells);
  }
  cells.push({x:target.x,y:target.y});
@@ -6652,6 +6986,8 @@ function enemyStatusTags(e){
  if(e.intent)tags.push("予兆:"+e.intent);
  if(e.elite)tags.push("エリート:"+e.elite);
  if(e.nemesis)tags.push("宿敵");
+ if(e.boss)tags.push(`番人:${wardenProfileFor(e).short}`);
+ if(e.phase===2)tags.push("第二形態");
  if(e.status?.burning>0)tags.push("炎上 "+e.status.burning);
  if(e.status?.poison>0)tags.push("毒 "+e.status.poison);
  if(e.status?.frozen>0)tags.push("凍結 "+e.status.frozen);
@@ -6672,7 +7008,11 @@ function inspectTileAt(x,y){
   const tags=enemyStatusTags(enemy);
   body+=`<p>Lv${enemy.level||floorTargetLevel()}　経験値補正 ${xpPercentForEnemy(enemy)}%<br>HP ${enemy.hp}/${enemy.maxHp}<br>攻撃 ${enemy.atk} / 防御 ${enemy.def}<br>勢力 ${factionData[enemy.faction]?.label||"不明"}</p>`;
   body+=enemyResearchInfo(enemy);body+=tags.length?tags.map(t=>`<span class="statusTag">${t}</span>`).join(""):'<p class="tacticalNote">状態異常なし</p>';
-  body+=`<p class="tacticalNote">${enemy.nemesis?"あなたを追い続ける宿敵。":enemy.elite?"通常個体より強い変異個体。":"迷宮に棲む敵。"}</p>`;
+  if(enemy.boss){
+   const profile=wardenProfileFor(enemy);
+   body+=`<div class="tagBuild"><b>${profile.short}・${profile.name}</b><br>${profile.desc}<br><span class="bondStage">対処：${profile.hint}</span></div>`;
+  }
+  body+=`<p class="tacticalNote">${enemy.nemesis?"あなたを追い続ける宿敵。":enemy.boss?"階層ごとに固有の戦法を持つ深層番人。":enemy.elite?"通常個体より強い変異個体。":"迷宮に棲む敵。"}</p>`;
  }else if(item){
   title=item.name||"落とし物";
   body+=`<p>${item.type==="gear"?(item.gear.identified?gearLabel(item.gear):"未鑑定装備"):item.type}</p>`;
@@ -6798,7 +7138,7 @@ function draw(){
   ctx.strokeRect(sx(c.x)+3,sy(c.y)+3,TILE-6,TILE-6);
  }
 
- // 敵の次ターン攻撃範囲：攻撃種ごとに形と色を分ける。
+ // 敵の次ターン攻撃範囲：通常攻撃と四種の番人攻撃を描き分ける。
  const dangerPulse=(Math.sin(t*.26)+1)*.5;
  for(const e of state.enemies){
   const cells=enemyIntentCells(e);
@@ -6809,8 +7149,20 @@ function draw(){
    const explode=e.intent==="explode";
    const bolt=e.intent==="bolt";
    const heavy=e.intent==="heavy";
+   const chain=e.intent==="chain_sweep";
+   const grave=e.intent==="grave_volley";
+   const furnace=e.intent==="furnace_slam";
+   const root=e.intent==="root_cage";
 
-   ctx.fillStyle=explode
+   ctx.fillStyle=chain
+    ?`rgba(221,185,67,${.16+.12*dangerPulse})`
+    :grave
+    ?`rgba(164,91,234,${.19+.11*dangerPulse})`
+    :furnace
+    ?`rgba(255,92,42,${.22+.13*dangerPulse})`
+    :root
+    ?`rgba(87,174,87,${.18+.11*dangerPulse})`
+    :explode
     ?`rgba(255,116,42,${.20+.12*dangerPulse})`
     :bolt
     ?`rgba(190,76,255,${.17+.11*dangerPulse})`
@@ -6819,33 +7171,55 @@ function draw(){
     :`rgba(255,68,94,${.18+.12*dangerPulse})`;
    ctx.fillRect(px+1,py+1,TILE-2,TILE-2);
 
-   ctx.strokeStyle=explode
+   ctx.strokeStyle=chain
+    ?"rgba(255,224,112,.99)"
+    :grave
+    ?"rgba(225,168,255,.99)"
+    :furnace
+    ?"rgba(255,180,92,.99)"
+    :root
+    ?"rgba(170,230,128,.99)"
+    :explode
     ?"rgba(255,195,91,.99)"
     :bolt
     ?"rgba(222,157,255,.99)"
     :heavy
     ?"rgba(255,111,132,.99)"
     :"rgba(255,144,158,.98)";
-   ctx.lineWidth=heavy?2.5:1.5;
+   ctx.lineWidth=(heavy||chain||furnace)?2.5:1.5;
    ctx.strokeRect(px+2.5,py+2.5,TILE-5,TILE-5);
 
-   if(explode){
+   if(explode||furnace){
     ctx.beginPath();
-    ctx.moveTo(px+6,py+11);ctx.lineTo(px+16,py+11);
-    ctx.moveTo(px+11,py+6);ctx.lineTo(px+11,py+16);
+    if(furnace){
+     ctx.moveTo(px+5,py+5);ctx.lineTo(px+17,py+17);
+     ctx.moveTo(px+17,py+5);ctx.lineTo(px+5,py+17);
+    }else{
+     ctx.moveTo(px+6,py+11);ctx.lineTo(px+16,py+11);
+     ctx.moveTo(px+11,py+6);ctx.lineTo(px+11,py+16);
+    }
     ctx.stroke();
-   }else if(bolt){
-    const dx=Math.sign((target?.x??c.x)-e.x),dy=Math.sign((target?.y??c.y)-e.y);
+   }else if(bolt||grave){
     ctx.beginPath();
-    ctx.moveTo(px+11-dx*5,py+11-dy*5);
-    ctx.lineTo(px+11+dx*5,py+11+dy*5);
+    if(grave){
+     ctx.moveTo(px+5,py+6);ctx.lineTo(px+17,py+6);
+     ctx.moveTo(px+5,py+11);ctx.lineTo(px+17,py+11);
+     ctx.moveTo(px+5,py+16);ctx.lineTo(px+17,py+16);
+    }else{
+     const dx=Math.sign((target?.x??c.x)-e.x),dy=Math.sign((target?.y??c.y)-e.y);
+     ctx.moveTo(px+11-dx*5,py+11-dy*5);
+     ctx.lineTo(px+11+dx*5,py+11+dy*5);
+    }
     ctx.stroke();
-    ctx.fillStyle="rgba(240,209,255,.98)";
-    ctx.fillRect(px+10+dx*4,py+10+dy*4,3,3);
+   }else if(root){
+    ctx.beginPath();
+    ctx.moveTo(px+5,py+17);ctx.quadraticCurveTo(px+8,py+8,px+11,py+5);
+    ctx.moveTo(px+17,py+17);ctx.quadraticCurveTo(px+14,py+8,px+11,py+5);
+    ctx.stroke();
    }else{
     ctx.beginPath();
     ctx.moveTo(px+5,py+16);ctx.lineTo(px+16,py+5);
-    if(heavy){ctx.moveTo(px+7,py+18);ctx.lineTo(px+18,py+7)}
+    if(heavy||chain){ctx.moveTo(px+7,py+18);ctx.lineTo(px+18,py+7)}
     ctx.stroke();
    }
 
