@@ -1616,11 +1616,61 @@ body{
  .routeOption .routeDesc{font-size:8px}
 }
 
+
+/* v3.9.6 ROUTE VERDICTS */
+.routeFinale{
+ display:block;
+ margin-top:8px;
+ padding:7px 8px;
+ border:1px solid #4f4159;
+ border-radius:8px;
+ background:#0d0a11;
+ color:#d8ccdc;
+ font-size:8px;
+ line-height:1.55;
+}
+.routeFinale b{
+ color:#f3dda1;
+}
+.routeFinaleReward{
+ display:block;
+ margin-top:3px;
+ color:#b9dfbd;
+}
+.routeFinaleBoss{
+ display:block;
+ margin-top:3px;
+ color:#e8a6b4;
+}
+.routeVerdictBadge{
+ display:inline-block;
+ margin-left:4px;
+ padding:1px 5px;
+ border:1px solid #5d4b67;
+ border-radius:999px;
+ color:#e1d3e5;
+ font-size:7px;
+}
+.routeVerdictBadge.complete{
+ border-color:#55795f;
+ color:#b9e4c0;
+}
+.routeFinaleSummary{
+ margin-top:5px;
+ padding:6px 7px;
+ border-left:3px solid #aa8950;
+ border-radius:6px;
+ background:#151018;
+ color:#d6cad9;
+ font-size:8px;
+ line-height:1.5;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.5 DESCENT ROUTES</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.6 ROUTE VERDICTS</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -1661,7 +1711,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 番人撃破後の進路選択</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 進路終点の試練と踏破報酬</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -1758,6 +1808,7 @@ body{
           <li><b>階段 ▼</b> へ進む前には確認が出ます。移動後は次の階層名・環境・目標が約6秒表示されます。</li>
           <li><b>5階ごとに番人戦</b>があります。番人撃破後は、次の5階区間を「狩路・観測路・補給路」から選択します。</li>
           <li>進路は敵数・物資・エリート・罠・事件・研究量へ影響し、次の番人階まで継続します。</li>
+          <li>進路の終点となる番人階では、選んだ進路に応じた試練が発生します。番人を倒すと進路踏破報酬を獲得します。</li>
           <li><b>主人公のHPが0でその探索は終了</b>です。帰還・死亡後には、撃破数・戦闘結果・持ち帰り・喪失をまとめた探索結果が表示されます。</li>
         </ul>
         <div class="helpNote">迷ったら「敵を1体ずつ処理」「荷物が増えたら整理」「危なくなったら帰還」を意識すると安定します。</div>
@@ -1998,21 +2049,30 @@ const routeData={
   desc:"敵と強敵が増える代わりに、装備と経験値を狙いやすい戦闘路。",
   enemyBonus:3,enemyAtk:1,eliteBonus:.14,itemBonus:1,trapBonus:0,secretBonus:0,eventBonus:0,
   itemShift:.12,observationMul:1,objectiveScrap:1,
-  effects:["敵+3","エリート率上昇","装備出現増","敵攻撃+1"]
+  effects:["敵+3","エリート率上昇","装備出現増","敵攻撃+1"],
+  finaleName:"血戦の契約",
+  finaleBoss:"終点の番人は最大HP+18%・攻撃+2・防御+1。",
+  finaleReward:"番人装備のレア度を1段階上昇 / 深淵の欠片+3"
  },
  archive:{
   id:"archive",label:"古層の観測路",short:"観測路",
   desc:"罠・隠し通路・事件が増える。研究は進むが、慎重な探索を要求される。",
   enemyBonus:0,enemyAtk:0,eliteBonus:0,itemBonus:1,trapBonus:2,secretBonus:2,eventBonus:.25,
   itemShift:0,observationMul:2,objectiveScrap:0,
-  effects:["罠+2","隠し通路+2","事件率上昇","観察量2倍"]
+  effects:["罠+2","隠し通路+2","事件率上昇","観察量2倍"],
+  finaleName:"解読された弱点",
+  finaleBoss:"終点の番人は防御-2・受けるダメージ+15%。",
+  finaleReward:"番人装備を完全鑑定 / 研究点+3 / 深淵の欠片+2"
  },
  supply:{
   id:"supply",label:"残灯の補給路",short:"補給路",
   desc:"敵を減らし、薬・食料・灯油を多く確保できる。装備発見は少なくなる。",
   enemyBonus:-2,enemyAtk:0,eliteBonus:-.05,itemBonus:3,trapBonus:-1,secretBonus:0,eventBonus:0,
   itemShift:-.18,observationMul:1,objectiveScrap:0,
-  effects:["敵-2","物資+3","罠-1","装備出現減"]
+  effects:["敵-2","物資+3","罠-1","装備出現減"],
+  finaleName:"灯火の野営",
+  finaleBoss:"番人階へ到達時にHP25%回復・気力全快・携行糧+80・燃料+25。",
+  finaleReward:"治癒薬+1 / 灯油+1 / 携行糧+100 / 深淵の欠片+1"
  }
 };
 function activeRoute(){
@@ -2028,6 +2088,123 @@ function routeValue(key,fallback=0){
 }
 function routeRangeText(plan=state?.routePlan){
  return plan?`第${plan.startFloor}〜${plan.endFloor}層`:"";
+}
+function routeProgressText(plan=state?.routePlan){
+ if(!plan)return"";
+ const route=routeData[plan.id];
+ if(!route)return"";
+ if(plan.completed)return`${route.short}・踏破`;
+ const progress=clamp(state.floor-plan.startFloor+1,1,5);
+ return state.floor===plan.endFloor
+  ?`${route.short}・終点`
+  :`${route.short} ${progress}/5`;
+}
+function isRouteFinaleFloor(plan=state?.routePlan){
+ return !!plan&&!plan.completed&&state.floor===plan.endFloor;
+}
+function routeFinaleDescription(plan=state?.routePlan){
+ const route=plan?routeData[plan.id]:null;
+ return route?`${route.finaleName}：${route.finaleBoss}`:"";
+}
+function prepareRouteFinaleFloor(){
+ const plan=state.routePlan;
+ if(!isRouteFinaleFloor(plan)||plan.finalePrepared)return false;
+ const route=routeData[plan.id];
+ plan.finalePrepared=true;
+
+ if(route.id==="supply"){
+  const heal=Math.max(1,Math.round(state.hero.maxHp*.25));
+  const beforeHp=state.hero.hp;
+  state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+heal);
+  state.hero.stamina=effectiveMaxStamina();
+  state.hungerRecoveryBuffer=0;
+  state.provisions=(state.provisions||0)+80;
+  state.light.fuel=Math.min(100,(state.light.fuel||0)+25);
+  addLog(`灯火の野営でHPを${state.hero.hp-beforeHp}回復し、気力全快・携行糧+80・燃料+25。`);
+  showCombatToast("進路終点・補給完了","灯火の野営が番人戦への備えを整えた","objective");
+ }else{
+  addLog(`進路終点「${route.finaleName}」へ到達した。${route.finaleBoss}`);
+ }
+ return true;
+}
+function applyRouteFinaleToBoss(enemy){
+ const plan=state.routePlan;
+ if(!enemy?.boss||!isRouteFinaleFloor(plan)||enemy.routeFinaleApplied)return false;
+ const route=routeData[plan.id];
+ enemy.routeFinaleApplied=true;
+ enemy.routeFinale=route.id;
+ enemy.routeFinaleName=route.finaleName;
+
+ if(route.id==="hunt"){
+  const hpRatio=enemy.maxHp>0?enemy.hp/enemy.maxHp:1;
+  enemy.maxHp=Math.max(1,Math.round(enemy.maxHp*1.18));
+  enemy.hp=Math.max(1,Math.round(enemy.maxHp*hpRatio));
+  enemy.atk+=2;
+  enemy.def+=1;
+ }else if(route.id==="archive"){
+  enemy.def=Math.max(0,enemy.def-2);
+  enemy.routeDamageTaken=1.15;
+ }else if(route.id==="supply"){
+  enemy.routeDamageTaken=1;
+ }
+ addLog(`進路試練「${route.finaleName}」が${enemy.name}へ刻まれた。`);
+ return true;
+}
+function promoteGearRarity(gear,steps=1){
+ if(!gear)return gear;
+ const order=["common","magic","rare","legendary"];
+ const current=Math.max(0,order.indexOf(gear.rarity));
+ const target=Math.min(order.length-1,current+Math.max(0,steps));
+ if(target===current)return gear;
+ const oldMul=rarityData[order[current]]?.mul||1;
+ const nextMul=rarityData[order[target]]?.mul||oldMul;
+ gear.atk=Math.max(0,Math.round((gear.atk||0)*nextMul/oldMul));
+ gear.def=Math.max(0,Math.round((gear.def||0)*nextMul/oldMul));
+ gear.rarity=order[target];
+ gear.locked=target>=2;
+ return gear;
+}
+function completeRouteAtBoss(enemy,rewardGear){
+ const plan=state.routePlan;
+ if(!enemy?.boss||!isRouteFinaleFloor(plan))return null;
+ const route=routeData[plan.id];
+ let rewardSummary="";
+
+ if(route.id==="hunt"){
+  promoteGearRarity(rewardGear,1);
+  state.meta.shards+=3;
+  rewardSummary=`装備レア度+1 / 欠片+3`;
+ }else if(route.id==="archive"){
+  rewardGear.identified=true;
+  state.meta.research.points=(state.meta.research.points||0)+3;
+  state.meta.shards+=2;
+  rewardSummary=`装備完全鑑定 / 研究点+3 / 欠片+2`;
+ }else if(route.id==="supply"){
+  state.consumables.potion=(state.consumables.potion||0)+1;
+  state.consumables.oil=(state.consumables.oil||0)+1;
+  state.provisions=(state.provisions||0)+100;
+  state.meta.shards+=1;
+  rewardSummary=`治癒薬+1 / 灯油+1 / 携行糧+100 / 欠片+1`;
+ }
+
+ plan.completed=true;
+ plan.completedAtFloor=state.floor;
+ plan.rewardSummary=rewardSummary;
+ ensureRunStats().routesCompleted=(ensureRunStats().routesCompleted||0)+1;
+
+ const history=[...(state.routeHistory||[])].reverse().find(entry=>
+  entry.id===plan.id&&entry.startFloor===plan.startFloor&&!entry.completed
+ );
+ if(history){
+  history.completed=true;
+  history.completedAtFloor=state.floor;
+  history.rewardSummary=rewardSummary;
+ }
+
+ spawnCombatText(enemy.x,enemy.y,"ROUTE CLEAR","dodge",54);
+ showCombatToast("進路踏破",`${route.label} / ${rewardSummary}`,"objective");
+ addLog(`進路「${route.label}」を踏破した。${rewardSummary}`);
+ return{route:route.id,label:route.label,rewardSummary};
 }
 const floorMutationData={
  darkness:{label:"深闇",desc:"視界が狭い",vision:-2},
@@ -2815,6 +2992,7 @@ function createRunStats(meta){
   eventsResolved:0,
   bossesDefeated:0,
   objectivesCompleted:0,
+  routesCompleted:0,
   startedAt:Date.now()
  };
 }
@@ -2860,6 +3038,8 @@ function buildExpeditionReport(outcome,details={}){
   kills:Math.max(0,(state.meta.totalKills||0)-(stats.startTotalKills||0)),
   bosses:stats.bossesDefeated||0,
   objectives:stats.objectivesCompleted||0,
+  routesCompleted:stats.routesCompleted||0,
+  completedRoutes:(state.routeHistory||[]).filter(entry=>entry.completed).map(entry=>entry.label||routeData[entry.id]?.label||entry.id),
   gold:state.gold||0,
   damageDealt:stats.damageDealt||0,
   damageTaken:stats.damageTaken||0,
@@ -2883,6 +3063,7 @@ function buildExpeditionReport(outcome,details={}){
  };
 
  if(report.bosses>0)report.highlights.push(`番人を${report.bosses}体撃破`);
+ if(report.routesCompleted>0)report.highlights.push(`進路を${report.routesCompleted}区間踏破`);
  if(report.dodges>0)report.highlights.push(`予兆攻撃を${report.dodges}回回避`);
  if(report.breaks>0)report.highlights.push(`敵の攻撃態勢を${report.breaks}回崩した`);
  if(report.crits>0)report.highlights.push(`会心を${report.crits}回発生`);
@@ -2934,6 +3115,7 @@ function expeditionReportHtml(report,compact=false){
     <span class="expeditionPill">崩し ${report.breaks}</span>
     <span class="expeditionPill">会心 ${report.crits}</span>
     <span class="expeditionPill">目標達成 ${report.objectives||0}</span>
+    <span class="expeditionPill">進路踏破 ${report.routesCompleted||0}</span>
    </div>
   </div>
   <div class="expeditionSection">
@@ -3080,7 +3262,7 @@ function spawnFloorBoss(){
  const baseHp=48+bossLevel*8;
  const baseAtk=9+Math.floor(bossLevel*1.1);
  const baseDef=4+Math.floor(bossLevel/4);
- state.enemies.push({
+ const boss={
   id:"boss-"+state.floor,x:p.x,y:p.y,type:"warden",name:profile.name,level:bossLevel,
   hp:Math.round(baseHp*profile.hp),maxHp:Math.round(baseHp*profile.hp),
   atk:Math.round(baseAtk*profile.atk),def:Math.round(baseDef*profile.def),
@@ -3089,7 +3271,9 @@ function spawnFloorBoss(){
   bossFloor:state.floor,wardenKey:profile.key,bossCycle:0,summonsMade:0,
   bossColor:profile.color,bossAccent:profile.accent,
   alert:0,lastSeen:null,faction:"guardian",home:{x:p.x,y:p.y},patrol:0,rivalId:null,status:{}
- });
+ };
+ applyRouteFinaleToBoss(boss);
+ state.enemies.push(boss);
  state.stairs={x:p.x,y:p.y};
  state.bossDefeated=false;
  addLog(profile.intro);
@@ -4058,7 +4242,10 @@ function renderFloorGoal(){
  el.innerHTML=`<div class="floorGoalHeader"><b>第${state.floor}層：${objective.title}</b><span class="floorGoalState">${objective.completed?"階段解放":"封印中"}</span></div>
   <div class="floorGoalText">${objective.desc}　${progress}/${objective.target}</div>
   <div class="floorGoalProgress"><i style="width:${ratio}%"></i></div>
-  <div class="floorGoalReward">報酬 ${floorObjectiveRewardText(objective)}${fallback?` / ${fallback}`:""}</div>`;
+  <div class="floorGoalReward">報酬 ${floorObjectiveRewardText(objective)}${fallback?` / ${fallback}`:""}${
+   isRouteFinaleFloor()?` / 進路終点：${routeData[state.routePlan.id].finaleName}`:
+   state.routePlan?.completed&&state.floor===state.routePlan.endFloor?` / 進路踏破済み`:""
+  }</div>`;
 }
 
 function generateFloor(){
@@ -4174,6 +4361,7 @@ function generateFloor(){
  addFloorEvents();
  addEnvironmentObjects();
  applyFloorPacingRewards();
+ prepareRouteFinaleFloor();
  spawnFloorBoss();
  spawnNemesis();
  updateVision();
@@ -4765,7 +4953,7 @@ function damageEnemy(e,damage,label=""){
  }
  const guardMul=(e.type==="skeleton"&&e.guarding)?0.45:1;
  damage=applyTraitDamage(damage,e)*biomeDamageModifier(equippedElement())*tagDamageMultiplier(e)*lightDamageMultiplier(e);
- const dmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul*(mutation()?.damageMul||1)));
+ const dmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul*(mutation()?.damageMul||1)*(e.routeDamageTaken||1)));
  ensureRunStats().damageDealt+=dmg;
  e.hp-=dmg;
  const wasCritical=String(label).includes("会心");
@@ -4862,6 +5050,7 @@ function defeatEnemy(e){
    rewardGear.rarity="rare";
    rewardGear.locked=true;
   }
+  completeRouteAtBoss(e,rewardGear);
   state.items.push({x:e.x,y:e.y,type:"gear",gear:rewardGear});
   if(profile.key==="chain"){
    state.items.push({x:e.x,y:e.y,type:"purify",name:"解呪の灰"});
@@ -5653,6 +5842,11 @@ function renderRouteChoices(){
    </span>
    <span class="routeDesc">${route.desc}</span>
    <span class="routeEffects">${effects}</span>
+   <span class="routeFinale">
+    <b>終点試練：${route.finaleName}</b>
+    <span class="routeFinaleBoss">${route.finaleBoss}</span>
+    <span class="routeFinaleReward">踏破報酬：${route.finaleReward}</span>
+   </span>
   </button>`;
  }).join("");
  $("routeChoices").querySelectorAll("[data-route]").forEach(button=>{
@@ -5677,7 +5871,10 @@ function chooseDescentRoute(id){
   id,
   startFloor:state.floor+1,
   endFloor:state.floor+5,
-  chosenAfterFloor:state.floor
+  chosenAfterFloor:state.floor,
+  completed:false,
+  finalePrepared:false,
+  rewardSummary:null
  };
  state.routeHistory=state.routeHistory||[];
  state.routeHistory.push({...state.routePlan,label:route.label});
@@ -6585,10 +6782,25 @@ function loadGame(){
   if(!state.combatStats)state.combatStats={dodges:0,guards:0,breaks:0,crits:0};
   if(!state.runStats)state.runStats=createRunStats(state.meta);
   if(typeof state.runStats.objectivesCompleted!=="number")state.runStats.objectivesCompleted=0;
+  if(typeof state.runStats.routesCompleted!=="number")state.runStats.routesCompleted=0;
   if(!state.floorStats)state.floorStats=createFloorStats();
   if(!state.floorObjective)state.floorObjective={...createFloorObjective(),floor:state.floor};
   if(typeof state.routePlan==="undefined")state.routePlan=null;
   if(!Array.isArray(state.routeHistory))state.routeHistory=[];
+  if(state.routePlan){
+   if(typeof state.routePlan.completed!=="boolean")state.routePlan.completed=false;
+   if(typeof state.routePlan.finalePrepared!=="boolean")state.routePlan.finalePrepared=false;
+   if(typeof state.routePlan.rewardSummary==="undefined")state.routePlan.rewardSummary=null;
+  }
+  for(const entry of state.routeHistory){
+   if(typeof entry.completed!=="boolean")entry.completed=false;
+  }
+  if(isRouteFinaleFloor()){
+   prepareRouteFinaleFloor();
+   for(const enemy of state.enemies||[]){
+    if(enemy.boss)applyRouteFinaleToBoss(enemy);
+   }
+  }
   updateFloorObjective();
   for(const enemy of state.enemies||[]){
    if(!Array.isArray(enemy.intentCells))enemy.intentCells=[];
@@ -6658,7 +6870,10 @@ function showFloorBanner(){
  const extra=[];
  if(mutation())extra.push(`異変：${mutation().label}`);
  if(adaptation())extra.push(`環境適応：${adaptation().label}`);
- if(activeRoute())extra.push(`進路：${activeRoute().label}`);
+ if(activeRoute()){
+  const route=activeRoute();
+  extra.push(`進路：${route.label}${isRouteFinaleFloor()?"・終点":state.routePlan?.completed?"・踏破":""}`);
+ }
 
  banner.classList.remove("show","floorBannerBoss","floorBannerRest");
  void banner.offsetWidth;
@@ -6696,7 +6911,7 @@ function renderHero(){
  $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}</div>
-  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${activeRoute().short}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}</div>
+  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}</div>
   <div class="resourceGrid">
    <div class="resourceCell hpResource">
     <div class="resourceHeader"><b>HP</b><span class="resourceValue">${h.hp}/${h.maxHp}</span></div>
@@ -7242,6 +7457,10 @@ function inspectTileAt(x,y){
   if(enemy.boss){
    const profile=wardenProfileFor(enemy);
    body+=`<div class="tagBuild"><b>${profile.short}・${profile.name}</b><br>${profile.desc}<br><span class="bondStage">対処：${profile.hint}</span></div>`;
+   if(enemy.routeFinale){
+    const route=routeData[enemy.routeFinale];
+    body+=`<div class="routeFinaleSummary"><b>進路終点・${route.finaleName}</b><br>${route.finaleBoss}<br><span class="bondStage">踏破報酬：${route.finaleReward}</span></div>`;
+   }
   }
   body+=`<p class="tacticalNote">${enemy.nemesis?"あなたを追い続ける宿敵。":enemy.boss?"階層ごとに固有の戦法を持つ深層番人。":enemy.elite?"通常個体より強い変異個体。":"迷宮に棲む敵。"}</p>`;
  }else if(item){
