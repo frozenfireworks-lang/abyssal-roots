@@ -2624,11 +2624,62 @@ body{
  color:#e8d990;
 }
 
+
+/* v3.10.9.1 SHORTCUT STAIR FIX */
+.stairShortcutCard{
+ width:min(100%,390px);
+ border-color:#568779;
+ background:linear-gradient(180deg,#162622,#0b1412);
+}
+.stairShortcutCard h2{color:#c8f1e6}
+.stairShortcutInfo{
+ padding:8px 9px;
+ border:1px solid #426e63;
+ border-radius:8px;
+ background:#0d1b18;
+ color:#cae8df;
+ font-size:10px;
+ line-height:1.55;
+}
+.stairShortcutChoiceNote{
+ margin-top:8px;
+ padding:7px 8px;
+ border-left:3px solid #6b8fa0;
+ border-radius:6px;
+ background:#101a20;
+ color:#bfd3dc;
+ font-size:8px;
+ line-height:1.5;
+}
+.stairShortcutActions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:7px;
+ margin-top:10px;
+}
+.stairShortcutActions .modalBtn{margin-top:0}
+.stairShortcutCancel{grid-column:1 / -1}
+.stairShortcutStairs{
+ border-color:#8d7a55;
+ background:linear-gradient(180deg,#4a3d25,#2a2215);
+ color:#fff0bd;
+}
+.stairShortcutUse{
+ border-color:#4f8f80;
+ background:linear-gradient(180deg,#245348,#14342d);
+ color:#dcfff5;
+}
+.stairShortcutCancel{
+ border-color:#5c6663;
+ background:linear-gradient(180deg,#2b3431,#181f1d);
+ color:#dbe4e1;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.9 RATION PACK & RETURN CONFIRM</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.9.1 SHORTCUT STAIR FIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2679,7 +2730,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 携行糧上限・帰還確認</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 階段と昇降路の分離</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2732,6 +2783,18 @@ body{
     <div id="consumableList"></div>
     <div id="inventoryList"></div>
     <button class="modalBtn" id="closeInventory">閉じる</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="stairShortcutOverlay">
+  <div class="card stairShortcutCard" role="dialog" aria-modal="true" aria-labelledby="stairShortcutTitle">
+    <h2 id="stairShortcutTitle">階段と古い昇降路</h2>
+    <div id="stairShortcutBody"></div>
+    <div class="stairShortcutActions">
+      <button type="button" class="modalBtn stairShortcutStairs" id="chooseStairDescent">階段を使う</button>
+      <button type="button" class="modalBtn stairShortcutUse" id="chooseOldShortcut">古い昇降路を使う</button>
+      <button type="button" class="modalBtn stairShortcutCancel" id="cancelStairShortcut">戻る</button>
+    </div>
   </div>
 </div>
 
@@ -2920,6 +2983,8 @@ body{
           <li>単品分解・通常品一括分解のどちらも確認画面が開きます。装備名、獲得素材、対象数を確認してから実行してください。</li>
           <li>通常品一括分解は「通常品N個を分解」を最後に押した時だけ実行されます。クリック操作だけで確認を飛ばすことはありません。</li>
           <li>階段にアイテム・事件・特殊地点・罠が重なった場合は、それらを階層移動より先に処理します。階段上では中央ボタンが「回収」になり、すべて処理すると「階段」に変わります。</li>
+          <li>新しく生成される古い昇降路は階段と重ならず、隣接する安全な床へ配置されます。既存セーブの重複も読み込み時に自動移設します。</li>
+          <li>移設先がない特殊な地形では中央ボタンが「階段/昇降路」になり、次階層へ降りるか、同じ階層内を移動するか選択できます。</li>
           <li><b>探索同調</b>：探索中に拾った未調律装備は、表示された同調Lvへ到達するとその探索中に装備できます。</li>
           <li><b>灯台調律</b>：未調律装備を生存帰還・魂還石・装備保険で灯台へ届けると自動調律され、次回からLv1で装備できます。</li>
           <li>遺響から奪還した装備は再び未調律になります。現在の探索で同調Lvを満たすか、もう一度灯台へ持ち帰る必要があります。</li>
@@ -6372,6 +6437,93 @@ function eliteColor(e){
 }
 
 
+function shortcutCoordKey(x,y){
+ return`${x},${y}`;
+}
+function shortcutAt(x,y){
+ return(state.shortcuts||[]).find(path=>
+  (path.ax===x&&path.ay===y)||(path.bx===x&&path.by===y)
+ )||null;
+}
+function shortcutDestination(path,x,y){
+ if(!path)return null;
+ if(path.ax===x&&path.ay===y)return{x:path.bx,y:path.by};
+ if(path.bx===x&&path.by===y)return{x:path.ax,y:path.ay};
+ return null;
+}
+function shortcutPlacementBlocked(x,y,reserved=new Set()){
+ if(!inside(x,y)||tile(x,y)!==1)return true;
+ if(x===state.stairs.x&&y===state.stairs.y)return true;
+ if(x===state.player.x&&y===state.player.y)return true;
+ if(reserved.has(shortcutCoordKey(x,y)))return true;
+ if((state.enemies||[]).some(e=>e.x===x&&e.y===y))return true;
+ if((state.items||[]).some(item=>item.x===x&&item.y===y))return true;
+ if((state.traps||[]).some(trap=>!trap.spent&&trap.x===x&&trap.y===y))return true;
+ if((state.specialTiles||[]).some(s=>!s.used&&s.x===x&&s.y===y))return true;
+ if((state.events||[]).some(event=>!event.used&&event.x===x&&event.y===y))return true;
+ if((state.environment||[]).some(o=>o.active&&o.x===x&&o.y===y))return true;
+ if((state.remains||[]).some(r=>r.x===x&&r.y===y))return true;
+ return false;
+}
+function findShortcutEndpointNear(origin,reserved=new Set(),includeOrigin=true){
+ const start=includeOrigin?0:1;
+ for(let radius=start;radius<=6;radius++){
+  const candidates=[];
+  for(let dy=-radius;dy<=radius;dy++){
+   const dx=radius-Math.abs(dy);
+   candidates.push({x:origin.x+dx,y:origin.y+dy});
+   if(dx)candidates.push({x:origin.x-dx,y:origin.y+dy});
+  }
+  for(const candidate of candidates){
+   if(!shortcutPlacementBlocked(candidate.x,candidate.y,reserved)){
+    return candidate;
+   }
+  }
+ }
+ return null;
+}
+function shortcutOtherEndpointSet(ignorePath,ignoreSide){
+ const reserved=new Set();
+ for(const path of state.shortcuts||[]){
+  if(path!==ignorePath||ignoreSide!=="a")reserved.add(shortcutCoordKey(path.ax,path.ay));
+  if(path!==ignorePath||ignoreSide!=="b")reserved.add(shortcutCoordKey(path.bx,path.by));
+ }
+ return reserved;
+}
+function repairShortcutStairOverlap(writeLog=true){
+ let moved=0,failed=0;
+ if(!state?.stairs||!Array.isArray(state.shortcuts))return{moved,failed};
+
+ for(const path of state.shortcuts){
+  for(const side of ["a","b"]){
+   const xKey=side+"x",yKey=side+"y";
+   if(path[xKey]!==state.stairs.x||path[yKey]!==state.stairs.y)continue;
+
+   const reserved=shortcutOtherEndpointSet(path,side);
+   const target=findShortcutEndpointNear(
+    {x:state.stairs.x,y:state.stairs.y},
+    reserved,
+    false
+   );
+   if(!target){
+    failed++;
+    continue;
+   }
+
+   path[xKey]=target.x;
+   path[yKey]=target.y;
+   moved++;
+  }
+ }
+
+ if(writeLog&&moved){
+  addLog(`階段と重なっていた古い昇降路${moved}端を、隣接する安全な床へ移設した。`);
+ }
+ if(writeLog&&failed){
+  addLog("一部の古い昇降路を移設できなかったため、階段上で使用先を選択できるようにした。");
+ }
+ return{moved,failed};
+}
 function addSecretsAndShortcuts(){
  state.secretWalls=[];state.shortcuts=[];
  const candidates=[];
@@ -6386,11 +6538,33 @@ function addSecretsAndShortcuts(){
  for(const p of candidates.slice(0,Math.min(7,secretCount))){
   state.secretWalls.push({x:p.x,y:p.y,revealed:false});
  }
+
  const rooms=[...state.rooms].sort(()=>rng()-.5);
- for(let i=0;i<Math.min(3,Math.floor(rooms.length/5));i++){
+ const reserved=new Set();
+ const shortcutCount=Math.min(3,Math.floor(rooms.length/5));
+ for(let i=0;i<shortcutCount;i++){
   const a=rooms[i],b=rooms[rooms.length-1-i];
-  if(a&&b&&a!==b)state.shortcuts.push({ax:a.cx,ay:a.cy,bx:b.cx,by:b.cy,used:false});
+  if(!a||!b||a===b)continue;
+
+  const endpointA=findShortcutEndpointNear({x:a.cx,y:a.cy},reserved,true);
+  if(!endpointA)continue;
+  reserved.add(shortcutCoordKey(endpointA.x,endpointA.y));
+
+  const endpointB=findShortcutEndpointNear({x:b.cx,y:b.cy},reserved,true);
+  if(!endpointB){
+   reserved.delete(shortcutCoordKey(endpointA.x,endpointA.y));
+   continue;
+  }
+  reserved.add(shortcutCoordKey(endpointB.x,endpointB.y));
+
+  state.shortcuts.push({
+   ax:endpointA.x,ay:endpointA.y,
+   bx:endpointB.x,by:endpointB.y,
+   used:false
+  });
  }
+
+ repairShortcutStairOverlap(false);
 }
 function revealSecretNearPlayer(){
  let found=0;
@@ -6403,12 +6577,20 @@ function revealSecretNearPlayer(){
  return found;
 }
 function useShortcutIfPresent(){
- const s=state.shortcuts.find(q=>(q.ax===state.player.x&&q.ay===state.player.y)||(q.bx===state.player.x&&q.by===state.player.y));
+ const s=shortcutAt(state.player.x,state.player.y);
  if(!s)return false;
- const atA=s.ax===state.player.x&&s.ay===state.player.y;
- state.player={x:atA?s.bx:s.ax,y:atA?s.by:s.ay};state.visual.moveFrames=0;
- s.used=true;addLog("古い昇降路を使い、迷宮を大きく横切った。");
- updateVision();return true;
+ const destination=shortcutDestination(s,state.player.x,state.player.y);
+ if(!destination)return false;
+ if(destination.x===state.player.x&&destination.y===state.player.y){
+  addLog("古い昇降路は崩れており、移動先が失われている。");
+  return false;
+ }
+ state.player={x:destination.x,y:destination.y};
+ state.visual.moveFrames=0;
+ s.used=true;
+ addLog("古い昇降路を使い、迷宮を大きく横切った。");
+ updateVision();
+ return true;
 }
 function repairPlayerPosition(){
  // 武器選択前はまだマップが存在しない。ここでは位置修復を行わない。
@@ -9207,16 +9389,13 @@ function stairInteractionInfo(x=state.stairs.x,y=state.stairs.y){
  const special=specialAt(x,y);
  const event=eventAt(x,y);
  const trap=activeTrapAt(x,y);
- const shortcut=(state.shortcuts||[]).find(path=>
-  (path.ax===x&&path.ay===y)||(path.bx===x&&path.by===y)
- );
+ const shortcut=shortcutAt(x,y);
  const usableSpecial=special&&!special.used;
  const pending=
   items.length+
   (usableSpecial?1:0)+
   (event?1:0)+
-  (trap?1:0)+
-  (shortcut?1:0);
+  (trap?1:0);
  return{
   pending,
   items,
@@ -9232,7 +9411,6 @@ function stairInteractionSummary(info=stairInteractionInfo()){
  if(info.special)parts.push("特殊地点");
  if(info.event)parts.push("事件");
  if(info.trap)parts.push("罠");
- if(info.shortcut)parts.push("昇降路");
  return parts.join("・")||"処理対象なし";
 }
 function processCurrentStairInteraction(){
@@ -9246,7 +9424,6 @@ function processCurrentStairInteraction(){
  triggerTrap();
  triggerSpecialTile();
  triggerEvent();
- useShortcutIfPresent();
 
  if(state.gameOver){
   render();
@@ -9282,7 +9459,6 @@ function enterStairsForInteraction(dx,dy,nx,ny){
  triggerTrap();
  triggerSpecialTile();
  triggerEvent();
- useShortcutIfPresent();
 
  if(state.gameOver){
   render();
@@ -9301,6 +9477,64 @@ function enterStairsForInteraction(dx,dy,nx,ny){
  endTurn();
  return true;
 }
+let pendingStairShortcutChoice=null;
+function closeStairShortcutChoice(){
+ pendingStairShortcutChoice=null;
+ $("stairShortcutOverlay").classList.add("hidden");
+}
+function openStairShortcutChoice(dx=0,dy=0,nx=state.stairs.x,ny=state.stairs.y){
+ const shortcut=shortcutAt(nx,ny);
+ if(!shortcut)return attemptStairDescent(dx,dy,nx,ny);
+
+ const destination=shortcutDestination(shortcut,nx,ny);
+ pendingStairShortcutChoice={dx,dy,nx,ny};
+ $("stairShortcutBody").innerHTML=`
+  <div class="stairShortcutInfo">
+   このマスには、次の階層へ降りる<b>階段</b>と、現在の階層内を移動する<b>古い昇降路</b>が重なっています。
+  </div>
+  <div class="stairShortcutChoiceNote">
+   階段：第${state.floor+1}層へ進みます。現在の階層には戻れません。<br>
+   古い昇降路：現在の第${state.floor}層の別地点${destination?`（X${destination.x} Y${destination.y}）`:""}へ移動します。<br>
+   選択画面を開いただけではターンを消費しません。
+  </div>`;
+ $("stairShortcutOverlay").classList.remove("hidden");
+ return true;
+}
+function chooseStairDescentFromOverlap(){
+ const pending=pendingStairShortcutChoice;
+ if(!pending)return false;
+ closeStairShortcutChoice();
+ return attemptStairDescent(pending.dx,pending.dy,pending.nx,pending.ny);
+}
+function chooseShortcutFromOverlap(){
+ const pending=pendingStairShortcutChoice;
+ if(!pending)return false;
+ closeStairShortcutChoice();
+
+ const shortcut=shortcutAt(pending.nx,pending.ny);
+ if(!shortcut){
+  addLog("古い昇降路はすでに移設されている。");
+  render();
+  return false;
+ }
+
+ if(state.player.x!==pending.nx||state.player.y!==pending.ny){
+  startMoveAnim(pending.dx,pending.dy);
+  sfx("step");
+  gainTraining("endurance",1);
+  state.player={x:pending.nx,y:pending.ny};
+  recordFloorStep();
+ }
+
+ state.lastAction="shortcut";
+ if(!useShortcutIfPresent()){
+  render();
+  return false;
+ }
+ endTurn();
+ return true;
+}
+
 function attemptStairDescent(dx=0,dy=0,nx=state.stairs.x,ny=state.stairs.y){
  ensureBossProgressIntegrity("stairs");
  updateFloorObjective();
@@ -9340,7 +9574,7 @@ function performStairDescent(dx,dy,nx,ny){
  startMoveAnim(dx,dy);sfx("step");gainTraining("endurance",1);
  state.player.x=nx;state.player.y=ny;state.lastAction="move";
  recordFloorStep();
- revealNearbyTraps();pickup();triggerTrap();triggerSpecialTile();triggerEvent();useShortcutIfPresent();
+ revealNearbyTraps();pickup();triggerTrap();triggerSpecialTile();triggerEvent();
  if(state.gameOver){render();return}
  const previousFloor=state.floor;
  try{
@@ -9384,6 +9618,11 @@ function move(dx,dy){
    return;
   }
 
+  if(interaction.shortcut){
+   openStairShortcutChoice(dx,dy,nx,ny);
+   return;
+  }
+
   attemptStairDescent(dx,dy,nx,ny);
   return;
  }
@@ -9402,6 +9641,8 @@ function waitTurn(){
   const interaction=stairInteractionInfo();
   if(interaction.pending){
    processCurrentStairInteraction();
+  }else if(interaction.shortcut){
+   openStairShortcutChoice(0,0,state.stairs.x,state.stairs.y);
   }else{
    attemptStairDescent(0,0,state.stairs.x,state.stairs.y);
   }
@@ -10595,7 +10836,7 @@ function renderInventory(){
   box.appendChild(row);
  });
 }
-function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("returnConfirmOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
+function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("stairShortcutOverlay").classList.contains("hidden")&&$("returnConfirmOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
 let saveTimer=null;
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveGame(),120)}
 function saveSnapshot(){try{if(state)localStorage.setItem("abyssalRootsSoloV4Backup",JSON.stringify(state))}catch(e){}}
@@ -10810,6 +11051,8 @@ function loadGame(){
   }
   state.meta.balanceMigrations=state.meta.balanceMigrations||{};
   state.meta.balanceMigrations.gearAttunementV3105=true;
+  const shortcutRepair=repairShortcutStairOverlap(true);
+  if(shortcutRepair.moved)saveGame();
   updateVision();render();return true;
  }catch(e){return false}
 }
@@ -11831,10 +12074,14 @@ function renderSkills(){
   const stairInfo=stairInteractionInfo();
   waitButton.textContent=stairInfo.pending
    ?`回収 ${stairInfo.pending}`
-   :"階段";
+   :stairInfo.shortcut
+    ?"階段/昇降路"
+    :"階段";
   waitButton.title=stairInfo.pending
    ?`階段上の${stairInteractionSummary(stairInfo)}を処理する`
-   :"現在の階段を使って次の階層へ進む";
+   :stairInfo.shortcut
+    ?"階段を降りるか、古い昇降路を使うか選択する"
+    :"現在の階段を使って次の階層へ進む";
  }else{
   waitButton.textContent="休息";
   waitButton.title="その場で1ターン待機し、気力を5回復する";
@@ -11952,6 +12199,9 @@ $("quickBomb").onclick=throwBomb;
 $("lastStandBtn").onclick=()=>armLastStand();
 $("cancelLastStand").onclick=closeLastStandConfirm;
 $("confirmLastStand").onclick=confirmLastStand;
+$("cancelStairShortcut").onclick=closeStairShortcutChoice;
+$("chooseStairDescent").onclick=chooseStairDescentFromOverlap;
+$("chooseOldShortcut").onclick=chooseShortcutFromOverlap;
 $("cancelReturnConfirm").onclick=closeReturnConfirm;
 $("confirmReturnConfirm").onclick=confirmReturnToLighthouse;
 $("returnPromptBtn").onclick=()=>returnToLighthouse();
