@@ -2420,11 +2420,96 @@ body{
  color:#fff1c7;
 }
 
+
+/* v3.10.6 REACTION CONTROL */
+.labyrinthReactionCard.stabilized{
+ box-shadow:inset 0 0 24px rgba(92,181,167,.11);
+}
+.labyrinthReactionCard.sealed{
+ border-color:#686378;
+ background:linear-gradient(180deg,#15131b,#0d0c12);
+ color:#aaa7b4;
+}
+.reactionControlStatus{
+ margin-top:6px;
+ padding:6px 7px;
+ border:1px solid #5b6870;
+ border-radius:7px;
+ background:rgba(7,10,14,.65);
+ color:#c9d6db;
+ font-size:8px;
+ line-height:1.5;
+}
+.reactionControlStatus b{
+ color:#eef8fb;
+}
+.reactionControlStatus.stabilized{
+ border-color:#4f8379;
+ background:rgba(10,27,23,.7);
+ color:#bfe2d9;
+}
+.reactionControlStatus.stabilized b{
+ color:#d7fff4;
+}
+.reactionControlStatus.sealed{
+ border-color:#6d617d;
+ background:rgba(22,18,29,.72);
+ color:#c1b7cf;
+}
+.reactionControlStatus.sealed b{
+ color:#eee4fa;
+}
+.reactionControlGrid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:5px;
+ margin-top:6px;
+}
+.reactionControlGrid button{
+ min-height:37px;
+ padding:5px 4px;
+ border:1px solid #4d5c65;
+ border-radius:7px;
+ background:linear-gradient(180deg,#1d2730,#111820);
+ color:#d5e0e5;
+ font-size:8px;
+ line-height:1.25;
+}
+.reactionControlGrid button small{
+ display:block;
+ margin-top:2px;
+ color:#aebbc0;
+ font-size:6.5px;
+}
+.reactionControlGrid button.selected{
+ border-color:#85b9ac;
+ background:linear-gradient(180deg,#23463e,#142c27);
+ color:#effff9;
+ box-shadow:inset 0 0 12px rgba(105,207,181,.12);
+}
+.reactionControlGrid button[data-reaction-control="sealed"].selected{
+ border-color:#9a7aaa;
+ background:linear-gradient(180deg,#44334f,#291f31);
+}
+.reactionControlGrid button:disabled{
+ opacity:.48;
+}
+.reactionControlFoot{
+ margin-top:5px;
+ color:#9daab0;
+ font-size:7px;
+ line-height:1.4;
+}
+@media(max-width:390px){
+ .reactionControlGrid{gap:4px}
+ .reactionControlGrid button{min-height:35px;font-size:7.5px}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.5.2 LAST STAND RENEWAL</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.7 APPEARANCE EXPANSION</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2475,7 +2560,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 踏み止まり強化と番人回復</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 姿の大拡張</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2505,7 +2590,7 @@ body{
 <div class="overlay hidden" id="appearanceOverlay">
   <div class="card appearanceCard">
     <h2>探索者の姿</h2>
-    <p>すべての探索者は、最初は同じ凡人の外套から始まります。色は深淵の欠片で永久解放され、特別な輪郭は番人から得る希少な「姿片」で解放されます。</p>
+    <p>姿は <b>外套色</b>・<b>輪郭</b>・<b>紋章</b> の3系統で構成されます。深淵の欠片を大量に投じて恒久解放するもの、番人から激レアで落ちるもの、条件が伏せられた秘密の姿もあります。</p>
     <div class="appearancePreviewWrap">
       <canvas id="appearancePreview" width="96" height="96" aria-label="探索者アイコンのプレビュー"></canvas>
       <div id="appearanceSummary"></div>
@@ -2514,7 +2599,9 @@ body{
     <div id="appearanceColors" class="appearanceChoices"></div>
     <h3>輪郭</h3>
     <div id="appearanceShapes" class="appearanceChoices"></div>
-    <p class="note">変更は探索画面のキャラアイコンと盤面上の姿へ同時に反映されます。能力には影響しません。</p>
+    <h3>紋章</h3>
+    <div id="appearanceSigils" class="appearanceChoices"></div>
+    <p class="note">変更は探索画面のキャラアイコンと盤面上の姿へ同時に反映されます。能力には影響しません。秘密条件を満たすと、伏せられていた姿が一覧へ姿を現すことがあります。</p>
     <button type="button" class="modalBtn" id="closeAppearance">閉じる</button>
   </div>
 </div>
@@ -2606,7 +2693,7 @@ body{
       <summary>基本操作とUI</summary>
       <div class="helpBody">
         <ul>
-          <li><b>待機</b>：その場で1ターン進めます。敵の行動を誘ったり、間合い調整に使えます。</li>
+          <li><b>休息</b>：通常の床では1ターン進めて気力を回復します。階段上では「回収」または「階段」に自動で変わります。</li>
           <li><b>スキル</b>：武器や状況に応じて使う強行動です。気力を消費します。</li>
           <li><b>クイック欄</b>：治癒薬・壺などを即使用できます。</li>
           <li><b>射程ボタン</b>：武器の攻撃範囲を表示します。</li>
@@ -2682,6 +2769,8 @@ body{
           <li>ミニマップは右上固定の半透明表示です。探索者がミニマップの真下へ入った時だけ、背景・地形・マーカーをさらに薄くします。</li>
           <li><b>迷宮反応</b>：前回の死亡原因・帰還深度・戦い方から、次の1探索だけ浅層の環境が変化します。効果は第1〜5層です。</li>
           <li>迷宮反応には救済効果と代償があります。次の内容は探索結果と灯台で事前確認できます。</li>
+          <li>灯台では「そのまま受容」「代償を鎮静」「完全に封印」を選べます。出発前なら差額精算付きで選び直せます。</li>
+          <li>鎮静は利点を残し、敵数・罠数・物資数の整数ペナルティを無効化し、確率・倍率・出現傾向の代償を半減します。封印すると利点も失います。</li>
           <li>踏み止まり発動後は2行動の衰弱となり、最大気力-2・攻撃力18%低下が発生します。</li>
           <li>番人を倒すと踏み止まりは残り1回へ回復します。未使用なら1回を維持し、2回分を蓄積することはできません。</li>
         </ul>
@@ -2695,6 +2784,8 @@ body{
         <ul>
           <li>荷物が満杯になったら、不要装備を<b>現地分解</b>して素材にできます。</li>
           <li>単品分解・通常品一括分解のどちらも確認画面が開きます。装備名、獲得素材、対象数を確認してから実行してください。</li>
+          <li>通常品一括分解は「通常品N個を分解」を最後に押した時だけ実行されます。クリック操作だけで確認を飛ばすことはありません。</li>
+          <li>階段にアイテム・事件・特殊地点・罠が重なった場合は、それらを階層移動より先に処理します。階段上では中央ボタンが「回収」になり、すべて処理すると「階段」に変わります。</li>
           <li><b>探索同調</b>：探索中に拾った未調律装備は、表示された同調Lvへ到達するとその探索中に装備できます。</li>
           <li><b>灯台調律</b>：未調律装備を生存帰還・魂還石・装備保険で灯台へ届けると自動調律され、次回からLv1で装備できます。</li>
           <li>遺響から奪還した装備は再び未調律になります。現在の探索で同調Lvを満たすか、もう一度灯台へ持ち帰る必要があります。</li>
@@ -2728,7 +2819,7 @@ body{
     <details class="helpSection">
       <summary>記号と見方</summary>
       <div class="helpBody">
-        <p>探索者の姿は最初は全員同じです。外套色は欠片で、特別な輪郭は番人の姿片で解放されます。</p>
+        <p>探索者の姿は最初は全員同じですが、外套色・輪郭・紋章を深淵の欠片や希少な姿片で解放し、自由に組み合わせられます。</p>
         <div class="helpKeys">
           <div class="helpKey"><b>@</b><br>主人公</div>
           <div class="helpKey"><b>S</b><br>盾骸兵</div>
@@ -3481,25 +3572,96 @@ const weaponData={
  staff:{label:"杖",symbol:"杖",skill:"火花",skillDesc:"範囲魔撃 / 気力8",cost:5,minRange:1,maxRange:4}
 };
 
+
 const appearanceColorData={
  ash:{label:"煤灰",cost:0,body:"#b7a88f",cloak:"#5d5362",trim:"#d7c9af",aura:"rgba(215,201,175,.22)"},
  rust:{label:"錆朱",cost:3,body:"#b8674f",cloak:"#65343a",trim:"#efb07a",aura:"rgba(239,176,122,.22)"},
  moss:{label:"苔緑",cost:5,body:"#758f5d",cloak:"#354c3c",trim:"#becb91",aura:"rgba(190,203,145,.22)"},
  moon:{label:"月白青",cost:8,body:"#8195b9",cloak:"#3f4a65",trim:"#dce7ff",aura:"rgba(220,231,255,.24)"},
  amber:{label:"琥珀",cost:12,body:"#d29b48",cloak:"#714d2b",trim:"#ffe08a",aura:"rgba(255,224,138,.25)"},
- violet:{label:"深淵紫",cost:16,body:"#8965aa",cloak:"#402f55",trim:"#dfbdff",aura:"rgba(223,189,255,.25)"}
+ violet:{label:"深淵紫",cost:16,body:"#8965aa",cloak:"#402f55",trim:"#dfbdff",aura:"rgba(223,189,255,.25)"},
+ crimson:{label:"緋紅",cost:20,body:"#cf5b6f",cloak:"#5e2331",trim:"#ffbfcc",aura:"rgba(255,191,204,.24)"},
+ sea:{label:"海淵青",cost:24,body:"#4f9cb8",cloak:"#1f4858",trim:"#a8ebff",aura:"rgba(168,235,255,.24)"},
+ jade:{label:"翡翠",cost:28,body:"#4eac8b",cloak:"#1f554a",trim:"#baf8d5",aura:"rgba(186,248,213,.24)"},
+ ivory:{label:"象牙",cost:32,body:"#d6cab0",cloak:"#776d60",trim:"#fff4de",aura:"rgba(255,244,222,.22)"},
+ obsidian:{label:"黒曜",cost:38,body:"#716d77",cloak:"#1a1820",trim:"#cfc6dc",aura:"rgba(207,198,220,.20)"},
+ rose:{label:"薔薇灰",cost:42,body:"#c89aa4",cloak:"#5a3d49",trim:"#ffd9e3",aura:"rgba(255,217,227,.23)"},
+ aurora:{label:"極光",cost:48,body:"#86d7c3",cloak:"#28545f",trim:"#fff0a1",aura:"rgba(255,240,161,.28)"},
+ ember:{label:"残火",cost:54,body:"#df7c4b",cloak:"#52271c",trim:"#ffd89c",aura:"rgba(255,216,156,.28)"},
+ cobalt:{label:"群青",cost:60,body:"#4d6dd0",cloak:"#1f2b60",trim:"#d4deff",aura:"rgba(212,222,255,.28)"},
+ goldleaf:{label:"金葉",cost:66,body:"#bca256",cloak:"#4d4326",trim:"#fff1a5",aura:"rgba(255,241,165,.30)"},
+ orchid:{label:"蘭紫",cost:72,body:"#b57ad1",cloak:"#432455",trim:"#f4d4ff",aura:"rgba(244,212,255,.30)"},
+ frost:{label:"霜銀",cost:78,body:"#a8c1d4",cloak:"#4f6370",trim:"#ffffff",aura:"rgba(255,255,255,.26)"},
+ sunset:{label:"夕灼",cost:84,body:"#d98657",cloak:"#5c3040",trim:"#ffdcb1",aura:"rgba(255,220,177,.30)"},
+ abyss:{label:"深淵星",cost:96,body:"#6b76c2",cloak:"#161c3f",trim:"#9df3ff",aura:"rgba(157,243,255,.32)"}
+};
+const appearanceRequirementData={
+ always:{label:"常時",check:meta=>true},
+ best5:{label:"到達深度 5",check:meta=>(meta?.bestFloor||1)>=5},
+ best10:{label:"到達深度 10",check:meta=>(meta?.bestFloor||1)>=10},
+ best15:{label:"到達深度 15",check:meta=>(meta?.bestFloor||1)>=15},
+ best20:{label:"到達深度 20",check:meta=>(meta?.bestFloor||1)>=20},
+ kills30:{label:"累計討伐 30",check:meta=>(meta?.totalKills||0)>=30},
+ kills80:{label:"累計討伐 80",check:meta=>(meta?.totalKills||0)>=80},
+ kills150:{label:"累計討伐 150",check:meta=>(meta?.totalKills||0)>=150},
+ kills300:{label:"累計討伐 300",check:meta=>(meta?.totalKills||0)>=300},
+ research6:{label:"深淵研究 合計6",check:meta=>appearanceResearchLevel(meta)>=6},
+ research12:{label:"深淵研究 合計12",check:meta=>appearanceResearchLevel(meta)>=12},
+ death1:{label:"1回以上の死亡経験",check:meta=>((meta?.deathEchoHistory?.length||0)>0)||!!meta?.deathEcho}
 };
 const appearanceShapeData={
- common:{label:"凡人の外套",source:"初期",desc:"名も記録もない探索者の共通姿。"},
- hood:{label:"深潜りのフード",source:"第5層の姿片",desc:"顔を深く隠す、深層へ向かう者の輪郭。"},
- mask:{label:"無貌の仮面",source:"第10層の姿片",desc:"記憶を拒む白い仮面と硬い肩当て。"},
- mantle:{label:"墓守の長衣",source:"第15層の姿片",desc:"左右へ広がる古い守人の長衣。"},
- root:{label:"根冠の巡礼装",source:"第20層の姿片",desc:"世界樹の細根を冠した希少な巡礼装。"}
+ common:{label:"凡人の外套",source:"初期",desc:"名も記録もない探索者の共通姿。",unlockType:"default"},
+ hood:{label:"深潜りのフード",source:"第5層の姿片",desc:"顔を深く隠す、深層へ向かう者の輪郭。",unlockType:"milestone"},
+ mask:{label:"無貌の仮面",source:"第10層の姿片",desc:"記憶を拒む白い仮面と硬い肩当て。",unlockType:"milestone"},
+ mantle:{label:"墓守の長衣",source:"第15層の姿片",desc:"左右へ広がる古い守人の長衣。",unlockType:"milestone"},
+ root:{label:"根冠の巡礼装",source:"第20層の姿片",desc:"世界樹の細根を冠した希少な巡礼装。",unlockType:"milestone"},
+ scout:{label:"先見の短衣",source:"深淵の欠片",desc:"軽量な肩布と足さばき重視の探索装。",unlockType:"cost",cost:12,requirement:"best5"},
+ pilgrim:{label:"巡礼の長帽",source:"深淵の欠片",desc:"古い祈祷衣に似た、落ち着いた巡礼姿。",unlockType:"cost",cost:18,requirement:"research6"},
+ thorn:{label:"棘枝の猟装",source:"深淵の欠片",desc:"枝のような肩飾りを持つ荒野の狩装束。",unlockType:"cost",cost:24,requirement:"kills30"},
+ duelist:{label:"決闘者の羽飾",source:"深淵の欠片",desc:"細い外套と片側だけの羽飾りが特徴。",unlockType:"cost",cost:30,requirement:"kills80"},
+ seeker:{label:"灯追いの旅衣",source:"深淵の欠片",desc:"額灯と前垂れを備えた探索向けの旅衣。",unlockType:"cost",cost:34,requirement:"best10"},
+ mourner:{label:"弔いの面紗",source:"秘匿条件",desc:"薄い面紗に死者への祈りを重ねた姿。",unlockType:"cost",cost:42,requirement:"death1",hidden:true},
+ warden:{label:"番人の角冑",source:"番人の激レア姿片",desc:"重い角冑と厚い肩当てを持つ守護者の姿。",unlockType:"drop",requirement:"best15",hidden:true},
+ eclipse:{label:"蝕環の典礼装",source:"深層番人の激レア姿片",desc:"日蝕の輪を背負う秘匿の典礼装束。",unlockType:"drop",requirement:"best20",hidden:true},
+ antler:{label:"獣枝の隠れ装",source:"迷宮の激レア姿片",desc:"獣の枝角を戴く、記録外の隠れ姿。",unlockType:"drop",requirement:"kills150",hidden:true}
+};
+const appearanceSigilData={
+ none:{label:"無紋",source:"初期",desc:"余計な印を持たない標準状態。",unlockType:"default"},
+ ember:{label:"残火紋",source:"深淵の欠片",desc:"胸元に燃える残火の印。",unlockType:"cost",cost:8,requirement:"always",draw:"ember"},
+ tide:{label:"潮汐紋",source:"深淵の欠片",desc:"波のような流線を胸元へ刻む。",unlockType:"cost",cost:10,requirement:"best5",draw:"tide"},
+ thorn:{label:"荊棘紋",source:"深淵の欠片",desc:"棘枝が絡むような緑の印。",unlockType:"cost",cost:14,requirement:"kills30",draw:"thorn"},
+ halo:{label:"光環紋",source:"深淵の欠片",desc:"頭上に淡い光輪を灯す紋章。",unlockType:"cost",cost:18,requirement:"research6",draw:"halo"},
+ eye:{label:"監視の眼",source:"深淵の欠片",desc:"見られているような赤い眼の紋章。",unlockType:"cost",cost:22,requirement:"best10",draw:"eye"},
+ bloom:{label:"花葬紋",source:"深淵の欠片",desc:"散る花弁を象った柔らかな印。",unlockType:"cost",cost:26,requirement:"death1",hidden:true,draw:"bloom"},
+ chain:{label:"鎖縫い紋",source:"深淵の欠片",desc:"胸元を横切る細かな鎖状の印。",unlockType:"cost",cost:30,requirement:"kills80",draw:"chain"},
+ moon:{label:"半月紋",source:"深淵の欠片",desc:"肩上に淡い半月が浮かぶ。",unlockType:"cost",cost:36,requirement:"research12",draw:"moon"},
+ star:{label:"星晶紋",source:"番人の希少紋片",desc:"星が散るような希少な紋章。",unlockType:"drop",requirement:"best15",hidden:true,draw:"star"},
+ root:{label:"根脈紋",source:"番人の希少紋片",desc:"細い根が胸元から足元へ伸びる。",unlockType:"drop",requirement:"best20",hidden:true,draw:"root"},
+ shard:{label:"裂晶紋",source:"深淵の激レア紋片",desc:"体の周りへ割れた晶片を漂わせる。",unlockType:"drop",requirement:"kills150",hidden:true,draw:"shard"},
+ sun:{label:"暁輝紋",source:"深淵の激レア紋片",desc:"小さな太陽のような輝きを宿す。",unlockType:"drop",requirement:"kills300",hidden:true,draw:"sun"}
 };
 const appearanceRelicMilestones={5:"hood",10:"mask",15:"mantle",20:"root"};
 
+function appearanceResearchLevel(meta){
+ const lv=meta?.research?.levels||{};
+ return (lv.anatomy||0)+(lv.ecology||0)+(lv.arcana||0)+(lv.survival||0);
+}
+function appearanceRequirementMet(requirementId,meta=state?.meta||defaultMeta()){
+ const rule=appearanceRequirementData[requirementId]||appearanceRequirementData.always;
+ try{return !!rule.check(meta||defaultMeta())}catch{return false}
+}
+function appearanceRequirementLabel(requirementId){
+ return (appearanceRequirementData[requirementId]||appearanceRequirementData.always).label;
+}
 function defaultAppearance(){
- return{shape:"common",color:"ash",unlockedShapes:["common"],unlockedColors:["ash"]};
+ return{
+  shape:"common",
+  color:"ash",
+  sigil:"none",
+  unlockedShapes:["common"],
+  unlockedColors:["ash"],
+  unlockedSigils:["none"]
+ };
 }
 function ensureAppearanceMeta(meta){
  if(!meta)return defaultAppearance();
@@ -3507,10 +3669,13 @@ function ensureAppearanceMeta(meta){
  const a=meta.appearance;
  if(!Array.isArray(a.unlockedShapes))a.unlockedShapes=["common"];
  if(!Array.isArray(a.unlockedColors))a.unlockedColors=["ash"];
+ if(!Array.isArray(a.unlockedSigils))a.unlockedSigils=["none"];
  if(!a.unlockedShapes.includes("common"))a.unlockedShapes.unshift("common");
  if(!a.unlockedColors.includes("ash"))a.unlockedColors.unshift("ash");
+ if(!a.unlockedSigils.includes("none"))a.unlockedSigils.unshift("none");
  if(!appearanceShapeData[a.shape]||!a.unlockedShapes.includes(a.shape))a.shape="common";
  if(!appearanceColorData[a.color]||!a.unlockedColors.includes(a.color))a.color="ash";
+ if(!appearanceSigilData[a.sigil]||!a.unlockedSigils.includes(a.sigil))a.sigil="none";
  return a;
 }
 function currentAppearance(){
@@ -3519,10 +3684,67 @@ function currentAppearance(){
 function appearanceColor(){
  return appearanceColorData[currentAppearance().color]||appearanceColorData.ash;
 }
+function appearanceLockedLabel(data,unlocked){
+ if(unlocked)return "";
+ if(data.hidden&&!appearanceRequirementMet(data.requirement,state?.meta))return "未解放・???";
+ if(data.unlockType==="drop")return `未解放・${data.source}`;
+ if(data.unlockType==="cost"){
+  if(appearanceRequirementMet(data.requirement,state?.meta))return `解放 ${data.cost}欠片`;
+  return `条件: ${appearanceRequirementLabel(data.requirement)}`;
+ }
+ return `未解放・${data.source||"???"}`;
+}
+function appearanceEntryVisibleName(data,unlocked){
+ return data.hidden&&!unlocked&&!appearanceRequirementMet(data.requirement,state?.meta)?"？？？":data.label;
+}
+function appearanceEntryVisibleDesc(data,unlocked){
+ return data.hidden&&!unlocked&&!appearanceRequirementMet(data.requirement,state?.meta)
+  ?"解放条件は秘匿されている。"
+  :data.desc;
+}
+function appearanceCanBuy(data,collection,id){
+ const unlocked=collection.includes(id);
+ return !unlocked&&data.unlockType==="cost"&&appearanceRequirementMet(data.requirement,state?.meta);
+}
+function drawBaseExplorer(g,palette,dark,skin,hurt,bob){
+ g.fillStyle=dark;g.fillRect(8,4+bob,7,4);
+ g.fillStyle=skin;g.fillRect(9,6+bob,5,4);
+ g.fillStyle=hurt?"#ff7d8d":palette.body;g.fillRect(7,10+bob,9,6);
+ g.fillStyle=palette.cloak;g.fillRect(6,13+bob,11,6);
+}
+function drawAppearanceSigil(g,sigil,palette,dark,bob){
+ switch(sigil){
+  case "ember":
+   g.fillStyle="#ffb65c";g.fillRect(10,12+bob,2,2);g.fillRect(9,13+bob,4,2);g.fillRect(10,15+bob,2,1);break;
+  case "tide":
+   g.fillStyle="#8de1ff";g.fillRect(8,13+bob,2,1);g.fillRect(10,14+bob,2,1);g.fillRect(12,13+bob,2,1);g.fillRect(14,14+bob,2,1);break;
+  case "thorn":
+   g.fillStyle="#97dd84";g.fillRect(10,12+bob,2,5);g.fillRect(8,14+bob,6,1);g.fillRect(14,13+bob,2,1);break;
+  case "halo":
+   g.strokeStyle="#ffe69a";g.globalAlpha=.8;g.strokeRect(7.5,2.5+bob,8,2);g.globalAlpha=1;break;
+  case "eye":
+   g.fillStyle="#f4ddd2";g.fillRect(9,13+bob,5,2);g.fillStyle="#a30d2e";g.fillRect(11,13+bob,1,2);break;
+  case "bloom":
+   g.fillStyle="#ffc0d8";g.fillRect(10,13+bob,1,3);g.fillRect(9,14+bob,3,1);g.fillRect(11,14+bob,3,1);g.fillRect(10,15+bob,3,1);break;
+  case "chain":
+   g.fillStyle="#cfd6dc";g.fillRect(8,13+bob,2,1);g.fillRect(10,14+bob,2,1);g.fillRect(12,13+bob,2,1);g.fillRect(14,14+bob,2,1);break;
+  case "moon":
+   g.fillStyle="#d8e7ff";g.fillRect(14,5+bob,2,3);g.fillStyle=palette.cloak;g.fillRect(15,5+bob,1,3);break;
+  case "star":
+   g.fillStyle="#fff0a0";g.fillRect(11,12+bob,1,4);g.fillRect(9,14+bob,5,1);g.fillRect(10,13+bob,3,3);break;
+  case "root":
+   g.fillStyle="#b7d48c";g.fillRect(10,12+bob,2,5);g.fillRect(9,16+bob,1,2);g.fillRect(12,16+bob,1,2);break;
+  case "shard":
+   g.fillStyle="#d3b2ff";g.fillRect(6,8+bob,2,2);g.fillRect(15,9+bob,2,2);g.fillRect(8,17+bob,1,2);g.fillRect(14,17+bob,1,2);break;
+  case "sun":
+   g.fillStyle="#ffe07a";g.fillRect(10,12+bob,3,3);g.fillRect(11,10+bob,1,2);g.fillRect(11,15+bob,1,2);g.fillRect(8,13+bob,2,1);g.fillRect(13,13+bob,2,1);break;
+ }
+}
 function drawExplorerFigure(g,x,y,scale=1,hurt=false,bob=0,showAura=true){
  const appearance=currentAppearance();
  const palette=appearanceColor();
  const shape=appearance.shape;
+ const sigil=appearance.sigil;
  const skin="#d9c4bc",dark="#17111d",metal="#c8d0d6";
  g.save();
  g.translate(x,y);
@@ -3540,40 +3762,82 @@ function drawExplorerFigure(g,x,y,scale=1,hurt=false,bob=0,showAura=true){
   g.fillStyle=aura;g.fillRect(-7,-7,36,36);
  }
 
- if(shape==="common"){
-  g.fillStyle=dark;g.fillRect(8,4+bob,7,4);
-  g.fillStyle=skin;g.fillRect(9,6+bob,5,4);
-  g.fillStyle=hurt?"#ff7d8d":palette.body;g.fillRect(7,10+bob,9,6);
-  g.fillStyle=palette.cloak;g.fillRect(6,13+bob,11,6);
- }else if(shape==="hood"){
-  g.fillStyle=palette.cloak;g.fillRect(6,3+bob,11,9);
-  g.fillRect(5,10+bob,13,9);
-  g.fillStyle=dark;g.fillRect(8,6+bob,7,5);
-  g.fillStyle=palette.trim;g.fillRect(6,11+bob,1,7);g.fillRect(17,11+bob,1,7);
-  g.fillStyle=hurt?"#ff7d8d":palette.body;g.fillRect(8,11+bob,8,5);
- }else if(shape==="mask"){
-  g.fillStyle=dark;g.fillRect(7,3+bob,9,5);
-  g.fillStyle="#eee7dc";g.fillRect(8,5+bob,7,6);
-  g.fillStyle=dark;g.fillRect(9,7+bob,2,1);g.fillRect(13,7+bob,1,1);
-  g.fillStyle=hurt?"#ff7d8d":palette.body;g.fillRect(7,11+bob,10,6);
-  g.fillStyle=palette.cloak;g.fillRect(4,12+bob,4,5);g.fillRect(16,12+bob,4,5);g.fillRect(6,16+bob,12,3);
-  g.fillStyle=palette.trim;g.fillRect(5,12+bob,2,2);g.fillRect(17,12+bob,2,2);
- }else if(shape==="mantle"){
-  g.fillStyle=dark;g.fillRect(8,4+bob,7,4);
-  g.fillStyle=skin;g.fillRect(9,6+bob,5,4);
-  g.fillStyle=hurt?"#ff7d8d":palette.body;g.fillRect(7,10+bob,9,6);
-  g.fillStyle=palette.cloak;g.fillRect(3,12+bob,18,4);g.fillRect(5,15+bob,14,5);
-  g.fillStyle=palette.trim;g.fillRect(3,12+bob,3,2);g.fillRect(18,12+bob,3,2);
- }else{
-  g.fillStyle=palette.trim;
-  g.fillRect(7,2+bob,2,4);g.fillRect(15,2+bob,2,4);
-  g.fillRect(5,1+bob,3,2);g.fillRect(16,1+bob,3,2);
-  g.fillStyle=dark;g.fillRect(8,4+bob,7,4);
-  g.fillStyle=skin;g.fillRect(9,6+bob,5,4);
-  g.fillStyle=hurt?"#ff7d8d":palette.body;g.fillRect(7,10+bob,9,6);
-  g.fillStyle=palette.cloak;g.fillRect(5,13+bob,14,7);
-  g.fillStyle=palette.trim;g.fillRect(7,13+bob,2,6);g.fillRect(15,13+bob,2,6);
+ drawBaseExplorer(g,palette,dark,skin,hurt,bob);
+
+ switch(shape){
+  case "hood":
+   g.fillStyle=palette.cloak;g.fillRect(6,3+bob,11,9);g.fillRect(5,10+bob,13,9);
+   g.fillStyle=dark;g.fillRect(8,6+bob,7,5);
+   g.fillStyle=palette.trim;g.fillRect(6,11+bob,1,7);g.fillRect(17,11+bob,1,7);
+   g.fillStyle=hurt?"#ff7d8d":palette.body;g.fillRect(8,11+bob,8,5);
+   break;
+  case "mask":
+   g.fillStyle=dark;g.fillRect(7,3+bob,9,5);
+   g.fillStyle="#eee7dc";g.fillRect(8,5+bob,7,6);
+   g.fillStyle=dark;g.fillRect(9,7+bob,2,1);g.fillRect(13,7+bob,1,1);
+   g.fillStyle=hurt?"#ff7d8d":palette.body;g.fillRect(7,11+bob,10,6);
+   g.fillStyle=palette.cloak;g.fillRect(4,12+bob,4,5);g.fillRect(16,12+bob,4,5);g.fillRect(6,16+bob,12,3);
+   g.fillStyle=palette.trim;g.fillRect(5,12+bob,2,2);g.fillRect(17,12+bob,2,2);
+   break;
+  case "mantle":
+   g.fillStyle=palette.cloak;g.fillRect(3,12+bob,18,4);g.fillRect(5,15+bob,14,5);
+   g.fillStyle=palette.trim;g.fillRect(3,12+bob,3,2);g.fillRect(18,12+bob,3,2);
+   break;
+  case "root":
+   g.fillStyle=palette.trim;
+   g.fillRect(7,2+bob,2,4);g.fillRect(15,2+bob,2,4);
+   g.fillRect(5,1+bob,3,2);g.fillRect(16,1+bob,3,2);
+   g.fillStyle=palette.cloak;g.fillRect(5,13+bob,14,7);
+   g.fillStyle=palette.trim;g.fillRect(7,13+bob,2,6);g.fillRect(15,13+bob,2,6);
+   break;
+  case "scout":
+   g.fillStyle=palette.trim;g.fillRect(6,5+bob,2,2);
+   g.fillStyle=palette.cloak;g.fillRect(5,12+bob,5,5);g.fillRect(12,12+bob,5,7);
+   g.fillStyle=dark;g.fillRect(15,11+bob,2,5);
+   break;
+  case "pilgrim":
+   g.fillStyle=palette.cloak;g.fillRect(7,2+bob,9,3);g.fillRect(9,1+bob,5,2);
+   g.fillRect(6,13+bob,11,7);
+   g.fillStyle=palette.trim;g.fillRect(6,5+bob,1,7);g.fillRect(16,5+bob,1,7);g.fillRect(10,13+bob,2,7);
+   break;
+  case "thorn":
+   g.fillStyle=palette.trim;g.fillRect(4,11+bob,3,2);g.fillRect(16,11+bob,3,2);g.fillRect(5,10+bob,1,2);g.fillRect(18,10+bob,1,2);
+   g.fillStyle=palette.cloak;g.fillRect(5,13+bob,13,7);
+   break;
+  case "duelist":
+   g.fillStyle=palette.trim;g.fillRect(13,2+bob,1,4);g.fillRect(14,3+bob,1,2);g.fillRect(15,4+bob,1,1);
+   g.fillStyle=palette.cloak;g.fillRect(6,13+bob,9,6);g.fillRect(15,12+bob,3,7);
+   break;
+  case "seeker":
+   g.fillStyle=palette.trim;g.fillRect(10,3+bob,2,2);
+   g.fillStyle=palette.cloak;g.fillRect(6,13+bob,11,7);
+   g.fillStyle=metal;g.fillRect(14,10+bob,3,5);
+   break;
+  case "mourner":
+   g.fillStyle="#ece5ef";g.globalAlpha=.72;g.fillRect(7,4+bob,9,9);g.globalAlpha=1;
+   g.fillStyle=palette.cloak;g.fillRect(5,13+bob,13,7);
+   g.fillStyle=palette.trim;g.fillRect(10,13+bob,2,7);
+   break;
+  case "warden":
+   g.fillStyle=metal;g.fillRect(7,3+bob,9,6);g.fillRect(5,12+bob,15,7);
+   g.fillStyle=palette.trim;g.fillRect(6,2+bob,2,3);g.fillRect(15,2+bob,2,3);
+   g.fillStyle=dark;g.fillRect(9,6+bob,5,2);
+   break;
+  case "eclipse":
+   g.fillStyle="#f6e39c";g.globalAlpha=.7;g.strokeStyle="#f6e39c";g.strokeRect(6.5,1.5+bob,10,10);g.globalAlpha=1;
+   g.fillStyle=palette.cloak;g.fillRect(4,12+bob,6,7);g.fillRect(12,12+bob,6,7);g.fillRect(8,15+bob,4,4);
+   g.fillStyle=palette.trim;g.fillRect(9,13+bob,1,6);g.fillRect(12,13+bob,1,6);
+   break;
+  case "antler":
+   g.fillStyle=palette.trim;
+   g.fillRect(6,1+bob,1,5);g.fillRect(16,1+bob,1,5);
+   g.fillRect(5,2+bob,2,1);g.fillRect(16,2+bob,2,1);
+   g.fillRect(4,4+bob,2,1);g.fillRect(17,4+bob,2,1);
+   g.fillStyle=palette.cloak;g.fillRect(5,13+bob,14,7);
+   break;
  }
+
+ drawAppearanceSigil(g,sigil,palette,dark,bob);
 
  g.fillStyle=dark;
  g.fillRect(7,19+bob,3,3);g.fillRect(14,19+bob,3,3);
@@ -3601,36 +3865,51 @@ function drawAppearancePreview(){
  g.fillStyle=bg;g.fillRect(0,0,c.width,c.height);
  drawExplorerFigure(g,4,4,4,false,0,true);
 }
+function renderAppearanceCategory(targetId,dataMap,selectedId,unlockedList,keyName,unlockTypeName){
+ const html=Object.entries(dataMap).map(([id,data])=>{
+  const unlocked=unlockedList.includes(id);
+  const selected=selectedId===id;
+  const visibleName=appearanceEntryVisibleName(data,unlocked);
+  const visibleDesc=appearanceEntryVisibleDesc(data,unlocked);
+  let action=unlocked?(selected?"選択中":"使用する"):appearanceLockedLabel(data,unlocked);
+  const canBuy=appearanceCanBuy(data,unlockedList,id);
+  const disabled=(!unlocked&&!canBuy&&data.unlockType!=="default")?'disabled':'';
+  const swatch=keyName==="color"?`<span class="appearanceSwatch" style="background:${data.body}"></span>`:"";
+  return `<button type="button" class="appearanceChoice ${selected?"selected":""} ${unlocked?"":"locked"}" data-${keyName}="${id}" ${disabled}>
+   <b>${swatch}${visibleName}</b>
+   <small>${action}<br>${visibleDesc}</small>
+  </button>`;
+ }).join("");
+ $(targetId).innerHTML=html;
+}
+function attemptAppearancePurchase(kind,id,data,appearance){
+ const label=appearanceEntryVisibleName(data,false);
+ if((state.meta.shards||0)<data.cost){addLog(`${kind}「${label}」の解放に必要な深淵の欠片が足りない。`);renderAppearance();return false}
+ if(!confirm(`${kind}「${label}」を深淵の欠片 ${data.cost} 個で永久解放しますか？`))return false;
+ state.meta.shards-=data.cost;
+ return true;
+}
 function renderAppearance(){
  const a=currentAppearance();
  const color=appearanceColorData[a.color];
  const shape=appearanceShapeData[a.shape];
- $("appearanceSummary").innerHTML=`<b>${shape.label}</b><br>色：${color.label}<br>深淵の欠片：${state.meta.shards||0}<br>解放済み：色 ${a.unlockedColors.length} / 輪郭 ${a.unlockedShapes.length}`;
- $("appearanceColors").innerHTML=Object.entries(appearanceColorData).map(([id,data])=>{
-  const unlocked=a.unlockedColors.includes(id);
-  const selected=a.color===id;
-  const action=unlocked?(selected?"選択中":"使用する"):`解放 ${data.cost}欠片`;
-  return `<button type="button" class="appearanceChoice ${selected?"selected":""} ${unlocked?"":"locked"}" data-color="${id}">
-   <b><span class="appearanceSwatch" style="background:${data.body}"></span>${data.label}</b>
-   <small>${action}</small>
-  </button>`;
- }).join("");
- $("appearanceShapes").innerHTML=Object.entries(appearanceShapeData).map(([id,data])=>{
-  const unlocked=a.unlockedShapes.includes(id);
-  const selected=a.shape===id;
-  return `<button type="button" class="appearanceChoice ${selected?"selected":""} ${unlocked?"":"locked"}" data-shape="${id}" ${unlocked?"":"disabled"}>
-   <b>${data.label}</b>
-   <small>${unlocked?(selected?"選択中":"使用する"):`未解放・${data.source}`}<br>${data.desc}</small>
-  </button>`;
- }).join("");
+ const sigil=appearanceSigilData[a.sigil];
+ $("appearanceSummary").innerHTML=
+  `<b>${shape.label}</b><br>`+
+  `色：${color.label}<br>`+
+  `紋章：${sigil.label}<br>`+
+  `深淵の欠片：${state.meta.shards||0}<br>`+
+  `解放済み：色 ${a.unlockedColors.length} / 輪郭 ${a.unlockedShapes.length} / 紋章 ${a.unlockedSigils.length}`;
+
+ renderAppearanceCategory("appearanceColors",appearanceColorData,a.color,a.unlockedColors,"color","外套色");
+ renderAppearanceCategory("appearanceShapes",appearanceShapeData,a.shape,a.unlockedShapes,"shape","輪郭");
+ renderAppearanceCategory("appearanceSigils",appearanceSigilData,a.sigil,a.unlockedSigils,"sigil","紋章");
 
  $("appearanceColors").querySelectorAll("[data-color]").forEach(button=>{
   button.onclick=()=>{
    const id=button.dataset.color,data=appearanceColorData[id],appearance=currentAppearance();
    if(!appearance.unlockedColors.includes(id)){
-    if((state.meta.shards||0)<data.cost){addLog("色の解放に必要な深淵の欠片が足りない。");renderAppearance();return}
-    if(!confirm(`${data.label}を深淵の欠片 ${data.cost} 個で永久解放しますか？`))return;
-    state.meta.shards-=data.cost;
+    if(!attemptAppearancePurchase("外套色",id,data,appearance))return;
     appearance.unlockedColors.push(id);
     addLog(`外套色「${data.label}」を記録した。`);
    }
@@ -3640,25 +3919,74 @@ function renderAppearance(){
  });
  $("appearanceShapes").querySelectorAll("[data-shape]").forEach(button=>{
   button.onclick=()=>{
-   const id=button.dataset.shape,appearance=currentAppearance();
-   if(!appearance.unlockedShapes.includes(id))return;
+   const id=button.dataset.shape,data=appearanceShapeData[id],appearance=currentAppearance();
+   if(!appearance.unlockedShapes.includes(id)){
+    if(data.unlockType!=="cost"||!appearanceRequirementMet(data.requirement,state.meta))return;
+    if(!attemptAppearancePurchase("輪郭",id,data,appearance))return;
+    appearance.unlockedShapes.push(id);
+    addLog(`輪郭「${data.label}」を記録した。`);
+   }
    appearance.shape=id;
+   saveMeta();saveGame();renderAppearance();render();
+  };
+ });
+ $("appearanceSigils").querySelectorAll("[data-sigil]").forEach(button=>{
+  button.onclick=()=>{
+   const id=button.dataset.sigil,data=appearanceSigilData[id],appearance=currentAppearance();
+   if(!appearance.unlockedSigils.includes(id)){
+    if(data.unlockType!=="cost"||!appearanceRequirementMet(data.requirement,state.meta))return;
+    if(!attemptAppearancePurchase("紋章",id,data,appearance))return;
+    appearance.unlockedSigils.push(id);
+    addLog(`紋章「${data.label}」を記録した。`);
+   }
+   appearance.sigil=id;
    saveMeta();saveGame();renderAppearance();render();
   };
  });
  drawAppearancePreview();
 }
+function grantAppearanceBossDrop(){
+ const appearance=ensureAppearanceMeta(state.meta);
+ const pool=[];
+ for(const [id,data] of Object.entries(appearanceShapeData)){
+  if(data.unlockType==="drop"&&!appearance.unlockedShapes.includes(id)&&appearanceRequirementMet(data.requirement,state.meta)){
+   pool.push({type:"shape",id,data});
+  }
+ }
+ for(const [id,data] of Object.entries(appearanceSigilData)){
+  if(data.unlockType==="drop"&&!appearance.unlockedSigils.includes(id)&&appearanceRequirementMet(data.requirement,state.meta)){
+   pool.push({type:"sigil",id,data});
+  }
+ }
+ if(!pool.length)return null;
+ const chance=.08+(state.floor>=10?.03:0)+(state.floor>=20?.03:0);
+ if(rng()>=chance)return null;
+ const pick=pool[rint(0,pool.length-1)];
+ if(pick.type==="shape"){
+  appearance.unlockedShapes.push(pick.id);
+  addLog(`激レア姿片「${pick.data.label}」を入手した！`);
+  addLog("姿の記録に秘匿輪郭が追加された。");
+ }else{
+  appearance.unlockedSigils.push(pick.id);
+  addLog(`激レア紋片「${pick.data.label}」を入手した！`);
+  addLog("姿の記録に秘匿紋章が追加された。");
+ }
+ saveMeta();
+ return pick;
+}
 function grantAppearanceRelicForBoss(){
  const shapeId=appearanceRelicMilestones[state.floor];
- if(!shapeId)return;
  const appearance=ensureAppearanceMeta(state.meta);
- if(appearance.unlockedShapes.includes(shapeId))return;
- appearance.unlockedShapes.push(shapeId);
- saveMeta();
- const shape=appearanceShapeData[shapeId];
- addLog(`希少品「${shape.label}の姿片」を入手した！`);
- addLog("姿の記録に新しい輪郭が追加された。");
+ if(shapeId&&!appearance.unlockedShapes.includes(shapeId)){
+  appearance.unlockedShapes.push(shapeId);
+  saveMeta();
+  const shape=appearanceShapeData[shapeId];
+  addLog(`希少品「${shape.label}の姿片」を入手した！`);
+  addLog("姿の記録に新しい輪郭が追加された。");
+ }
+ grantAppearanceBossDrop();
 }
+
 
 let state=null, touchStart=null, bannerTimer=null, pendingRouteDescent=null;
 
@@ -3799,62 +4127,172 @@ const labyrinthReactionData={
   label:"灰冷えの教訓",short:"灰冷え",tone:"death",
   desc:"炎と爆発による死を迷宮が記憶した。火種は減るが、別の罠が増える。",
   benefit:"治癒薬+1 / 爆ぜ虫と火種が減少",cost:"罠数+1",
-  startPotion:1,environmentBonus:-1,trapBonus:1,bomberBias:-.14
+  startPotion:1,environmentBonus:-1,trapBonus:1,bomberBias:-.14,downsideKeys:["trapBonus"]
  },
  snare:{
   label:"傷跡の導線",short:"傷跡",tone:"death",
   desc:"罠死の記憶が足元の違和感を教える。ただし迷宮は罠を増設する。",
   benefit:"知覚+1 / 罠ダメージ-15%",cost:"罠数+1",
-  perceptionBonus:1,trapReduction:.15,trapBonus:1
+  perceptionBonus:1,trapReduction:.15,trapBonus:1,downsideKeys:["trapBonus"]
  },
  hunger:{
   label:"空腹の残響",short:"空腹",tone:"death",
   desc:"枯渇の記憶が備蓄を促す一方、迷宮内の物資総量は減る。",
   benefit:"携行糧+180 / 食料抽選増加",cost:"各階の物資数-1",
-  startProvisions:180,itemBonus:-1,foodBias:.18
+  startProvisions:180,itemBonus:-1,foodBias:.18,downsideKeys:["itemBonus"]
  },
  venom:{
   label:"蝕毒の警戒",short:"蝕毒",tone:"death",
   desc:"毒の記憶が治療物資を引き寄せるが、術師の気配も濃くなる。",
   benefit:"治癒薬+1 / 各階の物資数+1",cost:"骨術師の出現傾向上昇",
-  startPotion:1,itemBonus:1,mageBias:.12
+  startPotion:1,itemBonus:1,mageBias:.12,downsideKeys:["mageBias"]
  },
  blood:{
   label:"血の匂い",short:"血臭",tone:"death",
   desc:"戦闘死の血痕を敵が追う。治療手段は増えるが、敵の密度も上がる。",
   benefit:"治癒薬+1",cost:"敵数+1 / エリート率+5%",
-  startPotion:1,enemyBonus:1,eliteBonus:.05
+  startPotion:1,enemyBonus:1,eliteBonus:.05,downsideKeys:["enemyBonus","eliteBonus"]
  },
  borrowed:{
   label:"借りた命の反動",short:"借命",tone:"return",
   desc:"魂還石による帰還を迷宮が感知した。生命力は冴えるが追跡も強まる。",
   benefit:"今回の最大気力+2",cost:"敵数+1 / エリート率+3%",
-  staminaBonus:2,enemyBonus:1,eliteBonus:.03
+  staminaBonus:2,enemyBonus:1,eliteBonus:.03,downsideKeys:["enemyBonus","eliteBonus"]
  },
  warden:{
   label:"番人の注視",short:"注視",tone:"return",
   desc:"番人を越えた探索者へ、次の番人が備える。代わりに現地工作資材が集まる。",
   benefit:"現地素材+3 / 各階の物資数+1",cost:"第5層番人の最大HP+10%",
-  startScrap:3,itemBonus:1,bossHpBonus:.10
+  startScrap:3,itemBonus:1,bossHpBonus:.10,downsideKeys:["bossHpBonus"]
  },
  measured:{
   label:"慎重歩行への適応",short:"慎重",tone:"return",
   desc:"回避と構えを多用した記録から、遠距離個体が増える。",
   benefit:"今回の最大気力+1 / 事件率+10%",cost:"骨術師・爆ぜ虫の出現傾向上昇",
-  staminaBonus:1,eventBonus:.10,rangedBias:.12
+  staminaBonus:1,eventBonus:.10,rangedBias:.12,downsideKeys:["rangedBias"]
  },
  quiet:{
   label:"静かな帰還路",short:"静穏",tone:"return",
   desc:"無理をせず帰還した記録が、次の浅層に小さな余裕を残す。",
   benefit:"携行糧+80 / 事件率+8%",cost:"大きな戦闘補正なし",
-  startProvisions:80,eventBonus:.08
+  startProvisions:80,eventBonus:.08,downsideKeys:[]
  }
 };
 function ensureLabyrinthReactionMeta(meta=state?.meta){
  if(!meta)return null;
  if(typeof meta.pendingReaction==="undefined")meta.pendingReaction=null;
  if(!Array.isArray(meta.reactionHistory))meta.reactionHistory=[];
+ const pending=meta.pendingReaction;
+ if(pending){
+  if(!["normal","stabilized","sealed"].includes(pending.controlMode)){
+   pending.controlMode="normal";
+  }
+  if(typeof pending.controlPaid!=="number"||pending.controlPaid<0){
+   pending.controlPaid=0;
+  }
+ }
  return meta.pendingReaction;
+}
+function reactionControlMode(reaction){
+ return["normal","stabilized","sealed"].includes(reaction?.controlMode)
+  ?reaction.controlMode
+  :"normal";
+}
+function reactionHasDownside(reaction){
+ const data=labyrinthReactionData[reaction?.id];
+ return !!data?.downsideKeys?.length;
+}
+function reactionBaseControlCost(reaction){
+ return 3+Math.min(7,Math.floor(Math.max(1,reaction?.sourceFloor||1)/3));
+}
+function reactionStabilizeCost(reaction){
+ return reactionHasDownside(reaction)?reactionBaseControlCost(reaction):0;
+}
+function reactionSealCost(reaction){
+ return reactionBaseControlCost(reaction)*2+2;
+}
+function reactionControlCost(reaction,mode=reactionControlMode(reaction)){
+ if(mode==="stabilized")return reactionStabilizeCost(reaction);
+ if(mode==="sealed")return reactionSealCost(reaction);
+ return 0;
+}
+function reactionHistoryForPending(meta,reaction){
+ return[...(meta?.reactionHistory||[])].reverse().find(entry=>
+  entry.sourceTimestamp===reaction?.sourceTimestamp&&
+  ["queued","controlled"].includes(entry.status)
+ )||null;
+}
+function setPendingReactionControl(mode){
+ const meta=state?.meta;
+ const reaction=pendingLabyrinthReaction(meta);
+ if(!reaction)return false;
+ if(!["normal","stabilized","sealed"].includes(mode))return false;
+ if(mode==="stabilized"&&!reactionHasDownside(reaction)){
+  addLog("この迷宮反応には鎮静できる代償がない。");
+  return false;
+ }
+
+ const currentPaid=Math.max(0,reaction.controlPaid||0);
+ const targetPaid=reactionControlCost(reaction,mode);
+ const delta=targetPaid-currentPaid;
+
+ if(delta>0&&(meta.shards||0)<delta){
+  addLog(`迷宮反応の制御に必要な欠片が足りない。あと${delta-(meta.shards||0)}欠片必要。`);
+  return false;
+ }
+
+ if(delta>0){
+  const action=mode==="sealed"
+   ?`迷宮反応を封印します。利点も代償も失われ、追加で${delta}欠片を支払います。`
+   :`迷宮反応の代償を鎮静します。追加で${delta}欠片を支払います。`;
+  if(!confirm(action))return false;
+ }
+
+ meta.shards=(meta.shards||0)-delta;
+ reaction.controlMode=mode;
+ reaction.controlPaid=targetPaid;
+ reaction.controlledAt=Date.now();
+
+ const history=reactionHistoryForPending(meta,reaction);
+ if(history){
+  history.status="controlled";
+  history.controlMode=mode;
+  history.controlPaid=targetPaid;
+  history.controlledAt=reaction.controlledAt;
+ }
+
+ if(delta<0)addLog(`迷宮反応の制御を変更し、${Math.abs(delta)}欠片が戻った。`);
+ else if(mode==="stabilized")addLog(`迷宮反応「${reaction.label}」を鎮静した。利点を保ち、代償を軽減する。`);
+ else if(mode==="sealed")addLog(`迷宮反応「${reaction.label}」を封印予約した。次の探索では発生しない。`);
+ else addLog(`迷宮反応「${reaction.label}」をそのまま受け入れる。`);
+
+ saveMeta();
+ if(state.expeditionEnded)saveLighthouseSession("hub");
+ renderHub();
+ return true;
+}
+function controlledReactionValue(reaction,key,value){
+ if(reactionControlMode(reaction)!=="stabilized")return value;
+ const data=labyrinthReactionData[reaction?.id];
+ if(!data?.downsideKeys?.includes(key))return value;
+
+ // 個数ペナルティは端数が実質切り上がるため無効化。
+ if(key==="enemyBonus"||key==="trapBonus")return 0;
+ // 物資-1も整数生成なので無効化。
+ if(key==="itemBonus"&&value<0)return 0;
+ // 確率・倍率・出現傾向の代償は半減。
+ return value*.5;
+}
+function reactionControlLabel(reaction){
+ const mode=reactionControlMode(reaction);
+ if(mode==="stabilized")return"鎮静済み";
+ if(mode==="sealed")return"封印予定";
+ return"通常受容";
+}
+function reactionShortLabel(reaction){
+ const data=labyrinthReactionData[reaction?.id]||reaction||{};
+ const suffix=reactionControlMode(reaction)==="stabilized"?"・鎮静":"";
+ return`${data.short||reaction?.short||"反応"}${suffix}`;
 }
 function classifyLabyrinthReaction(report){
  if(!report)return null;
@@ -3874,6 +4312,9 @@ function classifyLabyrinthReaction(report){
 function queueLabyrinthReaction(report){
  const meta=state.meta;
  ensureLabyrinthReactionMeta(meta);
+ if(meta.pendingReaction?.controlPaid){
+  meta.shards=(meta.shards||0)+meta.pendingReaction.controlPaid;
+ }
  const id=classifyLabyrinthReaction(report);
  const data=labyrinthReactionData[id];
  if(!data)return null;
@@ -3881,7 +4322,7 @@ function queueLabyrinthReaction(report){
   id,label:data.label,short:data.short,tone:data.tone,desc:data.desc,
   benefit:data.benefit,cost:data.cost,sourceOutcome:report.outcome,
   sourceFloor:report.floor,sourceTimestamp:report.timestamp,
-  queuedAt:Date.now(),endFloor:5
+  queuedAt:Date.now(),endFloor:5,controlMode:"normal",controlPaid:0
  };
  meta.pendingReaction=pending;
  meta.reactionHistory.push({
@@ -3917,22 +4358,40 @@ function reactionData(){
  return reaction?labyrinthReactionData[reaction.id]||null:null;
 }
 function reactionValue(key,fallback=0){
- const data=reactionData();
+ const reaction=activeLabyrinthReaction();
+ const data=reaction?labyrinthReactionData[reaction.id]||null:null;
  const value=data?.[key];
- return typeof value==="number"?value:fallback;
+ return typeof value==="number"
+  ?controlledReactionValue(reaction,key,value)
+  :fallback;
 }
 function prepareLabyrinthReactionForExpedition(){
  if(!state||state.reactionApplied)return state?.labyrinthReaction||null;
  ensureLabyrinthReactionMeta(state.meta);
 
  if(!state.labyrinthReaction&&state.floor===1&&state.turn===0&&state.meta.pendingReaction){
-  state.labyrinthReaction={...state.meta.pendingReaction,activatedAt:Date.now()};
+  const pending={...state.meta.pendingReaction};
+  const history=reactionHistoryForPending(state.meta,pending);
+
+  if(reactionControlMode(pending)==="sealed"){
+   state.meta.pendingReaction=null;
+   state.reactionApplied=true;
+   if(history){
+    history.status="sealed";
+    history.controlMode="sealed";
+    history.sealedAt=Date.now();
+   }
+   state.log.unshift(`迷宮反応「${pending.label}」は灯台で封印され、発生しなかった。`);
+   state.log=state.log.slice(0,5);
+   saveMeta();
+   return null;
+  }
+
+  state.labyrinthReaction={...pending,activatedAt:Date.now()};
   state.meta.pendingReaction=null;
-  const history=[...(state.meta.reactionHistory||[])].reverse().find(entry=>
-   entry.status==="queued"&&entry.sourceTimestamp===state.labyrinthReaction.sourceTimestamp
-  );
   if(history){
    history.status="activated";
+   history.controlMode=reactionControlMode(state.labyrinthReaction);
    history.activatedAt=Date.now();
   }
  }
@@ -3951,7 +4410,8 @@ function prepareLabyrinthReactionForExpedition(){
   state.hero.maxStamina+=data.staminaBonus;
   state.hero.stamina+=data.staminaBonus;
  }
- state.log.unshift(`迷宮反応「${data.label}」が発生。第1〜5層に影響する。`);
+ const controlText=reactionControlMode(reaction)==="stabilized"?"・鎮静済み":"";
+ state.log.unshift(`迷宮反応「${data.label}」${controlText}が発生。第1〜5層に影響する。`);
  state.log=state.log.slice(0,5);
  saveMeta();
  return reaction;
@@ -3959,7 +4419,16 @@ function prepareLabyrinthReactionForExpedition(){
 function labyrinthReactionCardHtml(reaction,title="次の探索の迷宮反応"){
  if(!reaction)return"";
  const data=labyrinthReactionData[reaction.id]||reaction;
- return`<div class="labyrinthReactionCard ${data.tone||reaction.tone||""}">
+ const mode=reactionControlMode(reaction);
+ const stabilizeCost=reactionStabilizeCost(reaction);
+ const sealCost=reactionSealCost(reaction);
+ const paid=reaction.controlPaid||0;
+ const status=mode==="stabilized"
+  ?`利点は維持。敵・罠・物資の整数ペナルティを無効化し、確率・倍率・出現傾向の代償を半減します。${paid}欠片支払済み。`
+  :mode==="sealed"
+   ?`次の探索では利点と代償の両方が発生しません。${paid}欠片支払済み。`
+   :"利点と代償をそのまま第1〜5層へ適用します。欠片は消費しません。";
+ return`<div class="labyrinthReactionCard ${data.tone||reaction.tone||""} ${mode}">
   <div class="labyrinthReactionTop">
    <b>${title}・${data.label||reaction.label}</b>
    <span class="labyrinthReactionRange">第1〜${reaction.endFloor||5}層</span>
@@ -3968,6 +4437,24 @@ function labyrinthReactionCardHtml(reaction,title="次の探索の迷宮反応")
   <div class="labyrinthReactionEffect">
    ${data.benefit||reaction.benefit||""}
    <span class="labyrinthReactionCost">代償：${data.cost||reaction.cost||"なし"}</span>
+  </div>
+  <div class="reactionControlStatus ${mode}">
+   <b>${reactionControlLabel(reaction)}</b><br>${status}
+  </div>
+  <div class="reactionControlGrid">
+   <button type="button" data-reaction-control="normal" class="${mode==="normal"?"selected":""}">
+    そのまま受容<small>0欠片</small>
+   </button>
+   <button type="button" data-reaction-control="stabilized"
+    class="${mode==="stabilized"?"selected":""}" ${!reactionHasDownside(reaction)?"disabled":""}>
+    ${reactionHasDownside(reaction)?"代償を鎮静":"鎮静不要"}<small>${reactionHasDownside(reaction)?stabilizeCost+"欠片":"代償なし"}</small>
+   </button>
+   <button type="button" data-reaction-control="sealed" class="${mode==="sealed"?"selected":""}">
+    完全に封印<small>${sealCost}欠片</small>
+   </button>
+  </div>
+  <div class="reactionControlFoot">
+   出発前なら選び直せます。支払額との差額は自動精算されます。封印すると有利効果も失われます。
   </div>
  </div>`;
 }
@@ -8236,6 +8723,146 @@ function chooseDescentRoute(id){
  $("routeOverlay").classList.add("hidden");
  performStairDescent(pending.dx,pending.dy,pending.nx,pending.ny);
 }
+
+function playerOnStairs(){
+ return !!state&&
+  state.player.x===state.stairs.x&&
+  state.player.y===state.stairs.y;
+}
+function stairInteractionInfo(x=state.stairs.x,y=state.stairs.y){
+ const items=(state.items||[]).filter(item=>item.x===x&&item.y===y);
+ const special=specialAt(x,y);
+ const event=eventAt(x,y);
+ const trap=activeTrapAt(x,y);
+ const shortcut=(state.shortcuts||[]).find(path=>
+  (path.ax===x&&path.ay===y)||(path.bx===x&&path.by===y)
+ );
+ const usableSpecial=special&&!special.used;
+ const pending=
+  items.length+
+  (usableSpecial?1:0)+
+  (event?1:0)+
+  (trap?1:0)+
+  (shortcut?1:0);
+ return{
+  pending,
+  items,
+  special:usableSpecial?special:null,
+  event,
+  trap,
+  shortcut
+ };
+}
+function stairInteractionSummary(info=stairInteractionInfo()){
+ const parts=[];
+ if(info.items.length)parts.push(`拾得物${info.items.length}`);
+ if(info.special)parts.push("特殊地点");
+ if(info.event)parts.push("事件");
+ if(info.trap)parts.push("罠");
+ if(info.shortcut)parts.push("昇降路");
+ return parts.join("・")||"処理対象なし";
+}
+function processCurrentStairInteraction(){
+ if(!playerOnStairs())return false;
+ const before=stairInteractionInfo();
+ if(!before.pending)return false;
+
+ state.lastAction="stair_interact";
+ revealNearbyTraps();
+ pickup();
+ triggerTrap();
+ triggerSpecialTile();
+ triggerEvent();
+ useShortcutIfPresent();
+
+ if(state.gameOver){
+  render();
+  return true;
+ }
+
+ if(playerOnStairs()){
+  const after=stairInteractionInfo();
+  if(after.pending){
+   addLog(`階段上の対象を処理した。残り：${stairInteractionSummary(after)}。中央の「回収」で続けられる。`);
+  }else{
+   addLog("階段上の回収と出来事をすべて処理した。中央の「階段」で先へ進める。");
+  }
+ }
+
+ endTurn();
+ return true;
+}
+function enterStairsForInteraction(dx,dy,nx,ny){
+ startMoveAnim(dx,dy);
+ sfx("step");
+ gainTraining("endurance",1);
+ state.player.x=nx;
+ state.player.y=ny;
+ state.lastAction="stair_interact";
+ recordFloorStep();
+
+ const info=stairInteractionInfo(nx,ny);
+ addLog(`階段上の${stairInteractionSummary(info)}を、階層移動より先に処理する。`);
+
+ revealNearbyTraps();
+ pickup();
+ triggerTrap();
+ triggerSpecialTile();
+ triggerEvent();
+ useShortcutIfPresent();
+
+ if(state.gameOver){
+  render();
+  return true;
+ }
+
+ if(playerOnStairs()){
+  const remaining=stairInteractionInfo();
+  if(remaining.pending){
+   addLog(`階段上にまだ${stairInteractionSummary(remaining)}が残っている。中央の「回収」で取得できる。`);
+  }else{
+   addLog("階段上の処理が完了した。中央の「階段」で先へ進める。");
+  }
+ }
+
+ endTurn();
+ return true;
+}
+function attemptStairDescent(dx=0,dy=0,nx=state.stairs.x,ny=state.stairs.y){
+ ensureBossProgressIntegrity("stairs");
+ updateFloorObjective();
+
+ if(!floorObjectiveComplete()){
+  const objective=ensureFloorObjective(),progress=floorObjectiveProgress();
+  showCombatToast(
+   "階段は封印中",
+   `${objective.title} ${Math.min(progress,objective.target)}/${objective.target}`,
+   "miss"
+  );
+  addLog(`階段は封印されている。目標「${objective.title}」を達成する必要がある。`);
+  return false;
+ }
+
+ if(floorPlan().boss&&state.bossDefeated){
+  openRouteChoice(dx,dy,nx,ny);
+  return true;
+ }
+
+ const nextFloor=state.floor+1;
+ const goal=firstTwentyPlan[nextFloor];
+ const nextLabel=goal?`「${goal.title}」`:`第${nextFloor}層`;
+ const accepted=confirm(
+  `${nextLabel}へ進みますか？\n\n一度進むと現在の階層には戻れません。`
+ );
+ if(!accepted){
+  addLog("階段の前で足を止めた。");
+  return false;
+ }
+
+ performStairDescent(dx,dy,nx,ny);
+ return true;
+}
+
 function performStairDescent(dx,dy,nx,ny){
  startMoveAnim(dx,dy);sfx("step");gainTraining("endurance",1);
  state.player.x=nx;state.player.y=ny;state.lastAction="move";
@@ -8275,31 +8902,16 @@ function move(dx,dy){
 
  const steppingOntoStairs=nx===state.stairs.x&&ny===state.stairs.y;
  if(steppingOntoStairs){
-  ensureBossProgressIntegrity("stairs");
-  updateFloorObjective();
-  if(!floorObjectiveComplete()){
-   const objective=ensureFloorObjective(),progress=floorObjectiveProgress();
-   showCombatToast("階段は封印中",`${objective.title} ${Math.min(progress,objective.target)}/${objective.target}`,"miss");
-   addLog(`階段は封印されている。目標「${objective.title}」を達成する必要がある。`);
+  const interaction=stairInteractionInfo(nx,ny);
+
+  // 階段上の拾得物・事件・特殊地点・罠を階層移動より優先する。
+  // 封印中の階段でも、重なった物だけは回収可能。
+  if(interaction.pending){
+   enterStairsForInteraction(dx,dy,nx,ny);
    return;
   }
 
-  if(floorPlan().boss&&state.bossDefeated){
-   openRouteChoice(dx,dy,nx,ny);
-   return;
-  }
-
-  const nextFloor=state.floor+1;
-  const goal=firstTwentyPlan[nextFloor];
-  const nextLabel=goal?`「${goal.title}」`:`第${nextFloor}層`;
-  const accepted=confirm(
-   `${nextLabel}へ進みますか？\n\n一度進むと現在の階層には戻れません。`
-  );
-  if(!accepted){
-   addLog("階段の手前で足を止めた。");
-   return;
-  }
-  performStairDescent(dx,dy,nx,ny);
+  attemptStairDescent(dx,dy,nx,ny);
   return;
  }
 
@@ -8312,8 +8924,22 @@ function move(dx,dy){
 }
 function waitTurn(){
  if(!canAct())return;
- state.lastAction="rest";gainTraining("endurance",2);recoverStamina(5);
- addLog("呼吸を整え、気力を回復した。");endTurn();
+
+ if(playerOnStairs()){
+  const interaction=stairInteractionInfo();
+  if(interaction.pending){
+   processCurrentStairInteraction();
+  }else{
+   attemptStairDescent(0,0,state.stairs.x,state.stairs.y);
+  }
+  return;
+ }
+
+ state.lastAction="rest";
+ gainTraining("endurance",2);
+ recoverStamina(5);
+ addLog("呼吸を整え、気力を回復した。");
+ endTurn();
 }
 function tryMoveEnemy(e,options){
  for(const [dx,dy] of options){
@@ -8558,6 +9184,7 @@ function toggleInventoryLock(id){
 let pendingFieldSalvage=null;
 function closeFieldSalvageConfirm(){
  pendingFieldSalvage=null;
+ $("confirmFieldSalvage").textContent="分解する";
  $("fieldSalvageOverlay").classList.add("hidden");
 }
 function fieldSalvageEquippedState(g){
@@ -8588,6 +9215,7 @@ function openFieldSalvageConfirm(payload){
    ?`${rarityData[g.rarity]?.label||g.rarity}・${gearLabel(g)}`
    :`未鑑定・${gearLabel(g)}`;
 
+  $("confirmFieldSalvage").textContent="この装備を分解";
   body.innerHTML=`<div class="fieldSalvagePreview">
     <div class="top">
       <span class="${g.rarity||"common"}">${identified}</span>
@@ -8614,6 +9242,7 @@ function openFieldSalvageConfirm(payload){
   }
   const total=targets.reduce((sum,g)=>sum+salvageValue(g),0);
   pendingFieldSalvage.ids=targets.map(g=>g.id);
+  $("confirmFieldSalvage").textContent=`通常品${targets.length}個を分解`;
   body.innerHTML=`<div class="fieldSalvagePreview">
     <div class="top"><span>通常装備の一括分解</span><span>${targets.length}個</span></div>
     <div class="desc">保護されていない通常装備だけが対象です。保護品と魔法以上の装備は残ります。</div>
@@ -9267,6 +9896,9 @@ function renderHub(){
   return`<div class="itemRow"><div class="top"><span>${name} Lv${lvl}</span><span>${cost}欠片</span></div>
    <div class="desc">${desc}</div><button type="button" data-upgrade="${id}">強化する</button></div>`;
  }).join("");
+ $("hubSummary").querySelectorAll("[data-reaction-control]").forEach(button=>{
+  button.onclick=()=>setPendingReactionControl(button.dataset.reactionControl);
+ });
  $("hubUpgrades").querySelectorAll("[data-upgrade]").forEach(b=>b.onclick=()=>buyMetaUpgrade(b.dataset.upgrade));
  const stashItems=m.stash||[];
  const totalStashShards=stashItems.reduce((sum,g)=>sum+stashSalvageValue(g),0);
@@ -9368,7 +10000,7 @@ function renderInventory(){
  $("expandPackBtn").onclick=()=>buyFieldUpgrade("pack");
  $("forgeAtkBtn").onclick=()=>buyFieldUpgrade("attack");
  $("forgeDefBtn").onclick=()=>buyFieldUpgrade("defense");
- $("salvageCommonBtn").onclick=salvageCommonInventory;
+ $("salvageCommonBtn").onclick=()=>salvageCommonInventory();
 
  $("consumableList").innerHTML=`<div class="itemRow"><div class="top"><span>消耗品</span><span>所持金 ${state.gold}G</span></div>
  <div class="desc">携行糧 ${state.provisions||0}手 / 治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0} / 帰還楔 ${state.consumables.retreat||0} / 灯油 ${state.consumables.oil||0}</div>
@@ -9663,7 +10295,7 @@ function showFloorBanner(){
  const resonance=currentEchoResonance();
  if(resonance.tier)extra.push(`遺響共鳴：${echoResonanceLabel(resonance)}`);
  const reaction=activeLabyrinthReaction();
- if(reaction)extra.push(`迷宮反応：${labyrinthReactionData[reaction.id]?.short||reaction.short}`);
+ if(reaction)extra.push(`迷宮反応：${reactionShortLabel(reaction)}`);
 
  banner.classList.remove("show","floorBannerBoss","floorBannerRest");
  void banner.offsetWidth;
@@ -9711,7 +10343,7 @@ function renderHero(){
  $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}${threat.possibleLethal?` <span class="mortalWarning ${threat.certainLethal?"certain":""}">${threat.certainLethal?"確定致死":"致死圏"}</span>`:""}</div>
-  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${reaction?` <span class="labyrinthReactionBadge ${labyrinthReactionData[reaction.id]?.tone==="death"?"danger":""}">反応:${labyrinthReactionData[reaction.id]?.short||reaction.short}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
+  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${reaction?` <span class="labyrinthReactionBadge ${labyrinthReactionData[reaction.id]?.tone==="death"?"danger":""}">反応:${reactionShortLabel(reaction)}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
   <div class="resourceGrid">
    <div class="resourceCell hpResource">
     <div class="resourceHeader"><b>HP</b><span class="resourceValue">${h.hp}/${h.maxHp}</span></div>
@@ -10654,6 +11286,20 @@ function draw(){
  drawMiniMap();
 }
 function renderSkills(){
+ const waitButton=$("wait");
+ if(playerOnStairs()){
+  const stairInfo=stairInteractionInfo();
+  waitButton.textContent=stairInfo.pending
+   ?`回収 ${stairInfo.pending}`
+   :"階段";
+  waitButton.title=stairInfo.pending
+   ?`階段上の${stairInteractionSummary(stairInfo)}を処理する`
+   :"現在の階段を使って次の階層へ進む";
+ }else{
+  waitButton.textContent="休息";
+  waitButton.title="その場で1ターン待機し、気力を5回復する";
+ }
+
  for(const k of ["guard","heal","search"]){
   const b=$(k);b.disabled=state.cooldowns[k]>0 || (k==="guard"&&state.hero.stamina<3) || (k==="heal"&&state.hero.stamina<4) || (k==="search"&&state.hero.stamina<2);
   b.firstChild.textContent=({guard:"構え",heal:"治癒",search:"探索"}[k])+(state.cooldowns[k]>0?" "+state.cooldowns[k]:"")
@@ -10738,7 +11384,11 @@ $("continueBtn").onclick=()=>{
  }
 };
 $("inventoryBtn").onclick=()=>{if(!state)return;renderInventory();$("inventoryOverlay").classList.remove("hidden")};
-$("closeInventory").onclick=()=>{closeFieldSalvageConfirm();$("inventoryOverlay").classList.add("hidden")};
+$("closeInventory").onclick=()=>{
+ closeFieldSalvageConfirm();
+ $("inventoryOverlay").classList.add("hidden");
+ render();
+};
 $("cancelFieldSalvage").onclick=closeFieldSalvageConfirm;
 $("confirmFieldSalvage").onclick=confirmFieldSalvage;
 $("closeAppearance").onclick=()=>$("appearanceOverlay").classList.add("hidden");
