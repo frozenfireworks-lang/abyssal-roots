@@ -2049,11 +2049,47 @@ body{
  }
 }
 
+
+/* v3.10.3 LABYRINTH RESPONSE */
+.labyrinthReactionCard{
+ margin-bottom:7px;padding:8px 9px;border:1px solid #596b78;border-radius:9px;
+ background:linear-gradient(180deg,#101820,#0b1016);color:#cbdde5;
+ font-size:9px;line-height:1.5;box-shadow:inset 0 0 20px rgba(93,166,191,.06);
+}
+.labyrinthReactionCard.death{
+ border-color:#875260;background:linear-gradient(180deg,#1c1117,#100b0f);color:#e7bdc5;
+}
+.labyrinthReactionCard.return{
+ border-color:#5b8068;background:linear-gradient(180deg,#101912,#0b110d);color:#c9dfce;
+}
+.labyrinthReactionTop{
+ display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:4px;
+}
+.labyrinthReactionTop b{color:#eaf8fc;font-size:10px}
+.labyrinthReactionRange{
+ flex:none;padding:1px 6px;border:1px solid #637984;border-radius:999px;
+ color:#cbe6ec;font-size:7px;
+}
+.labyrinthReactionEffect{
+ margin-top:5px;padding:5px 6px;border:1px solid rgba(106,137,150,.55);
+ border-radius:6px;background:rgba(7,12,16,.52);color:#d5e5ea;font-size:8px;
+}
+.labyrinthReactionCost{display:block;margin-top:3px;color:#e8aeb9}
+.labyrinthReactionBadge{
+ display:inline-block;margin-left:5px;padding:1px 5px;border:1px solid #587681;
+ border-radius:999px;color:#c8e8ef;font-size:7px;
+}
+.labyrinthReactionBadge.danger{border-color:#8f4e5c;color:#efb0bb}
+.nextReactionReport{
+ margin-top:7px;padding:7px 8px;border-left:3px solid #5f8491;border-radius:7px;
+ background:#0d151a;color:#c6dce3;font-size:8px;line-height:1.5;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.2.3 TRANSLUCENT MINIMAP HOTFIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.3.2 STAIR RETURN HOTFIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2095,7 +2131,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 半透明の固定HUD</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 階段隣接からの帰還</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2177,7 +2213,7 @@ body{
       </div>
       <div class="helpQuickCard">
         <b>③ いつ帰る？</b>
-        <small>祭壇上、番人撃破後の階段上、または目標達成済み階段で帰還楔を使うと帰還できます。</small>
+        <small>祭壇上、または解放済み階段の上下左右に立って帰還操作を行うと帰還できます。</small>
       </div>
     </div>
 
@@ -2253,13 +2289,15 @@ body{
           <li>状態は <b>40%以上:充足 / 15〜39%:空腹 / 1〜14%:飢餓 / 0:枯渇</b> です。</li>
           <li>空腹になるほど、攻防・気力回復・治療効率が落ちます。枯渇すると非常に危険です。</li>
           <li>乾燥肉はその場で回復するのではなく、<b>携行糧</b>として探索時間を延長します。</li>
-          <li><b>帰還条件</b>は「祭壇上」「番人撃破後の階段上」「目標達成済み階段で帰還楔を消費」のいずれかです。</li>
+          <li><b>帰還条件</b>は「祭壇上」「番人撃破後の階段に隣接」「目標達成済み階段に隣接して帰還楔を消費」のいずれかです。</li>
           <li>帰還すると探索は終了し、<b>HP・気力・充足が完全回復</b>します。</li>
+          <li>階段マスへ入ると階層移動の確認が始まるため、帰還操作は階段の<b>上下左右に隣接したマス</b>から行います。斜め位置からは使用できません。</li>
           <li><b>欠片保険</b>は最大3部位まで指定でき、出撃時に性能依存の保険料を支払います。死亡時のみ現在状態を倉庫へ回収します。</li>
           <li><b>魂還石</b>は深層番人から極低確率で入手できます。携行設定中はHP0の瞬間に1個消費し、死亡を緊急帰還へ置き換えます。</li>
           <li><b>致死予測</b>は、現在プレイヤーを狙って固定されている敵予兆の合計被害範囲です。移動で予兆から外れれば予測も消えます。</li>
           <li><b>決死の踏み止まり</b>は探索中1回、気力5を使って次の敵行動へ備えます。致命傷をHP1で耐えて残りの敵行動を中断しますが、発動しなくても使い切りです。</li>
-          <li><b>遺響回収</b>：死亡時、保険対象外の新規装備から推奨度上位3個が死亡階層へ残ります。次の探索で同じ階へ到達し、遺響守を倒して墓標へ触れると回収できます。</li>
+          <li><b>死亡時は餓死を含め、装備中・荷物内の非初期装備がすべて全損対象</b>です。未携行の倉庫装備だけが安全です。</li>
+          <li><b>遺響回収</b>：死亡時、保険対象外の携行装備から推奨度上位3個が死亡階層へ残ります。次の探索で同じ階へ到達し、遺響守を倒して墓標へ触れると回収できます。</li>
           <li>遺響は1件だけ保持されます。回収前に再び死亡すると以前の遺響は消滅し、新しい死亡地点へ置き換わります。</li>
           <li>遺響から回収した装備は荷物へ戻るだけです。灯台へ帰還する前に死亡すると再び失います。</li>
           <li><b>遺響刻印</b>：奪還時、死亡原因に応じて装備へ小さな恒久効果が刻まれます。刻印は装備ごとに合計2段階までです。</li>
@@ -2270,6 +2308,8 @@ body{
           <li>次回出撃装備の共鳴内容は、灯台の出撃準備画面で事前確認できます。</li>
           <li>階層目標パネルは左上へ固定し、背景のみ半透明にしています。背後の床・敵・アイテムをパネル越しに確認できます。</li>
           <li>ミニマップは右上固定の半透明表示です。探索者がミニマップの真下へ入った時だけ、背景・地形・マーカーをさらに薄くします。</li>
+          <li><b>迷宮反応</b>：前回の死亡原因・帰還深度・戦い方から、次の1探索だけ浅層の環境が変化します。効果は第1〜5層です。</li>
+          <li>迷宮反応には救済効果と代償があります。次の内容は探索結果と灯台で事前確認できます。</li>
           <li>踏み止まり発動後は3行動の衰弱となり、最大気力-2・攻撃力18%低下が発生します。</li>
         </ul>
         <div class="helpNote">このゲームは「帰らずに粘るほど強くなる」のではなく、「どこで帰るか」が大きな判断になります。</div>
@@ -3372,9 +3412,187 @@ function restoreLighthouseSession(){
  return true;
 }
 function defaultMeta(){
- const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
+ const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
  meta.appearance=defaultAppearance();
  return meta;
+}
+
+const labyrinthReactionData={
+ ash:{
+  label:"灰冷えの教訓",short:"灰冷え",tone:"death",
+  desc:"炎と爆発による死を迷宮が記憶した。火種は減るが、別の罠が増える。",
+  benefit:"治癒薬+1 / 爆ぜ虫と火種が減少",cost:"罠数+1",
+  startPotion:1,environmentBonus:-1,trapBonus:1,bomberBias:-.14
+ },
+ snare:{
+  label:"傷跡の導線",short:"傷跡",tone:"death",
+  desc:"罠死の記憶が足元の違和感を教える。ただし迷宮は罠を増設する。",
+  benefit:"知覚+1 / 罠ダメージ-15%",cost:"罠数+1",
+  perceptionBonus:1,trapReduction:.15,trapBonus:1
+ },
+ hunger:{
+  label:"空腹の残響",short:"空腹",tone:"death",
+  desc:"枯渇の記憶が備蓄を促す一方、迷宮内の物資総量は減る。",
+  benefit:"携行糧+180 / 食料抽選増加",cost:"各階の物資数-1",
+  startProvisions:180,itemBonus:-1,foodBias:.18
+ },
+ venom:{
+  label:"蝕毒の警戒",short:"蝕毒",tone:"death",
+  desc:"毒の記憶が治療物資を引き寄せるが、術師の気配も濃くなる。",
+  benefit:"治癒薬+1 / 各階の物資数+1",cost:"骨術師の出現傾向上昇",
+  startPotion:1,itemBonus:1,mageBias:.12
+ },
+ blood:{
+  label:"血の匂い",short:"血臭",tone:"death",
+  desc:"戦闘死の血痕を敵が追う。治療手段は増えるが、敵の密度も上がる。",
+  benefit:"治癒薬+1",cost:"敵数+1 / エリート率+5%",
+  startPotion:1,enemyBonus:1,eliteBonus:.05
+ },
+ borrowed:{
+  label:"借りた命の反動",short:"借命",tone:"return",
+  desc:"魂還石による帰還を迷宮が感知した。生命力は冴えるが追跡も強まる。",
+  benefit:"今回の最大気力+2",cost:"敵数+1 / エリート率+3%",
+  staminaBonus:2,enemyBonus:1,eliteBonus:.03
+ },
+ warden:{
+  label:"番人の注視",short:"注視",tone:"return",
+  desc:"番人を越えた探索者へ、次の番人が備える。代わりに現地工作資材が集まる。",
+  benefit:"現地素材+3 / 各階の物資数+1",cost:"第5層番人の最大HP+10%",
+  startScrap:3,itemBonus:1,bossHpBonus:.10
+ },
+ measured:{
+  label:"慎重歩行への適応",short:"慎重",tone:"return",
+  desc:"回避と構えを多用した記録から、遠距離個体が増える。",
+  benefit:"今回の最大気力+1 / 事件率+10%",cost:"骨術師・爆ぜ虫の出現傾向上昇",
+  staminaBonus:1,eventBonus:.10,rangedBias:.12
+ },
+ quiet:{
+  label:"静かな帰還路",short:"静穏",tone:"return",
+  desc:"無理をせず帰還した記録が、次の浅層に小さな余裕を残す。",
+  benefit:"携行糧+80 / 事件率+8%",cost:"大きな戦闘補正なし",
+  startProvisions:80,eventBonus:.08
+ }
+};
+function ensureLabyrinthReactionMeta(meta=state?.meta){
+ if(!meta)return null;
+ if(typeof meta.pendingReaction==="undefined")meta.pendingReaction=null;
+ if(!Array.isArray(meta.reactionHistory))meta.reactionHistory=[];
+ return meta.pendingReaction;
+}
+function classifyLabyrinthReaction(report){
+ if(!report)return null;
+ const cause=String(report.cause||report.rescueCause||"");
+ if(report.outcome==="death"){
+  if(/燃|炎|火|爆発|焼|炉/.test(cause))return"ash";
+  if(/罠|崩落/.test(cause))return"snare";
+  if(/充足|枯渇|飢/.test(cause))return"hunger";
+  if(/毒|蝕/.test(cause))return"venom";
+  return"blood";
+ }
+ if(report.rescued)return"borrowed";
+ if((report.bosses||0)>0||(report.floor||0)>=10)return"warden";
+ if((report.dodges||0)+(report.guards||0)+(report.breaks||0)>=5)return"measured";
+ return"quiet";
+}
+function queueLabyrinthReaction(report){
+ const meta=state.meta;
+ ensureLabyrinthReactionMeta(meta);
+ const id=classifyLabyrinthReaction(report);
+ const data=labyrinthReactionData[id];
+ if(!data)return null;
+ const pending={
+  id,label:data.label,short:data.short,tone:data.tone,desc:data.desc,
+  benefit:data.benefit,cost:data.cost,sourceOutcome:report.outcome,
+  sourceFloor:report.floor,sourceTimestamp:report.timestamp,
+  queuedAt:Date.now(),endFloor:5
+ };
+ meta.pendingReaction=pending;
+ meta.reactionHistory.push({
+  id,sourceFloor:report.floor,sourceOutcome:report.outcome,
+  sourceTimestamp:report.timestamp,status:"queued",timestamp:Date.now()
+ });
+ meta.reactionHistory=meta.reactionHistory.slice(-16);
+ return pending;
+}
+function commitExpeditionReport(report){
+ state.meta.lastExpeditionReport=report;
+ const pending=queueLabyrinthReaction(report);
+ if(pending){
+  report.nextReaction={
+   id:pending.id,label:pending.label,short:pending.short,desc:pending.desc,
+   benefit:pending.benefit,cost:pending.cost,endFloor:pending.endFloor
+  };
+ }
+ state.meta.lastExpeditionReport=report;
+ return report;
+}
+function pendingLabyrinthReaction(meta=state?.meta){
+ ensureLabyrinthReactionMeta(meta);
+ return meta?.pendingReaction||null;
+}
+function activeLabyrinthReaction(){
+ const reaction=state?.labyrinthReaction;
+ if(!reaction||state.floor>(reaction.endFloor||5))return null;
+ return reaction;
+}
+function reactionData(){
+ const reaction=activeLabyrinthReaction();
+ return reaction?labyrinthReactionData[reaction.id]||null:null;
+}
+function reactionValue(key,fallback=0){
+ const data=reactionData();
+ const value=data?.[key];
+ return typeof value==="number"?value:fallback;
+}
+function prepareLabyrinthReactionForExpedition(){
+ if(!state||state.reactionApplied)return state?.labyrinthReaction||null;
+ ensureLabyrinthReactionMeta(state.meta);
+
+ if(!state.labyrinthReaction&&state.floor===1&&state.turn===0&&state.meta.pendingReaction){
+  state.labyrinthReaction={...state.meta.pendingReaction,activatedAt:Date.now()};
+  state.meta.pendingReaction=null;
+  const history=[...(state.meta.reactionHistory||[])].reverse().find(entry=>
+   entry.status==="queued"&&entry.sourceTimestamp===state.labyrinthReaction.sourceTimestamp
+  );
+  if(history){
+   history.status="activated";
+   history.activatedAt=Date.now();
+  }
+ }
+
+ const reaction=state.labyrinthReaction;
+ if(!reaction)return null;
+ const data=labyrinthReactionData[reaction.id];
+ if(!data)return null;
+
+ state.reactionApplied=true;
+ if(data.startPotion)state.consumables.potion=(state.consumables.potion||0)+data.startPotion;
+ if(data.startProvisions)state.provisions=(state.provisions||0)+data.startProvisions;
+ if(data.startScrap)state.fieldScrap=(state.fieldScrap||0)+data.startScrap;
+ if(data.perceptionBonus)state.hero.perception=(state.hero.perception||0)+data.perceptionBonus;
+ if(data.staminaBonus){
+  state.hero.maxStamina+=data.staminaBonus;
+  state.hero.stamina+=data.staminaBonus;
+ }
+ state.log.unshift(`迷宮反応「${data.label}」が発生。第1〜5層に影響する。`);
+ state.log=state.log.slice(0,5);
+ saveMeta();
+ return reaction;
+}
+function labyrinthReactionCardHtml(reaction,title="次の探索の迷宮反応"){
+ if(!reaction)return"";
+ const data=labyrinthReactionData[reaction.id]||reaction;
+ return`<div class="labyrinthReactionCard ${data.tone||reaction.tone||""}">
+  <div class="labyrinthReactionTop">
+   <b>${title}・${data.label||reaction.label}</b>
+   <span class="labyrinthReactionRange">第1〜${reaction.endFloor||5}層</span>
+  </div>
+  ${data.desc||reaction.desc||""}
+  <div class="labyrinthReactionEffect">
+   ${data.benefit||reaction.benefit||""}
+   <span class="labyrinthReactionCost">代償：${data.cost||reaction.cost||"なし"}</span>
+  </div>
+ </div>`;
 }
 const lighthouseLoadoutSlots=["weapon","shield","head","body","arms","legs","ring","charm"];
 function emptyLighthouseLoadout(){
@@ -3535,21 +3753,30 @@ function updateStashWithProtectedGear(gear){
 }
 function recoverInsuredGearOnDeath(){
  const contract=state.protectionContract;
- if(contract?.mode!=="shards")return{recovered:0,missed:0,premium:0,names:[]};
+ if(contract?.mode!=="shards")return{recovered:0,missed:0,premium:0,names:[],ids:[],slots:[]};
  let recovered=0,missed=0;
- const names=[];
+ const names=[],ids=[],slots=[];
+ ensureMetaLoadouts(state.meta);
  for(const item of contract.items||[]){
   const gear=runGearById(item.id);
   if(gear&&updateStashWithProtectedGear(gear)){
    recovered++;
    names.push(gearLabel(gear));
+   ids.push(gear.id);
+   if(item.slot&&lighthouseLoadoutSlots.includes(item.slot)){
+    state.meta.nextLoadout[item.slot]=gear.id;
+    slots.push(item.slot);
+   }
   }else{
    missed++;
   }
  }
+ if(state.meta.insurancePlan?.mode==="shards"){
+  state.meta.insurancePlan.slots=[...new Set(slots)];
+ }
  contract.recovered=recovered;
  saveMeta();
- return{recovered,missed,premium:contract.premium||0,names};
+ return{recovered,missed,premium:contract.premium||0,names,ids,slots};
 }
 function soulAnchorCanTrigger(){
  return state.protectionContract?.mode==="soul"&&
@@ -3575,7 +3802,7 @@ function completeSoulAnchorRescue(cause){
  });
  report.rescued=true;
  report.rescueCause=cause;
- state.meta.lastExpeditionReport=report;
+ commitExpeditionReport(report);
  state.hero.hp=state.hero.maxHp;
  state.hunger=effectiveMaxHunger();
  state.provisions=0;
@@ -3717,6 +3944,23 @@ function newlyFoundRunGear(){
  const original=new Set(stats.startStashIds||[]);
  return uniqueRunGear().filter(g=>!isStarterGear(g)&&!original.has(g.id));
 }
+function deathGearSnapshot(){
+ return uniqueRunGear()
+  .filter(g=>g&&!isStarterGear(g))
+  .map(g=>cloneGear(g));
+}
+function purgeDeathGearFromPersistence(snapshot){
+ const ids=new Set((snapshot||[]).map(g=>g.id));
+ state.meta.stash=state.meta.stash||[];
+ const before=state.meta.stash.length;
+ state.meta.stash=state.meta.stash.filter(g=>!ids.has(g.id));
+
+ ensureMetaLoadouts(state.meta);
+ for(const slot of lighthouseLoadoutSlots){
+  if(ids.has(state.meta.nextLoadout[slot]))state.meta.nextLoadout[slot]=null;
+ }
+ return{removed:before-state.meta.stash.length,ids:[...ids]};
+}
 function ensureDeathEchoMeta(meta=state?.meta){
  if(!meta)return null;
  if(typeof meta.deathEcho==="undefined")meta.deathEcho=null;
@@ -3749,10 +3993,13 @@ function deathEchoGuardSnapshot(killer){
   defBonus:Math.max(0,Math.floor((killer?.def||2)*.2))
  };
 }
-function createDeathEchoFromCurrentRun(cause,killer=null){
+function createDeathEchoFromCurrentRun(cause,killer=null,candidateGear=null){
  ensureDeathEchoMeta(state.meta);
  const previous=activeDeathEcho();
- const candidates=newlyFoundRunGear().sort((a,b)=>gearScore(b)-gearScore(a));
+ const candidates=(candidateGear||newlyFoundRunGear())
+  .filter(g=>g&&!isStarterGear(g))
+  .map(g=>cloneGear(g))
+  .sort((a,b)=>gearScore(b)-gearScore(a));
  const preserved=candidates.slice(0,3).map(gear=>{
   const copy=cloneGear(gear);
   copy.locked=true;
@@ -3967,7 +4214,9 @@ function buildExpeditionReport(outcome,details={}){
  const combat=state.combatStats||{dodges:0,guards:0,breaks:0,crits:0,lastStands:0};
  const bank=details.bank||null;
  const finalResonance=currentEchoResonance();
- const lostGear=outcome==="death"?newlyFoundRunGear().length:(bank?.leftBehind||0);
+ const lostGear=outcome==="death"
+  ?(details.deathLoss?.unprotected??newlyFoundRunGear().length)
+  :(bank?.leftBehind||0);
  const report={
   outcome,
   timestamp:Date.now(),
@@ -4002,6 +4251,9 @@ function buildExpeditionReport(outcome,details={}){
   updatedGear:bank?.updatedGear||0,
   scrapShards:bank?.scrapShards||0,
   lostGear,
+  deathCarriedGear:details.deathLoss?.carried||0,
+  deathPurgedFromStash:details.deathLoss?.removedFromStash||0,
+  permanentlyDestroyed:details.deathLoss?.destroyed||0,
   insuredRecovered:details.insurance?.recovered||0,
   insuranceMissed:details.insurance?.missed||0,
   insurancePremium:details.insurance?.premium||state.protectionContract?.premium||0,
@@ -4027,7 +4279,8 @@ function buildExpeditionReport(outcome,details={}){
  if(report.breaks>0)report.highlights.push(`敵の攻撃態勢を${report.breaks}回崩した`);
  if(report.crits>0)report.highlights.push(`会心を${report.crits}回発生`);
  if(outcome==="return"&&report.newGear>0)report.highlights.push(`新しい装備を${report.newGear}個持ち帰った`);
- if(outcome==="death"&&report.lostGear>0)report.highlights.push(`新規入手装備を${report.lostGear}個失った`);
+ if(outcome==="death"&&report.deathCarriedGear>0)report.highlights.push(`携行装備${report.deathCarriedGear}個が全損判定を受けた`);
+ if(outcome==="death"&&report.permanentlyDestroyed>0)report.highlights.push(`装備${report.permanentlyDestroyed}個が完全消失した`);
  if(report.insuredRecovered>0)report.highlights.push(`装備保険で${report.insuredRecovered}部位を回収`);
  if(report.rescued)report.highlights.push("魂還石が致死傷を緊急帰還へ置き換えた");
  if(report.echoStored>0)report.highlights.push(`失った装備${report.echoStored}個が第${report.echoTargetFloor}層の遺響へ残った`);
@@ -4063,14 +4316,15 @@ function expeditionReportHtml(report,compact=false){
     report.lostGear?`<span class="expeditionPill bad">倉庫満杯で残置 ${report.lostGear}</span>`:""
    ].filter(Boolean).join("")
   :[
-    `<span class="expeditionPill good">倉庫装備は維持</span>`,
+    `<span class="expeditionPill good">未携行の倉庫装備は維持</span>`,
     `<span class="expeditionPill good">研究・恒久成長は維持</span>`,
+    report.deathCarriedGear?`<span class="expeditionPill bad">携行装備全損 ${report.deathCarriedGear}</span>`:
+      `<span class="expeditionPill">携行装備なし</span>`,
     report.insuredRecovered?`<span class="expeditionPill good">保険回収 ${report.insuredRecovered}部位</span>`:"",
     report.insuranceMissed?`<span class="expeditionPill bad">保険回収失敗 ${report.insuranceMissed}</span>`:"",
     report.echoStored?`<span class="expeditionPill good">遺響に残存 ${report.echoStored}</span>`:"",
-    report.echoAbandoned?`<span class="expeditionPill bad">即時喪失 ${report.echoAbandoned}</span>`:"",
-    report.echoReplaced?`<span class="expeditionPill bad">以前の遺響消滅 ${report.echoReplaced}</span>`:"",
-    !report.lostGear?`<span class="expeditionPill">新規装備の喪失なし</span>`:""
+    report.permanentlyDestroyed?`<span class="expeditionPill bad">完全消失 ${report.permanentlyDestroyed}</span>`:"",
+    report.echoReplaced?`<span class="expeditionPill bad">以前の遺響消滅 ${report.echoReplaced}</span>`:""
    ].filter(Boolean).join("");
 
  return`
@@ -4104,6 +4358,12 @@ function expeditionReportHtml(report,compact=false){
     ${report.echoPressureReached?`<span class="expeditionPill bad">迷宮圧</span>`:""}
    </div>
   </div>
+  ${report.nextReaction?`<div class="nextReactionReport">
+   <b>次の探索：${report.nextReaction.label}</b><br>
+   ${report.nextReaction.desc}<br>
+   ${report.nextReaction.benefit}<br>
+   <span style="color:#e8aeb9">代償：${report.nextReaction.cost}</span>
+  </div>`:""}
   <div class="expeditionSection">
    <h3>${returned?"持ち帰った成果":"残ったもの・失ったもの"}</h3>
    <div class="expeditionPills">${retained}</div>
@@ -4141,13 +4401,25 @@ function finishExpeditionDeath(cause,killer=null){
  if(state.gameOver)return;
  if(completeSoulAnchorRescue(cause))return;
  if(killer)maybePromoteKiller(killer);
+ const deathSnapshot=deathGearSnapshot();
+ const purge=purgeDeathGearFromPersistence(deathSnapshot);
  const insurance=recoverInsuredGearOnDeath();
- const echo=createDeathEchoFromCurrentRun(cause,killer);
+ const insuredIds=new Set(insurance.ids||[]);
+ const unprotected=deathSnapshot.filter(g=>!insuredIds.has(g.id));
+ const echo=createDeathEchoFromCurrentRun(cause,killer,unprotected);
+ const deathLoss={
+  carried:deathSnapshot.length,
+  removedFromStash:purge.removed,
+  insured:insurance.recovered||0,
+  unprotected:unprotected.length,
+  echoStored:echo.stored||0,
+  destroyed:echo.abandoned||0
+ };
  state.gameOver=true;
  state.expeditionEnded=true;
  state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
- const report=buildExpeditionReport("death",{cause,insurance,echo});
- state.meta.lastExpeditionReport=report;
+ const report=buildExpeditionReport("death",{cause,insurance,echo,deathLoss});
+ commitExpeditionReport(report);
  saveMeta();
  localStorage.removeItem(ACTIVE_SAVE_KEY);
  localStorage.removeItem("abyssalRootsSoloV4Backup");
@@ -4160,8 +4432,8 @@ function freshState(){
   hunger:720,maxHunger:720,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false,lastStandUsed:false,lastStandArmed:false,lastStandInvulnerable:false,lastStandTriggeredThisTurn:false,exhaustedTurns:0},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,crits:0,lastStands:0},
-  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
+  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],labyrinthReaction:null,reactionApplied:false,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
  const prepared=applyMetaToFreshState(newState);
  prepared.runStats=createRunStats(prepared.meta);
@@ -4302,7 +4574,7 @@ function spawnFloorBoss(recovery=false){
  const boss={
   id:`boss-${state.floor}-${recovery?"recovered":"spawned"}`,
   x:p.x,y:p.y,type:"warden",name:profile.name,level:bossLevel,
-  hp:Math.round(baseHp*profile.hp),maxHp:Math.round(baseHp*profile.hp),
+  hp:Math.round(baseHp*profile.hp*(1+reactionValue("bossHpBonus"))),maxHp:Math.round(baseHp*profile.hp*(1+reactionValue("bossHpBonus"))),
   atk:Math.round(baseAtk*profile.atk),def:Math.round(baseDef*profile.def),
   xp:30+bossLevel*5,intent:null,intentCells:[],intentTarget:null,
   stagger:0,guarding:false,boss:true,phase:1,phaseTriggered:false,
@@ -4389,7 +4661,7 @@ function estimateMitigatedHeroDamage(raw,sourceEnemy=null,options={}){
  if(tagTier("bone")>=6)dmg=Math.max(0,Math.round(dmg*.88));
  if(sourceEnemy?.nemesis&&hasAbyssAdaptation("steadyHeart"))dmg=Math.max(0,Math.round(dmg*.85));
  if(options.trap){
-  const reduction=clamp(researchTrapReduction()+echoTrapReduction(),0,.65);
+  const reduction=clamp(researchTrapReduction()+echoTrapReduction()+reactionValue("trapReduction"),0,.75);
   dmg=Math.max(0,Math.round(dmg*(1-reduction)));
  }
  return dmg;
@@ -4490,7 +4762,7 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
  if(tagTier("bone")>=6)dmg=Math.max(0,Math.round(dmg*.88));
  if(sourceEnemy?.nemesis&&hasAbyssAdaptation("steadyHeart"))dmg=Math.max(0,Math.round(dmg*.85));
  if(options.trap){
-  const reduction=clamp(researchTrapReduction()+echoTrapReduction(),0,.65);
+  const reduction=clamp(researchTrapReduction()+echoTrapReduction()+reactionValue("trapReduction"),0,.75);
   dmg=Math.max(0,Math.round(dmg*(1-reduction)));
  }
  if(tagTier("bone")>=10&&!state.hero.boneLastStandUsed&&dmg>=state.hero.hp){
@@ -4555,7 +4827,7 @@ function envAt(x,y,type=null){
 }
 function addEnvironmentObjects(){
  let biomeEnv=currentBiomeKey()==="furnace"?3:currentBiomeKey()==="fungal"?1:0;
- const count=Math.max(0,2+Math.floor(state.floor/2)+(mutation()?.environmentBonus||0)+biomeEnv-(state.meta?.adaptation==="anti_bomb"?2:0));
+ const count=Math.max(0,2+Math.floor(state.floor/2)+(mutation()?.environmentBonus||0)+biomeEnv-(state.meta?.adaptation==="anti_bomb"?2:0)+reactionValue("environmentBonus"));
  for(let i=0;i<count;i++){
   const p=randomFloorCell(3);
   if(!p)break;
@@ -4659,7 +4931,7 @@ function mutation(){
  return state.floorMutation?floorMutationData[state.floorMutation]:null;
 }
 function applyEliteMutation(enemy){
- const chance=clamp(.16+routeValue("eliteBonus")+resonanceBonus("eliteChance"),.04,.60);
+ const chance=clamp(.16+routeValue("eliteBonus")+resonanceBonus("eliteChance")+reactionValue("eliteBonus"),.04,.65);
  if(enemy.boss||rng()>chance)return;
  const affix=choice(["brutal","swift","armored","volatile","vampiric"]);
  enemy.elite=affix;
@@ -5152,7 +5424,7 @@ const eventDefs=[
 ];
 function addFloorEvents(){
  state.events=[];
- const eventThreshold=clamp(.7-routeValue("eventBonus"),.2,.92);
+ const eventThreshold=clamp(.7+routeValue("eventBonus")+reactionValue("eventBonus"),.2,.95);
  if(state.floor===1||rng()>=eventThreshold)return;
  const p=randomFloorCell(5);if(!p)return;
  const def=choice(eventDefs);
@@ -5289,14 +5561,14 @@ function plannedEnemyCount(){
  const base=5+Math.floor(state.floor*1.15);
  const biomePressure=(currentBiomeKey()==="furnace"||currentBiomeKey()==="crypt")?1:0;
  const cap=floorPlan().boss?20:26;
- return Math.max(3,Math.min(cap+resonanceBonus("enemyCount"),base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")));
+ return Math.max(3,Math.min(cap+resonanceBonus("enemyCount")+reactionValue("enemyBonus"),base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")));
 }
 function plannedTrapCount(){
  const base=isRestFloor()?1:Math.min(10,2+Math.floor(state.floor/3));
- return clamp(base+routeValue("trapBonus"),0,12);
+ return clamp(base+routeValue("trapBonus")+reactionValue("trapBonus"),0,14);
 }
 function plannedItemCount(){
- const normal=4+Math.floor(state.floor/2)+(mutation()?.itemBonus||0)+(hasTalent("scavenger")?1:0)+routeValue("itemBonus");
+ const normal=4+Math.floor(state.floor/2)+(mutation()?.itemBonus||0)+(hasTalent("scavenger")?1:0)+routeValue("itemBonus")+reactionValue("itemBonus");
  return state.floor===1?7:Math.max(2,normal);
 }
 function placeGuaranteedItem(type,name,minDist=3){
@@ -5452,6 +5724,7 @@ function renderFloorGoal(){
 }
 
 function generateFloor(){
+ prepareLabyrinthReactionForExpedition();
  chooseFloorMutation();
  state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
  state.rooms=[];
@@ -5519,6 +5792,11 @@ function generateFloor(){
   if(ad==="anti_spear"&&rng()<.34)type="warg";
   if(ad==="anti_bow"&&rng()<.36)type="warg";
   if(ad==="anti_staff"&&rng()<.34)type="mage";
+  if(reactionValue("mageBias")>0&&rng()<reactionValue("mageBias"))type="mage";
+  if(reactionValue("rangedBias")>0&&rng()<reactionValue("rangedBias"))type=rng()<.68?"mage":"bomber";
+  if(type==="bomber"&&reactionValue("bomberBias")<0&&rng()<Math.abs(reactionValue("bomberBias"))){
+   type=rng()<.55?"skeleton":"warg";
+  }
   const base={
    skeleton:{name:"盾骸兵",hp:14,atk:4,def:3,xp:7},
    warg:{name:"穴獣",hp:9,atk:5,def:0,xp:6},
@@ -5545,6 +5823,7 @@ function generateFloor(){
   if(currentBiomeKey()==="fungal"&&rng()<.35)itemRoll=.25;
   if(currentBiomeKey()==="crypt"&&rng()<.22)itemRoll=.45;
   if(activeRoute()?.id==="archive"&&rng()<.18)itemRoll=rng()<.58?.28:.35;
+  if(reactionValue("foodBias")>0&&rng()<reactionValue("foodBias"))itemRoll=rng()<.58?.07:.18;
   if(itemRoll<.12)state.items.push({x:p.x,y:p.y,type:"food",name:"乾燥肉"});
   else if(itemRoll<.24)state.items.push({x:p.x,y:p.y,type:"potion",name:"治癒薬"});
   else if(itemRoll<.32)state.items.push({x:p.x,y:p.y,type:"identify",name:"鑑定紙片"});
@@ -7771,13 +8050,18 @@ function pickupGroundItemFromInventory(){
 function currentReturnSource(){
  if(!state||state.expeditionEnded||state.gameOver)return null;
  const onShrine=specialAt(state.player.x,state.player.y)?.type==="shrine";
- const onStairs=state.player.x===state.stairs.x&&state.player.y===state.stairs.y;
+ const stairDistance=
+  Math.abs(state.player.x-state.stairs.x)+
+  Math.abs(state.player.y-state.stairs.y);
+ const besideStairs=stairDistance===1;
  const stairsUnlocked=floorObjectiveComplete();
 
  if(onShrine)return{id:"shrine",label:"帰還可能な祭壇"};
- if(onStairs&&state.bossDefeated)return{id:"boss",label:"番人撃破後の階段"};
- if(onStairs&&stairsUnlocked&&(state.consumables.retreat||0)>0){
-  return{id:"marker",label:"帰還楔を打った階段"};
+ if(besideStairs&&state.bossDefeated){
+  return{id:"boss",label:"番人撃破後の階段前"};
+ }
+ if(besideStairs&&stairsUnlocked&&(state.consumables.retreat||0)>0){
+  return{id:"marker",label:"帰還楔を打てる階段前"};
  }
  return null;
 }
@@ -7792,7 +8076,7 @@ function renderReturnAccess(){
  button.textContent=source?"帰還":"帰還不可";
  button.title=source
   ?`${source.label}から探索を終了する`
-  :"祭壇上、番人撃破後の階段上、または目標達成済み階段で帰還楔が必要";
+  :"祭壇上、または解放済み階段に上下左右で隣接すると帰還できます";
 }
 function isStarterGear(g){
  return !!g&&(g.bankable===false||g.origin==="starter"||String(g.id||"").startsWith("starter-"));
@@ -7850,7 +8134,7 @@ function bankCurrentRun(){
 function returnToLighthouse(){
  const source=currentReturnSource();
  if(!source){
-  addLog("ここからは帰還できない。祭壇、番人撃破後の階段、または目標達成済み階段で帰還楔が必要だ。");
+  addLog("ここからは帰還できない。祭壇上、または解放済み階段の上下左右に立つ必要がある。");
   renderReturnAccess();
   return;
  }
@@ -7860,7 +8144,7 @@ function returnToLighthouse(){
  const bank=bankCurrentRun();
  state.expeditionEnded=true;
  const report=buildExpeditionReport("return",{source:source.label,bank});
- state.meta.lastExpeditionReport=report;
+ commitExpeditionReport(report);
  state.hero.hp=state.hero.maxHp;
  state.hunger=effectiveMaxHunger();
  state.provisions=0;
@@ -8085,8 +8369,8 @@ function renderInsurance(meta=state.meta){
     倉庫上限を超えた荷物は通常の帰還と同様に残置されます。
    </div>`:""}
   <div class="extractionRule">
-   帰還楔はどこでも使用できません。階層目標を達成し、解放された階段まで戻った時だけ消費できます。
-   祭壇帰還は祭壇上、番人撃破後の帰還は番人階の階段上に限定されます。
+   帰還楔はどこでも使用できません。階層目標を達成し、解放された階段の上下左右まで戻った時だけ消費できます。
+   祭壇帰還は祭壇上、番人撃破後の帰還は番人階の階段に上下左右で隣接した時に限定されます。
   </div>`;
 
  $("insuranceBody").querySelectorAll("[data-insurance-mode]").forEach(button=>{
@@ -8202,7 +8486,8 @@ function renderHub(){
  $("lastReportBody").innerHTML=lastReport
   ?expeditionReportHtml(lastReport,true)
   :'<p class="note">完了した探索はまだありません。</p>';
- $("hubSummary").innerHTML=`
+ const pendingReaction=pendingLabyrinthReaction(m);
+ $("hubSummary").innerHTML=(pendingReaction?labyrinthReactionCardHtml(pendingReaction):"")+`
   <div class="itemRow">
    <div class="top"><span>探索記録</span><span>欠片 ${m.shards}</span></div>
    <div class="desc">最高到達 ${m.bestFloor}層 / 総撃破 ${m.totalKills}<br>帰還によりHP・気力・充足は完全回復。次は新しい探索として出発します。</div>
@@ -8429,6 +8714,7 @@ function loadGame(){
   ensureRouteMastery(state.meta);
   ensureInsuranceMeta(state.meta);
   ensureDeathEchoMeta(state.meta);
+  ensureLabyrinthReactionMeta(state.meta);
   if(!state.meta.bodyTraining)state.meta.bodyTraining={endurance:0,strength:0,focus:0,perception:0};
   if(!state.meta.abyssAdaptations)state.meta.abyssAdaptations=[];
   if(typeof state.meta.adaptationPoints!=="number")state.meta.adaptationPoints=0;
@@ -8474,6 +8760,8 @@ function loadGame(){
   if(typeof state.fieldForgeDef!=="number")state.fieldForgeDef=0;
   if(typeof state.inventorySort!=="string")state.inventorySort="score";
   if(typeof state.protectionContract==="undefined")state.protectionContract=null;
+  if(typeof state.labyrinthReaction==="undefined")state.labyrinthReaction=null;
+  if(typeof state.reactionApplied!=="boolean")state.reactionApplied=!!state.labyrinthReaction;
   if(!state.combatStats)state.combatStats={dodges:0,guards:0,breaks:0,crits:0,lastStands:0};
   if(typeof state.combatStats.lastStands!=="number")state.combatStats.lastStands=0;
   if(!state.runStats)state.runStats=createRunStats(state.meta);
@@ -8582,6 +8870,8 @@ function showFloorBanner(){
  if(deathEchoForCurrentFloor())extra.push("遺響：失った装備の回収地点");
  const resonance=currentEchoResonance();
  if(resonance.tier)extra.push(`遺響共鳴：${echoResonanceLabel(resonance)}`);
+ const reaction=activeLabyrinthReaction();
+ if(reaction)extra.push(`迷宮反応：${labyrinthReactionData[reaction.id]?.short||reaction.short}`);
 
  banner.classList.remove("show","floorBannerBoss","floorBannerRest");
  void banner.offsetWidth;
@@ -8619,6 +8909,7 @@ function renderHero(){
  const threat=currentThreatForecast();
  const stand=lastStandStatus();
  const resonance=currentEchoResonance();
+ const reaction=activeLabyrinthReaction();
  const threatClass=threat.certainLethal?"lethal":threat.possibleLethal?"warning":"";
  const threatText=threat.count
   ?`予測被害 <b>${threat.min===threat.max?threat.max:`${threat.min}〜${threat.max}`}</b> / ${threat.count}予兆${
@@ -8628,7 +8919,7 @@ function renderHero(){
  $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}${threat.possibleLethal?` <span class="mortalWarning ${threat.certainLethal?"certain":""}">${threat.certainLethal?"確定致死":"致死圏"}</span>`:""}</div>
-  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""} <span class="lastStandState ${stand.className}">踏留:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
+  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${reaction?` <span class="labyrinthReactionBadge ${labyrinthReactionData[reaction.id]?.tone==="death"?"danger":""}">反応:${labyrinthReactionData[reaction.id]?.short||reaction.short}</span>`:""} <span class="lastStandState ${stand.className}">踏留:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
   <div class="resourceGrid">
    <div class="resourceCell hpResource">
     <div class="resourceHeader"><b>HP</b><span class="resourceValue">${h.hp}/${h.maxHp}</span></div>
