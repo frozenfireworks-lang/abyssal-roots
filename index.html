@@ -2687,11 +2687,91 @@ body{
  line-height:1.5;
 }
 
+
+/* v3.10.10 ROUTE FINALE INTEGRITY */
+.floorGoalRoute{
+ margin-top:5px;
+ padding:5px 7px;
+ border:1px solid #5e526e;
+ border-radius:6px;
+ background:rgba(19,14,25,.80);
+ color:#cfc1dd;
+ font-size:7px;
+ line-height:1.45;
+}
+.floorGoalRoute b{color:#efe2ff}
+.floorGoalRoute.completed{
+ border-color:#52765f;
+ background:rgba(13,27,18,.82);
+ color:#b9dcc4;
+}
+.floorGoalRoute.completed b{color:#ddffe7}
+.floorBannerRouteFinale{
+ margin-top:7px;
+ padding:6px 8px;
+ border:1px solid rgba(203,177,243,.40);
+ border-radius:7px;
+ background:rgba(20,12,30,.76);
+ color:#e3d5f4;
+ font-size:9px;
+ line-height:1.45;
+}
+.floorBannerRouteFinale b{color:#fff0b5}
+
+
+/* v3.10.10.1 ECHO STABILITY CLARITY */
+.echoStabilizeBtn.blocked{
+ border-color:#765461!important;
+ background:linear-gradient(180deg,#321820,#211016)!important;
+ color:#e7aeb9!important;
+ opacity:1!important;
+}
+.echoStabilizeReason{
+ display:block;
+ margin-top:4px;
+ color:#d8a4ae;
+ font-size:7px;
+ line-height:1.4;
+}
+.echoScoreNote{
+ display:block;
+ margin-top:3px;
+ color:#b9c7cc;
+ font-size:7px;
+ line-height:1.4;
+}
+.echoScoreNote.negative{color:#e1a5af}
+.echoStrainState{
+ display:inline-block;
+ margin-left:3px;
+ padding:1px 5px;
+ border:1px solid #87505e;
+ border-radius:999px;
+ background:#241017;
+ color:#efb1bc;
+ font-size:7px;
+}
+.echoStrainState.capped{
+ border-color:#a86c48;
+ background:#29170e;
+ color:#f0c19d;
+}
+.echoLoadoutWarning{
+ margin-top:5px;
+ padding:4px 6px;
+ border:1px solid #805060;
+ border-radius:6px;
+ background:#1d0f15;
+ color:#e9afba;
+ font-size:8px;
+ line-height:1.45;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.9.2 START FLOW LOCK</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.10.1 ECHO STABILITY CLARITY</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2742,7 +2822,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 探索開始経路の固定</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 遺響歪み・安定化の明確化</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2888,6 +2968,9 @@ body{
           <li><b>5階ごとに番人戦</b>があります。番人撃破後は、次の5階区間を「狩路・観測路・補給路」から選択します。</li>
           <li>進路は敵数・物資・エリート・罠・事件・研究量へ影響し、次の番人階まで継続します。</li>
           <li>進路の終点となる番人階では、選んだ進路に応じた試練が発生します。番人を倒すと進路踏破報酬を獲得します。</li>
+          <li>進路表示の分母は、実際の開始階層から終点番人階までの階層数を自動計算します。特殊な再開状態でも固定5層表示にはなりません。</li>
+          <li>観測路の終点「解読された弱点」は、通常攻撃だけでなく戦技、火炎壺、爆薬樽、燃える油、炎上、毒、雷連鎖、槍貫通など番人が受ける全ダメージを15%増加させます。</li>
+          <li>終点番人を倒した時点で進路効果は終了します。踏破報酬と熟練上昇は階層目標欄・通知・ログへ表示されます。</li>
           <li>同じ進路を1・3・5回踏破すると、その進路を選択中だけ発動する恒久熟練を解放します。解放状況は灯台で確認できます。</li>
           <li><b>主人公のHPが0でその探索は終了</b>です。帰還・死亡後には、撃破数・戦闘結果・持ち帰り・喪失をまとめた探索結果が表示されます。</li>
         </ul>
@@ -2971,6 +3054,9 @@ body{
           <li>遺響から回収した装備は荷物へ戻るだけです。灯台へ帰還する前に死亡すると再び失います。</li>
           <li><b>遺響刻印</b>：奪還時、死亡原因に応じて装備へ小さな恒久効果が刻まれます。刻印は装備ごとに合計2段階までです。</li>
           <li>同じ装備を3回以上遺響から奪還すると<b>歪み</b>が蓄積し、装備中の最大気力が低下します。歪みは灯台で欠片を使って安定化できます。</li>
+          <li>装備中の歪みは合計値を表示し、最大気力低下は合計3までです。4以上の歪みも装備へ残りますが、追加の気力低下は発生しません。</li>
+          <li>安定化ボタンは欠片不足でも押せます。必要数・所持数・不足数を表示し、押した時にも不足理由を通知します。</li>
+          <li>推奨度には罠識刻印の価値と歪みによる最大気力低下を反映します。旧セーブで刻印合計が2を超えていた装備は、超過刻印を歪みへ変換して整理します。</li>
           <li>安定化しても刻印と奪還回数は残ります。再び遺響化すれば、また歪みが発生します。</li>
           <li><b>遺響共鳴</b>：装備中の刻印総数が2・4・6に達すると共鳴Ⅰ・Ⅱ・Ⅲが発動します。最も多い刻印の種類が主効果になります。</li>
           <li>共鳴Ⅲでは強力な効果と引き換えに<b>迷宮圧</b>が発生し、敵数+2・再出現上限+2・エリート率+8%になります。</li>
@@ -2996,6 +3082,9 @@ body{
           <li>単品分解・通常品一括分解のどちらも確認画面が開きます。装備名、獲得素材、対象数を確認してから実行してください。</li>
           <li>通常品一括分解は「通常品N個を分解」を最後に押した時だけ実行されます。クリック操作だけで確認を飛ばすことはありません。</li>
           <li>階段にアイテム・事件・特殊地点・罠が重なった場合は、それらを階層移動より先に処理します。階段上では中央ボタンが「回収」になり、すべて処理すると「階段」に変わります。</li>
+          <li>通常床でも番人報酬などが複数重なっていれば、中央ボタンが「回収 N」になります。1個ずつ安全に取得し、残数を表示します。</li>
+          <li>番人撃破目標は撃破フラグを立てた後に再評価します。根檻の中央に留まる成功も、回避・構え系の階層目標へ即時反映します。</li>
+          <li>装備を伝説へ昇格させた場合は、必ず伝説固有特性が付与されます。</li>
           <li>新しく生成される古い昇降路は階段と重ならず、隣接する安全な床へ配置されます。既存セーブの重複も読み込み時に自動移設します。</li>
           <li>移設先がない特殊な地形では中央ボタンが「階段/昇降路」になり、次階層へ降りるか、同じ階層内を移動するか選択できます。</li>
           <li><b>探索同調</b>：探索中に拾った未調律装備は、表示された同調Lvへ到達するとその探索中に装備できます。</li>
@@ -3339,10 +3428,25 @@ function applyRouteSelectionMasteryBonus(id){
  addLog(`進路熟練「灯台備蓄」により、補給路へ${provisionGainSummary(gain)}。`);
  return{provisions:gain.gained,requested:40,overflow:gain.overflow};
 }
+function routeFloorCount(plan=state?.routePlan){
+ if(!plan)return 0;
+ return Math.max(1,(plan.endFloor||plan.startFloor||1)-(plan.startFloor||1)+1);
+}
+function nextRouteEndFloor(fromFloor=state?.floor||0){
+ const first=Math.max(1,fromFloor+1);
+ return Math.ceil(first/5)*5;
+}
+function routePlanOnCurrentFloor(plan=state?.routePlan){
+ return !!plan&&state.floor>=plan.startFloor&&state.floor<=plan.endFloor;
+}
 function activeRoute(){
  const plan=state?.routePlan;
- if(!plan)return null;
- if(state.floor<plan.startFloor||state.floor>plan.endFloor)return null;
+ if(!routePlanOnCurrentFloor(plan)||plan.completed)return null;
+ return routeData[plan.id]||null;
+}
+function displayedRoute(){
+ const plan=state?.routePlan;
+ if(!routePlanOnCurrentFloor(plan))return null;
  return routeData[plan.id]||null;
 }
 function routeValue(key,fallback=0){
@@ -3358,18 +3462,61 @@ function routeProgressText(plan=state?.routePlan){
  if(!plan)return"";
  const route=routeData[plan.id];
  if(!route)return"";
- if(plan.completed)return`${route.short}・踏破`;
- const progress=clamp(state.floor-plan.startFloor+1,1,5);
+ if(plan.completed){
+  const mastery=typeof plan.masteryAfter==="number"?`・熟練${plan.masteryAfter}`:"";
+  return`${route.short}・踏破${mastery}`;
+ }
+ const length=routeFloorCount(plan);
+ const progress=clamp(state.floor-plan.startFloor+1,1,length);
  return state.floor===plan.endFloor
-  ?`${route.short}・終点`
-  :`${route.short} ${progress}/5`;
+  ?`${route.short}・終点 ${length}/${length}`
+  :`${route.short} ${progress}/${length}`;
 }
 function isRouteFinaleFloor(plan=state?.routePlan){
  return !!plan&&!plan.completed&&state.floor===plan.endFloor;
 }
 function routeFinaleDescription(plan=state?.routePlan){
  const route=plan?routeData[plan.id]:null;
- return route?`${route.finaleName}：${route.finaleBoss}`:"";
+ return route
+  ?`${route.finaleName}：${route.finaleBoss} 踏破報酬：${route.finaleReward}`
+  :"";
+}
+function routeFloorStatusHtml(plan=state?.routePlan){
+ if(!routePlanOnCurrentFloor(plan))return"";
+ const route=routeData[plan.id];
+ if(!route)return"";
+ if(plan.completed){
+  return`<div class="floorGoalRoute completed"><b>${route.label}・踏破済み</b><br>${plan.rewardSummary||route.finaleReward}${typeof plan.masteryAfter==="number"?` / 熟練${plan.masteryAfter}回`:""}</div>`;
+ }
+ if(isRouteFinaleFloor(plan)){
+  return`<div class="floorGoalRoute"><b>進路終点・${route.finaleName}</b><br>${route.finaleBoss}<br>踏破報酬：${route.finaleReward}</div>`;
+ }
+ return`<div class="floorGoalRoute"><b>${route.label} ${routeProgressText(plan)}</b><br>終点：${route.finaleName} / ${route.finaleReward}</div>`;
+}
+function maintainRoutePlanForCurrentFloor(writeLog=true){
+ const plan=state?.routePlan;
+ if(!plan||state.floor<=plan.endFloor)return false;
+ const route=routeData[plan.id];
+ if(!plan.completed){
+  const history=[...(state.routeHistory||[])].reverse().find(entry=>
+   entry.id===plan.id&&entry.startFloor===plan.startFloor&&!entry.completed&&!entry.expired
+  );
+  if(history){
+   history.expired=true;
+   history.expiredAtFloor=state.floor;
+  }
+  if(writeLog&&route)addLog(`進路「${route.label}」は終点を越えたため失効した。進路効果を解除した。`);
+ }
+ state.routePlan=null;
+ return true;
+}
+function routeFinaleIncomingMultiplier(enemy){
+ const value=Number(enemy?.routeDamageTaken||1);
+ return Number.isFinite(value)&&value>0?value:1;
+}
+function routeAdjustedEnemyDamage(enemy,amount,minimum=1){
+ const raw=Math.max(0,Number(amount)||0);
+ return Math.max(minimum,Math.round(raw*routeFinaleIncomingMultiplier(enemy)));
 }
 function prepareRouteFinaleFloor(){
  const plan=state.routePlan;
@@ -3420,13 +3567,23 @@ function promoteGearRarity(gear,steps=1){
  const order=["common","magic","rare","legendary"];
  const current=Math.max(0,order.indexOf(gear.rarity));
  const target=Math.min(order.length-1,current+Math.max(0,steps));
- if(target===current)return gear;
+ if(target===current){
+  if(order[target]==="legendary"&&!gear.trait){
+   gear.trait=choice(["berserk","echo","collector","glass"]);
+  }
+  return gear;
+ }
  const oldMul=rarityData[order[current]]?.mul||1;
  const nextMul=rarityData[order[target]]?.mul||oldMul;
  gear.atk=Math.max(0,Math.round((gear.atk||0)*nextMul/oldMul));
  gear.def=Math.max(0,Math.round((gear.def||0)*nextMul/oldMul));
  gear.rarity=order[target];
  gear.locked=target>=2;
+
+ // レア度だけ伝説になり、固有特性が空になる不整合を防ぐ。
+ if(gear.rarity==="legendary"&&!gear.trait){
+  gear.trait=choice(["berserk","echo","collector","glass"]);
+ }
  return gear;
 }
 function completeRouteAtBoss(enemy,rewardGear){
@@ -3467,7 +3624,9 @@ function completeRouteAtBoss(enemy,rewardGear){
  plan.completed=true;
  plan.completedAtFloor=state.floor;
  plan.rewardSummary=rewardSummary;
+ plan.masteryBefore=masteryBefore;
  plan.masteryAfter=masteryGain.after;
+ plan.completedDescription=`${route.finaleName}踏破 / ${rewardSummary}`;
  ensureRunStats().routesCompleted=(ensureRunStats().routesCompleted||0)+1;
 
  const history=[...(state.routeHistory||[])].reverse().find(entry=>
@@ -3484,8 +3643,8 @@ function completeRouteAtBoss(enemy,rewardGear){
   ?` / 解放：${masteryGain.unlocked.map(node=>node.name).join("・")}`
   :"";
  spawnCombatText(enemy.x,enemy.y,"ROUTE CLEAR","dodge",54);
- showCombatToast("進路踏破",`${route.label}・熟練${masteryGain.after}回${unlockText}`,"objective");
- addLog(`進路「${route.label}」を踏破した。${rewardSummary} / 進路熟練+1（累計${masteryGain.after}回）`);
+ showCombatToast("進路踏破",`${route.label}・${rewardSummary}・熟練${masteryGain.after}回${unlockText}`,"objective");
+ addLog(`進路「${route.label}」を踏破した。踏破報酬：${rewardSummary} / 進路熟練 ${masteryBefore}→${masteryGain.after}回${unlockText}`);
  saveMeta();
  return{
   route:route.id,label:route.label,rewardSummary,
@@ -6397,8 +6556,9 @@ function explodeBarrel(barrel){
   const tx=barrel.x+dx,ty=barrel.y+dy;
   const enemy=enemyAt(tx,ty);
   if(enemy){
-   enemy.hp-=12+state.floor*2;
-   addLog(enemy.name+"が爆風を受けた。");
+   const enemyDamage=routeAdjustedEnemyDamage(enemy,12+state.floor*2);
+   enemy.hp-=enemyDamage;
+   addLog(`${enemy.name}が爆風で${enemyDamage}ダメージ。`);
    if(enemy.hp<=0)defeatEnemy(enemy);
   }
   if(state.player.x===tx&&state.player.y===ty){
@@ -6417,8 +6577,9 @@ function updateEnvironment(){
   if(o.type==="oil"&&o.burning&&o.active){
    const enemy=enemyAt(o.x,o.y);
    if(enemy){
-    enemy.hp-=4+Math.floor(state.floor/2);
-    addLog(enemy.name+"が炎上した。");
+    const enemyDamage=routeAdjustedEnemyDamage(enemy,4+Math.floor(state.floor/2));
+    enemy.hp-=enemyDamage;
+    addLog(`${enemy.name}が燃える油で${enemyDamage}ダメージ。`);
     if(enemy.hp<=0)defeatEnemy(enemy);
    }
    if(state.player.x===o.x&&state.player.y===o.y){
@@ -6455,7 +6616,9 @@ function throwBomb(){
  addLog("火炎壺を投げた！");
  const enemy=enemyAt(target.x,target.y);
  if(enemy){
-  enemy.hp-=8+state.level*2;
+  const enemyDamage=routeAdjustedEnemyDamage(enemy,8+state.level*2);
+  enemy.hp-=enemyDamage;
+  addLog(`${enemy.name}へ火炎壺が直撃し${enemyDamage}ダメージ。`);
   if(enemy.hp<=0)defeatEnemy(enemy);
  }
  igniteAt(target.x,target.y,"火炎壺");
@@ -7398,14 +7561,13 @@ function renderFloorGoal(){
  el.innerHTML=`<div class="floorGoalHeader"><b>第${state.floor}層：${objective.title}</b><span class="floorGoalState">${objective.completed?"階段解放":"封印中"}</span></div>
   <div class="floorGoalText">${objective.desc}　${progress}/${objective.target}</div>
   <div class="floorGoalProgress"><i style="width:${ratio}%"></i></div>
-  <div class="floorGoalReward">報酬 ${floorObjectiveRewardText(objective)}${fallback?` / ${fallback}`:""}${
-   isRouteFinaleFloor()?` / 進路終点：${routeData[state.routePlan.id].finaleName}`:
-   state.routePlan?.completed&&state.floor===state.routePlan.endFloor?` / 進路踏破済み`:""
-  }</div>`;
+  <div class="floorGoalReward">報酬 ${floorObjectiveRewardText(objective)}${fallback?` / ${fallback}`:""}</div>
+  ${routeFloorStatusHtml()}`;
  positionFloorGoal();
 }
 
 function generateFloor(){
+ maintainRoutePlanForCurrentFloor(true);
  prepareLabyrinthReactionForExpedition();
  chooseFloorMutation();
  state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
@@ -7628,6 +7790,8 @@ const echoResonanceData={
  }
 };
 const echoResonanceOrder=["impact","flame","venom","trap","hunger","arcane"];
+const ECHO_MARK_CAP=2;
+const ECHO_STRAIN_EFFECT_CAP=3;
 function echoResonanceFromItems(items=[]){
  const counts={impact:0,flame:0,venom:0,trap:0,hunger:0,arcane:0};
  for(const gear of items.filter(Boolean)){
@@ -7718,19 +7882,52 @@ function normalizeGearEcho(g){
  if(!g)return emptyEchoMemory();
  if(!g.echoMemory||typeof g.echoMemory!=="object")g.echoMemory=emptyEchoMemory();
  const memory=g.echoMemory;
+
  if(typeof memory.recoveries!=="number")memory.recoveries=0;
  if(!memory.marks||typeof memory.marks!=="object")memory.marks={};
- for(const key of Object.keys(echoImprintData)){
-  if(typeof memory.marks[key]!=="number")memory.marks[key]=0;
-  memory.marks[key]=clamp(Math.floor(memory.marks[key]),0,2);
- }
  if(typeof memory.strain!=="number")memory.strain=0;
  if(typeof memory.stabilized!=="number")memory.stabilized=0;
  if(typeof memory.lastCause!=="string")memory.lastCause="";
  if(typeof memory.lastFloor!=="number")memory.lastFloor=0;
+ if(typeof memory.legacyOverflowConverted!=="number")memory.legacyOverflowConverted=0;
+
  memory.recoveries=Math.max(0,Math.floor(memory.recoveries));
  memory.strain=Math.max(0,Math.floor(memory.strain));
  memory.stabilized=Math.max(0,Math.floor(memory.stabilized));
+ memory.legacyOverflowConverted=Math.max(0,Math.floor(memory.legacyOverflowConverted));
+
+ for(const key of Object.keys(echoImprintData)){
+  if(typeof memory.marks[key]!=="number")memory.marks[key]=0;
+  memory.marks[key]=clamp(Math.floor(memory.marks[key]),0,ECHO_MARK_CAP);
+ }
+
+ // 旧セーブで刻印合計が2を超えている場合、
+ // 最後の死亡原因に近い刻印を優先して2段階だけ残し、超過分を歪みへ変換する。
+ const rawTotal=Object.values(memory.marks).reduce((sum,value)=>sum+(value||0),0);
+ if(rawTotal>ECHO_MARK_CAP){
+  const priority=[
+   echoMarkFromCause(memory.lastCause),
+   ...echoResonanceOrder
+  ].filter((key,index,array)=>key&&array.indexOf(key)===index);
+
+  const normalized={};
+  for(const key of echoResonanceOrder)normalized[key]=0;
+
+  let remaining=ECHO_MARK_CAP;
+  for(const key of priority){
+   if(remaining<=0)break;
+   const keep=Math.min(memory.marks[key]||0,remaining);
+   normalized[key]=keep;
+   remaining-=keep;
+  }
+
+  const kept=Object.values(normalized).reduce((sum,value)=>sum+value,0);
+  const overflow=Math.max(0,rawTotal-kept);
+  memory.marks=normalized;
+  memory.strain+=overflow;
+  memory.legacyOverflowConverted+=overflow;
+ }
+
  return memory;
 }
 function echoMarkRank(g,key){
@@ -7809,8 +8006,31 @@ function effectiveGearTags(g){
  tags.light+=echoMarkRank(g,"arcane");
  return tags;
 }
+function rawEchoStrainFromItems(items=[]){
+ return items.filter(Boolean).reduce((sum,g)=>sum+echoStrain(g),0);
+}
+function echoStrainProfile(items=[]){
+ const raw=rawEchoStrainFromItems(items);
+ return{
+  raw,
+  effective:Math.min(ECHO_STRAIN_EFFECT_CAP,raw),
+  cap:ECHO_STRAIN_EFFECT_CAP,
+  overflow:Math.max(0,raw-ECHO_STRAIN_EFFECT_CAP)
+ };
+}
+function equippedEchoStrainProfile(){
+ return echoStrainProfile(allEquippedItems());
+}
+function nextLoadoutEchoStrainProfile(meta=state.meta){
+ ensureMetaLoadouts(meta);
+ return echoStrainProfile(
+  lighthouseLoadoutSlots
+   .map(slot=>nextLoadoutGear(meta,slot))
+   .filter(Boolean)
+ );
+}
 function totalEchoStrain(){
- return Math.min(3,allEquippedItems().reduce((sum,g)=>sum+echoStrain(g),0));
+ return equippedEchoStrainProfile().effective;
 }
 function echoTrapReduction(){
  return Math.min(.32,allEquippedItems().reduce((sum,g)=>sum+echoMarkRank(g,"trap")*.05,0)+resonanceBonus("trapReduction"));
@@ -7820,20 +8040,81 @@ function echoStabilizeCost(g){
  const rarityCost={common:0,magic:8,rare:18,legendary:34}[g.rarity]||0;
  return Math.ceil(18+rarityCost+(g.itemLevel||1)*2+echoStrain(g)*16);
 }
+function echoStabilizeStatus(g,meta=state.meta){
+ const strain=echoStrain(g);
+ const cost=echoStabilizeCost(g);
+ const shards=Math.max(0,meta?.shards||0);
+
+ if(!g)return{
+  can:false,cost:0,shards,missing:0,
+  reason:"装備が見つかりません。"
+ };
+
+ if(strain<=0)return{
+  can:false,cost:0,shards,missing:0,
+  reason:"この装備に歪みはありません。"
+ };
+
+ if(shards<cost)return{
+  can:false,cost,shards,missing:cost-shards,
+  reason:`欠片不足 ${shards}/${cost}（あと${cost-shards}）`
+ };
+
+ return{
+  can:true,cost,shards,missing:0,
+  reason:`安定化可能 ${shards}/${cost}`
+ };
+}
 function stabilizeEchoGear(index){
  const gear=state.meta?.stash?.[index];
- if(!gear||echoStrain(gear)<=0)return false;
- const cost=echoStabilizeCost(gear);
- if((state.meta.shards||0)<cost){
-  addLog(`遺響安定化には${cost}欠片必要。`);
+ const status=echoStabilizeStatus(gear,state.meta);
+
+ if(!gear){
+  addLog("安定化する装備が見つからない。");
+  showCombatToast("安定化できない","装備が見つかりません","miss");
   return false;
  }
- if(!confirm(`「${gearLabel(gear)}」の歪み${echoStrain(gear)}を安定化しますか？\n\n必要：${cost}欠片\n刻印は維持されます。`))return false;
- state.meta.shards-=cost;
+
+ if(echoStrain(gear)<=0){
+  addLog(`「${gearLabel(gear)}」に安定化が必要な歪みはない。`);
+  showCombatToast("安定化不要","この装備に歪みはありません","miss");
+  renderHub();
+  return false;
+ }
+
+ if(!status.can){
+  addLog(`「${gearLabel(gear)}」を安定化できない。${status.reason}。`);
+  showCombatToast("欠片が足りない",status.reason,"miss");
+  renderHub();
+  return false;
+ }
+
+ const strain=echoStrain(gear);
+ const scoreBefore=Math.round(gearScore(gear));
+ const scoreAfter=Math.round(scoreBefore+echoGearScoreBreakdown(gear).strainPenalty);
+ if(!confirm(
+  `「${gearLabel(gear)}」の歪み${strain}を安定化しますか？\n\n`+
+  `必要：${status.cost}欠片\n`+
+  `所持：${status.shards}欠片\n`+
+  `推奨度：${scoreBefore} → ${scoreAfter}\n\n`+
+  `刻印・奪還回数は維持されます。`
+ ))return false;
+
+ state.meta.shards-=status.cost;
  const memory=normalizeGearEcho(gear);
  memory.stabilized+=memory.strain;
  memory.strain=0;
- addLog(`「${gearLabel(gear)}」の遺響を${cost}欠片で安定化した。刻印は維持された。`);
+
+ addLog(
+  `「${gearLabel(gear)}」の遺響を${status.cost}欠片で安定化した。`+
+  `刻印と奪還${memory.recoveries}回の記録は維持された。`
+ );
+ showCombatToast(
+  "遺響安定化",
+  `歪み${strain}→0・推奨度${scoreBefore}→${Math.round(gearScore(gear))}`,
+  "objective"
+ );
+
  saveMeta();
  renderHub();
  return true;
@@ -8284,9 +8565,10 @@ function applyElementHit(e,damage){
  if(element==="storm"){
   const chainRange=(state.meta?.adaptation==="anti_storm"?1:2)+(tagTier("storm")>=6?1:0)+(weaponType()==="staff"&&masteryLevel("staff")>=4?1:0);const nearby=state.enemies.find(o=>o!==e&&Math.abs(o.x-e.x)+Math.abs(o.y-e.y)<=chainRange);
   if(nearby){
-   nearby.hp-=Math.max(1,Math.floor(damage*(tagTier("storm")>=3?.55:.4)));
+   const chainDamage=routeAdjustedEnemyDamage(nearby,Math.max(1,Math.floor(damage*(tagTier("storm")>=3?.55:.4))));
+   nearby.hp-=chainDamage;
    if(tagTier("storm")>=10&&rng()<.25){nearby.status=nearby.status||{};nearby.status.frozen=Math.max(nearby.status.frozen||0,1)}
-   addLog("雷が "+nearby.name+" へ連鎖した。");if(nearby.hp<=0)defeatEnemy(nearby)
+   addLog(`雷が${nearby.name}へ連鎖し${chainDamage}ダメージ。`);if(nearby.hp<=0)defeatEnemy(nearby)
   }
  }
  if(element==="venom"){
@@ -8310,11 +8592,13 @@ function updateStatuses(){
   if(e.status.burning>0){
    let dmg=3+Math.floor(state.floor/3);
    if(hasTalent("pyromaniac"))dmg=Math.round(dmg*1.5);if(tagTier("fire")>=3)dmg=Math.round(dmg*1.25);
+   dmg=routeAdjustedEnemyDamage(e,dmg);
    e.hp-=dmg;e.status.burning--;
    addLog(e.name+"が炎上で "+dmg+" ダメージ。");
   }
   if(e.status.poison>0){
    let dmg=2+Math.floor(state.floor/4);if(tagTier("venom")>=6)dmg=Math.round(dmg*1.35);if(hasAbyssAdaptation("toxinBlood"))dmg=Math.max(1,Math.round(dmg*.65));
+   dmg=routeAdjustedEnemyDamage(e,dmg);
    e.hp-=dmg;e.status.poison--;
    addLog(e.name+"が毒で "+dmg+" ダメージ。");
   }
@@ -8440,7 +8724,8 @@ function damageEnemy(e,damage,label=""){
  }
  const guardMul=(e.type==="skeleton"&&e.guarding)?0.45:1;
  damage=applyTraitDamage(damage,e)*biomeDamageModifier(equippedElement())*tagDamageMultiplier(e)*lightDamageMultiplier(e);
- const dmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul*(mutation()?.damageMul||1)*(e.routeDamageTaken||1)));
+ const baseDmg=Math.max(1,Math.round((Math.round(damage)-e.def)*guardMul*(mutation()?.damageMul||1)));
+ const dmg=routeAdjustedEnemyDamage(e,baseDmg);
  ensureRunStats().damageDealt+=dmg;
  e.hp-=dmg;
  const wasCritical=String(label).includes("会心");
@@ -8456,7 +8741,12 @@ function damageEnemy(e,damage,label=""){
  if(weaponType()==="spear"&&masteryLevel("spear")>=3){
   const dx=Math.sign(e.x-state.player.x),dy=Math.sign(e.y-state.player.y);
   const second=enemyAt(e.x+dx,e.y+dy);
-  if(second&&second!==e){second.hp-=Math.max(1,Math.floor(dmg*.5));addLog("槍が "+second.name+" まで貫いた。");if(second.hp<=0)defeatEnemy(second)}
+  if(second&&second!==e){
+   const pierceDamage=routeAdjustedEnemyDamage(second,Math.max(1,Math.floor(dmg*.5)));
+   second.hp-=pierceDamage;
+   addLog(`槍が${second.name}まで貫き${pierceDamage}ダメージ。`);
+   if(second.hp<=0)defeatEnemy(second)
+  }
  }
  if(e.type==="skeleton"&&e.guarding)addLog(e.name+"が盾で威力を殺した。");
  if(e.intent&&dmg>=Math.max(5,Math.floor(e.maxHp*.28))){
@@ -8528,6 +8818,11 @@ function defeatEnemy(e){
  if(wasBoss){
   ensureRunStats().bossesDefeated++;
   state.bossDefeated=true;
+
+  // 撃破フラグを立てた後に目標を再評価する。
+  // 以前はフラグ更新前の評価だけだったため、番人目標が未達のまま残る場合があった。
+  updateFloorObjective();
+
   restoreLastStandFromWarden();
   const profile=wardenProfileFor(e);
   const rewardGear=rollGear((e.level||floorTargetLevel())+1);
@@ -8629,7 +8924,8 @@ function bomberExplosion(e){
   const dmg=applyHeroDamage(raw,e,{guardable:true});addLog("爆風で "+dmg+" ダメージ。");
  }
  for(const other of targets){
-  other.hp-=Math.max(2,Math.floor(e.atk*.8)-other.def);
+  const enemyDamage=routeAdjustedEnemyDamage(other,Math.max(2,Math.floor(e.atk*.8)-other.def));
+  other.hp-=enemyDamage;
   if(other.hp<=0)defeatEnemy(other);
  }
  state.enemies=state.enemies.filter(x=>x!==e);
@@ -8845,6 +9141,7 @@ function resolveWardenIntent(enemy,intent,cells,playerInTarget){
     addLog("根檻の中心へ留まり、閉じる根をやり過ごした。");
     ensureCombatStats().dodges++;
     recoverStamina(1);
+    updateFloorObjective();
    }else registerIntentDodge(enemy,intent);
   }
   clearEnemyIntent(enemy);
@@ -9047,8 +9344,11 @@ function enemyAttack(e,mult=1,label="攻撃"){
  }
 }
 function pickup(){
- const item=itemAt(state.player.x,state.player.y);if(!item)return;
+ const item=itemAt(state.player.x,state.player.y);
+ if(!item)return false;
+
  state.items=state.items.filter(i=>i!==item);
+
  if(item.type==="food"){
   const amount=Math.max(1,Math.floor(item.provisions||60));
   const gain=gainProvisions(amount);
@@ -9057,7 +9357,7 @@ function pickup(){
    item.provisions=amount;
    state.items.push(item);
    addLog(`携行糧は上限${gain.cap}手。乾燥肉は足元へ残した。`);
-   return
+   return false;
   }
 
   if(!item.provisionCounted){
@@ -9074,13 +9374,29 @@ function pickup(){
   }else{
    addLog(`乾燥肉を携行糧へ加えた。携行糧+${gain.gained}（${gain.after}/${gain.cap}手）。`);
   }
-  return
+  return true;
  }
- if(item.type==="potion"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("potion");state.consumables.potion++;addLog("治癒薬を拾った。");return}
- if(item.type==="identify"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("identify");state.consumables.identify++;addLog("鑑定紙片を拾った。");return}
- if(item.type==="purify"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("purify");state.consumables.purify++;addLog("解呪の灰を拾った。");return}
- if(item.type==="bomb"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("bomb");state.consumables.bomb=(state.consumables.bomb||0)+1;addLog("火炎壺を拾った。");return}
- if(item.type==="retreat"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("retreat");state.consumables.retreat=(state.consumables.retreat||0)+1;addLog("帰還楔を拾った。");return}
+
+ if(item.type==="potion"){
+  ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("potion");
+  state.consumables.potion++;addLog("治癒薬を拾った。");return true;
+ }
+ if(item.type==="identify"){
+  ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("identify");
+  state.consumables.identify++;addLog("鑑定紙片を拾った。");return true;
+ }
+ if(item.type==="purify"){
+  ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("purify");
+  state.consumables.purify++;addLog("解呪の灰を拾った。");return true;
+ }
+ if(item.type==="bomb"){
+  ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("bomb");
+  state.consumables.bomb=(state.consumables.bomb||0)+1;addLog("火炎壺を拾った。");return true;
+ }
+ if(item.type==="retreat"){
+  ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("retreat");
+  state.consumables.retreat=(state.consumables.retreat||0)+1;addLog("帰還楔を拾った。");return true;
+ }
  if(item.type==="oil"){
   ensureRunStats().itemsFound++;
   recordFloorPickup(false);
@@ -9094,21 +9410,29 @@ function pickup(){
   }else{
    addLog("灯油を拾った。必要な時に補充できる。");
   }
-  return
+  return true;
  }
+
  if(state.inventory.length>=inventoryCapacity()){
   addLog("荷物が満杯だ。装備を足元へ残し、整理画面を開いた。");
   state.items.push(item);
   setTimeout(()=>{renderInventory();$("inventoryOverlay").classList.remove("hidden")},0);
-  return
+  return false;
  }
+
  ensureRunStats().itemsFound++;
  ensureRunStats().gearFound++;
  recordFloorPickup(true);
  spawnPickupEffect("gear");
  if(typeof item.gear.locked!=="boolean")item.gear.locked=(rarityOrder[item.gear.rarity]||0)>=2;
  state.inventory.push(item.gear);
- sfx("pickup");addLog(item.gear.identified?`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。`:"正体不明の装備を拾った。");
+ sfx("pickup");
+ addLog(
+  item.gear.identified
+   ?`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。`
+   :"正体不明の装備を拾った。"
+ );
+ return true;
 }
 function triggerTrap(){
  const t=activeTrapAt(state.player.x,state.player.y);if(!t)return;
@@ -9369,11 +9693,12 @@ function refreshViewportHeight(){
 }
 function renderRouteChoices(){
  const nextFloor=state.floor+1;
- const endFloor=state.floor+5;
+ const endFloor=nextRouteEndFloor(state.floor);
+ const routeLength=endFloor-nextFloor+1;
  $("routeIntro").innerHTML=`
   <div class="routeSummary">
-   番人を倒したため、第${nextFloor}〜${endFloor}層の進路を選べます。
-   選択すると、そのまま次の階へ降ります。進路効果は次の番人階まで継続します。
+   番人を倒したため、第${nextFloor}〜${endFloor}層（全${routeLength}層）の進路を選べます。
+   選択すると、そのまま次の階へ降ります。進路効果は終点番人を倒すまで継続します。
   </div>`;
  $("routeChoices").innerHTML=Object.values(routeData).map(route=>{
   const effects=route.effects.map((effect,index)=>{
@@ -9417,7 +9742,7 @@ function chooseDescentRoute(id){
  state.routePlan={
   id,
   startFloor:state.floor+1,
-  endFloor:state.floor+5,
+  endFloor:nextRouteEndFloor(state.floor),
   chosenAfterFloor:state.floor,
   masteryAtChoice:routeMasteryLevel(id),
   completed:false,
@@ -9689,6 +10014,35 @@ function move(dx,dy){
  if(state.gameOver){render();return}
  endTurn();
 }
+function groundItemsAtPlayer(){
+ return(state.items||[]).filter(item=>
+  item.x===state.player.x&&item.y===state.player.y
+ );
+}
+function processCurrentGroundPickup(){
+ if(!canAct())return false;
+ const before=groundItemsAtPlayer();
+ if(!before.length)return false;
+
+ state.lastAction="ground_pickup";
+ const picked=pickup();
+
+ // 荷物満杯時は整理画面を開くだけでターンを進めない。
+ if(!picked){
+  render();
+  return false;
+ }
+
+ const remaining=groundItemsAtPlayer().length;
+ if(remaining>0){
+  addLog(`足元にまだ拾得物が${remaining}個残っている。中央の「回収」で続けられる。`);
+ }else{
+  addLog("足元の拾得物をすべて回収した。");
+ }
+
+ endTurn();
+ return true;
+}
 function waitTurn(){
  if(!canAct())return;
 
@@ -9701,6 +10055,11 @@ function waitTurn(){
   }else{
    attemptStairDescent(0,0,state.stairs.x,state.stairs.y);
   }
+  return;
+ }
+
+ if(groundItemsAtPlayer().length>0){
+  processCurrentGroundPickup();
   return;
  }
 
@@ -9926,11 +10285,39 @@ function salvageValue(g){
  const base={common:1,magic:3,rare:7,legendary:15}[g.rarity]||1;
  return base+Math.floor((g.itemLevel||1)/10)+Math.max(0,bondStage(g)-1);
 }
+function echoGearScoreBreakdown(g){
+ if(!g)return{markBonus:0,strainPenalty:0,total:0};
+
+ // 衝撃は防御、焦熱・蝕毒・幽光はタグ、飢越は追加充足として既存評価済み。
+ // 未評価だった罠識の実用価値をここで加算する。
+ const markBonus=echoMarkRank(g,"trap")*4;
+
+ // 最大気力を下げる歪みは重く減点する。
+ // 効果上限後の超過分も、安定化負担として小さく減点する。
+ const strain=echoStrain(g);
+ const strainPenalty=Math.min(strain,ECHO_STRAIN_EFFECT_CAP)*8+
+  Math.max(0,strain-ECHO_STRAIN_EFFECT_CAP)*2;
+
+ return{
+  markBonus,
+  strainPenalty,
+  total:markBonus-strainPenalty
+ };
+}
+function echoGearScoreText(g){
+ const detail=echoGearScoreBreakdown(g);
+ const parts=[];
+ if(detail.markBonus)parts.push(`罠識評価 +${detail.markBonus}`);
+ if(detail.strainPenalty)parts.push(`歪み評価 -${detail.strainPenalty}`);
+ return parts.join(" / ");
+}
 function gearScore(g){
  if(!g)return 0;
  const stats=applyBondTraitStats(g);
+ const echoScore=echoGearScoreBreakdown(g).total;
  return stats.atk*2.2+stats.def*2+gearSupplyBonus(g)*.12+(g.crit||0)*100+
-        gearTagPower(g)*1.35+(rarityOrder[g.rarity]||0)*5+bondStage(g)*3+(g.identified?1:-2);
+        gearTagPower(g)*1.35+(rarityOrder[g.rarity]||0)*5+bondStage(g)*3+
+        echoScore+(g.identified?1:-2);
 }
 function sortedInventoryItems(){
  const mode=state.inventorySort||"score";
@@ -10115,8 +10502,9 @@ function pickupGroundItemFromInventory(){
  if(item.type==="gear"&&state.inventory.length>=inventoryCapacity()){
   addLog("まだ荷物に空きがない。");return
  }
- pickup();
- saveGame();renderInventory();render();
+ const picked=pickup();
+ if(picked)saveGame();
+ renderInventory();render();
 }
 function returnAccessStatus(){
  if(!state||state.expeditionEnded||state.gameOver){
@@ -10491,9 +10879,14 @@ function renderLighthouseLoadout(){
  const returnedStats=loadoutSummaryStats(meta,returned,false);
  const nextStats=loadoutSummaryStats(meta,next,true);
  const nextResonance=nextLoadoutEchoResonance(meta);
+ const returnedStrain=echoStrainProfile(loadoutGearList(meta,returned,false));
+ const nextStrain=nextLoadoutEchoStrainProfile(meta);
  const selectedCount=Object.values(next).filter(Boolean).length;
 
- $("loadoutSummary").textContent=`出撃準備・次回装備 ${selectedCount}/8部位${nextResonance.tier?`・${echoResonanceLabel(nextResonance)}`:""}`;
+ $("loadoutSummary").textContent=
+  `出撃準備・次回装備 ${selectedCount}/8部位`+
+  `${nextResonance.tier?`・${echoResonanceLabel(nextResonance)}`:""}`+
+  `${nextStrain.raw?`・歪み${nextStrain.raw}/気力-${nextStrain.effective}`:""}`;
  $("loadoutPlanner").innerHTML=`
   <div class="loadoutIntro">
    左は直前の探索から帰還した時の装備、右は次の探索開始時に装備する予定です。
@@ -10506,14 +10899,15 @@ function renderLighthouseLoadout(){
     <div class="loadoutSlotGrid">
      ${lighthouseLoadoutSlots.map(slot=>loadoutGearCard(meta,slot,returned[slot],"returned")).join("")}
     </div>
-    <div class="loadoutTotals">装備合計　攻${returnedStats.atk} / 防${returnedStats.def} / 会心${Math.round(returnedStats.crit*100)}% / 追加充足${returnedStats.supply}</div>
+    <div class="loadoutTotals">装備合計　攻${returnedStats.atk} / 防${returnedStats.def} / 会心${Math.round(returnedStats.crit*100)}% / 追加充足${returnedStats.supply}${returnedStrain.raw?` / 歪み${returnedStrain.raw}（気力-${returnedStrain.effective}）`:""}</div>
    </section>
    <section class="loadoutColumn next">
     <h3>次回出撃時の装備</h3>
     <div class="loadoutSlotGrid">
      ${lighthouseLoadoutSlots.map(slot=>loadoutGearCard(meta,slot,nextLoadoutGear(meta,slot),"next")).join("")}
     </div>
-    <div class="loadoutTotals">装備合計　攻${nextStats.atk} / 防${nextStats.def} / 会心${Math.round(nextStats.crit*100)}% / 追加充足${nextStats.supply}</div>
+    <div class="loadoutTotals">装備合計　攻${nextStats.atk} / 防${nextStats.def} / 会心${Math.round(nextStats.crit*100)}% / 追加充足${nextStats.supply}${nextStrain.raw?` / 歪み${nextStrain.raw}（気力-${nextStrain.effective}${nextStrain.overflow?`・上限${nextStrain.cap}`:""}）`:""}</div>
+    ${nextStrain.overflow?`<div class="echoLoadoutWarning">次回装備の歪みは合計${nextStrain.raw}ですが、最大気力低下は上限${nextStrain.cap}です。超過${nextStrain.overflow}は追加低下しませんが、各装備へ残り安定化費用へ影響します。</div>`:""}
    </section>
   </div>
   <div class="loadoutActions">
@@ -10738,7 +11132,11 @@ function renderHub(){
  $("hubUpgrades").querySelectorAll("[data-upgrade]").forEach(b=>b.onclick=()=>buyMetaUpgrade(b.dataset.upgrade));
  const stashItems=m.stash||[];
  const totalStashShards=stashItems.reduce((sum,g)=>sum+stashSalvageValue(g),0);
- $("stashSummary").textContent=`持ち帰り倉庫 ${stashItems.length}/20・全分解 ${totalStashShards}欠片`;
+ const stashStrain=stashItems.reduce((sum,g)=>sum+echoStrain(g),0);
+ const unstableGear=stashItems.filter(g=>echoStrain(g)>0).length;
+ $("stashSummary").textContent=
+  `持ち帰り倉庫 ${stashItems.length}/20・全分解 ${totalStashShards}欠片`+
+  `${stashStrain?`・歪み総量${stashStrain}（${unstableGear}個）`:""}`;
  $("stashList").innerHTML=`<div class="stashSummaryLine">
   装備名の色でレア度を確認できます。分解ボタンには獲得する欠片数を表示しています。
  </div>`+
@@ -10748,6 +11146,8 @@ function renderHub(){
    const salvage=stashSalvageValue(g);
    const loadoutSlot=selectedLoadoutSlot(m,g.id);
    const inherited=!!loadoutSlot;
+   const stabilizeStatus=echoStabilizeStatus(g,m);
+   const echoScoreText=echoGearScoreText(g);
    return`
    <div class="itemRow ${inherited?"protectedItem":""}">
     <div class="top">
@@ -10761,6 +11161,7 @@ function renderHub(){
      ${tagSummaryHtml(effectiveGearTags(g))}<br>
      <span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0} / ${bondTraitSummary(g)}</span>
      ${echoImprintHtml(g)}
+     ${echoScoreText?`<span class="echoScoreNote ${echoGearScoreBreakdown(g).total<0?"negative":""}">推奨度補正：${echoScoreText}</span>`:""}
      分解価値：<span class="stashShardValue">${salvage}欠片</span>
     </div>
     <div class="stashActions">
@@ -10770,7 +11171,13 @@ function renderHub(){
        :`次回の${equippedSlotLabel(normalizeLoadoutSlot(g.slot))}に設定`
      }</button>
      <button type="button" data-salvage="${i}">分解 +${salvage}欠片</button>
-     ${echoStrain(g)>0?`<button type="button" class="echoStabilizeBtn" data-stabilize-echo="${i}" ${(m.shards||0)<echoStabilizeCost(g)?"disabled":""}>安定化 ${echoStabilizeCost(g)}欠片</button>`:""}
+     ${echoStrain(g)>0
+      ?`<button type="button" class="echoStabilizeBtn ${stabilizeStatus.can?"":"blocked"}" data-stabilize-echo="${i}" title="${stabilizeStatus.reason}">${
+        stabilizeStatus.can
+         ?`安定化 ${stabilizeStatus.cost}欠片`
+         :`安定化不可・あと${stabilizeStatus.missing}欠片`
+       }</button><span class="echoStabilizeReason">${stabilizeStatus.reason}</span>`
+      :""}
     </div>
    </div>`;
   }).join(""):'<p class="note">持ち帰った装備はありません。</p>');
@@ -10875,7 +11282,7 @@ function renderInventory(){
   const unknownHint=hasTalent("keen_eye")?`攻撃 +${g.atk} / 防御 +${g.def} までは見抜ける。`:"性能不明。";
   const equipReady=canEquipGearNow(g);
   const detail=g.identified
-   ?`ILv${g.itemLevel||1} / ${gearAttunementBadgeHtml(g)} / 推奨度 ${Math.round(gearScore(g))} / ${g.weaponType?"型："+weaponData[g.weaponType].label+" / ":""}攻撃 +${g.atk} / 防御 +${g.def}${g.hunger?" / 最大充足 +"+gearSupplyBonus(g):""}${g.crit?" / 会心 +"+Math.round(g.crit*100)+"%":""}${elem}${trait}<br>${tagSummaryHtml(effectiveGearTags(g))}<br><span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0}${nextBondKills(g)?` / 次:${nextBondKills(g)}`:" / 最大"}</span><br>進化:${bondTraitSummary(g)}${echoImprintHtml(g)}<br>${compareText(g)}<br>${tagComparisonHtml(g)}`
+   ?`ILv${g.itemLevel||1} / ${gearAttunementBadgeHtml(g)} / 推奨度 ${Math.round(gearScore(g))} / ${g.weaponType?"型："+weaponData[g.weaponType].label+" / ":""}攻撃 +${g.atk} / 防御 +${g.def}${g.hunger?" / 最大充足 +"+gearSupplyBonus(g):""}${g.crit?" / 会心 +"+Math.round(g.crit*100)+"%":""}${elem}${trait}<br>${tagSummaryHtml(effectiveGearTags(g))}<br><span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0}${nextBondKills(g)?` / 次:${nextBondKills(g)}`:" / 最大"}</span><br>進化:${bondTraitSummary(g)}${echoImprintHtml(g)}${echoGearScoreText(g)?`<span class="echoScoreNote ${echoGearScoreBreakdown(g).total<0?"negative":""}">推奨度補正：${echoGearScoreText(g)}</span>`:""}<br>${compareText(g)}<br>${tagComparisonHtml(g)}`
    :`${gearAttunementBadgeHtml(g)}<br>${unknownHint} 鑑定紙片1枚、現地素材2、または8Gで鑑定可能。装備して確かめることもできる。`;
   row.innerHTML=`<div class="top">${title}<span>${g.locked?"🔒 ":""}${equippedSlotLabel(g.slot)}</span></div><div class="desc">${detail}</div>
    <div class="itemActions">
@@ -11029,7 +11436,9 @@ function loadGame(){
   }
   for(const entry of state.routeHistory){
    if(typeof entry.completed!=="boolean")entry.completed=false;
+   if(typeof entry.expired!=="boolean")entry.expired=false;
   }
+  maintainRoutePlanForCurrentFloor(true);
   if(isRouteFinaleFloor()){
    prepareRouteFinaleFloor();
    for(const enemy of state.enemies||[]){
@@ -11125,9 +11534,9 @@ function showFloorBanner(){
  const extra=[];
  if(mutation())extra.push(`異変：${mutation().label}`);
  if(adaptation())extra.push(`環境適応：${adaptation().label}`);
- if(activeRoute()){
-  const route=activeRoute();
-  extra.push(`進路：${route.label}${isRouteFinaleFloor()?"・終点":state.routePlan?.completed?"・踏破":""}`);
+ if(displayedRoute()){
+  const route=displayedRoute();
+  extra.push(`進路：${routeProgressText()}`);
  }
  if(deathEchoForCurrentFloor())extra.push("遺響：失った装備の回収地点");
  const resonance=currentEchoResonance();
@@ -11149,7 +11558,8 @@ function showFloorBanner(){
    <span>${biome.label}</span>
    ${extra.map(label=>`<span>${label}</span>`).join("")}
   </div>
-  <div class="floorBannerGoal"><b>階層目標</b><br>${ensureFloorObjective().title}：${ensureFloorObjective().desc}</div>`;
+  <div class="floorBannerGoal"><b>階層目標</b><br>${ensureFloorObjective().title}：${ensureFloorObjective().desc}</div>
+  ${isRouteFinaleFloor()?`<div class="floorBannerRouteFinale"><b>${routeData[state.routePlan.id].finaleName}</b><br>${routeFinaleDescription()}</div>`:""}`;
 
  banner.classList.add("show");
  clearTimeout(bannerTimer);
@@ -11171,6 +11581,7 @@ function renderHero(){
  const threat=currentThreatForecast();
  const stand=lastStandStatus();
  const resonance=currentEchoResonance();
+ const strainProfile=equippedEchoStrainProfile();
  const reaction=activeLabyrinthReaction();
  const threatClass=threat.certainLethal?"lethal":threat.possibleLethal?"warning":"";
  const threatText=threat.count
@@ -11181,7 +11592,7 @@ function renderHero(){
  $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}${threat.possibleLethal?` <span class="mortalWarning ${threat.certainLethal?"certain":""}">${threat.certainLethal?"確定致死":"致死圏"}</span>`:""}</div>
-  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}/${provisionCapacity()}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${reaction?` <span class="labyrinthReactionBadge ${labyrinthReactionData[reaction.id]?.tone==="death"?"danger":""}">反応:${reactionShortLabel(reaction)}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
+  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}/${provisionCapacity()}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${displayedRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${strainProfile.raw?` <span class="echoStrainState ${strainProfile.overflow?"capped":""}">歪み:${strainProfile.raw} / 気力-${strainProfile.effective}${strainProfile.overflow?`・効果上限${strainProfile.cap}`:""}</span>`:""}${reaction?` <span class="labyrinthReactionBadge ${labyrinthReactionData[reaction.id]?.tone==="death"?"danger":""}">反応:${reactionShortLabel(reaction)}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
   <div class="resourceGrid">
    <div class="resourceCell hpResource">
     <div class="resourceHeader"><b>HP</b><span class="resourceValue">${h.hp}/${h.maxHp}</span></div>
@@ -11191,7 +11602,7 @@ function renderHero(){
    <div class="resourceCell staminaResource">
     <div class="resourceHeader"><b>気力</b><span class="resourceValue">${h.stamina}/${effectiveMaxStamina()}</span></div>
     <div class="staminaBar"><div class="staminaFill" style="width:${100*h.stamina/effectiveMaxStamina()}%"></div></div>
-    <div class="resourceNote">通常攻撃消費 ${weaponData[weaponType()].cost}</div>
+    <div class="resourceNote">通常攻撃消費 ${weaponData[weaponType()].cost}${strainProfile.raw?` / 歪みで最大-${strainProfile.effective}`:""}</div>
    </div>
   </div>
   <div class="threatReadout ${threatClass}">${threatText}${
@@ -12138,8 +12549,14 @@ function renderSkills(){
     ?"階段を降りるか、古い昇降路を使うか選択する"
     :"現在の階段を使って次の階層へ進む";
  }else{
-  waitButton.textContent="休息";
-  waitButton.title="その場で1ターン待機し、気力を5回復する";
+  const groundCount=groundItemsAtPlayer().length;
+  if(groundCount>0){
+   waitButton.textContent=`回収 ${groundCount}`;
+   waitButton.title=`足元の拾得物${groundCount}個を順番に回収する`;
+  }else{
+   waitButton.textContent="休息";
+   waitButton.title="その場で1ターン待機し、気力を5回復する";
+  }
  }
 
  for(const k of ["guard","heal","search"]){
