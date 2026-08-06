@@ -2675,11 +2675,23 @@ body{
  color:#dbe4e1;
 }
 
+
+/* v3.10.9.2 START FLOW LOCK */
+#titleStateNote{
+ margin-top:8px;
+ padding:7px 8px;
+ border-left:3px solid #5b7780;
+ border-radius:6px;
+ background:#10181c;
+ color:#bacbd1;
+ line-height:1.5;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.9.1 SHORTCUT STAIR FIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.9.2 START FLOW LOCK</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2730,14 +2742,15 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 階段と昇降路の分離</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 探索開始経路の固定</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
       <div>Wizardry：暗闇・罠・死の重さ</div><div>Diablo：武器ビルド・接辞装備</div>
     </div>
-    <button type="button" class="modalBtn" id="newGameBtn">新しい探索を始める</button>
-    <button type="button" class="modalBtn hidden" id="continueBtn">続きから</button>
+    <button type="button" class="modalBtn hidden" id="newGameBtn">灯台から始める</button>
+    <button type="button" class="modalBtn hidden" id="continueBtn">探索を再開</button>
+    <p class="note" id="titleStateNote">保存状態を確認しています。</p>
     <p class="note">画面はiPhone縦持ち向けです。スワイプまたは方向ボタンで移動します。</p>
   </div>
 </div>
@@ -3138,7 +3151,7 @@ body{
     <p id="gameOverText" class="expeditionResultLead"></p>
     <div id="expeditionResultBody"></div>
     <button class="modalBtn" id="debriefHubBtn">灯台へ進む</button>
-    <button class="modalBtn hidden" id="restartBtn">新しい探索者で再挑戦</button>
+    <button class="modalBtn hidden" id="restartBtn">灯台へ戻る</button>
   </div>
 </div>
 
@@ -4576,28 +4589,39 @@ function migrateLegacyLighthouseSession(){
  }));
  return true;
 }
-function updateContinueAvailability(){
- const button=$("continueBtn");
- if(!button)return;
- const active=hasActiveExpeditionSave();
- const lighthouse=hasLighthouseSession();
- button.classList.toggle("hidden",!active&&!lighthouse);
- button.textContent=active
-  ?"続きから（探索中）"
-  :lighthouse
-   ?"続きから（灯台）"
-   :"続きから";
+function titleStartupMode(){
+ if(hasActiveExpeditionSave())return"active";
+ if(hasLighthouseSession())return"lighthouse";
+ return"first";
 }
-function restoreLighthouseSession(){
- const session=readLighthouseSession();
- if(!session)return false;
+function updateContinueAvailability(){
+ const continueButton=$("continueBtn");
+ const firstButton=$("newGameBtn");
+ const note=$("titleStateNote");
+ if(!continueButton||!firstButton)return;
 
- const meta=loadMeta()||defaultMeta();
+ const mode=titleStartupMode();
+ continueButton.classList.toggle("hidden",mode==="first");
+ firstButton.classList.toggle("hidden",mode!=="first");
+
+ if(mode==="active"){
+  continueButton.textContent="探索を再開";
+  if(note)note.textContent="探索中の記録があります。装備・階層・状態を維持して再開します。別の探索を開始することはできません。";
+ }else if(mode==="lighthouse"){
+  continueButton.textContent="灯台へ戻る";
+  if(note)note.textContent="灯台の記録があります。灯台で装備や強化を整えてから、次の探索へ出発します。";
+ }else{
+  firstButton.textContent="灯台から始める";
+  if(note)note.textContent="初めての探索者は灯台から始まります。最初の武器は灯台から出発する際に選択します。";
+ }
+}
+function openLighthouseState(meta,sessionPhase="hub",report=null){
  state=freshState();
- state.meta=meta;
+ state.meta=meta||defaultMeta();
  ensureMetaLoadouts(state.meta);
+ ensureAppearanceMeta(state.meta);
  state.expeditionEnded=true;
- state.gameOver=session.outcome==="death";
+ state.gameOver=false;
  state.hero.hp=state.hero.maxHp;
  state.hero.stamina=effectiveMaxStamina();
  state.hunger=effectiveMaxHunger();
@@ -4616,10 +4640,10 @@ function restoreLighthouseSession(){
  renderLightButton();
  render();
 
- const report=session.report||state.meta.lastExpeditionReport;
- if(session.phase==="debrief"&&report){
+ if(sessionPhase==="debrief"&&report){
   state.meta.lastExpeditionReport=report;
   showExpeditionReport(report);
+  saveLighthouseSession("debrief");
  }else{
   renderHub();
   $("returnToAbyssBtn").classList.add("hidden");
@@ -4628,6 +4652,37 @@ function restoreLighthouseSession(){
   saveLighthouseSession("hub");
  }
  return true;
+}
+function beginAtLighthouse(){
+ if(hasActiveExpeditionSave()||hasLighthouseSession()){
+  updateContinueAvailability();
+  return false;
+ }
+ const meta=loadMeta()||defaultMeta();
+ localStorage.setItem("abyssalRootsMeta",JSON.stringify(meta));
+ return openLighthouseState(meta,"hub",null);
+}
+function recoverBrokenExpeditionToLighthouse(){
+ const meta=loadMeta()||defaultMeta();
+ localStorage.removeItem(ACTIVE_SAVE_KEY);
+ localStorage.removeItem("abyssalRootsSoloV4Backup");
+ clearLighthouseSession();
+
+ const restored=openLighthouseState(meta,"hub",null);
+ if(restored){
+  addLog("探索記録を復元できなかったため、現在の探索を破棄して灯台へ退避した。");
+  saveLighthouseSession("hub");
+ }
+ updateContinueAvailability();
+ return restored;
+}
+
+function restoreLighthouseSession(){
+ const session=readLighthouseSession();
+ if(!session)return false;
+ const meta=loadMeta()||defaultMeta();
+ const report=session.report||meta.lastExpeditionReport||null;
+ return openLighthouseState(meta,session.phase,report);
 }
 function defaultMeta(){
  const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
@@ -12121,29 +12176,20 @@ function renderSkills(){
 }
 function render(){if(!state)return;recordEchoResonance();renderStats();renderHero();renderLog();renderSkills();renderFloorGoal();renderReturnAccess();draw()}
 function startNew(){
- try{
-  const meta=loadMeta()||defaultMeta();
-  ensureMetaLoadouts(meta);
-  const preparation=prepareDepartureProtection(meta);
-  if(!preparation.ok)return;
-  localStorage.setItem("abyssalRootsMeta",JSON.stringify(meta));
-  clearLighthouseSession();
-  state=freshState();
-  state.protectionContract=preparation.contract;
-  $("titleOverlay").classList.add("hidden");
-  $("gameOverOverlay").classList.add("hidden");
-  $("expeditionResultBody").innerHTML="";
-  $("hubOverlay").classList.add("hidden");
-  $("eventOverlay").classList.add("hidden");
-  $("inspectOverlay").classList.add("hidden");
-  renderLightButton();
-  beginPreparedFreshRun();
- }catch(error){
-  console.error("New run initialization failed",error);
-  alert("新しい探索の初期化に失敗しました。ページを再読み込みしてください。");
- }
+ // タイトル画面から探索を直接初期化する旧経路は廃止。
+ // 新しい探索は必ず灯台の startFreshRunFromHub() から開始する。
+ return beginAtLighthouse();
 }
-$("newGameBtn").onclick=event=>{event.preventDefault();ensureAudio();startAmbient();startNew()};$("restartBtn").onclick=startNew;$("debriefHubBtn").onclick=openLighthouseAfterDebrief;document.querySelectorAll(".starterBtn").forEach(b=>{
+$("newGameBtn").onclick=event=>{
+ event.preventDefault();
+ ensureAudio();
+ startAmbient();
+ beginAtLighthouse();
+};
+$("restartBtn").onclick=()=>{
+ clearLighthouseSession();
+ openLighthouseState(loadMeta()||defaultMeta(),"hub",null);
+};$("debriefHubBtn").onclick=openLighthouseAfterDebrief;document.querySelectorAll(".starterBtn").forEach(b=>{
  b.addEventListener("click",ev=>{
   ev.preventDefault();
   ev.stopPropagation();
@@ -12152,19 +12198,32 @@ $("newGameBtn").onclick=event=>{event.preventDefault();ensureAudio();startAmbien
  });
 });
 $("continueBtn").onclick=()=>{
+ const mode=titleStartupMode();
  let restored=false;
- if(hasActiveExpeditionSave()){
+
+ if(mode==="active"){
   restored=loadGame();
   if(restored){
    $("titleOverlay").classList.add("hidden");
    $("soundBtn").textContent=state.audio?.enabled?"音ON":"音OFF";
    if(state.audio?.enabled){ensureAudio();startAmbient()}
    renderLightButton();
+   return;
   }
+
+  const evacuated=recoverBrokenExpeditionToLighthouse();
+  alert(
+   evacuated
+    ?"探索中の保存を復元できなかったため、その探索を破棄して灯台へ退避しました。装備を保持したまま第1層へ戻る処理は行っていません。"
+    :"探索中の保存を復元できませんでした。ページを再読み込みしてください。"
+  );
+  return;
  }
- if(!restored&&hasLighthouseSession()){
+
+ if(mode==="lighthouse"){
   restored=restoreLighthouseSession();
  }
+
  if(!restored){
   updateContinueAvailability();
   alert("再開できる保存状態が見つかりませんでした。");
