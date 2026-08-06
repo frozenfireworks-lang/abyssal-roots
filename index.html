@@ -689,7 +689,7 @@ body{
     right:6px;
     bottom:calc(var(--safe-bottom) + 36px);
     left:6px;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(2,1fr);
     gap:5px;
     margin:0!important;
     padding:7px!important;
@@ -2281,11 +2281,150 @@ body{
  color:#fff0f3;
 }
 
+
+/* v3.10.5 GEAR ATTUNEMENT */
+.attunementState{
+ display:inline-block;
+ padding:1px 5px;
+ border:1px solid #65727a;
+ border-radius:999px;
+ color:#cbd8dd;
+ background:#151b20;
+ font-size:8px;
+ line-height:1.4;
+ vertical-align:middle;
+}
+.attunementState.attuned{
+ border-color:#4f897c;
+ background:#10221d;
+ color:#bcebdc;
+}
+.attunementState.ready{
+ border-color:#887244;
+ background:#241f11;
+ color:#efdc99;
+}
+.attunementState.locked{
+ border-color:#87505c;
+ background:#26141a;
+ color:#efb2bd;
+}
+.attunementNote{
+ margin-top:5px;
+ padding:5px 7px;
+ border-left:3px solid #557f75;
+ border-radius:5px;
+ background:#101a18;
+ color:#bdd9d1;
+ font-size:8px;
+ line-height:1.45;
+}
+
+
+/* v3.10.5.1 LAST STAND CLARITY */
+#lastStandBtn{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:1px;
+ min-height:42px;
+ white-space:normal;
+ line-height:1.05;
+}
+#lastStandBtn span{
+ display:block;
+ font-size:9px;
+ font-weight:800;
+}
+#lastStandBtn small{
+ display:block;
+ font-size:6.5px;
+ color:inherit;
+ opacity:.88;
+}
+.lastStandConfirmCard{
+ width:min(100%,390px);
+ border-color:#9a7147;
+ background:linear-gradient(180deg,#2a2118,#15110e);
+}
+.lastStandConfirmCard h2{
+ color:#ffe0a8;
+}
+.lastStandConfirmSummary{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:6px;
+ margin:8px 0;
+}
+.lastStandConfirmStat{
+ padding:7px 5px;
+ border:1px solid #5b4936;
+ border-radius:8px;
+ background:#17120e;
+ text-align:center;
+}
+.lastStandConfirmStat b{
+ display:block;
+ color:#f1d18e;
+ font-size:14px;
+}
+.lastStandConfirmStat small{
+ display:block;
+ margin-top:2px;
+ color:#bcae96;
+ font-size:8px;
+}
+.lastStandConfirmEffect{
+ margin-top:8px;
+ padding:8px 9px;
+ border:1px solid #6f603d;
+ border-radius:8px;
+ background:#1d190d;
+ color:#ebdca4;
+ font-size:10px;
+ line-height:1.55;
+}
+.lastStandConfirmWarning{
+ margin-top:8px;
+ padding:8px 9px;
+ border-left:3px solid #a65261;
+ border-radius:6px;
+ background:#251218;
+ color:#efb4bf;
+ font-size:9px;
+ line-height:1.55;
+}
+.lastStandConfirmWarning.lethal{
+ border-color:#df6b57;
+ background:#2c160f;
+ color:#ffd1b3;
+}
+.lastStandConfirmActions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:10px;
+}
+.lastStandConfirmActions .modalBtn{
+ margin-top:0;
+}
+.lastStandCancel{
+ border-color:#665b51;
+ background:linear-gradient(180deg,#312b26,#1e1a17);
+ color:#ddd5cc;
+}
+.lastStandExecute{
+ border-color:#bd7f3f;
+ background:linear-gradient(180deg,#6c421d,#3c250f);
+ color:#fff1c7;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.4.3 FIELD SALVAGE CONFIRM</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.5.2 LAST STAND RENEWAL</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2320,7 +2459,9 @@ body{
 <div class="quickBar">
 <button type="button" class="miniBtn" id="quickPotion">薬</button>
 <button type="button" class="miniBtn" id="quickBomb">壺</button>
-<button type="button" class="miniBtn" id="lastStandBtn">踏留 1</button>
+<button type="button" class="miniBtn" id="lastStandBtn">
+  <span>踏み止まり</span><small>残り1・気力5</small>
+</button>
 <button type="button" class="miniBtn" id="menuBtn" aria-expanded="false">メニュー</button>
 </div>
 <div class="safariScrollHint">下へ少しスワイプするとSafariのツールバーが縮みます。ホーム画面追加なら全画面で遊べます。</div><div id="footerBtns">
@@ -2334,7 +2475,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 現地分解の確認画面</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 踏み止まり強化と番人回復</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2385,6 +2526,17 @@ body{
     <div id="consumableList"></div>
     <div id="inventoryList"></div>
     <button class="modalBtn" id="closeInventory">閉じる</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="lastStandOverlay">
+  <div class="card lastStandConfirmCard" role="dialog" aria-modal="true" aria-labelledby="lastStandConfirmTitle">
+    <h2 id="lastStandConfirmTitle">踏み止まりの確認</h2>
+    <div id="lastStandConfirmBody"></div>
+    <div class="lastStandConfirmActions">
+      <button type="button" class="modalBtn lastStandCancel" id="cancelLastStand">戻る</button>
+      <button type="button" class="modalBtn lastStandExecute" id="confirmLastStand">気力5で構える</button>
+    </div>
   </div>
 </div>
 
@@ -2514,7 +2666,8 @@ body{
           <li><b>欠片保険</b>は最大3部位まで指定でき、出撃時に性能依存の保険料を支払います。死亡時のみ現在状態を倉庫へ回収します。</li>
           <li><b>魂還石</b>は深層番人から極低確率で入手できます。携行設定中はHP0の瞬間に1個消費し、死亡を緊急帰還へ置き換えます。</li>
           <li><b>致死予測</b>は、現在プレイヤーを狙って固定されている敵予兆の合計被害範囲です。移動で予兆から外れれば予測も消えます。</li>
-          <li><b>決死の踏み止まり</b>は探索中1回、気力5を使って次の敵行動へ備えます。致命傷をHP1で耐えて残りの敵行動を中断しますが、発動しなくても使い切りです。</li>
+          <li><b>踏み止まり</b>は気力5を使って次の敵行動へ備えます。致命傷を耐えるとHPを最大HPの25%まで立て直し、気力+3、残りの敵行動中断、2行動の衰弱が発生します。発動しなくても使い切りです。</li>
+          <li>ボタンを押すと確認画面が開き、現在HP・固定予測被害・使用後の気力を確認できます。「気力5で構える」を押した時だけ実行します。</li>
           <li><b>死亡時は餓死を含め、装備中・荷物内の非初期装備がすべて全損対象</b>です。未携行の倉庫装備だけが安全です。</li>
           <li><b>遺響回収</b>：死亡時、保険対象外の携行装備から推奨度上位3個が死亡階層へ残ります。次の探索で同じ階へ到達し、遺響守を倒して墓標へ触れると回収できます。</li>
           <li>遺響は1件だけ保持されます。回収前に再び死亡すると以前の遺響は消滅し、新しい死亡地点へ置き換わります。</li>
@@ -2529,7 +2682,8 @@ body{
           <li>ミニマップは右上固定の半透明表示です。探索者がミニマップの真下へ入った時だけ、背景・地形・マーカーをさらに薄くします。</li>
           <li><b>迷宮反応</b>：前回の死亡原因・帰還深度・戦い方から、次の1探索だけ浅層の環境が変化します。効果は第1〜5層です。</li>
           <li>迷宮反応には救済効果と代償があります。次の内容は探索結果と灯台で事前確認できます。</li>
-          <li>踏み止まり発動後は3行動の衰弱となり、最大気力-2・攻撃力18%低下が発生します。</li>
+          <li>踏み止まり発動後は2行動の衰弱となり、最大気力-2・攻撃力18%低下が発生します。</li>
+          <li>番人を倒すと踏み止まりは残り1回へ回復します。未使用なら1回を維持し、2回分を蓄積することはできません。</li>
         </ul>
         <div class="helpNote">このゲームは「帰らずに粘るほど強くなる」のではなく、「どこで帰るか」が大きな判断になります。</div>
       </div>
@@ -2541,6 +2695,9 @@ body{
         <ul>
           <li>荷物が満杯になったら、不要装備を<b>現地分解</b>して素材にできます。</li>
           <li>単品分解・通常品一括分解のどちらも確認画面が開きます。装備名、獲得素材、対象数を確認してから実行してください。</li>
+          <li><b>探索同調</b>：探索中に拾った未調律装備は、表示された同調Lvへ到達するとその探索中に装備できます。</li>
+          <li><b>灯台調律</b>：未調律装備を生存帰還・魂還石・装備保険で灯台へ届けると自動調律され、次回からLv1で装備できます。</li>
+          <li>遺響から奪還した装備は再び未調律になります。現在の探索で同調Lvを満たすか、もう一度灯台へ持ち帰る必要があります。</li>
           <li>素材はその探索中だけ有効な<b>荷物拡張・武器仮補強・防具仮補強・鑑定</b>に使えます。</li>
           <li>余った素材は帰還時に<b>深淵の欠片</b>へ変換されます。</li>
           <li>未鑑定装備は性能も呪いも不明です。呪具は解呪するまで外せません。</li>
@@ -3632,7 +3789,7 @@ function restoreLighthouseSession(){
  return true;
 }
 function defaultMeta(){
- const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],balanceMigrations:{hungerV31042:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
+ const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
  meta.appearance=defaultAppearance();
  return meta;
 }
@@ -3823,7 +3980,13 @@ function normalizeLoadoutSlot(slot){
 }
 function ensureMetaLoadouts(meta){
  meta.stash=meta.stash||[];
- meta.stash.forEach(normalizeGearEcho);
+ meta.stash.forEach(g=>{
+  normalizeGearEcho(g);
+  if(typeof g.requiredLevel!=="number")g.requiredLevel=itemRequiredLevel(g.itemLevel||1);
+  g.attuned=true;
+  g.attunedAt=g.attunedAt||Date.now();
+  g.attunementSource=g.attunementSource||"lighthouse";
+ });
  if(!meta.nextLoadout||typeof meta.nextLoadout!=="object")meta.nextLoadout=emptyLighthouseLoadout();
  const normalized=emptyLighthouseLoadout();
  for(const slot of lighthouseLoadoutSlots){
@@ -3835,7 +3998,7 @@ function ensureMetaLoadouts(meta){
  if(meta.heirloom){
   const legacy=meta.heirloom;
   const legacySlot=normalizeLoadoutSlot(legacy.slot||"weapon");
-  if(!meta.stash.some(g=>g.id===legacy.id))meta.stash.push(cloneGear(legacy));
+  if(!meta.stash.some(g=>g.id===legacy.id))meta.stash.push(attuneGearAtLighthouse(legacy,"legacy"));
   if(!meta.nextLoadout[legacySlot])meta.nextLoadout[legacySlot]=legacy.id;
   meta.heirloom=null;
  }
@@ -3851,7 +4014,7 @@ function ensureMetaLoadouts(meta){
   const last=emptyLighthouseLoadout();
   for(const slot of lighthouseLoadoutSlots){
    const gear=meta.lastReturnLoadout[slot];
-   last[slot]=gear?cloneGear(gear):null;
+   last[slot]=gear?attuneGearAtLighthouse(gear,"return_history"):null;
   }
   meta.lastReturnLoadout=last;
  }
@@ -3959,7 +4122,7 @@ function runGearById(id){
 function updateStashWithProtectedGear(gear){
  if(!gear||isStarterGear(gear))return false;
  state.meta.stash=state.meta.stash||[];
- const copy=cloneGear(gear);
+ const copy=attuneGearAtLighthouse(gear,"insurance");
  copy.cursed=false;
  copy.identified=true;
  const index=state.meta.stash.findIndex(stored=>stored.id===copy.id);
@@ -4087,6 +4250,7 @@ function applyMetaToFreshState(newState){
  ensureAppearanceMeta(meta);
  meta.balanceMigrations=meta.balanceMigrations||{};
  meta.balanceMigrations.hungerV31042=true;
+ meta.balanceMigrations.gearAttunementV3105=true;
  newState.meta=meta;
  const usage=meta.usage||emptyUsage();
  const weaponKeys=["sword","spear","bow","staff"];
@@ -4111,9 +4275,7 @@ function applyMetaToFreshState(newState){
  for(const slot of lighthouseLoadoutSlots){
   const gear=nextLoadoutGear(meta,slot);
   if(!gear)continue;
-  if((gear.requiredLevel||1)<=newState.level){
-   setFreshStateGear(newState,slot,gear);
-  }
+  setFreshStateGear(newState,slot,attuneGearAtLighthouse(gear,"departure"));
  }
  const freshEquipped=[newState.weapon,newState.armor,...Object.values(newState.equipment||{})].filter(Boolean);
  const swiftBonus=freshEquipped.reduce((sum,g)=>sum+((g.bondTraits||[]).includes("swift")?1:0),0);
@@ -4389,6 +4551,7 @@ function recoverDeathEcho(tile){
  const imprintLabels=[];
  for(const stored of echo.gear||[]){
   const gear=cloneGear(stored);
+  removeLighthouseAttunement(gear,"death_echo");
   gear.locked=true;
   gear.origin="death_echo";
   gear.deathEchoRecovered=true;
@@ -4471,6 +4634,7 @@ function buildExpeditionReport(outcome,details={}){
   cause:details.cause||"",
   newGear:bank?.newGear||0,
   updatedGear:bank?.updatedGear||0,
+  attunedGear:bank?.attunedGear||0,
   scrapShards:bank?.scrapShards||0,
   lostGear,
   deathCarriedGear:details.deathLoss?.carried||0,
@@ -4501,6 +4665,7 @@ function buildExpeditionReport(outcome,details={}){
  if(report.breaks>0)report.highlights.push(`敵の攻撃態勢を${report.breaks}回崩した`);
  if(report.crits>0)report.highlights.push(`会心を${report.crits}回発生`);
  if(outcome==="return"&&report.newGear>0)report.highlights.push(`新しい装備を${report.newGear}個持ち帰った`);
+ if(outcome==="return"&&report.attunedGear>0)report.highlights.push(`未調律装備${report.attunedGear}個を灯台調律した`);
  if(outcome==="death"&&report.deathCarriedGear>0)report.highlights.push(`携行装備${report.deathCarriedGear}個が全損判定を受けた`);
  if(outcome==="death"&&report.permanentlyDestroyed>0)report.highlights.push(`装備${report.permanentlyDestroyed}個が完全消失した`);
  if(report.insuredRecovered>0)report.highlights.push(`装備保険で${report.insuredRecovered}部位を回収`);
@@ -4532,6 +4697,7 @@ function expeditionReportHtml(report,compact=false){
   ?[
     `<span class="expeditionPill good">新規装備 ${report.newGear}</span>`,
     `<span class="expeditionPill good">装備更新 ${report.updatedGear}</span>`,
+    report.attunedGear?`<span class="expeditionPill good">灯台調律 ${report.attunedGear}</span>`:"",
     `<span class="expeditionPill good">素材変換 +${report.scrapShards}欠片</span>`,
     report.rescued?`<span class="expeditionPill good">魂還石救命</span>`:"",
     report.insurancePremium?`<span class="expeditionPill">保険料 ${report.insurancePremium}欠片</span>`:"",
@@ -4652,10 +4818,10 @@ function freshState(){
  const newState={
   version:4,seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,
   hunger:840,maxHunger:840,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
-  hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false,lastStandUsed:false,lastStandArmed:false,lastStandInvulnerable:false,lastStandTriggeredThisTurn:false,exhaustedTurns:0},
+  hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false,lastStandUsed:false,lastStandArmed:false,lastStandInvulnerable:false,lastStandTriggeredThisTurn:false,lastStandRechargePending:false,exhaustedTurns:0},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,crits:0,lastStands:0},
   map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],labyrinthReaction:null,reactionApplied:false,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],balanceMigrations:{hungerV31042:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
  const prepared=applyMetaToFreshState(newState);
  prepared.runStats=createRunStats(prepared.meta);
@@ -4920,47 +5086,139 @@ function currentThreatForecast(){
 }
 function lastStandStatus(){
  const hero=state.hero;
- if(hero.lastStandArmed)return{label:"構え中",className:"armed"};
+ if(hero.lastStandArmed)return{label:hero.lastStandRechargePending?"構え中・回復待ち":"構え中",className:"armed"};
  if(hero.lastStandUsed)return{label:"使用済み",className:"used"};
  return{label:"残り1回",className:"ready"};
+}
+function resolvePendingLastStandRecharge(){
+ const hero=state.hero;
+ if(!hero?.lastStandRechargePending||hero.lastStandArmed)return false;
+ hero.lastStandRechargePending=false;
+ hero.lastStandUsed=false;
+ addLog("番人撃破の力が定着し、踏み止まりが残り1回へ回復した。");
+ showCombatToast("踏み止まり回復","番人撃破・残り1回","guard");
+ return true;
+}
+function restoreLastStandFromWarden(){
+ const hero=state.hero;
+ if(!hero)return"none";
+
+ if(hero.lastStandArmed){
+  hero.lastStandRechargePending=true;
+  addLog("番人撃破の力が踏み止まりへ宿った。現在の構えが解けた後、残り1回へ回復する。");
+  showCombatToast("踏み止まり回復予約","構え終了後に残り1回","guard");
+  return"pending";
+ }
+
+ hero.lastStandRechargePending=false;
+ if(hero.lastStandUsed){
+  hero.lastStandUsed=false;
+  addLog("番人撃破により、踏み止まりが残り1回へ回復した。");
+  showCombatToast("踏み止まり回復","番人撃破・残り1回","guard");
+  return"restored";
+ }
+
+ addLog("番人撃破により、踏み止まりの残り1回を維持した。");
+ return"kept";
 }
 function canArmLastStand(){
  return canAct()&&!state.hero.lastStandUsed&&!state.hero.lastStandArmed&&state.hero.stamina>=5;
 }
-function armLastStand(){
- if(!canAct())return;
+function closeLastStandConfirm(){
+ $("lastStandOverlay").classList.add("hidden");
+}
+function openLastStandConfirm(){
+ if(!canAct())return false;
  if(state.hero.lastStandUsed){
-  addLog("決死の踏み止まりは、この探索ですでに使い切っている。");
-  return;
+  addLog("踏み止まりは、この探索ですでに使い切っている。");
+  return false;
  }
  if(state.hero.stamina<5){
-  addLog("決死の踏み止まりには気力5が必要。");
-  return;
+  addLog("踏み止まりには気力5が必要。");
+  return false;
  }
- if(!spendStamina(5))return;
+
+ const threat=currentThreatForecast();
+ const prediction=threat.count
+  ?(threat.min===threat.max?`${threat.max}`:`${threat.min}〜${threat.max}`)
+  :"なし";
+ const lethal=!!threat.possibleLethal;
+ const recoveryHp=Math.max(1,Math.ceil(state.hero.maxHp*.25));
+ const staminaAfterCost=Math.max(0,state.hero.stamina-5);
+ const staminaAfterTrigger=Math.min(effectiveMaxStamina(),staminaAfterCost+3);
+
+ $("lastStandConfirmBody").innerHTML=`
+  <div class="lastStandConfirmSummary">
+   <div class="lastStandConfirmStat"><b>${state.hero.hp}</b><small>現在HP</small></div>
+   <div class="lastStandConfirmStat"><b>${prediction}</b><small>固定予測被害</small></div>
+   <div class="lastStandConfirmStat"><b>${recoveryHp}</b><small>発動後の最低HP</small></div>
+   <div class="lastStandConfirmStat"><b>${state.hero.stamina}→${staminaAfterCost}</b><small>構えの気力消費</small></div>
+  </div>
+  <div class="lastStandConfirmEffect">
+   次の敵行動中に一度だけ、致命傷を耐えてHPを最大HPの25%まで立て直します。<br>
+   発動時は気力を3回復し、残りの敵行動を中断します。<br>
+   その後は2行動の衰弱になります。番人撃破時に残り1回へ回復しますが、2回分は蓄積しません。<br>
+   現在値なら発動後の気力は最大${staminaAfterTrigger}です。
+  </div>
+  <div class="lastStandConfirmWarning ${lethal?"lethal":""}">
+   ${lethal
+    ?"致死予測があります。現在の固定予兆を受けると致命傷になる可能性があります。"
+    :"現在、致死予測はありません。致命傷を受けなくても使用回数と気力5は戻りません。"}
+  </div>`;
+
+ $("lastStandOverlay").classList.remove("hidden");
+ return true;
+}
+function confirmLastStand(){
+ closeLastStandConfirm();
+ return armLastStand(true);
+}
+function armLastStand(confirmed=false){
+ if(!confirmed)return openLastStandConfirm();
+ if(!canAct())return false;
+ if(state.hero.lastStandUsed){
+  addLog("踏み止まりは、この探索ですでに使い切っている。");
+  return false;
+ }
+ if(state.hero.stamina<5){
+  addLog("踏み止まりには気力5が必要。");
+  return false;
+ }
+ if(!spendStamina(5))return false;
  state.hero.lastStandUsed=true;
  state.hero.lastStandArmed=true;
  state.hero.lastStandTriggeredThisTurn=false;
  state.lastAction="laststand";
- showCombatToast("決死の踏み止まり","次の敵行動中、一度だけ致命傷をHP1で耐える","guard");
+ showCombatToast("踏み止まり","致命傷時にHP25%・気力+3・敵行動中断","guard");
  addLog("気力5を費やし、致命傷へ備えて踏み止まった。発動しなくても使用回数は戻らない。");
  endTurn();
+ return true;
 }
 function triggerManualLastStand(incomingDamage){
  const hero=state.hero;
  if(!hero.lastStandArmed||hero.lastStandInvulnerable||incomingDamage<hero.hp)return false;
+
+ const hpTarget=Math.max(1,Math.ceil(hero.maxHp*.25));
+ const beforeStamina=hero.stamina;
+
  hero.lastStandArmed=false;
  hero.lastStandTriggeredThisTurn=true;
  hero.lastStandInvulnerable=true;
- hero.exhaustedTurns=Math.max(hero.exhaustedTurns||0,3);
- hero.stamina=0;
+ hero.exhaustedTurns=Math.max(hero.exhaustedTurns||0,2);
+ hero.stamina=Math.min(effectiveMaxStamina(),hero.stamina+3);
  state.enemyTurnInterrupted=true;
  ensureCombatStats().lastStands++;
+
  spawnHeroEffect("guard");
  spawnCombatText(state.player.x,state.player.y,"LAST STAND","guard",54);
- showCombatToast("踏み止まった","HP1で生存・残りの敵行動を中断・衰弱3行動","critical");
- addLog("決死の踏み止まりが致命傷を防いだ。HP1で生存したが、3行動の衰弱を負った。");
- return true;
+ spawnCombatText(state.player.x,state.player.y,`HP→${hpTarget}`,"heal",42);
+ showCombatToast(
+  "踏み止まった",
+  `HP${hpTarget}まで立て直し・気力${beforeStamina}→${hero.stamina}・敵行動中断`,
+  "critical"
+ );
+ addLog(`踏み止まりが致命傷を防いだ。HPを${hpTarget}まで立て直し、気力が3回復した。衰弱は2行動。`);
+ return{hpTarget,staminaRecovered:hero.stamina-beforeStamina};
 }
 function applyHeroDamage(raw,sourceEnemy=null,options={}){
  if(state.hero.lastStandInvulnerable){
@@ -4992,10 +5250,14 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
   dmg=Math.max(0,state.hero.hp-1);
   addLog("骨の加護が致命傷を防いだ！");
  }
- if(triggerManualLastStand(dmg)){
-  dmg=Math.max(0,state.hero.hp-1);
+ const lastStandResult=triggerManualLastStand(dmg);
+ if(lastStandResult){
+  dmg=Math.max(0,state.hero.hp-Math.min(state.hero.hp,lastStandResult.hpTarget));
  }
  state.hero.hp=Math.max(0,state.hero.hp-dmg);
+ if(lastStandResult){
+  state.hero.hp=Math.max(state.hero.hp,lastStandResult.hpTarget);
+ }
  ensureRunStats().damageTaken+=dmg;
  if(dmg>0){
   gainTraining("endurance",Math.min(3,dmg));
@@ -6630,6 +6892,51 @@ function xpPercentForEnemy(enemy){
 function itemRequiredLevel(itemLevel){
  return Math.max(1,itemLevel-2);
 }
+function gearAttunementLevel(g){
+ return Math.max(1,Math.floor(g?.requiredLevel||itemRequiredLevel(g?.itemLevel||1)));
+}
+function isLighthouseAttuned(g){
+ return !!g&&(isStarterGear(g)||g.attuned===true);
+}
+function canEquipGearNow(g,level=state?.level||1){
+ if(!g)return false;
+ return isLighthouseAttuned(g)||level>=gearAttunementLevel(g);
+}
+function gearAttunementText(g){
+ if(isLighthouseAttuned(g))return"灯台調律済み・Lv1装備可";
+ const need=gearAttunementLevel(g);
+ return(state?.level||1)>=need
+  ?`未調律・同調可能 Lv${need}`
+  :`未調律・同調Lv${need}`;
+}
+function gearAttunementClass(g){
+ if(isLighthouseAttuned(g))return"attuned";
+ return canEquipGearNow(g)?"ready":"locked";
+}
+function gearAttunementBadgeHtml(g){
+ return`<span class="attunementState ${gearAttunementClass(g)}">${gearAttunementText(g)}</span>`;
+}
+function attuneGearAtLighthouse(g,source="return"){
+ if(!g)return null;
+ const copy=cloneGear(g);
+ if(typeof copy.requiredLevel!=="number"){
+  copy.requiredLevel=itemRequiredLevel(copy.itemLevel||1);
+ }
+ copy.attuned=true;
+ copy.attunedAt=copy.attunedAt||Date.now();
+ copy.attunementSource=source;
+ return copy;
+}
+function removeLighthouseAttunement(g,source="field"){
+ if(!g)return g;
+ if(typeof g.requiredLevel!=="number"){
+  g.requiredLevel=itemRequiredLevel(g.itemLevel||1);
+ }
+ g.attuned=false;
+ g.attunedAt=null;
+ g.attunementSource=source;
+ return g;
+}
 
 function rollGear(sourceLevel=floorTargetLevel()){
  const roll=rng();let rarity=roll<.62?"common":roll<.88?"magic":roll<.98?"rare":"legendary";
@@ -6667,7 +6974,7 @@ function rollGear(sourceLevel=floorTargetLevel()){
  const element=rarity==="common"?null:(rng()<.48?choice(Object.keys(elementData)):null);
  const trait=rarity==="legendary"?choice(["berserk","echo","collector","glass"]):null;
  const tags=rollGearTags(rarity,element,slot);
- return{id:"g"+Date.now()+Math.floor(rng()*99999),slot,rarity,name,weaponType,atk,def,hunger,crit,cursed,identified:rng()>=.48,element,trait,kills:0,itemLevel,requiredLevel,tags,bondTraits:[],bondPending:0,locked:rarity==="rare"||rarity==="legendary"};
+ return{id:"g"+Date.now()+Math.floor(rng()*99999),slot,rarity,name,weaponType,atk,def,hunger,crit,cursed,identified:rng()>=.48,element,trait,kills:0,itemLevel,requiredLevel,attuned:false,attunedAt:null,attunementSource:"field",tags,bondTraits:[],bondPending:0,locked:rarity==="rare"||rarity==="legendary"};
 }
 function updateVision(){
  state.visible={};
@@ -7045,6 +7352,7 @@ function defeatEnemy(e){
  if(wasBoss){
   ensureRunStats().bossesDefeated++;
   state.bossDefeated=true;
+  restoreLastStandFromWarden();
   const profile=wardenProfileFor(e);
   const rewardGear=rollGear((e.level||floorTargetLevel())+1);
   if(["oracle","furnace","root"].includes(profile.key)&&(rarityOrder[rewardGear.rarity]||0)<2){
@@ -7660,8 +7968,9 @@ function endTurn(){
  ensureBossProgressIntegrity("turn-end");
  if(state.hero.lastStandArmed&&!state.hero.lastStandTriggeredThisTurn){
   state.hero.lastStandArmed=false;
-  addLog("決死の踏み止まりは発動しないまま解けた。");
+  addLog("踏み止まりは発動しないまま解けた。");
  }
+ resolvePendingLastStandRecharge();
  state.hero.lastStandInvulnerable=false;
  for(const k in state.cooldowns)state.cooldowns[k]=Math.max(0,state.cooldowns[k]-1);
  state.guardTurns=Math.max(0,state.guardTurns-1);
@@ -8163,7 +8472,10 @@ function purifyEquipped(){
 
 function equipItem(id){
  const g=state.inventory.find(i=>i.id===id);if(!g)return;
- if(state.level<(g.requiredLevel||1)){addLog("必要レベル "+(g.requiredLevel||1)+" に達していない。");return}
+ if(!canEquipGearNow(g)){
+  addLog(`未調律装備の同調Lv${gearAttunementLevel(g)}に達していない。灯台へ持ち帰れば次回からLv1で装備できる。`);
+  return;
+ }
  const old=equippedItem(g.slot);
  if(old?.cursed){addLog("呪具が外れない。解呪の灰が必要だ。");return}
  if(!g.identified){
@@ -8181,7 +8493,7 @@ function equipItem(id){
 function makeStarterWeapon(type){
  const names={sword:"旅人の剣",spear:"古い槍",bow:"狩人の短弓",staff:"灰色の杖"};
  const atk={sword:3,spear:3,bow:2,staff:4};
- return{id:"starter-"+type,slot:"weapon",rarity:"common",name:names[type],weaponType:type,atk:atk[type],def:0,hunger:0,crit:0,identified:true,cursed:false,element:null,trait:null,kills:0,itemLevel:1,requiredLevel:1,tags:emptyTags(),bondTraits:[],bondPending:0,locked:true,origin:"starter",bankable:false};
+ return{id:"starter-"+type,slot:"weapon",rarity:"common",name:names[type],weaponType:type,atk:atk[type],def:0,hunger:0,crit:0,identified:true,cursed:false,element:null,trait:null,kills:0,itemLevel:1,requiredLevel:1,attuned:true,attunedAt:Date.now(),attunementSource:"starter",tags:emptyTags(),bondTraits:[],bondPending:0,locked:true,origin:"starter",bankable:false};
 }
 function beginPreparedFreshRun(){
  $("starterOverlay").classList.add("hidden");
@@ -8522,7 +8834,14 @@ function isStarterGear(g){
 function bankCurrentRun(){
  state.meta.stash=state.meta.stash||[];
  ensureMetaLoadouts(state.meta);
- state.meta.lastReturnLoadout=snapshotEquippedLoadout();
+ const returnedLoadout=snapshotEquippedLoadout();
+ for(const slot of lighthouseLoadoutSlots){
+  const gear=returnedLoadout[slot];
+  if(gear&&!isStarterGear(gear)){
+   returnedLoadout[slot]=attuneGearAtLighthouse(gear,"return");
+  }
+ }
+ state.meta.lastReturnLoadout=returnedLoadout;
  const candidates=[...new Map(
   [...allEquippedItems(),...state.inventory]
    .filter(g=>g&&!isStarterGear(g))
@@ -8530,11 +8849,13 @@ function bankCurrentRun(){
  ).values()];
 
  const stashIndexById=new Map(state.meta.stash.map((g,index)=>[g.id,index]));
- let newGear=0,updatedGear=0,leftBehind=0;
+ let newGear=0,updatedGear=0,leftBehind=0,attunedGear=0;
  for(const g of candidates){
-  const copy=cloneGear(g);
+  const wasAttuned=isLighthouseAttuned(g);
+  const copy=attuneGearAtLighthouse(g,"return");
   copy.cursed=false;
   copy.identified=true;
+  if(!wasAttuned)attunedGear++;
 
   if(stashIndexById.has(copy.id)){
    const index=stashIndexById.get(copy.id);
@@ -8566,6 +8887,7 @@ function bankCurrentRun(){
   updatedGear,
   leftBehind,
   scrapShards:recoveredShards,
+  attunedGear,
   candidates:candidates.length
  };
 }
@@ -8643,18 +8965,17 @@ function clearAllNextLoadout(){
 }
 function copyReturnedLoadoutToNext(){
  ensureMetaLoadouts(state.meta);
- let applied=0,skipped=0;
+ let applied=0;
  for(const slot of lighthouseLoadoutSlots){
   const returned=state.meta.lastReturnLoadout?.[slot];
   if(!returned||isStarterGear(returned))continue;
   const stored=state.meta.stash.find(g=>g.id===returned.id);
   if(!stored)continue;
-  if((stored.requiredLevel||1)>1){skipped++;continue}
+  stored.attuned=true;
   state.meta.nextLoadout[slot]=stored.id;
   applied++;
  }
- if(applied)addLog(`帰還時装備から${applied}部位を次回装備へ設定した。`);
- if(skipped)addLog(`必要レベルを満たさない${skipped}部位は設定できなかった。`);
+ if(applied)addLog(`帰還時装備から${applied}部位を、調律済みの次回装備へ設定した。`);
  saveMeta();renderHub();
 }
 
@@ -8687,13 +9008,13 @@ function loadoutGearCard(meta,slot,gear,mode){
  const rarity=rarityData[gear.rarity]||rarityData.common;
  const stats=applyBondTraitStats(gear);
  const stored=meta.stash?.some(g=>g.id===gear.id);
- const unavailable=(gear.requiredLevel||1)>1;
  return`<div class="loadoutSlot selected">
   <div class="slotLabel"><span>${label}</span><span>${rarity.label}</span></div>
   <span class="loadoutName ${gear.rarity||"common"}">${gearLabel(gear)}</span>
-  <div class="loadoutStats">ILv${gear.itemLevel||1} / 必要Lv${gear.requiredLevel||1}<br>攻${stats.atk} / 防${stats.def}<br>${echoMarkTotal(gear)>0?echoImprintSummary(gear,true):"刻印なし"}</div>
+  <div class="loadoutStats">ILv${gear.itemLevel||1} / 探索同調Lv${gearAttunementLevel(gear)}<br>
+   <span class="attunementState attuned">灯台調律済み・Lv1装備可</span><br>
+   攻${stats.atk} / 防${stats.def}<br>${echoMarkTotal(gear)>0?echoImprintSummary(gear,true):"刻印なし"}</div>
   ${mode==="returned"&&!stored?`<span class="loadoutWarning">${isStarterGear(gear)?"初期装備・持ち帰り不可":"倉庫に未保存"}</span>`:""}
-  ${mode==="next"&&unavailable?'<span class="loadoutWarning">開始Lvでは装備不可</span>':""}
   ${mode==="next"?`<button type="button" data-clear-loadout="${slot}">この部位を解除</button>`:""}
  </div>`;
 }
@@ -8959,7 +9280,6 @@ function renderHub(){
    const salvage=stashSalvageValue(g);
    const loadoutSlot=selectedLoadoutSlot(m,g.id);
    const inherited=!!loadoutSlot;
-   const startUnavailable=(g.requiredLevel||1)>1;
    return`
    <div class="itemRow ${inherited?"protectedItem":""}">
     <div class="top">
@@ -8967,7 +9287,8 @@ function renderHub(){
      <span>${equippedSlotLabel(g.slot)}${inherited?"・次回装備":""}</span>
     </div>
     <div class="desc">
-     ILv${g.itemLevel||1} / 必要Lv${g.requiredLevel||1} / 推奨度 ${Math.round(gearScore(g))}<br>
+     ILv${g.itemLevel||1} / 探索同調Lv${gearAttunementLevel(g)} / 推奨度 ${Math.round(gearScore(g))}<br>
+     <span class="attunementState attuned">灯台調律済み・Lv1装備可</span><br>
      攻${stats.atk} / 防${stats.def}${g.hunger?` / 最大充足 +${gearSupplyBonus(g)}`:""}${g.crit?` / 会心 +${Math.round(g.crit*100)}%`:""}<br>
      ${tagSummaryHtml(effectiveGearTags(g))}<br>
      <span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0} / ${bondTraitSummary(g)}</span>
@@ -8975,12 +9296,10 @@ function renderHub(){
      分解価値：<span class="stashShardValue">${salvage}欠片</span>
     </div>
     <div class="stashActions">
-     <button type="button" class="${inherited?"loadoutSelected":""}" data-loadout="${i}" ${!inherited&&startUnavailable?"disabled":""}>${
+     <button type="button" class="${inherited?"loadoutSelected":""}" data-loadout="${i}">${
       inherited
        ?`${equippedSlotLabel(loadoutSlot)}を解除`
-       :startUnavailable
-        ?`必要Lv${g.requiredLevel||1}`
-        :`次回の${equippedSlotLabel(normalizeLoadoutSlot(g.slot))}に設定`
+       :`次回の${equippedSlotLabel(normalizeLoadoutSlot(g.slot))}に設定`
      }</button>
      <button type="button" data-salvage="${i}">分解 +${salvage}欠片</button>
      ${echoStrain(g)>0?`<button type="button" class="echoStabilizeBtn" data-stabilize-echo="${i}" ${(m.shards||0)<echoStabilizeCost(g)?"disabled":""}>安定化 ${echoStabilizeCost(g)}欠片</button>`:""}
@@ -9086,13 +9405,14 @@ function renderInventory(){
   const elem=g.element?` / 属性 ${elementData[g.element].label}`:"";
   const trait=g.trait?` / 固有 ${g.trait}`:"";
   const unknownHint=hasTalent("keen_eye")?`攻撃 +${g.atk} / 防御 +${g.def} までは見抜ける。`:"性能不明。";
+  const equipReady=canEquipGearNow(g);
   const detail=g.identified
-   ?`ILv${g.itemLevel||1} / 必要Lv${g.requiredLevel||1} / 推奨度 ${Math.round(gearScore(g))} / ${g.weaponType?"型："+weaponData[g.weaponType].label+" / ":""}攻撃 +${g.atk} / 防御 +${g.def}${g.hunger?" / 最大充足 +"+gearSupplyBonus(g):""}${g.crit?" / 会心 +"+Math.round(g.crit*100)+"%":""}${elem}${trait}<br>${tagSummaryHtml(effectiveGearTags(g))}<br><span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0}${nextBondKills(g)?` / 次:${nextBondKills(g)}`:" / 最大"}</span><br>進化:${bondTraitSummary(g)}${echoImprintHtml(g)}<br>${compareText(g)}<br>${tagComparisonHtml(g)}`
-   :`${unknownHint} 鑑定紙片1枚、現地素材2、または8Gで鑑定可能。装備して確かめることもできる。`;
+   ?`ILv${g.itemLevel||1} / ${gearAttunementBadgeHtml(g)} / 推奨度 ${Math.round(gearScore(g))} / ${g.weaponType?"型："+weaponData[g.weaponType].label+" / ":""}攻撃 +${g.atk} / 防御 +${g.def}${g.hunger?" / 最大充足 +"+gearSupplyBonus(g):""}${g.crit?" / 会心 +"+Math.round(g.crit*100)+"%":""}${elem}${trait}<br>${tagSummaryHtml(effectiveGearTags(g))}<br><span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0}${nextBondKills(g)?` / 次:${nextBondKills(g)}`:" / 最大"}</span><br>進化:${bondTraitSummary(g)}${echoImprintHtml(g)}<br>${compareText(g)}<br>${tagComparisonHtml(g)}`
+   :`${gearAttunementBadgeHtml(g)}<br>${unknownHint} 鑑定紙片1枚、現地素材2、または8Gで鑑定可能。装備して確かめることもできる。`;
   row.innerHTML=`<div class="top">${title}<span>${g.locked?"🔒 ":""}${equippedSlotLabel(g.slot)}</span></div><div class="desc">${detail}</div>
    <div class="itemActions">
     ${!g.identified?'<button type="button" class="identifyBtn">鑑定する</button>':""}
-    <button type="button" class="equipBtn">装備する</button>
+    <button type="button" class="equipBtn" ${!equipReady?"disabled":""}>${equipReady?"装備する":`同調Lv${gearAttunementLevel(g)}`}</button>
     <button type="button" class="lockBtn">${g.locked?"保護解除":"保護する"}</button>
     <button type="button" class="salvageBtn" ${g.locked?"disabled":""}>分解 +${salvageValue(g)}</button>
    </div>`;
@@ -9103,7 +9423,7 @@ function renderInventory(){
   box.appendChild(row);
  });
 }
-function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
+function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
 let saveTimer=null;
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveGame(),120)}
 function saveSnapshot(){try{if(state)localStorage.setItem("abyssalRootsSoloV4Backup",JSON.stringify(state))}catch(e){}}
@@ -9182,6 +9502,7 @@ function loadGame(){
   if(typeof state.hero.lastStandArmed!=="boolean")state.hero.lastStandArmed=false;
   if(typeof state.hero.lastStandInvulnerable!=="boolean")state.hero.lastStandInvulnerable=false;
   if(typeof state.hero.lastStandTriggeredThisTurn!=="boolean")state.hero.lastStandTriggeredThisTurn=false;
+  if(typeof state.hero.lastStandRechargePending!=="boolean")state.hero.lastStandRechargePending=false;
   if(typeof state.hero.exhaustedTurns!=="number")state.hero.exhaustedTurns=0;
   if(typeof state.hungerStageId!=="string")state.hungerStageId=hungerStage().id;
   if(typeof state.hungerRecoveryBuffer!=="number")state.hungerRecoveryBuffer=0;
@@ -9272,6 +9593,10 @@ function loadGame(){
   if(typeof state.consumables.oil!=="number")state.consumables.oil=1;
   if(typeof state.consumables.retreat!=="number")state.consumables.retreat=1;
   saveMeta();
+  const lighthouseGearIds=new Set([
+   ...(state.meta?.stash||[]).map(g=>g.id),
+   ...(state.runStats?.startStashIds||[])
+  ]);
   const migrationGear=[
    ...state.inventory,
    state.weapon,state.armor,
@@ -9286,6 +9611,17 @@ function loadGame(){
    if(typeof g.itemLevel!=="number")g.itemLevel=Math.max(1,state.floor);
    if(g.slot==="armor")g.slot="body";
    if(typeof g.requiredLevel!=="number")g.requiredLevel=itemRequiredLevel(g.itemLevel);
+   if(typeof g.attuned!=="boolean"){
+    g.attuned=isStarterGear(g)||lighthouseGearIds.has(g.id);
+    if(g.origin==="death_echo")g.attuned=false;
+   }
+   if(g.attuned){
+    g.attunedAt=g.attunedAt||Date.now();
+    g.attunementSource=g.attunementSource||"migration";
+   }else{
+    g.attunedAt=null;
+    g.attunementSource=g.attunementSource||"field";
+   }
    if(typeof g.locked!=="boolean")g.locked=(rarityOrder[g.rarity]||0)>=2;
    if(String(g.id||"").startsWith("starter-")){
     g.origin="starter";
@@ -9300,6 +9636,8 @@ function loadGame(){
    if(typeof g.identified!=="boolean")g.identified=true;
    if(typeof g.cursed!=="boolean")g.cursed=false;
   }
+  state.meta.balanceMigrations=state.meta.balanceMigrations||{};
+  state.meta.balanceMigrations.gearAttunementV3105=true;
   updateVision();render();return true;
  }catch(e){return false}
 }
@@ -9373,7 +9711,7 @@ function renderHero(){
  $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 攻撃予兆 ${danger}</span>`:""}${threat.possibleLethal?` <span class="mortalWarning ${threat.certainLethal?"certain":""}">${threat.certainLethal?"確定致死":"致死圏"}</span>`:""}</div>
-  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${reaction?` <span class="labyrinthReactionBadge ${labyrinthReactionData[reaction.id]?.tone==="death"?"danger":""}">反応:${labyrinthReactionData[reaction.id]?.short||reaction.short}</span>`:""} <span class="lastStandState ${stand.className}">踏留:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
+  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${activeRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${reaction?` <span class="labyrinthReactionBadge ${labyrinthReactionData[reaction.id]?.tone==="death"?"danger":""}">反応:${labyrinthReactionData[reaction.id]?.short||reaction.short}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
   <div class="resourceGrid">
    <div class="resourceCell hpResource">
     <div class="resourceHeader"><b>HP</b><span class="resourceValue">${h.hp}/${h.maxHp}</span></div>
@@ -9388,7 +9726,7 @@ function renderHero(){
   </div>
   <div class="threatReadout ${threatClass}">${threatText}${
    threat.possibleLethal&&!h.lastStandUsed
-    ?`<br>「踏留」を使うと気力5を消費し、次の敵行動中の致命傷を一度だけHP1で耐えます。`
+    ?`<br>「踏み止まり」を使うと気力5を消費し、次の敵行動中の致命傷を一度だけHP1で耐えます。`
     :""
   }</div>
  </div>`;
@@ -10334,15 +10672,19 @@ function renderSkills(){
  standBtn.classList.toggle("armed",!!state.hero.lastStandArmed);
  standBtn.classList.toggle("used",!!state.hero.lastStandUsed&&!state.hero.lastStandArmed);
  standBtn.classList.toggle("lethalReady",!!threat.possibleLethal&&!state.hero.lastStandUsed&&state.hero.stamina>=5);
- standBtn.textContent=state.hero.lastStandArmed?"踏留 構え中":state.hero.lastStandUsed?"踏留 済":"踏留 1";
+ standBtn.innerHTML=state.hero.lastStandArmed
+  ?`<span>踏み止まり</span><small>${state.hero.lastStandRechargePending?"構え中・回復待ち":"構え中・次の敵行動"}</small>`
+  :state.hero.lastStandUsed
+   ?"<span>踏み止まり</span><small>使用済み</small>"
+   :`<span>踏み止まり</span><small>残り1・気力5</small>`;
  standBtn.disabled=!canArmLastStand();
  standBtn.title=state.hero.lastStandUsed
   ?"この探索では使用済みです。"
   :state.hero.stamina<5
    ?"気力5が必要です。"
    :threat.possibleLethal
-    ?"致死予測あり。次の敵行動へ決死の構えを取ります。"
-    :"次の敵行動中、一度だけ致命傷をHP1で耐えます。発動しなくても使用済みになります。";
+    ?"致死予測あり。確認画面を開きます。"
+    :"次の敵行動中、致命傷を耐えてHP25%・気力+3・敵行動中断。確認画面を開きます。";
 }
 function render(){if(!state)return;recordEchoResonance();renderStats();renderHero();renderLog();renderSkills();renderFloorGoal();renderReturnAccess();draw()}
 function startNew(){
@@ -10418,6 +10760,8 @@ canvas.addEventListener("click",event=>{
 $("quickPotion").onclick=usePotion;
 $("quickBomb").onclick=throwBomb;
 $("lastStandBtn").onclick=armLastStand;
+$("cancelLastStand").onclick=closeLastStandConfirm;
+$("confirmLastStand").onclick=confirmLastStand;
 $("returnPromptBtn").onclick=returnToLighthouse;
 $("appearanceBtn").onclick=()=>{
  if(!state)return;
