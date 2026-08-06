@@ -3441,16 +3441,220 @@ body{
  .mobileResourceMini .miniTrack{height:5px}
 }
 
+
+/* v3.12.2 IMPACT FEEDBACK */
+#impactOverlay{
+ position:absolute;
+ inset:0;
+ z-index:7;
+ pointer-events:none;
+ opacity:0;
+ transform:translateZ(0);
+}
+#impactOverlay.show{animation:impactFeedbackPulse .48s ease-out both}
+#impactOverlay.hurt{background:radial-gradient(circle at 50% 50%,transparent 20%,rgba(186,27,51,.12) 56%,rgba(221,48,72,.56) 100%)}
+#impactOverlay.trap{background:radial-gradient(circle at 50% 55%,transparent 18%,rgba(225,72,37,.12) 52%,rgba(255,108,55,.58) 100%)}
+#impactOverlay.heal{background:radial-gradient(circle at 50% 50%,rgba(104,244,159,.28),rgba(44,157,91,.10) 42%,transparent 72%)}
+#impactOverlay.critical{background:radial-gradient(circle at 50% 48%,rgba(255,244,181,.44),rgba(255,183,69,.15) 42%,transparent 70%)}
+#impactOverlay.rare{background:radial-gradient(circle at 50% 48%,rgba(210,139,255,.34),rgba(126,79,191,.12) 48%,transparent 76%)}
+#impactOverlay.legendary{background:radial-gradient(circle at 50% 48%,rgba(255,223,112,.46),rgba(255,142,48,.14) 48%,transparent 78%)}
+#impactOverlay.objective{background:radial-gradient(circle at 50% 50%,rgba(113,231,156,.32),rgba(46,142,83,.10) 46%,transparent 76%)}
+#impactOverlay.stairs{background:linear-gradient(180deg,rgba(105,212,255,.32),transparent 38%,rgba(99,112,218,.20))}
+#impactOverlay.boss{background:radial-gradient(circle at 50% 48%,rgba(255,230,140,.52),rgba(190,86,41,.16) 48%,rgba(45,17,12,.18) 82%)}
+#impactOverlay.death{background:radial-gradient(circle at 50% 48%,transparent 12%,rgba(92,11,25,.26) 55%,rgba(8,2,5,.84) 100%)}
+@keyframes impactFeedbackPulse{
+ 0%{opacity:0;filter:brightness(1)}
+ 18%{opacity:1;filter:brightness(1.12)}
+ 100%{opacity:0;filter:brightness(1)}
+}
+.member.resource-hp-loss .hpMini,
+.member.resource-hp-loss .hpResource{animation:resourceLossKick .42s ease-out}
+.member.resource-hp-gain .hpMini,
+.member.resource-hp-gain .hpResource{animation:resourceGainKick .52s ease-out}
+.member.resource-stamina-loss .staminaMini,
+.member.resource-stamina-loss .staminaResource{animation:resourceLossKick .38s ease-out}
+.member.resource-stamina-gain .staminaMini,
+.member.resource-stamina-gain .staminaResource{animation:resourceGainKick .46s ease-out}
+@keyframes resourceLossKick{
+ 0%{transform:translateX(0);filter:brightness(1)}
+ 24%{transform:translateX(-2px);filter:brightness(1.35)}
+ 48%{transform:translateX(2px)}
+ 100%{transform:translateX(0);filter:brightness(1)}
+}
+@keyframes resourceGainKick{
+ 0%{transform:scale(1);filter:brightness(1)}
+ 34%{transform:scale(1.035);filter:brightness(1.35)}
+ 100%{transform:scale(1);filter:brightness(1)}
+}
+.ctrl:not(:disabled):active,
+.skill:not(:disabled):active,
+.miniBtn:not(:disabled):active,
+.weaponDeepeningChoice:not(:disabled):active,
+.weaponOathAction:not(:disabled):active{
+ transform:translateY(1px) scale(.965);
+ filter:brightness(1.22);
+}
+@media(prefers-reduced-motion:reduce){
+ #impactOverlay.show,
+ .member.resource-hp-loss .hpMini,
+ .member.resource-hp-loss .hpResource,
+ .member.resource-hp-gain .hpMini,
+ .member.resource-hp-gain .hpResource,
+ .member.resource-stamina-loss .staminaMini,
+ .member.resource-stamina-loss .staminaResource,
+ .member.resource-stamina-gain .staminaMini,
+ .member.resource-stamina-gain .staminaResource{
+  animation:none!important;
+ }
+ .ctrl:not(:disabled):active,
+ .skill:not(:disabled):active,
+ .miniBtn:not(:disabled):active{transform:none}
+}
+
+
+/* v3.12.3 STASH COMPARE */
+.stashManager{
+ display:grid;gap:7px;
+}
+.stashManagerTop{
+ position:sticky;top:-1px;z-index:7;
+ display:grid;gap:6px;padding:7px;
+ border:1px solid #50476a;border-radius:9px;
+ background:linear-gradient(180deg,rgba(25,21,34,.98),rgba(14,12,20,.98));
+ box-shadow:0 5px 12px rgba(0,0,0,.28);
+}
+.stashManagerHeadline{
+ display:flex;align-items:flex-start;justify-content:space-between;gap:7px;
+ color:#d9d0e6;font-size:8px;line-height:1.35;
+}
+.stashManagerHeadline b{color:#fff1b8;font-size:9px}
+.stashManagerHeadline span:last-child{text-align:right;color:#a99db9}
+.stashLoadoutTotals{
+ padding:5px 6px;border-left:3px solid #6b9b75;border-radius:5px;
+ background:#111b15;color:#bfe2c6;font-size:7px;line-height:1.45;
+}
+.stashLoadoutStrip{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;
+}
+.stashLoadoutSlot{
+ min-width:0;padding:5px 4px;text-align:left;
+ border:1px solid #494156;border-radius:6px;background:#17131d;color:#c9bfd3;
+}
+.stashLoadoutSlot span{display:block;color:#8f8499;font-size:6px}
+.stashLoadoutSlot b{display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e9dba9;font-size:7px}
+.stashLoadoutSlot small{display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#8f8499;font-size:5.8px}
+.stashLoadoutSlot.active{border-color:#a78f52;background:#241e11;box-shadow:0 0 0 1px #6d5b30 inset}
+.stashControls{
+ display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:5px;
+}
+.stashControls input,.stashControls select{
+ width:100%;min-width:0;height:30px;padding:4px 6px;
+ border:1px solid #4e455b;border-radius:6px;background:#100d15;color:#e4dce9;
+ font:inherit;font-size:7px;
+}
+.stashFilterChips{
+ display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin;
+}
+.stashFilterChips button{
+ flex:0 0 auto;min-width:42px;padding:5px 7px;border:1px solid #4a4256;border-radius:999px;
+ background:#15111b;color:#bfb4ca;font-size:6.5px;
+}
+.stashFilterChips button.active{border-color:#b49a57;background:#2a2212;color:#ffe7a1}
+.stashResultLine{
+ display:flex;justify-content:space-between;gap:7px;color:#a89eaf;font-size:7px;
+}
+.stashResultLine b{color:#e7deeb}
+.stashResultLine button{min-height:24px;padding:3px 7px;font-size:6px}
+.stashCardGrid{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:7px;
+}
+.stashCompactCard{
+ min-width:0;padding:7px;border:1px solid #423b4b;border-radius:9px;
+ background:linear-gradient(180deg,#17131d,#100d15);
+ box-shadow:0 3px 8px rgba(0,0,0,.2);
+}
+.stashCompactCard.protectedItem{border-color:#7a6840;background:linear-gradient(180deg,#241e12,#141007)}
+.stashCompactCard.oathWeapon{box-shadow:0 0 0 1px #715b2c inset,0 3px 8px rgba(0,0,0,.25)}
+.stashCompactHead{
+ display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:start;
+}
+.stashCompactName{min-width:0}
+.stashCompactName b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:8.5px}
+.stashCompactName small{display:block;margin-top:2px;color:#9e93a8;font-size:6px}
+.stashCompactBadges{display:flex;justify-content:flex-end;gap:3px;flex-wrap:wrap;max-width:110px}
+.stashBadge{padding:2px 5px;border:1px solid #50475b;border-radius:999px;color:#bdb1c6;font-size:5.8px;white-space:nowrap}
+.stashBadge.selected{border-color:#8b7337;background:#2b2310;color:#ffe396}
+.stashBadge.legendary{border-color:#a7823e;color:#ffd77d}
+.stashBadge.strain{border-color:#855368;color:#ecacc0}
+.stashBadge.oath{border-color:#a07943;color:#f0ce8e}
+.stashCompareBox{
+ display:grid;gap:5px;margin-top:6px;padding:6px;border:1px solid #34303c;border-radius:7px;background:#0d0b10;
+}
+.stashCompareTarget{display:flex;justify-content:space-between;gap:6px;color:#9d92a7;font-size:6.5px;line-height:1.3}
+.stashCompareTarget b{max-width:62%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#d9cedf}
+.stashCompareMetrics{display:flex;gap:4px;flex-wrap:wrap}
+.stashCompareMetric{padding:3px 5px;border:1px solid #45404b;border-radius:5px;color:#aaa0b1;font-size:6px;white-space:nowrap}
+.stashCompareMetric.up{border-color:#3f7652;background:#102018;color:#9ee5b2}
+.stashCompareMetric.down{border-color:#814859;background:#261117;color:#f1a9b6}
+.stashCompareMetric.same{color:#918797}
+.stashCompareTags{color:#a89cad;font-size:6px;line-height:1.4}
+.stashCompareTags .up{color:#98dfaa}.stashCompareTags .down{color:#ee9fac}
+.stashQuickStats{margin-top:5px;color:#c6bacd;font-size:6.5px;line-height:1.45}
+.stashCompactDetails{margin-top:5px;border-top:1px solid #302b36;padding-top:4px}
+.stashCompactDetails summary{cursor:pointer;color:#bcae83;font-size:6.5px;list-style:none}
+.stashCompactDetails summary::-webkit-details-marker{display:none}
+.stashCompactDetails summary::before{content:'＋ ';color:#8b7744}
+.stashCompactDetails[open] summary::before{content:'－ '}
+.stashDetailBody{margin-top:5px;color:#aaa0b1;font-size:6.3px;line-height:1.5}
+.stashActions.compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin-top:6px}
+.stashActions.compact button{min-height:28px;padding:4px;font-size:6.2px}
+.stashActions.compact .echoStabilizeReason{grid-column:1/-1;font-size:5.8px;color:#998da1}
+.stashPagination{
+ display:grid;grid-template-columns:70px minmax(0,1fr) 70px;gap:6px;align-items:center;
+ padding:6px;border:1px solid #3c3645;border-radius:7px;background:#110e16;
+}
+.stashPagination button{min-height:29px;padding:4px;font-size:6.5px}
+.stashPagination span{text-align:center;color:#afa4b7;font-size:7px}
+.stashEmpty{
+ padding:16px 8px;border:1px dashed #4c4455;border-radius:8px;text-align:center;color:#a89daf;font-size:7px;line-height:1.6;
+}
+@media(max-width:390px){
+ .stashManagerTop{position:relative;top:auto}
+ .stashLoadoutStrip{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .stashControls{grid-template-columns:1fr 1fr}
+ .stashControls .stashSearchWrap{grid-column:1/-1}
+ .stashCardGrid{grid-template-columns:1fr}
+}
+
+
+/* v3.12.3.1 PROGRESSION RECOVERY */
+#game{display:block;background:#050407;image-rendering:pixelated;image-rendering:crisp-edges}
+.mobileResourceRow{display:grid!important;visibility:visible!important;opacity:1!important;min-height:15px;overflow:visible}
+.mobileResourceMini{display:grid!important;visibility:visible!important;opacity:1!important;min-width:0}
+.mobileResourceMini .miniTrack{display:block!important;visibility:visible!important;opacity:1!important;min-height:6px!important;height:6px!important;border:1px solid #6a596e!important;background:#0b080d!important;overflow:hidden!important}
+.mobileResourceMini .miniFill{display:block!important;visibility:visible!important;opacity:1!important;height:100%!important;min-height:4px!important;max-width:100%!important;border-radius:999px!important}
+.mobileResourceMini.hpMini.healthy .miniFill{background:linear-gradient(90deg,#238c50,#70d991)!important}
+.mobileResourceMini.hpMini.warning .miniFill{background:linear-gradient(90deg,#ad6b20,#efb84f)!important}
+.mobileResourceMini.hpMini.critical .miniFill{background:linear-gradient(90deg,#a12238,#ed5d70)!important}
+.mobileResourceMini.staminaMini.ready .miniFill{background:linear-gradient(90deg,#2b78ad,#70cbed)!important}
+.mobileResourceMini.staminaMini.low .miniFill{background:linear-gradient(90deg,#9d641e,#e2ad45)!important}
+.resourceCell .bar,.resourceCell .staminaBar{display:block!important;visibility:visible!important;opacity:1!important;overflow:hidden!important;background:#0a070c!important;border-color:#5d4d61!important}
+.resourceCell .fill,.resourceCell .staminaFill{display:block!important;visibility:visible!important;opacity:1!important;height:100%!important;max-width:100%!important}
+#appearanceOverlay{z-index:32}
+.hubAppearanceBtn{border-color:#735f8d!important;background:linear-gradient(180deg,#2d2138,#17111d)!important;color:#e7d6f1!important}
+.runtimeRecoveryNotice{margin:5px 0;padding:5px 7px;border:1px solid #735b41;border-radius:6px;background:#20170e;color:#e7c995;font-size:7px;line-height:1.45}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.12.1.1 ADVENTURE AUDIO</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.12.3.1 PROGRESSION RECOVERY</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
 <canvas id="game" width="374" height="462" aria-label="ダンジョン"></canvas>
 <div id="floorBanner"></div>
+<div id="impactOverlay" aria-hidden="true"></div>
 <div id="combatToast" aria-live="polite"></div>
 <div class="floorGoal" id="floorGoal"><b>探索目標</b><br>深淵へ踏み出す。</div>
 <div class="returnPrompt hidden" id="returnPrompt" aria-live="polite">
@@ -3496,7 +3700,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 色付き資源バー・明るいケルト冒険曲</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 進行復旧・静かなケルト探索曲・灯台の姿編集</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -3636,7 +3840,7 @@ body{
       <span>再生状態</span><b id="audioRuntimeLabel">最初のタップ待ち</b>
     </div>
     <div class="audioToggleGrid">
-      <button type="button" id="toggleBgmBtn" aria-pressed="true"><b>BGM</b><small>明るいケルト調の旅・冒険曲</small></button>
+      <button type="button" id="toggleBgmBtn" aria-pressed="true"><b>BGM</b><small>静かなケルト調の探索・旅路</small></button>
       <button type="button" id="toggleSfxBtn" aria-pressed="true"><b>効果音</b><small>戦闘・探索・報酬の音</small></button>
     </div>
     <label class="audioRangeRow" for="bgmVolumeRange"><span>BGM音量</span><b id="bgmVolumeValue">38%</b></label>
@@ -3647,7 +3851,7 @@ body{
       <button type="button" id="previewBgmBtn">BGMを試聴</button>
       <button type="button" id="previewSfxBtn">効果音を試聴</button>
     </div>
-    <p class="audioNote">灯台と通常探索は、長調寄りの笛・ハープ・軽いフレームドラムで、旅立ちや冒険を感じる曲へ変更しています。危険時と番人戦だけ緊張感のある音階へ切り替わります。</p>
+    <p class="audioNote">灯台と通常探索は、明るすぎないミクソリディアン調の笛とハープへ調整しています。静かな探索感を保ち、危険時と番人戦だけ緊張感を強めます。</p>
     <p class="audioNote">バックグラウンドでは音源とタイマーを停止し、復帰時に現在の場面から再開します。効果音は同時発音数を制限して音割れを防ぎます。</p>
     <p class="audioNote">iPhoneでは最初のタップ後に音が始まります。消音スイッチや端末音量も確認してください。</p>
     <button type="button" class="modalBtn" id="closeAudioSettings">閉じる</button>
@@ -3852,6 +4056,8 @@ body{
           <li>装備絆の撃破数は、今後は武器を含む各装備へ1体につき正確に1回だけ加算します。過去の撃破数は失わないため、そのまま維持します。</li>
           <li>3レベルごとに才能を選び、灯台では欠片で永久強化ができます。</li>
           <li>帰還後の灯台では、<b>帰還時の装備</b>と<b>次回出撃装備</b>を比較し、倉庫から部位ごとに装備を変更・解除できます。</li>
+          <li>灯台倉庫は、現在の次回出撃装備と候補を同じ部位で比較できます。攻撃・防御・会心・充足・推奨度・タグ差を色付き表示します。</li>
+          <li>倉庫は名前検索、部位、状態、並び順で絞り込めます。初期表示は1ページ4件で、8件・12件へ変更できます。</li>
           <li>深度10・25・50・80で<b>深淵適応</b>、観察で<b>研究点</b>も増えます。</li>
         </ul>
       </div>
@@ -3991,7 +4197,7 @@ body{
     </details>
     <div id="codexList"></div>
     <button type="button" class="modalBtn hidden" id="returnToAbyssBtn">現在の探索へ戻る</button>
-    <button type="button" class="modalBtn" id="researchBtn">深淵研究</button><button type="button" class="modalBtn" id="adaptBtn">深淵適応を選ぶ</button><button type="button" class="modalBtn" id="newRunBtn">新しい探索を始める</button>
+    <button type="button" class="modalBtn hubAppearanceBtn" id="hubAppearanceBtn">姿を編集</button><button type="button" class="modalBtn" id="researchBtn">深淵研究</button><button type="button" class="modalBtn" id="adaptBtn">深淵適応を選ぶ</button><button type="button" class="modalBtn" id="newRunBtn">新しい探索を始める</button>
     <button type="button" class="modalBtn hidden" id="closeHub">閉じる</button>
   </div>
 </div>
@@ -7370,6 +7576,7 @@ function openLighthouseAfterDebrief(){
 }
 function finishExpeditionDeath(cause,killer=null){
  if(state.gameOver)return;
+ triggerImpactFeedback("death",{haptic:"death",duration:1050});
  if(state.meta?.pendingEchoRecovery){
   completePendingDeathEchoRecovery(state.meta.pendingEchoRecovery.id);
  }
@@ -7620,6 +7827,70 @@ function ensureBossProgressIntegrity(source="turn"){
 }
 
 let combatToastTimer=null;
+let impactFeedbackTimer=null;
+let resourceFeedbackTimer=null;
+let resourceFeedbackState={kind:"",until:0};
+const hapticFeedbackTimes={};
+function reducedFeedbackMotion(){
+ return!!window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+}
+function feedbackHaptic(kind="tap"){
+ if(reducedFeedbackMotion()||document.hidden||typeof navigator?.vibrate!=="function")return false;
+ const now=Date.now(),last=hapticFeedbackTimes[kind]||0;
+ if(now-last<90)return false;
+ hapticFeedbackTimes[kind]=now;
+ const pattern={
+  tap:7,attack:9,pickup:8,stamina:7,
+  hurt:18,trap:[16,24,14],heal:[8,20,8],guard:12,
+  critical:[14,26,18],rare:[8,18,10],legendary:[10,22,12,22,16],
+  objective:[9,18,9],stairs:[7,20,7],boss:[18,28,18,28,24],death:[30,40,55]
+ }[kind]||7;
+ try{return navigator.vibrate(pattern)}catch(error){return false}
+}
+function currentResourceFeedbackClass(){
+ if(!resourceFeedbackState.kind||Date.now()>=resourceFeedbackState.until)return"";
+ return`resource-${resourceFeedbackState.kind}`;
+}
+function pulseResourceBar(kind,duration=520){
+ resourceFeedbackState={kind,until:Date.now()+duration};
+ clearTimeout(resourceFeedbackTimer);
+ resourceFeedbackTimer=setTimeout(()=>{
+  resourceFeedbackState={kind:"",until:0};
+  const member=$("hero")?.querySelector?.(".member");
+  member?.classList?.remove(
+   "resource-hp-loss","resource-hp-gain",
+   "resource-stamina-loss","resource-stamina-gain"
+  );
+ },duration+40);
+}
+function triggerImpactFeedback(kind="tap",options={}){
+ if(options.resource)pulseResourceBar(options.resource,options.resourceDuration||520);
+ feedbackHaptic(options.haptic||kind);
+ const overlay=$("impactOverlay");
+ if(!overlay||reducedFeedbackMotion())return false;
+ overlay.className=kind;
+ void overlay.offsetWidth;
+ overlay.classList.add("show");
+ clearTimeout(impactFeedbackTimer);
+ impactFeedbackTimer=setTimeout(()=>{overlay.className=""},options.duration||520);
+ return true;
+}
+function spawnFeedbackBurst(x,y,kind="objective",count=10){
+ const color={
+  objective:"#9af0b8",rare:"#daa0ff",legendary:"#ffd678",
+  boss:"#ffe3a0",stairs:"#9ddfff",heal:"#92efae",critical:"#ffd36f"
+ }[kind]||"#ffffff";
+ addVisualEffect({kind:"feedback_ring",x,y,feedbackKind:kind,color,life:28});
+ for(let i=0;i<count;i++){
+  addVisualEffect({
+   kind:"feedback_spark",x,y,feedbackKind:kind,color,
+   angle:(Math.PI*2*i/count)+(i%2)*.12,
+   distance:9+(i%4)*3,
+   size:i%3===0?2:1,
+   life:22+(i%3)*3
+  });
+ }
+}
 function ensureCombatStats(){
  state.combatStats=state.combatStats||{dodges:0,guards:0,breaks:0,crits:0,lastStands:0};
  if(typeof state.combatStats.lastStands!=="number")state.combatStats.lastStands=0;
@@ -8077,7 +8348,13 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
   gainTraining("endurance",Math.min(3,dmg));
   spawnHeroEffect(options.trap?"trap":"hurt");
   spawnCombatText(state.player.x,state.player.y,`-${dmg}`,options.trap?"trap":"hurt",30);
+  triggerImpactFeedback(options.trap?"trap":"hurt",{
+   resource:"hp-loss",
+   haptic:options.trap?"trap":"hurt",
+   duration:options.trap?620:480
+  });
  }else if(options.guardable){
+  feedbackHaptic("guard");
   spawnCombatText(state.player.x,state.player.y,"NO DAMAGE","guard",30);
  }
  if(options.fx!==false){startDamageAnim();sfx("hurt")}
@@ -8427,6 +8704,108 @@ function repairPlayerPosition(){
  updateVision();
  addLog("探索者の位置情報を安全な場所へ復旧した。");
 }
+function activeRunMapIsUsable(){
+ if(!Array.isArray(state?.map)||state.map.length!==ROWS)return false;
+ let floorCount=0;
+ for(let y=0;y<ROWS;y++){
+  const row=state.map[y];
+  if(!Array.isArray(row)||row.length!==COLS)return false;
+  for(let x=0;x<COLS;x++){
+   if(row[x]!==0&&row[x]!==1)return false;
+   if(row[x]===1)floorCount++;
+  }
+ }
+ return floorCount>=12;
+}
+function rebuildEmergencyFloor(reason="terrain"){
+ state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
+ carveRoom(state.map,2,2,8,8);
+ carveRoom(state.map,COLS-11,ROWS-11,8,8);
+ carveLine(state.map,{x:6,y:6},{x:COLS-7,y:ROWS-7});
+ state.rooms=[
+  {x:2,y:2,w:8,h:8,cx:6,cy:6},
+  {x:COLS-11,y:ROWS-11,w:8,h:8,cx:COLS-7,cy:ROWS-7}
+ ];
+ state.player={x:6,y:6};
+ state.stairs={x:COLS-7,y:ROWS-7};
+ state.enemies=[];state.items=[];state.traps=[];state.specialTiles=[];state.environment=[];
+ state.secretWalls=[];state.shortcuts=[];state.events=[];state.remains=[];
+ state.visited={};state.visible={};state.bossDefeated=false;
+ state.floorStats=createFloorStats();
+ state.floorObjective={...createFloorObjective(),floor:state.floor};
+ updateVision();
+ if(!state.progressionRecoveryLogged){
+  state.progressionRecoveryLogged=true;
+  addLog(`保存内の迷宮地形を安全な通路へ再構築した（${reason}）。装備・荷物・階層は維持した。`);
+ }
+ return true;
+}
+function repairActiveRunProgressionState(source="render"){
+ if(!state||state.expeditionEnded||state.gameOver)return{changed:false,emergency:false};
+ let changed=false,emergency=false;
+ const arrays=["enemies","items","inventory","traps","specialTiles","environment","secretWalls","shortcuts","events","remains","rooms"];
+ for(const keyName of arrays){if(!Array.isArray(state[keyName])){state[keyName]=[];changed=true}}
+ if(!state.visual||typeof state.visual!=="object"){state.visual={};changed=true}
+ if(!Array.isArray(state.visual.effects)){state.visual.effects=[];changed=true}
+ for(const keyName of ["moveFrames","attackFrames","damageFrames","flash","shake","time"]){if(typeof state.visual[keyName]!=="number"){state.visual[keyName]=0;changed=true}}
+ if(!state.visited||typeof state.visited!=="object"||Array.isArray(state.visited)){state.visited={};changed=true}
+ if(!state.visible||typeof state.visible!=="object"||Array.isArray(state.visible)){state.visible={};changed=true}
+
+ if(!activeRunMapIsUsable()){
+  emergency=rebuildEmergencyFloor("地形データ不整合");changed=true;
+ }else{
+  const beforePlayer=JSON.stringify(state.player||null);
+  repairPlayerPosition();
+  if(beforePlayer!==JSON.stringify(state.player||null))changed=true;
+  const stairValid=state.stairs&&Number.isFinite(state.stairs.x)&&Number.isFinite(state.stairs.y)&&inside(state.stairs.x,state.stairs.y)&&tile(state.stairs.x,state.stairs.y)===1&&!(state.stairs.x===state.player.x&&state.stairs.y===state.player.y);
+  if(!stairValid){
+   let best=null,bestDistance=-1;
+   for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+    if(state.map[y][x]!==1||(x===state.player.x&&y===state.player.y))continue;
+    const distance=Math.abs(x-state.player.x)+Math.abs(y-state.player.y);
+    if(distance>bestDistance){best={x,y};bestDistance=distance}
+   }
+   if(best){state.stairs=best;changed=true;addLog("階段位置を迷宮内の安全な床へ復旧した。");}
+   else{emergency=rebuildEmergencyFloor("階段位置不整合");changed=true;}
+  }
+ }
+
+ const onFloor=e=>e&&Number.isFinite(e.x)&&Number.isFinite(e.y)&&inside(e.x,e.y)&&tile(e.x,e.y)===1;
+ for(const keyName of ["enemies","items","traps","specialTiles","environment","events","remains"]){
+  const before=state[keyName].length;
+  state[keyName]=state[keyName].filter(onFloor);
+  if(state[keyName].length!==before)changed=true;
+ }
+ if(!state.floorStats||typeof state.floorStats!=="object"){state.floorStats=createFloorStats();changed=true}
+ if(!state.floorObjective||typeof state.floorObjective!=="object"){state.floorObjective={...createFloorObjective(),floor:state.floor};changed=true}
+ repairShortcutStairOverlap(false);
+ if(changed||!Object.keys(state.visible||{}).length)updateVision();
+ if(changed&&source==="load"&&!state.progressionRecoveryNotified){
+  state.progressionRecoveryNotified=true;
+  addLog("進行復旧：マップ・位置・階段・描画用データを検査し、安全な状態へ補正した。");
+ }
+ return{changed,emergency};
+}
+function renderHeroRecoveryFallback(error){
+ const h=state?.hero||{name:"探索者",hp:0,maxHp:1,stamina:0,maxStamina:1};
+ const maxStamina=Math.max(1,Number(h.maxStamina)||1);
+ const hpPercent=clamp(100*(Number(h.hp)||0)/Math.max(1,Number(h.maxHp)||1),0,100);
+ const staminaPercent=clamp(100*(Number(h.stamina)||0)/maxStamina,0,100);
+ const hpClass=hpPercent<=25?"critical":hpPercent<=50?"warning":"healthy";
+ const staminaClass=staminaPercent<=25?"low":"ready";
+ $("hero").innerHTML=`<div class="member mobileCompactHero"><div class="name">${h.name||"探索者"}<span class="mobileCombatStats">HUD復旧表示</span></div><div class="mobileResourceRow"><div class="mobileResourceMini hpMini ${hpClass}"><b>HP</b><span class="miniTrack"><span class="miniFill" style="width:${hpPercent}%"></span></span><span>${h.hp||0}/${h.maxHp||1}</span></div><div class="mobileResourceMini staminaMini ${staminaClass}"><b>気</b><span class="miniTrack"><span class="miniFill" style="width:${staminaPercent}%"></span></span><span>${h.stamina||0}/${maxStamina}</span></div></div></div>`;
+ console.error("Hero HUD fallback",error);
+}
+function safeRenderPart(name,fn,fallback=null){
+ try{fn();return true}catch(error){
+  console.error(`Render part failed: ${name}`,error);
+  state.runtimeRenderFaults=state.runtimeRenderFaults||{};
+  state.runtimeRenderFaults[name]=(state.runtimeRenderFaults[name]||0)+1;
+  if(fallback){try{fallback(error)}catch(fallbackError){console.error(`Render fallback failed: ${name}`,fallbackError)}}
+  return false;
+ }
+}
+
 function cameraOrigin(){
  if(!state?.map?.length)return{x:0,y:0};
  repairPlayerPosition();
@@ -9127,6 +9506,8 @@ function completeFloorObjective(method="primary"){
  if(provisionGain.overflow)addLog(`階層報酬の携行糧は上限により${provisionGain.gained}/${provisionGain.requested}手を収納した。`);
  const run=ensureRunStats();run.objectivesCompleted=(run.objectivesCompleted||0)+1;
  spawnCombatText(state.player.x,state.player.y,"UNSEALED","dodge",48);
+ spawnFeedbackBurst(state.player.x,state.player.y,"objective",12);
+ triggerImpactFeedback("objective",{haptic:"objective",duration:680});
  showCombatToast("階層目標達成",`${method==="fallback"?"踏破による代替達成・":""}階段解放 / ${floorObjectiveRewardText(objective)}`,"objective");
  sfx("objective");
  addLog(`階層目標「${objective.title}」を達成。階段の封印が解けた。${floorObjectiveRewardText(objective)}`);
@@ -10547,6 +10928,8 @@ function spendStamina(cost){
  }
  state.hero.stamina-=cost;
  spawnHeroEffect("stamina");
+ pulseResourceBar("stamina-loss",360);
+ if(cost>=3)feedbackHaptic("stamina");
  return true;
 }
 function recoverStamina(amount){
@@ -10557,7 +10940,9 @@ function recoverStamina(amount){
  state.hungerRecoveryBuffer-=gain;
  const before=state.hero.stamina;
  state.hero.stamina=Math.min(effectiveMaxStamina(),state.hero.stamina+gain);
- return state.hero.stamina-before;
+ const recovered=state.hero.stamina-before;
+ if(recovered>=3)pulseResourceBar("stamina-gain",440);
+ return recovered;
 }
 
 function hasTalent(id){return state.hero.talents?.includes(id)}
@@ -10646,7 +11031,7 @@ let bgmLaneGains=[],musicLaneSources=[new Set(),new Set()],activeMusicLane=0;
 let activeSfxVoices=[],sfxLastPlayed=new Map();
 let musicTimer=null,musicScene="",musicNextTime=0,musicBar=0,audioRuntimeSettings=null;
 let audioBackgrounded=!!document.hidden,audioResumePending=false,audioTransitionSerial=0;
-const celticBrightScale=[146.83,164.81,185,196,220,246.94,277.18,293.66,329.63];
+const celticBrightScale=[146.83,164.81,185,196,220,246.94,261.63,293.66,329.63];
 const celticShadowScale=[146.83,164.81,174.61,196,220,233.08,261.63,293.66,329.63];
 const sfxProfiles={
  step:{priority:0,cooldown:52},attack:{priority:1,cooldown:24},hit:{priority:2,cooldown:18},
@@ -10868,48 +11253,48 @@ function scheduleFrameDrum(start,accent=.016,lane=activeMusicLane){
 }
 function musicConfig(scene){
  const base=scene.split(":")[0],biome=scene.split(":")[1]||"roots";
- const brightTranspose={frost:2,furnace:-1,crypt:0,fungal:0,roots:0}[biome]||0;
+ const journeyTranspose={frost:2,furnace:-1,crypt:-2,fungal:0,roots:0}[biome]||0;
  const shadowTranspose={frost:0,furnace:-2,crypt:-3,fungal:-1,roots:-1}[biome]||0;
 
  if(base==="lighthouse"||base==="title")return{
-  bpm:98,transpose:0,scale:"bright",drum:"light",
-  drone:.0024,whistle:.0105,harpVolume:.0092,whistleOctave:1,
+  bpm:88,transpose:0,scale:"bright",drum:"sparse",
+  drone:.0035,whistle:.0092,harpVolume:.0078,whistleOctave:1,
   melodies:[
-   [0,2,4,5,4,2],
-   [1,3,5,6,5,3],
-   [0,2,4,6,5,4],
-   [4,5,6,4,2,0]
+   [0,null,2,3,4,2],
+   [0,2,4,3,2,1],
+   [3,2,0,null,1,2],
+   [4,5,4,2,1,0]
   ],
-  harp:[0,3,4,0]
+  harp:[0,4,2,5]
  };
  if(base==="danger")return{
-  bpm:116,transpose:shadowTranspose,scale:"shadow",drum:"strong",
-  drone:.0065,whistle:.009,harpVolume:.0068,whistleOctave:1,
+  bpm:112,transpose:shadowTranspose,scale:"shadow",drum:"strong",
+  drone:.0062,whistle:.0088,harpVolume:.0066,whistleOctave:1,
   melodies:[[0,2,3,4,3,2],[0,3,5,4,3,1],[2,4,6,5,4,2],[0,1,3,2,1,0]],
   harp:[0,3,5,2]
  };
  if(base==="boss")return{
-  bpm:128,transpose:-3,scale:"shadow",drum:"strong",
-  drone:.009,whistle:.0088,harpVolume:.0062,whistleOctave:1,
+  bpm:124,transpose:-3,scale:"shadow",drum:"strong",
+  drone:.0085,whistle:.0085,harpVolume:.006,whistleOctave:1,
   melodies:[[0,0,3,2,5,3],[0,3,4,5,4,2],[5,4,3,1,2,0],[0,2,5,4,3,1]],
   harp:[0,5,3,6]
  };
  if(base==="death")return{
-  bpm:62,transpose:-5,scale:"shadow",drum:false,
-  drone:.006,whistle:.007,harpVolume:.0055,whistleOctave:1,
+  bpm:60,transpose:-5,scale:"shadow",drum:false,
+  drone:.0058,whistle:.0068,harpVolume:.0053,whistleOctave:1,
   melodies:[[0,null,null,2,null,1],[0,null,-1,null,-2,null]],
   harp:[0,3]
  };
  return{
-  bpm:108,transpose:brightTranspose,scale:"bright",drum:"travel",
-  drone:.0028,whistle:.011,harpVolume:.0085,whistleOctave:1,
+  bpm:96,transpose:journeyTranspose,scale:"bright",drum:"soft",
+  drone:.0042,whistle:.0096,harpVolume:.0072,whistleOctave:1,
   melodies:[
+   [0,2,3,4,3,2],
    [0,2,4,5,4,2],
-   [0,3,4,6,5,3],
-   [2,4,6,7,6,4],
-   [4,5,6,4,2,0]
+   [1,3,4,6,4,3],
+   [4,3,2,1,2,0]
   ],
-  harp:[0,3,4,1]
+  harp:[0,4,2,5]
  };
 }
 function scheduleMusicBar(scene,start,barIndex,lane=activeMusicLane){
@@ -10918,57 +11303,27 @@ function scheduleMusicBar(scene,start,barIndex,lane=activeMusicLane){
  const eighth=30/cfg.bpm,barDuration=eighth*6;
  const pattern=cfg.melodies[barIndex%cfg.melodies.length];
 
- if(cfg.drone>0)scheduleDrone(
-  scaleFrequency(0,0,cfg.transpose,scale),
-  start,barDuration*.94,cfg.drone,lane
- );
-
+ if(cfg.drone>0)scheduleDrone(scaleFrequency(0,0,cfg.transpose,scale),start,barDuration*.94,cfg.drone,lane);
  const chordRoot=cfg.harp[barIndex%cfg.harp.length];
- [chordRoot,chordRoot+2,chordRoot+4].forEach((degree,i)=>
-  scheduleHarp(
-   scaleFrequency(degree,0,cfg.transpose,scale),
-   start+i*.045,
-   barDuration*(i===0?.58:.46),
-   cfg.harpVolume*(i===0?1:.82),
-   lane
-  )
- );
-
- if(cfg.scale==="bright"){
-  scheduleHarp(
-   scaleFrequency(chordRoot+4,1,cfg.transpose,scale),
-   start+3*eighth+.035,
-   eighth*.72,
-   cfg.harpVolume*.62,
-   lane
-  );
- }
+ [chordRoot,chordRoot+2,chordRoot+4].forEach((degree,i)=>scheduleHarp(
+  scaleFrequency(degree,0,cfg.transpose,scale),start+i*.045,
+  barDuration*(i===0?.56:.42),cfg.harpVolume*(i===0?1:.78),lane
+ ));
 
  pattern.forEach((degree,i)=>{
   if(degree===null)return;
   const grace=i===0&&barIndex%2===1;
-  if(grace)scheduleWhistle(
-   scaleFrequency(degree-1,cfg.whistleOctave,cfg.transpose,scale),
-   start+i*eighth,.07,cfg.whistle*.42,lane
-  );
-  scheduleWhistle(
-   scaleFrequency(degree,cfg.whistleOctave,cfg.transpose,scale),
-   start+i*eighth+(grace?.04:0),
-   eighth*.82,
-   cfg.whistle*(i===0||i===3?1:.9),
-   lane
-  );
+  if(grace)scheduleWhistle(scaleFrequency(degree-1,cfg.whistleOctave,cfg.transpose,scale),start+i*eighth,.07,cfg.whistle*.38,lane);
+  scheduleWhistle(scaleFrequency(degree,cfg.whistleOctave,cfg.transpose,scale),start+i*eighth+(grace?.04:0),eighth*.84,cfg.whistle*(i===0?1:.88),lane);
  });
 
  if(cfg.drum==="strong"){
-  [0,3].forEach((step,i)=>scheduleFrameDrum(start+step*eighth,i===0?.017:.012,lane));
+  [0,3].forEach((step,i)=>scheduleFrameDrum(start+step*eighth,i===0?.016:.011,lane));
   if(scene.startsWith("boss"))scheduleFrameDrum(start+5*eighth,.009,lane);
- }else if(cfg.drum==="travel"){
-  scheduleFrameDrum(start,.0075,lane);
-  scheduleFrameDrum(start+3*eighth,.0055,lane);
- }else if(cfg.drum==="light"&&barIndex%2===1){
-  scheduleFrameDrum(start,.0055,lane);
-  scheduleFrameDrum(start+3*eighth,.004,lane);
+ }else if(cfg.drum==="soft"&&barIndex%2===1){
+  scheduleFrameDrum(start,.0062,lane);scheduleFrameDrum(start+3*eighth,.0048,lane);
+ }else if(cfg.drum==="sparse"&&barIndex%4===3){
+  scheduleFrameDrum(start,.0048,lane);scheduleFrameDrum(start+3*eighth,.0036,lane);
  }
  return barDuration;
 }
@@ -10985,8 +11340,8 @@ function audioSceneForState(){
 }
 function audioSceneDisplay(scene=audioSceneForState()){
  const [base,biome]=scene.split(":");
- if(base==="title")return"旅立ちの灯台";if(base==="lighthouse")return"灯火と旅支度";if(base==="danger")return"迫る足音";if(base==="boss")return"番人の輪舞";if(base==="death")return"失われた残響";
- return`緑風の冒険路・${({roots:"根迷宮",crypt:"古き石廊",furnace:"火の工房",frost:"白銀洞",fungal:"光茸の小径"}[biome]||"迷宮")}`;
+ if(base==="title")return"灯台への序奏";if(base==="lighthouse")return"灯台の旅支度";if(base==="danger")return"迫る足音";if(base==="boss")return"番人の輪舞";if(base==="death")return"失われた残響";
+ return`深淵の旅路・${({roots:"根迷宮",crypt:"古き石廊",furnace:"火の工房",frost:"白銀洞",fungal:"光茸の小径"}[biome]||"迷宮")}`;
 }
 function rampMusicLane(lane,target,now,duration){
  const param=bgmLaneGains[lane]?.gain;if(!param)return;holdAudioParam(param,now);param.linearRampToValueAtTime(target,now+Math.max(.02,duration));
@@ -11153,6 +11508,8 @@ function damageEnemy(e,damage,label=""){
  if(wasCritical){
   ensureCombatStats().crits++;
   showCombatToast("会心","急所を捉えた","critical");
+  spawnFeedbackBurst(e.x,e.y,"critical",8);
+  triggerImpactFeedback("critical",{haptic:"critical",duration:430});
  }
  if(echoHit.proc){
   ensureRunStats().legendaryEchoProcs=(ensureRunStats().legendaryEchoProcs||0)+1;
@@ -11259,6 +11616,8 @@ function defeatEnemy(e){
   explodeBarrel(ghost);
  }
  if(wasBoss){
+  spawnFeedbackBurst(e.x,e.y,"boss",18);
+  triggerImpactFeedback("boss",{haptic:"boss",duration:900});
   ensureRunStats().bossesDefeated++;
   state.bossDefeated=true;
 
@@ -11867,9 +12226,15 @@ function pickup(){
  ensureRunStats().gearFound++;
  recordFloorPickup(true);
  spawnPickupEffect("gear");
- if(typeof item.gear.locked!=="boolean")item.gear.locked=(rarityOrder[item.gear.rarity]||0)>=2;
+ const pickupRarityRank=rarityOrder[item.gear.rarity]||0;
+ if(typeof item.gear.locked!=="boolean")item.gear.locked=pickupRarityRank>=2;
  state.inventory.push(item.gear);
- sfx((rarityOrder[item.gear.rarity]||0)>=2?"rare":"pickup");
+ if(pickupRarityRank>=2){
+  const feedbackKind=pickupRarityRank>=3?"legendary":"rare";
+  spawnFeedbackBurst(state.player.x,state.player.y,feedbackKind,pickupRarityRank>=3?14:9);
+  triggerImpactFeedback(feedbackKind,{haptic:feedbackKind,duration:pickupRarityRank>=3?760:580});
+ }else feedbackHaptic("pickup");
+ sfx(pickupRarityRank>=2?"rare":"pickup");
  addLog(
   item.gear.identified
    ?`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。`
@@ -12040,7 +12405,24 @@ function drawVisualEffects(cam){
   if(!inView(ef.x,ef.y))continue;
   const px=sx(ef.x),py=sy(ef.y),p=ef.life/ef.maxLife,age=1-p;
   ctx.save();ctx.globalAlpha=Math.max(.1,p);
-  if(ef.kind==="combat_text"){
+  if(ef.kind==="feedback_spark"){
+   const radius=age*(ef.distance||14);
+   const cx=px+TILE/2+Math.cos(ef.angle||0)*radius;
+   const cy=py+TILE/2+Math.sin(ef.angle||0)*radius-age*3;
+   ctx.fillStyle=ef.color||"#fff";
+   const size=ef.size||1;
+   ctx.fillRect(Math.round(cx-size/2),Math.round(cy-size/2),size,size);
+   if(size>1){
+    ctx.globalAlpha=Math.max(.08,p*.45);
+    ctx.fillRect(Math.round(cx-3),Math.round(cy),6,1);
+    ctx.fillRect(Math.round(cx),Math.round(cy-3),1,6);
+   }
+  }else if(ef.kind==="feedback_ring"){
+   const radius=3+age*13;
+   ctx.strokeStyle=ef.color||"#fff";
+   ctx.lineWidth=ef.feedbackKind==="boss"?2.5:1.5;
+   ctx.beginPath();ctx.arc(px+TILE/2,py+TILE/2,radius,0,Math.PI*2);ctx.stroke();
+  }else if(ef.kind==="combat_text"){
    const palette={
     dodge:"#9dffe8",guard:"#ffe39b",break:"#e9b7ff",critical:"#ffd36f",
     miss:"#d2c6d7",block:"#afd7ff",hurt:"#ff8794",trap:"#ff9b74",damage:"#fff1dc"
@@ -12392,6 +12774,7 @@ function performStairDescent(dx,dy,nx,ny){
  const previousFloor=state.floor;
  try{
   state.floor++;sfx("stairs");
+  triggerImpactFeedback("stairs",{haptic:"stairs",duration:620});
   state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
   updateAdaptationPoints();
   saveMeta();
@@ -12645,6 +13028,8 @@ function usePotion(){
  const amount=hungerAdjustedHealing(18+state.level*2);
  state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+amount);
  spawnHeroEffect("heal");
+ spawnFeedbackBurst(state.player.x,state.player.y,"heal",7);
+ triggerImpactFeedback("heal",{resource:"hp-gain",haptic:"heal",duration:560});
  addLog("治癒薬を使い、HPを "+amount+" 回復した。");
  renderInventory();render();saveGame();
 }
@@ -12955,55 +13340,32 @@ function returnAccessStatus(){
  if(!state||state.expeditionEnded||state.gameOver){
   return{near:false,ready:false,id:null,title:"帰還不可",detail:"探索中ではありません。"};
  }
- const onShrine=specialAt(state.player.x,state.player.y)?.type==="shrine";
+ if(!state.player||!Number.isFinite(state.player.x)||!Number.isFinite(state.player.y)){
+  return{near:false,ready:false,id:"repair",title:"位置を復旧中",detail:"探索者の位置情報を修復しています。"};
+ }
+ const onShrine=(state.specialTiles||[]).some(tileData=>tileData?.type==="shrine"&&tileData.x===state.player.x&&tileData.y===state.player.y);
  if(onShrine){
-  return{
-   near:true,ready:true,id:"shrine",free:true,
-   label:"帰還可能な祭壇",
-   title:"祭壇から無料帰還",
-   detail:"帰還楔は消費しません。"
-  };
+  return{near:true,ready:true,id:"shrine",free:true,label:"帰還可能な祭壇",title:"祭壇から無料帰還",detail:"帰還楔は消費しません。"};
  }
-
- const stairDistance=
-  Math.abs(state.player.x-state.stairs.x)+
-  Math.abs(state.player.y-state.stairs.y);
- if(stairDistance!==1){
-  return{near:false,ready:false,id:null,title:"帰還不可",detail:"階段の上下左右へ移動してください。"};
+ if(!state.stairs||!Number.isFinite(state.stairs.x)||!Number.isFinite(state.stairs.y)){
+  return{near:false,ready:false,id:"repair",title:"階段を復旧中",detail:"階段位置を安全な床へ修復しています。"};
  }
-
+ const stairDistance=Math.abs(state.player.x-state.stairs.x)+Math.abs(state.player.y-state.stairs.y);
+ if(stairDistance>1){
+  return{near:false,ready:false,id:null,title:"帰還不可",detail:"階段上、または階段の上下左右へ移動してください。"};
+ }
+ const locationLabel=stairDistance===0?"階段上":"階段前";
  if(state.bossDefeated){
-  return{
-   near:true,ready:true,id:"boss",free:true,
-   label:"番人撃破後の階段前",
-   title:"番人撃破・無料帰還",
-   detail:"帰還楔は消費しません。"
-  };
+  return{near:true,ready:true,id:"boss",free:true,label:`番人撃破後の${locationLabel}`,title:"番人撃破・無料帰還",detail:"帰還楔は消費しません。"};
  }
-
  if(!floorObjectiveComplete()){
-  return{
-   near:true,ready:false,id:"locked",free:false,
-   title:"階段はまだ封印中",
-   detail:"現在階の階段解放条件を達成してください。"
-  };
+  return{near:true,ready:false,id:"locked",free:false,title:"階段はまだ封印中",detail:"現在階の階段解放条件を達成してください。"};
  }
-
- const wedges=state.consumables.retreat||0;
+ const wedges=state.consumables?.retreat||0;
  if(wedges<=0){
-  return{
-   near:true,ready:false,id:"no_marker",free:false,
-   title:"帰還楔がありません",
-   detail:"帰還楔を1個入手すると、ここから帰還できます。"
-  };
+  return{near:true,ready:false,id:"no_marker",free:false,title:"帰還楔がありません",detail:"帰還楔を1個入手すると、ここから帰還できます。"};
  }
-
- return{
-  near:true,ready:true,id:"marker",free:false,
-  label:"帰還楔を打てる階段前",
-  title:"帰還可能・帰還楔×1",
-  detail:`所持${wedges}個 → 帰還後${wedges-1}個`
- };
+ return{near:true,ready:true,id:"marker",free:false,label:`帰還楔を打てる${locationLabel}`,title:"帰還可能・帰還楔×1",detail:`所持${wedges}個 → 帰還後${wedges-1}個`};
 }
 function currentReturnSource(){
  const status=returnAccessStatus();
@@ -13538,6 +13900,192 @@ function renderDeathEcho(meta=state.meta){
    </div>
   </div>`;
 }
+
+let lighthouseStashView={
+ query:"",slot:"all",status:"all",sort:"score_desc",page:1,pageSize:4
+};
+const lighthouseStashSortLabels={
+ score_desc:"推奨度が高い順",
+ ilvl_desc:"ILvが高い順",
+ rarity_desc:"レア度が高い順",
+ slot:"部位順",
+ name:"名前順",
+ newest:"新しく持ち帰った順",
+ oldest:"古くからある順"
+};
+const lighthouseStashStatusLabels={
+ all:"すべての状態",
+ selected:"次回装備に設定中",
+ available:"次回装備に未設定",
+ legendary:"伝説装備",
+ unstable:"歪みあり",
+ oath:"誓約武器"
+};
+function stashViewResetPage(){lighthouseStashView.page=1}
+function stashEscapeHtml(value){return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","\'":"&#39;"}[char]))}
+function stashSearchText(g){
+ const trait=legendaryTraitInfo(g)?.label||"";
+ return[
+  gearLabel(g),g.name,rarityData[g.rarity]?.label,equippedSlotLabel(normalizeLoadoutSlot(g.slot)),
+  bondStages[bondStage(g)]?.label,bondTraitSummary(g),weaponDeepeningSummary(g,true),trait,
+  Object.entries(effectiveGearTags(g)).filter(([,value])=>value>0).map(([id])=>tagData[id]?.label||id).join(" ")
+ ].filter(Boolean).join(" ").toLocaleLowerCase("ja");
+}
+function stashGearCrit(g){return(g?.crit||0)+weaponDeepeningEffectValue(g,"crit")}
+function stashGearStamina(g){return((g?.bondTraits||[]).includes("swift")?1:0)+weaponDeepeningEffectValue(g,"stamina")}
+function stashGearVision(g){return((g?.bondTraits||[]).includes("lantern")?1:0)+weaponDeepeningEffectValue(g,"vision")}
+function lighthouseStashComparison(meta,g){
+ const slot=normalizeLoadoutSlot(g.slot),current=nextLoadoutGear(meta,slot);
+ const candidateStats=applyBondTraitStats(g),currentStats=current?applyBondTraitStats(current):{atk:0,def:0};
+ const candidateTags=normalizeTags(effectiveGearTags(g)),currentTags=current?normalizeTags(effectiveGearTags(current)):emptyTags();
+ return{
+  slot,current,
+  atk:candidateStats.atk-currentStats.atk,
+  def:candidateStats.def-currentStats.def,
+  crit:stashGearCrit(g)-stashGearCrit(current),
+  supply:gearSupplyBonus(g)-gearSupplyBonus(current),
+  stamina:stashGearStamina(g)-stashGearStamina(current),
+  vision:stashGearVision(g)-stashGearVision(current),
+  score:Math.round(gearScore(g)-(current?gearScore(current):0)),
+  tags:Object.keys(candidateTags).map(id=>({id,delta:candidateTags[id]-currentTags[id]})).filter(item=>item.delta!==0)
+ };
+}
+function stashDeltaClass(value){return value>0?"up":value<0?"down":"same"}
+function stashSigned(value,digits=0){
+ const rounded=digits?Number(value.toFixed(digits)):Math.round(value);
+ return`${rounded>0?"+":""}${rounded}`;
+}
+function stashDeltaMetric(label,value,suffix="",digits=0){
+ return`<span class="stashCompareMetric ${stashDeltaClass(value)}">${label} ${stashSigned(value,digits)}${suffix}</span>`;
+}
+function stashTagDeltaHtml(comparison){
+ if(!comparison.tags.length)return'<span class="same">タグ差なし</span>';
+ return comparison.tags.map(item=>`<span class="${stashDeltaClass(item.delta)}">${tagData[item.id]?.label||item.id}${stashSigned(item.delta)}</span>`).join(" / ");
+}
+function lighthouseStashCurrentLoadoutHtml(meta){
+ const stats=loadoutSummaryStats(meta,meta.nextLoadout,true);
+ const count=lighthouseLoadoutSlots.filter(slot=>nextLoadoutGear(meta,slot)).length;
+ return`<div class="stashManagerHeadline"><div><b>現在の次回出撃装備</b><br>各部位を押すと、その部位の倉庫装備だけを表示します。</div><span>${count}/8部位</span></div>
+ <div class="stashLoadoutTotals">合計　攻${stats.atk} / 防${stats.def} / 会心${Math.round(stats.crit*100)}% / 追加充足${stats.supply}</div>
+ <div class="stashLoadoutStrip">${lighthouseLoadoutSlots.map(slot=>{
+  const gear=nextLoadoutGear(meta,slot);
+  return`<button type="button" class="stashLoadoutSlot ${lighthouseStashView.slot===slot?"active":""}" data-stash-slot="${slot}">
+   <span>${equippedSlotLabel(slot)}</span><b>${gear?gearLabel(gear):"未設定"}</b><small>${gear?`ILv${gear.itemLevel||1}・推${Math.round(gearScore(gear))}`:"候補を表示"}</small>
+  </button>`;
+ }).join("")}</div>`;
+}
+function lighthouseStashMatchesStatus(meta,g,status){
+ const selected=!!selectedLoadoutSlot(meta,g.id);
+ if(status==="selected")return selected;
+ if(status==="available")return!selected;
+ if(status==="legendary")return g.rarity==="legendary";
+ if(status==="unstable")return echoStrain(g)>0;
+ if(status==="oath")return isWeaponOathGear(g,meta);
+ return true;
+}
+function lighthouseStashEntries(meta){
+ const query=(lighthouseStashView.query||"").trim().toLocaleLowerCase("ja");
+ const entries=(meta.stash||[]).map((gear,index)=>({gear,index})).filter(entry=>{
+  const gear=entry.gear,slot=normalizeLoadoutSlot(gear.slot);
+  if(lighthouseStashView.slot!=="all"&&slot!==lighthouseStashView.slot)return false;
+  if(!lighthouseStashMatchesStatus(meta,gear,lighthouseStashView.status))return false;
+  if(query&&!stashSearchText(gear).includes(query))return false;
+  return true;
+ });
+ entries.sort((a,b)=>{
+  const ga=a.gear,gb=b.gear,mode=lighthouseStashView.sort;
+  if(mode==="ilvl_desc")return(gb.itemLevel||1)-(ga.itemLevel||1)||gearScore(gb)-gearScore(ga);
+  if(mode==="rarity_desc")return(rarityOrder[gb.rarity]||0)-(rarityOrder[ga.rarity]||0)||gearScore(gb)-gearScore(ga);
+  if(mode==="slot")return lighthouseLoadoutSlots.indexOf(normalizeLoadoutSlot(ga.slot))-lighthouseLoadoutSlots.indexOf(normalizeLoadoutSlot(gb.slot))||gearScore(gb)-gearScore(ga);
+  if(mode==="name")return gearLabel(ga).localeCompare(gearLabel(gb),"ja");
+  if(mode==="newest")return b.index-a.index;
+  if(mode==="oldest")return a.index-b.index;
+  return gearScore(gb)-gearScore(ga)||(gb.itemLevel||1)-(ga.itemLevel||1);
+ });
+ return entries;
+}
+function lighthouseStashCardHtml(meta,entry){
+ const g=entry.gear,i=entry.index,rarity=rarityData[g.rarity]||rarityData.common,stats=applyBondTraitStats(g);
+ const salvage=stashSalvageValue(g),loadoutSlot=selectedLoadoutSlot(meta,g.id),selected=!!loadoutSlot;
+ const stabilizeStatus=echoStabilizeStatus(g,meta),echoScoreText=echoGearScoreText(g),oathCurrent=isWeaponOathGear(g,meta);
+ const comparison=lighthouseStashComparison(meta,g),currentName=comparison.current?gearLabel(comparison.current):"未装備";
+ const deepeningText=weaponDeepeningSummaryHtml(g),legendary=legendaryTraitInfo(g);
+ const extraMetrics=[
+  comparison.stamina?stashDeltaMetric("気力",comparison.stamina):"",
+  comparison.vision?stashDeltaMetric("視野",comparison.vision):""
+ ].join("");
+ return`<article class="stashCompactCard ${selected?"protectedItem":""} ${oathCurrent?"oathWeapon":""}">
+  <div class="stashCompactHead">
+   <div class="stashCompactName"><b class="stashGearName ${g.rarity||"common"}">${rarity.label}・${gearLabel(g)}</b><small>${equippedSlotLabel(normalizeLoadoutSlot(g.slot))} / ILv${g.itemLevel||1} / 推奨度 ${Math.round(gearScore(g))}</small></div>
+   <div class="stashCompactBadges">
+    ${selected?'<span class="stashBadge selected">次回装備</span>':""}
+    ${g.rarity==="legendary"?'<span class="stashBadge legendary">伝説</span>':""}
+    ${oathCurrent?'<span class="stashBadge oath">誓約</span>':""}
+    ${echoStrain(g)>0?`<span class="stashBadge strain">歪み${echoStrain(g)}</span>`:""}
+   </div>
+  </div>
+  <div class="stashCompareBox">
+   <div class="stashCompareTarget"><span>次回の${equippedSlotLabel(comparison.slot)}と比較</span><b>${currentName}</b></div>
+   <div class="stashCompareMetrics">
+    ${stashDeltaMetric("攻",comparison.atk)}${stashDeltaMetric("防",comparison.def)}${stashDeltaMetric("会心",comparison.crit*100,"%")}${stashDeltaMetric("充足",comparison.supply)}${stashDeltaMetric("推",comparison.score)}${extraMetrics}
+   </div>
+   <div class="stashCompareTags">タグ差：${stashTagDeltaHtml(comparison)}</div>
+  </div>
+  <div class="stashQuickStats">候補性能　攻${stats.atk} / 防${stats.def} / 会心${Math.round(stashGearCrit(g)*100)}% / 追加充足${gearSupplyBonus(g)}${legendary?`<br>固有：${legendary.label}`:""}</div>
+  <details class="stashCompactDetails"><summary>進化・刻印・分解価値の詳細</summary><div class="stashDetailBody">
+   探索同調Lv${gearAttunementLevel(g)}・灯台調律済み<br>
+   ${tagSummaryHtml(effectiveGearTags(g))}${legendaryTraitSummaryHtml(g)}<br>
+   <span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0} / ${bondTraitSummary(g)}</span>
+   ${deepeningText}${echoImprintHtml(g)}
+   ${echoScoreText?`<span class="echoScoreNote ${echoGearScoreBreakdown(g).total<0?"negative":""}">推奨度補正：${echoScoreText}</span>`:""}
+   分解価値：<span class="stashShardValue">${salvage}欠片</span>
+  </div></details>
+  <div class="stashActions compact">
+   <button type="button" class="${selected?"loadoutSelected":""}" data-loadout="${i}">${selected?`${equippedSlotLabel(loadoutSlot)}を解除`:`次回の${equippedSlotLabel(comparison.slot)}に設定`}</button>
+   <button type="button" data-salvage="${i}">分解 +${salvage}欠片</button>
+   ${weaponOathStashActionHtml(g,i,meta)}
+   ${echoStrain(g)>0?`<button type="button" class="echoStabilizeBtn ${stabilizeStatus.can?"":"blocked"}" data-stabilize-echo="${i}" title="${stabilizeStatus.reason}">${stabilizeStatus.can?`安定化 ${stabilizeStatus.cost}欠片`:`安定化不可・あと${stabilizeStatus.missing}欠片`}</button><span class="echoStabilizeReason">${stabilizeStatus.reason}</span>`:""}
+  </div>
+ </article>`;
+}
+function renderLighthouseStash(meta=state.meta){
+ ensureMetaLoadouts(meta);
+ const stashItems=meta.stash||[],totalStashShards=stashItems.reduce((sum,g)=>sum+stashSalvageValue(g),0);
+ const stashStrain=stashItems.reduce((sum,g)=>sum+echoStrain(g),0),unstableGear=stashItems.filter(g=>echoStrain(g)>0).length;
+ const entries=lighthouseStashEntries(meta),pageSize=Math.max(1,Number(lighthouseStashView.pageSize)||4);
+ const pageCount=Math.max(1,Math.ceil(entries.length/pageSize));
+ lighthouseStashView.page=Math.min(Math.max(1,lighthouseStashView.page),pageCount);
+ const start=(lighthouseStashView.page-1)*pageSize,paged=entries.slice(start,start+pageSize);
+ $("stashSummary").textContent=`持ち帰り倉庫 ${stashItems.length}/20・表示${entries.length}・全分解 ${totalStashShards}欠片${stashStrain?`・歪み総量${stashStrain}（${unstableGear}個）`:""}`;
+ $("stashList").innerHTML=`<div class="stashManager">
+  <div class="stashManagerTop">
+   ${lighthouseStashCurrentLoadoutHtml(meta)}
+   <div class="stashControls">
+    <label class="stashSearchWrap"><input type="search" id="stashSearchInput" value="${stashEscapeHtml(lighthouseStashView.query||"")}" placeholder="装備名・特性・タグを検索"></label>
+    <select id="stashStatusSelect">${Object.entries(lighthouseStashStatusLabels).map(([id,label])=>`<option value="${id}" ${lighthouseStashView.status===id?"selected":""}>${label}</option>`).join("")}</select>
+    <select id="stashSortSelect">${Object.entries(lighthouseStashSortLabels).map(([id,label])=>`<option value="${id}" ${lighthouseStashView.sort===id?"selected":""}>${label}</option>`).join("")}</select>
+   </div>
+   <div class="stashFilterChips"><button type="button" data-stash-slot="all" class="${lighthouseStashView.slot==="all"?"active":""}">全部位</button>${lighthouseLoadoutSlots.map(slot=>`<button type="button" data-stash-slot="${slot}" class="${lighthouseStashView.slot===slot?"active":""}">${equippedSlotLabel(slot)}</button>`).join("")}</div>
+   <div class="stashResultLine"><span><b>${entries.length}</b>件中 ${entries.length?start+1:0}〜${Math.min(start+pageSize,entries.length)}件</span><button type="button" id="stashResetFilters">条件解除</button><label>1ページ <select id="stashPageSizeSelect"><option value="4" ${pageSize===4?"selected":""}>4件</option><option value="8" ${pageSize===8?"selected":""}>8件</option><option value="12" ${pageSize===12?"selected":""}>12件</option></select></label></div>
+  </div>
+  ${paged.length?`<div class="stashCardGrid">${paged.map(entry=>lighthouseStashCardHtml(meta,entry)).join("")}</div>`:`<div class="stashEmpty">条件に一致する装備はありません。<br>検索語・部位・状態を変更してください。</div>`}
+  <div class="stashPagination"><button type="button" id="stashPrevPage" ${lighthouseStashView.page<=1?"disabled":""}>前のページ</button><span>${lighthouseStashView.page} / ${pageCount}ページ</span><button type="button" id="stashNextPage" ${lighthouseStashView.page>=pageCount?"disabled":""}>次のページ</button></div>
+ </div>`;
+ const list=$("stashList");
+ list.querySelectorAll("[data-stash-slot]").forEach(button=>button.onclick=()=>{lighthouseStashView.slot=button.dataset.stashSlot;stashViewResetPage();renderLighthouseStash(meta)});
+ const search=$("stashSearchInput");if(search){const applySearch=value=>{lighthouseStashView.query=value;stashViewResetPage();renderLighthouseStash(meta);const next=$("stashSearchInput");if(next){next.focus();next.setSelectionRange(next.value.length,next.value.length)}};search.oninput=event=>{if(event.isComposing)return;applySearch(event.target.value)};search.oncompositionend=event=>applySearch(event.target.value)};
+ $("stashStatusSelect").onchange=event=>{lighthouseStashView.status=event.target.value;stashViewResetPage();renderLighthouseStash(meta)};
+ $("stashSortSelect").onchange=event=>{lighthouseStashView.sort=event.target.value;stashViewResetPage();renderLighthouseStash(meta)};
+ $("stashPageSizeSelect").onchange=event=>{lighthouseStashView.pageSize=Number(event.target.value)||4;stashViewResetPage();renderLighthouseStash(meta)};
+ const reset=$("stashResetFilters");if(reset)reset.onclick=()=>{lighthouseStashView.query="";lighthouseStashView.slot="all";lighthouseStashView.status="all";lighthouseStashView.sort="score_desc";stashViewResetPage();renderLighthouseStash(meta)};
+ $("stashPrevPage").onclick=()=>{lighthouseStashView.page=Math.max(1,lighthouseStashView.page-1);renderLighthouseStash(meta)};
+ $("stashNextPage").onclick=()=>{lighthouseStashView.page=Math.min(pageCount,lighthouseStashView.page+1);renderLighthouseStash(meta)};
+ list.querySelectorAll("[data-loadout]").forEach(button=>button.onclick=()=>toggleNextLoadout(Number(button.dataset.loadout)));
+ list.querySelectorAll("[data-salvage]").forEach(button=>button.onclick=()=>salvageStash(Number(button.dataset.salvage)));
+ list.querySelectorAll("[data-stabilize-echo]").forEach(button=>button.onclick=()=>stabilizeEchoGear(Number(button.dataset.stabilizeEcho)));
+ list.querySelectorAll("[data-weapon-oath]").forEach(button=>button.onclick=()=>requestWeaponOath(Number(button.dataset.weaponOath)));
+}
+
 function renderHub(){
  const m=state.meta||defaultMeta();
  ensureLighthouseOnboardingMeta(m);
@@ -13586,66 +14134,7 @@ function renderHub(){
   button.onclick=()=>setPendingReactionControl(button.dataset.reactionControl);
  });
  $("hubUpgrades").querySelectorAll("[data-upgrade]").forEach(b=>b.onclick=()=>buyMetaUpgrade(b.dataset.upgrade));
- const stashItems=m.stash||[];
- const totalStashShards=stashItems.reduce((sum,g)=>sum+stashSalvageValue(g),0);
- const stashStrain=stashItems.reduce((sum,g)=>sum+echoStrain(g),0);
- const unstableGear=stashItems.filter(g=>echoStrain(g)>0).length;
- $("stashSummary").textContent=
-  `持ち帰り倉庫 ${stashItems.length}/20・全分解 ${totalStashShards}欠片`+
-  `${stashStrain?`・歪み総量${stashStrain}（${unstableGear}個）`:""}`;
- $("stashList").innerHTML=`<div class="stashSummaryLine">
-  装備名の色でレア度を確認できます。分解ボタンには獲得する欠片数を表示しています。
- </div>`+
-  (stashItems.length?stashItems.map((g,i)=>{
-   const rarity=rarityData[g.rarity]||rarityData.common;
-   const stats=applyBondTraitStats(g);
-   const salvage=stashSalvageValue(g);
-   const loadoutSlot=selectedLoadoutSlot(m,g.id);
-   const inherited=!!loadoutSlot;
-   const stabilizeStatus=echoStabilizeStatus(g,m);
-   const echoScoreText=echoGearScoreText(g);
-   const oathCurrent=isWeaponOathGear(g,m);
-   const deepeningText=weaponDeepeningSummaryHtml(g);
-   return`
-   <div class="itemRow ${inherited?"protectedItem":""} ${oathCurrent?"oathWeapon":""}">
-    <div class="top">
-     <span class="stashGearName ${g.rarity||"common"}">${rarity.label}・${gearLabel(g)}</span>
-     <span>${equippedSlotLabel(g.slot)}${inherited?"・次回装備":""}</span>
-    </div>
-    <div class="desc">
-     ILv${g.itemLevel||1} / 探索同調Lv${gearAttunementLevel(g)} / 推奨度 ${Math.round(gearScore(g))}<br>
-     <span class="attunementState attuned">灯台調律済み・Lv1装備可</span><br>
-     攻${stats.atk} / 防${stats.def}${g.hunger?` / 最大充足 +${gearSupplyBonus(g)}`:""}${g.crit?` / 会心 +${Math.round(g.crit*100)}%`:""}<br>
-     ${tagSummaryHtml(effectiveGearTags(g))}
-     ${legendaryTraitSummaryHtml(g)}<br>
-     <span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0} / ${bondTraitSummary(g)}</span>
-     ${deepeningText}
-     ${echoImprintHtml(g)}
-     ${echoScoreText?`<span class="echoScoreNote ${echoGearScoreBreakdown(g).total<0?"negative":""}">推奨度補正：${echoScoreText}</span>`:""}
-     分解価値：<span class="stashShardValue">${salvage}欠片</span>
-    </div>
-    <div class="stashActions">
-     <button type="button" class="${inherited?"loadoutSelected":""}" data-loadout="${i}">${
-      inherited
-       ?`${equippedSlotLabel(loadoutSlot)}を解除`
-       :`次回の${equippedSlotLabel(normalizeLoadoutSlot(g.slot))}に設定`
-     }</button>
-     <button type="button" data-salvage="${i}">分解 +${salvage}欠片</button>
-     ${weaponOathStashActionHtml(g,i,m)}
-     ${echoStrain(g)>0
-      ?`<button type="button" class="echoStabilizeBtn ${stabilizeStatus.can?"":"blocked"}" data-stabilize-echo="${i}" title="${stabilizeStatus.reason}">${
-        stabilizeStatus.can
-         ?`安定化 ${stabilizeStatus.cost}欠片`
-         :`安定化不可・あと${stabilizeStatus.missing}欠片`
-       }</button><span class="echoStabilizeReason">${stabilizeStatus.reason}</span>`
-      :""}
-    </div>
-   </div>`;
-  }).join(""):'<p class="note">持ち帰った装備はありません。</p>');
- $("stashList").querySelectorAll("[data-loadout]").forEach(b=>b.onclick=()=>toggleNextLoadout(Number(b.dataset.loadout)));
- $("stashList").querySelectorAll("[data-salvage]").forEach(b=>b.onclick=()=>salvageStash(Number(b.dataset.salvage)));
- $("stashList").querySelectorAll("[data-stabilize-echo]").forEach(b=>b.onclick=()=>stabilizeEchoGear(Number(b.dataset.stabilizeEcho)));
- $("stashList").querySelectorAll("[data-weapon-oath]").forEach(b=>b.onclick=()=>requestWeaponOath(Number(b.dataset.weaponOath)));
+ renderLighthouseStash(m);
  const researchRows=Object.keys(researchData).map(type=>`${researchData[type].label} Lv${researchLevel(type)}`).join(" / ");
  $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>深淵研究</span><span>未使用 ${m.research?.points||0}</span></div><div class="desc">${researchRows}</div></div>`;
  const adaptationRows=(m.abyssAdaptations||[]).map(id=>abyssAdaptationData[id]?.label||id).join(" / ")||"未獲得";
@@ -14186,6 +14675,7 @@ function loadGame(){
   if(!state.events)state.events=[];
   if(!state.remains)state.remains=[];
   if(!state.ecology)state.ecology={spawnClock:0,totalRespawns:0,killsThisFloor:0};
+  const progressionRepair=repairActiveRunProgressionState("load");
   for(const e of state.enemies||[]){
    if(typeof e.alert!=="number")e.alert=0;
    if(typeof e.lastSeen==="undefined")e.lastSeen=null;
@@ -14500,6 +14990,8 @@ function renderHero(){
  const strainProfile=equippedEchoStrainProfile();
  const reaction=activeLabyrinthReaction();
  const oathRun=weaponOathRuntimeStatus();
+ const legendaryMobile=mobileLegendaryTraitText();
+ const resourcePulseClass=currentResourceFeedbackClass();
  const threatClass=threat.certainLethal?"lethal":threat.possibleLethal?"warning":"";
 
  if(compactMobileHudActive()){
@@ -14515,7 +15007,7 @@ function renderHero(){
    ?`歪${strainProfile.raw}・気-${strainProfile.effective}`
    :"";
 
-  $("hero").innerHTML=`<div class="member hasPortrait mobileCompactHero ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
+  $("hero").innerHTML=`<div class="member hasPortrait mobileCompactHero ${resourcePulseClass} ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
    <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
    <div class="name">${h.name}<span class="mobileCombatStats">Lv${state.level}　攻${totalAtk()} 防${totalDef()} 会${Math.round(totalCrit()*100)}%</span>${legendaryMobile?`<span class="mobileLegendaryStats">伝:${legendaryMobile}</span>`:""}</div>
    <div class="mobileResourceRow">
@@ -14536,7 +15028,7 @@ function renderHero(){
   return;
  }
 
- $("hero").innerHTML=`<div class="member hasPortrait ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
+ $("hero").innerHTML=`<div class="member hasPortrait ${resourcePulseClass} ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 固定予兆 ${danger}</span>`:""}${threat.possibleLethal?` <span class="mortalWarning ${threat.certainLethal?"certain":""}">${threat.certainLethal?"確定致死":"致死圏"}</span>`:""}</div>
   <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　残り約${state.hunger+(state.provisions||0)}手　携行糧:${state.provisions||0}/${provisionCapacity()}<br>才能:${(h.talents||[]).length}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${displayedRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${strainProfile.raw?` <span class="echoStrainState ${strainProfile.overflow?"capped":""}">歪み:${strainProfile.raw} / 気力-${strainProfile.effective}${strainProfile.overflow?`・効果上限${strainProfile.cap}`:""}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
@@ -15385,9 +15877,9 @@ function draw(){
  state.events.forEach(ev=>{if(!ev.used&&state.visible[key(ev.x,ev.y)]){
   const x=sx(ev.x),y=sy(ev.y);drawEventTileSprite(x,y,t);
  }});
- state.specialTiles.forEach(t=>{if(state.visible[key(t.x,t.y)]){
-  const x=sx(t.x),y=sy(t.y);
-  drawSpecialTileSprite(t,x,y,t);
+ state.specialTiles.forEach(tileData=>{if(state.visible[key(tileData.x,tileData.y)]){
+  const x=sx(tileData.x),y=sy(tileData.y);
+  drawSpecialTileSprite(tileData,x,y,t);
  }});
 
  state.environment.forEach(o=>{if(o.active&&state.visible[key(o.x,o.y)]){
@@ -15545,7 +16037,21 @@ function renderSkills(){
     ?"致死予測あり。確認画面を開きます。"
     :"次の敵行動中、致命傷を耐えてHP25%・気力+3・敵行動中断。確認画面を開きます。";
 }
-function render(){if(!state)return;recordEchoResonance();renderStats();renderHero();renderLog();renderSkills();renderFloorGoal();renderReturnAccess();draw();renderAudioButton();updateMusicScene()}
+function render(){
+ if(!state)return;
+ const repair=repairActiveRunProgressionState("render");
+ safeRenderPart("echo",()=>recordEchoResonance());
+ safeRenderPart("stats",()=>renderStats());
+ safeRenderPart("hero",()=>renderHero(),renderHeroRecoveryFallback);
+ safeRenderPart("log",()=>renderLog());
+ safeRenderPart("skills",()=>renderSkills());
+ safeRenderPart("goal",()=>renderFloorGoal());
+ safeRenderPart("return",()=>renderReturnAccess());
+ safeRenderPart("map",()=>draw());
+ safeRenderPart("audioButton",()=>renderAudioButton());
+ safeRenderPart("music",()=>updateMusicScene());
+ if(repair.changed&&!state.expeditionEnded&&!state.gameOver)queueSave();
+}
 function startNew(){
  // タイトル画面から探索を直接初期化する旧経路は廃止。
  // 新しい探索は必ず灯台の startFreshRunFromHub() から開始する。
@@ -15613,7 +16119,8 @@ $("closeInventory").onclick=()=>{
 };
 $("cancelFieldSalvage").onclick=closeFieldSalvageConfirm;
 $("confirmFieldSalvage").onclick=confirmFieldSalvage;
-$("closeAppearance").onclick=()=>$("appearanceOverlay").classList.add("hidden");
+function openAppearanceEditor(){if(!state)return false;ensureAppearanceMeta(state.meta);renderAppearance();$("appearanceOverlay").classList.remove("hidden");return true}
+$("closeAppearance").onclick=()=>{$("appearanceOverlay").classList.add("hidden");if(state?.expeditionEnded)renderHub()};
 
 let canvasTouchMoved=false;
 canvas.addEventListener("touchstart",()=>{canvasTouchMoved=false},{passive:true});
@@ -15643,11 +16150,8 @@ $("chooseOldShortcut").onclick=chooseShortcutFromOverlap;
 $("cancelReturnConfirm").onclick=closeReturnConfirm;
 $("confirmReturnConfirm").onclick=confirmReturnToLighthouse;
 $("returnPromptBtn").onclick=()=>returnToLighthouse();
-$("appearanceBtn").onclick=()=>{
- if(!state)return;
- renderAppearance();
- $("appearanceOverlay").classList.remove("hidden");
-};
+$("appearanceBtn").onclick=openAppearanceEditor;
+$("hubAppearanceBtn").onclick=openAppearanceEditor;
 
 $("menuBtn").onclick=()=>{
  const footer=$("footerBtns");
@@ -15746,19 +16250,16 @@ document.querySelectorAll("button").forEach(button=>{
  },{passive:false});
 });
 
-if("serviceWorker" in navigator){
- navigator.serviceWorker.getRegistrations().then(regs=>Promise.all(regs.map(r=>r.unregister()))).catch(()=>{});
-}
-if("caches" in window){caches.keys().then(keys=>Promise.all(keys.map(k=>caches.delete(k)))).catch(()=>{});}
-
 window.addEventListener("load",()=>{
-  setTimeout(()=>window.scrollTo(0,1),100);
+ setTimeout(()=>window.scrollTo(0,1),100);
+ if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(registration=>registration.update()).catch(()=>{});
+  let reloading=false;
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{
+   if(reloading)return;reloading=true;window.location.reload();
+  });
+ }
 });
-
-
-if("serviceWorker" in navigator){
- window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-}
 </script>
 </body>
 </html>
