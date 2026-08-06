@@ -633,7 +633,7 @@ body{
     font-size:8px;
     line-height:1.2;
   }
-  #log div:nth-last-child(n+3){display:none}
+  #log div:nth-child(n+3){display:none}
 
   #actions{
     height:94px;
@@ -2193,7 +2193,7 @@ body{
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.4 EXTRACTION PROMPT</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.4.2 HUNGER BALANCE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2242,7 +2242,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 帰還条件の常時案内</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 第10層を基準にした充足再調整</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2368,7 +2368,7 @@ body{
           <div class="helpKey"><b>HP</b><br>0になるとその探索は終了。</div>
           <div class="helpKey"><b>気力</b><br>攻撃・スキルの燃料。空腹だと回復しにくくなります。</div>
           <div class="helpKey"><b>充足</b><br>1回の探索で使える総行動時間。帰還しない限り基本的に減るだけです。</div>
-          <div class="helpKey"><b>携行糧</b><br>充足が減る前に消費される予備時間です。</div>
+          <div class="helpKey"><b>携行糧</b><br>乾燥肉や一部報酬で補充でき、充足が減る前に消費される予備時間です。</div>
         </div>
       </div>
     </details>
@@ -2404,6 +2404,10 @@ body{
           <li>帰還すると探索は終了し、<b>HP・気力・充足が完全回復</b>します。</li>
           <li>階段マスへ入ると階層移動の確認が始まるため、帰還操作は階段の<b>上下左右に隣接したマス</b>から行います。斜め位置からは使用できません。</li>
           <li>帰還地点へ近づくと、ゲーム画面下部に専用案内が表示されます。階段封印・帰還楔不足・無料帰還・楔消費後の残数をその場で確認できます。</li>
+          <li>ログは常に最新の内容から表示されます。短いiPhone画面では最新2件を優先表示します。</li>
+          <li>燃料0の状態で灯油を拾うと、その1本を自動補充して光源を再点灯します。燃料が残っている時は携行品として保存します。</li>
+          <li><b>充足バランス</b>：基礎最大充足は840です。乾燥肉は携行糧60手、休息階の目標報酬も携行糧60手になります。</li>
+          <li>装備の「飢え耐え」は従来より強く最大充足へ反映されます。消費2倍の「飢餓」変異は第11層以降にだけ出現します。</li>
           <li><b>欠片保険</b>は最大3部位まで指定でき、出撃時に性能依存の保険料を支払います。死亡時のみ現在状態を倉庫へ回収します。</li>
           <li><b>魂還石</b>は深層番人から極低確率で入手できます。携行設定中はHP0の瞬間に1個消費し、死亡を緊急帰還へ置き換えます。</li>
           <li><b>致死予測</b>は、現在プレイヤーを狙って固定されている敵予兆の合計被害範囲です。移動で予兆から外れれば予測も消えます。</li>
@@ -3524,7 +3528,7 @@ function restoreLighthouseSession(){
  return true;
 }
 function defaultMeta(){
- const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
+ const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],balanceMigrations:{hungerV31042:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
  meta.appearance=defaultAppearance();
  return meta;
 }
@@ -3977,6 +3981,8 @@ function loadoutSummaryStats(meta,loadout,isIdLoadout=false){
 function applyMetaToFreshState(newState){
  const meta=loadMeta()||defaultMeta();
  ensureAppearanceMeta(meta);
+ meta.balanceMigrations=meta.balanceMigrations||{};
+ meta.balanceMigrations.hungerV31042=true;
  newState.meta=meta;
  const usage=meta.usage||emptyUsage();
  const weaponKeys=["sword","spear","bow","staff"];
@@ -4541,11 +4547,11 @@ function finishExpeditionDeath(cause,killer=null){
 function freshState(){
  const newState={
   version:4,seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,
-  hunger:720,maxHunger:720,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
+  hunger:840,maxHunger:840,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false,lastStandUsed:false,lastStandArmed:false,lastStandInvulnerable:false,lastStandTriggeredThisTurn:false,exhaustedTurns:0},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,crits:0,lastStands:0},
   map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],labyrinthReaction:null,reactionApplied:false,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingReaction:null,reactionHistory:[],balanceMigrations:{hungerV31042:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
  const prepared=applyMetaToFreshState(newState);
  prepared.runStats=createRunStats(prepared.meta);
@@ -5036,7 +5042,7 @@ function throwBomb(){
 
 function chooseFloorMutation(){
  if(state.floor===1){state.floorMutation=null;return}
- const pool=Object.keys(floorMutationData).filter(id=>state.floor>=6||id!=="famine");
+ const pool=Object.keys(floorMutationData).filter(id=>state.floor>=11||id!=="famine");
  state.floorMutation=choice(pool);
 }
 function mutation(){
@@ -5230,15 +5236,37 @@ function consumeLightFuel(){
  if(state.light.fuel===0&&state.light.on){
   state.light.on=false;
   renderLightButton();
+  updateVision();
   addLog("光源の燃料が尽き、消灯した。");
  }
 }
-function refillLight(){
- if((state.consumables.oil||0)<=0){addLog("灯油を持っていない。");return}
+function refillLight(options={}){
+ if((state.consumables.oil||0)<=0){
+  addLog("灯油を持っていない。");
+  return false;
+ }
+ const beforeFuel=state.light.fuel||0;
+ const wasOff=!state.light.on;
  state.consumables.oil--;
- state.light.fuel=Math.min(100,state.light.fuel+45);
- addLog("灯油を補充した。");
- renderInventory();queueSave?.();render();
+ state.light.fuel=Math.min(100,beforeFuel+45);
+ state.light.on=true;
+
+ renderLightButton();
+ applyLightUtility();
+ updateVision();
+
+ if(options.fromPickup){
+  addLog(`灯油を拾い、光源へ自動補充した。燃料${state.light.fuel}。`);
+ }else if(wasOff){
+  addLog(`灯油を補充し、光源を再点灯した。燃料${state.light.fuel}。`);
+ }else{
+  addLog(`灯油を補充した。燃料${beforeFuel}→${state.light.fuel}。`);
+ }
+
+ renderInventory();
+ queueSave?.();
+ render();
+ return true;
 }
 
 const factionData={
@@ -5749,7 +5777,7 @@ function objectiveRewardForFloor(){
  return{
   shards:1,
   scrap:(plan.boss?5:2)+routeValue("objectiveScrap"),
-  provisions:plan.rest?40:0
+  provisions:plan.rest?60:0
  };
 }
 function objectiveFallbackTarget(){return Math.min(70,34+Math.floor(state.floor*1.5));}
@@ -6554,7 +6582,7 @@ function totalAtk(){return Math.round(hungerAdjustedAttack(state.hero.atk+equipp
 function totalDef(){let d=state.hero.def+equippedDef()+(state.fieldForgeDef||0)+(tagTier("bone")>=3?1:0)+resonanceBonus("def")-hungerStage().defPenalty;if(hasTalent("survivor")&&state.hero.hp<=state.hero.maxHp*.25)d+=3;if(state.weapon?.trait==="glass")d=Math.max(0,d-2);return Math.max(0,d)}
 function totalCrit(){return state.crit+allEquippedItems().reduce((sum,g)=>sum+(g.crit||0),0)+(tagTier("shadow")>=6?.08:0)+resonanceBonus("crit")}
 function gearSupplyBonus(g){
- return Math.max(0,(g?.hunger||0)*3+echoMarkRank(g,"hunger")*15);
+ return Math.max(0,(g?.hunger||0)*5+echoMarkRank(g,"hunger")*15);
 }
 function effectiveMaxHunger(){
  const gearBonus=Math.min(240,allEquippedItems().reduce((sum,g)=>sum+gearSupplyBonus(g),0));
@@ -7435,8 +7463,8 @@ function pickup(){
  state.items=state.items.filter(i=>i!==item);
  if(item.type==="food"){ensureRunStats().itemsFound++;recordFloorPickup(false);
   spawnPickupEffect("food");
-  state.provisions=(state.provisions||0)+40;
-  addLog("乾燥肉を携行糧へ加えた。充足消費を40手分肩代わりする。");
+  state.provisions=(state.provisions||0)+60;
+  addLog("乾燥肉を携行糧へ加えた。充足消費を60手分肩代わりする。");
   return
  }
  if(item.type==="potion"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("potion");state.consumables.potion++;addLog("治癒薬を拾った。");return}
@@ -7444,7 +7472,21 @@ function pickup(){
  if(item.type==="purify"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("purify");state.consumables.purify++;addLog("解呪の灰を拾った。");return}
  if(item.type==="bomb"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("bomb");state.consumables.bomb=(state.consumables.bomb||0)+1;addLog("火炎壺を拾った。");return}
  if(item.type==="retreat"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("retreat");state.consumables.retreat=(state.consumables.retreat||0)+1;addLog("帰還楔を拾った。");return}
- if(item.type==="oil"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("oil");state.consumables.oil=(state.consumables.oil||0)+1;addLog("灯油を拾った。");return}
+ if(item.type==="oil"){
+  ensureRunStats().itemsFound++;
+  recordFloorPickup(false);
+  spawnPickupEffect("oil");
+  state.consumables.oil=(state.consumables.oil||0)+1;
+
+  // 燃料切れで消灯している場合だけ、拾った1本を即座に使用する。
+  // 手動消灯中や燃料が残っている場合は携行品として保存する。
+  if((state.light.fuel||0)<=0){
+   refillLight({fromPickup:true});
+  }else{
+   addLog("灯油を拾った。必要な時に補充できる。");
+  }
+  return
+ }
  if(state.inventory.length>=inventoryCapacity()){
   addLog("荷物が満杯だ。装備を足元へ残し、整理画面を開いた。");
   state.items.push(item);
@@ -8904,6 +8946,7 @@ function loadGame(){
   ensureInsuranceMeta(state.meta);
   ensureDeathEchoMeta(state.meta);
   ensureLabyrinthReactionMeta(state.meta);
+  if(!state.meta.balanceMigrations)state.meta.balanceMigrations={};
   if(!state.meta.bodyTraining)state.meta.bodyTraining={endurance:0,strength:0,focus:0,perception:0};
   if(!state.meta.abyssAdaptations)state.meta.abyssAdaptations=[];
   if(typeof state.meta.adaptationPoints!=="number")state.meta.adaptationPoints=0;
@@ -8940,8 +8983,23 @@ function loadGame(){
   if((state.maxHunger||0)<300){
    const oldMax=Math.max(1,state.maxHunger||100);
    const oldRatio=clamp((state.hunger??oldMax)/oldMax,0,1);
-   state.maxHunger=720+(state.meta.upgrades.supply||0)*120;
+   state.maxHunger=840+(state.meta.upgrades.supply||0)*120;
    state.hunger=Math.round(state.maxHunger*oldRatio);
+   state.meta.balanceMigrations.hungerV31042=true;
+  }else if(!state.meta.balanceMigrations.hungerV31042){
+   const oldGearSupply=allEquippedItems().reduce((sum,g)=>
+    sum+Math.max(0,(g?.hunger||0)*3+echoMarkRank(g,"hunger")*15),0
+   );
+   const oldEffective=Math.max(
+    1,
+    state.maxHunger+Math.min(240,oldGearSupply)+resonanceBonus("hunger")
+   );
+   const oldRatio=clamp((state.hunger??oldEffective)/oldEffective,0,1);
+
+   state.maxHunger=(state.maxHunger||720)+120;
+   const newEffective=effectiveMaxHunger();
+   state.hunger=Math.min(newEffective,Math.round(newEffective*oldRatio));
+   state.meta.balanceMigrations.hungerV31042=true;
   }
   if(typeof state.fieldScrap!=="number")state.fieldScrap=0;
   if(typeof state.packExpansion!=="number")state.packExpansion=0;
@@ -9136,7 +9194,13 @@ function renderLog(){
   if(/ダメージ|倒れた|失敗|呪い|毒|炎上|足りない|塞いで/.test(text))return"logBad";
   return"logInfo";
  };
- $("log").innerHTML=state.log.slice(-4).map((x,i)=>`<div class="${classify(x)}" style="opacity:${1-i*.12}">› ${x}</div>`).join("");
+ const logEl=$("log");
+ const latest=state.log.slice(0,4);
+ logEl.innerHTML=latest
+  .map((x,i)=>`<div class="${classify(x)}" style="opacity:${1-i*.12}">› ${x}</div>`)
+  .join("");
+ // スクロール可能な表示でも、追加時は必ず最新行へ戻す。
+ logEl.scrollTop=0;
 }
 
 function wallMask(x,y){
