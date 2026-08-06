@@ -2189,11 +2189,103 @@ body{
  }
 }
 
+
+/* v3.10.4.3 FIELD SALVAGE CONFIRM */
+.fieldSalvageCard{
+ width:min(100%,390px);
+ border-color:#84606b;
+ background:linear-gradient(180deg,#2a1d25,#151016);
+}
+.fieldSalvageCard h2{
+ color:#f1c0c9;
+}
+.fieldSalvagePreview{
+ margin:8px 0;
+ padding:10px;
+ border:1px solid #624651;
+ border-radius:10px;
+ background:#171016;
+}
+.fieldSalvagePreview .top{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ gap:8px;
+ font-size:12px;
+ font-weight:800;
+}
+.fieldSalvagePreview .desc{
+ margin-top:6px;
+ color:#c8b8c0;
+ font-size:10px;
+ line-height:1.55;
+}
+.fieldSalvageGain{
+ margin:8px 0;
+ padding:8px 9px;
+ border:1px solid #6b6a42;
+ border-radius:8px;
+ background:#1d1b0d;
+ color:#f2df88;
+ font-size:11px;
+ font-weight:800;
+}
+.fieldSalvageWarning{
+ margin:8px 0 0;
+ padding:8px 9px;
+ border-left:3px solid #a84e61;
+ border-radius:6px;
+ background:#241118;
+ color:#efb4bf;
+ font-size:9px;
+ line-height:1.5;
+}
+.fieldSalvageWarning.valuable{
+ border-color:#d58d45;
+ background:#27190e;
+ color:#f0c28d;
+}
+.fieldSalvageList{
+ max-height:160px;
+ overflow-y:auto;
+ margin-top:7px;
+ padding:6px;
+ border:1px solid #473943;
+ border-radius:7px;
+ background:#100c11;
+ font-size:9px;
+ line-height:1.55;
+}
+.fieldSalvageList div{
+ padding:3px 4px;
+ border-bottom:1px solid #2c232a;
+}
+.fieldSalvageList div:last-child{border-bottom:0}
+.fieldSalvageActions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:10px;
+}
+.fieldSalvageActions .modalBtn{
+ margin-top:0;
+}
+.fieldSalvageCancel{
+ border-color:#615867;
+ background:linear-gradient(180deg,#302a34,#1d1920);
+ color:#ddd5df;
+}
+.fieldSalvageExecute{
+ border-color:#a64c5e;
+ background:linear-gradient(180deg,#672736,#3d1721);
+ color:#fff0f3;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.4.2 HUNGER BALANCE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.10.4.3 FIELD SALVAGE CONFIRM</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -2242,7 +2334,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 第10層を基準にした充足再調整</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 現地分解の確認画面</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -2293,6 +2385,17 @@ body{
     <div id="consumableList"></div>
     <div id="inventoryList"></div>
     <button class="modalBtn" id="closeInventory">閉じる</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="fieldSalvageOverlay">
+  <div class="card fieldSalvageCard" role="dialog" aria-modal="true" aria-labelledby="fieldSalvageTitle">
+    <h2 id="fieldSalvageTitle">現地分解の確認</h2>
+    <div id="fieldSalvageBody"></div>
+    <div class="fieldSalvageActions">
+      <button type="button" class="modalBtn fieldSalvageCancel" id="cancelFieldSalvage">戻る</button>
+      <button type="button" class="modalBtn fieldSalvageExecute" id="confirmFieldSalvage">分解する</button>
+    </div>
   </div>
 </div>
 
@@ -2437,6 +2540,7 @@ body{
       <div class="helpBody">
         <ul>
           <li>荷物が満杯になったら、不要装備を<b>現地分解</b>して素材にできます。</li>
+          <li>単品分解・通常品一括分解のどちらも確認画面が開きます。装備名、獲得素材、対象数を確認してから実行してください。</li>
           <li>素材はその探索中だけ有効な<b>荷物拡張・武器仮補強・防具仮補強・鑑定</b>に使えます。</li>
           <li>余った素材は帰還時に<b>深淵の欠片</b>へ変換されます。</li>
           <li>未鑑定装備は性能も呪いも不明です。呪具は解呪するまで外せません。</li>
@@ -8139,13 +8243,101 @@ function toggleInventoryLock(id){
  addLog(g.locked?`「${gearLabel(g)}」を保護した。`:`「${gearLabel(g)}」の保護を解除した。`);
  saveGame();renderInventory();
 }
+let pendingFieldSalvage=null;
+function closeFieldSalvageConfirm(){
+ pendingFieldSalvage=null;
+ $("fieldSalvageOverlay").classList.add("hidden");
+}
+function fieldSalvageEquippedState(g){
+ return allEquippedItems().some(item=>item?.id===g?.id)
+  ?"装備中"
+  :"荷物内・未装備";
+}
+function openFieldSalvageConfirm(payload){
+ const overlay=$("fieldSalvageOverlay");
+ const body=$("fieldSalvageBody");
+ if(!overlay||!body)return false;
+
+ pendingFieldSalvage=payload;
+
+ if(payload.mode==="single"){
+  const g=state.inventory.find(item=>item.id===payload.id);
+  if(!g)return false;
+  if(g.locked){
+   addLog("保護中の装備は分解できない。");
+   pendingFieldSalvage=null;
+   return false;
+  }
+
+  const value=salvageValue(g);
+  const valuable=(rarityOrder[g.rarity]||0)>=2||bondStage(g)>=2||
+   echoMarkTotal(g)>0||echoStrain(g)>0;
+  const identified=g.identified
+   ?`${rarityData[g.rarity]?.label||g.rarity}・${gearLabel(g)}`
+   :`未鑑定・${gearLabel(g)}`;
+
+  body.innerHTML=`<div class="fieldSalvagePreview">
+    <div class="top">
+      <span class="${g.rarity||"common"}">${identified}</span>
+      <span>${equippedSlotLabel(g.slot)}</span>
+    </div>
+    <div class="desc">
+      ILv${g.itemLevel||1} / ${fieldSalvageEquippedState(g)}<br>
+      推奨度 ${Math.round(gearScore(g))} / 装備絆 ${bondStages[bondStage(g)].label}
+      ${echoMarkTotal(g)?`<br>遺響刻印 ${echoImprintSummary(g,true)}`:""}
+      ${echoStrain(g)?`<br>歪み ${echoStrain(g)}`:""}
+    </div>
+  </div>
+  <div class="fieldSalvageGain">獲得：現地素材 +${value}</div>
+  ${valuable?`<div class="fieldSalvageWarning valuable">希少度・装備絆・遺響情報のいずれかを持つ価値の高い装備です。</div>`:""}
+  <div class="fieldSalvageWarning">
+    分解した装備は元に戻せません。現地素材は今回の探索中だけ使用でき、帰還時は5素材ごとに深淵の欠片1個へ変換されます。
+  </div>`;
+ }else{
+  const targets=state.inventory.filter(g=>!g.locked&&g.rarity==="common");
+  if(!targets.length){
+   addLog("一括分解できる通常装備はない。");
+   pendingFieldSalvage=null;
+   return false;
+  }
+  const total=targets.reduce((sum,g)=>sum+salvageValue(g),0);
+  pendingFieldSalvage.ids=targets.map(g=>g.id);
+  body.innerHTML=`<div class="fieldSalvagePreview">
+    <div class="top"><span>通常装備の一括分解</span><span>${targets.length}個</span></div>
+    <div class="desc">保護されていない通常装備だけが対象です。保護品と魔法以上の装備は残ります。</div>
+    <div class="fieldSalvageList">
+      ${targets.map(g=>`<div>${gearLabel(g)}・${equippedSlotLabel(g.slot)}　+${salvageValue(g)}素材</div>`).join("")}
+    </div>
+  </div>
+  <div class="fieldSalvageGain">合計獲得：現地素材 +${total}</div>
+  <div class="fieldSalvageWarning">
+    表示された${targets.length}個をすべて分解します。この操作は元に戻せません。
+  </div>`;
+ }
+
+ overlay.classList.remove("hidden");
+ return true;
+}
+function confirmFieldSalvage(){
+ const pending=pendingFieldSalvage;
+ if(!pending)return false;
+ closeFieldSalvageConfirm();
+
+ if(pending.mode==="single"){
+  return salvageInventoryItem(pending.id,true);
+ }
+ return salvageCommonInventory(true,pending.ids||[]);
+}
 function salvageInventoryItem(id,skipConfirm=false){
  const index=state.inventory.findIndex(item=>item.id===id);
  if(index<0)return false;
  const g=state.inventory[index];
  if(g.locked){addLog("保護中の装備は分解できない。");return false}
- const valuable=(rarityOrder[g.rarity]||0)>=2||bondStage(g)>=2;
- if(!skipConfirm&&valuable&&!confirm(`「${gearLabel(g)}」を現地分解しますか？`))return false;
+
+ if(!skipConfirm){
+  return openFieldSalvageConfirm({mode:"single",id});
+ }
+
  const value=salvageValue(g);
  state.inventory.splice(index,1);
  state.fieldScrap=(state.fieldScrap||0)+value;
@@ -8154,19 +8346,34 @@ function salvageInventoryItem(id,skipConfirm=false){
  saveGame();renderInventory();render();
  return true;
 }
-function salvageCommonInventory(){
- const targets=state.inventory.filter(g=>!g.locked&&g.rarity==="common");
- if(!targets.length){addLog("一括分解できる通常装備はない。");return}
- if(!confirm(`保護されていない通常装備 ${targets.length}個を分解しますか？`))return;
+function salvageCommonInventory(skipConfirm=false,confirmedIds=null){
+ const currentTargets=state.inventory.filter(g=>!g.locked&&g.rarity==="common");
+ if(!currentTargets.length){
+  addLog("一括分解できる通常装備はない。");
+  return false;
+ }
+
+ if(!skipConfirm){
+  return openFieldSalvageConfirm({mode:"bulk",ids:currentTargets.map(g=>g.id)});
+ }
+
+ const idSet=new Set(confirmedIds||currentTargets.map(g=>g.id));
+ const targets=currentTargets.filter(g=>idSet.has(g.id));
+ if(!targets.length){
+  addLog("確認後に対象装備が見つからなくなった。");
+  return false;
+ }
+
  let total=0;
  for(const g of targets){
   total+=salvageValue(g);
-  state.inventory=state.inventory.filter(item=>item!==g);
+  state.inventory=state.inventory.filter(item=>item.id!==g.id);
  }
  state.fieldScrap=(state.fieldScrap||0)+total;
  spawnHeroEffect("pickup_gear");
  addLog(`通常装備 ${targets.length}個を分解し、現地素材を${total}得た。`);
  saveGame();renderInventory();render();
+ return true;
 }
 function fieldUpgradeCost(type){
  if(type==="pack")return 5+(state.packExpansion||0)*3;
@@ -8896,7 +9103,7 @@ function renderInventory(){
   box.appendChild(row);
  });
 }
-function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
+function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
 let saveTimer=null;
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveGame(),120)}
 function saveSnapshot(){try{if(state)localStorage.setItem("abyssalRootsSoloV4Backup",JSON.stringify(state))}catch(e){}}
@@ -10189,7 +10396,9 @@ $("continueBtn").onclick=()=>{
  }
 };
 $("inventoryBtn").onclick=()=>{if(!state)return;renderInventory();$("inventoryOverlay").classList.remove("hidden")};
-$("closeInventory").onclick=()=>$("inventoryOverlay").classList.add("hidden");
+$("closeInventory").onclick=()=>{closeFieldSalvageConfirm();$("inventoryOverlay").classList.add("hidden")};
+$("cancelFieldSalvage").onclick=closeFieldSalvageConfirm;
+$("confirmFieldSalvage").onclick=confirmFieldSalvage;
 $("closeAppearance").onclick=()=>$("appearanceOverlay").classList.add("hidden");
 
 let canvasTouchMoved=false;
