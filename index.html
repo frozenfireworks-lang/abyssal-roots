@@ -1666,11 +1666,118 @@ body{
  line-height:1.5;
 }
 
+
+/* v3.9.7 ROUTE MASTERY */
+#routeMasteryBody{padding:7px}
+.routeMasteryLead{
+ margin-bottom:7px;padding:7px 8px;border:1px solid #4e4057;border-radius:8px;
+ background:#120e16;color:#d6cad9;font-size:9px;line-height:1.55
+}
+.routeMasteryGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.routeMasteryCard{
+ min-width:0;padding:8px;border:1px solid #4c3e55;border-radius:10px;
+ background:linear-gradient(180deg,#16111b,#0e0b12)
+}
+.routeMasteryCard.hunt{border-color:#8c5d4d}
+.routeMasteryCard.archive{border-color:#695d93}
+.routeMasteryCard.supply{border-color:#557b65}
+.routeMasteryTop{display:flex;align-items:center;justify-content:space-between;gap:5px}
+.routeMasteryName{
+ min-width:0;overflow:hidden;color:#eee3f0;font-size:10px;font-weight:900;
+ white-space:nowrap;text-overflow:ellipsis
+}
+.routeMasteryCount{
+ flex:none;padding:1px 5px;border:1px solid #5c4c65;border-radius:999px;
+ color:#e0d2e4;font-size:7px
+}
+.routeMasteryBar{
+ height:5px;margin:6px 0;overflow:hidden;border:1px solid #3d3245;
+ border-radius:999px;background:#09070c
+}
+.routeMasteryBar i{
+ display:block;height:100%;background:linear-gradient(90deg,#765a89,#d6b05b)
+}
+.routeMasteryNodes{display:grid;gap:4px}
+.routeMasteryNode{
+ padding:5px 6px;border:1px solid #3d3344;border-radius:7px;background:#0c0910;
+ color:#8f8295;font-size:8px;line-height:1.4
+}
+.routeMasteryNode b{display:block;margin-bottom:2px;color:#a99cad;font-size:8px}
+.routeMasteryNode.unlocked{border-color:#526f59;background:#101711;color:#c5ddc8}
+.routeMasteryNode.unlocked b{color:#b9e1be}
+.routeMasteryNext{margin-top:5px;color:#b5a7bb;font-size:7px;line-height:1.4}
+.routeMasteryChoice{
+ display:block;margin-top:7px;padding:6px 7px;border:1px solid #4b3e54;
+ border-radius:7px;background:#100c14;color:#cfc2d3;font-size:8px;line-height:1.5
+}
+.routeMasteryChoice b{color:#f0d98c}
+@media(max-width:600px){
+ .routeMasteryGrid{grid-template-columns:1fr}
+ .routeMasteryCard{padding:7px}
+}
+
+
+/* v3.9.8 RISK & EXTRACTION */
+#insuranceBody{padding:7px}
+.insuranceLead{
+ padding:8px 9px;border:1px solid #504259;border-radius:9px;
+ background:#120e16;color:#d7cadb;font-size:9px;line-height:1.55
+}
+.insuranceModeGrid{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:7px
+}
+.insuranceMode{
+ -webkit-appearance:none;appearance:none;min-height:70px;padding:8px;
+ border:1px solid #574961;border-radius:10px;background:linear-gradient(180deg,#18121d,#0e0b12);
+ color:#d9cddd;text-align:left
+}
+.insuranceMode.selected{
+ border-color:#d0ae59;box-shadow:inset 0 0 20px rgba(208,174,89,.08)
+}
+.insuranceMode.soul.selected{
+ border-color:#81c3d9;box-shadow:inset 0 0 20px rgba(93,178,205,.1)
+}
+.insuranceMode b{display:block;margin-bottom:3px;color:#f1e3f2;font-size:10px}
+.insuranceMode small{display:block;color:#ad9fb4;font-size:8px;line-height:1.45}
+.insuranceCostBox{
+ margin-top:7px;padding:7px 8px;border:1px solid #4b3d54;border-radius:8px;
+ background:#0f0c13;color:#d7cadb;font-size:9px;line-height:1.5
+}
+.insuranceCostBox strong{color:#f0d88c}
+.insuranceCostBox.danger{border-color:#82505c;color:#e8aeb8}
+.insuranceSlotGrid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:7px
+}
+.insuranceSlot{
+ -webkit-appearance:none;appearance:none;min-height:56px;padding:7px;
+ border:1px solid #4c3e55;border-radius:8px;background:#100c14;color:#cfc2d3;text-align:left
+}
+.insuranceSlot.selected{
+ border-color:#d1b05c;background:#19150e;color:#f0dfad
+}
+.insuranceSlot:disabled{opacity:.55}
+.insuranceSlot b{display:block;font-size:9px}
+.insuranceSlot small{display:block;margin-top:2px;color:#a99cac;font-size:7px;line-height:1.35}
+.insuranceBadge{
+ display:inline-block;margin-left:4px;padding:1px 5px;border:1px solid #6c596f;
+ border-radius:999px;color:#dfd0e3;font-size:7px
+}
+.insuranceBadge.active{border-color:#b99648;color:#ffe5a0}
+.insuranceBadge.soul{border-color:#548da1;color:#b9eaff}
+.extractionRule{
+ margin-top:7px;padding:7px 8px;border-left:3px solid #6a8e75;border-radius:7px;
+ background:#101611;color:#c8ddcb;font-size:8px;line-height:1.55
+}
+@media(max-width:600px){
+ .insuranceModeGrid{grid-template-columns:1fr}
+ .insuranceSlotGrid{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.6.1 BOSS SOFTLOCK HOTFIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.9.8 RISK & EXTRACTION</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -1711,7 +1818,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 番人消失・進行不能修正</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 帰還制限・装備保険・魂還石</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -1793,7 +1900,7 @@ body{
       </div>
       <div class="helpQuickCard">
         <b>③ いつ帰る？</b>
-        <small>祭壇・番人撃破後・帰還標があれば帰還可能。帰還するとその探索は終了します。</small>
+        <small>祭壇上、番人撃破後の階段上、または目標達成済み階段で帰還楔を使うと帰還できます。</small>
       </div>
     </div>
 
@@ -1809,6 +1916,7 @@ body{
           <li><b>5階ごとに番人戦</b>があります。番人撃破後は、次の5階区間を「狩路・観測路・補給路」から選択します。</li>
           <li>進路は敵数・物資・エリート・罠・事件・研究量へ影響し、次の番人階まで継続します。</li>
           <li>進路の終点となる番人階では、選んだ進路に応じた試練が発生します。番人を倒すと進路踏破報酬を獲得します。</li>
+          <li>同じ進路を1・3・5回踏破すると、その進路を選択中だけ発動する恒久熟練を解放します。解放状況は灯台で確認できます。</li>
           <li><b>主人公のHPが0でその探索は終了</b>です。帰還・死亡後には、撃破数・戦闘結果・持ち帰り・喪失をまとめた探索結果が表示されます。</li>
         </ul>
         <div class="helpNote">迷ったら「敵を1体ずつ処理」「荷物が増えたら整理」「危なくなったら帰還」を意識すると安定します。</div>
@@ -1868,8 +1976,10 @@ body{
           <li>状態は <b>40%以上:充足 / 15〜39%:空腹 / 1〜14%:飢餓 / 0:枯渇</b> です。</li>
           <li>空腹になるほど、攻防・気力回復・治療効率が落ちます。枯渇すると非常に危険です。</li>
           <li>乾燥肉はその場で回復するのではなく、<b>携行糧</b>として探索時間を延長します。</li>
-          <li><b>帰還条件</b>は「祭壇」「番人撃破後」「帰還標」のいずれかです。</li>
+          <li><b>帰還条件</b>は「祭壇上」「番人撃破後の階段上」「目標達成済み階段で帰還楔を消費」のいずれかです。</li>
           <li>帰還すると探索は終了し、<b>HP・気力・充足が完全回復</b>します。</li>
+          <li><b>欠片保険</b>は最大3部位まで指定でき、出撃時に性能依存の保険料を支払います。死亡時のみ現在状態を倉庫へ回収します。</li>
+          <li><b>魂還石</b>は深層番人から極低確率で入手できます。携行設定中はHP0の瞬間に1個消費し、死亡を緊急帰還へ置き換えます。</li>
         </ul>
         <div class="helpNote">このゲームは「帰らずに粘るほど強くなる」のではなく、「どこで帰るか」が大きな判断になります。</div>
       </div>
@@ -1988,6 +2098,11 @@ body{
     <div id="hubSummary"></div>
     <div id="hubUpgrades"></div>
 
+    <details class="hubFold" id="routeMasteryPanel" open>
+      <summary id="routeMasterySummary">進路熟練</summary>
+      <div id="routeMasteryBody"></div>
+    </details>
+
     <details class="hubFold" id="lastReportPanel">
       <summary id="lastReportSummary">前回の探索結果</summary>
       <div id="lastReportBody"></div>
@@ -1996,6 +2111,11 @@ body{
     <details class="hubFold" id="loadoutPanel" open>
       <summary id="loadoutSummary">出撃準備</summary>
       <div id="loadoutPlanner"></div>
+    </details>
+
+    <details class="hubFold" id="insurancePanel" open>
+      <summary id="insuranceSummary">装備保険・救命契約</summary>
+      <div id="insuranceBody"></div>
     </details>
 
     <details class="hubFold" id="stashPanel" open>
@@ -2075,6 +2195,97 @@ const routeData={
   finaleReward:"治癒薬+1 / 灯油+1 / 携行糧+100 / 深淵の欠片+1"
  }
 };
+const routeMasteryData={
+ hunt:{
+  label:"戦痕の狩路",short:"狩路",
+  nodes:[
+   {at:1,name:"獲物の勘",desc:"狩路のエリート出現率をさらに+3%。"},
+   {at:3,name:"戦利品選別",desc:"狩路で装備が出る補正をさらに+5%。"},
+   {at:5,name:"血戦勲章",desc:"終点装備ILv+1、踏破時の欠片をさらに+1。"}
+  ]
+ },
+ archive:{
+  label:"古層の観測路",short:"観測路",
+  nodes:[
+   {at:1,name:"記録習慣",desc:"観測路の観察記録を2倍から2.25倍へ強化。"},
+   {at:3,name:"構造読解",desc:"観測路の隠し通路をさらに+1。"},
+   {at:5,name:"完全解析",desc:"事件率をさらに+5%、終点研究点を3から5へ強化。"}
+  ]
+ },
+ supply:{
+  label:"残灯の補給路",short:"補給路",
+  nodes:[
+   {at:1,name:"荷造り",desc:"補給路の物資数をさらに+1。"},
+   {at:3,name:"安全経路",desc:"補給路の罠をさらに-1。"},
+   {at:5,name:"灯台備蓄",desc:"選択時に携行糧+40、終点報酬の携行糧を100から150へ強化。"}
+  ]
+ }
+};
+function emptyRouteMastery(){return{hunt:0,archive:0,supply:0}}
+function ensureRouteMastery(meta=state?.meta){
+ if(!meta)return emptyRouteMastery();
+ if(!meta.routeMastery||typeof meta.routeMastery!=="object")meta.routeMastery=emptyRouteMastery();
+ for(const id of Object.keys(routeData)){
+  if(typeof meta.routeMastery[id]!=="number")meta.routeMastery[id]=0;
+  meta.routeMastery[id]=Math.max(0,Math.floor(meta.routeMastery[id]));
+ }
+ return meta.routeMastery;
+}
+function routeMasteryLevel(id,meta=state?.meta){
+ return ensureRouteMastery(meta)[id]||0;
+}
+function routeMasteryModifier(id,key,meta=state?.meta){
+ const level=routeMasteryLevel(id,meta);
+ if(id==="hunt"){
+  if(key==="eliteBonus"&&level>=1)return .03;
+  if(key==="itemShift"&&level>=3)return .05;
+ }
+ if(id==="archive"){
+  if(key==="observationMul"&&level>=1)return .25;
+  if(key==="secretBonus"&&level>=3)return 1;
+  if(key==="eventBonus"&&level>=5)return .05;
+ }
+ if(id==="supply"){
+  if(key==="itemBonus"&&level>=1)return 1;
+  if(key==="trapBonus"&&level>=3)return-1;
+ }
+ return 0;
+}
+function routeMasteryUnlockedNodes(id,meta=state?.meta){
+ const level=routeMasteryLevel(id,meta);
+ return(routeMasteryData[id]?.nodes||[]).filter(node=>level>=node.at);
+}
+function routeMasteryNextNode(id,meta=state?.meta){
+ const level=routeMasteryLevel(id,meta);
+ return(routeMasteryData[id]?.nodes||[]).find(node=>level<node.at)||null;
+}
+function gainRouteMastery(id){
+ const mastery=ensureRouteMastery(state.meta);
+ const before=mastery[id]||0;
+ const after=before+1;
+ mastery[id]=after;
+ const unlocked=(routeMasteryData[id]?.nodes||[]).filter(node=>before<node.at&&after>=node.at);
+ if(unlocked.length){
+  addLog(`進路熟練「${unlocked.map(node=>node.name).join(" / ")}」を解放した。次回以降の${routeData[id].label}で発動する。`);
+ }
+ return{before,after,unlocked};
+}
+function routeMasteryChoiceHtml(id){
+ const level=routeMasteryLevel(id);
+ const unlocked=routeMasteryUnlockedNodes(id);
+ const next=routeMasteryNextNode(id);
+ return`<span class="routeMasteryChoice">
+  <b>進路熟練 ${level}回</b><br>
+  発動中：${unlocked.length?unlocked.map(node=>node.name).join(" / "):"未解放"}<br>
+  ${next?`次の解放：${next.at}回・${next.name}`:"全段階解放済み"}
+ </span>`;
+}
+function applyRouteSelectionMasteryBonus(id){
+ if(id!=="supply"||routeMasteryLevel("supply")<5)return null;
+ state.provisions=(state.provisions||0)+40;
+ addLog("進路熟練「灯台備蓄」により、補給路へ携行糧40を追加した。");
+ return{provisions:40};
+}
 function activeRoute(){
  const plan=state?.routePlan;
  if(!plan)return null;
@@ -2084,7 +2295,8 @@ function activeRoute(){
 function routeValue(key,fallback=0){
  const route=activeRoute();
  const value=route?.[key];
- return typeof value==="number"?value:fallback;
+ if(typeof value!=="number")return fallback;
+ return value+routeMasteryModifier(route.id,key);
 }
 function routeRangeText(plan=state?.routePlan){
  return plan?`第${plan.startFloor}〜${plan.endFloor}層`:"";
@@ -2168,28 +2380,41 @@ function completeRouteAtBoss(enemy,rewardGear){
  const plan=state.routePlan;
  if(!enemy?.boss||!isRouteFinaleFloor(plan))return null;
  const route=routeData[plan.id];
+ const masteryBefore=routeMasteryLevel(route.id);
  let rewardSummary="";
 
  if(route.id==="hunt"){
   promoteGearRarity(rewardGear,1);
-  state.meta.shards+=3;
-  rewardSummary=`装備レア度+1 / 欠片+3`;
+  let shardReward=3;
+  if(masteryBefore>=5){
+   rewardGear.itemLevel=(rewardGear.itemLevel||1)+1;
+   if((rewardGear.atk||0)>0)rewardGear.atk++;
+   if((rewardGear.def||0)>0)rewardGear.def++;
+   if(!(rewardGear.atk||0)&&!(rewardGear.def||0))rewardGear.def=1;
+   shardReward++;
+  }
+  state.meta.shards+=shardReward;
+  rewardSummary=`装備レア度+1${masteryBefore>=5?"・ILv+1":""} / 欠片+${shardReward}`;
  }else if(route.id==="archive"){
   rewardGear.identified=true;
-  state.meta.research.points=(state.meta.research.points||0)+3;
+  const researchReward=masteryBefore>=5?5:3;
+  state.meta.research.points=(state.meta.research.points||0)+researchReward;
   state.meta.shards+=2;
-  rewardSummary=`装備完全鑑定 / 研究点+3 / 欠片+2`;
+  rewardSummary=`装備完全鑑定 / 研究点+${researchReward} / 欠片+2`;
  }else if(route.id==="supply"){
   state.consumables.potion=(state.consumables.potion||0)+1;
   state.consumables.oil=(state.consumables.oil||0)+1;
-  state.provisions=(state.provisions||0)+100;
+  const provisionReward=masteryBefore>=5?150:100;
+  state.provisions=(state.provisions||0)+provisionReward;
   state.meta.shards+=1;
-  rewardSummary=`治癒薬+1 / 灯油+1 / 携行糧+100 / 欠片+1`;
+  rewardSummary=`治癒薬+1 / 灯油+1 / 携行糧+${provisionReward} / 欠片+1`;
  }
 
+ const masteryGain=gainRouteMastery(route.id);
  plan.completed=true;
  plan.completedAtFloor=state.floor;
  plan.rewardSummary=rewardSummary;
+ plan.masteryAfter=masteryGain.after;
  ensureRunStats().routesCompleted=(ensureRunStats().routesCompleted||0)+1;
 
  const history=[...(state.routeHistory||[])].reverse().find(entry=>
@@ -2199,12 +2424,21 @@ function completeRouteAtBoss(enemy,rewardGear){
   history.completed=true;
   history.completedAtFloor=state.floor;
   history.rewardSummary=rewardSummary;
+  history.masteryAfter=masteryGain.after;
  }
 
+ const unlockText=masteryGain.unlocked.length
+  ?` / 解放：${masteryGain.unlocked.map(node=>node.name).join("・")}`
+  :"";
  spawnCombatText(enemy.x,enemy.y,"ROUTE CLEAR","dodge",54);
- showCombatToast("進路踏破",`${route.label} / ${rewardSummary}`,"objective");
- addLog(`進路「${route.label}」を踏破した。${rewardSummary}`);
- return{route:route.id,label:route.label,rewardSummary};
+ showCombatToast("進路踏破",`${route.label}・熟練${masteryGain.after}回${unlockText}`,"objective");
+ addLog(`進路「${route.label}」を踏破した。${rewardSummary} / 進路熟練+1（累計${masteryGain.after}回）`);
+ saveMeta();
+ return{
+  route:route.id,label:route.label,rewardSummary,
+  masteryBefore,masteryAfter:masteryGain.after,
+  unlocked:masteryGain.unlocked.map(node=>node.name)
+ };
 }
 const floorMutationData={
  darkness:{label:"深闇",desc:"視界が狭い",vision:-2},
@@ -2842,7 +3076,7 @@ function restoreLighthouseSession(){
  return true;
 }
 function defaultMeta(){
- const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
+ const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
  meta.appearance=defaultAppearance();
  return meta;
 }
@@ -2886,10 +3120,178 @@ function ensureMetaLoadouts(meta){
   }
   meta.lastReturnLoadout=last;
  }
+ ensureInsuranceMeta(meta);
  return meta;
 }
 function stashGearById(meta,id){
  return id?(meta.stash||[]).find(g=>g.id===id)||null:null;
+}
+function emptyInsurancePlan(){
+ return{mode:"none",slots:[]};
+}
+function ensureInsuranceMeta(meta){
+ if(!meta)return emptyInsurancePlan();
+ if(typeof meta.soulAnchors!=="number")meta.soulAnchors=0;
+ meta.soulAnchors=Math.max(0,Math.floor(meta.soulAnchors));
+ if(!meta.insurancePlan||typeof meta.insurancePlan!=="object")meta.insurancePlan=emptyInsurancePlan();
+ if(!["none","shards","soul"].includes(meta.insurancePlan.mode))meta.insurancePlan.mode="none";
+ if(!Array.isArray(meta.insurancePlan.slots))meta.insurancePlan.slots=[];
+ meta.insurancePlan.slots=[...new Set(meta.insurancePlan.slots)]
+  .filter(slot=>lighthouseLoadoutSlots.includes(slot))
+  .filter(slot=>!!meta.nextLoadout?.[slot])
+  .slice(0,3);
+ return meta.insurancePlan;
+}
+function insuranceItemPremium(gear){
+ if(!gear)return 0;
+ const rarityBase={common:4,magic:9,rare:20,legendary:45}[gear.rarity]||4;
+ return rarityBase+Math.ceil((gear.itemLevel||1)*.8)+Math.max(0,bondStage(gear)-1)*4;
+}
+function insurancePremium(meta=state.meta){
+ ensureMetaLoadouts(meta);
+ const plan=ensureInsuranceMeta(meta);
+ if(plan.mode!=="shards")return 0;
+ const gears=plan.slots.map(slot=>nextLoadoutGear(meta,slot)).filter(Boolean);
+ const base=gears.reduce((sum,gear)=>sum+insuranceItemPremium(gear),0);
+ const multi=gears.length<=1?1:gears.length===2?1.5:2.1;
+ return Math.ceil(base*multi);
+}
+function setInsuranceMode(mode){
+ const plan=ensureInsuranceMeta(state.meta);
+ if(!["none","shards","soul"].includes(mode))return;
+ plan.mode=mode;
+ if(mode==="none")plan.slots=[];
+ saveMeta();renderHub();
+}
+function toggleInsuranceSlot(slot){
+ const plan=ensureInsuranceMeta(state.meta);
+ if(plan.mode!=="shards")plan.mode="shards";
+ if(!state.meta.nextLoadout?.[slot])return;
+ const index=plan.slots.indexOf(slot);
+ if(index>=0){
+  plan.slots.splice(index,1);
+ }else{
+  if(plan.slots.length>=3){
+   addLog("欠片保険で指定できるのは最大3部位まで。");
+   return;
+  }
+  plan.slots.push(slot);
+ }
+ saveMeta();renderHub();
+}
+function prepareDepartureProtection(meta){
+ ensureMetaLoadouts(meta);
+ const plan=ensureInsuranceMeta(meta);
+
+ if(plan.mode==="none"){
+  return{ok:true,contract:null};
+ }
+
+ if(plan.mode==="soul"){
+  if((meta.soulAnchors||0)<=0){
+   alert("魂還石を所持していないため、救命契約を携行できません。");
+   return{ok:false,contract:null};
+  }
+  return{
+   ok:true,
+   contract:{mode:"soul",armed:true,used:false,startedAt:Date.now()}
+  };
+ }
+
+ const slots=plan.slots.filter(slot=>!!nextLoadoutGear(meta,slot));
+ if(!slots.length){
+  alert("保険を掛ける次回装備を1部位以上選んでください。");
+  return{ok:false,contract:null};
+ }
+ const premium=insurancePremium(meta);
+ if((meta.shards||0)<premium){
+  alert(`装備保険の保険料が不足しています。必要 ${premium}欠片 / 所持 ${meta.shards||0}欠片`);
+  return{ok:false,contract:null};
+ }
+ meta.shards-=premium;
+ const items=slots.map(slot=>{
+  const gear=nextLoadoutGear(meta,slot);
+  return{slot,id:gear.id,name:gearLabel(gear)};
+ });
+ return{
+  ok:true,
+  contract:{mode:"shards",premium,items,startedAt:Date.now(),recovered:0}
+ };
+}
+function runGearById(id){
+ return[...allEquippedItems(),...(state.inventory||[])].find(gear=>gear?.id===id)||null;
+}
+function updateStashWithProtectedGear(gear){
+ if(!gear||isStarterGear(gear))return false;
+ state.meta.stash=state.meta.stash||[];
+ const copy=cloneGear(gear);
+ copy.cursed=false;
+ copy.identified=true;
+ const index=state.meta.stash.findIndex(stored=>stored.id===copy.id);
+ if(index>=0){
+  state.meta.stash[index]=copy;
+  return true;
+ }
+ if(state.meta.stash.length>=20)return false;
+ state.meta.stash.push(copy);
+ return true;
+}
+function recoverInsuredGearOnDeath(){
+ const contract=state.protectionContract;
+ if(contract?.mode!=="shards")return{recovered:0,missed:0,premium:0,names:[]};
+ let recovered=0,missed=0;
+ const names=[];
+ for(const item of contract.items||[]){
+  const gear=runGearById(item.id);
+  if(gear&&updateStashWithProtectedGear(gear)){
+   recovered++;
+   names.push(gearLabel(gear));
+  }else{
+   missed++;
+  }
+ }
+ contract.recovered=recovered;
+ saveMeta();
+ return{recovered,missed,premium:contract.premium||0,names};
+}
+function soulAnchorCanTrigger(){
+ return state.protectionContract?.mode==="soul"&&
+  state.protectionContract.armed&&!state.protectionContract.used&&
+  (state.meta.soulAnchors||0)>0;
+}
+function completeSoulAnchorRescue(cause){
+ if(!soulAnchorCanTrigger())return false;
+ state.protectionContract.used=true;
+ state.meta.soulAnchors=Math.max(0,(state.meta.soulAnchors||0)-1);
+ state.hero.hp=1;
+ addLog("魂還石が砕け、致命傷を灯台への帰還へ置き換えた。");
+
+ const bank=bankCurrentRun();
+ state.expeditionEnded=true;
+ state.gameOver=false;
+ const report=buildExpeditionReport("return",{
+  source:"魂還石の緊急帰還",
+  bank,
+  rescued:true,
+  cause,
+  insurance:{mode:"soul",rescued:true,consumed:1}
+ });
+ report.rescued=true;
+ report.rescueCause=cause;
+ state.meta.lastExpeditionReport=report;
+ state.hero.hp=state.hero.maxHp;
+ state.hunger=effectiveMaxHunger();
+ state.provisions=0;
+ state.hungerStageId="fed";
+ state.hungerRecoveryBuffer=0;
+ state.hero.stamina=effectiveMaxStamina();
+ saveMeta();
+ localStorage.removeItem(ACTIVE_SAVE_KEY);
+ localStorage.removeItem("abyssalRootsSoloV4Backup");
+ showCombatToast("魂還石が発動","死亡を回避し、全装備を伴って緊急帰還した","objective");
+ showExpeditionReport(report);
+ saveLighthouseSession("debrief");
+ return true;
 }
 function nextLoadoutGear(meta,slot){
  ensureMetaLoadouts(meta);
@@ -3040,6 +3442,7 @@ function buildExpeditionReport(outcome,details={}){
   objectives:stats.objectivesCompleted||0,
   routesCompleted:stats.routesCompleted||0,
   completedRoutes:(state.routeHistory||[]).filter(entry=>entry.completed).map(entry=>entry.label||routeData[entry.id]?.label||entry.id),
+  routeMastery:{...ensureRouteMastery(state.meta)},
   gold:state.gold||0,
   damageDealt:stats.damageDealt||0,
   damageTaken:stats.damageTaken||0,
@@ -3059,6 +3462,11 @@ function buildExpeditionReport(outcome,details={}){
   updatedGear:bank?.updatedGear||0,
   scrapShards:bank?.scrapShards||0,
   lostGear,
+  insuredRecovered:details.insurance?.recovered||0,
+  insuranceMissed:details.insurance?.missed||0,
+  insurancePremium:details.insurance?.premium||state.protectionContract?.premium||0,
+  rescued:!!details.rescued,
+  soulAnchorConsumed:details.insurance?.consumed||0,
   highlights:[]
  };
 
@@ -3069,6 +3477,8 @@ function buildExpeditionReport(outcome,details={}){
  if(report.crits>0)report.highlights.push(`会心を${report.crits}回発生`);
  if(outcome==="return"&&report.newGear>0)report.highlights.push(`新しい装備を${report.newGear}個持ち帰った`);
  if(outcome==="death"&&report.lostGear>0)report.highlights.push(`新規入手装備を${report.lostGear}個失った`);
+ if(report.insuredRecovered>0)report.highlights.push(`装備保険で${report.insuredRecovered}部位を回収`);
+ if(report.rescued)report.highlights.push("魂還石が致死傷を緊急帰還へ置き換えた");
  if(!report.highlights.length)report.highlights.push("探索記録が灯台へ刻まれた");
 
  return report;
@@ -3078,21 +3488,27 @@ function expeditionReportHtml(report,compact=false){
  const returned=report.outcome==="return";
  const title=returned?"帰還成功":"探索失敗";
  const subtitle=returned
-  ?`${report.source||"深淵"}から戦利品を持ち帰った。`
+  ?report.rescued
+   ?`魂還石が「${report.rescueCause||"致命傷"}」を緊急帰還へ置き換えた。`
+   :`${report.source||"深淵"}から戦利品を持ち帰った。`
   :(report.cause||"探索者は深淵に倒れた。");
  const retained=returned
   ?[
     `<span class="expeditionPill good">新規装備 ${report.newGear}</span>`,
     `<span class="expeditionPill good">装備更新 ${report.updatedGear}</span>`,
     `<span class="expeditionPill good">素材変換 +${report.scrapShards}欠片</span>`,
+    report.rescued?`<span class="expeditionPill good">魂還石救命</span>`:"",
+    report.insurancePremium?`<span class="expeditionPill">保険料 ${report.insurancePremium}欠片</span>`:"",
     report.lostGear?`<span class="expeditionPill bad">倉庫満杯で残置 ${report.lostGear}</span>`:""
    ].filter(Boolean).join("")
   :[
     `<span class="expeditionPill good">倉庫装備は維持</span>`,
     `<span class="expeditionPill good">研究・恒久成長は維持</span>`,
+    report.insuredRecovered?`<span class="expeditionPill good">保険回収 ${report.insuredRecovered}部位</span>`:"",
+    report.insuranceMissed?`<span class="expeditionPill bad">保険回収失敗 ${report.insuranceMissed}</span>`:"",
     report.lostGear?`<span class="expeditionPill bad">新規装備喪失 ${report.lostGear}</span>`:
       `<span class="expeditionPill">新規装備の喪失なし</span>`
-   ].join("");
+   ].filter(Boolean).join("");
 
  return`
   <div class="expeditionOutcome ${report.outcome}">
@@ -3116,6 +3532,7 @@ function expeditionReportHtml(report,compact=false){
     <span class="expeditionPill">会心 ${report.crits}</span>
     <span class="expeditionPill">目標達成 ${report.objectives||0}</span>
     <span class="expeditionPill">進路踏破 ${report.routesCompleted||0}</span>
+    <span class="expeditionPill">熟練 狩${report.routeMastery?.hunt||0}・観${report.routeMastery?.archive||0}・補${report.routeMastery?.supply||0}</span>
    </div>
   </div>
   <div class="expeditionSection">
@@ -3153,11 +3570,13 @@ function openLighthouseAfterDebrief(){
 }
 function finishExpeditionDeath(cause,killer=null){
  if(state.gameOver)return;
+ if(completeSoulAnchorRescue(cause))return;
  if(killer)maybePromoteKiller(killer);
+ const insurance=recoverInsuredGearOnDeath();
  state.gameOver=true;
  state.expeditionEnded=true;
  state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
- const report=buildExpeditionReport("death",{cause});
+ const report=buildExpeditionReport("death",{cause,insurance});
  state.meta.lastExpeditionReport=report;
  saveMeta();
  localStorage.removeItem(ACTIVE_SAVE_KEY);
@@ -3170,9 +3589,9 @@ function freshState(){
   version:4,seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,
   hunger:720,maxHunger:720,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false},
-  cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",combatStats:{dodges:0,guards:0,breaks:0,crits:0},
+  cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,crits:0},
   map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],secretWalls:[],shortcuts:[],events:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
  const prepared=applyMetaToFreshState(newState);
  prepared.runStats=createRunStats(prepared.meta);
@@ -4085,7 +4504,7 @@ function describeEventChanges(before,after){
   ["gold","所持金"],["xp","経験値"],["shards","深淵の欠片"],
   ["hunger","充足"],["provisions","携行糧"],["inventory","装備"],
   ["potion","治癒薬"],["identify","鑑定紙片"],["purify","解呪の灰"],
-  ["bomb","火炎壺"],["retreat","帰還標"],["oil","灯油"]
+  ["bomb","火炎壺"],["retreat","帰還楔"],["oil","灯油"]
  ];
  const changes=[];
  for(const [key,label,percent] of definitions){
@@ -4210,6 +4629,7 @@ function applyFloorPacingRewards(){
   placeGuaranteedItem("potion","治癒薬");
   placeGuaranteedItem("food","乾燥肉");
   placeGuaranteedItem("oil","灯油");
+  if(rng()<.35)placeGuaranteedItem("retreat","帰還楔");
  }
  if([3,8,12,16,19].includes(state.floor)){
   const p=randomFloorCell(4);
@@ -4444,7 +4864,14 @@ function generateFloor(){
   else if(itemRoll<.32)state.items.push({x:p.x,y:p.y,type:"identify",name:"鑑定紙片"});
   else if(itemRoll<.37)state.items.push({x:p.x,y:p.y,type:"purify",name:"解呪の灰"});
   else if(itemRoll<.45)state.items.push({x:p.x,y:p.y,type:"bomb",name:"火炎壺"});
-  else if(itemRoll<.48)state.items.push({x:p.x,y:p.y,type:"retreat",name:"帰還標"});
+  else if(itemRoll<.48){
+   const wedgeEligible=isRestFloor()||activeRoute()?.id==="supply";
+   if(wedgeEligible&&rng()<(isRestFloor()?.30:.12)){
+    state.items.push({x:p.x,y:p.y,type:"retreat",name:"帰還楔"});
+   }else{
+    state.items.push({x:p.x,y:p.y,type:"oil",name:"灯油"});
+   }
+  }
   else if(itemRoll<.53)state.items.push({x:p.x,y:p.y,type:"oil",name:"灯油"});
   else state.items.push({x:p.x,y:p.y,type:"gear",gear:rollGear()});
  }
@@ -5159,9 +5586,15 @@ function defeatEnemy(e){
    state.items.push({x:e.x,y:e.y,type:"bomb",name:"火炎壺"});
    state.items.push({x:e.x,y:e.y,type:"oil",name:"灯油"});
   }else if(profile.key==="root"){
-   state.items.push({x:e.x,y:e.y,type:"retreat",name:"帰還標"});
+   state.items.push({x:e.x,y:e.y,type:"retreat",name:"帰還楔"});
   }
   state.meta.shards+=profile.bonusShards||0;
+  const soulChance=state.floor>=20?(profile.key==="root"?.18:.04):0;
+  if(soulChance>0&&rng()<soulChance){
+   state.meta.soulAnchors=(state.meta.soulAnchors||0)+1;
+   addLog("番人の核から、極めて希少な「魂還石」を回収した。");
+   showCombatToast("希少品入手","魂還石・致死時に自動帰還","critical");
+  }
   grantAppearanceRelicForBoss();
   addLog(`${profile.name}が崩れ、階段の封印が解けた！`);
   addLog(`番人固有報酬：深淵の欠片+${profile.bonusShards||0}。`);
@@ -5661,7 +6094,7 @@ function pickup(){
  if(item.type==="identify"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("identify");state.consumables.identify++;addLog("鑑定紙片を拾った。");return}
  if(item.type==="purify"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("purify");state.consumables.purify++;addLog("解呪の灰を拾った。");return}
  if(item.type==="bomb"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("bomb");state.consumables.bomb=(state.consumables.bomb||0)+1;addLog("火炎壺を拾った。");return}
- if(item.type==="retreat"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("retreat");state.consumables.retreat=(state.consumables.retreat||0)+1;addLog("帰還標を拾った。");return}
+ if(item.type==="retreat"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("retreat");state.consumables.retreat=(state.consumables.retreat||0)+1;addLog("帰還楔を拾った。");return}
  if(item.type==="oil"){ensureRunStats().itemsFound++;recordFloorPickup(false);spawnPickupEffect("oil");state.consumables.oil=(state.consumables.oil||0)+1;addLog("灯油を拾った。");return}
  if(state.inventory.length>=inventoryCapacity()){
   addLog("荷物が満杯だ。装備を足元へ残し、整理画面を開いた。");
@@ -5947,6 +6380,7 @@ function renderRouteChoices(){
     <span class="routeFinaleBoss">${route.finaleBoss}</span>
     <span class="routeFinaleReward">踏破報酬：${route.finaleReward}</span>
    </span>
+   ${routeMasteryChoiceHtml(route.id)}
   </button>`;
  }).join("");
  $("routeChoices").querySelectorAll("[data-route]").forEach(button=>{
@@ -5972,13 +6406,15 @@ function chooseDescentRoute(id){
   startFloor:state.floor+1,
   endFloor:state.floor+5,
   chosenAfterFloor:state.floor,
+  masteryAtChoice:routeMasteryLevel(id),
   completed:false,
   finalePrepared:false,
   rewardSummary:null
  };
  state.routeHistory=state.routeHistory||[];
  state.routeHistory.push({...state.routePlan,label:route.label});
- addLog(`進路「${route.label}」を選択。${route.desc}`);
+ const masteryBonus=applyRouteSelectionMasteryBonus(id);
+ addLog(`進路「${route.label}」を選択。${route.desc}${masteryBonus?` 熟練補給：携行糧+${masteryBonus.provisions}。`:""}`);
  showCombatToast("進路決定",`${route.label}・第${state.routePlan.startFloor}〜${state.routePlan.endFloor}層`,"objective");
  pendingRouteDescent=null;
  $("routeOverlay").classList.add("hidden");
@@ -6364,9 +6800,14 @@ function pickupGroundItemFromInventory(){
 function currentReturnSource(){
  if(!state||state.expeditionEnded||state.gameOver)return null;
  const onShrine=specialAt(state.player.x,state.player.y)?.type==="shrine";
- if(state.bossDefeated)return{id:"boss",label:"番人撃破後"};
+ const onStairs=state.player.x===state.stairs.x&&state.player.y===state.stairs.y;
+ const stairsUnlocked=floorObjectiveComplete();
+
  if(onShrine)return{id:"shrine",label:"帰還可能な祭壇"};
- if((state.consumables.retreat||0)>0)return{id:"marker",label:"帰還標"};
+ if(onStairs&&state.bossDefeated)return{id:"boss",label:"番人撃破後の階段"};
+ if(onStairs&&stairsUnlocked&&(state.consumables.retreat||0)>0){
+  return{id:"marker",label:"帰還楔を打った階段"};
+ }
  return null;
 }
 function canReturnNow(){
@@ -6379,8 +6820,8 @@ function renderReturnAccess(){
  button.disabled=!source;
  button.textContent=source?"帰還":"帰還不可";
  button.title=source
-  ?`${source.label}を使って探索を終了する`
-  :"番人撃破後、祭壇、または帰還標が必要";
+  ?`${source.label}から探索を終了する`
+  :"祭壇上、番人撃破後の階段上、または目標達成済み階段で帰還楔が必要";
 }
 function isStarterGear(g){
  return !!g&&(g.bankable===false||g.origin==="starter"||String(g.id||"").startsWith("starter-"));
@@ -6438,7 +6879,7 @@ function bankCurrentRun(){
 function returnToLighthouse(){
  const source=currentReturnSource();
  if(!source){
-  addLog("ここからは帰還できない。番人撃破後・祭壇・帰還標のいずれかが必要だ。");
+  addLog("ここからは帰還できない。祭壇、番人撃破後の階段、または目標達成済み階段で帰還楔が必要だ。");
   renderReturnAccess();
   return;
  }
@@ -6613,10 +7054,122 @@ function renderLighthouseLoadout(){
  copyBtn.title=hasReturned?"帰還時の装備を次回出撃へ一括設定します。":"帰還時の装備が無いため設定できません。";
  clearBtn.title=hasNext?"設定済みの次回装備をすべて解除します。":"解除できる次回装備がありません。";
 }
+function insuranceSlotCard(meta,slot){
+ const gear=nextLoadoutGear(meta,slot);
+ const plan=ensureInsuranceMeta(meta);
+ const selected=plan.slots.includes(slot);
+ if(!gear){
+  return`<button type="button" class="insuranceSlot" disabled>
+   <b>${equippedSlotLabel(slot)}・未装備</b>
+   <small>次回装備を設定すると保険対象にできます。</small>
+  </button>`;
+ }
+ return`<button type="button" class="insuranceSlot ${selected?"selected":""}" data-insurance-slot="${slot}">
+  <b>${equippedSlotLabel(slot)}・${gearLabel(gear)}</b>
+  <small>ILv${gear.itemLevel||1} / ${rarityData[gear.rarity]?.label||"通常"} / 基礎保険料 ${insuranceItemPremium(gear)}欠片</small>
+ </button>`;
+}
+function renderInsurance(meta=state.meta){
+ ensureMetaLoadouts(meta);
+ const plan=ensureInsuranceMeta(meta);
+ const premium=insurancePremium(meta);
+ const selected=plan.slots.length;
+ const soulCount=meta.soulAnchors||0;
+ $("insuranceSummary").textContent=plan.mode==="shards"
+  ?`装備保険・${selected}部位・保険料 ${premium}欠片`
+  :plan.mode==="soul"
+   ?`魂還石救命・所持 ${soulCount}`
+   :"装備保険・未契約";
+
+ $("insuranceBody").innerHTML=`
+  <div class="insuranceLead">
+   欠片保険は出撃時に保険料を支払い、死亡時に選択装備の現在状態を倉庫へ回収します。
+   魂還石は致死時だけ1個消費し、死亡そのものを緊急帰還へ置き換えます。
+  </div>
+  <div class="insuranceModeGrid">
+   <button type="button" class="insuranceMode ${plan.mode==="none"?"selected":""}" data-insurance-mode="none">
+    <b>無保険</b><small>費用なし。死亡時は今回の入手装備と成長差分を失います。</small>
+   </button>
+   <button type="button" class="insuranceMode ${plan.mode==="shards"?"selected":""}" data-insurance-mode="shards">
+    <b>欠片保険</b><small>最大3部位。性能・希少度・部位数で保険料が大きく上昇します。</small>
+   </button>
+   <button type="button" class="insuranceMode soul ${plan.mode==="soul"?"selected":""}" data-insurance-mode="soul">
+    <b>魂還石を携行</b><small>所持 ${soulCount}個。致死時だけ消費し、通常帰還として全戦利品を回収します。</small>
+   </button>
+  </div>
+  ${plan.mode==="shards"?`
+   <div class="insuranceSlotGrid">
+    ${lighthouseLoadoutSlots.map(slot=>insuranceSlotCard(meta,slot)).join("")}
+   </div>
+   <div class="insuranceCostBox ${premium>(meta.shards||0)?"danger":""}">
+    選択 ${selected}/3部位　<strong>出撃時保険料 ${premium}欠片</strong><br>
+    所持 ${meta.shards||0}欠片。保険料は帰還できても返金されません。
+   </div>`:""}
+  ${plan.mode==="soul"?`
+   <div class="insuranceCostBox ${soulCount<=0?"danger":""}">
+    <strong>魂還石 ${soulCount}個</strong><br>
+    出撃時には消費せず、HPが0になる瞬間にだけ1個消費します。
+    倉庫上限を超えた荷物は通常の帰還と同様に残置されます。
+   </div>`:""}
+  <div class="extractionRule">
+   帰還楔はどこでも使用できません。階層目標を達成し、解放された階段まで戻った時だけ消費できます。
+   祭壇帰還は祭壇上、番人撃破後の帰還は番人階の階段上に限定されます。
+  </div>`;
+
+ $("insuranceBody").querySelectorAll("[data-insurance-mode]").forEach(button=>{
+  button.onclick=()=>setInsuranceMode(button.dataset.insuranceMode);
+ });
+ $("insuranceBody").querySelectorAll("[data-insurance-slot]").forEach(button=>{
+  button.onclick=()=>toggleInsuranceSlot(button.dataset.insuranceSlot);
+ });
+}
+function routeMasteryCardHtml(id,meta){
+ const data=routeMasteryData[id];
+ const level=routeMasteryLevel(id,meta);
+ const next=routeMasteryNextNode(id,meta);
+ const bar=Math.min(100,Math.round(Math.min(level,5)/5*100));
+ return`<section class="routeMasteryCard ${id}">
+  <div class="routeMasteryTop">
+   <span class="routeMasteryName">${data.label}</span>
+   <span class="routeMasteryCount">踏破 ${level}回</span>
+  </div>
+  <div class="routeMasteryBar"><i style="width:${bar}%"></i></div>
+  <div class="routeMasteryNodes">
+   ${data.nodes.map(node=>`
+    <div class="routeMasteryNode ${level>=node.at?"unlocked":""}">
+     <b>${level>=node.at?"解放済み":"未解放"}・${node.at}回　${node.name}</b>
+     ${node.desc}
+    </div>`).join("")}
+  </div>
+  <div class="routeMasteryNext">${
+   next
+    ?`次の解放まであと${next.at-level}回：${next.name}`
+    :"全段階を解放済み。踏破回数は引き続き記録されます。"
+  }</div>
+ </section>`;
+}
+function renderRouteMastery(meta=state.meta){
+ ensureRouteMastery(meta);
+ const total=Object.values(meta.routeMastery).reduce((sum,value)=>sum+(value||0),0);
+ const unlocked=Object.keys(routeData).reduce((sum,id)=>sum+routeMasteryUnlockedNodes(id,meta).length,0);
+ $("routeMasterySummary").textContent=`進路熟練・総踏破 ${total}回・解放 ${unlocked}/9`;
+ $("routeMasteryBody").innerHTML=`
+  <div class="routeMasteryLead">
+   番人区間を最後まで踏破すると、選んだ進路の熟練が1上昇します。
+   解放効果は次回以降、その進路を選んでいる間だけ発動します。
+  </div>
+  <div class="routeMasteryGrid">
+   ${Object.keys(routeData).map(id=>routeMasteryCardHtml(id,meta)).join("")}
+  </div>`;
+}
 function renderHub(){
  const m=state.meta||defaultMeta();
  ensureMetaLoadouts(m);
+ ensureRouteMastery(m);
+ ensureInsuranceMeta(m);
  renderLighthouseLoadout();
+ renderInsurance(m);
+ renderRouteMastery(m);
  $("researchBtn").textContent=`深淵研究（${m.research?.points||0}点）`;
  $("adaptBtn").textContent=(m.adaptationPoints||0)>0
   ?`深淵適応を選ぶ（${m.adaptationPoints}点）`
@@ -6711,12 +7264,20 @@ function renderHub(){
 }
 function openHub(){if(!state)return;returnToLighthouse()}
 function startFreshRunFromHub(){
+ const preparation=prepareDepartureProtection(state.meta);
+ if(!preparation.ok)return;
  saveMeta();
  clearLighthouseSession();
  state=freshState();
+ state.protectionContract=preparation.contract;
  $("hubOverlay").classList.add("hidden");
  $("titleOverlay").classList.add("hidden");
  $("gameOverOverlay").classList.add("hidden");
+ if(preparation.contract?.mode==="shards"){
+  state.log=[`装備保険料${preparation.contract.premium}欠片を支払い、${preparation.contract.items.length}部位を保険対象として出撃した。`];
+ }else if(preparation.contract?.mode==="soul"){
+  state.log=["魂還石を救命契約として携行し、迷宮へ入った。"];
+ }
  beginPreparedFreshRun();
 }
 
@@ -6744,7 +7305,7 @@ function renderInventory(){
  $("salvageCommonBtn").onclick=salvageCommonInventory;
 
  $("consumableList").innerHTML=`<div class="itemRow"><div class="top"><span>消耗品</span><span>所持金 ${state.gold}G</span></div>
- <div class="desc">携行糧 ${state.provisions||0}手 / 治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0} / 帰還標 ${state.consumables.retreat||0} / 灯油 ${state.consumables.oil||0}</div>
+ <div class="desc">携行糧 ${state.provisions||0}手 / 治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0} / 帰還楔 ${state.consumables.retreat||0} / 灯油 ${state.consumables.oil||0}</div>
  <div class="desc">荷物 ${state.inventory.length}/${inventoryCapacity()}　保護 ${state.inventory.filter(g=>g.locked).length}</div>
  <button type="button" id="usePotionBtn">治癒薬を使う</button><button type="button" id="oilBtn">灯油を補充</button><button type="button" id="bombBtn">火炎壺を投げる</button><button type="button" id="purifyBtn">装備中の呪いを解く</button></div>`;
  $("usePotionBtn").onclick=usePotion;$("oilBtn").onclick=refillLight;$("bombBtn").onclick=()=>{$("inventoryOverlay").classList.add("hidden");throwBomb()};$("purifyBtn").onclick=purifyEquipped;
@@ -6841,6 +7402,8 @@ function loadGame(){
   if(!state.meta.eventHistory)state.meta.eventHistory=[];
   if(!state.meta.marks)state.meta.marks={mercy:0,greed:0,defiance:0,curiosity:0};
   if(!state.meta.mastery)state.meta.mastery={sword:0,spear:0,bow:0,staff:0};
+  ensureRouteMastery(state.meta);
+  ensureInsuranceMeta(state.meta);
   if(!state.meta.bodyTraining)state.meta.bodyTraining={endurance:0,strength:0,focus:0,perception:0};
   if(!state.meta.abyssAdaptations)state.meta.abyssAdaptations=[];
   if(typeof state.meta.adaptationPoints!=="number")state.meta.adaptationPoints=0;
@@ -6880,6 +7443,7 @@ function loadGame(){
   if(typeof state.fieldForgeAtk!=="number")state.fieldForgeAtk=0;
   if(typeof state.fieldForgeDef!=="number")state.fieldForgeDef=0;
   if(typeof state.inventorySort!=="string")state.inventorySort="score";
+  if(typeof state.protectionContract==="undefined")state.protectionContract=null;
   if(!state.combatStats)state.combatStats={dodges:0,guards:0,breaks:0,crits:0};
   if(!state.runStats)state.runStats=createRunStats(state.meta);
   if(typeof state.runStats.objectivesCompleted!=="number")state.runStats.objectivesCompleted=0;
@@ -6892,6 +7456,7 @@ function loadGame(){
    if(typeof state.routePlan.completed!=="boolean")state.routePlan.completed=false;
    if(typeof state.routePlan.finalePrepared!=="boolean")state.routePlan.finalePrepared=false;
    if(typeof state.routePlan.rewardSummary==="undefined")state.routePlan.rewardSummary=null;
+   if(typeof state.routePlan.masteryAtChoice!=="number")state.routePlan.masteryAtChoice=routeMasteryLevel(state.routePlan.id);
   }
   for(const entry of state.routeHistory){
    if(typeof entry.completed!=="boolean")entry.completed=false;
@@ -7278,7 +7843,7 @@ function drawItemSprite(item,x,y,t){
    ctx.strokeStyle="#ffe09a";ctx.beginPath();ctx.moveTo(x+13,y+4);ctx.lineTo(x+16,y+2);ctx.stroke();
 
   }else if(type==="retreat"){
-   // 帰還標：青緑の方位標と帰還矢印。
+   // 帰還楔：青緑の方位標と帰還矢印。
    ctx.strokeStyle="#83e0d3";ctx.lineWidth=2;
    ctx.strokeRect(x+6,y+5,10,12);
    ctx.beginPath();ctx.moveTo(x+12,y+8);ctx.lineTo(x+8,y+11);ctx.lineTo(x+12,y+14);ctx.stroke();
@@ -7921,8 +8486,14 @@ function renderSkills(){
 function render(){if(!state)return;renderStats();renderHero();renderLog();renderSkills();renderFloorGoal();renderReturnAccess();draw()}
 function startNew(){
  try{
+  const meta=loadMeta()||defaultMeta();
+  ensureMetaLoadouts(meta);
+  const preparation=prepareDepartureProtection(meta);
+  if(!preparation.ok)return;
+  localStorage.setItem("abyssalRootsMeta",JSON.stringify(meta));
   clearLighthouseSession();
   state=freshState();
+  state.protectionContract=preparation.contract;
   $("titleOverlay").classList.add("hidden");
   $("gameOverOverlay").classList.add("hidden");
   $("expeditionResultBody").innerHTML="";
