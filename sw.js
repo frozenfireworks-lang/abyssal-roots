@@ -1,4 +1,4 @@
-const CACHE='abyssal-roots-v3-21-1';
+const CACHE='abyssal-roots-v3-22-0';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));

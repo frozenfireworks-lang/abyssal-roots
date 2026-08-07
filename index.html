@@ -3623,6 +3623,153 @@ body{
 .stashEmpty{
  padding:16px 8px;border:1px dashed #4c4455;border-radius:8px;text-align:center;color:#a89daf;font-size:7px;line-height:1.6;
 }
+
+.stashBuildPreview{
+ display:grid;
+ gap:6px;
+ margin-top:6px;
+ padding:7px;
+ border:1px solid #41374a;
+ border-radius:8px;
+ background:linear-gradient(180deg,#120f16,#0d0a10);
+}
+.stashBuildPreview.equip{border-color:#4a6e58;background:linear-gradient(180deg,#111913,#0c100d)}
+.stashBuildPreview.remove{border-color:#74505d;background:linear-gradient(180deg,#191116,#110b0e)}
+.stashBuildPreviewTitle{
+ display:flex;
+ justify-content:space-between;
+ gap:6px;
+ align-items:flex-start;
+ color:#cfc3d7;
+ font-size:6.6px;
+ line-height:1.35;
+}
+.stashBuildPreviewTitle b{color:#f1e3aa;font-size:7.6px}
+.stashBuildPreviewTitle span{color:#978ca1;white-space:nowrap}
+.stashBuildMetrics{
+ display:flex;
+ flex-wrap:wrap;
+ gap:4px;
+}
+.stashBuildMetric{
+ padding:3px 5px;
+ border:1px solid #45404b;
+ border-radius:5px;
+ color:#aaa0b1;
+ font-size:6px;
+ white-space:nowrap;
+}
+.stashBuildMetric.up{border-color:#3f7652;background:#102018;color:#9ee5b2}
+.stashBuildMetric.down{border-color:#814859;background:#261117;color:#f1a9b6}
+.stashBuildMetric.same{color:#918797;background:#0d0b10}
+.stashBuildSynergy{
+ display:grid;
+ gap:4px;
+ color:#bfb3c8;
+ font-size:6.4px;
+ line-height:1.45;
+}
+.stashBuildSynergyRow{
+ display:flex;
+ justify-content:space-between;
+ gap:6px;
+}
+.stashBuildSynergyRow b{color:#e6dae9;font-size:6.7px}
+.stashBuildThresholds{
+ display:flex;
+ flex-wrap:wrap;
+ gap:4px;
+ color:#aa9fb1;
+ font-size:6px;
+ line-height:1.4;
+}
+.stashBuildThresholds span{
+ padding:2px 5px;
+ border:1px solid #45404b;
+ border-radius:999px;
+ background:#110e16;
+}
+.stashBuildThresholds .gain{border-color:#476f56;color:#a8e1b7;background:#111d15}
+.stashBuildThresholds .loss{border-color:#855465;color:#efb3bf;background:#1f1116}
+.stashBuildThresholds .change{border-color:#6f6446;color:#eed89c;background:#19150d}
+.stashBuildNoThreshold{color:#94889c}
+
+.sealedCarryStatus{
+ margin-top:4px;
+ padding:6px 8px;
+ border:1px solid #60536c;
+ border-radius:8px;
+ background:linear-gradient(180deg,#17121d,#0f0c13);
+ color:#cec1d6;
+ font-size:7px;
+ line-height:1.45;
+}
+.sealedCarryStatus b{display:block;color:#f0dfaa;font-size:8px}
+.sealedCarryStatus .sealedCarryMeta{display:flex;justify-content:space-between;gap:8px;margin-top:2px}
+.sealedCarryStatus .sealedCarryMeta span:last-child{color:#a9dcba}
+.sealedCarryStatus small{display:block;margin-top:4px;color:#9e92a8;font-size:6.3px}
+
+.relicVaultIntro{
+ display:grid;
+ gap:8px;
+ padding:8px;
+ border:1px solid #51455d;
+ border-radius:10px;
+ background:linear-gradient(180deg,#17121d,#100d14);
+}
+.relicVaultLead b{display:block;color:#f3e3aa;font-size:8px}
+.relicVaultLead small{display:block;margin-top:3px;color:#b8acbf;font-size:6.6px;line-height:1.55}
+.relicFortune{
+ padding:7px 8px;
+ border:1px solid #6b5b39;
+ border-radius:8px;
+ background:linear-gradient(180deg,#1d180d,#120f09);
+ color:#ddc98b;
+}
+.relicFortune.ready{border-color:#b98d3d;box-shadow:0 0 0 1px #6e5421 inset}
+.relicFortuneHead{display:flex;justify-content:space-between;gap:6px;align-items:flex-start}
+.relicFortuneHead b{color:#ffeab1;font-size:8px}
+.relicFortuneHead small{color:#cbbb92;font-size:6.2px;line-height:1.45;text-align:right}
+.relicFortuneBar{margin-top:6px;height:7px;border:1px solid #5e4b26;border-radius:999px;background:#0d0a08;overflow:hidden}
+.relicFortuneBar i{display:block;height:100%;background:linear-gradient(90deg,#99752c,#f2d06c)}
+.relicVaultGrid{
+ display:grid;
+ gap:7px;
+ margin-top:8px;
+}
+.relicVaultCard{
+ display:grid;
+ gap:6px;
+ padding:8px;
+ border:1px solid #4d4257;
+ border-radius:10px;
+ background:linear-gradient(180deg,#18131d,#100d14);
+}
+.relicVaultCard b{display:block;color:#f3e3aa;font-size:8px}
+.relicVaultMeta{display:flex;flex-wrap:wrap;gap:4px}
+.relicVaultMeta span{padding:1px 5px;border:1px solid #4e4558;border-radius:999px;background:#120e16;color:#c7bccf;font-size:5.8px}
+.relicVaultCard small{display:block;color:#aea2b7;font-size:6.4px;line-height:1.55}
+.relicVaultCard button{margin-top:1px;width:100%;padding:7px 8px;border:1px solid #695977;border-radius:8px;background:linear-gradient(180deg,#31253b,#1b1522);color:#eee4f4;font-size:7px;font-weight:700}
+.relicVaultCard button:disabled{opacity:.55}
+.relicVaultCard.ash{border-color:#655d66}
+.relicVaultCard.azure{border-color:#4a6488}
+.relicVaultCard.crimson{border-color:#8a4d58}
+.relicVaultCard.gold{border-color:#a47d37;box-shadow:0 0 0 1px #6c5221 inset}
+.relicHistory{
+ margin-top:8px;
+ padding:8px;
+ border:1px solid #4d4458;
+ border-radius:9px;
+ background:#110d15;
+ color:#bdb0c6;
+ font-size:6.5px;
+ line-height:1.55;
+}
+.relicHistory b{display:block;margin-bottom:5px;color:#eee1ad;font-size:7.4px}
+.relicHistoryItem{padding:4px 0;border-top:1px solid #2f2836}
+.relicHistoryItem:first-of-type{border-top:none;padding-top:0}
+.relicHistoryFloor{color:#f1dfaa}
+.relicHistoryReward{color:#ded1e4}
 @media(max-width:390px){
  .stashManagerTop{position:relative;top:auto}
  .stashLoadoutStrip{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -3821,11 +3968,52 @@ body{
 .forkReport{margin-top:6px;padding:6px;border:1px solid #50465a;border-radius:6px;background:#131016;color:#c9becf;font-size:7px;line-height:1.45}
 .forkReport b{color:#e6d9eb}
 
+
+
+/* v3.22.0 FIRST DEPTH CLEAR */
+#firstTwentyMilestoneOverlay{z-index:48}
+.firstTwentyMilestoneCard{
+ width:min(100%,420px);
+ border-color:#806f3f;
+ background:
+  radial-gradient(circle at 50% -10%,rgba(230,193,91,.14),transparent 42%),
+  linear-gradient(180deg,#211a16,#100c11 58%,#0b090d);
+ box-shadow:0 22px 70px rgba(0,0,0,.82),inset 0 0 34px rgba(226,184,91,.05);
+}
+.firstTwentyKicker{color:#bea96d;font-size:7px;letter-spacing:.22em;text-align:center}
+.firstTwentyTitle{margin:5px 0 2px!important;color:#fff0b5!important;text-align:center;font-size:20px!important;letter-spacing:.08em}
+.firstTwentySubtitle{text-align:center;color:#b9adba;font-size:7.5px;line-height:1.55}
+.firstTwentyReward{
+ margin-top:9px;padding:8px;border:1px solid #6d5b31;border-radius:9px;
+ background:linear-gradient(180deg,#211a0e,#141008);
+}
+.firstTwentyReward b{display:block;color:#ffe49a;font-size:9px}
+.firstTwentyReward small{display:block;margin-top:3px;color:#c9b98e;font-size:6.7px;line-height:1.5}
+.firstTwentyRewardGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:7px}
+.firstTwentyRewardCell{padding:6px 4px;border:1px solid #574923;border-radius:7px;background:#100d08;text-align:center}
+.firstTwentyRewardCell strong{display:block;color:#ffe8a6;font-size:11px}
+.firstTwentyRewardCell span{display:block;margin-top:2px;color:#a99b74;font-size:5.8px}
+.firstTwentyRunGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:8px}
+.firstTwentyRunCell{padding:5px 3px;border:1px solid #433a48;border-radius:7px;background:#0d0a10;text-align:center}
+.firstTwentyRunCell b{display:block;color:#eee2f0;font-size:8px}
+.firstTwentyRunCell small{display:block;margin-top:2px;color:#918697;font-size:5.8px}
+.firstTwentyWarning{margin-top:7px;padding:6px 7px;border-left:3px solid #8b5d48;border-radius:6px;background:#20130f;color:#ddb8a6;font-size:6.7px;line-height:1.5}
+.firstTwentyChoiceLead{margin-top:8px;color:#c8bccd;font-size:7px;line-height:1.5}
+.firstTwentyActions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px}
+.firstTwentyActions .modalBtn{margin:0;min-height:38px;padding:7px 5px;font-size:7.5px}
+#firstTwentyReturnBtn{border-color:#5e8067;background:linear-gradient(180deg,#24402c,#132319);color:#d9f5df}
+#firstTwentyContinueBtn{border-color:#75613d;background:linear-gradient(180deg,#44351a,#241b0e);color:#ffe8a7}
+#firstTwentyStayBtn{margin-top:6px;font-size:6.8px;color:#c6bbc9}
+@media(max-width:390px){
+ .firstTwentyTitle{font-size:18px!important}
+ .firstTwentyRewardGrid{gap:4px}
+ .firstTwentyRunGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.21.1 BOOT RECOVERY</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.22.0 FIRST DEPTH CLEAR</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -4088,6 +4276,7 @@ body{
           <li>番人階以外は、指定行動が難しい場合でも迷宮を十分に踏破すれば代替達成できます。</li>
           <li><b>階段 ▼</b> へ進む前には確認が出ます。移動後は次の階層名・環境・目標が約6秒表示されます。</li>
           <li><b>5階ごとに番人戦</b>があります。番人撃破後は、次の5階区間を「狩路・観測路・補給路」から選択します。</li>
+          <li><b>第20層は第一深度圏の大きな到達点</b>です。初踏破では恒久報酬と伝説へ昇格した番人装備を得て、灯台へ成果を持ち帰るか、第21層以降へ潜るかを選べます。</li>
           <li>進路は敵数・物資・エリート・罠・事件・研究量へ影響し、次の番人階まで継続します。</li>
           <li><b>深脈分岐</b>：第7層以降、各5層区間の途中で一度だけ、次の1階だけに効く分岐が現れます。通常路に加えてランダムに2つの特殊路が提示され、敵密度・物資・罠・敵Lv・装備ILv・隠し通路・事件などを危険と報酬の交換条件として選べます。番人後に選ぶ「進路」とは別枠で重複します。</li>
           <li><b>迷宮現象</b>：通常階では一定確率で、探索途中に予告付きの現象が発生します。闇潮は自分と敵の視界を狭め、灯脈噴出は灯油を消費せず視界を広げる代わりに発見されやすくなり、深層静穏は敵の再出現を止めて気力回復を助けます。地脈震動は戦術地形を新生し、生態流入は遠方から群れが侵入します。現象は階生成時に固定され、更新で引き直せません。</li>
@@ -4362,6 +4551,20 @@ body{
     <p id="forkIntro"></p>
     <div id="forkChoices" class="forkChoiceGrid"></div>
     <button type="button" class="modalBtn" id="closeForkChoice">階段前へ戻る</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="firstTwentyMilestoneOverlay">
+  <div class="card firstTwentyMilestoneCard">
+    <div class="firstTwentyKicker">FIRST DEPTH COMPLETE</div>
+    <h2 class="firstTwentyTitle">第一深度圏・踏破</h2>
+    <div class="firstTwentySubtitle" id="firstTwentyMilestoneSubtitle">第20層の番人を越え、ひとつの深度圏を征した。</div>
+    <div id="firstTwentyMilestoneBody"></div>
+    <div class="firstTwentyActions">
+      <button type="button" class="modalBtn" id="firstTwentyReturnBtn">成果を持って灯台へ</button>
+      <button type="button" class="modalBtn" id="firstTwentyContinueBtn">第21層以降へ</button>
+    </div>
+    <button type="button" class="modalBtn" id="firstTwentyStayBtn">階段前へ戻り、戦利品を確認</button>
   </div>
 </div>
 
@@ -6646,7 +6849,7 @@ function restoreLighthouseSession(){
  return openLighthouseState(meta,session.phase,report);
 }
 function defaultMeta(){
- const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}};
+ const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},depthMilestones:{firstTwenty:{clears:0,firstClearAt:0,lastClearAt:0}},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}};
  meta.appearance=defaultAppearance();
  return meta;
 }
@@ -7673,7 +7876,8 @@ function stashBuildValue(value,digits=0){
 }
 function stashBuildMetricHtml(label,before,after,suffix="",digits=0){
  const a=stashBuildValue(before,digits),b=stashBuildValue(after,digits),delta=stashBuildValue(b-a,digits);
- return`<span class="stashBuildMetric ${stashDeltaClass(delta)}">${label} ${a}→${b}${suffix}${delta?` (${delta>0?"+":""}${delta})`:""}</span>`;
+ const value=delta===0?"±0":`${delta>0?"+":""}${delta}${suffix}`;
+ return`<span class="stashBuildMetric ${stashDeltaClass(delta)}">${label} ${value}</span>`;
 }
 function stashBuildResonanceText(profile){return profile?.tier?`${echoResonanceLabel(profile)}・刻印${profile.total}`:"共鳴なし"}
 function lighthouseStashBuildPreviewHtml(meta,gear){
@@ -7681,15 +7885,19 @@ function lighthouseStashBuildPreviewHtml(meta,gear){
  const thresholdHtml=[
   ...preview.thresholds.gains.map(label=>`<span class="gain">解放 ${label}</span>`),
   ...preview.thresholds.losses.map(label=>`<span class="loss">喪失 ${label}</span>`),
-  ...preview.legendaryChanges.map(change=>`<span class="change">${change.label}${change.before}→${change.after}</span>`)
- ].join("")||'<span class="stashBuildNoThreshold">タグ段階・伝説特性の発動数に変化なし</span>';
+  ...preview.legendaryChanges.map(change=>`<span class="change">${change.label} ${change.delta>0?"+":""}${change.delta}</span>`)
+ ].join("")||'<span class="stashBuildNoThreshold">タグ段階・伝説特性の変化なし</span>';
  const resonanceBefore=stashBuildResonanceText(before.resonance),resonanceAfter=stashBuildResonanceText(after.resonance);
+ const rawChange=after.strain.raw-before.strain.raw;
+ const effChange=after.strain.effective-before.strain.effective;
  return`<div class="stashBuildPreview ${preview.selected?"remove":"equip"}">
-  <div class="stashBuildPreviewTitle"><b>${preview.selected?"解除した場合":"設定した場合"}の次回ビルド</b><span>未確定プレビュー</span></div>
+  <div class="stashBuildPreviewTitle"><b>${preview.selected?"解除時":"設定時"}の全体差分</b><span>次回ビルド</span></div>
   <div class="stashBuildMetrics">
-   ${stashBuildMetricHtml("攻",before.atk,after.atk)}${stashBuildMetricHtml("防",before.def,after.def)}${stashBuildMetricHtml("会心",before.crit*100,after.crit*100,"%",1)}${stashBuildMetricHtml("充足+",before.supply,after.supply)}${stashBuildMetricHtml("気力補正",before.stamina,after.stamina)}${stashBuildMetricHtml("視野+",before.vision,after.vision)}
+   ${stashBuildMetricHtml("攻",before.atk,after.atk)}${stashBuildMetricHtml("防",before.def,after.def)}${stashBuildMetricHtml("会心",before.crit*100,after.crit*100,"%",1)}${stashBuildMetricHtml("充足",before.supply,after.supply)}${stashBuildMetricHtml("気力",before.stamina,after.stamina)}${stashBuildMetricHtml("視野",before.vision,after.vision)}${stashBuildMetricHtml("歪み",before.strain.effective,after.strain.effective)}
   </div>
-  <div class="stashBuildSynergy">歪み ${before.strain.effective}→${after.strain.effective}${after.strain.raw>after.strain.effective?`（生${after.strain.raw}）`:""} / 共鳴 ${resonanceBefore}${resonanceBefore!==resonanceAfter?` → ${resonanceAfter}`:""}</div>
+  <div class="stashBuildSynergy">
+   <div class="stashBuildSynergyRow"><span><b>共鳴</b> ${resonanceBefore}${resonanceBefore!==resonanceAfter?` → ${resonanceAfter}`:" / 変化なし"}</span><span><b>生歪み</b> ${rawChange===0?"±0":`${rawChange>0?"+":""}${rawChange}`}</span></div>
+  </div>
   <div class="stashBuildThresholds">${thresholdHtml}</div>
  </div>`;
 }
@@ -7773,12 +7981,57 @@ function createRunStats(meta){
   legendaryCollectorDrops:0,
   maxEchoResonance:0,
   maxEchoResonanceKey:null,
+  firstTwentyCleared:false,
+  firstTwentyFirstClear:false,
+  firstTwentyRewardShards:0,
+  firstTwentyRewardAnchor:0,
   startedAt:Date.now()
  };
 }
 function ensureRunStats(){
  if(!state.runStats)state.runStats=createRunStats(state.meta||defaultMeta());
  return state.runStats;
+}
+function ensureDepthMilestones(meta=state?.meta){
+ if(!meta)return{firstTwenty:{clears:0,firstClearAt:0,lastClearAt:0}};
+ if(!meta.depthMilestones||typeof meta.depthMilestones!=="object")meta.depthMilestones={};
+ if(!meta.depthMilestones.firstTwenty||typeof meta.depthMilestones.firstTwenty!=="object")meta.depthMilestones.firstTwenty={};
+ const milestone=meta.depthMilestones.firstTwenty;
+ for(const keyName of ["clears","firstClearAt","lastClearAt"]){if(typeof milestone[keyName]!=="number")milestone[keyName]=0}
+ return meta.depthMilestones;
+}
+function grantFirstTwentyClearReward(rewardGear){
+ if(state.floor!==20||!state.bossDefeated)return null;
+ const milestone=ensureDepthMilestones(state.meta).firstTwenty;
+ const stats=ensureRunStats();
+ const firstClear=!milestone.firstClearAt;
+ milestone.clears=Math.max(0,milestone.clears||0)+1;
+ milestone.lastClearAt=Date.now();
+ stats.firstTwentyCleared=true;
+ let shards=0,anchor=0;
+ if(firstClear){
+  milestone.firstClearAt=milestone.lastClearAt;
+  shards=20;anchor=1;
+  state.meta.shards=(state.meta.shards||0)+shards;
+  state.meta.soulAnchors=(state.meta.soulAnchors||0)+anchor;
+  promoteGearRarity(rewardGear,3);
+  rewardGear.firstDepthClearReward=true;
+  stats.firstTwentyFirstClear=true;
+  stats.firstTwentyRewardShards=shards;
+  stats.firstTwentyRewardAnchor=anchor;
+ }
+ state.firstTwentyMilestonePending={firstClear,shards,anchor,legendary:!!firstClear,clears:milestone.clears,at:milestone.lastClearAt};
+ state.firstTwentyMilestoneSeen=false;
+ saveMeta();
+ if(firstClear){
+  addLog(`第一深度圏を初踏破。恒久報酬として深淵の欠片+${shards}、魂還石+${anchor}。番人装備は伝説へ昇格した。`);
+  showCombatToast("第一深度圏・初踏破",`欠片+${shards} / 魂還石+${anchor} / 伝説装備` ,"legendary");
+  sfx("legendary");
+ }else{
+  addLog(`第一深度圏を再踏破した。第20層の向こうへ進む道が開いた。`);
+  showCombatToast("第一深度圏・踏破",`第20層突破 ${milestone.clears}回目`,"objective");
+ }
+ return state.firstTwentyMilestonePending;
 }
 function uniqueRunGear(){
  return[...new Map(
@@ -8246,9 +8499,15 @@ function buildExpeditionReport(outcome,details={}){
   echoResonanceTier:Math.max(stats.maxEchoResonance||0,finalResonance.tier||0),
   echoResonanceKey:(stats.maxEchoResonance||0)>=(finalResonance.tier||0)?stats.maxEchoResonanceKey:finalResonance.key,
   echoPressureReached:Math.max(stats.maxEchoResonance||0,finalResonance.tier||0)>=3,
+  firstTwentyCleared:!!stats.firstTwentyCleared,
+  firstTwentyFirstClear:!!stats.firstTwentyFirstClear,
+  firstTwentyRewardShards:stats.firstTwentyRewardShards||0,
+  firstTwentyRewardAnchor:stats.firstTwentyRewardAnchor||0,
   highlights:[]
  };
 
+ if(report.firstTwentyFirstClear)report.highlights.push(`第一深度圏を初踏破・欠片+${report.firstTwentyRewardShards} / 魂還石+${report.firstTwentyRewardAnchor}`);
+ else if(report.firstTwentyCleared)report.highlights.push("第一深度圏・第20層を踏破");
  if(report.bosses>0)report.highlights.push(`番人を${report.bosses}体撃破`);
  if(report.routesCompleted>0)report.highlights.push(`進路を${report.routesCompleted}区間踏破`);
  if(report.specialForksTaken>0)report.highlights.push(`深脈の特殊分岐を${report.specialForksTaken}回選択`);
@@ -12882,7 +13141,7 @@ function maybeDropRoomSealedRelic(enc,p){
 }
 function sealedRelicCarryStatusHtml(){
  const count=state?.sealedRelics?.length||0;if(!count)return"";
- return`<div class="sealedCarryStatus">封印遺物 ${count}/${SEALED_RELIC_CARRY_CAP}・灯台帰還まで開封不可・死亡すると失う</div>`;
+ return`<div class="sealedCarryStatus"><b>封印遺物を携行中</b><div class="sealedCarryMeta"><span>${count}/${SEALED_RELIC_CARRY_CAP} 個</span><span>生還で灯台保管</span></div><small>探索中は開封できません。死亡すると携行分をすべて失います。</small></div>`;
 }
 function sealedRelicRewardSpec(relic,meta=state?.meta){
  const {fortune}=ensureSealedRelicMeta(meta);
@@ -13007,7 +13266,7 @@ function renderSealedRelicVault(meta=state.meta){
  const pct=Math.round(Math.min(SEALED_RELIC_PITY,fortune.misses)/SEALED_RELIC_PITY*100);
  const ready=fortune.misses>=SEALED_RELIC_PITY;
  const history=fortune.history.slice(-5).reverse();
- body.innerHTML=`<div class="relicVaultIntro">探索中に見つかる封印遺物は、帰還するまで中身が確定しません。携行中に死亡すると失います。封印の色は期待度の違いだけを示し、内容そのものは秘匿されます。<div class="relicFortune ${ready?"ready":""}"><b>黄金残響 ${fortune.misses}/${SEALED_RELIC_PITY}</b> — ${ready?"次の開封は伝説以上が確定。":"伝説以上が出なかった開封で蓄積。満ちると次回が伝説以上になります。"}<div class="relicFortuneBar"><i style="width:${pct}%"></i></div></div></div>${relics.length?`<div class="relicVaultGrid">${relics.map((relic,index)=>{const seal=sealedRelicSealData[relic.seal]||sealedRelicSealData.ash;const blocked=(meta.stash||[]).length>=20;const waiting=index>0;return`<div class="relicVaultCard ${relic.seal}"><b>${seal.glyph} ${seal.label}</b><small>第${relic.floor}層・${sealedRelicSourceLabel(relic.source)}<br>${seal.desc}</small><button type="button" data-open-relic="${relic.id}" ${blocked||waiting?"disabled":""}>${blocked?"倉庫を1枠空ける":waiting?"前の封印から":"封印を解く"}</button></div>`}).join("")}</div>`:'<p class="note">未開封の封印遺物はありません。通常敵からも極低確率で現れ、変異個体・特異室・番人ほど見つけやすくなります。</p>'}${history.length?`<div class="relicHistory"><b>最近の開封</b><br>${history.map(entry=>`第${entry.floor}層 ${entry.label}${entry.gearName?`「${entry.gearName}」`:""}`).join("<br>")}</div>`:""}`;
+ body.innerHTML=`<div class="relicVaultIntro"><div class="relicVaultLead"><b>封印遺物庫</b><small>探索中に見つかる封印遺物は、灯台へ生還するまで中身が分かりません。封印の色は期待度の目安だけを示し、携行中に死亡すると失います。</small></div><div class="relicFortune ${ready?"ready":""}"><div class="relicFortuneHead"><b>黄金残響 ${fortune.misses}/${SEALED_RELIC_PITY}</b><small>${ready?"次の開封は伝説以上が確定。":"伝説以上が出なかった開封で蓄積。満ちると次回の開封が伝説以上になります。"}</small></div><div class="relicFortuneBar"><i style="width:${pct}%"></i></div></div></div>${relics.length?`<div class="relicVaultGrid">${relics.map((relic,index)=>{const seal=sealedRelicSealData[relic.seal]||sealedRelicSealData.ash;const blocked=(meta.stash||[]).length>=20;const waiting=index>0;return`<div class="relicVaultCard ${relic.seal}"><div><b>${seal.glyph} ${seal.label}</b><div class="relicVaultMeta"><span>第${relic.floor}層</span><span>${sealedRelicSourceLabel(relic.source)}</span></div></div><small>${seal.desc}</small><button type="button" data-open-relic="${relic.id}" ${blocked||waiting?"disabled":""}>${blocked?"倉庫を1枠空ける":waiting?"前の封印を解いてから":"封印を解く"}</button></div>`}).join("")}</div>`:'<p class="note">未開封の封印遺物はありません。通常敵からも極低確率で現れ、変異個体・特異室・番人ほど見つけやすくなります。</p>'}${history.length?`<div class="relicHistory"><b>最近の開封</b>${history.map(entry=>`<div class="relicHistoryItem"><span class="relicHistoryFloor">第${entry.floor}層</span> <span class="relicHistoryReward">${entry.label}${entry.gearName?`「${entry.gearName}」`:""}</span></div>`).join("")}</div>`:""}`;
  body.querySelectorAll?.("[data-open-relic]").forEach(button=>button.onclick=()=>beginSealedRelicOpen(button.dataset.openRelic));
 }
 function bankSealedRelics(){
@@ -13843,6 +14102,7 @@ function defeatEnemy(e){
    rewardGear.rarity="rare";
    rewardGear.locked=true;
   }
+  if(state.floor===20)grantFirstTwentyClearReward(rewardGear);
   completeRouteAtBoss(e,rewardGear);
   state.items.push({x:e.x,y:e.y,type:"gear",gear:rewardGear});
   if(profile.key==="chain"){
@@ -14826,6 +15086,50 @@ function chooseDescentRoute(id){
  performStairDescent(pending.dx,pending.dy,pending.nx,pending.ny);
 }
 
+let pendingFirstTwentyDescent=null;
+function firstTwentyMilestoneUncollected(){return(state.items||[]).filter(item=>item&&item.x!=null&&item.y!=null).length}
+function openFirstTwentyMilestone(dx,dy,nx,ny){
+ pendingFirstTwentyDescent={dx,dy,nx,ny,fromFloor:state.floor};
+ const pending=state.firstTwentyMilestonePending||{};
+ const stats=ensureRunStats();
+ const first=!!pending.firstClear;
+ const uncollected=firstTwentyMilestoneUncollected();
+ const carried=(state.sealedRelics||[]).length;
+ const newGear=newlyFoundRunGear().length;
+ $("firstTwentyMilestoneSubtitle").textContent=first
+  ?"第20層の根冠の王を越え、最初の大きな到達点へ辿り着いた。"
+  :"第20層を再び越えた。ここから先は、完成見本を越えた終わりなき深淵となる。";
+ const rewardHtml=first
+  ?`<div class="firstTwentyReward"><b>初踏破・恒久報酬</b><small>この報酬はすでに保存されています。このあと深層で倒れても、欠片と魂還石は失いません。</small><div class="firstTwentyRewardGrid"><div class="firstTwentyRewardCell"><strong>+${pending.shards||20}</strong><span>深淵の欠片</span></div><div class="firstTwentyRewardCell"><strong>+${pending.anchor||1}</strong><span>魂還石</span></div><div class="firstTwentyRewardCell"><strong>伝説</strong><span>番人装備へ昇格</span></div></div></div>`
+  :`<div class="firstTwentyReward"><b>第一深度圏・再踏破</b><small>初踏破の恒久報酬は一度だけです。今回の番人・進路・戦利品報酬は通常どおり獲得しています。</small></div>`;
+ $("firstTwentyMilestoneBody").innerHTML=`${rewardHtml}<div class="firstTwentyRunGrid"><div class="firstTwentyRunCell"><b>${stats.bossesDefeated||0}</b><small>番人撃破</small></div><div class="firstTwentyRunCell"><b>${newGear}</b><small>新規装備</small></div><div class="firstTwentyRunCell"><b>${carried}/${SEALED_RELIC_CARRY_CAP}</b><small>封印遺物</small></div><div class="firstTwentyRunCell"><b>${state.hero.hp}/${state.hero.maxHp}</b><small>現在HP</small></div></div>${uncollected?`<div class="firstTwentyWarning">この階層には未回収の拾得物が${uncollected}個あります。灯台へ帰る前に拾わなければ失われます。</div>`:""}<div class="firstTwentyChoiceLead">ここで成果を確定して灯台へ帰るか、次の進路を選んで第21層以降へ潜るかを決められます。</div>`;
+ $("firstTwentyMilestoneOverlay").classList.remove("hidden");
+ triggerImpactFeedback("legendary",{haptic:"legendary",duration:920});
+ return true;
+}
+function closeFirstTwentyMilestone(markSeen=true){
+ if(markSeen)state.firstTwentyMilestoneSeen=true;
+ pendingFirstTwentyDescent=null;
+ $("firstTwentyMilestoneOverlay").classList.add("hidden");
+ render();
+}
+function stayAtFirstTwentyMilestone(){closeFirstTwentyMilestone(true)}
+function returnFromFirstTwentyMilestone(){
+ state.firstTwentyMilestoneSeen=true;
+ pendingFirstTwentyDescent=null;
+ $("firstTwentyMilestoneOverlay").classList.add("hidden");
+ return returnToLighthouse(true);
+}
+function continueFromFirstTwentyMilestone(){
+ const pending=pendingFirstTwentyDescent;
+ if(!pending||pending.fromFloor!==20||state.floor!==20){closeFirstTwentyMilestone(true);return false}
+ state.firstTwentyMilestoneSeen=true;
+ pendingFirstTwentyDescent=null;
+ $("firstTwentyMilestoneOverlay").classList.add("hidden");
+ openRouteChoice(pending.dx,pending.dy,pending.nx,pending.ny);
+ return true;
+}
+
 function playerOnStairs(){
  return !!state&&
   state.player.x===state.stairs.x&&
@@ -14999,6 +15303,10 @@ function attemptStairDescent(dx=0,dy=0,nx=state.stairs.x,ny=state.stairs.y){
  }
 
  if(floorPlan().boss&&state.bossDefeated){
+  if(state.floor===20&&!state.firstTwentyMilestoneSeen){
+   openFirstTwentyMilestone(dx,dy,nx,ny);
+   return true;
+  }
   openRouteChoice(dx,dy,nx,ny);
   return true;
  }
@@ -16817,7 +17125,7 @@ function renderInventory(){
   box.appendChild(row);
  });
 }
-function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("weaponArtOverlay").classList.contains("hidden")&&$("threatOverlay").classList.contains("hidden")&&$("actionConfirmOverlay").classList.contains("hidden")&&$("stairShortcutOverlay").classList.contains("hidden")&&$("returnConfirmOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("routeOverlay").classList.contains("hidden")&&$("forkOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("audioOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
+function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("weaponArtOverlay").classList.contains("hidden")&&$("threatOverlay").classList.contains("hidden")&&$("actionConfirmOverlay").classList.contains("hidden")&&$("stairShortcutOverlay").classList.contains("hidden")&&$("returnConfirmOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("routeOverlay").classList.contains("hidden")&&$("forkOverlay").classList.contains("hidden")&&$("firstTwentyMilestoneOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("audioOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
 let saveTimer=null;
 let lastActiveSaveResult=null;
 function queueSave(){
@@ -18748,7 +19056,7 @@ $("previewSfxBtn").onclick=()=>{if(!currentAudioSettings().sfxEnabled)setAudioPa
 $("closeAudioSettings").onclick=closeAudioSettings;
 document.addEventListener("pointerdown",unlockAudioFromGesture,{passive:true});
 $("closeRouteChoice").onclick=closeRouteChoice;
-$("closeForkChoice").onclick=closeAbyssForkChoice;$("closeRelicReveal").onclick=closeSealedRelicReveal;$("closeEvent").onclick=()=>{$("eventOverlay").classList.add("hidden");render()};$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("researchBtn").onclick=openResearchFromHub;$("closeResearch").onclick=()=>closeHubSubOverlay("researchOverlay");$("closeAdapt").onclick=()=>closeHubSubOverlay("adaptOverlay");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
+$("closeForkChoice").onclick=closeAbyssForkChoice;$("firstTwentyReturnBtn").onclick=returnFromFirstTwentyMilestone;$("firstTwentyContinueBtn").onclick=continueFromFirstTwentyMilestone;$("firstTwentyStayBtn").onclick=stayAtFirstTwentyMilestone;$("closeRelicReveal").onclick=closeSealedRelicReveal;$("closeEvent").onclick=()=>{$("eventOverlay").classList.add("hidden");render()};$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("researchBtn").onclick=openResearchFromHub;$("closeResearch").onclick=()=>closeHubSubOverlay("researchOverlay");$("closeAdapt").onclick=()=>closeHubSubOverlay("adaptOverlay");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
 $("saveBtn").onclick=()=>{
  addLog("探索記録を手動保存した。");
  const result=saveGame();
