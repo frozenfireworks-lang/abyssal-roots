@@ -4216,11 +4216,79 @@ body{
 .weaponArtChoice:disabled{opacity:1;background:linear-gradient(180deg,#231d28,#16121a);border-color:#5a5163;color:#afa3b5}
 .weaponArtUnlockNote{margin-top:8px;color:#a79caf;font-size:6.2px;line-height:1.5}
 
+
+
+/* v3.24.0 COUNTER WINDOWS */
+.statusTag.counterOpen{
+ border-color:#a78742;
+ background:#211a0d;
+ color:#ffe19a;
+ box-shadow:0 0 0 1px rgba(255,213,112,.08) inset;
+}
+.counterWindowCard{
+ margin-top:7px;
+ padding:7px 8px;
+ border:1px solid #806b3f;
+ border-radius:8px;
+ background:linear-gradient(180deg,#1b160d,#100d08);
+ color:#d9c99d;
+ font-size:6.6px;
+ line-height:1.55;
+}
+.counterWindowCard b{color:#ffe4a1;font-size:7.4px}
+
+
+
+/* v3.25.0 ABYSS WHISPERS */
+.abyssWhisperOffer{
+ margin:8px 0;
+ padding:8px;
+ border:1px solid #5a4b68;
+ border-radius:10px;
+ background:linear-gradient(180deg,#19131f,#0f0b13);
+ box-shadow:inset 0 0 24px rgba(118,78,150,.055);
+}
+.abyssWhisperOfferHead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.abyssWhisperOfferHead b{color:#eadcf4;font-size:8px;letter-spacing:.03em}
+.abyssWhisperOfferHead span{padding:1px 6px;border:1px solid #665673;border-radius:999px;color:#baa9c7;font-size:5.8px;white-space:nowrap}
+.abyssWhisperLead{margin-top:4px;color:#a99caf;font-size:6.2px;line-height:1.55}
+.abyssWhisperChoices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:7px}
+.abyssWhisperChoice{
+ min-width:0;padding:7px 5px;border:1px solid #43394c;border-radius:8px;
+ background:linear-gradient(180deg,#151019,#0d0a10);text-align:left;color:#cfc3d6;
+}
+.abyssWhisperChoice b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e6d8eb;font-size:6.7px}
+.abyssWhisperChoice small{display:block;margin-top:3px;color:#9f92a7;font-size:5.6px;line-height:1.4;min-height:2.8em}
+.abyssWhisperChoice span{display:block;margin-top:4px;color:#cbb781;font-size:5.7px}
+.abyssWhisperChoice.selected{border-color:#a081b2;background:linear-gradient(180deg,#24172c,#130e18);box-shadow:0 0 0 1px rgba(184,139,214,.18) inset}
+.abyssWhisperChoice.selected b{color:#f3e4ff}
+.abyssWhisperChoice.blackgold.selected{border-color:#a5833f;background:linear-gradient(180deg,#241d0f,#130f08)}
+.abyssWhisperChoice.blackgold span{color:#efd68d}
+.abyssWhisperCurrent{margin-top:6px;padding:6px 7px;border-left:3px solid #8969a0;border-radius:6px;background:#120d17;color:#c5b7ce;font-size:6.2px;line-height:1.5}
+.abyssWhisperCurrent b{color:#eadcf4}
+.abyssWhisperFloor{
+ margin-top:5px;padding:4px 6px;border:1px solid #51435d;border-radius:6px;
+ background:rgba(18,12,23,.86);color:#bfb0c9;font-size:6.3px;line-height:1.4;
+}
+.abyssWhisperFloor b{color:#e6d7ec}
+.abyssWhisperFloor.complete{border-color:#7a6740;background:rgba(27,21,10,.90);color:#dbc88e}
+.abyssWhisperFloor.complete b{color:#ffe9a6}
+.abyssWhisperReport{margin-top:7px;padding:7px 8px;border:1px solid #564760;border-radius:8px;background:#130f17;color:#c3b6cb;font-size:6.5px;line-height:1.55}
+.abyssWhisperReport b{display:block;margin-bottom:3px;color:#eadcf4;font-size:7.4px}
+.abyssWhisperReport.rewarded{border-color:#88703c;background:#1b160c;color:#ddca95}
+.abyssWhisperReport.rewarded b{color:#ffe9a9}
+.abyssWhisperReport.failed{border-color:#6e4853;background:#180e12;color:#d4a9b2}
+@media(max-width:390px){
+ .abyssWhisperChoices{gap:4px}
+ .abyssWhisperChoice{padding:6px 4px}
+ .abyssWhisperChoice small{font-size:5.4px}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.23.1 VISUAL HARMONY</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.25.0 ABYSS WHISPERS</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -4534,7 +4602,7 @@ body{
         </div>
         <ul>
           <li>敵の予兆は狙った場所へ固定されます。赤は近接、紫の線は骨弾、橙の十字は爆発、濃赤の二重斬線は強打です。</li>
-          <li><b>回避成功</b>は気力を1回復、<b>構え</b>は軽減量を表示、予兆中へ大打撃を与えると<b>態勢崩し</b>になります。</li>
+          <li><b>回避成功</b>は気力を1回復、<b>構え</b>は軽減量を表示、予兆中へ大打撃を与えると<b>態勢崩し</b>になります。回避・構え・遮断・態勢崩しに成功すると攻撃者へ短い<b>反撃好機</b>が開き、次の一撃が強化されます。</li>
           <li>結果はマップ上の文字と画面上部の通知で確認できます。</li>
           <li><b>剣</b>：扱いやすい近接。<br><b>槍</b>：間合いを取りやすい。<br><b>弓</b>：遠距離向けだが近距離不可。<br><b>杖</b>：高消費だが範囲攻撃が可能。</li><li><b>副武技（熟練Lv2）</b>：剣「崩し斬り」は隣接予兆を強制中断、槍「退き突き」は攻撃しながら安全な床へ後退、弓「牽制射」は遠距離から足止め・予兆中断、杖「氷環」は隣接敵をまとめて凍結します。通常武技とクールダウンを共有するため、火力を取るか制御を取るかを選びます。</li>
           <li>爆薬樽や油は炎で誘爆します。敵を巻き込めますが、自分も危険です。</li><li><b>戦術地形</b>：浅水は雷+35%・炎-30%で敵の炎上を消し、絡み根は踏むと気力-2だが通常敵の次行動を止め、崩れ石は立っている探索者への骨弾・墓標列を35%軽減します。敵が崩れ石にいる時は弓ダメージが30%低下します。地形をタップすると使い方を確認できます。</li>
@@ -4640,6 +4708,7 @@ body{
           <li>装備には<b>必要レベル・アイテムレベル・タグ・熟練・絆</b>があります。</li>
           <li><b>封印遺物</b>：通常敵から極低確率、変異個体・特異室・番人ほど高確率で現れます。初めて遭遇するまでは番人から必ず一度提示されます。</li>
           <li>封印遺物は最大3個まで携行でき、探索中は開けません。死亡すると携行分はすべて失い、生還すると灯台の封印遺物庫へ移ります。</li>
+          <li><b>深淵の囁き</b>：初回探索後、灯台で次の探索だけ有効な誘惑を3つから1つ選べます。条件を満たして生還すると、囁きに応じた封印遺物が灯台へ現れます。達成後に死亡すると報酬は失効します。</li>
           <li>灰封・紫脈封・黒金封は期待度を示します。封印は古い順に解き、保存や再読込で開封結果を引き直せないようにしています。</li>
           <li>伝説以上が出ない開封では「黄金残響」が1ずつ蓄積し、7/7になると次の開封は伝説以上が確定します。課金・期限・日課はありません。</li>
           <li><b>銘装誓約</b>：レア以上・灯台調律済み・装備絆「遺物」の武器1本だけを、120欠片で長期育成対象にできます。</li>
@@ -7059,7 +7128,7 @@ function restoreLighthouseSession(){
  return openLighthouseState(meta,session.phase,report);
 }
 function defaultMeta(){
- const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},depthMilestones:{firstTwenty:{clears:0,firstClearAt:0,lastClearAt:0}},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}};
+ const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},depthMilestones:{firstTwenty:{clears:0,firstClearAt:0,lastClearAt:0}},abyssWhisper:{cycle:0,options:[],selectedId:null,history:[]},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}};
  meta.appearance=defaultAppearance();
  return meta;
 }
@@ -7393,6 +7462,11 @@ function commitExpeditionReport(report){
    id:pending.id,label:pending.label,short:pending.short,desc:pending.desc,
    benefit:pending.benefit,cost:pending.cost,endFloor:pending.endFloor
   };
+ }
+ const nextWhisper=queueAbyssWhisperOffer(report,state.meta);
+ if(nextWhisper){
+  const selected=selectedAbyssWhisper(state.meta);
+  report.nextWhisper=selected?{id:selected.id,label:selected.label,desc:selected.desc,rewardLabel:selected.rewardLabel}:null;
  }
  state.meta.lastExpeditionReport=report;
  return report;
@@ -8195,6 +8269,8 @@ function createRunStats(meta){
   firstTwentyFirstClear:false,
   firstTwentyRewardShards:0,
   firstTwentyRewardAnchor:0,
+  whisperCompleted:false,
+  whisperRewarded:false,
   startedAt:Date.now()
  };
 }
@@ -8661,6 +8737,7 @@ function buildExpeditionReport(outcome,details={}){
   dodges:combat.dodges||0,
   guards:combat.guards||0,
   breaks:combat.breaks||0,
+  counters:combat.counters||0,
   crits:combat.crits||0,
   lastStands:combat.lastStands||0,
   shardDelta:(state.meta.shards||0)-(stats.startShards||0),
@@ -8713,9 +8790,12 @@ function buildExpeditionReport(outcome,details={}){
   firstTwentyFirstClear:!!stats.firstTwentyFirstClear,
   firstTwentyRewardShards:stats.firstTwentyRewardShards||0,
   firstTwentyRewardAnchor:stats.firstTwentyRewardAnchor||0,
+  whisper:details.whisper?{...details.whisper}:null,
   highlights:[]
  };
 
+ if(report.whisper?.rewarded)report.highlights.push(`深淵の囁き「${report.whisper.label}」を完遂し、${report.whisper.rewardLabel}を獲得`);
+ else if(report.whisper?.status==="lost")report.highlights.push(`囁きの条件を達成したが、生還できず${report.whisper.rewardLabel}を失った`);
  if(report.firstTwentyFirstClear)report.highlights.push(`第一深度圏を初踏破・欠片+${report.firstTwentyRewardShards} / 魂還石+${report.firstTwentyRewardAnchor}`);
  else if(report.firstTwentyCleared)report.highlights.push("第一深度圏・第20層を踏破");
  if(report.bosses>0)report.highlights.push(`番人を${report.bosses}体撃破`);
@@ -8729,6 +8809,7 @@ function buildExpeditionReport(outcome,details={}){
  if(report.dodges>0)report.highlights.push(`予兆攻撃を${report.dodges}回回避`);
  if(report.lastStands>0)report.highlights.push("決死の踏み止まりで致命傷を耐えた");
  if(report.breaks>0)report.highlights.push(`敵の攻撃態勢を${report.breaks}回崩した`);
+ if(report.counters>0)report.highlights.push(`反撃好機を${report.counters}回ものにした`);
  if(report.crits>0)report.highlights.push(`会心を${report.crits}回発生`);
  if(outcome==="return"&&report.newGear>0)report.highlights.push(`新しい装備を${report.newGear}個持ち帰った`);
  if(outcome==="return"&&report.sealedRelicsReturned>0)report.highlights.push(`封印遺物${report.sealedRelicsReturned}個を灯台へ持ち帰った`);
@@ -8773,6 +8854,7 @@ function expeditionReportHtml(report,compact=false){
     `<span class="expeditionPill good">装備更新 ${report.updatedGear}</span>`,
     report.attunedGear?`<span class="expeditionPill good">灯台調律 ${report.attunedGear}</span>`:"",
     report.sealedRelicsReturned?`<span class="expeditionPill good">封印遺物 ${report.sealedRelicsReturned}個</span>`:"",
+    report.whisper?.rewarded?`<span class="expeditionPill good">囁き報酬 ${report.whisper.rewardLabel}</span>`:"",
     `<span class="expeditionPill good">素材変換 +${report.scrapShards}欠片</span>`,
     report.rescued?`<span class="expeditionPill good">魂還石救命</span>`:"",
     report.insurancePremium?`<span class="expeditionPill">保険料 ${report.insurancePremium}欠片</span>`:"",
@@ -8810,6 +8892,7 @@ function expeditionReportHtml(report,compact=false){
     <span class="expeditionPill">回避 ${report.dodges}</span>
     <span class="expeditionPill">構え ${report.guards}</span>
     <span class="expeditionPill">崩し ${report.breaks}</span>
+    <span class="expeditionPill">反撃 ${report.counters||0}</span>
     <span class="expeditionPill">会心 ${report.crits}</span>
     <span class="expeditionPill">踏み止まり ${report.lastStands||0}</span>
     <span class="expeditionPill">目標達成 ${report.objectives||0}</span>
@@ -8841,6 +8924,7 @@ function expeditionReportHtml(report,compact=false){
   ${livingEcologyReportHtml(report)}
   ${abyssForkReportHtml(report)}
   ${floorPhenomenonReportHtml(report)}
+  ${abyssWhisperReportHtml(report.whisper)}
   ${report.nextReaction?`<div class="nextReactionReport">
    <b>次の探索：${report.nextReaction.label}</b><br>
    ${report.nextReaction.desc}<br>
@@ -8926,7 +9010,8 @@ function finishExpeditionDeath(cause,killer=null){
  state.gameOver=true;
  state.expeditionEnded=true;
  state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
- const report=buildExpeditionReport("death",{cause,insurance,echo,deathLoss});
+ const whisper=finishAbyssWhisperAttempt("death");
+ const report=buildExpeditionReport("death",{cause,insurance,echo,deathLoss,whisper});
  commitExpeditionReport(report);
  finalizeExpeditionClosure("death",report,cause);
  sfx("death");updateMusicScene(true);
@@ -8937,9 +9022,9 @@ function freshState(){
   version:4,expeditionId:createExpeditionId(),seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,
   hunger:840,maxHunger:840,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],sealedRelics:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false,lastStandUsed:false,lastStandArmed:false,lastStandInvulnerable:false,lastStandTriggeredThisTurn:false,lastStandRechargePending:false,exhaustedTurns:0},
-  cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,crits:0,lastStands:0},
-  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],terrainFeatures:[],terrainKnowledge:{},secretWalls:[],shortcuts:[],events:[],roomEncounters:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],floorFork:null,forkHistory:[],floorPhenomenon:null,phenomenonHistory:[],labyrinthReaction:null,reactionApplied:false,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}},audio:{enabled:true,started:false,bgmEnabled:true,sfxEnabled:true,bgmVolume:.38,sfxVolume:.62},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
+  cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,counters:0,crits:0,lastStands:0},
+  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],terrainFeatures:[],terrainKnowledge:{},secretWalls:[],shortcuts:[],events:[],roomEncounters:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],floorFork:null,forkHistory:[],floorPhenomenon:null,phenomenonHistory:[],labyrinthReaction:null,reactionApplied:false,runWhisper:null,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},abyssWhisper:{cycle:0,options:[],selectedId:null,history:[]},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}},audio:{enabled:true,started:false,bgmEnabled:true,sfxEnabled:true,bgmVolume:.38,sfxVolume:.62},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
  newState.audio=normalizeAudioSettings(newState.audio);
  const prepared=applyMetaToFreshState(newState);
@@ -9509,9 +9594,34 @@ function spawnFeedbackBurst(x,y,kind="objective",count=10){
  }
 }
 function ensureCombatStats(){
- state.combatStats=state.combatStats||{dodges:0,guards:0,breaks:0,crits:0,lastStands:0};
+ state.combatStats=state.combatStats||{dodges:0,guards:0,breaks:0,counters:0,crits:0,lastStands:0};
  if(typeof state.combatStats.lastStands!=="number")state.combatStats.lastStands=0;
+ if(typeof state.combatStats.counters!=="number")state.combatStats.counters=0;
  return state.combatStats;
+}
+function counterWindowActive(enemy){
+ return !!enemy&&Number.isFinite(enemy.counterWindowTurn)&&enemy.counterWindowTurn===state.turn;
+}
+function counterWindowMultiplier(enemy){return enemy?.boss?1.15:1.30}
+function openCounterWindow(enemy,reason="見切り",nextPlayerTurn=false){
+ if(!enemy||!state.enemies?.includes(enemy)||enemy.hp<=0)return false;
+ const targetTurn=state.turn+(nextPlayerTurn?1:0);
+ if(!Number.isFinite(enemy.counterWindowTurn)||enemy.counterWindowTurn<targetTurn)enemy.counterWindowTurn=targetTurn;
+ enemy.counterWindowReason=reason;
+ spawnCombatText(enemy.x,enemy.y,"OPEN","dodge",34);
+ return true;
+}
+function consumeCounterWindow(enemy){
+ if(!counterWindowActive(enemy))return 1;
+ const mult=counterWindowMultiplier(enemy);
+ enemy.counterWindowTurn=-1;
+ enemy.counterWindowReason="";
+ ensureCombatStats().counters++;
+ const pct=Math.round((mult-1)*100);
+ spawnCombatText(enemy.x,enemy.y,`COUNTER +${pct}%`,"critical",42);
+ showCombatToast("反撃成功",`${enemy.name}の隙へ一撃・威力+${pct}%`,"break");
+ addLog(`${enemy.name}の反撃好機を捉え、次の一撃を${pct}%増幅した。`);
+ return mult;
 }
 function showCombatToast(title,detail="",kind=""){
  const toast=$("combatToast");
@@ -9941,8 +10051,9 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
   ensureCombatStats().guards++;
   spawnHeroEffect("guard");
   spawnCombatText(state.player.x,state.player.y,blocked>0?`GUARD ${blocked}`:"GUARD","guard",38);
-  showCombatToast("構え成功",blocked>0?`${blocked}ダメージを軽減`:"衝撃を完全に受け流した","guard");
-  addLog(`構えで衝撃を受け流し、${blocked}ダメージを軽減した！`);
+  openCounterWindow(sourceEnemy,"構え");
+  showCombatToast("構え成功",blocked>0?`${blocked}ダメージを軽減・反撃好機`:"衝撃を完全に受け流した・反撃好機","guard");
+  addLog(`構えで衝撃を受け流し、${blocked}ダメージを軽減した！${sourceEnemy?" 反撃好機が開いた。":""}`);
   updateFloorObjective();
  }
  if(tagTier("bone")>=6)dmg=Math.max(0,Math.round(dmg*.88));
@@ -11821,6 +11932,7 @@ function renderFloorGoal(){
   ${livingEcologyFloorStatusHtml()}
   ${floorForkStatusHtml()}
   ${floorPhenomenonStatusHtml()}
+  ${abyssWhisperStatusHtml()}
   ${sealedRelicCarryStatusHtml()}`;
  positionFloorGoal();
 }
@@ -13420,7 +13532,7 @@ function createSealedRelic(source="ordinary",floor=state?.floor||1){
  const seal=sealedRelicSealForSource(source);
  return{id,floor:Math.max(1,floor),source,seal,createdAt:Date.now(),rewardSeed:sealedRelicHash(`${id}|reward|${floor}|${source}`)};
 }
-function sealedRelicSourceLabel(source){return({ordinary:"敵の遺骸",elite:"変異個体",nemesis:"宿敵",boss:"番人",room:"特異室"}[source]||"深淵")}
+function sealedRelicSourceLabel(source){return({ordinary:"敵の遺骸",elite:"変異個体",nemesis:"宿敵",boss:"番人",room:"特異室",whisper:"深淵の囁き"}[source]||"深淵")}
 function maybeDropSealedRelic(enemy){
  if(!enemy||enemy.echoGuard)return false;
  const {fortune}=ensureSealedRelicMeta(state.meta);
@@ -13447,6 +13559,144 @@ function sealedRelicCarryStatusHtml(){
  const count=state?.sealedRelics?.length||0;if(!count)return"";
  return`<div class="sealedCarryStatus"><b>封印遺物を携行中</b><div class="sealedCarryMeta"><span>${count}/${SEALED_RELIC_CARRY_CAP} 個</span><span>生還で灯台保管</span></div><small>探索中は開封できません。死亡すると携行分をすべて失います。</small></div>`;
 }
+
+const abyssWhisperData={
+ hunter:{label:"狩りの囁き",short:"狩り",desc:"敵を12体撃破する。",metric:"kills",target:12,rewardSeal:"violet",rewardLabel:"紫脈封"},
+ counter:{label:"逆襲の囁き",short:"逆襲",desc:"反撃好機を4回ものにする。",metric:"counters",target:4,rewardSeal:"violet",rewardLabel:"紫脈封"},
+ objective:{label:"踏破の囁き",short:"踏破",desc:"階層目標を3回達成する。",metric:"objectives",target:3,rewardSeal:"violet",rewardLabel:"紫脈封"},
+ collector:{label:"収集の囁き",short:"収集",desc:"装備を5個発見する。",metric:"gear",target:5,rewardSeal:"violet",rewardLabel:"紫脈封"},
+ chamber:{label:"異室の囁き",short:"異室",desc:"特異室を1室制圧する。",metric:"rooms",target:1,rewardSeal:"violet",rewardLabel:"紫脈封"},
+ warden:{label:"関門の囁き",short:"関門",desc:"番人を1体撃破する。",metric:"bosses",target:1,rewardSeal:"blackgold",rewardLabel:"黒金封"}
+};
+function ensureAbyssWhisperMeta(meta=state?.meta){
+ if(!meta)return{cycle:0,options:[],selectedId:null,history:[]};
+ if(!meta.abyssWhisper||typeof meta.abyssWhisper!=="object")meta.abyssWhisper={};
+ const w=meta.abyssWhisper;
+ if(typeof w.cycle!=="number")w.cycle=0;
+ if(!Array.isArray(w.options))w.options=[];
+ w.options=w.options.filter(id=>abyssWhisperData[id]).slice(0,3);
+ if(!abyssWhisperData[w.selectedId])w.selectedId=null;
+ if(!Array.isArray(w.history))w.history=[];
+ w.history=w.history.filter(entry=>entry&&typeof entry==="object").slice(-20);
+ return w;
+}
+function whisperShuffle(ids,seed){
+ let value=(seed>>>0)||0x9e3779b9;
+ const rand=()=>{value^=value<<13;value^=value>>>17;value^=value<<5;value>>>=0;return value/4294967296};
+ const out=[...ids];
+ for(let i=out.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[out[i],out[j]]=[out[j],out[i]]}
+ return out;
+}
+function queueAbyssWhisperOffer(report=null,meta=state?.meta){
+ if(!meta)return null;
+ const w=ensureAbyssWhisperMeta(meta);
+ const guide=ensureLighthouseOnboardingMeta(meta);
+ if(!guide.firstDepartureComplete)return null;
+ const last=w.history[w.history.length-1]?.id||null;
+ let pool=Object.keys(abyssWhisperData);
+ const seed=(Number(report?.timestamp)||Date.now())^(Math.max(1,meta.bestFloor||1)*2654435761)^(w.cycle*2246822519);
+ pool=whisperShuffle(pool,seed);
+ if(last&&pool.length>3){const index=pool.indexOf(last);if(index>=0&&index<3){const swap=3+Math.floor(Math.abs(seed)%Math.max(1,pool.length-3));[pool[index],pool[swap]]=[pool[swap],pool[index]]}}
+ w.cycle+=1;
+ w.options=pool.slice(0,3);
+ w.selectedId=w.options[0]||null;
+ w.generatedAt=Date.now();
+ w.sourceFloor=report?.floor||meta.bestFloor||1;
+ return w;
+}
+function ensureAbyssWhisperOffer(meta=state?.meta){
+ const w=ensureAbyssWhisperMeta(meta);
+ const guide=ensureLighthouseOnboardingMeta(meta);
+ if(guide.firstDepartureComplete&&(!w.options.length||!w.selectedId))queueAbyssWhisperOffer(meta?.lastExpeditionReport||null,meta);
+ return w;
+}
+function selectedAbyssWhisper(meta=state?.meta){
+ const w=ensureAbyssWhisperOffer(meta);
+ const id=w.selectedId;
+ return id&&abyssWhisperData[id]?{id,...abyssWhisperData[id]}:null;
+}
+function selectAbyssWhisper(id){
+ if(!state?.expeditionEnded||!abyssWhisperData[id])return false;
+ const w=ensureAbyssWhisperOffer(state.meta);
+ if(!w.options.includes(id))return false;
+ w.selectedId=id;
+ saveMeta();
+ renderLighthouseLoadout();
+ return true;
+}
+function abyssWhisperOfferHtml(meta=state?.meta){
+ const guide=ensureLighthouseOnboardingMeta(meta);
+ if(!guide.firstDepartureComplete)return"";
+ const w=ensureAbyssWhisperOffer(meta);
+ const selected=selectedAbyssWhisper(meta);
+ if(!selected)return"";
+ return`<section class="abyssWhisperOffer"><div class="abyssWhisperOfferHead"><b>深淵の囁き</b><span>次の探索だけ</span></div><div class="abyssWhisperLead">1つだけ選択。条件を達成して生還すると封印遺物が灯台へ現れます。達成後に死亡すると失効します。</div><div class="abyssWhisperChoices">${w.options.map(id=>{const data=abyssWhisperData[id];const selectedClass=w.selectedId===id?" selected":"";return`<button type="button" class="abyssWhisperChoice ${data.rewardSeal}${selectedClass}" data-whisper-choice="${id}"><b>${data.label}</b><small>${data.desc}</small><span>${data.rewardLabel} ×1</span></button>`}).join("")}</div><div class="abyssWhisperCurrent"><b>選択中：${selected.label}</b>　${selected.desc} / 生還報酬 ${selected.rewardLabel}</div></section>`;
+}
+function prepareAbyssWhisperForRun(meta=state?.meta){
+ const selected=selectedAbyssWhisper(meta);
+ if(!selected)return null;
+ return{...selected,progress:0,completed:false,rewarded:false,startedAt:Date.now()};
+}
+function abyssWhisperProgressValue(run=state?.runWhisper){
+ if(!run||!state)return 0;
+ const stats=ensureRunStats();
+ if(run.metric==="kills")return Math.max(0,(state.meta?.totalKills||0)-(stats.startTotalKills||0));
+ if(run.metric==="counters")return state.combatStats?.counters||0;
+ if(run.metric==="objectives")return stats.objectivesCompleted||0;
+ if(run.metric==="gear")return stats.gearFound||0;
+ if(run.metric==="rooms")return stats.roomEncountersCleared||0;
+ if(run.metric==="bosses")return stats.bossesDefeated||0;
+ return 0;
+}
+function updateAbyssWhisperProgress(showFeedback=true){
+ const run=state?.runWhisper;if(!run)return null;
+ run.progress=Math.min(run.target,abyssWhisperProgressValue(run));
+ if(!run.completed&&run.progress>=run.target){
+  run.completed=true;run.completedAt=Date.now();ensureRunStats().whisperCompleted=true;
+  if(showFeedback){
+   addLog(`深淵の囁き「${run.label}」を満たした。生還すれば${run.rewardLabel}が灯台へ現れる。`);
+   showCombatToast("囁き達成",`${run.rewardLabel}・生還で獲得`,"rare");
+   triggerImpactFeedback("rare",{haptic:"rare",duration:620});sfx("rare");
+  }
+  queueSave?.();
+ }
+ return run;
+}
+function abyssWhisperStatusHtml(){
+ const run=updateAbyssWhisperProgress(true);if(!run)return"";
+ const progress=Math.min(run.target,run.progress||0);
+ return`<div class="abyssWhisperFloor ${run.completed?"complete":""}"><b>囁き：${run.short}</b>　${run.completed?`達成・生還で${run.rewardLabel}`:`${progress}/${run.target}・${run.rewardLabel}`}</div>`;
+}
+function finishAbyssWhisperAttempt(outcome){
+ const run=updateAbyssWhisperProgress(false);if(!run)return null;
+ const meta=state.meta,w=ensureAbyssWhisperMeta(meta),completed=!!run.completed;
+ let rewarded=false,relic=null,status="failed";
+ if(outcome==="return"&&completed){
+  const vault=ensureSealedRelicMeta(meta);
+  relic=createSealedRelic("whisper",state.floor);
+  relic.seal=run.rewardSeal||"violet";
+  relic.whisperId=run.id;
+  relic.whisperCycle=w.cycle;
+  vault.relics.push(relic);vault.fortune.firstFound=true;
+  rewarded=true;status="rewarded";run.rewarded=true;ensureRunStats().whisperRewarded=true;
+  addLog(`深淵の囁き「${run.label}」を生還で完遂。${run.rewardLabel}が封印遺物庫へ現れた。`);
+ }else if(completed&&outcome==="death")status="lost";
+ else if(outcome==="return")status="missed";
+ const result={id:run.id,label:run.label,short:run.short,desc:run.desc,progress:run.progress||0,target:run.target,completed,rewarded,status,rewardSeal:run.rewardSeal,rewardLabel:run.rewardLabel,relicId:relic?.id||null};
+ w.history.push({...result,floor:state.floor,timestamp:Date.now()});w.history=w.history.slice(-20);
+ return result;
+}
+function abyssWhisperReportHtml(whisper){
+ if(!whisper)return"";
+ const cls=whisper.rewarded?"rewarded":whisper.status==="lost"||whisper.status==="failed"?"failed":"";
+ const text=whisper.rewarded
+  ?`条件 ${whisper.progress}/${whisper.target} を達成して生還。${whisper.rewardLabel}が封印遺物庫へ現れた。`
+  :whisper.status==="lost"
+   ?`条件は達成したが生還できず、${whisper.rewardLabel}は深淵へ消えた。`
+   :`進捗 ${whisper.progress}/${whisper.target}。今回は報酬条件を満たせなかった。`;
+ return`<div class="abyssWhisperReport ${cls}"><b>${whisper.label}</b>${text}</div>`;
+}
+
 function sealedRelicRewardSpec(relic,meta=state?.meta){
  const {fortune}=ensureSealedRelicMeta(meta);
  const seal=sealedRelicSealData[relic?.seal]||sealedRelicSealData.ash;
@@ -14258,8 +14508,9 @@ function damageEnemy(e,damage,label=""){
  }
  const guardMul=(e.type==="skeleton"&&e.guarding)?0.45:1;
  const echoHit=consumeLegendaryEchoHit();
+ const counterMult=counterWindowActive(e)?consumeCounterWindow(e):1;
  const terrainAttack=tacticalTerrainEnemyAttackModifier(e);
- damage=applyTraitDamage(damage,e)*echoHit.multiplier*biomeDamageModifier(equippedElement())*tagDamageMultiplier(e)*lightDamageMultiplier(e)*terrainAttack.mult;
+ damage=applyTraitDamage(damage,e)*echoHit.multiplier*counterMult*biomeDamageModifier(equippedElement())*tagDamageMultiplier(e)*lightDamageMultiplier(e)*terrainAttack.mult;
  const baseDmg=Math.max(1,Math.round((Math.round(damage)-effectiveEnemyDefense(e))*guardMul*(mutation()?.damageMul||1)));
  const dmg=routeAdjustedEnemyDamage(e,baseDmg);
  ensureRunStats().damageDealt+=dmg;
@@ -14302,8 +14553,9 @@ function damageEnemy(e,damage,label=""){
   ensureCombatStats().breaks++;
   const staminaGain=recoverStamina(1);
   spawnCombatText(e.x,e.y,"BREAK","break",42);
-  showCombatToast("態勢崩し",`${e.name}の${enemyIntentDisplayName(brokenIntent)}を中断${staminaGain?"・気力+1":""}`,"break");
-  addLog(`${e.name}の攻撃態勢を崩した！${staminaGain?" 気力が1戻った。":""}`);
+  openCounterWindow(e,`態勢崩し・${enemyIntentDisplayName(brokenIntent)}`,true);
+  showCombatToast("態勢崩し",`${e.name}の${enemyIntentDisplayName(brokenIntent)}を中断${staminaGain?"・気力+1":""}・次手に反撃好機`,"break");
+  addLog(`${e.name}の攻撃態勢を崩した！${staminaGain?" 気力が1戻った。":""} 次の行動に反撃好機が残る。`);
   updateFloorObjective();
  }
  addLog((label?label+" ":"")+e.name+"に "+dmg+" ダメージ。");
@@ -14715,6 +14967,7 @@ function resolveWardenIntent(enemy,intent,cells,playerInTarget){
     addLog("根檻の中心へ留まり、閉じる根をやり過ごした。");
     ensureCombatStats().dodges++;
     recoverStamina(1);
+    openCounterWindow(enemy,"根檻の見切り");
     updateFloorObjective();
    }else registerIntentDodge(enemy,intent);
   }
@@ -16593,8 +16846,9 @@ function returnToLighthouse(confirmed=false){
   state.consumables.retreat=Math.max(0,(state.consumables.retreat||0)-1);
  }
  const bank=bankCurrentRun();
+ const whisper=finishAbyssWhisperAttempt("return");
  state.expeditionEnded=true;
- const report=buildExpeditionReport("return",{source:source.label,bank});
+ const report=buildExpeditionReport("return",{source:source.label,bank,whisper});
  commitExpeditionReport(report);
  state.hero.hp=state.hero.maxHp;
  state.hunger=effectiveMaxHunger();
@@ -16738,6 +16992,7 @@ function renderLighthouseLoadout(){
     ?"持ち帰った装備がまだありません。武器を選んで最初の探索へ出発し、迷宮で見つけた装備を持ち帰るとここから設定できます。"
     :"左は直前の探索から帰還した時の装備、右は次の探索開始時に装備する予定です。倉庫の『次回の○○に設定』から部位ごとに入れ替えられます。"}
   </div>
+  ${abyssWhisperOfferHtml(meta)}
   ${echoResonancePreviewHtml(nextResonance,"次回装備の遺響共鳴")}
   <div class="loadoutColumns">
    <section class="loadoutColumn">
@@ -16761,6 +17016,9 @@ function renderLighthouseLoadout(){
    <button type="button" id="clearNextLoadout" class="warnAction">次回装備をすべて解除</button>
   </div>`;
 
+ $("loadoutPlanner").querySelectorAll("[data-whisper-choice]").forEach(button=>{
+  button.onclick=()=>selectAbyssWhisper(button.dataset.whisperChoice);
+ });
  $("loadoutPlanner").querySelectorAll("[data-clear-loadout]").forEach(button=>{
   button.onclick=()=>clearNextLoadoutSlot(button.dataset.clearLoadout);
  });
@@ -17340,6 +17598,7 @@ function startFreshRunFromHub(){
  clearExpeditionClosure();
 
  state=freshState();
+ state.runWhisper=prepareAbyssWhisperForRun(state.meta);
  state.protectionContract=preparation.contract;
  if(!state.weapon&&starterType)state.weapon=makeStarterWeapon(starterType);
  ensureLighthouseOnboardingMeta(state.meta).departureStarterWeapon=null;
@@ -17883,6 +18142,10 @@ function loadGame(){
   if(typeof state.runStats.echoGearDestabilized!=="number")state.runStats.echoGearDestabilized=0;
   if(typeof state.runStats.maxEchoResonance!=="number")state.runStats.maxEchoResonance=0;
   if(typeof state.runStats.maxEchoResonanceKey==="undefined")state.runStats.maxEchoResonanceKey=null;
+  if(typeof state.runStats.whisperCompleted!=="boolean")state.runStats.whisperCompleted=false;
+  if(typeof state.runStats.whisperRewarded!=="boolean")state.runStats.whisperRewarded=false;
+  ensureAbyssWhisperMeta(state.meta);
+  if(typeof state.runWhisper==="undefined")state.runWhisper=null;
   const pendingEchoRecoveryResult=applyPendingDeathEchoRecovery(null,false);
   for(const gear of uniqueRunGear()){
    normalizeGearEcho(gear);
@@ -18701,17 +18964,19 @@ function registerIntentDodge(e,intent){
  const name=enemyIntentDisplayName(intent);
  const staminaGain=recoverStamina(1);
  ensureCombatStats().dodges++;
+ openCounterWindow(e,`回避・${name}`);
  spawnCombatText(state.player.x,state.player.y,staminaGain?"DODGE +1":"DODGE","dodge",42);
- showCombatToast("回避成功",`${e.name}の${name}を避けた${staminaGain?"・気力+1":""}`,"dodge");
- addLog(`${e.name}の${name}を回避した！${staminaGain?" 気力が1戻った。":""}`);
+ showCombatToast("回避成功",`${e.name}の${name}を避けた${staminaGain?"・気力+1":""}・反撃好機`,"dodge");
+ addLog(`${e.name}の${name}を回避した！${staminaGain?" 気力が1戻った。":""} 反撃好機が開いた。`);
  updateFloorObjective();
  clearEnemyIntent(e);
 }
 function registerIntentBlocked(e,intent){
  const name=enemyIntentDisplayName(intent);
+ openCounterWindow(e,`遮断・${name}`);
  spawnCombatText(state.player.x,state.player.y,"BLOCKED","block",38);
- showCombatToast("攻撃遮断",`${e.name}の${name}は壁や敵に遮られた`,"block");
- addLog(`${e.name}の${name}は遮られた。`);
+ showCombatToast("攻撃遮断",`${e.name}の${name}を遮断・反撃好機`,"block");
+ addLog(`${e.name}の${name}は遮られ、反撃好機が開いた。`);
  clearEnemyIntent(e);
 }
 function weaponPreviewCells(){
@@ -18737,6 +19002,7 @@ function enemyStatusTags(e){
  if(e.echoGuard)tags.push("遺響守");
  if(e.boss)tags.push(`番人:${wardenProfileFor(e).short}`);
  if(e.phase===2)tags.push("第二形態");
+ if(counterWindowActive(e))tags.push("反撃好機");
  if(e.status?.burning>0)tags.push("炎上 "+e.status.burning);
  if(e.status?.poison>0)tags.push("毒 "+e.status.poison);
  if(e.status?.frozen>0)tags.push("凍結 "+e.status.frozen);
@@ -18762,6 +19028,7 @@ function inspectTileAt(x,y){
    ?tags.map(t=>`<span class="statusTag">${t}</span>`).join("")
    :'<p class="tacticalNote">状態異常なし</p>';
   body+=enemyIntentTacticalHtml(enemy);
+  if(counterWindowActive(enemy))body+=`<div class="counterWindowCard"><b>反撃好機</b><br>${enemy.boss?"次の一撃が+15%":"次の一撃が+30%"}。攻撃せず次の行動へ進むと隙は閉じます。</div>`;
   body+=eliteMutationTacticalHtml(enemy);
   if(terrain)body+=tacticalTerrainInfoHtml(terrain);
   if(enemy.boss){
@@ -19094,6 +19361,11 @@ function draw(){
   if(e.status?.poison>0){ctx.fillStyle="#79c76b";ctx.fillRect(x+7,y+5,3,3)}
   if(e.status?.frozen>0){ctx.fillStyle="#86d4ff";ctx.fillRect(x+11,y+5,3,3)}
   if((e.alert||0)>0&&!e.intent){ctx.fillStyle="#f0d36b";ctx.fillRect(x+16,y+5,3,3)}
+  if(counterWindowActive(e)){
+   ctx.strokeStyle="#f3d06b";ctx.lineWidth=1;
+   ctx.strokeRect(x+1.5,y+1.5,TILE-3,TILE-3);
+   ctx.fillStyle="#ffe39b";ctx.fillRect(x+17,y+5,3,3);
+  }
   ctx.fillStyle=factionData[e.faction]?.color||"#aaa";ctx.fillRect(x+3,y+19,4,2);
  }});
 
