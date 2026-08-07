@@ -3821,10 +3821,11 @@ body{
 .forkReport{margin-top:6px;padding:6px;border:1px solid #50465a;border-radius:6px;background:#131016;color:#c9becf;font-size:7px;line-height:1.45}
 .forkReport b{color:#e6d9eb}
 
+</style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.21.0 SEALED RELICS</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.21.1 BOOT RECOVERY</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -3885,6 +3886,8 @@ body{
     <button type="button" class="modalBtn hidden" id="newGameBtn">灯台から始める</button>
     <button type="button" class="modalBtn hidden" id="continueBtn">探索を再開</button>
     <p class="note" id="titleStateNote">保存状態を確認しています。</p>
+    <button type="button" class="modalBtn hidden" id="bootRecoveryBtn">起動を復旧する</button>
+    <p class="note hidden" id="bootRecoveryDetail"></p>
     <p class="note">画面はiPhone縦持ち向けです。スワイプまたは方向ボタンで移動します。</p>
   </div>
 </div>
@@ -4454,6 +4457,82 @@ body{
     <button class="modalBtn hidden" id="restartBtn">灯台へ戻る</button>
   </div>
 </div>
+
+<script id="bootRecoveryBootstrap">
+(function(){
+ "use strict";
+ var bootFinished=false;
+ var lastReason="";
+ function byId(id){return document.getElementById(id)}
+ function reasonText(value){
+  try{
+   if(value&&value.message)return String(value.message);
+   if(value&&value.reason&&value.reason.message)return String(value.reason.message);
+   if(value&&value.reason)return String(value.reason);
+   return value?String(value):"不明な起動エラー";
+  }catch(_){return "不明な起動エラー"}
+ }
+ function expose(reason){
+  if(bootFinished||window.__ABYSS_BOOT_OK__)return;
+  lastReason=reason||lastReason||"起動処理が完了しませんでした。";
+  var title=byId("titleOverlay");
+  var button=byId("bootRecoveryBtn");
+  var detail=byId("bootRecoveryDetail");
+  var note=byId("titleStateNote");
+  if(title)title.classList.remove("hidden");
+  if(button)button.classList.remove("hidden");
+  if(detail){
+   detail.classList.remove("hidden");
+   detail.textContent="起動保護が作動しました。セーブは消さず、配信キャッシュだけを更新できます。 / "+lastReason;
+  }
+  if(note)note.textContent="起動処理で問題を検出しました。下の『起動を復旧する』を試してください。";
+ }
+ function recover(){
+  var button=byId("bootRecoveryBtn");
+  var detail=byId("bootRecoveryDetail");
+  if(button){button.disabled=true;button.textContent="復旧しています…"}
+  if(detail)detail.textContent="セーブを保持したまま、Service Worker と配信キャッシュを更新しています。";
+  var unregister=Promise.resolve();
+  if("serviceWorker" in navigator){
+   unregister=navigator.serviceWorker.getRegistrations().then(function(registrations){
+    return Promise.all(registrations.map(function(registration){return registration.unregister()}));
+   }).catch(function(error){console.warn("Service Worker recovery failed",error)});
+  }
+  unregister.then(function(){
+   if(!("caches" in window))return null;
+   return caches.keys().then(function(keys){
+    return Promise.all(keys.filter(function(key){return key.indexOf("abyssal-roots-")===0}).map(function(key){return caches.delete(key)}));
+   });
+  }).catch(function(error){console.warn("Cache recovery failed",error)}).then(function(){
+   try{
+    var url=new URL(location.href);
+    url.searchParams.set("bootRecovery",Date.now().toString(36));
+    location.replace(url.toString());
+   }catch(_){location.reload()}
+  });
+ }
+ window.__ABYSS_BOOT_OK__=false;
+ window.__ABYSS_EXPOSE_BOOT_RECOVERY__=expose;
+ window.addEventListener("error",function(event){expose(reasonText(event.error||event.message))});
+ window.addEventListener("unhandledrejection",function(event){expose(reasonText(event))});
+ window.addEventListener("abyss:boot-ok",function(){
+  bootFinished=true;
+  window.__ABYSS_BOOT_OK__=true;
+  var button=byId("bootRecoveryBtn");
+  var detail=byId("bootRecoveryDetail");
+  if(button)button.classList.add("hidden");
+  if(detail)detail.classList.add("hidden");
+ });
+ window.addEventListener("abyss:boot-failed",function(event){
+  expose(reasonText(event&&event.detail?event.detail.message:event));
+ });
+ document.addEventListener("DOMContentLoaded",function(){
+  var button=byId("bootRecoveryBtn");
+  if(button)button.onclick=recover;
+  setTimeout(function(){if(!bootFinished&&!window.__ABYSS_BOOT_OK__)expose("起動完了信号がありません。")},1600);
+ });
+})();
+</script>
 
 <script>
 "use strict";
@@ -6459,9 +6538,15 @@ function migrateLegacyLighthouseSession(){
  return result.ok;
 }
 function titleStartupMode(){
- if(hasActiveExpeditionSave())return"active";
- if(hasLighthouseSession())return"lighthouse";
- return"first";
+ try{
+  if(hasActiveExpeditionSave())return"active";
+  if(hasLighthouseSession())return"lighthouse";
+  return"first";
+ }catch(error){
+  console.error("Title save-state scan failed",error);
+  if(window.__ABYSS_EXPOSE_BOOT_RECOVERY__)window.__ABYSS_EXPOSE_BOOT_RECOVERY__("保存状態の確認に失敗: "+String(error&&error.message?error.message:error));
+  return"recovery";
+ }
 }
 function updateContinueAvailability(){
  const continueButton=$("continueBtn");
@@ -6470,6 +6555,14 @@ function updateContinueAvailability(){
  if(!continueButton||!firstButton)return;
 
  const mode=titleStartupMode();
+ if(mode==="recovery"){
+  continueButton.classList.add("hidden");
+  firstButton.classList.add("hidden");
+  if(note)note.textContent="保存状態を安全に確認できませんでした。保存データは削除していません。";
+  const recoveryButton=$("bootRecoveryBtn");
+  if(recoveryButton)recoveryButton.classList.remove("hidden");
+  return;
+ }
  continueButton.classList.toggle("hidden",mode==="first");
  firstButton.classList.toggle("hidden",mode!=="first");
 
@@ -16455,7 +16548,7 @@ function hubPanelNotifications(meta=state.meta){
   routeMasteryPanel:{badge:"",className:"",signal:""},
   lastReportPanel:{badge:meta.lastExpeditionReport?`第${meta.lastExpeditionReport.floor}層`:"",className:"info",signal:""},
   deathEchoPanel:{badge:echo?"回収あり":"",className:"info",signal:echo?`echo:${echo.floor}:${echo.createdAt||echo.timestamp||echo.gear?.map(g=>g.id).join(',')}`:""},
-  relicVaultPanel:{badge:(meta.sealedRelics||[]).length?`${meta.sealedRelics.length}封`:"",className:"gold",signal:(meta.sealedRelics||[]).length?`relics:${meta.sealedRelics.length}:${meta.sealedRelics.at(-1)?.id||""}`:""},
+  relicVaultPanel:{badge:(meta.sealedRelics||[]).length?`${meta.sealedRelics.length}封`:"",className:"gold",signal:(meta.sealedRelics||[]).length?`relics:${meta.sealedRelics.length}:${meta.sealedRelics[meta.sealedRelics.length-1]?.id||""}`:""},
   loadoutPanel:{badge:loadoutCount?`${loadoutCount}/8`:"",className:loadoutCount?"good":"",signal:""},
   weaponOathPanel:{badge:oath.status==="lost"?"喪失":deepening?.pendingStage?"深化待ち":"",className:oath.status==="lost"?"":deepening?.pendingStage?"gold":"",signal:oath.status==="lost"?`lost:${oath.gearId}:${oath.lostAt}`:deepening?.pendingStage?`ready:${oath.gearId}:${deepening.pendingStage}`:""},
   insurancePanel:{badge:loadoutCount&&plan.mode==="none"?"未保険":plan.mode==="shards"?`${plan.slots.length}部位`:plan.mode==="soul"?"魂還石":"",className:plan.mode==="none"?"":"good",signal:loadoutCount&&plan.mode==="none"?`uninsured:${lighthouseLoadoutSlots.map(slot=>meta.nextLoadout?.[slot]||'').join('|')}`:""},
@@ -18701,10 +18794,24 @@ document.addEventListener("visibilitychange",()=>{
 window.addEventListener("pagehide",()=>{saveGame();pauseAudioForBackground("pagehide")});
 window.addEventListener("pageshow",()=>resumeAudioAfterBackground());
 
-recoverCommittedExpeditionClosure();
-migrateLegacyLighthouseSession();
-updateContinueAvailability();
-requestAnimationFrame(tickContinuousAnimation);
+function bootAbyssalRoots(){
+ try{
+  recoverCommittedExpeditionClosure();
+  migrateLegacyLighthouseSession();
+  updateContinueAvailability();
+  window.__ABYSS_BOOT_OK__=true;
+  window.dispatchEvent(new Event("abyss:boot-ok"));
+  requestAnimationFrame(tickContinuousAnimation);
+  return true;
+ }catch(error){
+  console.error("Abyssal Roots boot failed",error);
+  const note=$("titleStateNote");
+  if(note)note.textContent="起動処理に失敗しました。保存データは削除していません。";
+  window.dispatchEvent(new CustomEvent("abyss:boot-failed",{detail:{message:String(error&&error.message?error.message:error)}}));
+  return false;
+ }
+}
+bootAbyssalRoots();
 
 // iPhone Safariのダブルタップ拡大・ピンチ拡大を抑止する。
 
