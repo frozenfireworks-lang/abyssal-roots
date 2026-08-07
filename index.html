@@ -19,7 +19,12 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0,#292034 0,#100d16 48%,#09070d 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;overscroll-behavior:none}
 body{display:flex;justify-content:center}
-button{font:inherit;color:inherit}
+button{
+ font:inherit;color:inherit;
+ -webkit-appearance:none;appearance:none;
+ border:1px solid #675574;border-radius:8px;
+ background:linear-gradient(180deg,#2b2233,#17121d);
+}
 #app{width:min(100%,480px);min-height:100svh;padding:calc(env(safe-area-inset-top) + 4px) 8px calc(env(safe-area-inset-bottom) + 8px);overflow-x:hidden}
 header{display:flex;justify-content:space-between;align-items:end;margin:2px 2px 8px}
 h1{font-size:18px;margin:0;letter-spacing:.08em}
@@ -3627,6 +3632,66 @@ body{
 }
 
 
+/* v3.12.3.2 LIGHTHOUSE BUTTON CONTRAST */
+#stashResetFilters,
+.stashActions.compact button,
+.stashPagination button{
+ -webkit-appearance:none;appearance:none;
+ border:1px solid #675574;
+ background:linear-gradient(180deg,#30263a,#19131f);
+ color:#f3e9f6;
+ text-shadow:0 1px 1px rgba(0,0,0,.8);
+ box-shadow:0 2px 0 #09070b;
+}
+#stashResetFilters{
+ border-color:#695877;
+ background:linear-gradient(180deg,#34283e,#1b1421);
+ color:#f1e5f4;
+}
+.stashActions.compact button[data-loadout]{
+ border-color:#9d8144;
+ background:linear-gradient(180deg,#4b3b19,#28200e);
+ color:#ffe8a6;
+}
+.stashActions.compact button[data-loadout].loadoutSelected{
+ border-color:#679476;
+ background:linear-gradient(180deg,#254532,#14271d);
+ color:#c8f2d2;
+}
+.stashActions.compact button[data-salvage]{
+ border-color:#8f5360;
+ background:linear-gradient(180deg,#4a2530,#27131a);
+ color:#ffd4dc;
+}
+.stashPagination button{
+ border-color:#665574;
+ background:linear-gradient(180deg,#30263a,#18121e);
+ color:#f0e5f3;
+}
+.stashPagination button:disabled{
+ border-color:#3d3742;
+ background:#17141a;
+ color:#77707c;
+ text-shadow:none;
+ box-shadow:none;
+ opacity:1;
+}
+#stashResetFilters:active,
+.stashActions.compact button:not(:disabled):active,
+.stashPagination button:not(:disabled):active{
+ transform:translateY(1px);
+ box-shadow:0 1px 0 #09070b;
+ filter:brightness(1.13);
+}
+.appearanceMicroHint{
+ display:inline-block;
+ margin-top:2px;
+ color:#c9b87d;
+ font-size:6.4px;
+ letter-spacing:.02em;
+}
+
+
 /* v3.12.3.1 PROGRESSION RECOVERY */
 #game{display:block;background:#050407;image-rendering:pixelated;image-rendering:crisp-edges}
 .mobileResourceRow{display:grid!important;visibility:visible!important;opacity:1!important;min-height:15px;overflow:visible}
@@ -3648,7 +3713,7 @@ body{
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.12.3.1 PROGRESSION RECOVERY</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.12.3.2 UI CONTRAST</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -3700,7 +3765,7 @@ body{
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 進行復旧・静かなケルト探索曲・灯台の姿編集</p>
+    <p class="sub">迷宮探索 × 完全ソロ × 灯台UI配色・姿の解放導線</p>
     <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
@@ -3989,6 +4054,7 @@ body{
           <li>踏み止まりボタンは必ず効果説明と現在値を表示する確認画面を経由します。クリック情報によって確認を飛ばすことはありません。</li>
           <li>帰還ボタンも確認画面を経由します。楔消費、持ち帰り装備、倉庫あふれ、素材から得る欠片を確認してから確定します。</li>
           <li>姿の永久解放、迷宮反応の鎮静・封印、遺響安定化、階段降下、未鑑定装備、灯台装備の分解、次回装備の全解除もゲーム内確認画面へ統一しています。</li>
+          <li>未解放の外套色は深淵の欠片で永久解放できます。色カードには短い「ヒント：欠片」を表示します。</li>
           <li>確認画面を開いただけでは欠片・装備・階層・選択内容は変化しません。確定時に対象と所持数をもう一度検査します。</li>
           <li>赤い確認画面は装備消失や封印など不可逆性が高い操作、橙色は階層移動や高額支払い、金色は恒久解放や安定化を示します。</li>
           <li>ボタンを押すと確認画面が開き、現在HP・固定予測被害・使用後の気力を確認できます。「気力5で構える」を押した時だけ実行します。</li>
@@ -5098,6 +5164,12 @@ const appearanceColorData={
  phantom:{label:"幽世",cost:620,body:"#8ca4ad",cloak:"#26343c",trim:"#d2ffff",aura:"rgba(210,255,255,.36)"},
  prismatic:{label:"万華",cost:720,body:"#ba91d6",cloak:"#344f68",trim:"#fff2a3",aura:"rgba(255,242,163,.40)"}
 };
+for(const [id,data] of Object.entries(appearanceColorData)){
+ if(id==="ash"){data.unlockType="default";data.source="初期";continue}
+ if(!data.unlockType)data.unlockType="cost";
+ if(!data.source)data.source="深淵の欠片";
+ if(!data.requirement)data.requirement="always";
+}
 const appearanceRequirementData={
  always:{label:"常時",check:meta=>true},
  best5:{label:"到達深度 5",check:meta=>(meta?.bestFloor||1)>=5},
@@ -5600,9 +5672,12 @@ function renderAppearanceCategory(targetId,dataMap,selectedId,unlockedList,keyNa
   const rarity=data.unlockType==="drop"&&!unlocked
    ?`<br><span class="rarityHint">${appearanceDropTierLabel(data.dropTier)}</span>`
    :"";
+  const microHint=!unlocked&&keyName==="color"
+   ?`<br><span class="appearanceMicroHint">ヒント：欠片</span>`
+   :"";
   return `<button type="button" class="appearanceChoice ${selected?"selected":""} ${unlocked?"":"locked"} ${secretKnown?"secretRevealed":""} ${dropClass} ${highCost}" data-${keyName}="${id}" ${disabled}>
    <b>${swatch}${visibleName}</b>
-   <small>${action}<br>${visibleDesc}${rarity}</small>
+   <small>${action}<br>${visibleDesc}${rarity}${microHint}</small>
   </button>`;
  }).join("");
  $(targetId).innerHTML=html;
