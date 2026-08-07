@@ -1622,6 +1622,94 @@ body{
 }
 
 
+/* v3.23.0 WARDEN RHYTHM */
+.wardenBridge{
+ display:grid;
+ gap:6px;
+ margin:7px 0 9px;
+ padding:8px 9px;
+ border:1px solid #6d5b3d;
+ border-radius:10px;
+ background:linear-gradient(180deg,#19150e,#100d0a);
+ color:#d8cdb5;
+}
+.wardenBridgeTop{
+ display:flex;
+ align-items:flex-start;
+ justify-content:space-between;
+ gap:8px;
+}
+.wardenBridgeTop b{color:#f5dfa1;font-size:9px;line-height:1.35}
+.wardenBridgeTop span{flex:none;color:#bda97d;font-size:6.5px;white-space:nowrap}
+.wardenBridgeBar{
+ height:5px;
+ overflow:hidden;
+ border:1px solid #5a4b31;
+ border-radius:999px;
+ background:#090806;
+}
+.wardenBridgeBar i{
+ display:block;
+ height:100%;
+ background:linear-gradient(90deg,#8a6b31,#e6c567);
+}
+.wardenBridgeLoot{
+ display:flex;
+ flex-wrap:wrap;
+ gap:4px;
+}
+.wardenBridgeLoot span{
+ padding:2px 5px;
+ border:1px solid #514638;
+ border-radius:999px;
+ background:#0d0b09;
+ color:#cbbda0;
+ font-size:6px;
+}
+.wardenBridgeLoot span.good{border-color:#466a51;color:#a9dfb5;background:#0f1812}
+.wardenBridgeLoot span.warn{border-color:#805361;color:#edb1be;background:#1e1115}
+.wardenBridgeNext{
+ padding-top:5px;
+ border-top:1px solid #3c3325;
+ color:#aea28c;
+ font-size:6.5px;
+ line-height:1.5;
+}
+.wardenBridgeNext b{color:#e0d3b5}
+.wardenClearStrip{
+ display:grid;
+ grid-template-columns:auto minmax(0,1fr) auto;
+ align-items:center;
+ gap:6px;
+ margin-top:5px;
+ padding:5px 7px;
+ border:1px solid #68583a;
+ border-radius:7px;
+ background:linear-gradient(180deg,#19150e,#100d0a);
+ color:#cbbd9d;
+ font-size:6.3px;
+ line-height:1.35;
+}
+.wardenClearStrip b{color:#f3dda1;font-size:7px;white-space:nowrap}
+.wardenClearStrip span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wardenClearStrip small{color:#a89b82;font-size:5.8px;white-space:nowrap}
+.floorBannerWarden{
+ margin-top:7px;
+ padding:6px 8px;
+ border:1px solid rgba(225,184,91,.42);
+ border-radius:7px;
+ background:rgba(18,14,9,.78);
+ color:#d8c8a2;
+ font-size:7.2px;
+ line-height:1.5;
+}
+.floorBannerWardenHead{display:flex;justify-content:space-between;gap:7px;align-items:center}
+.floorBannerWardenHead b{color:#fff0b5;font-size:8.5px}
+.floorBannerWardenHead span{color:#c2aa75;font-size:6.3px;white-space:nowrap}
+.floorBannerWarden small{display:block;margin-top:3px;color:#c6b9a0;font-size:6.4px;line-height:1.45}
+.stashBadge.warden{border-color:#7b6940;background:#211b0e;color:#ead193}
+
+
 /* v3.9.6 ROUTE VERDICTS */
 .routeFinale{
  display:block;
@@ -4009,11 +4097,130 @@ body{
  .firstTwentyRewardGrid{gap:4px}
  .firstTwentyRunGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+
+/* v3.23.1 VISUAL HARMONY */
+.provisionReadout{
+ margin-bottom:8px;
+ padding:8px 9px;
+ border:1px solid #4a4453;
+ border-radius:10px;
+ background:linear-gradient(180deg,#17121d,#0f0c13);
+ color:#d3c8da;
+ display:grid;
+ gap:7px;
+}
+.provisionReadout.safe{border-color:#4e7562;background:linear-gradient(180deg,#121a17,#0d120f)}
+.provisionReadout.caution{border-color:#8b6f46;background:linear-gradient(180deg,#1a150e,#110d09)}
+.provisionReadout.danger{border-color:#8a5160;background:linear-gradient(180deg,#1b1015,#110b0e)}
+.provisionTitle{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.provisionTitle b{color:#f2e4ad;font-size:8px;line-height:1.2}
+.provisionTitle span{color:#b6aabd;font-size:6.6px;line-height:1.35;text-align:right}
+.provisionMetrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.provisionMetric{padding:6px 4px;border:1px solid #3f3947;border-radius:8px;background:#110d15;text-align:center}
+.provisionMetric b{display:block;color:#f3ebf7;font-size:8px;line-height:1.15}
+.provisionMetric small{display:block;margin-top:2px;color:#9d91a5;font-size:6px}
+.provisionBreakdown{padding:7px 8px;border:1px solid #36303f;border-radius:8px;background:#0d0a11;color:#b8aebb;font-size:6.25px;line-height:1.6}
+.provisionRouteNotice{padding:6px 8px;border-left:3px solid #6f627c;border-radius:6px;background:#110d15;color:#c8bece;font-size:6.3px;line-height:1.55}
+.provisionRouteNotice.good{border-color:#55806a;background:#101712;color:#bfe1ca}
+.provisionRouteNotice.warn{border-color:#a27852;background:#181108;color:#ecc697}
+.provisionRouteNotice.bad{border-color:#985565;background:#1b1014;color:#efb8c2}
+
+.stashLoadoutBuildMeta{
+ margin-top:6px;
+ padding:7px 8px;
+ border:1px solid #3f4d43;
+ border-radius:8px;
+ background:linear-gradient(180deg,#101812,#0c110d);
+ color:#bcd3c1;
+ font-size:6.4px;
+ line-height:1.55;
+}
+.stashLoadoutBuildMeta b{color:#eef3f1;font-size:7px}
+.stashLoadoutBuildTags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.stashLoadoutBuildTags span{padding:2px 5px;border:1px solid #48524b;border-radius:999px;background:#111713;color:#b9cbbd;font-size:5.8px;line-height:1.3}
+.stashLoadoutBuildTags span.active{border-color:#7b9e86;background:#132017;color:#d6f1dc}
+
+.livingEcologyCard{
+ margin-top:8px;
+ padding:8px;
+ border:1px solid #4a4453;
+ border-radius:10px;
+ background:linear-gradient(180deg,#17121d,#0f0c13);
+ display:grid;
+ gap:7px;
+}
+.livingEcologyTop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.livingEcologyTop b{color:#efe4f3;font-size:8px}
+.livingEcologyTop span{padding:1px 6px;border:1px solid #5d5367;border-radius:999px;color:#c9bdcf;font-size:6px;white-space:nowrap}
+.livingEcologyRows{display:grid;gap:5px}
+.livingEcologyRow{display:grid;grid-template-columns:34px minmax(0,1fr) 28px;align-items:center;gap:6px;color:#bcb2c4;font-size:6.4px}
+.livingEcologyRow b{color:#e6ddec;font-size:6.8px}
+.livingEcologyTrack{display:block;height:7px;border:1px solid #403949;border-radius:999px;background:#0d0a10;overflow:hidden}
+.livingEcologyTrack i{display:block;height:100%;background:linear-gradient(90deg,#6c5f91,#d58b74)}
+.livingEcologyRow.low .livingEcologyTrack i{background:linear-gradient(90deg,#5a7485,#8ec3d1)}
+.livingEcologyRow.dominant .livingEcologyTrack i{background:linear-gradient(90deg,#4a7a5a,#8fe0a2)}
+.livingEcologyEffect{padding:7px 8px;border-left:3px solid #62566d;border-radius:6px;background:#0f0c13;color:#b8adbe;font-size:6.25px;line-height:1.6}
+.livingEcologyEffect b{color:#f0dfaa}
+
+.ecologyReport{
+ margin-top:7px;
+ padding:8px;
+ border:1px solid #4d4558;
+ border-radius:9px;
+ background:linear-gradient(180deg,#16121b,#100d13);
+ color:#c5bacb;
+ font-size:6.4px;
+ line-height:1.6;
+}
+.ecologyReport b{display:block;margin-bottom:5px;color:#efe4f3;font-size:7.6px}
+.ecologyReportRow{padding:4px 0;border-top:1px solid #2d2734}
+.ecologyReportRow:first-of-type{padding-top:0;border-top:none}
+.ecologyReportRow span{display:inline-block;margin-right:8px}
+.ecologyReportRow .gain{color:#d6f0dd}
+.ecologyReportRow .loss{color:#efc0c8}
+.ecologyReportFoot{margin-top:4px;color:#a99eb0}
+.ecologyReportFoot strong{color:#efdfa7}
+
+.weaponArtLead{
+ margin:8px 0;
+ padding:8px 9px;
+ border:1px solid #4c4456;
+ border-radius:8px;
+ background:#120e16;
+ color:#c8bdd0;
+ font-size:7px;
+ line-height:1.6;
+}
+.weaponArtLead b{color:#efe2aa}
+.weaponArtGrid{display:grid;gap:7px;margin-top:8px}
+.weaponArtChoice{
+ width:100%;
+ text-align:left;
+ padding:8px;
+ border:1px solid #4f4658;
+ border-radius:10px;
+ background:linear-gradient(180deg,#1a1520,#110d15);
+ color:#ddd3e4;
+ display:grid;
+ gap:5px;
+}
+.weaponArtChoice b{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;color:#f2e8f6;font-size:7.2px;line-height:1.35}
+.weaponArtChoice b span:last-child{color:#c8bbd0;font-size:6.1px;white-space:nowrap}
+.weaponArtChoice small{display:block;color:#b0a4b7;font-size:6.2px;line-height:1.55}
+.weaponArtChoice .artReady,.weaponArtChoice .artBlocked{display:block;padding:3px 6px;border:1px solid #4d4654;border-radius:999px;font-size:5.9px;line-height:1.35;justify-self:start}
+.weaponArtChoice .artReady{border-color:#4a7758;background:#101812;color:#bde0c8}
+.weaponArtChoice .artBlocked{border-color:#875565;background:#1a1014;color:#efb9c3}
+.weaponArtChoice.primary{border-color:#6d5e43}
+.weaponArtChoice.secondary{border-color:#4c6177}
+.weaponArtChoice:disabled{opacity:1;background:linear-gradient(180deg,#231d28,#16121a);border-color:#5a5163;color:#afa3b5}
+.weaponArtUnlockNote{margin-top:8px;color:#a79caf;font-size:6.2px;line-height:1.5}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.22.0 FIRST DEPTH CLEAR</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.23.1 VISUAL HARMONY</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5197,13 +5404,14 @@ function completeRouteAtBoss(enemy,rewardGear){
  if(!enemy?.boss||!isRouteFinaleFloor(plan))return null;
  const route=routeData[plan.id];
  const masteryBefore=routeMasteryLevel(route.id);
- let rewardSummary="";
+ let rewardSummary="",shardReward=0;
 
  if(route.id==="hunt"){
   promoteGearRarity(rewardGear,1);
-  let shardReward=3;
+  shardReward=3;
   if(masteryBefore>=5){
    rewardGear.itemLevel=(rewardGear.itemLevel||1)+1;
+   rewardGear.requiredLevel=itemRequiredLevel(rewardGear.itemLevel);
    if((rewardGear.atk||0)>0)rewardGear.atk++;
    if((rewardGear.def||0)>0)rewardGear.def++;
    if(!(rewardGear.atk||0)&&!(rewardGear.def||0))rewardGear.def=1;
@@ -5214,16 +5422,18 @@ function completeRouteAtBoss(enemy,rewardGear){
  }else if(route.id==="archive"){
   rewardGear.identified=true;
   const researchReward=masteryBefore>=5?5:3;
+  shardReward=2;
   state.meta.research.points=(state.meta.research.points||0)+researchReward;
-  state.meta.shards+=2;
-  rewardSummary=`装備完全鑑定 / 研究点+${researchReward} / 欠片+2`;
+  state.meta.shards+=shardReward;
+  rewardSummary=`装備完全鑑定 / 研究点+${researchReward} / 欠片+${shardReward}`;
  }else if(route.id==="supply"){
   state.consumables.potion=(state.consumables.potion||0)+1;
   state.consumables.oil=(state.consumables.oil||0)+1;
   const provisionReward=masteryBefore>=5?150:100;
   const provisionGain=gainProvisions(provisionReward);
-  state.meta.shards+=1;
-  rewardSummary=`治癒薬+1 / 灯油+1 / ${provisionGainSummary(provisionGain)} / 欠片+1`;
+  shardReward=1;
+  state.meta.shards+=shardReward;
+  rewardSummary=`治癒薬+1 / 灯油+1 / ${provisionGainSummary(provisionGain)} / 欠片+${shardReward}`;
  }
 
  const masteryGain=gainRouteMastery(route.id);
@@ -5253,7 +5463,7 @@ function completeRouteAtBoss(enemy,rewardGear){
  addLog(`進路「${route.label}」を踏破した。踏破報酬：${rewardSummary} / 進路熟練 ${masteryBefore}→${masteryGain.after}回${unlockText}`);
  saveMeta();
  return{
-  route:route.id,label:route.label,rewardSummary,
+  route:route.id,label:route.label,rewardSummary,shardReward,
   masteryBefore,masteryAfter:masteryGain.after,
   unlocked:masteryGain.unlocked.map(node=>node.name)
  };
@@ -9021,6 +9231,99 @@ const wardenProfiles={
   color:"#70ae63",accent:"#e0f5a5",hp:1.32,atk:1.18,def:1.08,bonusShards:5
  }
 };
+const firstDepthWardenCadence={
+ 5:{gate:"第一関門",index:1,next:"第6〜10層：暗闇・勢力争い・ビルド形成",minRarity:"magic",trophyNote:"最初の番人戦利品は魔法以上を保証。"},
+ 10:{gate:"第二関門",index:2,next:"第11〜15層：再生生態・未鑑定・追跡・環境戦",minRarity:"rare",trophyNote:"第二関門以降の番人戦利品は希少以上を保証。"},
+ 15:{gate:"第三関門",index:3,next:"第16〜20層：熟練・研究・高密度・最終決戦",minRarity:"rare",itemLevelBonus:1,trophyNote:"第三関門は希少以上に加え、戦利品ILvを+1。"},
+ 20:{gate:"最終関門",index:4,next:"第一深度圏の向こう：終わりなき深淵",minRarity:"rare",trophyNote:"初踏破時は番人戦利品が伝説へ昇格。"}
+};
+function wardenCadenceForFloor(floor=state?.floor||1){
+ const fixed=firstDepthWardenCadence[floor];
+ if(fixed)return fixed;
+ const index=Math.max(1,Math.floor(floor/5));
+ return{gate:`第${index}関門`,index,next:`第${floor+1}層以降：終わりなき深淵`,minRarity:"rare",trophyNote:"深層番人の戦利品は希少以上を保証。"};
+}
+function wardenCadenceProgress(floor=state?.floor||1){
+ const cadence=wardenCadenceForFloor(floor);
+ return floor<=20?clamp((cadence.index||1)/4,0,1):1;
+}
+function reinforceWardenTrophyLevel(gear,levels=0){
+ const gain=Math.max(0,Math.floor(levels||0));
+ if(!gear||!gain)return gear;
+ gear.itemLevel=Math.max(1,(gear.itemLevel||1)+gain);
+ gear.requiredLevel=itemRequiredLevel(gear.itemLevel);
+ if((gear.atk||0)>0)gear.atk+=gain;
+ if((gear.def||0)>0)gear.def+=Math.ceil(gain/2);
+ if(!(gear.atk||0)&&!(gear.def||0))gear.def=gain;
+ return gear;
+}
+function prepareWardenTrophy(gear,enemy,profile){
+ if(!gear)return gear;
+ const floor=enemy?.bossFloor||state.floor;
+ const cadence=wardenCadenceForFloor(floor);
+ const targetRank=rarityOrder[cadence.minRarity]||0;
+ const currentRank=rarityOrder[gear.rarity]||0;
+ if(currentRank<targetRank)promoteGearRarity(gear,targetRank-currentRank);
+ reinforceWardenTrophyLevel(gear,cadence.itemLevelBonus||0);
+ gear.wardenTrophyFloor=floor;
+ gear.wardenTrophyKey=profile?.key||wardenProfileKeyForFloor(floor);
+ gear.wardenTrophyName=profile?.name||wardenProfileFor(enemy).name;
+ gear.wardenTrophyAt=Date.now();
+ gear.locked=true;
+ return gear;
+}
+function wardenTrophyPublicLabel(gear){
+ if(!gear)return"番人戦利品";
+ const rarity=rarityData[gear.rarity]?.label||"装備";
+ return gear.identified?`${rarity}・${gearLabel(gear)}`:`${rarity}・未鑑定${equippedSlotLabel(gear.slot)}`;
+}
+function wardenTrophyLocation(gearId){
+ if(!gearId)return"整理済み";
+ const carried=[...allEquippedItems(),...(state.inventory||[])].some(g=>g?.id===gearId);
+ if(carried)return"回収済み";
+ const ground=(state.items||[]).some(item=>item?.type==="gear"&&item.gear?.id===gearId);
+ if(ground)return"足元に未回収";
+ return"整理済み";
+}
+function recordWardenVictory(enemy,profile,rewardGear,routeResult=null,extras={}){
+ if(!enemy?.boss||!profile||!rewardGear)return null;
+ const floor=enemy.bossFloor||state.floor;
+ const cadence=wardenCadenceForFloor(floor);
+ const record={
+  floor,at:Date.now(),gate:cadence.gate,index:cadence.index,bossName:profile.name,bossKey:profile.key,
+  rewardGearId:rewardGear.id,rewardLabel:wardenTrophyPublicLabel(rewardGear),rewardRarity:rewardGear.rarity,
+  rewardItemLevel:rewardGear.itemLevel||1,rewardIdentified:!!rewardGear.identified,
+  routeLabel:routeResult?.label||null,routeReward:routeResult?.rewardSummary||null,
+  shards:5+(state.floorObjective?.reward?.shards||0)+(profile.bonusShards||0)+(routeResult?.shardReward||0)+(state.firstTwentyMilestonePending?.firstClear?(state.firstTwentyMilestonePending.shards||0):0),
+  soulAnchorFound:!!extras.soulAnchorFound,sealedRelicDropped:!!extras.sealedRelicDropped,
+  next:cadence.next,trophyNote:cadence.trophyNote
+ };
+ state.lastWardenVictory=record;
+ return record;
+}
+function wardenVictoryStatusHtml(){
+ if(!state?.bossDefeated||state.floor%5!==0)return"";
+ const cadence=wardenCadenceForFloor(state.floor);
+ const victory=state.lastWardenVictory;
+ const location=victory?.rewardGearId?wardenTrophyLocation(victory.rewardGearId):"戦利品を確認";
+ return`<div class="wardenClearStrip"><b>${cadence.gate} 突破</b><span>${victory?.bossName||wardenProfileFor().name} / 戦利品 ${location}</span><small>階段→次の進路</small></div>`;
+}
+function wardenRouteBridgeHtml(){
+ if(!state?.bossDefeated||state.floor%5!==0)return"";
+ const cadence=wardenCadenceForFloor(state.floor);
+ const victory=state.lastWardenVictory;
+ const progress=Math.round(wardenCadenceProgress(state.floor)*100);
+ const location=victory?.rewardGearId?wardenTrophyLocation(victory.rewardGearId):"戦利品を確認";
+ const lootClass=location==="回収済み"?"good":location.includes("未回収")?"warn":"";
+ const reward=victory?.rewardLabel||cadence.trophyNote;
+ return`<div class="wardenBridge"><div class="wardenBridgeTop"><b>${cadence.gate}・${victory?.bossName||wardenProfileFor().name}を突破</b><span>${state.floor<=20?`${cadence.index}/4 関門`:`第${state.floor}層`}</span></div><div class="wardenBridgeBar"><i style="width:${progress}%"></i></div><div class="wardenBridgeLoot"><span class="${lootClass}">戦利品 ${location}</span><span>${reward}</span>${victory?.shards?`<span class="good">欠片 +${victory.shards}</span>`:""}${victory?.sealedRelicDropped?'<span class="good">封印遺物 出現</span>':""}${victory?.soulAnchorFound?'<span class="good">魂還石 入手</span>':""}${victory?.routeReward?`<span class="good">進路踏破 ${victory.routeReward}</span>`:""}</div><div class="wardenBridgeNext"><b>次の区間</b> ${cadence.next}<br>ここから先の危険と報酬傾向を、下の3進路から選びます。</div></div>`;
+}
+function wardenFloorBannerHtml(plan=floorPlan()){
+ if(!plan?.boss)return"";
+ const cadence=wardenCadenceForFloor(state.floor);
+ const profile=wardenProfileFor();
+ return`<div class="floorBannerWarden"><div class="floorBannerWardenHead"><b>${cadence.gate}・${profile.name}</b><span>${state.floor<=20?`${cadence.index}/4 関門`:"深層番人"}</span></div><small>${profile.hint}</small></div>`;
+}
 function wardenProfileKeyForFloor(floor=state.floor){
  const index=(Math.max(1,Math.floor(floor/5))-1)%4;
  return["chain","oracle","furnace","root"][index];
@@ -10846,9 +11149,9 @@ function livingEcologyFloorStatusHtml(){
 function livingEcologyReportHtml(report){
  const shift=report?.ecologyShift;if(!shift)return"";
  const ids=["undead","beast","aberration"];
- const parts=ids.map(id=>`${livingFactionData[id].label} ${shift.before[id]}→${shift.after[id]}（撃破${shift.kills[id]||0}）`).join(" / ");
+ const rows=ids.map(id=>{const before=shift.before[id],after=shift.after[id],delta=after-before;return`<div class="ecologyReportRow"><span>${livingFactionData[id].label} ${before}→${after}</span><span class="${delta>=0?"gain":"loss"}">${delta>=0?"+":""}${delta}</span><span>撃破${shift.kills[id]||0}</span></div>`}).join("");
  const dom=shift.after.dominant;
- return`<div class="ecologyReport"><b>深淵生態への影響</b><br>${parts}<br>${dom?`現在：${livingFactionData[dom].dominant}。${livingFactionData[dom].desc}`:"現在は三勢力が拮抗しています。"}</div>`;
+ return`<div class="ecologyReport"><b>深淵生態への影響</b>${rows}<div class="ecologyReportFoot">${dom?`現在：<strong>${livingFactionData[dom].dominant}</strong>。${livingFactionData[dom].desc}`:"現在は三勢力が拮抗しています。"}</div></div>`;
 }
 function factionsHostile(a,b){
  if(a===b)return false;
@@ -11513,6 +11816,7 @@ function renderFloorGoal(){
   <div class="floorGoalText">${objective.desc}　${progress}/${objective.target}</div>
   <div class="floorGoalProgress"><i style="width:${ratio}%"></i></div>
   <div class="floorGoalReward">報酬 ${floorObjectiveRewardText(objective)}${fallback?` / ${fallback}`:""} ${roomEncounterStatusHtml()}</div>
+  ${wardenVictoryStatusHtml()}
   ${routeFloorStatusHtml()}
   ${livingEcologyFloorStatusHtml()}
   ${floorForkStatusHtml()}
@@ -14093,18 +14397,10 @@ function defeatEnemy(e){
 
   restoreLastStandFromWarden();
   const profile=wardenProfileFor(e);
-  const rewardGear=rollGear((e.level||floorTargetLevel())+1);
-  if(["oracle","furnace","root"].includes(profile.key)&&(rarityOrder[rewardGear.rarity]||0)<2){
-   const oldMul=rarityData[rewardGear.rarity]?.mul||1;
-   const newMul=rarityData.rare.mul;
-   rewardGear.atk=Math.round(rewardGear.atk*newMul/oldMul);
-   rewardGear.def=Math.round(rewardGear.def*newMul/oldMul);
-   rewardGear.rarity="rare";
-   rewardGear.locked=true;
-  }
+  const rewardGear=prepareWardenTrophy(rollGear((e.level||floorTargetLevel())+1),e,profile);
   if(state.floor===20)grantFirstTwentyClearReward(rewardGear);
-  completeRouteAtBoss(e,rewardGear);
-  state.items.push({x:e.x,y:e.y,type:"gear",gear:rewardGear});
+  const routeResult=completeRouteAtBoss(e,rewardGear);
+  state.items.push({x:e.x,y:e.y,type:"gear",gear:rewardGear,wardenTrophy:true});
   if(profile.key==="chain"){
    state.items.push({x:e.x,y:e.y,type:"purify",name:"解呪の灰"});
   }else if(profile.key==="oracle"){
@@ -14117,20 +14413,29 @@ function defeatEnemy(e){
    state.items.push({x:e.x,y:e.y,type:"retreat",name:"帰還楔"});
   }
   state.meta.shards+=profile.bonusShards||0;
+  let soulAnchorFound=false;
   const soulChance=state.floor>=20?(profile.key==="root"?.18:.04):0;
   if(soulChance>0&&rng()<soulChance){
+   soulAnchorFound=true;
    state.meta.soulAnchors=(state.meta.soulAnchors||0)+1;
    addLog("番人の核から、極めて希少な「魂還石」を回収した。");
    showCombatToast("希少品入手","魂還石・致死時に自動帰還","critical");
   }
   grantAppearanceRelicForBoss();
+  state.pendingWardenVictoryRecord={enemy:e,profile,rewardGear,routeResult,soulAnchorFound};
   addLog(`${profile.name}が崩れ、階段の封印が解けた！`);
+  addLog(`${wardenCadenceForFloor(state.floor).gate}突破。番人戦利品「${wardenTrophyPublicLabel(rewardGear)}」が残された。`);
   addLog(`番人固有報酬：深淵の欠片+${profile.bonusShards||0}。`);
  }else{
   tryNormalEnemyGearDrop(e);
   livingEcologyResourceReward(e);
  }
- maybeDropSealedRelic(e);
+ const sealedRelicDropped=maybeDropSealedRelic(e);
+ if(wasBoss&&state.pendingWardenVictoryRecord){
+  const pending=state.pendingWardenVictoryRecord;
+  recordWardenVictory(pending.enemy,pending.profile,pending.rewardGear,pending.routeResult,{soulAnchorFound:pending.soulAnchorFound,sealedRelicDropped});
+  state.pendingWardenVictoryRecord=null;
+ }
  updateRoomEncounters();
  checkLevel();
 }
@@ -14727,19 +15032,22 @@ function pickup(){
  recordFloorPickup(true);
  spawnPickupEffect("gear");
  const pickupRarityRank=rarityOrder[item.gear.rarity]||0;
+ const wardenTrophy=!!(item.wardenTrophy||item.gear.wardenTrophyFloor);
  if(typeof item.gear.locked!=="boolean")item.gear.locked=pickupRarityRank>=2;
  state.inventory.push(item.gear);
- if(pickupRarityRank>=2){
+ if(pickupRarityRank>=2||wardenTrophy){
   const feedbackKind=pickupRarityRank>=3?"legendary":"rare";
-  spawnFeedbackBurst(state.player.x,state.player.y,feedbackKind,pickupRarityRank>=3?14:9);
-  triggerImpactFeedback(feedbackKind,{haptic:feedbackKind,duration:pickupRarityRank>=3?760:580});
+  spawnFeedbackBurst(state.player.x,state.player.y,feedbackKind,wardenTrophy?(pickupRarityRank>=3?16:11):(pickupRarityRank>=3?14:9));
+  triggerImpactFeedback(feedbackKind,{haptic:feedbackKind,duration:wardenTrophy?720:(pickupRarityRank>=3?760:580)});
  }else feedbackHaptic("pickup");
- sfx(pickupRarityRank>=2?"rare":"pickup");
- addLog(
-  item.gear.identified
-   ?`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。`
-   :"正体不明の装備を拾った。"
- );
+ sfx(pickupRarityRank>=2||wardenTrophy?"rare":"pickup");
+ if(wardenTrophy){
+  const floor=item.gear.wardenTrophyFloor||state.floor;
+  addLog(`第${floor}層の番人戦利品「${wardenTrophyPublicLabel(item.gear)}」を確保した。`);
+  showCombatToast("番人戦利品を確保",`${wardenTrophyPublicLabel(item.gear)} / ILv${item.gear.itemLevel||1}`,pickupRarityRank>=3?"legendary":"objective");
+ }else{
+  addLog(item.gear.identified?`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。`:"正体不明の装備を拾った。");
+ }
  return true;
 }
 function triggerTrap(){
@@ -15022,10 +15330,10 @@ function renderRouteChoices(){
  const nextFloor=state.floor+1;
  const endFloor=nextRouteEndFloor(state.floor);
  const routeLength=endFloor-nextFloor+1;
- $("routeIntro").innerHTML=`
+ $("routeIntro").innerHTML=`${wardenRouteBridgeHtml()}
   <div class="routeSummary">
-   番人を倒したため、第${nextFloor}〜${endFloor}層（全${routeLength}層）の進路を選べます。
-   選択すると、そのまま次の階へ降ります。進路効果は終点番人を倒すまで継続します。
+   第${nextFloor}〜${endFloor}層（全${routeLength}層）の進路を選べます。
+   選択するとそのまま次の階へ降り、効果は終点番人を倒すまで継続します。
   </div>`;
  $("routeChoices").innerHTML=Object.values(routeData).map(route=>{
   const effects=route.effects.map((effect,index)=>{
@@ -16745,6 +17053,7 @@ function lighthouseStashCardHtml(meta,entry){
    <div class="stashCompactName"><b class="stashGearName ${g.rarity||"common"}">${rarity.label}・${gearLabel(g)}</b><small>${equippedSlotLabel(normalizeLoadoutSlot(g.slot))} / ILv${g.itemLevel||1} / 推奨度 ${Math.round(gearScore(g))}</small></div>
    <div class="stashCompactBadges">
     ${selected?'<span class="stashBadge selected">次回装備</span>':""}
+    ${g.wardenTrophyFloor?`<span class="stashBadge warden">第${g.wardenTrophyFloor}層番人</span>`:""}
     ${g.rarity==="legendary"?'<span class="stashBadge legendary">伝説</span>':""}
     ${oathCurrent?'<span class="stashBadge oath">誓約</span>':""}
     ${echoStrain(g)>0?`<span class="stashBadge strain">歪み${echoStrain(g)}</span>`:""}
@@ -17768,6 +18077,7 @@ function showFloorBanner(){
    ${extra.map(label=>`<span>${label}</span>`).join("")}
   </div>
   <div class="floorBannerGoal"><b>階層目標</b><br>${ensureFloorObjective().title}：${ensureFloorObjective().desc}</div>
+  ${wardenFloorBannerHtml(plan)}
   ${isRouteFinaleFloor()?`<div class="floorBannerRouteFinale"><b>${routeData[state.routePlan.id].finaleName}</b><br>${routeFinaleDescription()}</div>`:""}`;
 
  banner.classList.add("show");
