@@ -3824,7 +3824,7 @@ body{
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.21.0 SEALED RELICS</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.20.0 LIVING FLOORS</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -4239,10 +4239,6 @@ body{
           <li>余った素材は帰還時に<b>深淵の欠片</b>へ変換されます。</li>
           <li>未鑑定装備は性能も呪いも不明です。呪具は解呪するまで外せません。</li>
           <li>装備には<b>必要レベル・アイテムレベル・タグ・熟練・絆</b>があります。</li>
-          <li><b>封印遺物</b>：通常敵から極低確率、変異個体・特異室・番人ほど高確率で現れます。初めて遭遇するまでは番人から必ず一度提示されます。</li>
-          <li>封印遺物は最大3個まで携行でき、探索中は開けません。死亡すると携行分はすべて失い、生還すると灯台の封印遺物庫へ移ります。</li>
-          <li>灰封・紫脈封・黒金封は期待度を示します。封印は古い順に解き、保存や再読込で開封結果を引き直せないようにしています。</li>
-          <li>伝説以上が出ない開封では「黄金残響」が1ずつ蓄積し、7/7になると次の開封は伝説以上が確定します。課金・期限・日課はありません。</li>
           <li><b>銘装誓約</b>：レア以上・灯台調律済み・装備絆「遺物」の武器1本だけを、120欠片で長期育成対象にできます。</li>
           <li>銘装経験は最高到達層の4階下以降でのみ獲得します。通常敵1、エリート5、宿敵15、番人40で、最高到達更新中は1.5倍です。</li>
           <li>深化Ⅰには1500経験が必要です。到達後、武器個体ごとに固定された3候補から1つを選びます。更新や再読込で候補は変わりません。</li><li><b>深化Ⅱ</b>：深化Ⅰ完成後、最高到達層の2階下以降で4500経験を蓄積し、同じ武器種のレア以上武器を供物として5点分捧げると固定3候補を選べます。レア=1点、伝説=2点です。</li><li>供物は「保護解除」した武器だけ使用できます。銘装育成済み・初期武器・異なる武器種は供物不可です。灯台では対象外理由を表示します。</li><li>深化Ⅱ経験が4500へ到達した後は経験加算を停止し、HUDを「供物待ち」へ切り替えます。深化Ⅱ完成後も追加経験は入りません。</li>
@@ -4362,19 +4358,6 @@ body{
   </div>
 </div>
 
-
-<div class="overlay hidden" id="relicRevealOverlay">
-  <div class="card relicRevealCard" id="relicRevealCard">
-    <div class="relicRevealInner">
-      <div class="relicSealGlyph" id="relicSealGlyph">◇</div>
-      <div class="relicRevealKicker" id="relicRevealKicker">SEALED RELIC</div>
-      <h2 class="relicRevealTitle" id="relicRevealTitle">封印を解く</h2>
-      <div id="relicRevealBody"><div class="relicSuspense">深淵の脈動を待っている…</div></div>
-      <button type="button" class="modalBtn hidden" id="closeRelicReveal">灯台へ戻る</button>
-    </div>
-  </div>
-</div>
-
 <div class="overlay hidden" id="hubOverlay">
   <div class="card">
     <h2>深淵の灯台</h2>
@@ -4400,11 +4383,6 @@ body{
     <details class="hubFold hubManagedFold" id="deathEchoPanel">
       <summary id="deathEchoSummary">遺響回収</summary>
       <div id="deathEchoBody"></div>
-    </details>
-
-    <details class="hubFold hubManagedFold" id="relicVaultPanel">
-      <summary id="relicVaultSummary">封印遺物</summary>
-      <div id="relicVaultBody"></div>
     </details>
 
     <details class="hubFold hubManagedFold" id="loadoutPanel">
@@ -6553,7 +6531,7 @@ function restoreLighthouseSession(){
  return openLighthouseState(meta,session.phase,report);
 }
 function defaultMeta(){
- const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}};
+ const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}};
  meta.appearance=defaultAppearance();
  return meta;
 }
@@ -7110,7 +7088,7 @@ function applyFirstLighthouseDisclosure(meta){
  const simple=!guide.firstDepartureComplete&&!guide.advancedHubShown;
  const advancedIds=[
   "hubAccordionNav","overviewPanel","routeMasteryPanel","lastReportPanel",
-  "deathEchoPanel","relicVaultPanel","loadoutPanel","weaponOathPanel","insurancePanel","stashPanel","recordsPanel"
+  "deathEchoPanel","loadoutPanel","weaponOathPanel","insurancePanel","stashPanel","recordsPanel"
  ];
  for(const id of advancedIds)$(id)?.classList.toggle("hubFirstHidden",simple);
  $("hubIntro").textContent=simple
@@ -7224,7 +7202,6 @@ function normalizeWeaponDeepeningAcrossMeta(meta){
 }
 function ensureMetaLoadouts(meta){
  ensureLighthouseOnboardingMeta(meta);
- ensureSealedRelicMeta(meta);
  ensureLivingEcology(meta);
  normalizeWeaponDeepeningAcrossMeta(meta);
  meta.stash=meta.stash||[];
@@ -7661,8 +7638,6 @@ function createRunStats(meta){
   damageTaken:0,
   itemsFound:0,
   gearFound:0,
-  sealedRelicsFound:0,
-  sealedRelicsReturned:0,
   trapsTriggered:0,
   eventsResolved:0,
   bossesDefeated:0,
@@ -8097,9 +8072,6 @@ function buildExpeditionReport(outcome,details={}){
   damageTaken:stats.damageTaken||0,
   itemsFound:stats.itemsFound||0,
   gearFound:stats.gearFound||0,
-  sealedRelicsFound:stats.sealedRelicsFound||0,
-  sealedRelicsReturned:bank?.sealedRelics||stats.sealedRelicsReturned||0,
-  sealedRelicsLost:outcome==="death"?(state.sealedRelics?.length||0):0,
   traps:stats.trapsTriggered||0,
   events:Math.max(stats.eventsResolved||0,(state.meta.eventHistory?.length||0)-(stats.startEventCount||0)),
   dodges:combat.dodges||0,
@@ -8169,8 +8141,6 @@ function buildExpeditionReport(outcome,details={}){
  if(report.breaks>0)report.highlights.push(`敵の攻撃態勢を${report.breaks}回崩した`);
  if(report.crits>0)report.highlights.push(`会心を${report.crits}回発生`);
  if(outcome==="return"&&report.newGear>0)report.highlights.push(`新しい装備を${report.newGear}個持ち帰った`);
- if(outcome==="return"&&report.sealedRelicsReturned>0)report.highlights.push(`封印遺物${report.sealedRelicsReturned}個を灯台へ持ち帰った`);
- if(outcome==="death"&&report.sealedRelicsLost>0)report.highlights.push(`携行していた封印遺物${report.sealedRelicsLost}個を失った`);
  if(outcome==="return"&&report.attunedGear>0)report.highlights.push(`未調律装備${report.attunedGear}個を灯台調律した`);
  if(outcome==="death"&&report.deathCarriedGear>0)report.highlights.push(`携行装備${report.deathCarriedGear}個が全損判定を受けた`);
  if(outcome==="death"&&report.permanentlyDestroyed>0)report.highlights.push(`装備${report.permanentlyDestroyed}個が完全消失した`);
@@ -8210,7 +8180,6 @@ function expeditionReportHtml(report,compact=false){
     `<span class="expeditionPill good">新規装備 ${report.newGear}</span>`,
     `<span class="expeditionPill good">装備更新 ${report.updatedGear}</span>`,
     report.attunedGear?`<span class="expeditionPill good">灯台調律 ${report.attunedGear}</span>`:"",
-    report.sealedRelicsReturned?`<span class="expeditionPill good">封印遺物 ${report.sealedRelicsReturned}個</span>`:"",
     `<span class="expeditionPill good">素材変換 +${report.scrapShards}欠片</span>`,
     report.rescued?`<span class="expeditionPill good">魂還石救命</span>`:"",
     report.insurancePremium?`<span class="expeditionPill">保険料 ${report.insurancePremium}欠片</span>`:"",
@@ -8225,8 +8194,7 @@ function expeditionReportHtml(report,compact=false){
     report.insuranceMissed?`<span class="expeditionPill bad">保険回収失敗 ${report.insuranceMissed}</span>`:"",
     report.echoStored?`<span class="expeditionPill good">遺響に残存 ${report.echoStored}</span>`:"",
     report.permanentlyDestroyed?`<span class="expeditionPill bad">完全消失 ${report.permanentlyDestroyed}</span>`:"",
-    report.echoReplaced?`<span class="expeditionPill bad">以前の遺響消滅 ${report.echoReplaced}</span>`:"",
-    report.sealedRelicsLost?`<span class="expeditionPill bad">封印遺物喪失 ${report.sealedRelicsLost}個</span>`:""
+    report.echoReplaced?`<span class="expeditionPill bad">以前の遺響消滅 ${report.echoReplaced}</span>`:""
    ].filter(Boolean).join("");
 
  return`
@@ -8293,7 +8261,6 @@ function expeditionReportHtml(report,compact=false){
     <span class="expeditionPill ${report.researchDelta>=0?"good":"bad"}">研究点 ${signedValue(report.researchDelta)}</span>
     <span class="expeditionPill">拾得 ${report.itemsFound}</span>
     <span class="expeditionPill">装備発見 ${report.gearFound}</span>
-    ${report.sealedRelicsFound?`<span class="expeditionPill">封印発見 ${report.sealedRelicsFound}</span>`:""}
     <span class="expeditionPill">事件 ${report.events}</span>
     <span class="expeditionPill">罠作動 ${report.traps}</span>
    </div>
@@ -8373,11 +8340,11 @@ function finishExpeditionDeath(cause,killer=null){
 function freshState(){
  const newState={
   version:4,expeditionId:createExpeditionId(),seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,
-  hunger:840,maxHunger:840,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],sealedRelics:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
+  hunger:840,maxHunger:840,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false,lastStandUsed:false,lastStandArmed:false,lastStandInvulnerable:false,lastStandTriggeredThisTurn:false,lastStandRechargePending:false,exhaustedTurns:0},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,crits:0,lastStands:0},
   map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],terrainFeatures:[],terrainKnowledge:{},secretWalls:[],shortcuts:[],events:[],roomEncounters:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],floorFork:null,forkHistory:[],floorPhenomenon:null,phenomenonHistory:[],labyrinthReaction:null,reactionApplied:false,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
-  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}},audio:{enabled:true,started:false,bgmEnabled:true,sfxEnabled:true,bgmVolume:.38,sfxVolume:.62},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
+  player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}}},audio:{enabled:true,started:false,bgmEnabled:true,sfxEnabled:true,bgmVolume:.38,sfxVolume:.62},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
  newState.audio=normalizeAudioSettings(newState.audio);
  const prepared=applyMetaToFreshState(newState);
@@ -8602,7 +8569,6 @@ function spawnRoomEncounterReward(enc){
   state.meta.shards=(state.meta.shards||0)+1;saveMeta();
   addLog("狩人の間の刻印から深淵の欠片+1を回収した。");
  }
- maybeDropRoomSealedRelic(enc,p);
  return true;
 }
 function updateRoomEncounters(silent=false){
@@ -10139,7 +10105,7 @@ function repairActiveRunProgressionState(source="render"){
  if(state.floorFork&&state.floorFork.targetFloor!==state.floor){state.floorFork=null;changed=true}
  if(state.floorPhenomenon&&state.floorPhenomenon.floor!==state.floor){state.floorPhenomenon=null;changed=true}
  normalizeFloorPhenomenonState();
- const arrays=["enemies","items","inventory","sealedRelics","traps","specialTiles","environment","terrainFeatures","secretWalls","shortcuts","events","roomEncounters","remains","rooms"];
+ const arrays=["enemies","items","inventory","traps","specialTiles","environment","terrainFeatures","secretWalls","shortcuts","events","roomEncounters","remains","rooms"];
  for(const keyName of arrays){if(!Array.isArray(state[keyName])){state[keyName]=[];changed=true}}
  if(!state.visual||typeof state.visual!=="object"){state.visual={};changed=true}
  if(!Array.isArray(state.visual.effects)){state.visual.effects=[];changed=true}
@@ -11164,8 +11130,7 @@ function renderFloorGoal(){
   ${routeFloorStatusHtml()}
   ${livingEcologyFloorStatusHtml()}
   ${floorForkStatusHtml()}
-  ${floorPhenomenonStatusHtml()}
-  ${sealedRelicCarryStatusHtml()}`;
+  ${floorPhenomenonStatusHtml()}`;
  positionFloorGoal();
 }
 
@@ -12726,208 +12691,6 @@ function rollGear(sourceLevel=floorTargetLevel()){
  const tags=rollGearTags(rarity,element,slot);
  return{id:"g"+Date.now()+Math.floor(rng()*99999),slot,rarity,name,weaponType,atk,def,hunger,crit,cursed,identified:rng()>=.48,element,trait,kills:0,itemLevel,requiredLevel,attuned:false,attunedAt:null,attunementSource:"field",tags,bondTraits:[],bondPending:0,locked:rarity==="rare"||rarity==="legendary"};
 }
-
-const SEALED_RELIC_CARRY_CAP=3;
-const SEALED_RELIC_PITY=7;
-const sealedRelicSealData={
- ash:{label:"灰封",glyph:"◇",desc:"弱いが読めない脈動。何が眠っているかは灯台まで分からない。",bias:0},
- violet:{label:"紫脈封",glyph:"◆",desc:"濃い遺物反応。希少な報酬へ寄りやすい。",bias:.045},
- blackgold:{label:"黒金封",glyph:"✦",desc:"番人級の圧を帯びた封印。中身は最後まで秘匿される。",bias:.09}
-};
-function ensureSealedRelicMeta(meta=state?.meta){
- if(!meta)return{relics:[],fortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}};
- if(!Array.isArray(meta.sealedRelics))meta.sealedRelics=[];
- meta.sealedRelics=meta.sealedRelics.filter(r=>r&&typeof r==="object"&&typeof r.id==="string");
- if(!meta.relicFortune||typeof meta.relicFortune!=="object")meta.relicFortune={};
- const fortune=meta.relicFortune;
- for(const keyName of ["misses","totalOpened","legendaryOpened","jackpots"]){if(typeof fortune[keyName]!=="number")fortune[keyName]=0}
- if(typeof fortune.firstFound!=="boolean")fortune.firstFound=fortune.totalOpened>0||meta.sealedRelics.length>0;
- if(!Array.isArray(fortune.history))fortune.history=[];
- fortune.misses=clamp(Math.floor(fortune.misses),0,SEALED_RELIC_PITY);
- fortune.history=fortune.history.filter(entry=>entry&&typeof entry==="object").slice(-24);
- return{relics:meta.sealedRelics,fortune};
-}
-function sealedRelicHash(value=""){
- let hash=2166136261;
- for(let i=0;i<String(value).length;i++){hash^=String(value).charCodeAt(i);hash=Math.imul(hash,16777619)}
- return hash>>>0;
-}
-function sealedRelicRandomBox(seed){return{value:sealedRelicHash(seed)||0x9e3779b9}}
-function sealedRelicRandom(box){let value=box.value>>>0;value^=value<<13;value^=value>>>17;value^=value<<5;box.value=value>>>0;return box.value/4294967296}
-function sealedRelicSealForSource(source="ordinary"){
- if(source==="boss"||source==="nemesis")return"blackgold";
- if(source==="elite"||source==="room")return"violet";
- return"ash";
-}
-function createSealedRelic(source="ordinary",floor=state?.floor||1){
- const id=`sr-${state?.expeditionId||state?.seed||"run"}-${floor}-${state?.turn||0}-${Math.floor(rng()*1e9).toString(36)}`;
- const seal=sealedRelicSealForSource(source);
- return{id,floor:Math.max(1,floor),source,seal,createdAt:Date.now(),rewardSeed:sealedRelicHash(`${id}|reward|${floor}|${source}`)};
-}
-function sealedRelicSourceLabel(source){return({ordinary:"敵の遺骸",elite:"変異個体",nemesis:"宿敵",boss:"番人",room:"特異室"}[source]||"深淵")}
-function maybeDropSealedRelic(enemy){
- if(!enemy||enemy.echoGuard)return false;
- const {fortune}=ensureSealedRelicMeta(state.meta);
- let chance=enemy.boss?.30:enemy.nemesis?.14:enemy.elite?.038:.0035;
- if(enemy.boss&&!fortune.firstFound)chance=1;
- if(rng()>=chance)return false;
- const source=enemy.boss?"boss":enemy.nemesis?"nemesis":enemy.elite?"elite":"ordinary";
- const relic=createSealedRelic(source,state.floor);
- state.items.push({x:enemy.x,y:enemy.y,type:"sealed_relic",name:"封印遺物",relic});
- addLog(`${enemy.name}の残滓から、${sealedRelicSealData[relic.seal].label}の封印遺物が現れた。`);
- spawnFeedbackBurst(enemy.x,enemy.y,source==="boss"?"legendary":"rare",source==="boss"?11:6);
- showCombatToast("封印遺物",`${sealedRelicSealData[relic.seal].label}・灯台へ持ち帰るまで開かない`,source==="boss"?"critical":"objective");
- sfx(source==="boss"?"legendary":"rare");
- return true;
-}
-function maybeDropRoomSealedRelic(enc,p){
- if(!enc||!p||rng()>=Math.min(.18,.09+state.floor*.003))return false;
- const relic=createSealedRelic("room",state.floor);
- state.items.push({x:p.x,y:p.y,type:"sealed_relic",name:"封印遺物",relic,roomEncounterReward:true});
- addLog(`${roomEncounterDefs[enc.type]?.label||"特異室"}の奥から、紫脈封の遺物反応が見つかった。`);
- return true;
-}
-function sealedRelicCarryStatusHtml(){
- const count=state?.sealedRelics?.length||0;if(!count)return"";
- return`<div class="sealedCarryStatus">封印遺物 ${count}/${SEALED_RELIC_CARRY_CAP}・灯台帰還まで開封不可・死亡すると失う</div>`;
-}
-function sealedRelicRewardSpec(relic,meta=state?.meta){
- const {fortune}=ensureSealedRelicMeta(meta);
- const seal=sealedRelicSealData[relic?.seal]||sealedRelicSealData.ash;
- const box=sealedRelicRandomBox(`${relic?.rewardSeed||relic?.id}|tier`);
- const roll=sealedRelicRandom(box);
- const pityReady=fortune.misses>=SEALED_RELIC_PITY;
- if(pityReady){
-  return roll<(.12+seal.bias*.5)
-   ?{tier:"jackpot",kind:"gear",label:"深層遺宝",pity:true,shards:8}
-   :{tier:"legendary",kind:"gear",label:"伝説装備",pity:true,shards:4};
- }
- const jackpot=.012+seal.bias*.35;
- const legendary=jackpot+.105+seal.bias;
- const anchor=legendary+.045;
- const refined=anchor+.30;
- if(roll<jackpot)return{tier:"jackpot",kind:"gear",label:"深層遺宝",shards:8};
- if(roll<legendary)return{tier:"legendary",kind:"gear",label:"伝説装備",shards:4};
- if(roll<anchor)return{tier:"anchor",kind:"anchor",label:"魂還石",shards:5};
- if(roll<refined)return{tier:"refined",kind:"gear",label:"選別遺装",shards:2};
- return{tier:"rare",kind:"gear",label:"希少装備",shards:1};
-}
-function relicSeededGear(relic,spec){
- const oldSeed=state.seed,oldFork=state.floorFork;
- try{
-  state.seed=sealedRelicHash(`${relic.rewardSeed}|gear|${spec.tier}`)||1;
-  state.floorFork=null;
-  const level=Math.max(1,relic.floor+(spec.tier==="jackpot"?3:spec.tier==="legendary"?2:spec.tier==="refined"?1:0));
-  const count=spec.tier==="jackpot"?3:spec.tier==="refined"?2:1;
-  const candidates=[];
-  for(let i=0;i<count;i++){
-   const gear=rollGear(level);
-   const rank=rarityOrder[gear.rarity]||0;
-   const target=spec.tier==="legendary"||spec.tier==="jackpot"?3:2;
-   if(rank<target)promoteGearRarity(gear,target-rank);
-   gear.tags=rollGearTags(gear.rarity,gear.element,gear.slot);
-   ensureLegendaryTrait(gear);
-   gear.identified=true;gear.cursed=false;gear.locked=true;
-   candidates.push(gear);
-  }
-  let gear=candidates.sort((a,b)=>gearScore(b)-gearScore(a))[0];
-  if(spec.tier==="jackpot"){
-   gear.name=`深層遺宝・${gear.name}`;
-   gear.sealedRelicJackpot=true;
-  }
-  gear.sealedRelicOrigin=relic.id;gear.sealedRelicSeal=relic.seal;
-  return attuneGearAtLighthouse(gear,"sealed_relic");
- }finally{state.seed=oldSeed;state.floorFork=oldFork}
-}
-function sealedRelicRewardPreview(relic,meta=state?.meta){return sealedRelicRewardSpec(relic,meta)}
-function applySealedRelicReward(relic){
- const meta=state.meta,{fortune}=ensureSealedRelicMeta(meta);
- const spec=sealedRelicRewardSpec(relic,meta);
- let gear=null,actualTier=spec.tier;
- if(spec.kind==="gear"){
-  if((meta.stash||[]).length>=20)return{ok:false,reason:"倉庫が満杯です。装備報酬を置く1枠を空けてください。",spec};
-  gear=relicSeededGear(relic,spec);
-  if(gear.rarity==="legendary"&&!['legendary','jackpot'].includes(actualTier))actualTier="legendary";
-  meta.stash.push(gear);
- }
- if(spec.kind==="anchor")meta.soulAnchors=(meta.soulAnchors||0)+1;
- meta.shards=(meta.shards||0)+(spec.shards||0);
- const high=actualTier==="legendary"||actualTier==="jackpot";
- if(high){fortune.misses=0;fortune.legendaryOpened++;if(actualTier==="jackpot")fortune.jackpots++}
- else fortune.misses=Math.min(SEALED_RELIC_PITY,fortune.misses+1);
- fortune.totalOpened++;
- const entry={id:relic.id,floor:relic.floor,source:relic.source,seal:relic.seal,tier:actualTier,label:actualTier==="jackpot"?"深層遺宝":actualTier==="legendary"?"伝説装備":spec.label,gearName:gear?gearLabel(gear):"",shards:spec.shards||0,openedAt:Date.now(),pity:!!spec.pity};
- fortune.history.push(entry);fortune.history=fortune.history.slice(-24);
- meta.sealedRelics=meta.sealedRelics.filter(r=>r.id!==relic.id);
- saveMeta();
- return{ok:true,spec:{...spec,tier:actualTier},gear,entry,fortune};
-}
-let pendingSealedRelicOpen=null;
-function closeSealedRelicReveal(){
- pendingSealedRelicOpen=null;
- $("relicRevealOverlay").classList.add("hidden");
- $("closeRelicReveal").classList.add("hidden");
- renderHub();
-}
-function beginSealedRelicOpen(relicId){
- if(pendingSealedRelicOpen)return false;
- const {relics}=ensureSealedRelicMeta(state.meta),relic=relics.find(r=>r.id===relicId);if(!relic)return false;
- if(relics[0]?.id!==relic.id){showCombatToast("封印順序","古い封印から順に解いてください","miss");return false}
- const spec=sealedRelicRewardPreview(relic,state.meta);
- if((state.meta.stash||[]).length>=20){
-  showCombatToast("封印を解けない","中身を秘匿したまま開封するため、倉庫を1枠空けてください","miss");return false;
- }
- pendingSealedRelicOpen=relic.id;
- const seal=sealedRelicSealData[relic.seal]||sealedRelicSealData.ash;
- const card=$("relicRevealCard");card.className=`card relicRevealCard ${relic.seal}`;
- $("relicSealGlyph").textContent=seal.glyph;
- $("relicRevealKicker").textContent=`${seal.label}・第${relic.floor}層・${sealedRelicSourceLabel(relic.source)}`;
- $("relicRevealTitle").textContent="封印がほどける";
- $("relicRevealBody").innerHTML='<div class="relicSuspense">音が消え、封印だけが脈打っている……</div>';
- $("closeRelicReveal").classList.add("hidden");
- $("relicRevealOverlay").classList.remove("hidden");
- sfx("rare");
- setTimeout(()=>{
-  if(pendingSealedRelicOpen!==relic.id)return;
-  const result=applySealedRelicReward(relic);
-  if(!result.ok){pendingSealedRelicOpen=null;$("relicRevealOverlay").classList.add("hidden");showCombatToast("開封保留",result.reason,"miss");return}
-  const tier=result.spec.tier;card.className=`card relicRevealCard ${tier}`;
-  const high=tier==="legendary"||tier==="jackpot";
-  $("relicSealGlyph").textContent=tier==="jackpot"?"✦":high?"★":"◆";
-  $("relicRevealTitle").textContent=tier==="jackpot"?"深層遺宝":tier==="legendary"?"伝説が応えた":result.spec.label;
-  const gear=result.gear;
-  $("relicRevealBody").innerHTML=gear
-   ?`<div class="relicRewardBox"><b class="${gear.rarity}">${rarityData[gear.rarity]?.label||gear.rarity}・${gearLabel(gear)}</b><br>ILv${gear.itemLevel||1} / ${equippedSlotLabel(gear.slot)} / 推奨度 ${Math.round(gearScore(gear))}<br>攻撃 +${gear.atk||0} / 防御 +${gear.def||0}${gear.crit?` / 会心 +${Math.round(gear.crit*100)}%`:""}${legendaryTraitInfo(gear)?`<br>伝説特性：<b class="legendary">${legendaryTraitInfo(gear).label}</b> — ${legendaryTraitInfo(gear).desc}`:""}<br>${tagSummaryHtml(effectiveGearTags(gear))}<div class="relicRewardMeta"><span>欠片 +${result.spec.shards||0}</span><span>灯台調律済み</span>${result.spec.pity?'<span>黄金残響・確定枠</span>':''}</div></div>`
-   :`<div class="relicRewardBox"><b class="legendary">魂還石</b><br>致死傷を一度だけ緊急帰還へ置き換える極希少品を得た。<div class="relicRewardMeta"><span>魂還石 +1</span><span>欠片 +${result.spec.shards||0}</span></div></div>`;
-  $("closeRelicReveal").classList.remove("hidden");
-  spawnFeedbackBurst(state.player?.x||0,state.player?.y||0,high?"legendary":"rare",tier==="jackpot"?18:high?13:8);
-  triggerImpactFeedback(high?"legendary":"rare",{haptic:high?"legendary":"rare",duration:tier==="jackpot"?1050:high?820:560});
-  sfx(high?"legendary":"rare");
-  saveMeta();
- },720);
- return true;
-}
-function renderSealedRelicVault(meta=state.meta){
- const body=$("relicVaultBody"),summary=$("relicVaultSummary");if(!body||!summary)return;
- const {relics,fortune}=ensureSealedRelicMeta(meta);
- summary.textContent=`封印遺物・未開封 ${relics.length}`;
- const pct=Math.round(Math.min(SEALED_RELIC_PITY,fortune.misses)/SEALED_RELIC_PITY*100);
- const ready=fortune.misses>=SEALED_RELIC_PITY;
- const history=fortune.history.slice(-5).reverse();
- body.innerHTML=`<div class="relicVaultIntro">探索中に見つかる封印遺物は、帰還するまで中身が確定しません。携行中に死亡すると失います。封印の色は期待度の違いだけを示し、内容そのものは秘匿されます。<div class="relicFortune ${ready?"ready":""}"><b>黄金残響 ${fortune.misses}/${SEALED_RELIC_PITY}</b> — ${ready?"次の開封は伝説以上が確定。":"伝説以上が出なかった開封で蓄積。満ちると次回が伝説以上になります。"}<div class="relicFortuneBar"><i style="width:${pct}%"></i></div></div></div>${relics.length?`<div class="relicVaultGrid">${relics.map((relic,index)=>{const seal=sealedRelicSealData[relic.seal]||sealedRelicSealData.ash;const blocked=(meta.stash||[]).length>=20;const waiting=index>0;return`<div class="relicVaultCard ${relic.seal}"><b>${seal.glyph} ${seal.label}</b><small>第${relic.floor}層・${sealedRelicSourceLabel(relic.source)}<br>${seal.desc}</small><button type="button" data-open-relic="${relic.id}" ${blocked||waiting?"disabled":""}>${blocked?"倉庫を1枠空ける":waiting?"前の封印から":"封印を解く"}</button></div>`}).join("")}</div>`:'<p class="note">未開封の封印遺物はありません。通常敵からも極低確率で現れ、変異個体・特異室・番人ほど見つけやすくなります。</p>'}${history.length?`<div class="relicHistory"><b>最近の開封</b><br>${history.map(entry=>`第${entry.floor}層 ${entry.label}${entry.gearName?`「${entry.gearName}」`:""}`).join("<br>")}</div>`:""}`;
- body.querySelectorAll?.("[data-open-relic]").forEach(button=>button.onclick=()=>beginSealedRelicOpen(button.dataset.openRelic));
-}
-function bankSealedRelics(){
- const {relics,fortune}=ensureSealedRelicMeta(state.meta);
- const carried=Array.isArray(state.sealedRelics)?state.sealedRelics:[];
- if(!carried.length)return 0;
- const existing=new Set(relics.map(r=>r.id));
- let moved=0;
- for(const relic of carried){if(!relic?.id||existing.has(relic.id))continue;relics.push({...relic,returnedAt:Date.now()});existing.add(relic.id);moved++}
- state.sealedRelics=[];fortune.firstFound=true;
- ensureRunStats().sealedRelicsReturned=(ensureRunStats().sealedRelicsReturned||0)+moved;
- saveMeta();return moved;
-}
 function updateVision(){
  state.visible={};
  const r=visionRadius();
@@ -13777,7 +13540,6 @@ function defeatEnemy(e){
   tryNormalEnemyGearDrop(e);
   livingEcologyResourceReward(e);
  }
- maybeDropSealedRelic(e);
  updateRoomEncounters();
  checkLevel();
 }
@@ -14343,25 +14105,6 @@ function pickup(){
   return true;
  }
 
-
- if(item.type==="sealed_relic"){
-  state.sealedRelics=Array.isArray(state.sealedRelics)?state.sealedRelics:[];
-  if(state.sealedRelics.length>=SEALED_RELIC_CARRY_CAP){
-   state.items.push(item);addLog(`封印遺物は${SEALED_RELIC_CARRY_CAP}個までしか安全に携行できない。足元へ残した。`);return false;
-  }
-  const relic=item.relic||createSealedRelic("ordinary",state.floor);
-  state.sealedRelics.push(relic);
-  const stats=ensureRunStats();stats.itemsFound++;stats.sealedRelicsFound=(stats.sealedRelicsFound||0)+1;
-  ensureSealedRelicMeta(state.meta).fortune.firstFound=true;
-  recordFloorPickup(false);spawnPickupEffect("sealed_relic");
-  spawnFeedbackBurst(state.player.x,state.player.y,relic.seal==="blackgold"?"legendary":"rare",relic.seal==="blackgold"?10:6);
-  triggerImpactFeedback(relic.seal==="blackgold"?"legendary":"rare",{haptic:relic.seal==="blackgold"?"legendary":"rare",duration:620});
-  sfx(relic.seal==="blackgold"?"legendary":"rare");
-  addLog(`${sealedRelicSealData[relic.seal].label}の封印遺物を回収した。灯台へ帰るまで中身は分からない。`);
-  showCombatToast("封印遺物を携行",`${state.sealedRelics.length}/${SEALED_RELIC_CARRY_CAP}・生還すれば開封できる`,"objective");
-  saveMeta();return true;
- }
-
  if(state.inventory.length>=inventoryCapacity()){
   addLog("荷物が満杯だ。装備を足元へ残し、整理画面を開いた。");
   state.items.push(item);
@@ -14487,7 +14230,7 @@ function spawnTileEffect(x,y,kind,life=18){
 function spawnPickupEffect(type){
  const kind={
   food:"pickup_food",potion:"pickup_potion",identify:"pickup_scroll",purify:"pickup_star",
-  bomb:"pickup_bomb",retreat:"pickup_return",oil:"pickup_oil",gear:"pickup_gear",sealed_relic:"pickup_relic"
+  bomb:"pickup_bomb",retreat:"pickup_return",oil:"pickup_oil",gear:"pickup_gear"
  }[type]||"pickup_gear";
  spawnHeroEffect(kind);
 }
@@ -14586,7 +14329,7 @@ function drawVisualEffects(cam){
   }else if(ef.kind.startsWith("pickup_")){
    const color={
     pickup_food:"#83dca7",pickup_potion:"#ff8ea8",pickup_scroll:"#93c9ff",pickup_star:"#f5df87",
-    pickup_bomb:"#ff9a62",pickup_return:"#8ce2d7",pickup_oil:"#ffe2a0",pickup_gear:"#ddd1ff",pickup_relic:"#d9a9ff"
+    pickup_bomb:"#ff9a62",pickup_return:"#8ce2d7",pickup_oil:"#ffe2a0",pickup_gear:"#ddd1ff"
    }[ef.kind]||"#ddd";
    const rise=age*8;ctx.strokeStyle=color;ctx.lineWidth=1.5;
    ctx.beginPath();ctx.arc(px+11,py+11-rise,4+age*3,0,Math.PI*2);ctx.stroke();
@@ -15748,7 +15491,6 @@ function openReturnConfirm(){
   <div class="returnConfirmNote">
    帰還するとHP・気力・充足は完全回復し、携行糧と今回限りの現地強化は失われます。
    ${markerCost?"「帰還を確定」を押した時だけ帰還楔を1個消費します。":"この帰還では帰還楔を消費しません。"}
-   ${(state.sealedRelics||[]).length?`封印遺物${state.sealedRelics.length}個は帰還後に灯台で開封できます。`:""}
   </div>`;
  $("confirmReturnConfirm").textContent=markerCost?"楔1個で帰還":"無料帰還を確定";
  $("returnConfirmOverlay").classList.remove("hidden");
@@ -15859,7 +15601,6 @@ function bankCurrentRun(){
   state.meta.shards+=recoveredShards;
   addLog(`余った現地素材から深淵の欠片を${recoveredShards}回収した。`);
  }
- const sealedRelics=bankSealedRelics();
  state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
  saveMeta();
  return{
@@ -15868,7 +15609,6 @@ function bankCurrentRun(){
   leftBehind,
   scrapShards:recoveredShards,
   attunedGear,
-  sealedRelics,
   candidates:candidates.length
  };
 }
@@ -16412,8 +16152,8 @@ function renderLighthouseStash(meta=state.meta){
  list.querySelectorAll("[data-weapon-oath]").forEach(button=>button.onclick=()=>requestWeaponOath(Number(button.dataset.weaponOath)));
 }
 
-const hubManagedPanelIds=["overviewPanel","routeMasteryPanel","lastReportPanel","deathEchoPanel","relicVaultPanel","loadoutPanel","weaponOathPanel","insurancePanel","stashPanel","recordsPanel"];
-const hubPanelDefaults={overviewPanel:true,routeMasteryPanel:false,lastReportPanel:false,deathEchoPanel:false,relicVaultPanel:false,loadoutPanel:true,weaponOathPanel:false,insurancePanel:false,stashPanel:false,recordsPanel:false};
+const hubManagedPanelIds=["overviewPanel","routeMasteryPanel","lastReportPanel","deathEchoPanel","loadoutPanel","weaponOathPanel","insurancePanel","stashPanel","recordsPanel"];
+const hubPanelDefaults={overviewPanel:true,routeMasteryPanel:false,lastReportPanel:false,deathEchoPanel:false,loadoutPanel:true,weaponOathPanel:false,insurancePanel:false,stashPanel:false,recordsPanel:false};
 let applyingHubPanelState=false;
 function ensureHubPanelState(meta=state?.meta){
  if(!meta)return{open:{...hubPanelDefaults},signals:{}};
@@ -16455,7 +16195,6 @@ function hubPanelNotifications(meta=state.meta){
   routeMasteryPanel:{badge:"",className:"",signal:""},
   lastReportPanel:{badge:meta.lastExpeditionReport?`第${meta.lastExpeditionReport.floor}層`:"",className:"info",signal:""},
   deathEchoPanel:{badge:echo?"回収あり":"",className:"info",signal:echo?`echo:${echo.floor}:${echo.createdAt||echo.timestamp||echo.gear?.map(g=>g.id).join(',')}`:""},
-  relicVaultPanel:{badge:(meta.sealedRelics||[]).length?`${meta.sealedRelics.length}封`:"",className:"gold",signal:(meta.sealedRelics||[]).length?`relics:${meta.sealedRelics.length}:${meta.sealedRelics.at(-1)?.id||""}`:""},
   loadoutPanel:{badge:loadoutCount?`${loadoutCount}/8`:"",className:loadoutCount?"good":"",signal:""},
   weaponOathPanel:{badge:oath.status==="lost"?"喪失":deepening?.pendingStage?"深化待ち":"",className:oath.status==="lost"?"":deepening?.pendingStage?"gold":"",signal:oath.status==="lost"?`lost:${oath.gearId}:${oath.lostAt}`:deepening?.pendingStage?`ready:${oath.gearId}:${deepening.pendingStage}`:""},
   insurancePanel:{badge:loadoutCount&&plan.mode==="none"?"未保険":plan.mode==="shards"?`${plan.slots.length}部位`:plan.mode==="soul"?"魂還石":"",className:plan.mode==="none"?"":"good",signal:loadoutCount&&plan.mode==="none"?`uninsured:${lighthouseLoadoutSlots.map(slot=>meta.nextLoadout?.[slot]||'').join('|')}`:""},
@@ -16487,11 +16226,11 @@ function applyHubPanelState(meta=state.meta){
  renderHubAccordionNav(meta,notifications);
 }
 function decorateHubPanelSummaries(notifications=hubPanelNotifications(state.meta)){
- const summaryByPanel={overviewPanel:"overviewSummary",routeMasteryPanel:"routeMasterySummary",lastReportPanel:"lastReportSummary",deathEchoPanel:"deathEchoSummary",relicVaultPanel:"relicVaultSummary",loadoutPanel:"loadoutSummary",weaponOathPanel:"weaponOathSummary",insurancePanel:"insuranceSummary",stashPanel:"stashSummary",recordsPanel:"recordsSummary"};
+ const summaryByPanel={overviewPanel:"overviewSummary",routeMasteryPanel:"routeMasterySummary",lastReportPanel:"lastReportSummary",deathEchoPanel:"deathEchoSummary",loadoutPanel:"loadoutSummary",weaponOathPanel:"weaponOathSummary",insurancePanel:"insuranceSummary",stashPanel:"stashSummary",recordsPanel:"recordsSummary"};
  for(const [panelId,summaryId] of Object.entries(summaryByPanel))appendHubSummaryBadge($(summaryId),notifications[panelId]?.badge,notifications[panelId]?.className);
 }
 function hubNavItems(){return[
- ["loadoutPanel","出撃準備"],["relicVaultPanel","封印"],["stashPanel","倉庫"],["insurancePanel","保険"],["recordsPanel","研究・姿"]
+ ["loadoutPanel","出撃準備"],["stashPanel","倉庫"],["insurancePanel","保険"],["recordsPanel","研究・姿"]
 ]}
 function renderHubAccordionNav(meta=state.meta,notifications=hubPanelNotifications(meta)){
  const nav=$("hubAccordionNav");if(!nav)return;
@@ -16525,7 +16264,6 @@ function renderHub(){
  renderInsurance(m);
  renderRouteMastery(m);
  renderDeathEcho(m);
- renderSealedRelicVault(m);
  $("researchBtn").textContent=`深淵研究（${m.research?.points||0}点）`;
  $("adaptBtn").textContent=(m.adaptationPoints||0)>0
   ?`深淵適応を選ぶ（${m.adaptationPoints}点）`
@@ -16672,7 +16410,7 @@ function renderInventory(){
  $("salvageCommonBtn").onclick=()=>salvageCommonInventory();
 
  $("consumableList").innerHTML=`${provisionReadoutHtml()}<div class="itemRow"><div class="top"><span>消耗品</span><span>所持金 ${state.gold}G</span></div>
- <div class="desc">携行糧 ${state.provisions||0}/${provisionCapacity()}手 / 治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0} / 帰還楔 ${state.consumables.retreat||0} / 灯油 ${state.consumables.oil||0} / 封印遺物 ${(state.sealedRelics||[]).length}/${SEALED_RELIC_CARRY_CAP}</div>
+ <div class="desc">携行糧 ${state.provisions||0}/${provisionCapacity()}手 / 治癒薬 ${state.consumables.potion} / 鑑定紙片 ${state.consumables.identify} / 解呪の灰 ${state.consumables.purify} / 火炎壺 ${state.consumables.bomb||0} / 帰還楔 ${state.consumables.retreat||0} / 灯油 ${state.consumables.oil||0}</div>
  <div class="desc">荷物 ${state.inventory.length}/${inventoryCapacity()}　保護 ${state.inventory.filter(g=>g.locked).length}</div>
  <button type="button" id="usePotionBtn">治癒薬を使う</button><button type="button" id="oilBtn">灯油を補充</button><button type="button" id="bombBtn">火炎壺を投げる</button><button type="button" id="purifyBtn">装備中の呪いを解く</button></div>`;
  $("usePotionBtn").onclick=usePotion;$("oilBtn").onclick=refillLight;$("bombBtn").onclick=()=>{$("inventoryOverlay").classList.add("hidden");throwBomb()};$("purifyBtn").onclick=purifyEquipped;
@@ -17763,11 +17501,6 @@ function drawItemSprite(item,x,y,t){
    ctx.fillStyle="#fff0b0";ctx.fillRect(x+11,y+9,1,3);
    ctx.strokeStyle="#6a421f";ctx.strokeRect(x+7.5,y+6.5,8,11);
 
-  }else if(type==="sealed_relic"&&item.relic){
-   const seal=sealedRelicSealData[item.relic.seal]||sealedRelicSealData.ash;
-   ctx.strokeStyle=item.relic.seal==="blackgold"?"#d1a75b":item.relic.seal==="violet"?"#b584d5":"#b6a9bd";ctx.lineWidth=2;
-   ctx.beginPath();ctx.moveTo(x+11,y+3);ctx.lineTo(x+17,y+11);ctx.lineTo(x+11,y+19);ctx.lineTo(x+5,y+11);ctx.closePath();ctx.stroke();
-   ctx.fillStyle="rgba(210,164,238,.22)";ctx.fill();ctx.fillStyle="#f2dfff";ctx.fillRect(x+10,y+9,2,4);
   }else if(type==="gear"&&gear){
    const rc=rarityColor;
    ctx.strokeStyle=rc;ctx.lineWidth=2;
@@ -18064,8 +17797,7 @@ function inspectTileAt(x,y){
   body+=`<p class="tacticalNote">${enemy.echoGuard?"失った装備を宿す遺響を守る。通常敵との勢力争いには参加しない。":enemy.nemesis?"あなたを追い続ける宿敵。":enemy.boss?"階層ごとに固有の戦法を持つ深層番人。":enemy.elite?"能力値だけでなく戦い方が変化した変異個体。変異ごとの対処を使い分ける。":"迷宮に棲む敵。"}</p>`;
  }else if(item){
   title=item.name||"落とし物";
-  if(item.type==="sealed_relic"&&item.relic){const seal=sealedRelicSealData[item.relic.seal]||sealedRelicSealData.ash;body+=`<p><b>${seal.label}の封印遺物</b><br>${seal.desc}<br>灯台まで持ち帰ると開封できます。死亡すると失います。</p>`;}
-  else body+=`<p>${item.type==="gear"?(item.gear.identified?gearLabel(item.gear):"未鑑定装備"):item.type}</p>`;
+  body+=`<p>${item.type==="gear"?(item.gear.identified?gearLabel(item.gear):"未鑑定装備"):item.type}</p>`;
  }else if(special){
   const names={shrine:"祭壇",treasure:"宝物庫",flood:"水没区画",collapse:"崩落区画",death_echo:"遺響の墓標"};
   title=names[special.type]||"特殊地点";
@@ -18655,7 +18387,7 @@ $("previewSfxBtn").onclick=()=>{if(!currentAudioSettings().sfxEnabled)setAudioPa
 $("closeAudioSettings").onclick=closeAudioSettings;
 document.addEventListener("pointerdown",unlockAudioFromGesture,{passive:true});
 $("closeRouteChoice").onclick=closeRouteChoice;
-$("closeForkChoice").onclick=closeAbyssForkChoice;$("closeRelicReveal").onclick=closeSealedRelicReveal;$("closeEvent").onclick=()=>{$("eventOverlay").classList.add("hidden");render()};$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("researchBtn").onclick=openResearchFromHub;$("closeResearch").onclick=()=>closeHubSubOverlay("researchOverlay");$("closeAdapt").onclick=()=>closeHubSubOverlay("adaptOverlay");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
+$("closeForkChoice").onclick=closeAbyssForkChoice;$("closeEvent").onclick=()=>{$("eventOverlay").classList.add("hidden");render()};$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("researchBtn").onclick=openResearchFromHub;$("closeResearch").onclick=()=>closeHubSubOverlay("researchOverlay");$("closeAdapt").onclick=()=>closeHubSubOverlay("adaptOverlay");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
 $("saveBtn").onclick=()=>{
  addLog("探索記録を手動保存した。");
  const result=saveGame();
