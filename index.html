@@ -4509,11 +4509,110 @@ body,button,input,select,textarea{font-size:12px}
  line-height:1.45;
 }
 
+
+
+/* v3.31.0 DEEP GATES */
+.depthGateCard{
+ margin:8px 0;
+ padding:10px;
+ border:1px solid #4f4659;
+ border-radius:10px;
+ background:linear-gradient(180deg,#17131d,#100d14);
+ display:grid;
+ gap:8px;
+}
+.depthGateHead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.depthGateHead b{color:#f2e2aa;font-size:12.8px}
+.depthGateHead span{color:#b9adc1;font-size:11.5px;text-align:right;line-height:1.4}
+.depthGateLead{color:#beb3c5;font-size:11.5px;line-height:1.55}
+.depthGateChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.depthGateChoice{
+ min-height:54px;
+ padding:8px 7px;
+ border:1px solid #51485c;
+ border-radius:9px;
+ background:linear-gradient(180deg,#1a1520,#110e15);
+ color:#ddd3e3;
+ text-align:left;
+}
+.depthGateChoice b{display:block;color:#f1e5f4;font-size:12px}
+.depthGateChoice small{display:block;margin-top:3px;color:#a99eaf;font-size:11.5px;line-height:1.4}
+.depthGateChoice.selected{border-color:#a0884d;background:linear-gradient(180deg,#2a2314,#171208);box-shadow:0 0 0 1px #6c592d inset}
+.depthGateChoice.rebuild{border-color:#567562}
+.depthGateStatus{padding:7px 8px;border-left:3px solid #695a75;border-radius:6px;background:#110d15;color:#bcb0c3;font-size:11.5px;line-height:1.55}
+.depthGateStatus strong{color:#f0dfa8}
+.depthGateStatus.warning{border-color:#8e5d50;background:#1b100d;color:#e4b8aa}
+@media(max-width:390px){.depthGateChoices{grid-template-columns:1fr}}
+
+
+
+/* v3.31.1 HUD COMPACT */
+.floorGoalInlineProgress{color:#c9b9d0;font-weight:600}
+.hungerValue{display:flex!important;align-items:baseline;justify-content:center;gap:1px;min-width:0;white-space:nowrap;font-variant-numeric:tabular-nums}
+.hungerValue span{min-width:0}
+.hungerValue i{font-style:normal;opacity:.7;margin:0 1px}
+.hungerMeta{display:flex!important;justify-content:center;gap:3px;min-width:0}
+.hungerMeta .rationCapacity{margin-left:0}
+
+@media(max-width:600px){
+ #floorGoal,
+ #floorGoal.goalRight,
+ #floorGoal.goalBottom,
+ #floorGoal.goalRight.goalBottom{
+  width:min(48%,184px)!important;
+  max-width:min(48%,184px)!important;
+  padding:4px 5px!important;
+  border-radius:6px;
+ }
+ #floorGoal .floorGoalHeader{gap:3px}
+ #floorGoal .floorGoalHeader b{
+  font-size:11.5px;
+  line-height:1.18;
+  max-width:calc(100% - 43px);
+ }
+ #floorGoal .floorGoalState{
+  padding:1px 4px;
+  font-size:11.5px;
+  line-height:1.15;
+ }
+ #floorGoal .floorGoalText,
+ #floorGoal .floorGoalReward,
+ #floorGoal .floorGoalRoute,
+ #floorGoal .floorGoalEncounters{
+  display:none!important;
+ }
+ #floorGoal .floorGoalProgress{
+  display:block;
+  height:3px;
+  margin-top:3px;
+ }
+ .floorGoalInlineProgress{display:inline;color:#d9c9df}
+
+ .hungerStat{padding-left:1px!important;padding-right:1px!important;overflow:visible}
+ .hungerStat .hungerValue{
+  width:100%;
+  font-size:clamp(11.5px,3vw,12.8px)!important;
+  letter-spacing:-.03em;
+  transform:scaleX(.96);
+  transform-origin:center;
+ }
+ .hungerStat .hungerMeta{
+  width:100%;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:nowrap!important;
+  font-size:11.5px!important;
+  letter-spacing:-.03em;
+ }
+ .hungerStat .hungerMeta>span:first-child{display:none}
+ .hungerStat .rationCapacity{display:block!important;color:inherit;margin:0!important}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.30.1 RECOVERY BALANCE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.31.1 HUD COMPACT</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -4777,7 +4876,7 @@ body,button,input,select,textarea{font-size:12px}
           <li><b>階段 ▼</b> へ進む前には確認が出ます。移動後は次の階層名・環境・目標が約6秒表示されます。</li>
           <li><b>5階ごとに番人戦</b>があります。番人撃破後は、次の5階区間を「狩路・観測路・補給路」から選択します。</li>
           <li><b>第20層は第一深度圏の大きな到達点</b>です。初踏破では恒久報酬と伝説へ昇格した番人装備を得て、灯台へ成果を持ち帰るか、第21層以降へ潜るかを選べます。</li>
-          <li><b>第21層以降の深度圏</b>：20層ごとに「反響圏・飢圧圏・変異圏」の法則が切り替わります。強化判定は現在いる階層だけを参照し、過去の最高到達階で浅層が強くなることはありません。第40/60/80…層の番人は黒金封を確定で残します。</li><li><b>再起支援</b>：第10層以降で装備を大きく失って死亡した場合、次の1探索だけ浅層の物資と装備品質が少し増えます。装備そのものは返還されず、自力で再建する必要があります。</li>
+          <li><b>第21層以降の深度圏</b>：20層ごとに「反響圏・飢圧圏・変異圏」の法則が切り替わります。強化判定は現在いる階層だけを参照し、過去の最高到達階で浅層が強くなることはありません。第40/60/80…層の番人は黒金封を確定で残します。</li><li><b>深度門</b>：第20/40/60…層の最終番人を倒すと、次の深度圏入口から直接出撃できます。直行時は圧縮調整を受けますが、飛ばした階層の戦利品・樹脈・物資は得られません。全ロス後の再起支援がある時は自動で第1層開始へ戻ります。</li><li><b>再起支援</b>：第10層以降で装備を大きく失って死亡した場合、次の1探索だけ浅層の物資と装備品質が少し増えます。装備そのものは返還されず、自力で再建する必要があります。</li>
           <li>進路は敵数・物資・エリート・罠・事件・研究量へ影響し、次の番人階まで継続します。</li>
           <li><b>深脈分岐</b>：第7層以降、各5層区間の途中で一度だけ、次の1階だけに効く分岐が現れます。通常路に加えてランダムに2つの特殊路が提示され、敵密度・物資・罠・敵Lv・装備ILv・隠し通路・事件などを危険と報酬の交換条件として選べます。番人後に選ぶ「進路」とは別枠で重複します。</li>
           <li><b>迷宮現象</b>：通常階では一定確率で、探索途中に予告付きの現象が発生します。闇潮は自分と敵の視界を狭め、灯脈噴出は灯油を消費せず視界を広げる代わりに発見されやすくなり、深層静穏は敵の再出現を止めて気力回復を助けます。地脈震動は戦術地形を新生し、生態流入は遠方から群れが侵入します。現象は階生成時に固定され、更新で引き直せません。</li>
@@ -9810,6 +9909,8 @@ function recordWardenVictory(enemy,profile,rewardGear,routeResult=null,extras={}
   soulAnchorFound:!!extras.soulAnchorFound,sealedRelicDropped:!!extras.sealedRelicDropped,
   next:cadence.next,trophyNote:cadence.trophyNote
  };
+ const unlockedGate=unlockDepthGateAfterWarden(floor,state.meta);
+ if(unlockedGate){record.unlockedDepthGate=unlockedGate;addLog(`深度門が共鳴し、第${unlockedGate}層からの出撃が灯台で解放された。`);showCombatToast("深度門 解放",`次回から第${unlockedGate}層へ直行可能`,"objective");}
  state.lastWardenVictory=record;
  return record;
 }
@@ -12121,6 +12222,90 @@ function floorPlan(){
  };
 }
 
+
+const depthGateDefaults={selectedStart:1,unlocked:[1],history:[]};
+function ensureDepthGateMeta(meta=state?.meta){
+ if(!meta)return{...depthGateDefaults,unlocked:[1],history:[]};
+ if(!meta.depthGates||typeof meta.depthGates!=="object")meta.depthGates={...depthGateDefaults,unlocked:[1],history:[]};
+ const gates=meta.depthGates;
+ if(!Array.isArray(gates.unlocked))gates.unlocked=[1];
+ gates.unlocked=gates.unlocked.map(v=>Math.max(1,Math.floor(Number(v)||1))).filter(v=>v===1||(v-1)%20===0);
+ if(!gates.unlocked.includes(1))gates.unlocked.push(1);
+ // 既存セーブ移行。第21/41/...層へ到達済みなら、その直前の20層番人を倒している。
+ const best=Math.max(1,Math.floor(Number(meta.bestFloor)||1));
+ for(let start=21;start<=best;start+=20)if(!gates.unlocked.includes(start))gates.unlocked.push(start);
+ const first=ensureDepthMilestones(meta)?.firstTwenty;
+ if((first?.clears||0)>0&&!gates.unlocked.includes(21))gates.unlocked.push(21);
+ gates.unlocked=[...new Set(gates.unlocked)].sort((a,b)=>a-b);
+ if(!Array.isArray(gates.history))gates.history=[];
+ gates.history=gates.history.slice(-24);
+ gates.selectedStart=Math.max(1,Math.floor(Number(gates.selectedStart)||1));
+ if(!gates.unlocked.includes(gates.selectedStart))gates.selectedStart=1;
+ return gates;
+}
+function unlockDepthGateAfterWarden(floor=state?.floor,meta=state?.meta){
+ floor=Math.max(1,Math.floor(Number(floor)||1));
+ if(!meta||floor%20!==0)return null;
+ const gates=ensureDepthGateMeta(meta),start=floor+1;
+ if(gates.unlocked.includes(start))return null;
+ gates.unlocked.push(start);gates.unlocked.sort((a,b)=>a-b);
+ gates.history.push({start,sourceFloor:floor,at:Date.now()});gates.history=gates.history.slice(-24);
+ saveMeta?.();
+ return start;
+}
+function selectedDepthGateStart(meta=state?.meta){return ensureDepthGateMeta(meta).selectedStart||1}
+function selectDepthGateStart(start,meta=state?.meta){
+ const gates=ensureDepthGateMeta(meta);start=Math.max(1,Math.floor(Number(start)||1));
+ if(!gates.unlocked.includes(start))return false;
+ gates.selectedStart=start;saveMeta();renderLighthouseLoadout();
+ return true;
+}
+function depthGateCycleLabel(start){
+ if(start<=1)return"第1深度圏・入口";
+ const cycle=Math.floor((start-1)/20)+1;
+ const profile=deepCycleLawForFloor(start);
+ return`第${cycle}深度圏${profile?.label?`・${profile.label}`:""}`;
+}
+function depthGateCalibrationPreview(start){
+ if(start<=1)return null;
+ const bands=Math.max(1,Math.floor((start-1)/5));
+ const level=Math.max(1,Math.floor(start*.55));
+ return{bands,level,atk:bands*2,hp:bands*8,def:bands,stamina:Math.ceil(bands/2)};
+}
+function applyDepthGateCalibration(run,start){
+ if(!run||start<=1)return run;
+ const c=depthGateCalibrationPreview(start);
+ run.floor=start;
+ run.level=c.level;
+ run.xp=0;
+ run.nextXp=Math.max(24,Math.round(24*Math.pow(1.45,Math.max(0,run.level-1))));
+ run.hero.atk+=c.atk;
+ run.hero.maxHp+=c.hp;run.hero.hp=run.hero.maxHp;
+ run.hero.def+=c.def;
+ run.hero.maxStamina+=c.stamina;run.hero.stamina=run.hero.maxStamina;
+ run.depthGateStart=start;
+ run.depthGateCalibration=c;
+ return run;
+}
+function depthGateHubHtml(meta=state?.meta){
+ const gates=ensureDepthGateMeta(meta),selected=gates.selectedStart||1;
+ if(gates.unlocked.length<=1)return"";
+ const pendingRecovery=ensureRecoveryAssistMeta(meta).pending;
+ const options=gates.unlocked.map(start=>{
+  const active=start===selected,cal=depthGateCalibrationPreview(start);
+  const sub=start===1
+   ?"浅層から装備・樹脈・物資を育て直す。最も強いランを作りやすい。"
+   :`${depthGateCycleLabel(start)} / 圧縮Lv${cal.level}・基礎補正を受けて直行。浅層報酬と成長選択は得られない。`;
+  return`<button type="button" class="depthGateChoice ${start===1?"rebuild":""} ${active?"selected":""}" data-depth-gate="${start}"><b>第${start}層から</b><small>${sub}</small></button>`;
+ }).join("");
+ const status=pendingRecovery
+  ?`<div class="depthGateStatus warning"><strong>再起支援待機中</strong>：大きな装備損失後は安全のため第1層開始へ戻します。</div>`
+  :selected===1
+   ?`<div class="depthGateStatus"><strong>再建ルート</strong>：既知区間も探索する代わりに、装備・樹脈・物資を最大限育てられます。</div>`
+   :`<div class="depthGateStatus"><strong>深度門を使用</strong>：第${selected}層へ直行します。時短の代わりに、飛ばした階層の報酬・封印遺物・成長選択は得られません。</div>`;
+ return`<section class="depthGateCard"><div class="depthGateHead"><b>深度門</b><span>踏破済み区間だけ選択可能</span></div><div class="depthGateLead">毎回第1層から潜る必要はありません。装備を再建したい時は浅層から、十分に整っている時は解放済みの深度圏へ直行できます。</div><div class="depthGateChoices">${options}</div>${status}</section>`;
+}
+
 const recoveryAssistDefaults={pending:false,sourceFloor:0,floorLimit:0,itemBonus:0,gearLevelBonus:0,oathRelief:false,createdAt:0,timesUsed:0};
 function ensureRecoveryAssistMeta(meta=state?.meta){
  if(!meta)return{...recoveryAssistDefaults};
@@ -12137,6 +12322,7 @@ function ensureRecoveryAssistMeta(meta=state?.meta){
 function scheduleRecoveryAssistAfterDeath(deathLoss,cause=""){
  const lost=Math.max(0,deathLoss?.unprotected||0);
  const floor=Math.max(1,state?.floor||1);
+ const gates=ensureDepthGateMeta(state.meta);gates.selectedStart=1;
  if(floor<10||lost<2)return null;
  const r=ensureRecoveryAssistMeta(state.meta);
  const floorLimit=floor>=30?15:floor>=20?10:5;
@@ -12458,7 +12644,7 @@ function renderFloorGoal(){
  const fallback=objective.fallbackTarget?`<span class="floorGoalFallback">代替：踏破 ${Math.min(objective.fallbackTarget,floorObjectiveFallbackProgress())}/${objective.fallbackTarget}</span>`:"";
  el.classList.toggle("objectiveComplete",objective.completed);
  el.classList.toggle("objectiveLocked",!objective.completed);
- el.innerHTML=`<div class="floorGoalHeader"><b>第${state.floor}層：${objective.title}</b><span class="floorGoalState">${objective.completed?"階段解放":"封印中"}</span></div>
+ el.innerHTML=`<div class="floorGoalHeader"><b>第${state.floor}層：${objective.title}<span class="floorGoalInlineProgress"> ${progress}/${objective.target}</span></b><span class="floorGoalState">${objective.completed?"解放":"封印"}</span></div>
   <div class="floorGoalText">${objective.desc}　${progress}/${objective.target}</div>
   <div class="floorGoalProgress"><i style="width:${ratio}%"></i></div>
   <div class="floorGoalReward">報酬 ${floorObjectiveRewardText(objective)}${fallback?` / ${fallback}`:""} ${roomEncounterStatusHtml()}</div>
@@ -17641,6 +17827,7 @@ function renderLighthouseLoadout(){
     ?"持ち帰った装備がまだありません。武器を選んで最初の探索へ出発し、迷宮で見つけた装備を持ち帰るとここから設定できます。"
     :"左は直前の探索から帰還した時の装備、右は次の探索開始時に装備する予定です。倉庫の『次回の○○に設定』から部位ごとに入れ替えられます。"}
   </div>
+  ${depthGateHubHtml(meta)}
   ${abyssWhisperOfferHtml(meta)}
   ${echoResonancePreviewHtml(nextResonance,"次回装備の遺響共鳴")}
   <div class="loadoutColumns">
@@ -17665,6 +17852,9 @@ function renderLighthouseLoadout(){
    <button type="button" id="clearNextLoadout" class="warnAction">次回装備をすべて解除</button>
   </div>`;
 
+ $("loadoutPlanner").querySelectorAll("[data-depth-gate]").forEach(button=>{
+  button.onclick=()=>selectDepthGateStart(button.dataset.depthGate);
+ });
  $("loadoutPlanner").querySelectorAll("[data-whisper-choice]").forEach(button=>{
   button.onclick=()=>selectAbyssWhisper(button.dataset.whisperChoice);
  });
@@ -18238,6 +18428,13 @@ function startFreshRunFromHub(){
  const preparation=prepareDepartureProtection(meta);
  if(!preparation.ok)return false;
 
+ const pendingRecovery=ensureRecoveryAssistMeta(meta).pending;
+ const requestedStart=pendingRecovery?1:selectedDepthGateStart(meta);
+ if(pendingRecovery)ensureDepthGateMeta(meta).selectedStart=1;
+ if(requestedStart>1&&!storedWeapon){
+  showCombatToast("深度門 使用不可","深層直行には灯台で設定した武器が必要","warning");
+  ensureDepthGateMeta(meta).selectedStart=1;saveMeta();renderHub();return false;
+ }
  const firstDeparture=!guide.firstDepartureComplete;
  const recoveryAssist=claimRecoveryAssistForDeparture(meta);
  guide.firstDepartureComplete=true;
@@ -18249,6 +18446,7 @@ function startFreshRunFromHub(){
  clearExpeditionClosure();
 
  state=freshState();
+ applyDepthGateCalibration(state,requestedStart);
  state.recoveryAssist=recoveryAssist;
  state.runWhisper=prepareAbyssWhisperForRun(state.meta);
  state.protectionContract=preparation.contract;
@@ -18266,6 +18464,7 @@ function startFreshRunFromHub(){
   state.log=["魂還石を救命契約として携行し、迷宮へ入った。"];
  }
  if(recoveryAssist){state.log.unshift(`再起支援が発動。第${recoveryAssist.floorLimit}層まで物資+${recoveryAssist.itemBonus}・装備ILv+${recoveryAssist.gearLevelBonus}。`);}
+ if(requestedStart>1){const c=state.depthGateCalibration;state.log.unshift(`深度門を使用し、第${requestedStart}層へ直行。圧縮調整Lv${c?.level||state.level}で開始する。飛ばした階層の報酬と樹脈成長は得られない。`);}
  beginPreparedFreshRun();
  return true;
 }
@@ -19015,7 +19214,7 @@ function renderStats(){
  $("stats").innerHTML=`
  <div class="stat"><b>${state.floor}</b><small>${currentBiome().label}</small></div><div class="stat"><b>${state.enemies.length}/${floorEnemyCap()}</b><small>生態</small></div>
  <div class="stat"><b>${state.level}</b><small>探索者Lv</small></div>
- <div class="stat" title="${hs.desc} / 現在速度で探索余力 約${provisionStatus.turns}手"><b style="color:${hs.color}">${state.hunger}/${effectiveMaxHunger()}</b><small style="color:${hs.color}">${hs.label}<span class="rationCapacity">・余力約${provisionStatus.turns}手</span></small></div>
+ <div class="stat hungerStat" title="${hs.desc} / 現在速度で探索余力 約${provisionStatus.turns}手"><b class="hungerValue" style="color:${hs.color}"><span>${state.hunger}</span><i>/</i><span>${effectiveMaxHunger()}</span></b><small class="hungerMeta" style="color:${hs.color}"><span>${hs.label}</span><span class="rationCapacity">余力${provisionStatus.turns}手</span></small></div>
  <div class="stat"><b>${state.gold}G</b><small>戦利金</small></div>`;
 }
 function compactMobileHudActive(){
