@@ -4770,7 +4770,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.33.1 RELIC OPEN FIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.33.3 RELIC CHAIN FIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5101,7 +5101,7 @@ body,button,input,select,textarea{font-size:12px}
           <li><b>初回の灯台</b>では、武器選択・任意準備・探索開始の3手順だけを表示します。「灯台の全機能を見る」で倉庫・保険・研究などを先に確認できます。</li>
           <li>初期武器を選んだだけでは探索は始まりません。灯台へ戻り、緑色になった出発ボタンを押した時に第1層へ入ります。</li>
           <li>研究点、適応点、次回装備、魂還石などが無い機能には、利用できない理由と解放方法を表示します。</li>
-          <li><b>充足は探索時間の上限</b>です。迷宮内で完全回復することはできません。</li>
+          <li><b>充足は探索時間の上限</b>です。迷宮内では回復しません。干し肉・階層報酬・補給路は「携行糧」を増やすだけで、消耗した充足そのものを巻き戻しません。</li>
           <li>HUDの<b>「余力約○手」</b>は、現在の充足＋携行糧を、その階の消費速度と「深呼吸」適応を含めて換算した目安です。変異で消費量が変わると即座に更新されます。</li>
           <li>荷物画面では最大充足と携行糧上限を「基礎・灯台強化・装備・共鳴・補給路・進路熟練」に分解して確認できます。</li>
           <li>補給路で一時的に携行糧上限が増えている場合は、拡張が終了する階層と終了後の上限を表示します。上限超過分は消えませんが、通常上限未満になるまで新規補充はできません。</li>
@@ -5648,8 +5648,8 @@ const routeData={
   itemShift:-.18,observationMul:1,objectiveScrap:0,
   effects:["敵-2","物資+3","罠-1","携行糧上限+180","装備出現減"],
   finaleName:"灯火の野営",
-  finaleBoss:"番人階へ到達時にHP25%回復・気力全快・携行糧+80・燃料+25。",
-  finaleReward:"治癒薬+1 / 灯油+1 / 携行糧+100 / 深淵の欠片+1"
+  finaleBoss:"番人階へ到達時にHP15%回復・気力+4・携行糧+30・燃料+15。充足そのものは回復しない。",
+  finaleReward:"治癒薬+1 / 灯油+1 / 携行糧+45 / 深淵の欠片+1"
  }
 };
 const routeMasteryData={
@@ -5674,7 +5674,7 @@ const routeMasteryData={
   nodes:[
    {at:1,name:"荷造り",desc:"補給路の物資数をさらに+1、期間中の携行糧上限をさらに+60。"},
    {at:3,name:"安全経路",desc:"補給路の罠をさらに-1。"},
-   {at:5,name:"灯台備蓄",desc:"期間中の携行糧上限をさらに+60。選択時に携行糧+40、終点報酬を100から150へ強化。"}
+   {at:5,name:"灯台備蓄",desc:"期間中の携行糧上限をさらに+60。選択時に携行糧+30、終点報酬を45から70へ強化。"}
   ]
  }
 };
@@ -5859,9 +5859,9 @@ function provisionGainSummary(result){
 }
 function applyRouteSelectionMasteryBonus(id){
  if(id!=="supply"||routeMasteryLevel("supply")<5)return null;
- const gain=gainProvisions(40);
+ const gain=gainProvisions(30);
  addLog(`進路熟練「灯台備蓄」により、補給路へ${provisionGainSummary(gain)}。`);
- return{provisions:gain.gained,requested:40,overflow:gain.overflow};
+ return{provisions:gain.gained,requested:30,overflow:gain.overflow};
 }
 function routeFloorCount(plan=state?.routePlan){
  if(!plan)return 0;
@@ -5960,15 +5960,21 @@ function prepareRouteFinaleFloor(){
  plan.finalePrepared=true;
 
  if(route.id==="supply"){
-  const heal=Math.max(1,Math.round(state.hero.maxHp*.25));
+  // 探索時間の上限である「充足」そのものは、迷宮内では回復させない。
+  // 野営は番人前の小休止に留め、干し肉と同じ携行糧レイヤーだけを補給する。
+  const heal=Math.max(1,Math.round(state.hero.maxHp*.15));
   const beforeHp=state.hero.hp;
+  const beforeStamina=state.hero.stamina;
   state.hero.hp=Math.min(state.hero.maxHp,state.hero.hp+heal);
-  state.hero.stamina=effectiveMaxStamina();
+  state.hero.stamina=Math.min(effectiveMaxStamina(),state.hero.stamina+4);
+  const staminaGain=state.hero.stamina-beforeStamina;
   state.hungerRecoveryBuffer=0;
-  const provisionGain=gainProvisions(80);
-  state.light.fuel=Math.min(100,(state.light.fuel||0)+25);
-  addLog(`灯火の野営でHPを${state.hero.hp-beforeHp}回復し、気力全快・${provisionGainSummary(provisionGain)}・燃料+25。`);
-  showCombatToast("進路終点・補給完了","灯火の野営が番人戦への備えを整えた","objective");
+  const provisionGain=gainProvisions(30);
+  const beforeFuel=state.light.fuel||0;
+  state.light.fuel=Math.min(100,beforeFuel+15);
+  const fuelGain=state.light.fuel-beforeFuel;
+  addLog(`灯火の野営でHPを${state.hero.hp-beforeHp}、気力を${staminaGain}回復。${provisionGainSummary(provisionGain)}・燃料+${fuelGain}。充足そのものは戻らない。`);
+  showCombatToast("進路終点・小休止",`HP+${state.hero.hp-beforeHp} / 気力+${staminaGain} / 携行糧+${provisionGain.gained}`,"objective");
  }else{
   addLog(`進路終点「${route.finaleName}」へ到達した。${route.finaleBoss}`);
  }
@@ -6051,7 +6057,7 @@ function completeRouteAtBoss(enemy,rewardGear){
  }else if(route.id==="supply"){
   state.consumables.potion=(state.consumables.potion||0)+1;
   state.consumables.oil=(state.consumables.oil||0)+1;
-  const provisionReward=masteryBefore>=5?150:100;
+  const provisionReward=masteryBefore>=5?70:45;
   const provisionGain=gainProvisions(provisionReward);
   shardReward=1;
   state.meta.shards+=shardReward;
@@ -14808,6 +14814,9 @@ function beginSealedRelicOpen(relicId){
    $("relicRevealBody").innerHTML=gear
     ?`<div class="relicRewardBox"><b class="${gear.rarity}">${rarityData[gear.rarity]?.label||gear.rarity}・${gearLabel(gear)}</b><br>ILv${gear.itemLevel||1} / ${equippedSlotLabel(gear.slot)} / 推奨度 ${Math.round(gearScore(gear))}<br>攻撃 +${gear.atk||0} / 防御 +${gear.def||0}${gear.crit?` / 会心 +${Math.round(gear.crit*100)}%`:""}${legendaryTraitInfo(gear)?`<br>伝説特性：<b class="legendary">${legendaryTraitInfo(gear).label}</b> — ${legendaryTraitInfo(gear).desc}`:""}<br>${tagSummaryHtml(effectiveGearTags(gear))}<div class="relicRewardMeta"><span>欠片 +${result.spec.shards||0}</span><span>灯台調律済み</span>${result.spec.pity?'<span>黄金残響・確定枠</span>':''}</div></div>`
     :`<div class="relicRewardBox"><b class="legendary">魂還石</b><br>致死傷を一度だけ緊急帰還へ置き換える極希少品を得た。<div class="relicRewardMeta"><span>魂還石 +1</span><span>欠片 +${result.spec.shards||0}</span></div></div>`;
+   // The reward transaction is complete here. Release the open lock immediately so
+   // the next seal becomes actionable as soon as the vault is re-rendered.
+   pendingSealedRelicOpen=null;
    $("closeRelicReveal").classList.remove("hidden");
    renderSealedRelicVault(state.meta);
    try{spawnFeedbackBurst(state.player?.x||0,state.player?.y||0,high?"legendary":"rare",tier==="jackpot"?18:high?13:8)}catch(error){console.warn("Relic burst skipped",error)}
