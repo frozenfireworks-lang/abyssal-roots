@@ -4740,11 +4740,37 @@ body,button,input,select,textarea{font-size:12px}
  }
 }
 
+
+
+/* v3.33.0 GATE BUILD */
+.depthGateBuild{
+ margin-top:8px;
+ padding:8px;
+ border:1px solid #51485c;
+ border-radius:10px;
+ background:linear-gradient(180deg,#15111b,#0e0b12);
+}
+.depthGateBuildHead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.depthGateBuildHead b{color:#f0e2b0;font-size:12px}
+.depthGateBuildHead span{color:#aaa0b0;font-size:11.5px;text-align:right}
+.depthGateBuildLead{margin-top:5px;color:#b9aec0;font-size:11.5px;line-height:1.55}
+.depthGateBuildChoices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:7px}
+.depthGateBuildChoice{min-width:0;padding:8px 6px;border:1px solid #50475a;border-radius:9px;background:#121018;text-align:left}
+.depthGateBuildChoice b{display:block;color:#e8ddeb;font-size:12px}
+.depthGateBuildChoice small{display:block;margin-top:3px;color:#aaa0b0;font-size:11.5px;line-height:1.4}
+.depthGateBuildChoice.selected{box-shadow:0 0 0 1px rgba(222,198,113,.25) inset}
+.depthGateBuildChoice.force.selected{border-color:#875661;background:#1c1115}
+.depthGateBuildChoice.guard.selected{border-color:#557583;background:#10171a}
+.depthGateBuildChoice.explore.selected{border-color:#748355;background:#13180f}
+.depthGateBuildStatus{margin-top:7px;padding:6px 7px;border-left:3px solid #6d6276;border-radius:6px;background:#100d14;color:#bcb1c3;font-size:11.5px;line-height:1.5}
+.depthGateBuildStatus b{color:#f1dfa4}
+@media(max-width:390px){.depthGateBuildChoices{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.32.1 HUD TOGGLE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.33.1 RELIC OPEN FIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5008,7 +5034,7 @@ body,button,input,select,textarea{font-size:12px}
           <li><b>階段 ▼</b> へ進む前には確認が出ます。移動後は次の階層名・環境・目標が約6秒表示されます。</li>
           <li><b>5階ごとに番人戦</b>があります。番人撃破後は、次の5階区間を「狩路・観測路・補給路」から選択します。</li>
           <li><b>第20層は第一深度圏の大きな到達点</b>です。初踏破では恒久報酬と伝説へ昇格した番人装備を得て、灯台へ成果を持ち帰るか、第21層以降へ潜るかを選べます。</li>
-          <li><b>第21層以降の深度圏</b>：20層ごとに「反響圏・飢圧圏・変異圏」の法則が切り替わります。強化判定は現在いる階層だけを参照し、過去の最高到達階で浅層が強くなることはありません。第40/60/80…層の番人は黒金封を確定で残します。</li><li><b>深層番人の変調</b>：21層以降の番人は深度圏に応じて残響律・飢圧律・異相律を得ます。第1深度圏の番人には適用されません。</li><li><b>深度門</b>：第20/40/60…層の最終番人を倒すと、次の深度圏入口から直接出撃できます。直行時は圧縮調整を受けますが、飛ばした階層の戦利品・樹脈・物資は得られません。全ロス後の再起支援がある時は自動で第1層開始へ戻ります。</li><li><b>再起支援</b>：第10層以降で装備を大きく失って死亡した場合、次の1探索だけ浅層の物資と装備品質が少し増えます。装備そのものは返還されず、自力で再建する必要があります。</li>
+          <li><b>第21層以降の深度圏</b>：20層ごとに「反響圏・飢圧圏・変異圏」の法則が切り替わります。強化判定は現在いる階層だけを参照し、過去の最高到達階で浅層が強くなることはありません。第40/60/80…層の番人は黒金封を確定で残します。</li><li><b>深層番人の変調</b>：21層以降の番人は深度圏に応じて残響律・飢圧律・異相律を得ます。第1深度圏の番人には適用されません。</li><li><b>深度門</b>：第20/40/60…層の最終番人を倒すと、次の深度圏入口から直接出撃できます。直行時は圧縮調整に加えて刃・護・探から1系統だけ樹脈2段階を再構成できますが、飛ばした階層の戦利品・通常の成長選択・物資は得られません。全ロス後の再起支援がある時は自動で第1層開始へ戻ります。</li><li><b>再起支援</b>：第10層以降で装備を大きく失って死亡した場合、次の1探索だけ浅層の物資と装備品質が少し増えます。装備そのものは返還されず、自力で再建する必要があります。</li>
           <li>進路は敵数・物資・エリート・罠・事件・研究量へ影響し、次の番人階まで継続します。</li>
           <li><b>深脈分岐</b>：第7層以降、各5層区間の途中で一度だけ、次の1階だけに効く分岐が現れます。通常路に加えてランダムに2つの特殊路が提示され、敵密度・物資・罠・敵Lv・装備ILv・隠し通路・事件などを危険と報酬の交換条件として選べます。番人後に選ぶ「進路」とは別枠で重複します。</li>
           <li><b>迷宮現象</b>：通常階では一定確率で、探索途中に予告付きの現象が発生します。闇潮は自分と敵の視界を狭め、灯脈噴出は灯油を消費せず視界を広げる代わりに発見されやすくなり、深層静穏は敵の再出現を止めて気力回復を助けます。地脈震動は戦術地形を新生し、生態流入は遠方から群れが侵入します。現象は階生成時に固定され、更新で引き直せません。</li>
@@ -12392,6 +12418,7 @@ function ensureDepthGateMeta(meta=state?.meta){
  gates.history=gates.history.slice(-24);
  gates.selectedStart=Math.max(1,Math.floor(Number(gates.selectedStart)||1));
  if(!gates.unlocked.includes(gates.selectedStart))gates.selectedStart=1;
+ if(!runGrowthBranches.includes(gates.selectedBranch))gates.selectedBranch="force";
  return gates;
 }
 function unlockDepthGateAfterWarden(floor=state?.floor,meta=state?.meta){
@@ -12410,6 +12437,24 @@ function selectDepthGateStart(start,meta=state?.meta){
  if(!gates.unlocked.includes(start))return false;
  gates.selectedStart=start;saveMeta();renderLighthouseLoadout();
  return true;
+}
+function selectDepthGateBranch(branch,meta=state?.meta){
+ const gates=ensureDepthGateMeta(meta);
+ if(!runGrowthBranches.includes(branch))return false;
+ gates.selectedBranch=branch;saveMeta();renderLighthouseLoadout();
+ return true;
+}
+function depthGateCompressedGrowthLabel(branch){
+ const data=runGrowthBranchData[branch]||runGrowthBranchData.force;
+ return`${data.label}2・${data.milestones[2]}`;
+}
+function applyDepthGateCompressedGrowth(run,start,branch){
+ if(!run||start<=1)return run;
+ if(!runGrowthBranches.includes(branch))branch="force";
+ run.runGrowth=run.runGrowth&&typeof run.runGrowth==="object"?run.runGrowth:{force:0,guard:0,explore:0};
+ for(const id of runGrowthBranches)run.runGrowth[id]=id===branch?2:0;
+ run.depthGateBuild={branch,rank:2,label:depthGateCompressedGrowthLabel(branch)};
+ return run;
 }
 function depthGateCycleLabel(start){
  if(start<=1)return"第1深度圏・入口";
@@ -12453,8 +12498,9 @@ function depthGateHubHtml(meta=state?.meta){
   ?`<div class="depthGateStatus warning"><strong>再起支援待機中</strong>：大きな装備損失後は安全のため第1層開始へ戻します。</div>`
   :selected===1
    ?`<div class="depthGateStatus"><strong>再建ルート</strong>：既知区間も探索する代わりに、装備・樹脈・物資を最大限育てられます。</div>`
-   :`<div class="depthGateStatus"><strong>深度門を使用</strong>：第${selected}層へ直行します。時短の代わりに、飛ばした階層の報酬・封印遺物・成長選択は得られません。</div>`;
- return`<section class="depthGateCard"><div class="depthGateHead"><b>深度門</b><span>踏破済み区間だけ選択可能</span></div><div class="depthGateLead">毎回第1層から潜る必要はありません。装備を再建したい時は浅層から、十分に整っている時は解放済みの深度圏へ直行できます。</div><div class="depthGateChoices">${options}</div>${status}</section>`;
+   :`<div class="depthGateStatus"><strong>深度門を使用</strong>：第${selected}層へ直行します。時短の代わりに、飛ばした階層の報酬・封印遺物・通常の成長選択は得られません。</div>`;
+ const build=selected>1?(()=>{const branch=gates.selectedBranch||"force";const choices=runGrowthBranches.map(id=>{const data=runGrowthBranchData[id];return`<button type="button" class="depthGateBuildChoice ${data.className} ${id===branch?"selected":""}" data-depth-gate-branch="${id}"><b>${data.label}</b><small>圧縮2段階<br>${data.milestones[2]}</small></button>`}).join("");return`<div class="depthGateBuild"><div class="depthGateBuildHead"><b>圧縮樹脈</b><span>深層直行時のみ</span></div><div class="depthGateBuildLead">飛ばした階層の成長は取得しません。その代わり、戦い方を成立させる最低限として1系統だけ2段階へ再構成します。</div><div class="depthGateBuildChoices">${choices}</div><div class="depthGateBuildStatus"><b>選択中：</b>${depthGateCompressedGrowthLabel(branch)}</div></div>`})():"";
+ return`<section class="depthGateCard"><div class="depthGateHead"><b>深度門</b><span>踏破済み区間だけ選択可能</span></div><div class="depthGateLead">毎回第1層から潜る必要はありません。装備を再建したい時は浅層から、十分に整っている時は解放済みの深度圏へ直行できます。</div><div class="depthGateChoices">${options}</div>${status}${build}</section>`;
 }
 
 const recoveryAssistDefaults={pending:false,sourceFloor:0,floorLimit:0,itemBonus:0,gearLevelBonus:0,oathRelief:false,createdAt:0,timesUsed:0};
@@ -14671,26 +14717,51 @@ function relicSeededGear(relic,spec){
 }
 function sealedRelicRewardPreview(relic,meta=state?.meta){return sealedRelicRewardSpec(relic,meta)}
 function applySealedRelicReward(relic){
- const meta=state.meta,{fortune}=ensureSealedRelicMeta(meta);
- const spec=sealedRelicRewardSpec(relic,meta);
- let gear=null,actualTier=spec.tier;
- if(spec.kind==="gear"){
-  if((meta.stash||[]).length>=20)return{ok:false,reason:"倉庫が満杯です。装備報酬を置く1枠を空けてください。",spec};
-  gear=relicSeededGear(relic,spec);
-  if(gear.rarity==="legendary"&&!['legendary','jackpot'].includes(actualTier))actualTier="legendary";
-  meta.stash.push(gear);
+ // v3.33.1: 開封は灯台データの複製上で最後まで完成させ、永続保存が成功してから本体へ反映する。
+ // 途中で例外・保存失敗が起きても、封印も報酬も半端な状態にしない。
+ if(!relic?.id||!state?.meta)return{ok:false,reason:"封印遺物の状態を確認できません。"};
+ try{
+  const currentMeta=state.meta;
+  const currentVault=ensureSealedRelicMeta(currentMeta);
+  if(!currentVault.relics.some(item=>item.id===relic.id))return{ok:false,reason:"この封印はすでに処理済みです。"};
+
+  const nextMeta=persistentClone(currentMeta);
+  const nextVault=ensureSealedRelicMeta(nextMeta);
+  const nextRelic=nextVault.relics.find(item=>item.id===relic.id);
+  if(!nextRelic)return{ok:false,reason:"封印遺物を複製データ上で確認できません。"};
+
+  const spec=sealedRelicRewardSpec(nextRelic,nextMeta);
+  let gear=null,actualTier=spec.tier;
+  if(spec.kind==="gear"){
+   if((nextMeta.stash||[]).length>=20)return{ok:false,reason:"倉庫が満杯です。装備報酬を置く1枠を空けてください。",spec};
+   gear=relicSeededGear(nextRelic,spec);
+   if(!gear)return{ok:false,reason:"装備報酬の生成に失敗しました。封印は消費していません。",spec};
+   if(gear.rarity==="legendary"&&!['legendary','jackpot'].includes(actualTier))actualTier="legendary";
+   nextMeta.stash.push(gear);
+  }
+  if(spec.kind==="anchor")nextMeta.soulAnchors=(nextMeta.soulAnchors||0)+1;
+  nextMeta.shards=(nextMeta.shards||0)+(spec.shards||0);
+
+  const fortune=nextVault.fortune;
+  const high=actualTier==="legendary"||actualTier==="jackpot";
+  if(high){fortune.misses=0;fortune.legendaryOpened++;if(actualTier==="jackpot")fortune.jackpots++}
+  else fortune.misses=Math.min(SEALED_RELIC_PITY,fortune.misses+1);
+  fortune.totalOpened++;
+  const entry={id:nextRelic.id,floor:nextRelic.floor,source:nextRelic.source,seal:nextRelic.seal,tier:actualTier,label:actualTier==="jackpot"?"深層遺宝":actualTier==="legendary"?"伝説装備":spec.label,gearName:gear?gearLabel(gear):"",shards:spec.shards||0,openedAt:Date.now(),pity:!!spec.pity};
+  fortune.history.push(entry);fortune.history=fortune.history.slice(-24);
+  nextMeta.sealedRelics=nextVault.relics.filter(item=>item.id!==nextRelic.id);
+
+  const saveResult=atomicSaveMetaData(nextMeta);
+  if(!saveResult?.ok){
+   return{ok:false,reason:`灯台データを保存できなかったため開封を中止しました。${saveResult?.message?` ${saveResult.message}`:""}`,spec};
+  }
+
+  state.meta=nextMeta;
+  return{ok:true,spec:{...spec,tier:actualTier},gear,entry,fortune:nextMeta.relicFortune,saveResult};
+ }catch(error){
+  console.error("Sealed relic transaction failed",error);
+  return{ok:false,reason:`開封処理で問題が発生しました。封印は消費していません。${error?.message?` ${error.message}`:""}`,error};
  }
- if(spec.kind==="anchor")meta.soulAnchors=(meta.soulAnchors||0)+1;
- meta.shards=(meta.shards||0)+(spec.shards||0);
- const high=actualTier==="legendary"||actualTier==="jackpot";
- if(high){fortune.misses=0;fortune.legendaryOpened++;if(actualTier==="jackpot")fortune.jackpots++}
- else fortune.misses=Math.min(SEALED_RELIC_PITY,fortune.misses+1);
- fortune.totalOpened++;
- const entry={id:relic.id,floor:relic.floor,source:relic.source,seal:relic.seal,tier:actualTier,label:actualTier==="jackpot"?"深層遺宝":actualTier==="legendary"?"伝説装備":spec.label,gearName:gear?gearLabel(gear):"",shards:spec.shards||0,openedAt:Date.now(),pity:!!spec.pity};
- fortune.history.push(entry);fortune.history=fortune.history.slice(-24);
- meta.sealedRelics=meta.sealedRelics.filter(r=>r.id!==relic.id);
- saveMeta();
- return{ok:true,spec:{...spec,tier:actualTier},gear,entry,fortune};
 }
 let pendingSealedRelicOpen=null;
 function closeSealedRelicReveal(){
@@ -14719,21 +14790,37 @@ function beginSealedRelicOpen(relicId){
  sfx("rare");
  setTimeout(()=>{
   if(pendingSealedRelicOpen!==relic.id)return;
-  const result=applySealedRelicReward(relic);
-  if(!result.ok){pendingSealedRelicOpen=null;$("relicRevealOverlay").classList.add("hidden");showCombatToast("開封保留",result.reason,"miss");return}
-  const tier=result.spec.tier;card.className=`card relicRevealCard ${tier}`;
-  const high=tier==="legendary"||tier==="jackpot";
-  $("relicSealGlyph").textContent=tier==="jackpot"?"✦":high?"★":"◆";
-  $("relicRevealTitle").textContent=tier==="jackpot"?"深層遺宝":tier==="legendary"?"伝説が応えた":result.spec.label;
-  const gear=result.gear;
-  $("relicRevealBody").innerHTML=gear
-   ?`<div class="relicRewardBox"><b class="${gear.rarity}">${rarityData[gear.rarity]?.label||gear.rarity}・${gearLabel(gear)}</b><br>ILv${gear.itemLevel||1} / ${equippedSlotLabel(gear.slot)} / 推奨度 ${Math.round(gearScore(gear))}<br>攻撃 +${gear.atk||0} / 防御 +${gear.def||0}${gear.crit?` / 会心 +${Math.round(gear.crit*100)}%`:""}${legendaryTraitInfo(gear)?`<br>伝説特性：<b class="legendary">${legendaryTraitInfo(gear).label}</b> — ${legendaryTraitInfo(gear).desc}`:""}<br>${tagSummaryHtml(effectiveGearTags(gear))}<div class="relicRewardMeta"><span>欠片 +${result.spec.shards||0}</span><span>灯台調律済み</span>${result.spec.pity?'<span>黄金残響・確定枠</span>':''}</div></div>`
-   :`<div class="relicRewardBox"><b class="legendary">魂還石</b><br>致死傷を一度だけ緊急帰還へ置き換える極希少品を得た。<div class="relicRewardMeta"><span>魂還石 +1</span><span>欠片 +${result.spec.shards||0}</span></div></div>`;
-  $("closeRelicReveal").classList.remove("hidden");
-  spawnFeedbackBurst(state.player?.x||0,state.player?.y||0,high?"legendary":"rare",tier==="jackpot"?18:high?13:8);
-  triggerImpactFeedback(high?"legendary":"rare",{haptic:high?"legendary":"rare",duration:tier==="jackpot"?1050:high?820:560});
-  sfx(high?"legendary":"rare");
-  saveMeta();
+  try{
+   const result=applySealedRelicReward(relic);
+   if(!result.ok){
+    pendingSealedRelicOpen=null;
+    $("relicRevealOverlay").classList.add("hidden");
+    $("closeRelicReveal").classList.add("hidden");
+    renderSealedRelicVault(state.meta);
+    showCombatToast("開封保留",result.reason,"miss");
+    return;
+   }
+   const tier=result.spec.tier;card.className=`card relicRevealCard ${tier}`;
+   const high=tier==="legendary"||tier==="jackpot";
+   $("relicSealGlyph").textContent=tier==="jackpot"?"✦":high?"★":"◆";
+   $("relicRevealTitle").textContent=tier==="jackpot"?"深層遺宝":tier==="legendary"?"伝説が応えた":result.spec.label;
+   const gear=result.gear;
+   $("relicRevealBody").innerHTML=gear
+    ?`<div class="relicRewardBox"><b class="${gear.rarity}">${rarityData[gear.rarity]?.label||gear.rarity}・${gearLabel(gear)}</b><br>ILv${gear.itemLevel||1} / ${equippedSlotLabel(gear.slot)} / 推奨度 ${Math.round(gearScore(gear))}<br>攻撃 +${gear.atk||0} / 防御 +${gear.def||0}${gear.crit?` / 会心 +${Math.round(gear.crit*100)}%`:""}${legendaryTraitInfo(gear)?`<br>伝説特性：<b class="legendary">${legendaryTraitInfo(gear).label}</b> — ${legendaryTraitInfo(gear).desc}`:""}<br>${tagSummaryHtml(effectiveGearTags(gear))}<div class="relicRewardMeta"><span>欠片 +${result.spec.shards||0}</span><span>灯台調律済み</span>${result.spec.pity?'<span>黄金残響・確定枠</span>':''}</div></div>`
+    :`<div class="relicRewardBox"><b class="legendary">魂還石</b><br>致死傷を一度だけ緊急帰還へ置き換える極希少品を得た。<div class="relicRewardMeta"><span>魂還石 +1</span><span>欠片 +${result.spec.shards||0}</span></div></div>`;
+   $("closeRelicReveal").classList.remove("hidden");
+   renderSealedRelicVault(state.meta);
+   try{spawnFeedbackBurst(state.player?.x||0,state.player?.y||0,high?"legendary":"rare",tier==="jackpot"?18:high?13:8)}catch(error){console.warn("Relic burst skipped",error)}
+   try{triggerImpactFeedback(high?"legendary":"rare",{haptic:high?"legendary":"rare",duration:tier==="jackpot"?1050:high?820:560})}catch(error){console.warn("Relic feedback skipped",error)}
+   try{sfx(high?"legendary":"rare")}catch(error){console.warn("Relic sound skipped",error)}
+  }catch(error){
+   console.error("Sealed relic reveal failed",error);
+   pendingSealedRelicOpen=null;
+   $("relicRevealOverlay").classList.add("hidden");
+   $("closeRelicReveal").classList.add("hidden");
+   renderSealedRelicVault(state.meta);
+   showCombatToast("開封保留","開封演出で問題が発生しました。封印を再度開けます。","miss");
+  }
  },720);
  return true;
 }
@@ -18069,6 +18156,9 @@ function renderLighthouseLoadout(){
  $("loadoutPlanner").querySelectorAll("[data-depth-gate]").forEach(button=>{
   button.onclick=()=>selectDepthGateStart(button.dataset.depthGate);
  });
+ $("loadoutPlanner").querySelectorAll("[data-depth-gate-branch]").forEach(button=>{
+  button.onclick=()=>selectDepthGateBranch(button.dataset.depthGateBranch);
+ });
  $("loadoutPlanner").querySelectorAll("[data-whisper-choice]").forEach(button=>{
   button.onclick=()=>selectAbyssWhisper(button.dataset.whisperChoice);
  });
@@ -18644,6 +18734,7 @@ function startFreshRunFromHub(){
 
  const pendingRecovery=ensureRecoveryAssistMeta(meta).pending;
  const requestedStart=pendingRecovery?1:selectedDepthGateStart(meta);
+ const requestedGateBranch=requestedStart>1?ensureDepthGateMeta(meta).selectedBranch:null;
  if(pendingRecovery)ensureDepthGateMeta(meta).selectedStart=1;
  if(requestedStart>1&&!storedWeapon){
   showCombatToast("深度門 使用不可","深層直行には灯台で設定した武器が必要","warning");
@@ -18661,6 +18752,7 @@ function startFreshRunFromHub(){
 
  state=freshState();
  applyDepthGateCalibration(state,requestedStart);
+ applyDepthGateCompressedGrowth(state,requestedStart,requestedGateBranch);
  state.recoveryAssist=recoveryAssist;
  state.runWhisper=prepareAbyssWhisperForRun(state.meta);
  state.protectionContract=preparation.contract;
@@ -18678,7 +18770,7 @@ function startFreshRunFromHub(){
   state.log=["魂還石を救命契約として携行し、迷宮へ入った。"];
  }
  if(recoveryAssist){state.log.unshift(`再起支援が発動。第${recoveryAssist.floorLimit}層まで物資+${recoveryAssist.itemBonus}・装備ILv+${recoveryAssist.gearLevelBonus}。`);}
- if(requestedStart>1){const c=state.depthGateCalibration;state.log.unshift(`深度門を使用し、第${requestedStart}層へ直行。圧縮調整Lv${c?.level||state.level}で開始する。飛ばした階層の報酬と樹脈成長は得られない。`);}
+ if(requestedStart>1){const c=state.depthGateCalibration,build=state.depthGateBuild;state.log.unshift(`深度門を使用し、第${requestedStart}層へ直行。圧縮調整Lv${c?.level||state.level} / ${build?.label||"圧縮樹脈なし"}で開始する。飛ばした階層の報酬と通常の成長選択は得られない。`);}
  beginPreparedFreshRun();
  return true;
 }
