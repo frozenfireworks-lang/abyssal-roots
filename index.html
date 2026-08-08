@@ -4608,11 +4608,143 @@ body,button,input,select,textarea{font-size:12px}
  .hungerStat .rationCapacity{display:block!important;color:inherit;margin:0!important}
 }
 
+
+
+/* v3.32.0 WARDEN VARIANTS */
+.wardenShiftBanner{
+ margin-top:6px;
+ padding:6px 8px;
+ border:1px solid #665274;
+ border-radius:8px;
+ background:rgba(17,12,22,.82);
+ color:#d7cadc;
+ font-size:11.5px;
+ line-height:1.5;
+}
+.wardenShiftBanner b{color:#f3e2ac}
+.wardenShiftBanner.echo{border-color:#76619a;background:rgba(25,17,37,.86)}
+.wardenShiftBanner.famine{border-color:#946d47;background:rgba(34,22,12,.86)}
+.wardenShiftBanner.mutation{border-color:#718357;background:rgba(19,28,14,.86)}
+.wardenShiftTag{
+ display:inline-block;
+ margin-left:4px;
+ padding:2px 6px;
+ border:1px solid #6f5d7b;
+ border-radius:999px;
+ color:#e5d8e9;
+ font-size:11.5px;
+}
+
+
+
+/* v3.32.1 UNIVERSAL FLOOR GOAL TOGGLE */
+#floorGoal,
+#floorGoal.goalRight,
+#floorGoal.goalBottom,
+#floorGoal.goalRight.goalBottom{
+ position:absolute;
+ top:5px;
+ left:5px;
+ right:auto;
+ bottom:auto;
+ z-index:8;
+ width:min(48%,184px);
+ max-width:min(48%,184px);
+ margin:0;
+ padding:5px 6px;
+ border-color:rgba(179,145,202,.68);
+ border-radius:7px;
+ background:rgba(10,7,15,.76);
+ box-shadow:0 3px 10px rgba(0,0,0,.22);
+ text-shadow:0 1px 2px rgba(0,0,0,.96),0 0 3px rgba(0,0,0,.72);
+ pointer-events:auto;
+ cursor:pointer;
+ touch-action:manipulation;
+ -webkit-user-select:none;
+ user-select:none;
+ transition:width .16s ease,max-width .16s ease,background .16s ease,border-color .16s ease;
+}
+#floorGoal:focus-visible{outline:2px solid #d8b76c;outline-offset:2px}
+#floorGoal .floorGoalHeader{gap:4px}
+#floorGoal .floorGoalHeader b{
+ min-width:0;
+ max-width:calc(100% - 46px);
+ overflow:hidden;
+ white-space:nowrap;
+ text-overflow:ellipsis;
+ font-size:11.5px;
+ line-height:1.2;
+}
+#floorGoal .floorGoalState{padding:1px 4px;font-size:11.5px;line-height:1.15}
+#floorGoal .floorGoalToggleHint{
+ display:block;
+ margin-top:3px;
+ color:#bcaec4;
+ font-size:11.5px;
+ line-height:1.1;
+ text-align:right;
+ opacity:.9;
+}
+#floorGoal .floorGoalText,
+#floorGoal .floorGoalReward,
+#floorGoal .floorGoalRoute,
+#floorGoal .floorGoalEncounters,
+#floorGoal .floorEcologyState,
+#floorGoal .floorForkState,
+#floorGoal .floorPhenomenonState,
+#floorGoal .abyssWhisperStatus,
+#floorGoal .sealedCarryStatus,
+#floorGoal .wardenVictoryStatus{
+ display:none!important;
+}
+#floorGoal .floorGoalProgress{display:block;height:3px;margin-top:3px}
+#floorGoal.expanded{
+ width:min(82%,350px)!important;
+ max-width:min(82%,350px)!important;
+ max-height:min(58%,330px);
+ overflow-y:auto;
+ padding:8px 9px;
+ border-color:rgba(210,177,230,.82);
+ background:rgba(10,7,15,.94);
+ box-shadow:0 8px 24px rgba(0,0,0,.42);
+ -webkit-user-select:text;
+ user-select:text;
+}
+#floorGoal.expanded .floorGoalHeader b{max-width:calc(100% - 52px);white-space:normal;text-overflow:clip}
+#floorGoal.expanded .floorGoalText,
+#floorGoal.expanded .floorGoalReward,
+#floorGoal.expanded .floorGoalRoute,
+#floorGoal.expanded .floorGoalEncounters,
+#floorGoal.expanded .floorEcologyState,
+#floorGoal.expanded .floorForkState,
+#floorGoal.expanded .floorPhenomenonState,
+#floorGoal.expanded .abyssWhisperStatus,
+#floorGoal.expanded .sealedCarryStatus,
+#floorGoal.expanded .wardenVictoryStatus{
+ display:block!important;
+ white-space:normal!important;
+ overflow:visible!important;
+ text-overflow:clip!important;
+}
+#floorGoal.expanded .floorGoalProgress{height:4px;margin-top:5px}
+#floorGoal.expanded .floorGoalToggleHint{margin-top:5px;color:#d4c4dc}
+@media(min-width:601px){
+ #floorGoal,#floorGoal.goalRight,#floorGoal.goalBottom,#floorGoal.goalRight.goalBottom{
+  width:min(38%,220px);
+  max-width:min(38%,220px);
+ }
+ #floorGoal.expanded{
+  width:min(52%,390px)!important;
+  max-width:min(52%,390px)!important;
+  max-height:min(68%,390px);
+ }
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.31.1 HUD COMPACT</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.32.1 HUD TOGGLE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -4876,7 +5008,7 @@ body,button,input,select,textarea{font-size:12px}
           <li><b>階段 ▼</b> へ進む前には確認が出ます。移動後は次の階層名・環境・目標が約6秒表示されます。</li>
           <li><b>5階ごとに番人戦</b>があります。番人撃破後は、次の5階区間を「狩路・観測路・補給路」から選択します。</li>
           <li><b>第20層は第一深度圏の大きな到達点</b>です。初踏破では恒久報酬と伝説へ昇格した番人装備を得て、灯台へ成果を持ち帰るか、第21層以降へ潜るかを選べます。</li>
-          <li><b>第21層以降の深度圏</b>：20層ごとに「反響圏・飢圧圏・変異圏」の法則が切り替わります。強化判定は現在いる階層だけを参照し、過去の最高到達階で浅層が強くなることはありません。第40/60/80…層の番人は黒金封を確定で残します。</li><li><b>深度門</b>：第20/40/60…層の最終番人を倒すと、次の深度圏入口から直接出撃できます。直行時は圧縮調整を受けますが、飛ばした階層の戦利品・樹脈・物資は得られません。全ロス後の再起支援がある時は自動で第1層開始へ戻ります。</li><li><b>再起支援</b>：第10層以降で装備を大きく失って死亡した場合、次の1探索だけ浅層の物資と装備品質が少し増えます。装備そのものは返還されず、自力で再建する必要があります。</li>
+          <li><b>第21層以降の深度圏</b>：20層ごとに「反響圏・飢圧圏・変異圏」の法則が切り替わります。強化判定は現在いる階層だけを参照し、過去の最高到達階で浅層が強くなることはありません。第40/60/80…層の番人は黒金封を確定で残します。</li><li><b>深層番人の変調</b>：21層以降の番人は深度圏に応じて残響律・飢圧律・異相律を得ます。第1深度圏の番人には適用されません。</li><li><b>深度門</b>：第20/40/60…層の最終番人を倒すと、次の深度圏入口から直接出撃できます。直行時は圧縮調整を受けますが、飛ばした階層の戦利品・樹脈・物資は得られません。全ロス後の再起支援がある時は自動で第1層開始へ戻ります。</li><li><b>再起支援</b>：第10層以降で装備を大きく失って死亡した場合、次の1探索だけ浅層の物資と装備品質が少し増えます。装備そのものは返還されず、自力で再建する必要があります。</li>
           <li>進路は敵数・物資・エリート・罠・事件・研究量へ影響し、次の番人階まで継続します。</li>
           <li><b>深脈分岐</b>：第7層以降、各5層区間の途中で一度だけ、次の1階だけに効く分岐が現れます。通常路に加えてランダムに2つの特殊路が提示され、敵密度・物資・罠・敵Lv・装備ILv・隠し通路・事件などを危険と報酬の交換条件として選べます。番人後に選ぶ「進路」とは別枠で重複します。</li>
           <li><b>迷宮現象</b>：通常階では一定確率で、探索途中に予告付きの現象が発生します。闇潮は自分と敵の視界を狭め、灯脈噴出は灯油を消費せず視界を広げる代わりに発見されやすくなり、深層静穏は敵の再出現を止めて気力回復を助けます。地脈震動は戦術地形を新生し、生態流入は遠方から群れが侵入します。現象は階生成時に固定され、更新で引き直せません。</li>
@@ -5346,6 +5478,24 @@ body,button,input,select,textarea{font-size:12px}
 const COLS=35, ROWS=39, VIEW_COLS=17, VIEW_ROWS=21, TILE=22;
 const canvas=document.getElementById("game"), ctx=canvas.getContext("2d");
 const $=id=>document.getElementById(id);
+const FLOOR_GOAL_EXPANDED_KEY="abyssal-roots-floor-goal-expanded";
+let floorGoalExpanded=false;
+try{floorGoalExpanded=localStorage.getItem(FLOOR_GOAL_EXPANDED_KEY)==="1"}catch(_){}
+function applyFloorGoalExpansion(){
+ const el=$("floorGoal");if(!el)return;
+ el.classList.toggle("expanded",floorGoalExpanded);
+ el.setAttribute("aria-expanded",floorGoalExpanded?"true":"false");
+ el.setAttribute("aria-label",floorGoalExpanded?"階段解放条件の詳細を閉じる":"階段解放条件の詳細を開く");
+ el.setAttribute("role","button");
+ el.setAttribute("tabindex","0");
+}
+function setFloorGoalExpanded(value){
+ floorGoalExpanded=!!value;
+ try{localStorage.setItem(FLOOR_GOAL_EXPANDED_KEY,floorGoalExpanded?"1":"0")}catch(_){}
+ applyFloorGoalExpansion();
+ renderFloorGoal?.();
+}
+function toggleFloorGoalExpanded(){setFloorGoalExpanded(!floorGoalExpanded)}
 let pendingActionConfirm=null;
 function actionConfirmIsOpen(){return!$("actionConfirmOverlay").classList.contains("hidden")}
 function closeActionConfirm(runCancel=true){
@@ -9935,7 +10085,7 @@ function wardenFloorBannerHtml(plan=floorPlan()){
  if(!plan?.boss)return"";
  const cadence=wardenCadenceForFloor(state.floor);
  const profile=wardenProfileFor();
- return`<div class="floorBannerWarden"><div class="floorBannerWardenHead"><b>${cadence.gate}・${profile.name}</b><span>${state.floor<=20?`${cadence.index}/4 関門`:"深層番人"}</span></div><small>${profile.hint}</small></div>`;
+ return`<div class="floorBannerWarden"><div class="floorBannerWardenHead"><b>${cadence.gate}・${profile.name}</b><span>${state.floor<=20?`${cadence.index}/4 関門`:"深層番人"}</span></div><small>${profile.hint}</small>${deepWardenShiftHtml(state.floor)}</div>`;
 }
 function wardenProfileKeyForFloor(floor=state.floor){
  const index=(Math.max(1,Math.floor(floor/5))-1)%4;
@@ -10009,6 +10159,7 @@ function spawnFloorBoss(recovery=false){
   xp:30+bossLevel*5,intent:null,intentCells:[],intentTarget:null,
   stagger:0,guarding:false,boss:true,phase:1,phaseTriggered:false,
   bossFloor:state.floor,wardenKey:profile.key,bossCycle:0,summonsMade:0,
+  deepWardenShift:deepWardenShiftForFloor(state.floor)?.id||null,
   bossColor:profile.color,bossAccent:profile.accent,
   recoveredFromSoftlock:!!recovery,
   alert:0,lastSeen:null,faction:"guardian",home:{x:p.x,y:p.y},patrol:0,rivalId:null,status:{}
@@ -12394,6 +12545,38 @@ function deepCycleLawForFloor(floor=state?.floor||1){
  };
 }
 function deepCycleValue(key,floor=state?.floor||1){const law=deepCycleLawForFloor(floor);return law?.[key]||0}
+const deepWardenShiftData={
+ echo:{id:"echo",label:"残響律",desc:"第二形態へ移ると番人の残響が従者として実体化する。戦場の処理順が増える。"},
+ famine:{id:"famine",label:"飢圧律",desc:"番人の直接攻撃は充足を削る。大技を見切って回避すると、逆に充足を少し取り戻せる。"},
+ mutation:{id:"mutation",label:"異相律",desc:"第二形態で既存の変異特性を1つ獲得する。毎回同じ番人でも性質が変わる。"}
+};
+function deepWardenShiftForFloor(floor=state?.floor||1){
+ const law=deepCycleLawForFloor(floor);if(!law)return null;
+ const data=deepWardenShiftData[law.id];return data?{...data,cycle:law.cycle,pressure:law.pressure}:null;
+}
+function deepWardenShiftHtml(floor=state?.floor||1){
+ const shift=deepWardenShiftForFloor(floor);if(!shift)return"";
+ return`<div class="wardenShiftBanner ${shift.id}"><b>番人変調・${shift.label}</b><br>${shift.desc}</div>`;
+}
+function deepWardenEchoMinionType(enemy){
+ return({chain:"skeleton",oracle:"mage",furnace:"bomber",root:"warg"})[wardenProfileFor(enemy).key]||"skeleton";
+}
+function applyDeepWardenMutation(enemy){
+ if(!enemy||enemy.deepMutationApplied)return false;
+ const pool=["brutal","armored","vampiric","frenzy","lightEater"];
+ const affix=choice(pool),data=eliteMutationData[affix];
+ if(!data)return false;
+ const oldHp=enemy.hp,oldMax=enemy.maxHp;
+ enemy.elite=affix;
+ applyEliteMutationEffect(enemy,affix);
+ const maxGain=enemy.maxHp-oldMax;
+ enemy.hp=Math.min(enemy.maxHp,Math.max(1,oldHp+Math.max(0,maxGain)));
+ enemy.deepMutationApplied=true;
+ spawnCombatText(enemy.x,enemy.y,data.label,"break",38);
+ showCombatToast("番人異相",`${wardenProfileFor(enemy).name}・${data.label}変異` ,"critical");
+ addLog(`${wardenProfileFor(enemy).name}が深度圏へ適応し、「${data.label}」変異を獲得した。`);
+ return true;
+}
 function deepCycleBoundaryFloor(floor=state?.floor||1){return floor>20&&floor%20===0}
 function deepCycleBannerHtml(){
  const law=deepCycleLawForFloor();if(!law)return"";
@@ -12645,6 +12828,7 @@ function renderFloorGoal(){
  el.classList.toggle("objectiveComplete",objective.completed);
  el.classList.toggle("objectiveLocked",!objective.completed);
  el.innerHTML=`<div class="floorGoalHeader"><b>第${state.floor}層：${objective.title}<span class="floorGoalInlineProgress"> ${progress}/${objective.target}</span></b><span class="floorGoalState">${objective.completed?"解放":"封印"}</span></div>
+  <div class="floorGoalToggleHint">${floorGoalExpanded?"タップで縮小 ▲":"タップで詳細 ▼"}</div>
   <div class="floorGoalText">${objective.desc}　${progress}/${objective.target}</div>
   <div class="floorGoalProgress"><i style="width:${ratio}%"></i></div>
   <div class="floorGoalReward">報酬 ${floorObjectiveRewardText(objective)}${fallback?` / ${fallback}`:""} ${roomEncounterStatusHtml()}</div>
@@ -12655,8 +12839,20 @@ function renderFloorGoal(){
   ${floorPhenomenonStatusHtml()}
   ${abyssWhisperStatusHtml()}
   ${sealedRelicCarryStatusHtml()}`;
+ applyFloorGoalExpansion();
  positionFloorGoal();
 }
+function bindFloorGoalToggle(){
+ const el=$("floorGoal");if(!el||el.dataset.toggleBound==="1")return;
+ el.dataset.toggleBound="1";
+ el.addEventListener("pointerdown",event=>event.stopPropagation());
+ el.addEventListener("click",event=>{event.preventDefault();event.stopPropagation();toggleFloorGoalExpanded()});
+ el.addEventListener("keydown",event=>{
+  if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();toggleFloorGoalExpanded()}
+ });
+ applyFloorGoalExpansion();
+}
+bindFloorGoalToggle();
 
 function generateFloor(){
  normalizeAbyssForkForCurrentFloor();
@@ -15669,6 +15865,18 @@ function enterWardenPhaseTwo(enemy){
   summonWardenMinion(enemy,"warg");
   summonWardenMinion(enemy,"mage");
  }
+ const shift=deepWardenShiftForFloor(enemy.bossFloor||state.floor);
+ if(shift?.id==="echo"&&!enemy.deepShiftTriggered){
+  enemy.deepShiftTriggered=true;
+  const type=deepWardenEchoMinionType(enemy);
+  if(summonWardenMinion(enemy,type)){
+   showCombatToast("番人変調・残響律","第二形態の残響が従者として実体化","critical");
+   addLog(`${profile.name}の残響が実体化し、戦場へ加わった。`);
+  }
+ }else if(shift?.id==="mutation"&&!enemy.deepShiftTriggered){
+  enemy.deepShiftTriggered=true;
+  applyDeepWardenMutation(enemy);
+ }
  return true;
 }
 function resolveWardenIntent(enemy,intent,cells,playerInTarget){
@@ -15995,7 +16203,13 @@ function enemyAttack(e,mult=1,label="攻撃"){
   addLog(e.name+"が生命を吸収した。");
  }
  eliteDirectHitEffect(e,dmg);
- addLog(e.name+"の"+label+"。"+dmg+" ダメージ。"+(terrainMul<1?" 崩れ石が射線を遮った。":""));
+ const wardenShift=e?.boss?deepWardenShiftForFloor(e.bossFloor||state.floor):null;
+ if(wardenShift?.id==="famine"&&dmg>0){
+  const lost=Math.min(state.hunger,42);
+  state.hunger=Math.max(0,state.hunger-lost);
+  if(lost>0){spawnCombatText(state.player.x,state.player.y,`充足-${lost}`,"miss",30);showCombatToast("番人変調・飢圧律",`充足 -${lost}` ,"hurt");}
+ }
+ addLog(e.name+"の"+label+"。"+dmg+" ダメージ。"+(wardenShift?.id==="famine"&&dmg>0?" 飢圧で充足を削られた。":"")+(terrainMul<1?" 崩れ石が射線を遮った。":""));
  if(state.hero.hp<=0){
   addLog("探索者は倒れた。");
   finishExpeditionDeath(`${e.name}の${label}に倒れた。`,e);
@@ -19858,6 +20072,13 @@ function registerIntentDodge(e,intent){
  spawnCombatText(state.player.x,state.player.y,staminaGain?"DODGE +1":"DODGE","dodge",42);
  showCombatToast("回避成功",`${e.name}の${name}を避けた${staminaGain?"・気力+1":""}・反撃好機`,"dodge");
  addLog(`${e.name}の${name}を回避した！${staminaGain?" 気力が1戻った。":""} 反撃好機が開いた。`);
+ const wardenShift=e?.boss?deepWardenShiftForFloor(e.bossFloor||state.floor):null;
+ if(wardenShift?.id==="famine"){
+  const before=state.hunger;
+  state.hunger=Math.min(effectiveMaxHunger(),state.hunger+18);
+  const restored=state.hunger-before;
+  if(restored>0){spawnCombatText(state.player.x,state.player.y,`充足+${restored}`,"heal",30);addLog(`飢圧律を見切り、充足が${restored}戻った。`)}
+ }
  updateFloorObjective();
  clearEnemyIntent(e);
 }
@@ -19891,7 +20112,10 @@ function enemyStatusTags(e){
  if(e.nemesis)tags.push("宿敵");
  if(e.echoGuard)tags.push("遺響守");
  if(e.tacticalPackId){const pack=tacticalPackById(e.tacticalPackId);if(pack)tags.push(`戦団:${pack.label}`)}
- if(e.boss)tags.push(`番人:${wardenProfileFor(e).short}`);
+ if(e.boss){
+  tags.push(`番人:${wardenProfileFor(e).short}`);
+  const shift=deepWardenShiftForFloor(e.bossFloor||state.floor);if(shift)tags.push(`変調:${shift.label}`);
+ }
  if(e.phase===2)tags.push("第二形態");
  if(counterWindowActive(e))tags.push("反撃好機");
  if(e.status?.burning>0)tags.push("炎上 "+e.status.burning);
@@ -19936,6 +20160,8 @@ function inspectTileAt(x,y){
   if(enemy.boss){
    const profile=wardenProfileFor(enemy);
    body+=`<div class="tagBuild"><b>${profile.short}・${profile.name}</b><br>${profile.desc}<br><span class="bondStage">対処：${profile.hint}</span></div>`;
+   const shift=deepWardenShiftForFloor(enemy.bossFloor||state.floor);
+   if(shift)body+=`<div class="tagBuild"><b>番人変調・${shift.label}</b><br>${shift.desc}</div>`;
    if(enemy.routeFinale){
     const route=routeData[enemy.routeFinale];
     body+=`<div class="routeFinaleSummary"><b>進路終点・${route.finaleName}</b><br>${route.finaleBoss}<br><span class="bondStage">踏破報酬：${route.finaleReward}</span></div>`;
