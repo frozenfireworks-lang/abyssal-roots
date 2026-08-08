@@ -4418,11 +4418,102 @@ body,button,input,select,textarea{font-size:12px}
 .hubSectionBadge,.stashBadge,.relicVaultMeta span,.weaponOathBadge,.mobileStateChip{padding-top:2px;padding-bottom:2px;line-height:1.25}
 .relicVaultCard button,.modalBtn,.choiceBtn,.miniBtn,.ctrl,.skill{line-height:1.3}
 .note,.desc,.relicVaultCard small,.relicVaultLead small,.relicFortuneHead small,.sealedCarryStatus small,.livingEcologyEffect,.ecologyReport,.weaponArtLead,.abyssWhisperLead,.abyssWhisperCurrent,.abyssWhisperReport,.provisionBreakdown{line-height:1.6}
+
+
+/* v3.29.0 WARDEN IMPRINTS */
+.wardenImprintLine{
+ display:block;
+ margin-top:6px;
+ padding:7px 8px;
+ border:1px solid #7a6840;
+ border-radius:8px;
+ background:linear-gradient(180deg,#211b10,#130f09);
+ color:#e5d3a0;
+ font-size:11.5px;
+ line-height:1.55;
+}
+.wardenImprintLine b{color:#ffe6a3}
+.wardenImprintRuntime{
+ display:grid;
+ grid-template-columns:auto minmax(0,1fr) auto;
+ align-items:center;
+ gap:7px;
+ margin-top:6px;
+ padding:6px 8px;
+ border:1px solid #6f6040;
+ border-radius:8px;
+ background:linear-gradient(180deg,#1d180f,#110e09);
+ color:#d8c590;
+ font-size:11.5px;
+ line-height:1.35;
+}
+.wardenImprintRuntime .kind{padding:2px 6px;border:1px solid #8b7546;border-radius:999px;color:#f3dda1;white-space:nowrap}
+.wardenImprintRuntime b{min-width:0;color:#f7e8bb;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wardenImprintRuntime small{color:#b9aa80;white-space:nowrap}
+
+
+
+/* v3.30.0 DEEP CYCLES */
+.deepCycleBanner{
+ margin-top:7px;
+ padding:7px 8px;
+ border:1px solid rgba(105,84,126,.74);
+ border-radius:8px;
+ background:rgba(15,11,20,.84);
+ color:#d9cde1;
+ font-size:11.5px;
+ line-height:1.55;
+}
+.deepCycleBanner b{color:#f3e2ac}
+.deepCycleBanner.echo{border-color:#68558a;background:rgba(20,14,31,.86)}
+.deepCycleBanner.famine{border-color:#866447;background:rgba(28,18,10,.86)}
+.deepCycleBanner.mutation{border-color:#6d794f;background:rgba(18,25,13,.86)}
+.deepCycleLaw{
+ display:flex;
+ flex-wrap:wrap;
+ gap:4px;
+ margin-top:5px;
+}
+.deepCycleLaw span{
+ padding:2px 6px;
+ border:1px solid #51475c;
+ border-radius:999px;
+ background:#100d14;
+ color:#c8bdce;
+ font-size:11.5px;
+}
+
+
+
+/* v3.30.1 RECOVERY BALANCE */
+.recoveryAssistCard{
+ margin-bottom:8px;
+ padding:10px 11px;
+ border:1px solid #5b755f;
+ border-radius:10px;
+ background:linear-gradient(180deg,#121a14,#0d120f);
+ color:#cadbce;
+ font-size:11.5px;
+ line-height:1.55;
+}
+.recoveryAssistCard b{color:#e4f0d7;font-size:12.8px}
+.recoveryAssistCard span{display:block;margin-top:4px;color:#aebfaf}
+.recoveryAssistRun{
+ margin:6px 0;
+ padding:7px 9px;
+ border-left:3px solid #66806a;
+ border-radius:7px;
+ background:rgba(15,24,17,.9);
+ color:#bed2c1;
+ font-size:11.5px;
+ line-height:1.45;
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.26.3 TYPOGRAPHY BOOST</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.30.1 RECOVERY BALANCE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -4686,6 +4777,7 @@ body,button,input,select,textarea{font-size:12px}
           <li><b>階段 ▼</b> へ進む前には確認が出ます。移動後は次の階層名・環境・目標が約6秒表示されます。</li>
           <li><b>5階ごとに番人戦</b>があります。番人撃破後は、次の5階区間を「狩路・観測路・補給路」から選択します。</li>
           <li><b>第20層は第一深度圏の大きな到達点</b>です。初踏破では恒久報酬と伝説へ昇格した番人装備を得て、灯台へ成果を持ち帰るか、第21層以降へ潜るかを選べます。</li>
+          <li><b>第21層以降の深度圏</b>：20層ごとに「反響圏・飢圧圏・変異圏」の法則が切り替わります。強化判定は現在いる階層だけを参照し、過去の最高到達階で浅層が強くなることはありません。第40/60/80…層の番人は黒金封を確定で残します。</li><li><b>再起支援</b>：第10層以降で装備を大きく失って死亡した場合、次の1探索だけ浅層の物資と装備品質が少し増えます。装備そのものは返還されず、自力で再建する必要があります。</li>
           <li>進路は敵数・物資・エリート・罠・事件・研究量へ影響し、次の番人階まで継続します。</li>
           <li><b>深脈分岐</b>：第7層以降、各5層区間の途中で一度だけ、次の1階だけに効く分岐が現れます。通常路に加えてランダムに2つの特殊路が提示され、敵密度・物資・罠・敵Lv・装備ILv・隠し通路・事件などを危険と報酬の交換条件として選べます。番人後に選ぶ「進路」とは別枠で重複します。</li>
           <li><b>迷宮現象</b>：通常階では一定確率で、探索途中に予告付きの現象が発生します。闇潮は自分と敵の視界を狭め、灯脈噴出は灯油を消費せず視界を広げる代わりに発見されやすくなり、深層静穏は敵の再出現を止めて気力回復を助けます。地脈震動は戦術地形を新生し、生態流入は遠方から群れが侵入します。現象は階生成時に固定され、更新で引き直せません。</li>
@@ -4867,7 +4959,7 @@ body,button,input,select,textarea{font-size:12px}
       <summary>敵・部屋・世界の特徴</summary>
       <div class="helpBody">
         <ul>
-          <li><b>盾骸兵</b>は正面に強く、<b>穴獣</b>は回り込み、<b>骨術師</b>は距離を取り、<b>爆ぜ虫</b>は自爆します。</li>
+          <li><b>盾骸兵</b>は正面に強く、<b>穴獣</b>は回り込み、<b>骨術師</b>は距離を取り、<b>爆ぜ虫</b>は自爆します。</li><li><b>第7層以降</b>は墓鐘司祭が負傷した亡者を治癒し、<b>第9層以降</b>は穿ち獣が直線突進を予告し、<b>第12層以降</b>は灯喰らいが灯火を吸い取ります。深度が進むほど「何から倒すか」「どこへ避けるか」が重要になります。</li>
           <li><b>鎖縛の門衛</b>は広い近接、<b>墓標の神託者</b>は射線と召喚、<b>熔炉の巨像</b>は炎上地形、<b>根冠の王</b>は動かない判断を要求します。</li>
           <li>特殊部屋には<b>祭壇・宝物庫・水没・崩落</b>があります。</li>
           <li>2階以降は<b>階層異変</b>が発生し、5階ごとに<b>バイオーム</b>が変わります。</li>
@@ -4891,6 +4983,9 @@ body,button,input,select,textarea{font-size:12px}
           <div class="helpKey"><b>W</b><br>穴獣</div>
           <div class="helpKey"><b>M</b><br>骨術師</div>
           <div class="helpKey"><b>B</b><br>爆ぜ虫</div>
+          <div class="helpKey"><b>P</b><br>墓鐘司祭</div>
+          <div class="helpKey"><b>C</b><br>穿ち獣</div>
+          <div class="helpKey"><b>L</b><br>灯喰らい</div>
           <div class="helpKey"><b>!</b><br>装備</div>
           <div class="helpKey"><b>◇</b><br>食料</div>
           <div class="helpKey"><b>^</b><br>罠</div>
@@ -5741,6 +5836,39 @@ const legendaryTraitData={
  collector:{label:"蒐集",short:"蒐集",score:9,desc:"通常敵の装備ドロップ率+10%。重複ごと+3%、最大+16%。現地分解素材も最大+2。"},
  glass:{label:"玻璃",short:"玻璃",score:14,desc:"常時与ダメージ+65%、防御-2。重複ごと与ダメージ+8%・防御-2、最大+85%・防御-6。"}
 };
+const wardenImprintData={
+ chain:{label:"鎖返し",short:"鎖返",score:10,desc:"反撃好機の威力+10%。反撃成功時に気力1回復。複数装備でも威力加算は最大+20%。"},
+ oracle:{label:"断章",short:"断章",score:10,desc:"攻撃予兆中の敵を倒すと、武技の残りCD-2・気力1回復。"},
+ furnace:{label:"炉心",short:"炉心",score:11,desc:"炎上中の敵への直接ダメージ+20%。同刻印を重ねると1個ごと+5%、最大+30%。"},
+ root:{label:"静根",short:"静根",score:10,desc:"敵が見えている時に休息すると追加で気力2回復し、次の攻撃を受け流す構えを得る。"}
+};
+function ensureWardenImprint(g){
+ if(!g)return null;
+ const key=g.wardenImprint||g.wardenTrophyKey||null;
+ if(!key||!wardenImprintData[key])return null;
+ g.wardenImprint=key;
+ return key;
+}
+function wardenImprintInfo(g){const id=ensureWardenImprint(g);return id?{id,...wardenImprintData[id]}:null}
+function wardenImprintCount(id){return allEquippedItems().filter(g=>ensureWardenImprint(g)===id).length}
+function wardenImprintScore(g){const info=wardenImprintInfo(g);return info?.score||0}
+function wardenImprintSummary(g,compact=false){
+ const info=wardenImprintInfo(g);if(!info)return"";
+ return compact?`${info.label}：${info.desc}`:`番人刻印「${info.label}」：${info.desc}`;
+}
+function wardenImprintSummaryHtml(g,compact=false){
+ const info=wardenImprintInfo(g);if(!info)return"";
+ return`<span class="wardenImprintLine"><b>${compact?info.label:`番人刻印・${info.label}`}</b><br>${info.desc}</span>`;
+}
+function activeWardenImprintText(){
+ const parts=[];
+ for(const id of ["chain","oracle","furnace","root"]){const count=wardenImprintCount(id);if(count)parts.push(`${wardenImprintData[id].short}${count>1?`×${count}`:""}`)}
+ return parts.join(" / ");
+}
+function wardenImprintRuntimeHtml(){
+ const text=activeWardenImprintText();if(!text)return"";
+ return`<div class="wardenImprintRuntime"><span class="kind">番人刻印</span><b>${text}</b><small>装備中</small></div>`;
+}
 function legendaryTraitSeedIndex(g){
  const source=`${g?.id||"legend"}|${g?.itemLevel||1}|${g?.slot||"gear"}`;
  let hash=2166136261;
@@ -5758,14 +5886,16 @@ function ensureLegendaryTrait(g){
 }
 function legendaryTraitInfo(g){const id=ensureLegendaryTrait(g);return id?{id,...legendaryTraitData[id]}:null}
 function legendaryTraitCount(id){return allEquippedItems().filter(g=>ensureLegendaryTrait(g)===id).length}
-function legendaryTraitScore(g){const info=legendaryTraitInfo(g);return info?.score||0}
+function legendaryTraitScore(g){const info=legendaryTraitInfo(g);return(info?.score||0)+wardenImprintScore(g)}
 function legendaryTraitSummary(g,compact=false){
- const info=legendaryTraitInfo(g);if(!info)return"";
- return compact?`${info.label}：${info.desc}`:`固有特性「${info.label}」：${info.desc}`;
+ const info=legendaryTraitInfo(g),imprint=wardenImprintSummary(g,compact);
+ const legendary=info?(compact?`${info.label}：${info.desc}`:`固有特性「${info.label}」：${info.desc}`):"";
+ return[imprint,legendary].filter(Boolean).join(" / ");
 }
 function legendaryTraitSummaryHtml(g,compact=false){
- const info=legendaryTraitInfo(g);if(!info)return"";
- return`<span class="legendaryTraitLine ${info.id}"><b>${compact?info.label:`伝説特性・${info.label}`}</b><br>${info.desc}</span>`;
+ const info=legendaryTraitInfo(g);
+ const legendary=info?`<span class="legendaryTraitLine ${info.id}"><b>${compact?info.label:`伝説特性・${info.label}`}</b><br>${info.desc}</span>`:"";
+ return`${wardenImprintSummaryHtml(g,compact)}${legendary}`;
 }
 function legendaryGlassDefensePenalty(){const count=legendaryTraitCount("glass");return Math.min(6,count*2)}
 function legendaryBerserkMultiplier(){const count=legendaryTraitCount("berserk");return count?Math.min(1.6,1.45+(count-1)*.05):1}
@@ -6029,7 +6159,7 @@ function enemyResearchInfo(enemy){
  if(anatomy>=1)text+=` / 推定脅威 ${enemy.level||floorTargetLevel()}`;
  if(anatomy>=2)text+=` / 経験値倍率 ${xpPercentForEnemy(enemy)}%`;
  if(anatomy>=3){
-  const weakness=enemy.faction==="undead"?"光":enemy.type==="bomber"?"氷":enemy.type==="warg"?"毒":"状況依存";
+  const weakness=enemy.faction==="undead"?"光":enemy.type==="bomber"||enemy.type==="leech"?"氷":enemy.type==="warg"||enemy.type==="charger"?"毒":"状況依存";
   text+=` / 有効傾向 ${weakness}`;
  }
  return text+"</p>";
@@ -8371,6 +8501,7 @@ function lighthouseStashBuildPreviewHtml(meta,gear){
 function applyMetaToFreshState(newState){
  const meta=loadMeta()||defaultMeta();
  ensureAppearanceMeta(meta);
+ ensureRecoveryAssistMeta(meta);
  meta.balanceMigrations=meta.balanceMigrations||{};
  meta.balanceMigrations.hungerV31042=true;
  meta.balanceMigrations.gearAttunementV3105=true;
@@ -8437,6 +8568,7 @@ function createRunStats(meta){
   objectivesCompleted:0,
   routesCompleted:0,
   roomEncountersCleared:0,
+  tacticalPacksCleared:0,
   floorPhenomenaTriggered:0,floorPhenomenaResolved:0,
   terrainSnares:0,terrainCoverBlocks:0,terrainElementHits:0,terrainRootSteps:0,
   factionKills:{undead:0,beast:0,aberration:0},
@@ -8897,6 +9029,7 @@ function buildExpeditionReport(outcome,details={}){
   objectives:stats.objectivesCompleted||0,
   routesCompleted:stats.routesCompleted||0,
   roomEncountersCleared:stats.roomEncountersCleared||0,
+  tacticalPacksCleared:stats.tacticalPacksCleared||0,
   floorPhenomenaTriggered:stats.floorPhenomenaTriggered||0,
   floorPhenomenaResolved:stats.floorPhenomenaResolved||0,
   phenomenonHistory:(state.phenomenonHistory||[]).map(entry=>({...entry})),
@@ -8973,7 +9106,9 @@ function buildExpeditionReport(outcome,details={}){
   firstTwentyFirstClear:!!stats.firstTwentyFirstClear,
   firstTwentyRewardShards:stats.firstTwentyRewardShards||0,
   firstTwentyRewardAnchor:stats.firstTwentyRewardAnchor||0,
+  deepCycle:(()=>{const law=deepCycleLawForFloor();return law?{cycle:law.cycle,id:law.id,label:law.label,pressure:law.pressure}:null})(),
   whisper:details.whisper?{...details.whisper}:null,
+  recoveryAssist:details.recoveryAssist?{sourceFloor:details.recoveryAssist.sourceFloor,floorLimit:details.recoveryAssist.floorLimit,itemBonus:details.recoveryAssist.itemBonus,gearLevelBonus:details.recoveryAssist.gearLevelBonus}:null,
   runGrowth:{...ensureRunGrowth()},
   highlights:[]
  };
@@ -8985,10 +9120,13 @@ function buildExpeditionReport(outcome,details={}){
  if((reportGrowth[reportGrowthBranch]||0)>=2)report.highlights.push(`樹脈は${runGrowthBranchData[reportGrowthBranch].label}${reportGrowth[reportGrowthBranch]}まで深化`);
  if(report.firstTwentyFirstClear)report.highlights.push(`第一深度圏を初踏破・欠片+${report.firstTwentyRewardShards} / 魂還石+${report.firstTwentyRewardAnchor}`);
  else if(report.firstTwentyCleared)report.highlights.push("第一深度圏・第20層を踏破");
+ if(report.deepCycle)report.highlights.push(`第${report.deepCycle.cycle}深度圏「${report.deepCycle.label}」へ到達`);
+ if(report.recoveryAssist)report.highlights.push(`次の探索に再起支援・第${report.recoveryAssist.floorLimit}層まで物資と装備再建を補助`);
  if(report.bosses>0)report.highlights.push(`番人を${report.bosses}体撃破`);
  if(report.routesCompleted>0)report.highlights.push(`進路を${report.routesCompleted}区間踏破`);
  if(report.specialForksTaken>0)report.highlights.push(`深脈の特殊分岐を${report.specialForksTaken}回選択`);
  if(report.roomEncountersCleared>0)report.highlights.push(`任意の特異室を${report.roomEncountersCleared}室制圧`);
+ if(report.tacticalPacksCleared>0)report.highlights.push(`連携戦団を${report.tacticalPacksCleared}隊撃破`);
  if(report.floorPhenomenaTriggered>0)report.highlights.push(`迷宮現象を${report.floorPhenomenaTriggered}回経験`);
  if(report.terrainSnares>0)report.highlights.push(`絡み根で敵の行動を${report.terrainSnares}回止めた`);
  if(report.terrainCoverBlocks>0)report.highlights.push(`崩れ石の遮蔽を${report.terrainCoverBlocks}回利用`);
@@ -9085,6 +9223,7 @@ function expeditionReportHtml(report,compact=false){
     <span class="expeditionPill">目標達成 ${report.objectives||0}</span>
     <span class="expeditionPill">進路踏破 ${report.routesCompleted||0}</span>
     <span class="expeditionPill">深脈分岐 ${report.forksTaken||0}</span>
+    ${report.tacticalPacksCleared?`<span class="expeditionPill">戦団撃破 ${report.tacticalPacksCleared}</span>`:""}
     ${report.floorPhenomenaTriggered?`<span class="expeditionPill">迷宮現象 ${report.floorPhenomenaTriggered}</span>`:""}
     <span class="expeditionPill">熟練 狩${report.routeMastery?.hunt||0}・観${report.routeMastery?.archive||0}・補${report.routeMastery?.supply||0}</span>
     ${report.runGrowth?`<span class="expeditionPill">樹脈 刃${report.runGrowth.force||0}・護${report.runGrowth.guard||0}・探${report.runGrowth.explore||0}</span>`:""}
@@ -9198,8 +9337,9 @@ function finishExpeditionDeath(cause,killer=null){
  state.gameOver=true;
  state.expeditionEnded=true;
  state.meta.bestFloor=Math.max(state.meta.bestFloor,state.floor);
+ const recoveryAssist=scheduleRecoveryAssistAfterDeath(deathLoss,cause);
  const whisper=finishAbyssWhisperAttempt("death");
- const report=buildExpeditionReport("death",{cause,insurance,echo,deathLoss,whisper});
+ const report=buildExpeditionReport("death",{cause,insurance,echo,deathLoss,whisper,recoveryAssist});
  commitExpeditionReport(report);
  finalizeExpeditionClosure("death",report,cause);
  sfx("death");updateMusicScene(true);
@@ -9207,11 +9347,11 @@ function finishExpeditionDeath(cause,killer=null){
 }
 function freshState(){
  const newState={
-  version:4,expeditionId:createExpeditionId(),seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,runGrowth:{force:0,guard:0,explore:0},critDamageBonus:0,
+  version:4,expeditionId:createExpeditionId(),seed:(Date.now()>>>0),floor:1,turn:0,level:1,xp:0,nextXp:24,gold:0,runGrowth:{force:0,guard:0,explore:0},critDamageBonus:0,recoveryAssist:null,
   hunger:840,maxHunger:840,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],sealedRelics:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false,lastStandUsed:false,lastStandArmed:false,lastStandInvulnerable:false,lastStandTriggeredThisTurn:false,lastStandRechargePending:false,exhaustedTurns:0},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,counters:0,crits:0,lastStands:0},
-  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],terrainFeatures:[],terrainKnowledge:{},secretWalls:[],shortcuts:[],events:[],roomEncounters:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],floorFork:null,forkHistory:[],floorPhenomenon:null,phenomenonHistory:[],labyrinthReaction:null,reactionApplied:false,runWhisper:null,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
+  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],terrainFeatures:[],terrainKnowledge:{},secretWalls:[],shortcuts:[],events:[],roomEncounters:[],tacticalPacks:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],floorFork:null,forkHistory:[],floorPhenomenon:null,phenomenonHistory:[],labyrinthReaction:null,reactionApplied:false,runWhisper:null,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
   player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},abyssWhisper:{cycle:0,options:[],selectedId:null,history:[]},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}},audio:{enabled:true,started:false,bgmEnabled:true,sfxEnabled:true,bgmVolume:.38,sfxVolume:.62},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
  newState.audio=normalizeAudioSettings(newState.audio);
@@ -9329,7 +9469,10 @@ function makeRoomEncounterEnemy(type,p,enc,index){
   skeleton:{name:"盾骸兵",hp:14,atk:4,def:3,xp:7},
   warg:{name:"穴獣",hp:9,atk:5,def:0,xp:6},
   mage:{name:"骨術師",hp:8,atk:6,def:0,xp:8},
-  bomber:{name:"爆ぜ虫",hp:6,atk:8,def:0,xp:7}
+  bomber:{name:"爆ぜ虫",hp:6,atk:8,def:0,xp:7},
+  priest:{name:"墓鐘司祭",hp:10,atk:5,def:1,xp:10},
+  charger:{name:"穿ち獣",hp:12,atk:7,def:1,xp:9},
+  leech:{name:"灯喰らい",hp:9,atk:6,def:1,xp:10}
  }[type];
  const enemyLevel=rollEnemyLevel(false);
  const enemy={
@@ -9344,11 +9487,11 @@ function makeRoomEncounterEnemy(type,p,enc,index){
  return enemy;
 }
 function roomEncounterEnemyTypes(type){
- if(type==="armory")return state.floor>=12?["skeleton","skeleton","mage"]:["skeleton","skeleton"];
- if(type==="den")return state.floor>=10?["warg","warg","warg","warg"]:["warg","warg","warg"];
- if(type==="ritual")return state.floor>=12?["mage","mage","skeleton"]:["mage","mage"];
- if(type==="powder")return state.floor>=12?["bomber","bomber","warg"]:["bomber","bomber"];
- return state.floor>=14?["skeleton","warg","mage","bomber"]:["skeleton","warg","mage"];
+ if(type==="armory")return state.floor>=12?["skeleton","skeleton","priest"]:state.floor>=7?["skeleton","priest"]:["skeleton","skeleton"];
+ if(type==="den")return state.floor>=10?["warg","charger","warg","warg"]:["warg","warg","warg"];
+ if(type==="ritual")return state.floor>=12?["mage","priest","skeleton"]:state.floor>=7?["mage","priest"]:["mage","mage"];
+ if(type==="powder")return state.floor>=12?["bomber","leech","bomber"]:["bomber","bomber"];
+ return state.floor>=14?["charger","priest","leech","mage"]:state.floor>=9?["skeleton","charger","mage"]:["skeleton","warg","mage"];
 }
 function prepareRoomEncounter(enc){
  const room=state.rooms?.[enc.roomIndex];if(!room)return false;
@@ -9384,6 +9527,101 @@ function addRoomEncounters(){
   if(prepareRoomEncounter(enc))state.roomEncounters.push(enc);
  }
 }
+const tacticalPackDefs={
+ bellGuard:{label:"墓鐘護衛",minFloor:7,biomes:["crypt","furnace","fungal"],types:["skeleton","priest","mage"],hint:"前衛の奥で墓鐘司祭が回復する。支援役へ射線を通すか、祈祷を態勢崩しで止める。"},
+ chargeHunt:{label:"穿ち狩り",minFloor:9,biomes:["furnace","frost","fungal"],types:["charger","warg","warg"],hint:"穴獣に足を止められると穿ち突進の射線が通る。直線を外して反撃好機へ変える。"},
+ blackout:{label:"消灯包囲",minFloor:12,biomes:["frost","fungal","furnace"],types:["leech","bomber","skeleton"],hint:"灯喰らいが灯火を削り、爆ぜ虫が退路を狭める。灯火を守るか爆発を敵へ利用する。",barrels:2},
+ crossfire:{label:"鐘射十字",minFloor:12,biomes:["frost","fungal","crypt"],types:["mage","charger","priest"],hint:"遠距離射線・突進・回復が同時に噛み合う。遮蔽を使って一役ずつ分断する。"}
+};
+function tacticalPackById(id){return(state.tacticalPacks||[]).find(pack=>pack.id===id)||null}
+function tacticalPackRoomBlocked(room,index){
+ if(!room||index<=0||index>=state.rooms.length-1)return true;
+ if(roomEncounterRoomBlocked(room))return true;
+ if((state.roomEncounters||[]).some(enc=>enc.roomIndex===index))return true;
+ return false;
+}
+function tacticalPackCandidates(){
+ const biome=currentBiomeKey();
+ return Object.entries(tacticalPackDefs).filter(([,def])=>state.floor>=def.minFloor&&def.biomes.includes(biome));
+}
+function makeTacticalPackEnemy(type,p,pack,index){
+ const enemy=makeRoomEncounterEnemy(type,p,{id:`pack-${pack.id}`},index);
+ delete enemy.roomEncounterId;delete enemy.encounterDormant;
+ enemy.tacticalPackId=pack.id;enemy.tacticalPackLabel=pack.label;
+ return enemy;
+}
+function tacticalPackCountForFloor(){
+ if(state.floor<7||state.floor%5===0||isRestFloor())return 0;
+ const base=state.floor>=16&&state.rooms.length>=8?2:1;
+ return Math.min(3,base+deepCycleValue("packBonus"));
+}
+function prepareTacticalPack(pack){
+ const room=state.rooms?.[pack.roomIndex];if(!room)return false;
+ // 通常配置を置き換えて密度だけが増えないようにする。固有敵は残す。
+ state.enemies=state.enemies.filter(e=>!roomContains(room,e.x,e.y)||e.boss||e.nemesis||e.echoGuard||e.roomEncounterId);
+ const used=new Set();
+ for(let i=0;i<pack.types.length;i++){
+  const p=randomRoomEncounterCell(room,used,i===0);if(!p)break;
+  used.add(key(p.x,p.y));const enemy=makeTacticalPackEnemy(pack.types[i],p,pack,i);
+  state.enemies.push(enemy);pack.enemyIds.push(enemy.id);
+ }
+ const def=tacticalPackDefs[pack.defId];
+ if(def?.barrels){
+  for(let i=0;i<def.barrels;i++){
+   const p=randomRoomEncounterCell(room,used,false);if(!p)break;
+   used.add(key(p.x,p.y));state.environment.push({x:p.x,y:p.y,type:"barrel",active:true,burning:false,timer:0,tacticalPackId:pack.id});
+  }
+ }
+ return pack.enemyIds.length>=2;
+}
+function addTacticalPacks(){
+ state.tacticalPacks=[];
+ const count=tacticalPackCountForFloor();if(!count)return;
+ const defs=tacticalPackCandidates();if(!defs.length)return;
+ const rooms=state.rooms.map((room,index)=>({room,index})).filter(entry=>!tacticalPackRoomBlocked(entry.room,entry.index));
+ rooms.sort(()=>rng()-.5);
+ const usedDefs=new Set();
+ for(const entry of rooms.slice(0,count)){
+  let options=defs.filter(([id])=>!usedDefs.has(id));if(!options.length)options=defs;
+  const [defId,def]=choice(options);usedDefs.add(defId);
+  const pack={id:`p${state.floor}-${entry.index}-${defId}`,defId,label:def.label,hint:def.hint,roomIndex:entry.index,cx:entry.room.cx,cy:entry.room.cy,types:[...def.types],enemyIds:[],alerted:false,cleared:false,announced:false,clearedAt:0};
+  if(prepareTacticalPack(pack))state.tacticalPacks.push(pack);
+ }
+}
+function alertTacticalPack(id,source="sight"){
+ const pack=tacticalPackById(id);if(!pack||pack.cleared)return false;
+ if(!pack.alerted){
+  pack.alerted=true;
+  for(const ally of state.enemies){
+   if(ally.tacticalPackId!==pack.id)continue;
+   ally.alert=Math.max(ally.alert||0,5);ally.lastSeen={x:state.player.x,y:state.player.y};ally.rivalId=null;
+  }
+  if(!pack.announced){
+   pack.announced=true;
+   addLog(`連携戦団「${pack.label}」が一斉にこちらを捉えた。${pack.hint}`);
+   showCombatToast(`戦団・${pack.label}`,pack.hint,"objective");
+  }
+ }
+ return true;
+}
+function updateTacticalPacks(){
+ for(const pack of state.tacticalPacks||[]){
+  if(pack.cleared)continue;
+  const alive=state.enemies.some(e=>e.tacticalPackId===pack.id);
+  if(alive)continue;
+  pack.cleared=true;pack.clearedAt=state.turn;
+  const reward=8+Math.floor(state.floor*1.5);state.gold+=reward;
+  ensureRunStats().tacticalPacksCleared=(ensureRunStats().tacticalPacksCleared||0)+1;
+  addLog(`連携戦団「${pack.label}」を崩した。探索内所持金 +${reward}G。`);
+  showCombatToast("戦団撃破",`${pack.label}・${reward}G` ,"objective");
+  gainObservation("enemy",1);
+ }
+}
+function tacticalPackHintHtml(enemy){
+ const pack=tacticalPackById(enemy?.tacticalPackId);if(!pack)return"";
+ return`<div class="tagBuild"><b>連携戦団・${pack.label}</b><br>${pack.hint}<br><span class="bondStage">${pack.alerted?"戦団全体が警戒中":"まだ連携警戒していない"}</span></div>`;
+}
+
 function triggerRoomEncounterById(id,source="entry"){
  const enc=roomEncounterById(id);if(!enc||enc.cleared)return false;
  enc.discovered=true;
@@ -9540,6 +9778,7 @@ function prepareWardenTrophy(gear,enemy,profile){
  reinforceWardenTrophyLevel(gear,cadence.itemLevelBonus||0);
  gear.wardenTrophyFloor=floor;
  gear.wardenTrophyKey=profile?.key||wardenProfileKeyForFloor(floor);
+ gear.wardenImprint=gear.wardenTrophyKey;
  gear.wardenTrophyName=profile?.name||wardenProfileFor(enemy).name;
  gear.wardenTrophyAt=Date.now();
  gear.locked=true;
@@ -9792,7 +10031,8 @@ function counterWindowActive(enemy){
 }
 function counterWindowMultiplier(enemy){
  const growthBonus=runGrowthHas("force",2)?.10:0;
- return(enemy?.boss?1.15:1.30)+growthBonus;
+ const chainBonus=Math.min(.20,wardenImprintCount("chain")*.10);
+ return(enemy?.boss?1.15:1.30)+growthBonus+chainBonus;
 }
 function openCounterWindow(enemy,reason="見切り",nextPlayerTurn=false){
  if(!enemy||!state.enemies?.includes(enemy)||enemy.hp<=0)return false;
@@ -9809,9 +10049,10 @@ function consumeCounterWindow(enemy){
  enemy.counterWindowReason="";
  ensureCombatStats().counters++;
  const pct=Math.round((mult-1)*100);
+ const chainGain=wardenImprintCount("chain")?recoverStamina(1):0;
  spawnCombatText(enemy.x,enemy.y,`COUNTER +${pct}%`,"critical",42);
- showCombatToast("反撃成功",`${enemy.name}の隙へ一撃・威力+${pct}%`,"break");
- addLog(`${enemy.name}の反撃好機を捉え、次の一撃を${pct}%増幅した。`);
+ showCombatToast("反撃成功",`${enemy.name}の隙へ一撃・威力+${pct}%${chainGain?"・鎖返し 気力+1":""}`,"break");
+ addLog(`${enemy.name}の反撃好機を捉え、次の一撃を${pct}%増幅した。${chainGain?" 番人刻印「鎖返し」で気力が1戻った。":""}`);
  return mult;
 }
 function showCombatToast(title,detail="",kind=""){
@@ -10652,8 +10893,9 @@ function floorPhenomenonRecord(p,outcome){
  return record;
 }
 function floorPhenomenonEnemyType(faction,index=0){
- if(faction==="beast")return"warg";
- if(faction==="aberration")return"bomber";
+ if(faction==="beast")return state.floor>=9&&index%3===2?"charger":"warg";
+ if(faction==="aberration")return state.floor>=12&&index%3===2?"leech":"bomber";
+ if(state.floor>=7&&index%4===3)return"priest";
  return index%3===2?"mage":"skeleton";
 }
 function createFloorPhenomenonEnemy(faction,index,p,id){
@@ -10662,7 +10904,10 @@ function createFloorPhenomenonEnemy(faction,index,p,id){
   skeleton:{name:"流入した盾骸兵",hp:14,atk:4,def:3,xp:7},
   warg:{name:"流入した穴獣",hp:9,atk:5,def:0,xp:6},
   mage:{name:"流入した骨術師",hp:8,atk:6,def:0,xp:8},
-  bomber:{name:"流入した爆ぜ虫",hp:6,atk:8,def:0,xp:7}
+  bomber:{name:"流入した爆ぜ虫",hp:6,atk:8,def:0,xp:7},
+  priest:{name:"流入した墓鐘司祭",hp:10,atk:5,def:1,xp:10},
+  charger:{name:"流入した穿ち獣",hp:12,atk:7,def:1,xp:9},
+  leech:{name:"流入した灯喰らい",hp:9,atk:6,def:1,xp:10}
  }[type];
  const level=rollEnemyLevel(false);
  const enemy={
@@ -10818,7 +11063,7 @@ function applyEliteMutationEffect(enemy,affix){
  if(affix==="lightEater"){enemy.maxHp=Math.max(1,enemy.maxHp-1);enemy.hp=enemy.maxHp}
 }
 function applyEliteMutation(enemy){
- const chance=clamp(.16+routeValue("eliteBonus")+resonanceBonus("eliteChance")+reactionValue("eliteBonus")+floorForkValue("eliteBonus"),.04,.75);
+ const chance=clamp(.16+routeValue("eliteBonus")+resonanceBonus("eliteChance")+reactionValue("eliteBonus")+floorForkValue("eliteBonus")+deepCycleValue("eliteBonus"),.04,.82);
  if(enemy.boss||rng()>chance)return;
  const affix=choice(eliteMutationPoolFor(enemy));
  enemy.elite=affix;
@@ -11075,7 +11320,7 @@ function rebuildEmergencyFloor(reason="terrain"){
  state.player={x:6,y:6};
  state.stairs={x:COLS-7,y:ROWS-7};
  state.enemies=[];state.items=[];state.traps=[];state.specialTiles=[];state.environment=[];state.terrainFeatures=[];state.terrainKnowledge={};
- state.secretWalls=[];state.shortcuts=[];state.events=[];state.roomEncounters=[];state.remains=[];
+ state.secretWalls=[];state.shortcuts=[];state.events=[];state.roomEncounters=[];state.tacticalPacks=[];state.remains=[];
  state.visited={};state.visible={};state.bossDefeated=false;
  state.floorStats=createFloorStats();
  state.floorObjective={...createFloorObjective(),floor:state.floor};
@@ -11096,7 +11341,7 @@ function repairActiveRunProgressionState(source="render"){
  if(state.floorFork&&state.floorFork.targetFloor!==state.floor){state.floorFork=null;changed=true}
  if(state.floorPhenomenon&&state.floorPhenomenon.floor!==state.floor){state.floorPhenomenon=null;changed=true}
  normalizeFloorPhenomenonState();
- const arrays=["enemies","items","inventory","sealedRelics","traps","specialTiles","environment","terrainFeatures","secretWalls","shortcuts","events","roomEncounters","remains","rooms"];
+ const arrays=["enemies","items","inventory","sealedRelics","traps","specialTiles","environment","terrainFeatures","secretWalls","shortcuts","events","roomEncounters","tacticalPacks","remains","rooms"];
  for(const keyName of arrays){if(!Array.isArray(state[keyName])){state[keyName]=[];changed=true}}
  if(!state.visual||typeof state.visual!=="object"){state.visual={};changed=true}
  if(!Array.isArray(state.visual.effects)){state.visual.effects=[];changed=true}
@@ -11324,15 +11569,15 @@ const factionData={
  guardian:{label:"番人",color:"#d7be62"}
 };
 function enemyFaction(type){
- if(type==="skeleton"||type==="mage")return"undead";
- if(type==="warg")return"beast";
- if(type==="bomber")return"aberration";
+ if(type==="skeleton"||type==="mage"||type==="priest")return"undead";
+ if(type==="warg"||type==="charger")return"beast";
+ if(type==="bomber"||type==="leech")return"aberration";
  return"guardian";
 }
 const livingFactionData={
- undead:{label:"死者",dominant:"死者優勢",desc:"盾骸兵・骨術師が増える。優勢個体から鑑定・解呪物資を得ることがある。"},
- beast:{label:"獣群",dominant:"獣群優勢",desc:"穴獣が増える。優勢個体から食料・治癒薬を得ることがある。"},
- aberration:{label:"異形",dominant:"異形優勢",desc:"爆ぜ虫が増える。優勢個体から灯油・火炎壺を得ることがある。"}
+ undead:{label:"死者",dominant:"死者優勢",desc:"盾骸兵・骨術師・墓鐘司祭が増える。優勢個体から鑑定・解呪物資を得ることがある。"},
+ beast:{label:"獣群",dominant:"獣群優勢",desc:"穴獣・穿ち獣が増える。優勢個体から食料・治癒薬を得ることがある。"},
+ aberration:{label:"異形",dominant:"異形優勢",desc:"爆ぜ虫・灯喰らいが増える。優勢個体から灯油・火炎壺を得ることがある。"}
 };
 function ensureLivingEcology(meta=state?.meta){
  if(!meta)return{version:1,undead:100,beast:100,aberration:100,history:[]};
@@ -11367,26 +11612,30 @@ function weightedEnemyType(weights){
  return entries[entries.length-1]?.[0]||"skeleton";
 }
 function chooseLivingEnemyType(){
+ const depth=Math.max(1,state.floor||1);
  let type=weightedEnemyType({
-  skeleton:.38*livingEcologySpawnMultiplier("undead"),
-  mage:.18*livingEcologySpawnMultiplier("undead"),
-  warg:.30*livingEcologySpawnMultiplier("beast"),
-  bomber:.14*livingEcologySpawnMultiplier("aberration")
+  skeleton:.31*livingEcologySpawnMultiplier("undead"),
+  mage:.15*livingEcologySpawnMultiplier("undead"),
+  priest:(depth>=7?.09:0)*livingEcologySpawnMultiplier("undead"),
+  warg:.25*livingEcologySpawnMultiplier("beast"),
+  charger:(depth>=9?.09:0)*livingEcologySpawnMultiplier("beast"),
+  bomber:.11*livingEcologySpawnMultiplier("aberration"),
+  leech:(depth>=12?.08:0)*livingEcologySpawnMultiplier("aberration")
  });
- // 既存バランスのバイオーム・迷宮適応・迷宮反応は従来どおり最後に作用する。
+ // バイオーム・適応・迷宮反応で「役割の偏り」を作る。新敵も解禁深度までは出さない。
  const biome=currentBiomeKey();
- if(biome==="crypt"&&rng()<.42)type=rng()<.65?"skeleton":"mage";
- if(biome==="furnace"&&rng()<.4)type=rng()<.65?"bomber":"warg";
- if(biome==="frost"&&rng()<.34)type=rng()<.55?"warg":"skeleton";
- if(biome==="fungal"&&rng()<.38)type=rng()<.6?"warg":"mage";
+ if(biome==="crypt"&&rng()<.42)type=depth>=7&&rng()<.22?"priest":rng()<.65?"skeleton":"mage";
+ if(biome==="furnace"&&rng()<.4)type=depth>=12&&rng()<.24?"leech":rng()<.65?"bomber":"warg";
+ if(biome==="frost"&&rng()<.34)type=depth>=9&&rng()<.28?"charger":rng()<.55?"warg":"skeleton";
+ if(biome==="fungal"&&rng()<.38)type=depth>=12&&rng()<.22?"leech":rng()<.6?"warg":"mage";
  const ad=state.meta?.adaptation;
- if(ad==="anti_sword"&&rng()<.34)type="skeleton";
- if(ad==="anti_spear"&&rng()<.34)type="warg";
- if(ad==="anti_bow"&&rng()<.36)type="warg";
- if(ad==="anti_staff"&&rng()<.34)type="mage";
- if(reactionValue("mageBias")>0&&rng()<reactionValue("mageBias"))type="mage";
- if(reactionValue("rangedBias")>0&&rng()<reactionValue("rangedBias"))type=rng()<.68?"mage":"bomber";
- if(type==="bomber"&&reactionValue("bomberBias")<0&&rng()<Math.abs(reactionValue("bomberBias")))type=rng()<.55?"skeleton":"warg";
+ if(ad==="anti_sword"&&rng()<.34)type=depth>=7&&rng()<.24?"priest":"skeleton";
+ if(ad==="anti_spear"&&rng()<.34)type=depth>=9&&rng()<.28?"charger":"warg";
+ if(ad==="anti_bow"&&rng()<.36)type=depth>=9&&rng()<.30?"charger":"warg";
+ if(ad==="anti_staff"&&rng()<.34)type=depth>=7&&rng()<.25?"priest":"mage";
+ if(reactionValue("mageBias")>0&&rng()<reactionValue("mageBias"))type=depth>=7&&rng()<.22?"priest":"mage";
+ if(reactionValue("rangedBias")>0&&rng()<reactionValue("rangedBias"))type=rng()<.68?(depth>=7&&rng()<.18?"priest":"mage"):(depth>=12&&rng()<.24?"leech":"bomber");
+ if((type==="bomber"||type==="leech")&&reactionValue("bomberBias")<0&&rng()<Math.abs(reactionValue("bomberBias")))type=depth>=9&&rng()<.28?"charger":rng()<.55?"skeleton":"warg";
  return type;
 }
 function livingEcologyResourceReward(enemy){
@@ -11561,6 +11810,7 @@ function updateEnemyAwareness(e){
   e.rivalId=null;
   e.alert=e.boss||e.nemesis?8:5;
   e.lastSeen={x:state.player.x,y:state.player.y};
+  if(e.tacticalPackId)alertTacticalPack(e.tacticalPackId,sees?"sight":"sound");
   return true;
  }
  if((e.alert||0)>0){
@@ -11870,6 +12120,100 @@ function floorPlan(){
   boss:state.floor%5===0,rest:false
  };
 }
+
+const recoveryAssistDefaults={pending:false,sourceFloor:0,floorLimit:0,itemBonus:0,gearLevelBonus:0,oathRelief:false,createdAt:0,timesUsed:0};
+function ensureRecoveryAssistMeta(meta=state?.meta){
+ if(!meta)return{...recoveryAssistDefaults};
+ if(!meta.recoveryAssist||typeof meta.recoveryAssist!=="object")meta.recoveryAssist={...recoveryAssistDefaults};
+ const r=meta.recoveryAssist;
+ for(const [key,value] of Object.entries(recoveryAssistDefaults))if(typeof r[key]!==typeof value)r[key]=value;
+ r.sourceFloor=Math.max(0,Math.floor(Number(r.sourceFloor)||0));
+ r.floorLimit=Math.max(0,Math.floor(Number(r.floorLimit)||0));
+ r.itemBonus=Math.max(0,Math.floor(Number(r.itemBonus)||0));
+ r.gearLevelBonus=Math.max(0,Math.floor(Number(r.gearLevelBonus)||0));
+ r.timesUsed=Math.max(0,Math.floor(Number(r.timesUsed)||0));
+ return r;
+}
+function scheduleRecoveryAssistAfterDeath(deathLoss,cause=""){
+ const lost=Math.max(0,deathLoss?.unprotected||0);
+ const floor=Math.max(1,state?.floor||1);
+ if(floor<10||lost<2)return null;
+ const r=ensureRecoveryAssistMeta(state.meta);
+ const floorLimit=floor>=30?15:floor>=20?10:5;
+ r.pending=true;
+ r.sourceFloor=floor;
+ r.floorLimit=floorLimit;
+ r.itemBonus=floor>=20?2:1;
+ r.gearLevelBonus=1;
+ r.oathRelief=true;
+ r.createdAt=Date.now();
+ r.cause=String(cause||"");
+ return{...r};
+}
+function claimRecoveryAssistForDeparture(meta){
+ const r=ensureRecoveryAssistMeta(meta);
+ if(!r.pending)return null;
+ const runtime={active:true,sourceFloor:r.sourceFloor,floorLimit:r.floorLimit,itemBonus:r.itemBonus,gearLevelBonus:r.gearLevelBonus,oathRelief:!!r.oathRelief,startedAt:Date.now()};
+ r.pending=false;
+ r.timesUsed=(r.timesUsed||0)+1;
+ return runtime;
+}
+function activeRecoveryAssist(){
+ const r=state?.recoveryAssist;
+ return r?.active&&state.floor<=r.floorLimit?r:null;
+}
+function recoveryAssistValue(key){const r=activeRecoveryAssist();return r?.[key]||0}
+function recoveryOathReliefActive(meta=state?.meta){
+ const runtime=state?.recoveryAssist;
+ if(runtime?.active&&runtime.oathRelief&&state.floor<=runtime.floorLimit)return true;
+ const pending=ensureRecoveryAssistMeta(meta);
+ return !!pending.pending&&!!pending.oathRelief;
+}
+function recoveryAssistHubHtml(meta=state?.meta){
+ const r=ensureRecoveryAssistMeta(meta);if(!r.pending)return"";
+ return`<div class="recoveryAssistCard"><b>再起支援・次の探索のみ</b><span>第${r.sourceFloor}層で大きな装備損失を受けたため、第1〜${r.floorLimit}層では物資+${r.itemBonus}、装備ILv+${r.gearLevelBonus}。銘装を保持している場合は浅層でも経験を得られます。敵の強さは現在階層どおりで、最高到達階による恒久強化はありません。</span></div>`;
+}
+function recoveryAssistRunHtml(){
+ const r=activeRecoveryAssist();if(!r)return"";
+ return`<div class="recoveryAssistRun"><b>再起支援</b>　第${r.floorLimit}層まで物資+${r.itemBonus} / 装備ILv+${r.gearLevelBonus}${r.oathRelief?" / 銘装の浅層XP制限解除":""}</div>`;
+}
+
+const deepCycleLawData={
+ echo:{
+  id:"echo",label:"反響圏",desc:"敵同士の連携と変異が濃くなる一方、封印遺物の反応も強まる。",
+  effects:["敵密度+1","戦団+1","変異率+5%","封印遺物率×1.25"],
+  enemyBonus:1,packBonus:1,eliteBonus:.05,itemBonus:0,gearLevelBonus:0,relicMultiplier:1.25
+ },
+ famine:{
+  id:"famine",label:"飢圧圏",desc:"物資が痩せ、敵が密集する。生き残れば一段深い装備が得られる。",
+  effects:["敵密度+2","通常物資-2","装備ILv+1","封印遺物率×1.10"],
+  enemyBonus:2,packBonus:0,eliteBonus:.02,itemBonus:-2,gearLevelBonus:1,relicMultiplier:1.10
+ },
+ mutation:{
+  id:"mutation",label:"変異圏",desc:"深淵の生態が歪み、変異個体が急増する。高深度装備と遺物反応も濃い。",
+  effects:["敵密度+1","変異率+14%","装備ILv+1","封印遺物率×1.35"],
+  enemyBonus:1,packBonus:0,eliteBonus:.14,itemBonus:0,gearLevelBonus:1,relicMultiplier:1.35
+ }
+};
+function deepCycleIndex(floor=state?.floor||1){return Math.max(1,Math.floor((Math.max(1,floor)-1)/20)+1)}
+function deepCycleLawForFloor(floor=state?.floor||1){
+ const cycle=deepCycleIndex(floor);if(cycle<=1)return null;
+ const ids=["echo","famine","mutation"];
+ const id=ids[(cycle-2)%ids.length];
+ const base=deepCycleLawData[id];
+ const pressure=Math.max(0,Math.floor((cycle-2)/3));
+ return{...base,cycle,pressure,
+  enemyBonus:base.enemyBonus+Math.min(3,pressure),
+  objectiveShards:Math.min(5,Math.max(1,Math.floor(cycle/2)))
+ };
+}
+function deepCycleValue(key,floor=state?.floor||1){const law=deepCycleLawForFloor(floor);return law?.[key]||0}
+function deepCycleBoundaryFloor(floor=state?.floor||1){return floor>20&&floor%20===0}
+function deepCycleBannerHtml(){
+ const law=deepCycleLawForFloor();if(!law)return"";
+ const rangeStart=(law.cycle-1)*20+1,rangeEnd=law.cycle*20;
+ return`<div class="deepCycleBanner ${law.id}"><b>第${law.cycle}深度圏・${law.label}</b>　${rangeStart}〜${rangeEnd}層<br>${law.desc}<div class="deepCycleLaw">${law.effects.map(effect=>`<span>${effect}</span>`).join("")}${law.pressure?`<span>深圧+${law.pressure}</span>`:""}</div></div>`;
+}
 function isRestFloor(){return !!floorPlan().rest}
 
 const abyssForkData={
@@ -11958,14 +12302,14 @@ function plannedEnemyCount(){
  const base=5+Math.floor(state.floor*1.15);
  const biomePressure=(currentBiomeKey()==="furnace"||currentBiomeKey()==="crypt")?1:0;
  const cap=floorPlan().boss?20:26;
- return Math.max(3,Math.min(cap+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+Math.max(0,floorForkValue("enemyBonus")),base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+floorForkValue("enemyBonus")));
+ return Math.max(3,Math.min(cap+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+Math.max(0,floorForkValue("enemyBonus"))+Math.max(0,deepCycleValue("enemyBonus")),base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+floorForkValue("enemyBonus")+deepCycleValue("enemyBonus")));
 }
 function plannedTrapCount(){
  const base=isRestFloor()?1:Math.min(10,2+Math.floor(state.floor/3));
  return clamp(base+routeValue("trapBonus")+reactionValue("trapBonus")+floorForkValue("trapBonus"),0,16);
 }
 function plannedItemCount(){
- const normal=4+Math.floor(state.floor/2)+(mutation()?.itemBonus||0)+(hasTalent("scavenger")?1:0)+(runGrowthHas("explore",4)?1:0)+routeValue("itemBonus")+reactionValue("itemBonus")+floorForkValue("itemBonus");
+ const normal=4+Math.floor(state.floor/2)+(mutation()?.itemBonus||0)+(hasTalent("scavenger")?1:0)+(runGrowthHas("explore",4)?1:0)+routeValue("itemBonus")+reactionValue("itemBonus")+floorForkValue("itemBonus")+deepCycleValue("itemBonus")+recoveryAssistValue("itemBonus");
  return state.floor===1?7:Math.max(2,normal);
 }
 function placeGuaranteedItem(type,name,minDist=3){
@@ -12032,7 +12376,7 @@ function genericFloorObjective(){
 function objectiveRewardForFloor(){
  const plan=floorPlan();
  return{
-  shards:Math.max(0,1+floorForkValue("objectiveShards")),
+  shards:Math.max(0,1+floorForkValue("objectiveShards")+deepCycleValue("objectiveShards")),
   scrap:(plan.boss?5:2)+routeValue("objectiveScrap"),
   provisions:(plan.rest?60:0)+floorForkValue("objectiveProvisions")
  };
@@ -12193,7 +12537,10 @@ function generateFloor(){
    skeleton:{name:"盾骸兵",hp:14,atk:4,def:3,xp:7},
    warg:{name:"穴獣",hp:9,atk:5,def:0,xp:6},
    mage:{name:"骨術師",hp:8,atk:6,def:0,xp:8},
-   bomber:{name:"爆ぜ虫",hp:6,atk:8,def:0,xp:7}
+   bomber:{name:"爆ぜ虫",hp:6,atk:8,def:0,xp:7},
+   priest:{name:"墓鐘司祭",hp:10,atk:5,def:1,xp:10},
+   charger:{name:"穿ち獣",hp:12,atk:7,def:1,xp:9},
+   leech:{name:"灯喰らい",hp:9,atk:6,def:1,xp:10}
   }[type];
   const enemyLevel=rollEnemyLevel(false);
   const enemy={
@@ -12243,6 +12590,7 @@ function generateFloor(){
  addEnvironmentObjects();
  addTacticalTerrain();
  addRoomEncounters();
+ addTacticalPacks();
  applyFloorPacingRewards();
  prepareFloorPhenomenon();
  prepareRouteFinaleFloor();
@@ -12659,6 +13007,7 @@ function requestCloseLostWeaponOath(){
  return openActionConfirm({title:"失われた銘装誓約を閉じる",tone:"danger",confirmLabel:"喪失記録を閉じる",body:`<div class="actionConfirmLead"><b>${oath.lastKnownName||"失われた誓約武器"}</b>との誓約記録を終了します。</div><div class="actionConfirmWarning danger">武器、蓄積した銘装経験、固定候補、支払った欠片は戻りません。記録を閉じた後は別の適格武器と新しく誓約できます。</div>`,onConfirm:executeCloseLostWeaponOath});
 }
 function weaponOathFloorMinimum(meta=state?.meta,stage=1){
+ if(recoveryOathReliefActive(meta))return 1;
  const offset=stage>=2?2:4;
  return Math.max(1,(meta?.bestFloor||1)-offset);
 }
@@ -13647,7 +13996,7 @@ function removeLighthouseAttunement(g,source="field"){
 }
 
 function rollGear(sourceLevel=floorTargetLevel()){
- sourceLevel=Math.max(1,sourceLevel+floorForkValue("gearLevelBonus"));
+ sourceLevel=Math.max(1,sourceLevel+floorForkValue("gearLevelBonus")+deepCycleValue("gearLevelBonus")+recoveryAssistValue("gearLevelBonus"));
  const roll=rng();let rarity=roll<.62?"common":roll<.88?"magic":roll<.98?"rare":"legendary";
  const slotRoll=rng();
  const slot=slotRoll<.30?"weapon":slotRoll<.42?"shield":slotRoll<.52?"head":
@@ -13728,7 +14077,9 @@ function maybeDropSealedRelic(enemy){
  if(!enemy||enemy.echoGuard)return false;
  const {fortune}=ensureSealedRelicMeta(state.meta);
  let chance=enemy.boss?.30:enemy.nemesis?.14:enemy.elite?.038:.0035;
+ chance=Math.min(1,chance*(deepCycleLawForFloor()?.relicMultiplier||1));
  if(enemy.boss&&!fortune.firstFound)chance=1;
+ if(enemy.boss&&deepCycleBoundaryFloor())chance=1;
  if(rng()>=chance)return false;
  const source=enemy.boss?"boss":enemy.nemesis?"nemesis":enemy.elite?"elite":"ordinary";
  const relic=createSealedRelic(source,state.floor);
@@ -14180,7 +14531,9 @@ function applyTraitDamage(base,e){
  let traitMultiplier=1;
  if(legendaryTraitCount("berserk")&&state.hero.hp<state.hero.maxHp*.4)traitMultiplier*=legendaryBerserkMultiplier();
  if(legendaryTraitCount("glass"))traitMultiplier*=legendaryGlassMultiplier();
- traitMultiplier=Math.min(2.15,traitMultiplier);
+ const furnaceCount=wardenImprintCount("furnace");
+ if(furnaceCount&&e?.status?.burning>0)traitMultiplier*=Math.min(1.30,1.20+(furnaceCount-1)*.05);
+ traitMultiplier=Math.min(2.35,traitMultiplier);
  const talentMultiplier=hasTalent("executioner")&&e.hp<=e.maxHp*.3?1.35:1;
  return base*traitMultiplier*talentMultiplier;
 }
@@ -14763,8 +15116,8 @@ function damageEnemy(e,damage,label=""){
 
 function addRemains(e){
  state.remains=state.remains||[];
- const type=e.type==="skeleton"?"bones":
-            e.type==="bomber"?"scorch":
+ const type=e.type==="skeleton"||e.type==="priest"?"bones":
+            e.type==="bomber"||e.type==="leech"?"scorch":
             e.type==="mage"?"mist":
             e.nemesis?"nemesis":
             e.type==="warden"?"warden":"blood";
@@ -14799,6 +15152,7 @@ function tryNormalEnemyGearDrop(e,rollValue=null){
 }
 function defeatEnemy(e){
  if(!state.enemies.includes(e))return;
+ const hadIntentOnDefeat=!!e.intent;
  const wasBoss=!!e.boss;const wasNemesis=!!e.nemesis;const wasEchoGuard=!!e.echoGuard;
  if(wasBoss)sfx("bossVictory");else if(e.elite||wasNemesis)sfx("eliteKill");
  spreadTagDeathEffects(e);
@@ -14829,6 +15183,14 @@ function defeatEnemy(e){
  if(e.boss||e.elite)state.meta.shards+=e.boss?5:1;
  saveMeta();
  addLog(e.name+"を倒した。");
+ if(!wasBoss&&hadIntentOnDefeat&&wardenImprintCount("oracle")){
+  const beforeCd=state.cooldowns?.volley||0;
+  if(state.cooldowns)state.cooldowns.volley=Math.max(0,beforeCd-2);
+  const staminaGain=recoverStamina(1);
+  spawnCombatText(e.x,e.y,"断章","break",34);
+  showCombatToast("番人刻印・断章",`予兆中撃破・武技CD ${beforeCd}→${state.cooldowns?.volley||0}${staminaGain?"・気力+1":""}`,"objective");
+  addLog(`番人刻印「断章」が予兆の終わりを読み取り、武技の再使用を早めた。${staminaGain?" 気力も1戻った。":""}`);
+ }
  if(wasNemesis)recordNemesisVictory(e);
  if(wasEchoGuard)markDeathEchoGuardDefeated(e);
  if(eliteHas(e,"volatile")){
@@ -14887,6 +15249,7 @@ function defeatEnemy(e){
   state.pendingWardenVictoryRecord=null;
  }
  updateRoomEncounters();
+ updateTacticalPacks();
  checkLevel();
 }
 function adjacentEnemiesAround(x,y){
@@ -15006,7 +15369,10 @@ function spawnEcologyEnemy(){
   skeleton:{name:"盾骸兵",hp:14,atk:4,def:3,xp:7},
   warg:{name:"穴獣",hp:9,atk:5,def:0,xp:6},
   mage:{name:"骨術師",hp:8,atk:6,def:0,xp:8},
-  bomber:{name:"爆ぜ虫",hp:6,atk:8,def:0,xp:7}
+  bomber:{name:"爆ぜ虫",hp:6,atk:8,def:0,xp:7},
+  priest:{name:"墓鐘司祭",hp:10,atk:5,def:1,xp:10},
+  charger:{name:"穿ち獣",hp:12,atk:7,def:1,xp:9},
+  leech:{name:"灯喰らい",hp:9,atk:6,def:1,xp:10}
  }[type];
 
  const enemyLevel=rollEnemyLevel(false);
@@ -15242,6 +15608,43 @@ function performWardenTurn(enemy,dist){
 
  stepTowardPlayer(enemy);
 }
+function gravePriestTarget(e){
+ return state.enemies.filter(other=>other!==e&&!other.boss&&other.faction==="undead"&&other.hp<other.maxHp&&Math.abs(other.x-e.x)+Math.abs(other.y-e.y)<=4)
+  .sort((a,b)=>(a.hp/a.maxHp)-(b.hp/b.maxHp))[0]||null;
+}
+function setSupportIntent(e,intent,target){
+ e.intent=intent;e.intentAllyId=target?.id||null;e.intentTarget=target?{x:target.x,y:target.y}:{x:e.x,y:e.y};e.intentCells=buildEnemyIntentCells(e,intent,e.intentTarget);
+}
+function resolveGraveDirge(e){
+ const ally=state.enemies.find(other=>other.id===e.intentAllyId&&other!==e&&other.faction==="undead"&&Math.abs(other.x-e.x)+Math.abs(other.y-e.y)<=4);
+ if(!ally){clearEnemyIntent(e);e.intentAllyId=null;return false}
+ const amount=Math.max(5,5+Math.floor((e.level||1)*1.5));
+ const before=ally.hp;ally.hp=Math.min(ally.maxHp,ally.hp+amount);const healed=ally.hp-before;
+ spawnCombatText(ally.x,ally.y,`+${healed}`,"heal",34);showCombatToast("墓鐘祈祷",`${ally.name} HP+${healed}`,"objective");addLog(`${e.name}の墓鐘祈祷。${ally.name}が${healed}回復した。`);
+ clearEnemyIntent(e);e.intentAllyId=null;return true;
+}
+function chargeTowardMarkedCell(e,target,steps=3){
+ if(!target)return;
+ for(let i=0;i<steps;i++){
+  if(Math.abs(e.x-target.x)+Math.abs(e.y-target.y)<=1)break;
+  const beforeX=e.x,beforeY=e.y;moveTowardPoint(e,target);if(e.x===beforeX&&e.y===beforeY)break;
+ }
+}
+function resolvePiercingCharge(e,cells,playerInTarget){
+ const marked=e.intentTarget?{...e.intentTarget}:null;
+ spawnEnemyAttackCells(cells,"enemy_heavy",20);
+ if(playerInTarget){enemyAttack(e,1.45,"穿ち突進");if(state.gameOver)return true}else registerIntentDodge(e,"charge");
+ chargeTowardMarkedCell(e,marked,3);clearEnemyIntent(e);return true;
+}
+function resolveLightDrain(e,playerInTarget){
+ if(!playerInTarget){registerIntentDodge(e,"light_drain");return true}
+ const lit=!!state.light?.on&&(state.light?.fuel||0)>0;
+ if(lit){
+  const drain=Math.min(state.light.fuel,18+Math.floor((state.floor||1)/5)*2);state.light.fuel=Math.max(0,state.light.fuel-drain);if(state.light.fuel<=0)state.light.on=false;
+  enemyAttack(e,.72,"吸光");addLog(`${e.name}が灯火を${drain}奪った。燃料${state.light.fuel}。`);showCombatToast("灯火を奪われた",`燃料 -${drain} / 残り${state.light.fuel}`,"hurt");renderLightButton();applyLightUtility();updateVision();
+ }else enemyAttack(e,1.12,"暗喰み");
+ clearEnemyIntent(e);return true;
+}
 function enemyTurn(){
  for(const e of [...state.enemies]){
   if(state.enemyTurnInterrupted)break;
@@ -15283,6 +15686,15 @@ function enemyTurn(){
    const cells=enemyIntentCells(e);
    const playerInTarget=enemyIntentHitsPlayer(e);
 
+   if(intent==="dirge"){
+    resolveGraveDirge(e);continue;
+   }
+   if(intent==="charge"){
+    resolvePiercingCharge(e,cells,playerInTarget);if(state.gameOver)return;continue;
+   }
+   if(intent==="light_drain"){
+    resolveLightDrain(e,playerInTarget);if(state.gameOver)return;continue;
+   }
    if(intent==="explode"){
     spawnEnemyAttackCells(cells,"enemy_blast",20);
     bomberExplosion(e);
@@ -15333,6 +15745,27 @@ function enemyTurn(){
   if(eliteHas(e,"swift")&&state.turn%2===0&&dist>1){
    stepTowardPlayer(e);
    if((e.terrainSlow||0)>0)continue;
+  }
+
+  if(e.type==="priest"){
+   const ally=gravePriestTarget(e);
+   if(ally&&dist>=2){setSupportIntent(e,"dirge",ally);addLog(`${e.name}が${ally.name}へ墓鐘の祈りを始めた！`);continue}
+   if(dist===1){stepAwayFromPlayer(e);continue}
+   if(ally){moveTowardPoint(e,ally);continue}
+   stepTowardPlayer(e);continue;
+  }
+
+  if(e.type==="charger"){
+   const aligned=e.x===state.player.x||e.y===state.player.y;
+   if(aligned&&dist>=2&&dist<=5){setEnemyIntent(e,"charge");addLog(e.name+"が一直線に地面を掻き、突進態勢に入った！");continue}
+   if(dist===1){enemyAttack(e,.9,"角突き");if(state.gameOver)return;continue}
+   if(dist<=4){flankPlayer(e);continue}
+   stepTowardPlayer(e);continue;
+  }
+
+  if(e.type==="leech"){
+   if(dist<=2){setEnemyIntent(e,"light_drain");addLog(e.name+"が灯火へ口を開き、吸光を始めた！");continue}
+   stepTowardPlayer(e);continue;
   }
 
   if(e.type==="bomber"){
@@ -16196,8 +16629,14 @@ function waitTurn(){
 
  state.lastAction="rest";
  gainTraining("endurance",2);
- recoverStamina(5);
- addLog("呼吸を整え、気力を回復した。");
+ const rootActive=wardenImprintCount("root")>0&&(state.enemies||[]).some(e=>e.hp>0&&state.visible?.[key(e.x,e.y)]);
+ const recovered=recoverStamina(rootActive?7:5);
+ if(rootActive){
+  state.guardTurns=Math.max(state.guardTurns||0,1);
+  spawnHeroEffect("guard");
+  showCombatToast("番人刻印・静根",`動かず根を張る・気力+${recovered}・構え獲得`,"guard");
+  addLog(`番人刻印「静根」でその場へ根を張り、気力を${recovered}回復して構えを得た。`);
+ }else addLog("呼吸を整え、気力を回復した。");
  endTurn();
 }
 function tryMoveEnemy(e,options){
@@ -17149,7 +17588,7 @@ function buyMetaUpgrade(type){
  renderHub();
 }
 function codexName(type){
- return{skeleton:"盾骸兵",warg:"穴獣",mage:"骨術師",bomber:"爆ぜ虫",warden:"深層の番人"}[type]||type;
+ return{skeleton:"盾骸兵",warg:"穴獣",mage:"骨術師",bomber:"爆ぜ虫",priest:"墓鐘司祭",charger:"穿ち獣",leech:"灯喰らい",warden:"深層の番人"}[type]||type;
 }
 function codexInsight(type,count){
  if(count>=30)return"行動と弱点をほぼ把握した。";
@@ -17522,6 +17961,7 @@ function lighthouseStashCardHtml(meta,entry){
    <div class="stashCompactBadges">
     ${selected?'<span class="stashBadge selected">次回装備</span>':""}
     ${g.wardenTrophyFloor?`<span class="stashBadge warden">第${g.wardenTrophyFloor}層番人</span>`:""}
+    ${wardenImprintInfo(g)?`<span class="stashBadge warden">刻印 ${wardenImprintInfo(g).label}</span>`:""}
     ${g.rarity==="legendary"?'<span class="stashBadge legendary">伝説</span>':""}
     ${oathCurrent?'<span class="stashBadge oath">誓約</span>':""}
     ${echoStrain(g)>0?`<span class="stashBadge strain">歪み${echoStrain(g)}</span>`:""}
@@ -17716,7 +18156,7 @@ function renderHub(){
   ?expeditionReportHtml(lastReport,true)
   :'<p class="note">完了した探索はまだありません。</p>';
  const pendingReaction=pendingLabyrinthReaction(m);
- $("hubSummary").innerHTML=(pendingReaction?labyrinthReactionCardHtml(pendingReaction):"")+`
+ $("hubSummary").innerHTML=recoveryAssistHubHtml(m)+(pendingReaction?labyrinthReactionCardHtml(pendingReaction):"")+`
   <div class="itemRow">
    <div class="top"><span>探索記録</span><span>欠片 ${m.shards}</span></div>
    <div class="desc">最高到達 ${m.bestFloor}層 / 総撃破 ${m.totalKills}<br>帰還によりHP・気力・充足は完全回復。次は新しい探索として出発します。</div>
@@ -17799,6 +18239,7 @@ function startFreshRunFromHub(){
  if(!preparation.ok)return false;
 
  const firstDeparture=!guide.firstDepartureComplete;
+ const recoveryAssist=claimRecoveryAssistForDeparture(meta);
  guide.firstDepartureComplete=true;
  guide.firstDepartureAt=guide.firstDepartureAt||Date.now();
  guide.guideMode=firstDeparture?"compact":guide.guideMode;
@@ -17808,6 +18249,7 @@ function startFreshRunFromHub(){
  clearExpeditionClosure();
 
  state=freshState();
+ state.recoveryAssist=recoveryAssist;
  state.runWhisper=prepareAbyssWhisperForRun(state.meta);
  state.protectionContract=preparation.contract;
  if(!state.weapon&&starterType)state.weapon=makeStarterWeapon(starterType);
@@ -17823,6 +18265,7 @@ function startFreshRunFromHub(){
  }else if(preparation.contract?.mode==="soul"){
   state.log=["魂還石を救命契約として携行し、迷宮へ入った。"];
  }
+ if(recoveryAssist){state.log.unshift(`再起支援が発動。第${recoveryAssist.floorLimit}層まで物資+${recoveryAssist.itemBonus}・装備ILv+${recoveryAssist.gearLevelBonus}。`);}
  beginPreparedFreshRun();
  return true;
 }
@@ -18356,6 +18799,7 @@ function loadGame(){
   if(typeof state.runStats.maxEchoResonanceKey==="undefined")state.runStats.maxEchoResonanceKey=null;
   if(typeof state.runStats.whisperCompleted!=="boolean")state.runStats.whisperCompleted=false;
   if(typeof state.runStats.whisperRewarded!=="boolean")state.runStats.whisperRewarded=false;
+  if(typeof state.runStats.tacticalPacksCleared!=="number")state.runStats.tacticalPacksCleared=0;
   ensureAbyssWhisperMeta(state.meta);
   if(typeof state.runWhisper==="undefined")state.runWhisper=null;
   const pendingEchoRecoveryResult=applyPendingDeathEchoRecovery(null,false);
@@ -18536,6 +18980,8 @@ function showFloorBanner(){
  if(resonance.tier)extra.push(`遺響共鳴：${echoResonanceLabel(resonance)}`);
  const reaction=activeLabyrinthReaction();
  if(reaction)extra.push(`迷宮反応：${reactionShortLabel(reaction)}・${reactionActiveProgressLabel(reaction)}`);
+ const depthLaw=deepCycleLawForFloor();
+ if(depthLaw)extra.push(`深度圏：${depthLaw.label}`);
 
  banner.classList.remove("show","floorBannerBoss","floorBannerRest");
  void banner.offsetWidth;
@@ -18552,6 +18998,8 @@ function showFloorBanner(){
    ${extra.map(label=>`<span>${label}</span>`).join("")}
   </div>
   <div class="floorBannerGoal"><b>階層目標</b><br>${ensureFloorObjective().title}：${ensureFloorObjective().desc}</div>
+  ${deepCycleBannerHtml()}
+  ${recoveryAssistRunHtml()}
   ${wardenFloorBannerHtml(plan)}
   ${isRouteFinaleFloor()?`<div class="floorBannerRouteFinale"><b>${routeData[state.routePlan.id].finaleName}</b><br>${routeFinaleDescription()}</div>`:""}`;
 
@@ -18657,6 +19105,7 @@ function renderHero(){
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 固定予兆 ${danger}</span>`:""}${threat.possibleLethal?` <span class="mortalWarning ${threat.certainLethal?"certain":""}">${threat.certainLethal?"確定致死":"致死圏"}</span>`:""}</div>
   <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　探索余力:約${provisionStatus.turns}手　次:${provisionStatus.nextLabel}まで約${provisionStatus.nextTurns}手　携行糧:${state.provisions||0}/${provisionCapacity()}<br>才能:${(h.talents||[]).length}　樹脈:刃${runGrowthRank("force")}/護${runGrowthRank("guard")}/探${runGrowthRank("explore")}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${displayedRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${strainProfile.raw?` <span class="echoStrainState ${strainProfile.overflow?"capped":""}">歪み:${strainProfile.raw} / 気力-${strainProfile.effective}${strainProfile.overflow?`・効果上限${strainProfile.cap}`:""}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
   ${weaponOathRuntimeStripHtml(oathRun)}
+  ${wardenImprintRuntimeHtml()}
   ${legendaryTraitRuntimeHtml()}
   ${reaction?`<div class="labyrinthReactionStrip ${labyrinthReactionData[reaction.id]?.tone==="death"?"danger":""}">
    <span class="reactionKind">迷宮反応</span>
@@ -18830,7 +19279,7 @@ function drawHeroSprite(x,y,hurt,t){
 }
 function drawEnemySprite(e,x,y,t){
  const bob=Math.sin(t*.1+e.x*.7+e.y)*.65;
- const base=e.bossColor||{skeleton:"#d5d8e1",warg:"#c76673",mage:"#9a84e4",bomber:"#e2a24d",warden:"#dbc45b"}[e.type]||"#ddd";
+ const base=e.bossColor||{skeleton:"#d5d8e1",warg:"#c76673",mage:"#9a84e4",bomber:"#e2a24d",priest:"#d2b7df",charger:"#bd705e",leech:"#70a47d",warden:"#dbc45b"}[e.type]||"#ddd";
  const accent=e.echoGuard?"#69d8eb":e.nemesis?"#ff4f73":(e.bossColor||eliteColor(e)||base);
 
  ctx.save();
@@ -18865,6 +19314,16 @@ function drawEnemySprite(e,x,y,t){
   ctx.fillStyle="#ffcf72";ctx.fillRect(x+10,y+3+bob,3,5);
   ctx.fillStyle="#2c2528";ctx.fillRect(x+8,y+14+bob,6,3);
   ctx.strokeStyle="#ffebac";ctx.beginPath();ctx.moveTo(x+12,y+3+bob);ctx.lineTo(x+15,y+1+bob);ctx.stroke();
+ }else if(e.type==="priest"){
+  ctx.fillStyle="#e8e0ea";ctx.fillRect(x+8,y+4+bob,7,5);ctx.fillStyle="#35283b";ctx.fillRect(x+9,y+6+bob,2,1);ctx.fillRect(x+13,y+6+bob,2,1);
+  ctx.fillStyle=accent;ctx.fillRect(x+6,y+9+bob,11,10);ctx.fillStyle="#cfa9dd";ctx.fillRect(x+10,y+10+bob,3,7);
+  ctx.strokeStyle="#f0d38c";ctx.beginPath();ctx.arc(x+11,y+6+bob,5,Math.PI,0);ctx.stroke();ctx.fillStyle="#f0d38c";ctx.fillRect(x+16,y+6+bob,2,10);
+ }else if(e.type==="charger"){
+  ctx.fillStyle=accent;ctx.fillRect(x+4,y+10+bob,15,7);ctx.fillRect(x+7,y+6+bob,9,5);ctx.fillStyle="#3c2424";ctx.fillRect(x+5,y+16+bob,3,4);ctx.fillRect(x+15,y+16+bob,3,4);
+  ctx.fillStyle="#f0d4bb";ctx.beginPath();ctx.moveTo(x+15,y+7+bob);ctx.lineTo(x+21,y+5+bob);ctx.lineTo(x+17,y+10+bob);ctx.fill();ctx.fillStyle="#2b1718";ctx.fillRect(x+14,y+8+bob,2,2);
+ }else if(e.type==="leech"){
+  ctx.fillStyle=accent;ctx.beginPath();ctx.ellipse(x+11,y+12+bob,7,9,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#1c2b21";ctx.beginPath();ctx.arc(x+11,y+10+bob,4,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#d8f3a8";ctx.fillRect(x+9,y+9+bob,1,2);ctx.fillRect(x+13,y+9+bob,1,2);ctx.strokeStyle="#b7dc8d";ctx.beginPath();ctx.moveTo(x+7,y+4+bob);ctx.lineTo(x+4,y+1+bob);ctx.moveTo(x+15,y+4+bob);ctx.lineTo(x+18,y+1+bob);ctx.stroke();
  }else{
   ctx.fillStyle=accent;ctx.fillRect(x+5,y+5+bob,13,14);
   ctx.fillStyle="#3a3034";ctx.fillRect(x+7,y+5+bob,9,3);
@@ -19089,6 +19548,7 @@ function drawStairsTile(x,y,t){
 function enemyIntentDisplayName(intent){
  return{
   lunge:"飛びかかり",heavy:"強打",bolt:"骨弾",explode:"爆発",
+  dirge:"墓鐘祈祷",charge:"穿ち突進",light_drain:"吸光",
   chain_sweep:"鎖薙ぎ",grave_volley:"墓標列",
   furnace_slam:"炉心落とし",root_cage:"根檻"
  }[intent]||"攻撃";
@@ -19111,6 +19571,24 @@ function buildEnemyIntentCells(e,intent,target={x:state.player.x,y:state.player.
  if(intent==="explode"){
   cells.push({x:e.x,y:e.y});
   for(const [dx,dy] of dirs)cells.push({x:e.x+dx,y:e.y+dy});
+  return normalizeCells(cells);
+ }
+ if(intent==="dirge"){
+  cells.push({x:target.x,y:target.y});
+  return normalizeCells(cells);
+ }
+ if(intent==="light_drain"){
+  cells.push({x:target.x,y:target.y});
+  return normalizeCells(cells);
+ }
+ if(intent==="charge"){
+  const dx=Math.sign(target.x-e.x),dy=Math.sign(target.y-e.y);
+  if(e.x===target.x||e.y===target.y){
+   const distance=Math.min(5,Math.abs(target.x-e.x)+Math.abs(target.y-e.y));
+   for(let i=1;i<=distance;i++){
+    const x=e.x+dx*i,y=e.y+dy*i;if(tile(x,y)!==1)break;cells.push({x,y});
+   }
+  }
   return normalizeCells(cells);
  }
  if(intent==="chain_sweep"){
@@ -19161,6 +19639,7 @@ function clearEnemyIntent(e){
  e.intent=null;
  e.intentTarget=null;
  e.intentCells=[];
+ e.intentAllyId=null;
 }
 function enemyIntentCells(e){
  if(!e?.intent)return[];
@@ -19212,6 +19691,7 @@ function enemyStatusTags(e){
  if(elitePackActive(e))tags.push(`群導 隣接${eliteAdjacentAllyCount(e)}`);
  if(e.nemesis)tags.push("宿敵");
  if(e.echoGuard)tags.push("遺響守");
+ if(e.tacticalPackId){const pack=tacticalPackById(e.tacticalPackId);if(pack)tags.push(`戦団:${pack.label}`)}
  if(e.boss)tags.push(`番人:${wardenProfileFor(e).short}`);
  if(e.phase===2)tags.push("第二形態");
  if(counterWindowActive(e))tags.push("反撃好機");
@@ -19221,6 +19701,15 @@ function enemyStatusTags(e){
  if((e.alert||0)>0)tags.push("警戒 "+e.alert);
  if(e.respawned)tags.push("再生個体");
  return tags;
+}
+function enemyArchetypeHintHtml(enemy){
+ const hints={
+  priest:{title:"支援役・優先撃破",text:"負傷した亡者へ墓鐘祈祷を行いHPを回復する。祈祷の予兆中に大きな一撃を入れれば態勢崩しで中断できる。"},
+  charger:{title:"突進役・位置取り",text:"同じ縦横線上の2〜5マスで穿ち突進を予告する。横へ外れて回避すると反撃好機が開き、獣は旧目標へ突っ込む。"},
+  leech:{title:"資源圧迫・灯火狙い",text:"2マス以内で吸光を予告し、命中するとダメージと同時に灯火燃料を奪う。予兆地点から離れて回避するのが安全。"}
+ };
+ const hint=hints[enemy?.type];if(!hint)return"";
+ return`<div class="tagBuild"><b>${hint.title}</b><br>${hint.text}</div>`;
 }
 function inspectTileAt(x,y){
  if(x<0||y<0||x>=COLS||y>=ROWS)return;
@@ -19240,6 +19729,8 @@ function inspectTileAt(x,y){
    ?tags.map(t=>`<span class="statusTag">${t}</span>`).join("")
    :'<p class="tacticalNote">状態異常なし</p>';
   body+=enemyIntentTacticalHtml(enemy);
+  body+=enemyArchetypeHintHtml(enemy);
+  body+=tacticalPackHintHtml(enemy);
   if(counterWindowActive(enemy))body+=`<div class="counterWindowCard"><b>反撃好機</b><br>${enemy.boss?"次の一撃が+15%":"次の一撃が+30%"}。攻撃せず次の行動へ進むと隙は閉じます。</div>`;
   body+=eliteMutationTacticalHtml(enemy);
   if(terrain)body+=tacticalTerrainInfoHtml(terrain);
