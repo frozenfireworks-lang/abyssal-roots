@@ -4766,11 +4766,34 @@ body,button,input,select,textarea{font-size:12px}
 .depthGateBuildStatus b{color:#f1dfa4}
 @media(max-width:390px){.depthGateBuildChoices{grid-template-columns:1fr}}
 
+
+/* v3.34.0 ROOTED OBJECTIVES */
+#floorGoal.affinity-force{border-color:#7f5555}
+#floorGoal.affinity-guard{border-color:#566f83}
+#floorGoal.affinity-explore{border-color:#59765f}
+.floorGoalAffinity{display:inline-block;margin-right:5px;font-weight:900;opacity:.92}
+#floorGoal.affinity-force .floorGoalAffinity{color:#e5a4a4}
+#floorGoal.affinity-guard .floorGoalAffinity{color:#a9cae3}
+#floorGoal.affinity-explore .floorGoalAffinity{color:#a8d7af}
+.floorGoalPrimaryBonus{color:#d8c47e}
+
+
+/* v3.35.0 WORLD ECHOES */
+.worldMarkEchoState{
+ margin-top:5px;padding:5px 6px;border-left:3px solid #75627e;border-radius:5px;
+ background:rgba(30,22,35,.72);font-size:11.5px;line-height:1.45
+}
+.worldMarkEchoState b{display:block;color:#e1c9e9;font-size:12px}
+.worldMarkEchoState span{display:block;color:#c3b6c8;margin-top:1px}
+#floorGoal:not(.expanded) .worldMarkEchoState{display:none!important}
+
+.stashBadge.relic{border-color:#7d6640;background:#21180c;color:#f0d486}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.33.3 RELIC CHAIN FIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.35.1 RELIC STASH VERIFY</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5338,6 +5361,7 @@ body,button,input,select,textarea{font-size:12px}
       <div class="relicRevealKicker" id="relicRevealKicker">SEALED RELIC</div>
       <h2 class="relicRevealTitle" id="relicRevealTitle">封印を解く</h2>
       <div id="relicRevealBody"><div class="relicSuspense">深淵の脈動を待っている…</div></div>
+      <button type="button" class="modalBtn hidden" id="showRelicInStash">倉庫で確認</button>
       <button type="button" class="modalBtn hidden" id="closeRelicReveal">灯台へ戻る</button>
     </div>
   </div>
@@ -9665,7 +9689,11 @@ function specialAt(x,y){
 function addSpecialRoom(){
  if(state.rooms.length<3)return;
  const room=choice(state.rooms.slice(1,-1));
+ const echo=activeWorldMarkEcho();
  const types=["shrine","treasure","flood","collapse"];
+ if(echo?.key==="mercy")types.push("shrine");
+ if(echo?.key==="greed")types.push("treasure","treasure");
+ if(echo?.key==="curiosity")types.push("shrine");
  const type=choice(types);
  const cx=room.cx,cy=room.cy;
  state.specialTiles.push({x:cx,y:cy,type,used:false});
@@ -9709,6 +9737,11 @@ function roomEncounterTypePool(){
   ?["den","ritual","den","gauntlet"]
   :["armory","den","ritual","powder"];
  if(state.floor>=8)pool.push("gauntlet");
+ const echo=activeWorldMarkEcho();
+ if(echo?.key==="mercy")pool.push("den");
+ if(echo?.key==="greed")pool.push("armory");
+ if(echo?.key==="defiance")pool.push("gauntlet");
+ if(echo?.key==="curiosity")pool.push("ritual");
  return pool;
 }
 function roomEncounterRoomBlocked(room){
@@ -9928,7 +9961,9 @@ function roomEncounterRewardCell(enc){
  return randomRoomEncounterCell(room,new Set(),false)||center;
 }
 function betterEncounterGear(){
- const a=rollGear(floorTargetLevel()+1),b=rollGear(floorTargetLevel()+1);
+ const echo=activeWorldMarkEcho();
+ const bonus=echo?.key==="greed"?Math.min(2,echo.tier):0;
+ const a=rollGear(floorTargetLevel()+1+bonus),b=rollGear(floorTargetLevel()+1+bonus);
  const ar=rarityOrder[a.rarity]||0,br=rarityOrder[b.rarity]||0;
  if(ar!==br)return ar>br?a:b;
  return gearScore(a)>=gearScore(b)?a:b;
@@ -9939,7 +9974,9 @@ function spawnRoomEncounterReward(enc){
  enc.rewarded=true;
  if(def.reward==="gear")state.items.push({x:p.x,y:p.y,type:"gear",gear:betterEncounterGear(),roomEncounterReward:true});
  if(def.reward==="food"){
-  state.items.push({x:p.x,y:p.y,type:"food",name:"巣穴の保存食",provisions:90,roomEncounterReward:true});
+  const echo=activeWorldMarkEcho();
+  const foodAmount=echo?.key==="mercy"?60+echo.tier*10:60;
+  state.items.push({x:p.x,y:p.y,type:"food",name:"巣穴の保存食",provisions:foodAmount,roomEncounterReward:true});
   state.items.push({x:p.x,y:p.y,type:"potion",name:"治癒薬",roomEncounterReward:true});
  }
  if(def.reward==="ritual"){
@@ -9953,8 +9990,11 @@ function spawnRoomEncounterReward(enc){
  }
  if(def.reward==="gauntlet"){
   state.items.push({x:p.x,y:p.y,type:"gear",gear:betterEncounterGear(),roomEncounterReward:true});
-  state.meta.shards=(state.meta.shards||0)+1;saveMeta();
-  addLog("狩人の間の刻印から深淵の欠片+1を回収した。");
+  state.meta.shards=(state.meta.shards||0)+1;
+  const echo=activeWorldMarkEcho();
+  if(echo?.key==="defiance")state.fieldScrap=(state.fieldScrap||0)+echo.tier;
+  saveMeta();
+  addLog(`狩人の間の刻印から深淵の欠片+1を回収した。${echo?.key==="defiance"?` 反抗の残響で現地素材+${echo.tier}。`:""}`);
  }
  maybeDropRoomSealedRelic(enc,p);
  return true;
@@ -12273,7 +12313,9 @@ const eventDefs=[
 ];
 function addFloorEvents(){
  state.events=[];
- const eventThreshold=clamp(.7+routeValue("eventBonus")+reactionValue("eventBonus")+floorForkValue("eventBonus"),.2,.98);
+ const echo=activeWorldMarkEcho();
+ const markEventBonus=echo?.key==="curiosity"?.05*echo.tier:0;
+ const eventThreshold=clamp(.7+routeValue("eventBonus")+reactionValue("eventBonus")+floorForkValue("eventBonus")+markEventBonus,.2,.98);
  if(state.floor===1||rng()>=eventThreshold)return;
  const p=randomFloorCell(5);if(!p)return;
  const def=choice(eventDefs);
@@ -12372,6 +12414,25 @@ function triggerEvent(){
 function dominantMark(){
  const entries=Object.entries(state.meta?.marks||{}).sort((a,b)=>b[1]-a[1]);
  return entries.length&&entries[0][1]>0?entries[0][0]:null;
+}
+const worldMarkEchoData={
+ mercy:{label:"慈悲の残響",short:"慈悲",desc:"迷宮の生存資源がわずかに寄りやすくなる。"},
+ greed:{label:"欲望の残響",short:"欲望",desc:"武具庫・宝物庫がわずかに現れやすくなる。"},
+ defiance:{label:"反抗の残響",short:"反抗",desc:"狩人の間など危険な戦闘区画がわずかに増える。"},
+ curiosity:{label:"探究の残響",short:"探究",desc:"事件・祭壇など観察機会がわずかに増える。"}
+};
+function activeWorldMarkEcho(meta=state?.meta){
+ const marks=meta?.marks||{};
+ const entries=Object.entries(marks).sort((a,b)=>(b[1]||0)-(a[1]||0));
+ if(!entries.length||(entries[0][1]||0)<3)return null;
+ const [key,count]=entries[0],data=worldMarkEchoData[key];
+ if(!data)return null;
+ return{key,count,tier:count>=9?3:count>=6?2:1,...data};
+}
+function worldMarkEchoStatusHtml(){
+ const echo=activeWorldMarkEcho();
+ if(!echo)return"";
+ return`<div class="worldMarkEchoState"><b>世界の残響・${echo.short}${echo.tier>1?` ${echo.tier}`:""}</b><span>${echo.desc}</span></div>`;
 }
 
 
@@ -12782,17 +12843,30 @@ function createFloorStats(){
   pickups:0,gearPickups:0,reveals:0,
   lightModes:{[state.light?.on?state.light.type:"none"]:1},
   startKills:state.ecology?.killsThisFloor||0,
-  startDodges:combat.dodges||0,startGuards:combat.guards||0,startBreaks:combat.breaks||0,
+  startDodges:combat.dodges||0,startGuards:combat.guards||0,startBreaks:combat.breaks||0,startCounters:combat.counters||0,
   startObservations:observationTotal()
  };
+}
+function rootedObjectiveForRun(){
+ const dominant=runGrowthDominant();
+ if(!dominant||runGrowthRank(dominant)<2)return null;
+ if(dominant==="force")return{type:"counter",target:2,title:"刃脈・隙を穿つ",desc:"反撃好機を2回ものにする。",affinity:"force",primaryBonus:{shards:1}};
+ if(dominant==="guard")return{type:"guardcraft",target:2,title:"護脈・受けて崩す",desc:"構え成功または態勢崩しを合計2回成功させる。",affinity:"guard",primaryBonus:{shards:1}};
+ return{type:"scavenge",target:3,title:"探脈・痕跡を拾う",desc:"物資回収または発見を合計3回進める。",affinity:"explore",primaryBonus:{shards:1}};
+}
+function deepCycleObjectiveForFloor(){
+ const law=deepCycleLawForFloor();if(!law)return null;
+ if(law.id==="echo")return{type:"counter",target:2,title:"反響圏・応じ返す",desc:"反撃好機を2回ものにして、反響する敵勢を崩す。",affinity:"force",primaryBonus:{shards:1}};
+ if(law.id==="famine")return{type:"explore",target:Math.min(42,26+Math.floor(state.floor/8)),title:"飢圧圏・道を切る",desc:"物資へ固執せず未知の床を踏破し、進路を確保する。",affinity:"explore",primaryBonus:{shards:1}};
+ return{type:"guardcraft",target:3,title:"変異圏・異相を凌ぐ",desc:"構え成功または態勢崩しを合計3回成功させる。",affinity:"guard",primaryBonus:{shards:1}};
 }
 function genericFloorObjective(){
  if(floorPlan().boss)return{type:"boss",target:1,title:"深層番人",desc:"階層の番人を倒す。"};
  const cycle=state.floor%5;
- if(cycle===1)return{type:"explore",target:Math.min(38,22+Math.floor(state.floor/4)),title:"深層を踏破する",desc:"未知の床を踏破して進路を確保する。"};
- if(cycle===2)return{type:"kill",target:Math.min(8,3+Math.floor(state.floor/12)),title:"脅威を排除する",desc:"階層内の敵を減らす。"};
- if(cycle===3)return{type:"pickup",target:3,title:"資源を確保する",desc:"物資または装備を3個回収する。"};
- return{type:"combat",target:2,title:"予兆へ対処する",desc:"回避・構え・態勢崩しを合計2回成功させる。"};
+ if(cycle===1)return{type:"explore",target:Math.min(38,22+Math.floor(state.floor/4)),title:"深層を踏破する",desc:"未知の床を踏破して進路を確保する。",primaryBonus:{shards:1}};
+ if(cycle===2)return rootedObjectiveForRun()||{type:"kill",target:Math.min(8,3+Math.floor(state.floor/12)),title:"脅威を排除する",desc:"階層内の敵を減らす。",primaryBonus:{shards:1}};
+ if(cycle===3)return{type:"pickup",target:3,title:"資源を確保する",desc:"物資または装備を3個回収する。",primaryBonus:{shards:1}};
+ return deepCycleObjectiveForFloor()||{type:"combat",target:2,title:"予兆へ対処する",desc:"回避・構え・態勢崩しを合計2回成功させる。",primaryBonus:{shards:1}};
 }
 function objectiveRewardForFloor(){
  const plan=floorPlan();
@@ -12823,6 +12897,9 @@ function floorObjectiveProgress(){
   case"reveal":return stats.reveals||0;
   case"light":return Object.keys(stats.lightModes||{}).length;
   case"combat":return Math.max(0,(combat.dodges||0)-(stats.startDodges||0)+(combat.guards||0)-(stats.startGuards||0)+(combat.breaks||0)-(stats.startBreaks||0));
+  case"counter":return Math.max(0,(combat.counters||0)-(stats.startCounters||0));
+  case"guardcraft":return Math.max(0,(combat.guards||0)-(stats.startGuards||0)+(combat.breaks||0)-(stats.startBreaks||0));
+  case"scavenge":return Math.max(0,(stats.pickups||0)+(stats.reveals||0));
   case"research":return Math.max(0,observationTotal()-(stats.startObservations||0));
   case"boss":return state.bossDefeated?1:0;
   default:return 0;
@@ -12837,21 +12914,31 @@ function floorObjectiveRewardText(objective=ensureFloorObjective()){
  return rewards.join(" / ");
 }
 function floorObjectiveComplete(){return !!ensureFloorObjective().completed;}
+function floorObjectivePrimaryBonusText(objective=ensureFloorObjective()){
+ const bonus=objective?.primaryBonus||{},parts=[];
+ if(bonus.shards)parts.push(`欠片+${bonus.shards}`);
+ if(bonus.scrap)parts.push(`現地素材+${bonus.scrap}`);
+ return parts.join(" / ");
+}
 function completeFloorObjective(method="primary"){
  const objective=ensureFloorObjective();
  if(objective.completed)return false;
  objective.completed=true;objective.claimed=true;objective.completionMethod=method;
  state.meta.shards+=(objective.reward.shards||0);
  state.fieldScrap=(state.fieldScrap||0)+(objective.reward.scrap||0);
+ const primaryBonus=method==="primary"?(objective.primaryBonus||{}):{};
+ state.meta.shards+=(primaryBonus.shards||0);
+ state.fieldScrap=(state.fieldScrap||0)+(primaryBonus.scrap||0);
  const provisionGain=gainProvisions(objective.reward.provisions||0);
  if(provisionGain.overflow)addLog(`階層報酬の携行糧は上限により${provisionGain.gained}/${provisionGain.requested}手を収納した。`);
  const run=ensureRunStats();run.objectivesCompleted=(run.objectivesCompleted||0)+1;
  spawnCombatText(state.player.x,state.player.y,"UNSEALED","dodge",48);
  spawnFeedbackBurst(state.player.x,state.player.y,"objective",12);
  triggerImpactFeedback("objective",{haptic:"objective",duration:680});
- showCombatToast("階層目標達成",`${method==="fallback"?"踏破による代替達成・":""}階段解放 / ${floorObjectiveRewardText(objective)}`,"objective");
+ const primaryBonusText=method==="primary"?floorObjectivePrimaryBonusText(objective):"";
+ showCombatToast("階層目標達成",`${method==="fallback"?"踏破による代替達成・":""}階段解放 / ${floorObjectiveRewardText(objective)}${primaryBonusText?` / 主条件 ${primaryBonusText}`:""}`,"objective");
  sfx("objective");
- addLog(`階層目標「${objective.title}」を達成。階段の封印が解けた。${floorObjectiveRewardText(objective)}`);
+ addLog(`階層目標「${objective.title}」を${method==="fallback"?"代替踏破で": ""}達成。階段の封印が解けた。${floorObjectiveRewardText(objective)}${primaryBonusText?` / 主条件ボーナス ${primaryBonusText}`:""}`);
  saveMeta();saveGame();return true;
 }
 function updateFloorObjective(){
@@ -12876,17 +12963,22 @@ function renderFloorGoal(){
  const objective=ensureFloorObjective();
  const progress=Math.min(objective.target,floorObjectiveProgress());
  const ratio=objective.completed?100:Math.min(100,Math.round(progress/objective.target*100));
+ el.classList.remove("affinity-force","affinity-guard","affinity-explore");
+ if(objective.affinity)el.classList.add(`affinity-${objective.affinity}`);
  const fallback=objective.fallbackTarget?`<span class="floorGoalFallback">代替：踏破 ${Math.min(objective.fallbackTarget,floorObjectiveFallbackProgress())}/${objective.fallbackTarget}</span>`:"";
  el.classList.toggle("objectiveComplete",objective.completed);
  el.classList.toggle("objectiveLocked",!objective.completed);
- el.innerHTML=`<div class="floorGoalHeader"><b>第${state.floor}層：${objective.title}<span class="floorGoalInlineProgress"> ${progress}/${objective.target}</span></b><span class="floorGoalState">${objective.completed?"解放":"封印"}</span></div>
+ const affinityLabel=objective.affinity?`<span class="floorGoalAffinity">${runGrowthBranchData[objective.affinity]?.short||""}</span>`:"";
+ const primaryBonus=floorObjectivePrimaryBonusText(objective);
+ el.innerHTML=`<div class="floorGoalHeader"><b>${affinityLabel}第${state.floor}層：${objective.title}<span class="floorGoalInlineProgress"> ${progress}/${objective.target}</span></b><span class="floorGoalState">${objective.completed?"解放":"封印"}</span></div>
   <div class="floorGoalToggleHint">${floorGoalExpanded?"タップで縮小 ▲":"タップで詳細 ▼"}</div>
   <div class="floorGoalText">${objective.desc}　${progress}/${objective.target}</div>
   <div class="floorGoalProgress"><i style="width:${ratio}%"></i></div>
-  <div class="floorGoalReward">報酬 ${floorObjectiveRewardText(objective)}${fallback?` / ${fallback}`:""} ${roomEncounterStatusHtml()}</div>
+  <div class="floorGoalReward">報酬 ${floorObjectiveRewardText(objective)}${primaryBonus?` / <span class="floorGoalPrimaryBonus">主条件 ${primaryBonus}</span>`:""}${fallback?` / ${fallback}`:""} ${roomEncounterStatusHtml()}</div>
   ${wardenVictoryStatusHtml()}
   ${routeFloorStatusHtml()}
   ${livingEcologyFloorStatusHtml()}
+  ${worldMarkEchoStatusHtml()}
   ${floorForkStatusHtml()}
   ${floorPhenomenonStatusHtml()}
   ${abyssWhisperStatusHtml()}
@@ -14743,7 +14835,14 @@ function applySealedRelicReward(relic){
    gear=relicSeededGear(nextRelic,spec);
    if(!gear)return{ok:false,reason:"装備報酬の生成に失敗しました。封印は消費していません。",spec};
    if(gear.rarity==="legendary"&&!['legendary','jackpot'].includes(actualTier))actualTier="legendary";
+   gear=attuneGearAtLighthouse(gear,"sealed_relic");
+   gear.origin="sealed_relic";
+   gear.relicOpenedAt=Date.now();
+   gear.relicSourceId=nextRelic.id;
    nextMeta.stash.push(gear);
+   if(!nextMeta.stash.some(item=>item?.id===gear.id)){
+    return{ok:false,reason:"開封装備を倉庫へ登録できませんでした。封印は消費していません。",spec};
+   }
   }
   if(spec.kind==="anchor")nextMeta.soulAnchors=(nextMeta.soulAnchors||0)+1;
   nextMeta.shards=(nextMeta.shards||0)+(spec.shards||0);
@@ -14763,17 +14862,22 @@ function applySealedRelicReward(relic){
   }
 
   state.meta=nextMeta;
-  return{ok:true,spec:{...spec,tier:actualTier},gear,entry,fortune:nextMeta.relicFortune,saveResult};
+  if(gear&&!state.meta.stash?.some(item=>item?.id===gear.id)){
+   return{ok:false,reason:"保存後の倉庫確認に失敗しました。封印開封データを再確認してください。",spec};
+  }
+  return{ok:true,spec:{...spec,tier:actualTier},gear,entry,fortune:nextMeta.relicFortune,saveResult,stashCount:state.meta.stash?.length||0};
  }catch(error){
   console.error("Sealed relic transaction failed",error);
   return{ok:false,reason:`開封処理で問題が発生しました。封印は消費していません。${error?.message?` ${error.message}`:""}`,error};
  }
 }
 let pendingSealedRelicOpen=null;
+let lastOpenedRelicGearId=null;
 function closeSealedRelicReveal(){
  pendingSealedRelicOpen=null;
  $("relicRevealOverlay").classList.add("hidden");
  $("closeRelicReveal").classList.add("hidden");
+ $("showRelicInStash")?.classList.add("hidden");
  renderHub();
 }
 function beginSealedRelicOpen(relicId){
@@ -14785,6 +14889,8 @@ function beginSealedRelicOpen(relicId){
   showCombatToast("封印を解けない","中身を秘匿したまま開封するため、倉庫を1枠空けてください","miss");return false;
  }
  pendingSealedRelicOpen=relic.id;
+ lastOpenedRelicGearId=null;
+ $("showRelicInStash")?.classList.add("hidden");
  const seal=sealedRelicSealData[relic.seal]||sealedRelicSealData.ash;
  const card=$("relicRevealCard");card.className=`card relicRevealCard ${relic.seal}`;
  $("relicSealGlyph").textContent=seal.glyph;
@@ -14812,13 +14918,16 @@ function beginSealedRelicOpen(relicId){
    $("relicRevealTitle").textContent=tier==="jackpot"?"深層遺宝":tier==="legendary"?"伝説が応えた":result.spec.label;
    const gear=result.gear;
    $("relicRevealBody").innerHTML=gear
-    ?`<div class="relicRewardBox"><b class="${gear.rarity}">${rarityData[gear.rarity]?.label||gear.rarity}・${gearLabel(gear)}</b><br>ILv${gear.itemLevel||1} / ${equippedSlotLabel(gear.slot)} / 推奨度 ${Math.round(gearScore(gear))}<br>攻撃 +${gear.atk||0} / 防御 +${gear.def||0}${gear.crit?` / 会心 +${Math.round(gear.crit*100)}%`:""}${legendaryTraitInfo(gear)?`<br>伝説特性：<b class="legendary">${legendaryTraitInfo(gear).label}</b> — ${legendaryTraitInfo(gear).desc}`:""}<br>${tagSummaryHtml(effectiveGearTags(gear))}<div class="relicRewardMeta"><span>欠片 +${result.spec.shards||0}</span><span>灯台調律済み</span>${result.spec.pity?'<span>黄金残響・確定枠</span>':''}</div></div>`
+    ?`<div class="relicRewardBox"><b class="${gear.rarity}">${rarityData[gear.rarity]?.label||gear.rarity}・${gearLabel(gear)}</b><br>ILv${gear.itemLevel||1} / ${equippedSlotLabel(gear.slot)} / 推奨度 ${Math.round(gearScore(gear))}<br>攻撃 +${gear.atk||0} / 防御 +${gear.def||0}${gear.crit?` / 会心 +${Math.round(gear.crit*100)}%`:""}${legendaryTraitInfo(gear)?`<br>伝説特性：<b class="legendary">${legendaryTraitInfo(gear).label}</b> — ${legendaryTraitInfo(gear).desc}`:""}<br>${tagSummaryHtml(effectiveGearTags(gear))}<div class="relicRewardMeta"><span>欠片 +${result.spec.shards||0}</span><span>倉庫へ追加済み ${result.stashCount}/20</span><span>灯台調律済み</span>${result.spec.pity?'<span>黄金残響・確定枠</span>':''}</div></div>`
     :`<div class="relicRewardBox"><b class="legendary">魂還石</b><br>致死傷を一度だけ緊急帰還へ置き換える極希少品を得た。<div class="relicRewardMeta"><span>魂還石 +1</span><span>欠片 +${result.spec.shards||0}</span></div></div>`;
    // The reward transaction is complete here. Release the open lock immediately so
    // the next seal becomes actionable as soon as the vault is re-rendered.
    pendingSealedRelicOpen=null;
+   lastOpenedRelicGearId=gear?.id||null;
    $("closeRelicReveal").classList.remove("hidden");
+   if(lastOpenedRelicGearId)$("showRelicInStash")?.classList.remove("hidden");
    renderSealedRelicVault(state.meta);
+   try{renderLighthouseStash(state.meta)}catch(error){console.warn("Relic stash refresh skipped",error)}
    try{spawnFeedbackBurst(state.player?.x||0,state.player?.y||0,high?"legendary":"rare",tier==="jackpot"?18:high?13:8)}catch(error){console.warn("Relic burst skipped",error)}
    try{triggerImpactFeedback(high?"legendary":"rare",{haptic:high?"legendary":"rare",duration:tier==="jackpot"?1050:high?820:560})}catch(error){console.warn("Relic feedback skipped",error)}
    try{sfx(high?"legendary":"rare")}catch(error){console.warn("Relic sound skipped",error)}
@@ -14831,6 +14940,32 @@ function beginSealedRelicOpen(relicId){
    showCombatToast("開封保留","開封演出で問題が発生しました。封印を再度開けます。","miss");
   }
  },720);
+ return true;
+}
+function showLastOpenedRelicInStash(){
+ if(!lastOpenedRelicGearId)return false;
+ const exists=(state.meta?.stash||[]).some(gear=>gear?.id===lastOpenedRelicGearId);
+ if(!exists){
+  showCombatToast("倉庫確認","開封装備を倉庫内で確認できませんでした。","miss");
+  return false;
+ }
+ pendingSealedRelicOpen=null;
+ $("relicRevealOverlay").classList.add("hidden");
+ $("closeRelicReveal").classList.add("hidden");
+ $("showRelicInStash")?.classList.add("hidden");
+
+ // Always reveal the newly opened item, independent of the user's previous filters.
+ lighthouseStashView.query="";
+ lighthouseStashView.slot="all";
+ lighthouseStashView.status="all";
+ lighthouseStashView.sort="newest";
+ lighthouseStashView.page=1;
+ renderHub();
+
+ const panel=$("stashPanel");
+ if(panel)panel.open=true;
+ panel?.scrollIntoView?.({block:"start",behavior:"smooth"});
+ showCombatToast("封印開封品","倉庫へ追加済み。新しい順で表示しています。","objective");
  return true;
 }
 function renderSealedRelicVault(meta=state.meta){
@@ -18369,6 +18504,7 @@ function stashSearchText(g){
  return[
   gearLabel(g),g.name,rarityData[g.rarity]?.label,equippedSlotLabel(normalizeLoadoutSlot(g.slot)),
   bondStages[bondStage(g)]?.label,bondTraitSummary(g),weaponDeepeningSummary(g,true),trait,
+  g.origin==="sealed_relic"?"封印開封品":"",
   Object.entries(effectiveGearTags(g)).filter(([,value])=>value>0).map(([id])=>tagData[id]?.label||id).join(" ")
  ].filter(Boolean).join(" ").toLocaleLowerCase("ja");
 }
@@ -18463,6 +18599,7 @@ function lighthouseStashCardHtml(meta,entry){
    <div class="stashCompactName"><b class="stashGearName ${g.rarity||"common"}">${rarity.label}・${gearLabel(g)}</b><small>${equippedSlotLabel(normalizeLoadoutSlot(g.slot))} / ILv${g.itemLevel||1} / 推奨度 ${Math.round(gearScore(g))}</small></div>
    <div class="stashCompactBadges">
     ${selected?'<span class="stashBadge selected">次回装備</span>':""}
+    ${g.origin==="sealed_relic"?'<span class="stashBadge relic">封印開封品</span>':""}
     ${g.wardenTrophyFloor?`<span class="stashBadge warden">第${g.wardenTrophyFloor}層番人</span>`:""}
     ${wardenImprintInfo(g)?`<span class="stashBadge warden">刻印 ${wardenImprintInfo(g).label}</span>`:""}
     ${g.rarity==="legendary"?'<span class="stashBadge legendary">伝説</span>':""}
@@ -18696,9 +18833,9 @@ function renderHub(){
  const masteryRows=Object.keys(weaponData).map(type=>`<div>${weaponData[type].label} Lv${masteryLevel(type)} (${masteryXp(type)})</div>`).join("");
  $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>武器熟練</span><span>永続</span></div><div class="desc">${masteryRows}</div></div>`;
  const markLabels={mercy:"慈悲",greed:"欲望",defiance:"反抗",curiosity:"探究"};
- const dom=dominantMark();
- $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>世界の印</span><span>${dom?markLabels[dom]:"未定"}</span></div>
- <div class="desc">慈悲 ${m.marks?.mercy||0} / 欲望 ${m.marks?.greed||0} / 反抗 ${m.marks?.defiance||0} / 探究 ${m.marks?.curiosity||0}</div></div>`;
+ const dom=dominantMark(),worldEcho=activeWorldMarkEcho(m);
+ $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>世界の印</span><span>${worldEcho?worldEcho.label:(dom?markLabels[dom]:"未定")}</span></div>
+ <div class="desc">慈悲 ${m.marks?.mercy||0} / 欲望 ${m.marks?.greed||0} / 反抗 ${m.marks?.defiance||0} / 探究 ${m.marks?.curiosity||0}${worldEcho?`<br><b>${worldEcho.label}${worldEcho.tier>1?` ${worldEcho.tier}`:""}</b>：${worldEcho.desc}`:"<br>同じ印が3つ蓄積すると、迷宮の出現傾向へ小さな残響が生まれる。"}</div></div>`;
  const entries=Object.entries(m.codex||{});
  $("codexList").innerHTML='' +'<h3>深淵図鑑</h3>'+(entries.length?entries.map(([type,count])=>
   `<div class="itemRow"><div class="top"><span>${codexName(type)}</span><span>${count}体</span></div><div class="desc">${codexInsight(type,count)}</div></div>`
@@ -20867,7 +21004,7 @@ $("previewSfxBtn").onclick=()=>{if(!currentAudioSettings().sfxEnabled)setAudioPa
 $("closeAudioSettings").onclick=closeAudioSettings;
 document.addEventListener("pointerdown",unlockAudioFromGesture,{passive:true});
 $("closeRouteChoice").onclick=closeRouteChoice;
-$("closeForkChoice").onclick=closeAbyssForkChoice;$("firstTwentyReturnBtn").onclick=returnFromFirstTwentyMilestone;$("firstTwentyContinueBtn").onclick=continueFromFirstTwentyMilestone;$("firstTwentyStayBtn").onclick=stayAtFirstTwentyMilestone;$("closeRelicReveal").onclick=closeSealedRelicReveal;$("closeEvent").onclick=()=>{$("eventOverlay").classList.add("hidden");render()};$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("researchBtn").onclick=openResearchFromHub;$("closeResearch").onclick=()=>closeHubSubOverlay("researchOverlay");$("closeAdapt").onclick=()=>closeHubSubOverlay("adaptOverlay");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
+$("closeForkChoice").onclick=closeAbyssForkChoice;$("firstTwentyReturnBtn").onclick=returnFromFirstTwentyMilestone;$("firstTwentyContinueBtn").onclick=continueFromFirstTwentyMilestone;$("firstTwentyStayBtn").onclick=stayAtFirstTwentyMilestone;$("closeRelicReveal").onclick=closeSealedRelicReveal;$("showRelicInStash").onclick=showLastOpenedRelicInStash;$("closeEvent").onclick=()=>{$("eventOverlay").classList.add("hidden");render()};$("helpBtn").onclick=()=>$("helpOverlay").classList.remove("hidden");$("soundBtn").onclick=toggleSound;$("hubBtn").onclick=openHub;$("lightBtn").onclick=cycleLight;$("rangeBtn").onclick=toggleRangePreview;$("closeInspect").onclick=()=>$("inspectOverlay").classList.add("hidden");$("closeHelp").onclick=()=>$("helpOverlay").classList.add("hidden");$("closeHub").onclick=()=>$("hubOverlay").classList.add("hidden");$("adaptBtn").onclick=openAdaptationChoice;$("researchBtn").onclick=openResearchFromHub;$("closeResearch").onclick=()=>closeHubSubOverlay("researchOverlay");$("closeAdapt").onclick=()=>closeHubSubOverlay("adaptOverlay");$("returnToAbyssBtn").onclick=()=>$("hubOverlay").classList.add("hidden");$("newRunBtn").onclick=startFreshRunFromHub;
 $("saveBtn").onclick=()=>{
  addLog("探索記録を手動保存した。");
  const result=saveGame();
