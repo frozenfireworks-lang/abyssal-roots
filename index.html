@@ -3974,7 +3974,7 @@ body{
 /* v3.12.4 LIGHTHOUSE DESK */
 #hubOverlay>.card{scroll-behavior:smooth}
 .hubAccordionNav{
- position:sticky;top:-1px;z-index:3;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ position:sticky;top:-1px;z-index:3;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
  gap:4px;margin:7px 0 8px;padding:5px;border:1px solid #4c4055;border-radius:9px;
  background:rgba(14,10,18,.96);backdrop-filter:blur(5px);
 }
@@ -3997,7 +3997,7 @@ body{
 .hubUtilityActions .modalBtn{margin:0;min-width:0;padding:7px 4px;font-size:11.5px}
 #recordsPanel #codexList{margin-top:4px}
 @media(max-width:390px){
- .hubAccordionNav{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:4px}
+ .hubAccordionNav{grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:4px}
  .hubAccordionNav button{font-size:11.5px;padding:5px 2px}
  .hubUtilityActions{grid-template-columns:1fr}
 }
@@ -5057,11 +5057,103 @@ body,button,input,select,textarea{font-size:12px}
 .returnOverflowFoot{margin-top:7px;padding-top:6px;border-top:1px solid #423925;color:#a99e84;font-size:11.5px;line-height:1.45}
 @media(max-width:520px){.returnOverflowGrid{grid-template-columns:1fr}}
 
+
+/* v3.49.0 BOUNDED PROGRESSION */
+.metaFoundation{
+ margin:8px 0;padding:9px;border:1px solid #5b5362;border-radius:10px;
+ background:linear-gradient(180deg,#151119,#0e0b11)
+}
+.metaFoundation.complete{border-color:#8c7438;background:linear-gradient(180deg,#20190c,#100d08)}
+.metaFoundationHead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.metaFoundationHead b{display:block;color:#e7d8e9;font-size:13px}
+.metaFoundation.complete .metaFoundationHead b{color:#f2d887}
+.metaFoundationHead small{display:block;margin-top:2px;color:#aaa0af;font-size:11.5px;line-height:1.45}
+.metaFoundationHead strong{white-space:nowrap;color:#c7b8cc;font-size:12px}
+.metaFoundation.complete .metaFoundationHead strong{color:#ebcd73}
+.metaFoundationBar,.metaUpgradeProgress{
+ height:5px;margin-top:7px;overflow:hidden;border:1px solid #403847;border-radius:999px;background:#09070b
+}
+.metaFoundationBar i,.metaUpgradeProgress i{display:block;height:100%;background:linear-gradient(90deg,#755a83,#d6b05b)}
+.metaFoundation.complete .metaFoundationBar i{background:linear-gradient(90deg,#8b6c2d,#efd37b)}
+.metaFoundationFoot{margin-top:6px;color:#b4a9b8;font-size:11.5px;line-height:1.45}
+.metaUpgradeCard.complete{border-color:#675b39;background:linear-gradient(180deg,#17130c,#0e0c09)}
+.metaUpgradeCard.complete .top span:first-child{color:#e6cf89}
+.metaUpgradeCard .desc b{color:#d8c9dc;font-size:11.5px}
+.metaUpgradeCard.complete .desc b{color:#d9c688}
+.metaUpgradeCard .hubUnavailableReason.complete{color:#bda96e}
+
+
+/* v3.50.0 FOCUS LAYERS */
+.expeditionEssentials{
+ margin:8px 0;padding:8px;border:1px solid #4b4451;border-radius:9px;background:#100d13
+}
+.expeditionEssentialGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.expeditionEssentialGrid>div{padding:6px 4px;border:1px solid #39333e;border-radius:7px;background:#0c0a0e;text-align:center}
+.expeditionEssentialGrid b{display:block;color:#eee4f0;font-size:13px;line-height:1.2}
+.expeditionEssentialGrid small{display:block;margin-top:2px;color:#9f94a3;font-size:11.5px}
+.expeditionEssentialPills{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.expeditionEssentialPills span{padding:3px 6px;border:1px solid #4d4652;border-radius:999px;color:#cfc4d2;font-size:11.5px}
+.expeditionEssentialPills .good{border-color:#4f7358;color:#bae1c2;background:#0e1811}
+.expeditionEssentialPills .bad{border-color:#774b55;color:#e9b3bc;background:#1c1013}
+.expeditionEssentialPills .info{border-color:#536d7c;color:#bad8e4;background:#0e171c}
+
+.expeditionDetailFold,.hubInnerFold,.recordInnerFold{
+ margin:8px 0;border:1px solid #443c49;border-radius:9px;background:#0e0b11;overflow:hidden
+}
+.expeditionDetailFold>summary,.hubInnerFold>summary,.recordInnerFold>summary{
+ display:flex;justify-content:space-between;gap:8px;align-items:center;
+ padding:8px 9px;cursor:pointer;list-style:none;color:#ddd1e1;font-size:11.5px
+}
+.expeditionDetailFold>summary::-webkit-details-marker,
+.hubInnerFold>summary::-webkit-details-marker,
+.recordInnerFold>summary::-webkit-details-marker{display:none}
+.expeditionDetailFold>summary span,.hubInnerFold>summary span,.recordInnerFold>summary span{font-weight:800}
+.expeditionDetailFold>summary small,.hubInnerFold>summary small,.recordInnerFold>summary small{color:#998e9e;font-size:11.5px;text-align:right}
+.expeditionDetailFold>summary::after,.hubInnerFold>summary::after,.recordInnerFold>summary::after{
+ content:"＋";flex:none;color:#b8a9bd;font-size:13px;font-weight:900
+}
+.expeditionDetailFold[open]>summary::after,.hubInnerFold[open]>summary::after,.recordInnerFold[open]>summary::after{content:"−"}
+.expeditionDetailBody,.hubInnerBody,.recordInnerBody{padding:0 8px 8px}
+
+.hubFocusHome{
+ margin:7px 0 8px;padding:9px;border:1px solid #4c4452;border-radius:10px;
+ background:linear-gradient(180deg,#151119,#0e0b11)
+}
+.hubFocusHead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.hubFocusHead b{display:block;color:#eee2f0;font-size:13px}
+.hubFocusHead small{display:block;margin-top:2px;color:#a69baa;font-size:11.5px;line-height:1.4}
+.hubFocusHead strong{padding:2px 6px;border:1px solid #5a5662;border-radius:999px;color:#bdb1c1;font-size:11.5px}
+.hubFocusMetrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:7px}
+.hubFocusMetrics>div{padding:6px 3px;border:1px solid #37313c;border-radius:7px;background:#0b090d;text-align:center}
+.hubFocusMetrics b{display:block;color:#e6dce9;font-size:12.5px}
+.hubFocusMetrics small{display:block;margin-top:2px;color:#958a99;font-size:11.5px}
+.hubFocusAlerts{display:grid;gap:4px;margin-top:7px}
+.hubFocusAlerts span{display:flex;gap:6px;align-items:center;padding:5px 6px;border-left:3px solid #53606c;background:#11151a;color:#c7d0d6;font-size:11.5px}
+.hubFocusAlerts span b{flex:none;color:inherit;font-size:11.5px}
+.hubFocusAlerts .danger{border-color:#8a4d58;background:#1e1014;color:#eab3bd}
+.hubFocusAlerts .warn{border-color:#8b7041;background:#1a150b;color:#e0ca91}
+.hubFocusAlerts .good{border-color:#54775b;background:#0f1811;color:#bee0c4}
+.hubFocusRecord{margin-top:6px;color:#a99eb0;font-size:11.5px}
+.hubFocusDepart{width:100%;margin-top:8px;min-height:38px;font-size:12px;font-weight:900}
+.hubInnerFold.upgradeFold{margin-top:6px}
+.compactRecordRow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:7px;align-items:start;padding:6px 0;border-bottom:1px solid #2f2933;font-size:11.5px}
+.compactRecordRow:last-child{border-bottom:0}
+.compactRecordRow b{color:#ded2e1;font-size:11.5px}
+.compactRecordRow span{min-width:0;color:#b7acbb;line-height:1.4}
+.compactRecordRow small{color:#8f8493;font-size:11.5px;white-space:nowrap}
+#hubIntro{margin:4px 0 6px;color:#a99fac;font-size:11.5px;line-height:1.4}
+#hubUpgrades:empty{display:none}
+@media(max-width:390px){
+ .expeditionEssentialGrid,.hubFocusMetrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .compactRecordRow{grid-template-columns:auto minmax(0,1fr)}
+ .compactRecordRow small{grid-column:2}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.48.0 SAFE RETURN</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.50.0 FOCUS LAYERS</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6186,7 +6278,7 @@ function supplyRouteCapacityActive(){
 }
 function provisionCapacity(){
  const base=240;
- const permanent=(state?.meta?.upgrades?.supply||0)*60;
+ const permanent=normalizedMetaUpgradeLevel(state?.meta,"supply")*60;
  if(!supplyRouteCapacityActive())return base+permanent;
  const routeBonus=180;
  const mastery=routeMasteryLevel("supply");
@@ -6195,7 +6287,7 @@ function provisionCapacity(){
 }
 function provisionCapacityBreakdown(){
  const base=240;
- const permanent=(state?.meta?.upgrades?.supply||0)*60;
+ const permanent=normalizedMetaUpgradeLevel(state?.meta,"supply")*60;
  const routeActive=supplyRouteCapacityActive();
  const route=routeActive?180:0;
  const mastery=routeActive?routeMasteryLevel("supply"):0;
@@ -6203,7 +6295,7 @@ function provisionCapacityBreakdown(){
  return{base,permanent,route,masteryBonus,total:base+permanent+route+masteryBonus,routeActive,mastery};
 }
 function hungerCapacityBreakdown(){
- const permanent=(state?.meta?.upgrades?.supply||0)*120;
+ const permanent=normalizedMetaUpgradeLevel(state?.meta,"supply")*120;
  const core=Math.max(0,(state?.maxHunger||840)-permanent);
  const gearRaw=allEquippedItems().reduce((sum,g)=>sum+gearSupplyBonus(g),0);
  const gear=Math.min(240,gearRaw);
@@ -6784,7 +6876,7 @@ function discoveryArchiveHubHtml(meta=state?.meta){
   {n:8,label:"収蔵者"},
   {n:DISCOVERY_ARCHIVE_TOTAL,label:"深淵編纂者"}
  ];
- return`<details class="discoveryArchive" ${count?"":"open"}>
+ return`<details class="discoveryArchive">
   <summary><span><b>深淵収蔵録</b><small>伝説特性・番人刻印・根冠の発見記録。能力補正はありません。</small></span><strong>${count}/${DISCOVERY_ARCHIVE_TOTAL}・${stage.label}</strong></summary>
   <div class="discoveryArchiveMilestones">${milestones.map(m=>`<span class="${count>=m.n?"done":""}">${m.n}/${DISCOVERY_ARCHIVE_TOTAL} ${m.label}</span>`).join("")}</div>
   <div class="discoveryArchiveSection"><h4>伝説特性 ${archive.legendary.length}/4</h4><div class="discoveryArchiveGrid">${legendary}</div></div>
@@ -7838,6 +7930,7 @@ function validateMetaSaveShape(candidate){
  if(candidate.stash!==undefined&&!Array.isArray(candidate.stash))return"倉庫データが不正です";
  if(candidate.returnOverflow!==undefined&&!Array.isArray(candidate.returnOverflow))return"帰還保留箱データが不正です";
  if(candidate.upgrades!==undefined&&(!candidate.upgrades||typeof candidate.upgrades!=="object"||Array.isArray(candidate.upgrades)))return"恒久強化データが不正です";
+ if(candidate.balanceMigrations!==undefined&&(!candidate.balanceMigrations||typeof candidate.balanceMigrations!=="object"||Array.isArray(candidate.balanceMigrations)))return"調整移行データが不正です";
  return"";
 }
 function validateHubSessionShape(candidate){
@@ -7969,8 +8062,10 @@ function loadMeta(){
   const selected=journal.best;
   notePersistentRecovery("灯台データ",selected);
   const data=persistentClone(selected.data);
-  if(selected.source!=="primary")atomicSaveMetaData(data);
+  const migration=migrateMetaUpgradeCaps(data);
+  if(selected.source!=="primary"||migration.changed)atomicSaveMetaData(data);
   mirrorLegacyMeta(data);
+  if(migration.refund>0)pendingLighthouseRecoveryNotice=`恒久強化の上限調整により、超過購入分${migration.refund}欠片を返還しました`;
   return data;
  }
  try{
@@ -7978,7 +8073,9 @@ function loadMeta(){
   if(!raw)return null;
   const legacy=JSON.parse(raw);
   if(validateMetaSaveShape(legacy))return null;
+  const migration=migrateMetaUpgradeCaps(legacy);
   if(journal.invalid.length)pendingLighthouseRecoveryNotice="灯台データを旧保存から復旧しました";
+  if(migration.refund>0)pendingLighthouseRecoveryNotice=`旧保存を復旧し、恒久強化の超過購入分${migration.refund}欠片も返還しました`;
   atomicSaveMetaData(legacy);
   return persistentClone(legacy);
  }catch(error){return null}
@@ -8299,6 +8396,89 @@ function restoreLighthouseSession(){
  const meta=loadMeta()||defaultMeta();
  const report=session.report||meta.lastExpeditionReport||null;
  return openLighthouseState(meta,session.phase,report);
+}
+const META_UPGRADE_DATA={
+ vitality:{
+  id:"vitality",name:"灯火の生命",cap:8,
+  step:"最大HP +4",
+  desc:"次回以降の最大HPを4増やす。装備・構え・回避を置き換えない範囲で、生存の土台を整える。",
+  current(level){return`最大HP +${level*4}`}
+ },
+ focus:{
+  id:"focus",name:"静謐の焦点",cap:5,
+  step:"最大気力 +1",
+  desc:"次回以降の最大気力を1増やす。行動回数を無限化せず、戦術の余裕だけを広げる。",
+  current(level){return`最大気力 +${level}`}
+ },
+ pack:{
+  id:"pack",name:"回収箱",cap:10,
+  step:"荷物 +2 / 灯台倉庫 +4",
+  desc:"次回以降の荷物上限を2、灯台倉庫を4増やす。倉庫は最大60枠。",
+  current(level){return`荷物 +${level*2} / 灯台倉庫 ${Math.min(60,20+level*4)}/60`}
+ },
+ supply:{
+  id:"supply",name:"遠征糧袋",cap:4,
+  step:"最大充足 +120 / 携行糧 +60",
+  desc:"次回以降の最大充足を120、携行糧上限を60増やす。探索時間の緊張を残したまま遠征余力を広げる。",
+  current(level){return`最大充足 +${level*120} / 携行糧 +${level*60}`}
+ }
+};
+const META_UPGRADE_IDS=Object.keys(META_UPGRADE_DATA);
+function metaUpgradeCap(type){return META_UPGRADE_DATA[type]?.cap||0}
+function normalizedMetaUpgradeLevel(meta,type){
+ const cap=metaUpgradeCap(type);
+ const raw=Math.max(0,Math.floor(Number(meta?.upgrades?.[type])||0));
+ return cap?Math.min(cap,raw):0;
+}
+function metaUpgradeCompletion(meta=state?.meta){
+ const completed=META_UPGRADE_IDS.filter(id=>normalizedMetaUpgradeLevel(meta,id)>=metaUpgradeCap(id)).length;
+ const total=META_UPGRADE_IDS.length;
+ return{completed,total,done:completed>=total};
+}
+function metaUpgradeRefundForOverflow(type,rawLevel){
+ const cap=metaUpgradeCap(type);
+ const level=Math.max(0,Math.floor(Number(rawLevel)||0));
+ if(level<=cap)return 0;
+ let refund=0;
+ for(let purchasedAt=cap;purchasedAt<level;purchasedAt++)refund+=upgradeCost(purchasedAt);
+ return refund;
+}
+function migrateMetaUpgradeCaps(meta){
+ if(!meta||typeof meta!=="object")return{changed:false,refund:0,details:[]};
+ meta.upgrades=meta.upgrades&&typeof meta.upgrades==="object"?meta.upgrades:{};
+ meta.balanceMigrations=meta.balanceMigrations&&typeof meta.balanceMigrations==="object"?meta.balanceMigrations:{};
+ const migrationKey="metaUpgradeCapsV349";
+ if(meta.balanceMigrations[migrationKey]){
+  let changed=false;
+  for(const id of META_UPGRADE_IDS){
+   const normalized=normalizedMetaUpgradeLevel(meta,id);
+   if(meta.upgrades[id]!==normalized){meta.upgrades[id]=normalized;changed=true}
+  }
+  return{changed,refund:0,details:[]};
+ }
+ let refund=0;
+ const details=[];
+ for(const id of META_UPGRADE_IDS){
+  const raw=Math.max(0,Math.floor(Number(meta.upgrades[id])||0));
+  const cap=metaUpgradeCap(id);
+  const returned=metaUpgradeRefundForOverflow(id,raw);
+  if(returned>0)details.push({id,name:META_UPGRADE_DATA[id].name,from:raw,to:cap,refund:returned});
+  refund+=returned;
+  meta.upgrades[id]=Math.min(cap,raw);
+ }
+ if(refund>0)meta.shards=Math.max(0,Number(meta.shards)||0)+refund;
+ meta.balanceMigrations[migrationKey]={at:Date.now(),refund,details};
+ return{changed:true,refund,details};
+}
+function metaUpgradeFoundationHtml(meta=state?.meta){
+ const progress=metaUpgradeCompletion(meta);
+ return`<div class="metaFoundation ${progress.done?"complete":""}">
+  <div class="metaFoundationHead"><div><b>灯台基盤</b><small>恒久強化には完成点があります。終わりなき深層の主役は装備・判断・ラン内成長です。</small></div><strong>${progress.completed}/${progress.total}</strong></div>
+  <div class="metaFoundationBar"><i style="width:${Math.round(progress.completed/progress.total*100)}%"></i></div>
+  <div class="metaFoundationFoot">${progress.done
+   ?"基盤完成。以後の欠片は装備保険・銘装誓約・遺響安定化・姿の解放などへ使えます。"
+   :`あと${progress.total-progress.completed}系統を完成させると灯台基盤が完成します。`}</div>
+ </div>`;
 }
 function defaultMeta(){
  const meta={shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},depthMilestones:{firstTwenty:{clears:0,firstClearAt:0,lastClearAt:0}},abyssWhisper:{cycle:0,options:[],selectedId:null,history:[]},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]},discoveryArchive:{version:1,legendary:[],imprints:[],crowns:[],discoveredAt:{},history:[],lastDiscovery:null},returnOverflow:[]};
@@ -9423,12 +9603,13 @@ function applyMetaToFreshState(newState){
  if((meta.marks?.greed||0)>=5)candidates.push("anti_bomb");
  if((meta.marks?.defiance||0)>=5)candidates.push("anti_guard");
  meta.adaptation=candidates.length?candidates[Math.floor(Math.random()*candidates.length)]:null;
+ migrateMetaUpgradeCaps(meta);
  newState.meta=meta;
- newState.hero.maxHp+=meta.upgrades.vitality*4+Math.floor(trainingRankFromXp(meta.bodyTraining?.endurance||0)/3)*3;
+ newState.hero.maxHp+=normalizedMetaUpgradeLevel(meta,"vitality")*4+Math.floor(trainingRankFromXp(meta.bodyTraining?.endurance||0)/3)*3;
  newState.hero.hp=newState.hero.maxHp;
- newState.hero.maxStamina+=meta.upgrades.focus+Math.floor(trainingRankFromXp(meta.bodyTraining?.focus||0)/3);
+ newState.hero.maxStamina+=normalizedMetaUpgradeLevel(meta,"focus")+Math.floor(trainingRankFromXp(meta.bodyTraining?.focus||0)/3);
  newState.hero.stamina=newState.hero.maxStamina;
- newState.maxHunger+=(meta.upgrades.supply||0)*120;
+ newState.maxHunger+=normalizedMetaUpgradeLevel(meta,"supply")*120;
  ensureMetaLoadouts(meta);
  for(const slot of lighthouseLoadoutSlots){
   const gear=nextLoadoutGear(meta,slot);
@@ -10314,6 +10495,37 @@ function buildExpeditionReport(outcome,details={}){
 
  return report;
 }
+function expeditionEssentialSummaryHtml(report){
+ if(!report)return"";
+ const returned=report.outcome==="return";
+ const gearValue=returned
+  ?(report.newGear||0)+(report.overflowStored||0)
+  :(report.deathCarriedGear||0);
+ const metrics=[
+  {value:`${report.kills||0}`,label:"撃破"},
+  {value:`Lv${report.level||1}`,label:"到達Lv"},
+  {value:`${gearValue}`,label:returned?"持帰り装備":"携行装備"},
+  {value:`${signedValue(report.shardDelta||0)}`,label:"欠片"}
+ ];
+ const key=[];
+ if(report.rescued)key.push({text:"魂還石で生還",tone:"good"});
+ if(report.deepBoundaryClears?.length){
+  const last=report.deepBoundaryClears[report.deepBoundaryClears.length-1];
+  key.push({text:`深度境界 ${last.floor}層`,tone:"good"});
+ }
+ if(report.archiveDiscoveries)key.push({text:`新収蔵 ${report.archiveDiscoveries}`,tone:"good"});
+ if(returned&&report.sealedRelicsReturned)key.push({text:`封印 ${report.sealedRelicsReturned}持帰り`,tone:"good"});
+ if(returned&&report.overflowStored)key.push({text:`保留箱 ${report.overflowStored}`,tone:"info"});
+ if(!returned&&report.insuredRecovered)key.push({text:`保険回収 ${report.insuredRecovered}`,tone:"good"});
+ if(!returned&&report.echoStored)key.push({text:`遺響 ${report.echoStored}`,tone:"info"});
+ if(!returned&&report.permanentlyDestroyed)key.push({text:`完全消失 ${report.permanentlyDestroyed}`,tone:"bad"});
+ if(!returned&&report.nemesisStolen)key.push({text:"宿敵に奪取",tone:"bad"});
+ const visible=key.slice(0,3);
+ return`<div class="expeditionEssentials">
+  <div class="expeditionEssentialGrid">${metrics.map(item=>`<div><b>${item.value}</b><small>${item.label}</small></div>`).join("")}</div>
+  ${visible.length?`<div class="expeditionEssentialPills">${visible.map(item=>`<span class="${item.tone}">${item.text}</span>`).join("")}</div>`:""}
+ </div>`;
+}
 function expeditionReportHtml(report,compact=false){
  if(!report)return'<p class="note">まだ完了した探索はありません。</p>';
  const returned=report.outcome==="return";
@@ -10356,6 +10568,10 @@ function expeditionReportHtml(report,compact=false){
    <small>${report.floorTitle} / ${report.biome}<br>${subtitle}${compact?`<br>${formatReportDate(report.timestamp)}`:""}</small>
   </div>
   ${expeditionHeroMomentHtml(report,compact)}
+  ${expeditionEssentialSummaryHtml(report)}
+  <details class="expeditionDetailFold">
+   <summary><span>詳細記録を見る</span><small>戦闘・収支・世界変化</small></summary>
+   <div class="expeditionDetailBody">
   ${expeditionRecordBurstHtml(report)}
   <div class="expeditionMetricGrid">
    <div class="expeditionMetric"><b>${report.turns}</b><small>経過ターン</small></div>
@@ -10435,13 +10651,15 @@ function expeditionReportHtml(report,compact=false){
   ${compact?"":`<div class="expeditionSection">
    <h3>その他の記録</h3>
    <ul class="expeditionHighlight">${report.highlights.map(item=>`<li>${item}</li>`).join("")}</ul>
-  </div>`}`;
+  </div>`}
+   </div>
+  </details>`;
 }
 function showExpeditionReport(report){
  $("expeditionResultTitle").textContent=report.outcome==="return"?"灯台への帰還":"探索者は深淵に消えた";
  $("gameOverText").textContent=report.outcome==="return"
-  ?"今回の探索成果を確認してから、灯台で次の装備を整えます。"
-  :"失ったものと残った成長を確認し、灯台から次の探索へ備えます。";
+  ?"要点だけ表示しています。必要な時だけ詳細を開けます。"
+  :"要点だけ表示しています。損失の内訳は詳細から確認できます。";
  $("expeditionResultBody").innerHTML=expeditionReportHtml(report,false);
  $("gameOverOverlay").classList.remove("hidden");
 }
@@ -19005,10 +19223,10 @@ function cloneGear(g){return g?JSON.parse(JSON.stringify(g)):null}
 const inventorySortLabels={score:"推奨度",rarity:"レア度",slot:"部位",level:"アイテムレベル",bond:"装備絆"};
 const rarityOrder={common:0,magic:1,rare:2,legendary:3};
 function inventoryCapacity(){
- return 12+(state.meta?.upgrades?.pack||0)*2+(state.packExpansion||0)*2;
+ return 12+normalizedMetaUpgradeLevel(state.meta,"pack")*2+(state.packExpansion||0)*2;
 }
 function lighthouseStashCapacity(meta=state?.meta){
- const pack=Math.max(0,Math.floor(meta?.upgrades?.pack||0));
+ const pack=normalizedMetaUpgradeLevel(meta,"pack");
  return Math.min(60,20+pack*4);
 }
 function lighthouseStashFree(meta=state?.meta){
@@ -19809,13 +20027,30 @@ function copyReturnedLoadoutToNext(){
  saveMeta();renderHub();
 }
 
-function upgradeCost(level){return 5+level*5}
+function upgradeCost(level){return 5+Math.max(0,Math.floor(level||0))*5}
 function buyMetaUpgrade(type){
- const lvl=state.meta.upgrades[type]||0,cost=upgradeCost(lvl);
- if(state.meta.shards<cost){addLog("深淵の欠片が足りない。");return}
- state.meta.shards-=cost;state.meta.upgrades[type]=lvl+1;saveMeta();
- addLog("灯台の力が強まった。次の探索から反映される。");
+ const data=META_UPGRADE_DATA[type];if(!data)return false;
+ migrateMetaUpgradeCaps(state.meta);
+ const lvl=normalizedMetaUpgradeLevel(state.meta,type);
+ if(lvl>=data.cap){
+  showCombatToast("灯台基盤","この系統は完成しています","objective");
+  return false;
+ }
+ const cost=upgradeCost(lvl);
+ if((state.meta.shards||0)<cost){addLog("深淵の欠片が足りない。");return false}
+ state.meta.shards-=cost;
+ state.meta.upgrades[type]=lvl+1;
+ const completed=state.meta.upgrades[type]>=data.cap;
+ const allComplete=metaUpgradeCompletion(state.meta).done;
+ saveMeta();
+ addLog(`${data.name}がLv${lvl+1}/${data.cap}へ。${data.current(lvl+1)}。${completed?" この系統は完成した。":""}`);
+ showCombatToast(completed?"恒久強化 完成":"恒久強化",`${data.name} Lv${lvl+1}/${data.cap}${completed?"・完成":""}`,completed?"legendary":"objective");
+ if(allComplete){
+  addLog("灯台の4基盤がすべて完成した。これ以上、恒久基礎能力は膨張しない。");
+  triggerImpactFeedback?.("legendary",{haptic:"legendary",duration:780});
+ }
  renderHub();
+ return true;
 }
 function codexName(type){
  return{skeleton:"盾骸兵",warg:"穴獣",mage:"骨術師",bomber:"爆ぜ虫",priest:"墓鐘司祭",charger:"穿ち獣",leech:"灯喰らい",warden:"深層の番人"}[type]||type;
@@ -20282,11 +20517,16 @@ function renderLighthouseStash(meta=state.meta){
 }
 
 const hubManagedPanelIds=["overviewPanel","routeMasteryPanel","lastReportPanel","deathEchoPanel","relicVaultPanel","loadoutPanel","weaponOathPanel","insurancePanel","stashPanel","recordsPanel"];
-const hubPanelDefaults={overviewPanel:true,routeMasteryPanel:false,lastReportPanel:false,deathEchoPanel:false,relicVaultPanel:false,loadoutPanel:true,weaponOathPanel:false,insurancePanel:false,stashPanel:false,recordsPanel:false};
+const hubPanelDefaults={overviewPanel:true,routeMasteryPanel:false,lastReportPanel:false,deathEchoPanel:false,relicVaultPanel:false,loadoutPanel:false,weaponOathPanel:false,insurancePanel:false,stashPanel:false,recordsPanel:false};
 let applyingHubPanelState=false;
 function ensureHubPanelState(meta=state?.meta){
  if(!meta)return{open:{...hubPanelDefaults},signals:{}};
+ meta.balanceMigrations=meta.balanceMigrations&&typeof meta.balanceMigrations==="object"?meta.balanceMigrations:{};
  if(!meta.hubPanels||typeof meta.hubPanels!=="object")meta.hubPanels={open:{...hubPanelDefaults},signals:{}};
+ if(!meta.balanceMigrations.focusLayersV350){
+  meta.hubPanels={open:{...hubPanelDefaults},signals:{}};
+  meta.balanceMigrations.focusLayersV350={at:Date.now()};
+ }
  if(!meta.hubPanels.open||typeof meta.hubPanels.open!=="object")meta.hubPanels.open={...hubPanelDefaults};
  if(!meta.hubPanels.signals||typeof meta.hubPanels.signals!=="object")meta.hubPanels.signals={};
  for(const id of hubManagedPanelIds)if(typeof meta.hubPanels.open[id]!=="boolean")meta.hubPanels.open[id]=!!hubPanelDefaults[id];
@@ -20383,9 +20623,79 @@ function showPendingLighthouseRecoveryNotice(){
   renderLog();
  }
 }
+function hubWorldDetailHtml(meta=state?.meta){
+ const pendingReaction=pendingLabyrinthReaction(meta);
+ const adaptation=meta?.adaptation
+  ?`<div class="itemRow"><div class="top"><span>迷宮の適応</span><span>${adaptationData[meta.adaptation]?.label||meta.adaptation}</span></div><div class="desc">${adaptationData[meta.adaptation]?.desc||""}</div></div>`
+  :"";
+ const nemesis=meta?.nemesis
+  ?`<div class="itemRow nemesisHubCard"><div class="top"><span>宿敵</span><span>${meta.nemesis.kills||1}勝・遭遇${meta.nemesis.encounters||0}</span></div><div class="desc"><b>${meta.nemesis.name}</b><br>追跡圏：第${Math.max(2,(meta.nemesis.floor||2)-1)}層以降${meta.nemesis.stolenGear?`<br><span class="nemesisStolen">奪われた装備：${gearLabel(meta.nemesis.stolenGear)}</span>`:""}</div></div>`
+  :"";
+ return`<details class="hubInnerFold">
+  <summary><span>世界・探索状態</span><small>宿敵・生態・迷宮反応</small></summary>
+  <div class="hubInnerBody">
+   ${recoveryAssistHubHtml(meta)}
+   ${pendingReaction?labyrinthReactionCardHtml(pendingReaction):""}
+   ${adaptation}
+   ${nemesis}
+   ${livingEcologyCardHtml(meta)}
+  </div>
+ </details>`;
+}
+function hubHomeSummaryHtml(meta=state?.meta){
+ ensureMetaLoadouts(meta);
+ const record=ensureExpeditionRecords(meta).values;
+ const loadoutCount=lighthouseLoadoutSlots.filter(slot=>!!nextLoadoutGear(meta,slot)).length;
+ const free=lighthouseStashFree(meta);
+ const pendingReaction=pendingLabyrinthReaction(meta);
+ const alerts=[];
+ if(hasPendingReturnOverflow(meta))alerts.push({tone:"danger",title:"要整理",text:`帰還保留 ${ensureReturnOverflow(meta).length}個`});
+ if(!hasPendingReturnOverflow(meta)&&loadoutCount===0)alerts.push({tone:"warn",title:"次にすること",text:"出撃装備を選ぶ"});
+ if(meta?.nemesis?.stolenGear)alerts.push({tone:"danger",title:"宿敵",text:`${meta.nemesis.name}が装備を保持`});
+ else if(meta?.nemesis)alerts.push({tone:"warn",title:"宿敵",text:`${meta.nemesis.name}が追跡中`});
+ if(pendingReaction)alerts.push({tone:"info",title:"迷宮反応",text:`${labyrinthReactionData[pendingReaction.id]?.label||pendingReaction.label||"変化あり"}`});
+ if(ensureRecoveryAssistMeta(meta).pending)alerts.push({tone:"good",title:"再起支援",text:"次の探索で発動"});
+ const ready=!hasPendingReturnOverflow(meta)&&loadoutCount>0;
+ return`${returnOverflowHubHtml(meta)}
+ <div class="hubFocusHome">
+  <div class="hubFocusHead"><div><b>${ready?"出発準備":"灯台"}</b><small>${ready?"必要なら装備だけ確認して出発できます。":"必要な項目だけ確認してください。"}</small></div><strong>${ready?"READY":"CHECK"}</strong></div>
+  <div class="hubFocusMetrics">
+   <div><b>${meta.shards||0}</b><small>欠片</small></div>
+   <div><b>${meta.bestFloor||1}</b><small>最高層</small></div>
+   <div><b>${loadoutCount}/8</b><small>出撃装備</small></div>
+   <div><b>${free}</b><small>倉庫空き</small></div>
+  </div>
+  ${alerts.length?`<div class="hubFocusAlerts">${alerts.slice(0,3).map(a=>`<span class="${a.tone}"><b>${a.title}</b>${a.text}</span>`).join("")}</div>`:""}
+  ${record.deepestReturn?`<div class="hubFocusRecord">最深生還 第${record.deepestReturn}層</div>`:""}
+  <button type="button" class="hubFocusDepart" id="hubFocusDepartBtn">${hasPendingReturnOverflow(meta)?"帰還保留を整理":ready?"探索へ出る":"出撃準備を進める"}</button>
+ </div>
+ ${hubWorldDetailHtml(meta)}`;
+}
+function hubProgressRecordsHtml(meta=state?.meta){
+ const researchRows=Object.keys(researchData).map(type=>`${researchData[type].label} Lv${researchLevel(type)}`).join(" / ");
+ const adaptationRows=(meta.abyssAdaptations||[]).map(id=>abyssAdaptationData[id]?.label||id).join(" / ")||"未獲得";
+ const trainingRows=Object.keys(trainingData).map(type=>`${trainingData[type].label} R${trainingRank(type)}`).join(" / ");
+ const masteryRows=Object.keys(weaponData).map(type=>`${weaponData[type].label} Lv${masteryLevel(type)}`).join(" / ");
+ const markLabels={mercy:"慈悲",greed:"欲望",defiance:"反抗",curiosity:"探究"};
+ const dom=dominantMark(),worldEcho=activeWorldMarkEcho(meta);
+ return`<details class="recordInnerFold">
+  <summary><span>成長・世界記録</span><small>研究 / 適応 / 熟練 / 世界の印</small></summary>
+  <div class="recordInnerBody">
+   <div class="compactRecordRow"><b>研究</b><span>${researchRows}</span><small>未使用 ${meta.research?.points||0}</small></div>
+   <div class="compactRecordRow"><b>適応</b><span>${adaptationRows}</span><small>未使用 ${meta.adaptationPoints||0}</small></div>
+   <div class="compactRecordRow"><b>身体</b><span>${trainingRows}</span></div>
+   <div class="compactRecordRow"><b>武器</b><span>${masteryRows}</span></div>
+   <div class="compactRecordRow"><b>世界の印</b><span>${worldEcho?worldEcho.label:(dom?markLabels[dom]:"未定")}</span><small>慈${meta.marks?.mercy||0} / 欲${meta.marks?.greed||0} / 反${meta.marks?.defiance||0} / 探${meta.marks?.curiosity||0}</small></div>
+  </div>
+ </details>`;
+}
 function renderHub(){
  const m=state.meta||defaultMeta();
- ensureLighthouseOnboardingMeta(m);
+ const guide=ensureLighthouseOnboardingMeta(m);
+ $("hubIntro").textContent=guide.firstDepartureComplete
+  ?"必要な準備だけ確認して、次の探索へ。詳細情報は各項目を開くと確認できます。"
+  :"まず武器を選び、出撃準備を整えてください。";
+
  ensureMetaLoadouts(m);
  ensureRouteMastery(m);
  ensureInsuranceMeta(m);
@@ -20407,52 +20717,46 @@ function renderHub(){
   ?expeditionReportHtml(lastReport,true)
   :'<p class="note">完了した探索はまだありません。</p>';
  const pendingReaction=pendingLabyrinthReaction(m);
- $("hubSummary").innerHTML=returnOverflowHubHtml(m)+recoveryAssistHubHtml(m)+(pendingReaction?labyrinthReactionCardHtml(pendingReaction):"")+`
-  <div class="itemRow">
-   <div class="top"><span>探索記録</span><span>欠片 ${m.shards}</span></div>
-   <div class="desc">最高到達 ${m.bestFloor}層 / 総撃破 ${m.totalKills} / 最深生還 ${ensureExpeditionRecords(m).values.deepestReturn?`${ensureExpeditionRecords(m).values.deepestReturn}層`:"未記録"}<br>灯台倉庫 ${m.stash?.length||0}/${lighthouseStashCapacity(m)} / 探索荷物 ${12+(m.upgrades?.pack||0)*2}枠<br>帰還によりHP・気力・充足は完全回復。次は新しい探索として出発します。</div>
-  </div>`+
-  (m.adaptation?`<div class="itemRow"><div class="top"><span>迷宮の適応</span><span>${adaptationData[m.adaptation]?.label||m.adaptation}</span></div>
-  <div class="desc">${adaptationData[m.adaptation]?.desc||""}</div></div>`:"")+
-  (m.nemesis?`<div class="itemRow nemesisHubCard"><div class="top"><span>宿敵</span><span>${m.nemesis.kills||1}勝・遭遇${m.nemesis.encounters||0}</span></div>
-  <div class="desc"><b>${m.nemesis.name}</b><br>追跡圏：第${Math.max(2,(m.nemesis.floor||2)-1)}層以降${m.nemesis.stolenGear?`<br><span class="nemesisStolen">奪われた装備：${gearLabel(m.nemesis.stolenGear)}</span>`:""}<br>対象階層で遭遇しなかった回数に応じて出現率が上昇し、3回目には必ず現れます。</div></div>`:
-  '<div class="itemRow"><div class="top"><span>宿敵</span><span>不在</span></div><div class="desc">現在、あなたを追う存在はいない。</div></div>')+livingEcologyCardHtml(m);
- const upgrades=[
-  ["vitality","灯火の生命","次回以降 最大HP +4"],
-  ["focus","静謐の焦点","次回以降 最大気力 +1"],
-  ["pack","回収箱","次回以降 荷物上限 +2 / 灯台倉庫 +4（最大60）"],
-  ["supply","遠征糧袋","次回以降 最大充足 +120 / 携行糧上限 +60"]
- ];
- $("hubUpgrades").innerHTML=upgrades.map(([id,name,desc])=>{
-  const lvl=m.upgrades[id]||0,cost=upgradeCost(lvl),affordable=(m.shards||0)>=cost;
-  return`<div class="itemRow"><div class="top"><span>${name} Lv${lvl}</span><span>${cost}欠片</span></div>
-   <div class="desc">${desc}</div><button type="button" data-upgrade="${id}" ${affordable?"":"disabled"}>${affordable?"強化する":`欠片不足 ${m.shards||0}/${cost}`}</button>${affordable?"":`<span class="hubUnavailableReason">探索・装備分解・進路報酬で深淵の欠片を集めると強化できます。</span>`}</div>`;
+ $("hubSummary").innerHTML=hubHomeSummaryHtml(m);
+ migrateMetaUpgradeCaps(m);
+ const upgradeProgress=metaUpgradeCompletion(m);
+ const upgradeCards=META_UPGRADE_IDS.map(id=>{
+  const data=META_UPGRADE_DATA[id];
+  const lvl=normalizedMetaUpgradeLevel(m,id),complete=lvl>=data.cap;
+  const cost=complete?0:upgradeCost(lvl),affordable=!complete&&(m.shards||0)>=cost;
+  const pct=Math.round(lvl/data.cap*100);
+  return`<div class="itemRow metaUpgradeCard ${complete?"complete":""}">
+   <div class="top"><span>${data.name} Lv${lvl}/${data.cap}</span><span>${complete?"完成":`${cost}欠片`}</span></div>
+   <div class="desc">${data.desc}<br><b>現在：${data.current(lvl)}</b><br>次：${complete?"—":data.step}</div>
+   <div class="metaUpgradeProgress"><i style="width:${pct}%"></i></div>
+   <button type="button" data-upgrade="${id}" ${affordable?"":"disabled"}>${complete?"完成済み":affordable?"強化する":`欠片不足 ${m.shards||0}/${cost}`}</button>
+  </div>`;
  }).join("");
+ $("hubUpgrades").innerHTML=`<details class="hubInnerFold upgradeFold">
+  <summary><span>灯台基盤・恒久強化</span><small>${upgradeProgress.completed}/${upgradeProgress.total}系統完成</small></summary>
+  <div class="hubInnerBody">${metaUpgradeFoundationHtml(m)}${upgradeCards}</div>
+ </details>`;
  $("hubSummary").querySelectorAll("[data-reaction-control]").forEach(button=>{
   button.onclick=()=>setPendingReactionControl(button.dataset.reactionControl);
  });
  $("hubUpgrades").querySelectorAll("[data-upgrade]").forEach(b=>b.onclick=()=>buyMetaUpgrade(b.dataset.upgrade));
  renderLighthouseStash(m);
- $("overviewSummary").textContent=`灯台概要・恒久強化・欠片 ${m.shards||0}${hasPendingReturnOverflow(m)?`・帰還保留 ${ensureReturnOverflow(m).length}`:""}`;
+ $("overviewSummary").textContent=`灯台${hasPendingReturnOverflow(m)?`・要整理 ${ensureReturnOverflow(m).length}`:""}`;
  $("recordsSummary").textContent="研究・記録・姿";
- const researchRows=Object.keys(researchData).map(type=>`${researchData[type].label} Lv${researchLevel(type)}`).join(" / ");
- $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>深淵研究</span><span>未使用 ${m.research?.points||0}</span></div><div class="desc">${researchRows}</div></div>`;
- const adaptationRows=(m.abyssAdaptations||[]).map(id=>abyssAdaptationData[id]?.label||id).join(" / ")||"未獲得";
- $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>深淵適応</span><span>未使用 ${m.adaptationPoints||0}</span></div><div class="desc">${adaptationRows}</div></div>`;
- const trainingRows=Object.keys(trainingData).map(type=>`${trainingData[type].label} R${trainingRank(type)} (${trainingXp(type)})`).join(" / ");
- $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>身体鍛錬</span><span>永続</span></div><div class="desc">${trainingRows}</div></div>`;
- const masteryRows=Object.keys(weaponData).map(type=>`<div>${weaponData[type].label} Lv${masteryLevel(type)} (${masteryXp(type)})</div>`).join("");
- $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>武器熟練</span><span>永続</span></div><div class="desc">${masteryRows}</div></div>`;
- const markLabels={mercy:"慈悲",greed:"欲望",defiance:"反抗",curiosity:"探究"};
- const dom=dominantMark(),worldEcho=activeWorldMarkEcho(m);
- $("hubSummary").innerHTML+=`<div class="itemRow"><div class="top"><span>世界の印</span><span>${worldEcho?worldEcho.label:(dom?markLabels[dom]:"未定")}</span></div>
- <div class="desc">慈悲 ${m.marks?.mercy||0} / 欲望 ${m.marks?.greed||0} / 反抗 ${m.marks?.defiance||0} / 探究 ${m.marks?.curiosity||0}${worldEcho?`<br><b>${worldEcho.label}${worldEcho.tier>1?` ${worldEcho.tier}`:""}</b>：${worldEcho.desc}`:"<br>同じ印が3つ蓄積すると、迷宮の出現傾向へ小さな残響が生まれる。"}</div></div>`;
+
  const entries=Object.entries(m.codex||{});
- $("codexList").innerHTML=discoveryArchiveHubHtml(m)+expeditionRecordsHubHtml(m)+'<h3>深淵図鑑</h3>'+(entries.length?entries.map(([type,count])=>
-  `<div class="itemRow"><div class="top"><span>${codexName(type)}</span><span>${count}体</span></div><div class="desc">${codexInsight(type,count)}</div></div>`
- ).join(""):'<p class="note">まだ記録はありません。</p>')+
- `<h3>事件記録</h3>`+
- ((m.eventHistory||[]).slice(-8).reverse().map(e=>`<div class="itemRow"><div class="top"><span>${e.title}</span><span>${e.floor}層</span></div><div class="desc">${e.choice}</div></div>`).join("")||'<p class="note">まだ事件記録はありません。</p>');
+ const codexRows=entries.length?entries.map(([type,count])=>
+  `<div class="compactRecordRow"><b>${codexName(type)}</b><span>${codexInsight(type,count)}</span><small>${count}体</small></div>`
+ ).join(""):'<p class="note">まだ記録はありません。</p>';
+ const eventRows=(m.eventHistory||[]).slice(-8).reverse().map(e=>
+  `<div class="compactRecordRow"><b>${e.title}</b><span>${e.choice}</span><small>第${e.floor}層</small></div>`
+ ).join("")||'<p class="note">まだ事件記録はありません。</p>';
+ $("codexList").innerHTML=
+  hubProgressRecordsHtml(m)+
+  discoveryArchiveHubHtml(m)+
+  `<details class="recordInnerFold"><summary><span>探索自己記録</span><small>自己ベスト</small></summary><div class="recordInnerBody">${expeditionRecordsHubHtml(m)}</div></details>`+
+  `<details class="recordInnerFold"><summary><span>深淵図鑑</span><small>${entries.length}種</small></summary><div class="recordInnerBody">${codexRows}</div></details>`+
+  `<details class="recordInnerFold"><summary><span>事件記録</span><small>${Math.min(8,(m.eventHistory||[]).length)}件</small></summary><div class="recordInnerBody">${eventRows}</div></details>`;
 
  const researchTotal=Object.values(m.research?.levels||{}).reduce((sum,value)=>sum+(value||0),0);
  const hasResearch=(m.research?.points||0)>0||researchTotal>0;
@@ -20470,6 +20774,8 @@ function renderHub(){
  if(!hasAdaptation)$("adaptBtn").textContent="深淵適応（番人撃破で解放）";
 
  bindReturnOverflowActions();
+ const focusDepart=$("hubFocusDepartBtn");
+ if(focusDepart)focusDepart.onclick=()=>hasPendingReturnOverflow(m)?focusReturnOverflow():startFreshRunFromHub();
  $("hubSummary").querySelectorAll("[data-reaction-control]").forEach(button=>{
   button.onclick=()=>setPendingReactionControl(button.dataset.reactionControl);
  });
@@ -20974,6 +21280,7 @@ function loadGame(){
   ensureExpeditionIdentity(state);
   const persistedMeta=loadMeta();
   state.meta=persistedMeta||state.meta||defaultMeta();
+  migrateMetaUpgradeCaps(state.meta);
   if(!state.meta.stash)state.meta.stash=[];
   if(!state.meta.upgrades)state.meta.upgrades={vitality:0,focus:0,pack:0,supply:0};
   if(typeof state.meta.upgrades.supply!=="number")state.meta.upgrades.supply=0;
@@ -21031,7 +21338,7 @@ function loadGame(){
   if((state.maxHunger||0)<300){
    const oldMax=Math.max(1,state.maxHunger||100);
    const oldRatio=clamp((state.hunger??oldMax)/oldMax,0,1);
-   state.maxHunger=840+(state.meta.upgrades.supply||0)*120;
+   state.maxHunger=840+normalizedMetaUpgradeLevel(state.meta,"supply")*120;
    state.hunger=Math.round(state.maxHunger*oldRatio);
    state.meta.balanceMigrations.hungerV31042=true;
   }else if(!state.meta.balanceMigrations.hungerV31042){
