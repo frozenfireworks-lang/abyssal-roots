@@ -966,11 +966,11 @@ body{
 }
 .helpSection summary::-webkit-details-marker{display:none}
 .helpSection summary::after{
- content:"＋";
+ content:"▸";
  float:right;
  color:#d6bfd8;
 }
-.helpSection[open] summary::after{content:"－"}
+.helpSection[open] summary::after{content:"▾"}
 .helpBody{
  padding:10px 12px 12px;
  color:#d8cddd;
@@ -1042,7 +1042,7 @@ body{
  background:#100c14;
  overflow:hidden;
 }
-.hubFold summary{
+.hubFold>summary{
  list-style:none;
  cursor:pointer;
  user-select:none;
@@ -1052,14 +1052,14 @@ body{
  font-weight:700;
  font-size:12.3px;
 }
-.hubFold summary::-webkit-details-marker{display:none}
-.hubFold summary::after{
- content:"開く ＋";
+.hubFold>summary::-webkit-details-marker{display:none}
+.hubFold>summary::after{
+ content:"▸";
  float:right;
  color:#cbb9d2;
- font-size:12px;
+ font-size:13px;
 }
-.hubFold[open] summary::after{content:"閉じる －"}
+.hubFold[open]>summary::after{content:"▾"}
 .hubFold #stashList{padding:7px}
 .stashSummaryLine{
  margin-bottom:7px;
@@ -1091,7 +1091,7 @@ body{
  font-weight:700;
 }
 @media(max-width:600px){
- .hubFold summary{padding:9px 10px;font-size:12.8px}
+ .hubFold>summary{padding:9px 10px;font-size:12.8px}
  .hubFold #stashList{padding:5px}
  .stashActions{gap:4px}
 }
@@ -3696,8 +3696,8 @@ body{
 .stashCompactDetails{margin-top:5px;border-top:1px solid #302b36;padding-top:4px}
 .stashCompactDetails summary{cursor:pointer;color:#bcae83;font-size:11.5px;list-style:none}
 .stashCompactDetails summary::-webkit-details-marker{display:none}
-.stashCompactDetails summary::before{content:'＋ ';color:#8b7744}
-.stashCompactDetails[open] summary::before{content:'－ '}
+.stashCompactDetails summary::before{content:'▸ ';color:#8b7744}
+.stashCompactDetails[open] summary::before{content:'▾ '}
 .stashDetailBody{margin-top:5px;color:#aaa0b1;font-size:11.5px;line-height:1.5}
 .stashActions.compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin-top:6px}
 .stashActions.compact button{min-height:28px;padding:4px;font-size:11.5px}
@@ -4414,7 +4414,7 @@ button{line-height:1.25}
 /* v3.26.3 TYPOGRAPHY BOOST */
 body,button,input,select,textarea{font-size:12px}
 .hubAccordionNav button{min-height:58px;line-height:1.25}
-.hubFold summary{line-height:1.3}
+.hubFold>summary{line-height:1.3}
 .hubSectionBadge,.stashBadge,.relicVaultMeta span,.weaponOathBadge,.mobileStateChip{padding-top:2px;padding-bottom:2px;line-height:1.25}
 .relicVaultCard button,.modalBtn,.choiceBtn,.miniBtn,.ctrl,.skill{line-height:1.3}
 .note,.desc,.relicVaultCard small,.relicVaultLead small,.relicFortuneHead small,.sealedCarryStatus small,.livingEcologyEffect,.ecologyReport,.weaponArtLead,.abyssWhisperLead,.abyssWhisperCurrent,.abyssWhisperReport,.provisionBreakdown{line-height:1.6}
@@ -4945,6 +4945,8 @@ body,button,input,select,textarea{font-size:12px}
  padding:9px;list-style:none
 }
 .discoveryArchive>summary::-webkit-details-marker{display:none}
+.discoveryArchive>summary::after{content:"▸";flex:none;color:#bca76c;font-size:13px;font-weight:900}
+.discoveryArchive[open]>summary::after{content:"▾"}
 .discoveryArchive>summary span{min-width:0}
 .discoveryArchive>summary b{display:block;color:#f0d58d;font-size:13px}
 .discoveryArchive>summary small{display:block;margin-top:2px;color:#aaa08c;font-size:11.5px;line-height:1.45}
@@ -5110,9 +5112,9 @@ body,button,input,select,textarea{font-size:12px}
 .expeditionDetailFold>summary span,.hubInnerFold>summary span,.recordInnerFold>summary span{font-weight:800}
 .expeditionDetailFold>summary small,.hubInnerFold>summary small,.recordInnerFold>summary small{color:#998e9e;font-size:11.5px;text-align:right}
 .expeditionDetailFold>summary::after,.hubInnerFold>summary::after,.recordInnerFold>summary::after{
- content:"＋";flex:none;color:#b8a9bd;font-size:13px;font-weight:900
+ content:"▸";flex:none;color:#b8a9bd;font-size:13px;font-weight:900
 }
-.expeditionDetailFold[open]>summary::after,.hubInnerFold[open]>summary::after,.recordInnerFold[open]>summary::after{content:"−"}
+.expeditionDetailFold[open]>summary::after,.hubInnerFold[open]>summary::after,.recordInnerFold[open]>summary::after{content:"▾"}
 .expeditionDetailBody,.hubInnerBody,.recordInnerBody{padding:0 8px 8px}
 
 .hubFocusHome{
@@ -5149,11 +5151,89 @@ body,button,input,select,textarea{font-size:12px}
  .compactRecordRow small{grid-column:2}
 }
 
+
+/* v3.51.0 LIGHTHOUSE WORKSPACES */
+#hubOverlay{padding:0;overflow:hidden;align-items:stretch}
+#hubOverlay .hubWorkspaceCard{
+ width:min(100%,500px);height:100dvh;max-height:100dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+ margin:0 auto;border-radius:0;border-top:0;border-bottom:0;
+ padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 14px);
+ background:linear-gradient(180deg,#211927,#120d16)
+}
+.hubWorkspaceTop{
+ position:sticky;top:calc(-1 * (env(safe-area-inset-top) + 10px));z-index:6;
+ display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:center;
+ margin:-2px -2px 8px;padding:calc(env(safe-area-inset-top) + 8px) 2px 8px;
+ background:linear-gradient(180deg,rgba(29,22,35,.99),rgba(20,15,24,.97));
+ border-bottom:1px solid #493d52;backdrop-filter:blur(8px)
+}
+.hubWorkspaceHeading{min-width:0}
+.hubWorkspaceHeading h2{margin:0!important;font-size:18px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hubWorkspaceHeading p{margin:2px 0 0!important;font-size:11.5px!important;line-height:1.35!important;color:#a99eae!important}
+.hubWorkspaceBack{
+ min-width:64px;min-height:36px;padding:6px 8px;border:1px solid #594b62;border-radius:9px;
+ background:#17111d;color:#e8ddeb;font-size:11.5px;font-weight:800
+}
+.hubWorkspaceScreen{animation:hubWorkspaceIn .16s ease-out}
+@keyframes hubWorkspaceIn{from{opacity:.45;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hubWorkspaceMenu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:9px 0}
+.hubWorkspaceTile{
+ position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:center;
+ min-width:0;min-height:68px;padding:9px;text-align:left;border:1px solid #51445b;border-radius:11px;
+ background:linear-gradient(180deg,#211927,#15101a);color:#e9deec
+}
+.hubWorkspaceTile:last-child{grid-column:1/-1}
+.hubWorkspaceTile:active{transform:translateY(1px)}
+.hubWorkspaceIcon{
+ display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid #5b4b65;
+ border-radius:9px;background:#100c14;color:#d8c0dc;font-size:15px;font-weight:900
+}
+.hubWorkspaceTile b{display:block;font-size:12.5px;color:#f1e7f3}
+.hubWorkspaceTile small{display:block;margin-top:2px;font-size:11.5px;color:#a99cac;line-height:1.3}
+.hubWorkspaceTile em{
+ position:absolute;right:7px;top:7px;padding:2px 5px;border:1px solid #59616a;border-radius:999px;
+ background:#12161a;color:#c9d2d8;font-size:11.5px;font-style:normal;font-weight:800
+}
+.hubWorkspaceTile em.good{border-color:#4d7057;background:#0f1b13;color:#c0e2c6}
+.hubWorkspaceTile em.gold{border-color:#806b3e;background:#201a0c;color:#ead18a}
+.hubWorkspaceTile em.danger{border-color:#834b56;background:#211014;color:#e9b1bb}
+.hubWorkspaceTile em.info{border-color:#4f6d7e;background:#0e171d;color:#b9dae7}
+.hubWorkspaceScreen>.hubFold{margin:7px 0}
+.hubWorkspaceSectionHead{
+ display:flex;justify-content:space-between;gap:8px;align-items:center;margin:4px 0 7px;padding:0 2px
+}
+.hubWorkspaceSectionHead b{color:#e8ddeb;font-size:13px}
+.hubWorkspaceSectionHead span{color:#a99bac;font-size:11.5px}
+.hubWorkspaceQuickActions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:8px 0}
+.hubWorkspaceQuickActions .modalBtn{margin:0;min-width:0;font-size:11.5px}
+.hubWorkspaceInfoCard{
+ margin:8px 0;padding:8px;border:1px solid #443b4b;border-radius:9px;background:#0f0c12
+}
+.hubWorkspaceInfoCard.compact{padding:7px}
+.hubWorkspaceInfoHead{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:4px}
+.hubWorkspaceInfoHead b{color:#ddd1e1;font-size:12px}
+.hubWorkspaceInfoHead span{color:#968a9b;font-size:11.5px}
+.hubWorkspaceMarkLine{color:#b8acbc;font-size:11.5px;line-height:1.45}
+.hubWorkspaceFooter{margin-top:8px}
+.hubUtilityActions.single{grid-template-columns:1fr}
+#hubWorkspaceHome #hubOnboarding:empty{display:none}
+#hubStashLead:empty,#hubDeepSummary:empty,#hubGrowthSummary:empty{display:none}
+#hubWorkspaceUpgrade .metaFoundation{margin-top:0}
+#hubWorkspaceRecords #lastReportBody>.expeditionOutcome{margin-top:6px}
+@media(min-width:560px){
+ #hubOverlay{padding:10px;align-items:flex-start;overflow-y:auto}
+ #hubOverlay .hubWorkspaceCard{
+  height:auto;min-height:min(760px,calc(100dvh - 20px));max-height:calc(100dvh - 20px);
+  border:1px solid #705f7c;border-radius:16px;padding:14px;overflow-y:auto
+ }
+ .hubWorkspaceTop{top:-14px;margin:-4px -2px 8px;padding:10px 2px 8px}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.50.0 FOCUS LAYERS</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.51.0 LIGHTHOUSE WORKSPACES</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5728,72 +5808,118 @@ body,button,input,select,textarea{font-size:12px}
 </div>
 
 <div class="overlay hidden" id="hubOverlay">
-  <div class="card">
-    <h2>深淵の灯台</h2>
-    <p id="hubIntro">帰還すると現在の探索は終了し、HP・気力・充足が完全回復します。持ち帰った装備と恒久強化を整え、次の探索へ出発してください。</p>
-    <div id="hubOnboarding"></div>
-    <div id="hubAccordionNav" class="hubAccordionNav"></div>
-
-    <details class="hubFold hubManagedFold" id="overviewPanel" open>
-      <summary id="overviewSummary">灯台概要・恒久強化</summary>
-      <div class="hubManagedBody"><div id="hubSummary"></div><div id="hubUpgrades"></div></div>
-    </details>
-
-    <details class="hubFold hubManagedFold" id="routeMasteryPanel">
-      <summary id="routeMasterySummary">進路熟練</summary>
-      <div id="routeMasteryBody"></div>
-    </details>
-
-    <details class="hubFold hubManagedFold" id="lastReportPanel">
-      <summary id="lastReportSummary">前回の探索結果</summary>
-      <div id="lastReportBody"></div>
-    </details>
-
-    <details class="hubFold hubManagedFold" id="deathEchoPanel">
-      <summary id="deathEchoSummary">遺響回収</summary>
-      <div id="deathEchoBody"></div>
-    </details>
-
-    <details class="hubFold hubManagedFold" id="relicVaultPanel">
-      <summary id="relicVaultSummary">封印遺物</summary>
-      <div id="relicVaultBody"></div>
-    </details>
-
-    <details class="hubFold hubManagedFold" id="loadoutPanel">
-      <summary id="loadoutSummary">出撃準備</summary>
-      <div id="loadoutPlanner"></div>
-    </details>
-
-    <details class="hubFold hubManagedFold" id="weaponOathPanel">
-      <summary id="weaponOathSummary">銘装誓約</summary>
-      <div id="weaponOathBody"></div>
-    </details>
-
-    <details class="hubFold hubManagedFold" id="insurancePanel">
-      <summary id="insuranceSummary">装備保険・救命契約</summary>
-      <div id="insuranceBody"></div>
-    </details>
-
-    <details class="hubFold hubManagedFold" id="stashPanel">
-      <summary id="stashSummary">持ち帰り倉庫</summary>
-      <div id="stashList"></div>
-    </details>
-
-    <details class="hubFold hubManagedFold" id="recordsPanel">
-      <summary id="recordsSummary">研究・記録・姿</summary>
-      <div class="hubManagedBody">
-       <div class="hubUtilityActions">
-        <button type="button" class="modalBtn" id="researchBtn">深淵研究</button>
-        <button type="button" class="modalBtn" id="adaptBtn">深淵適応を選ぶ</button>
-        <button type="button" class="modalBtn hubAppearanceBtn" id="hubAppearanceBtn">姿を編集</button>
-       </div>
-       <div id="codexList"></div>
+  <div class="card hubWorkspaceCard">
+    <div class="hubWorkspaceTop">
+      <button type="button" class="hubWorkspaceBack hidden" id="hubWorkspaceBack">‹ 灯台</button>
+      <div class="hubWorkspaceHeading">
+        <h2 id="hubWorkspaceTitle">深淵の灯台</h2>
+        <p id="hubIntro">必要な準備だけ確認して、次の探索へ。</p>
       </div>
-    </details>
+    </div>
 
-    <button type="button" class="modalBtn hidden" id="returnToAbyssBtn">現在の探索へ戻る</button>
-    <button type="button" class="modalBtn" id="newRunBtn">新しい探索を始める</button>
-    <button type="button" class="modalBtn hidden" id="closeHub">閉じる</button>
+    <div id="hubAccordionNav" class="hidden"></div>
+
+    <section class="hubWorkspaceScreen" id="hubWorkspaceHome" data-hub-screen="home">
+      <div id="hubOnboarding"></div>
+      <div id="hubSummary"></div>
+      <div class="hubWorkspaceMenu">
+        <button type="button" class="hubWorkspaceTile prep" data-hub-workspace="prep">
+          <span class="hubWorkspaceIcon">⚔</span>
+          <span><b>出撃準備</b><small>装備・銘装・保険</small></span>
+          <em id="hubWorkspacePrepBadge"></em>
+        </button>
+        <button type="button" class="hubWorkspaceTile stash" data-hub-workspace="stash">
+          <span class="hubWorkspaceIcon">▣</span>
+          <span><b>倉庫</b><small>装備整理・封印遺物</small></span>
+          <em id="hubWorkspaceStashBadge"></em>
+        </button>
+        <button type="button" class="hubWorkspaceTile upgrade" data-hub-workspace="upgrade">
+          <span class="hubWorkspaceIcon">✦</span>
+          <span><b>強化</b><small>基盤・研究・適応</small></span>
+          <em id="hubWorkspaceUpgradeBadge"></em>
+        </button>
+        <button type="button" class="hubWorkspaceTile abyss" data-hub-workspace="abyss">
+          <span class="hubWorkspaceIcon">◇</span>
+          <span><b>深淵</b><small>深度門・宿敵・遺響</small></span>
+          <em id="hubWorkspaceAbyssBadge"></em>
+        </button>
+        <button type="button" class="hubWorkspaceTile records" data-hub-workspace="records">
+          <span class="hubWorkspaceIcon">☷</span>
+          <span><b>記録</b><small>収蔵・図鑑・探索履歴</small></span>
+          <em id="hubWorkspaceRecordsBadge"></em>
+        </button>
+      </div>
+    </section>
+
+    <section class="hubWorkspaceScreen hidden" id="hubWorkspacePrep" data-hub-screen="prep">
+      <details class="hubFold hubManagedFold" id="loadoutPanel" open>
+        <summary id="loadoutSummary">出撃装備</summary>
+        <div id="loadoutPlanner"></div>
+      </details>
+      <details class="hubFold hubManagedFold" id="weaponOathPanel">
+        <summary id="weaponOathSummary">銘装誓約</summary>
+        <div id="weaponOathBody"></div>
+      </details>
+      <details class="hubFold hubManagedFold" id="insurancePanel">
+        <summary id="insuranceSummary">装備保険・救命契約</summary>
+        <div id="insuranceBody"></div>
+      </details>
+    </section>
+
+    <section class="hubWorkspaceScreen hidden" id="hubWorkspaceStash" data-hub-screen="stash">
+      <div id="hubStashLead"></div>
+      <details class="hubFold hubManagedFold" id="stashPanel" open>
+        <summary id="stashSummary">持ち帰り倉庫</summary>
+        <div id="stashList"></div>
+      </details>
+      <details class="hubFold hubManagedFold" id="relicVaultPanel">
+        <summary id="relicVaultSummary">封印遺物</summary>
+        <div id="relicVaultBody"></div>
+      </details>
+    </section>
+
+    <section class="hubWorkspaceScreen hidden" id="hubWorkspaceUpgrade" data-hub-screen="upgrade">
+      <div id="hubUpgrades"></div>
+      <div class="hubWorkspaceQuickActions">
+        <button type="button" class="modalBtn" id="researchBtn">深淵研究</button>
+        <button type="button" class="modalBtn" id="adaptBtn">深淵適応</button>
+      </div>
+      <div id="hubGrowthSummary"></div>
+    </section>
+
+    <section class="hubWorkspaceScreen hidden" id="hubWorkspaceAbyss" data-hub-screen="abyss">
+      <div id="hubDeepSummary"></div>
+      <details class="hubFold hubManagedFold" id="routeMasteryPanel" open>
+        <summary id="routeMasterySummary">深度門・進路熟練</summary>
+        <div id="routeMasteryBody"></div>
+      </details>
+      <details class="hubFold hubManagedFold" id="deathEchoPanel">
+        <summary id="deathEchoSummary">遺響回収</summary>
+        <div id="deathEchoBody"></div>
+      </details>
+    </section>
+
+    <section class="hubWorkspaceScreen hidden" id="hubWorkspaceRecords" data-hub-screen="records">
+      <details class="hubFold hubManagedFold" id="lastReportPanel">
+        <summary id="lastReportSummary">前回の探索結果</summary>
+        <div id="lastReportBody"></div>
+      </details>
+      <details class="hubFold hubManagedFold" id="recordsPanel" open>
+        <summary id="recordsSummary">収蔵・図鑑・記録</summary>
+        <div class="hubManagedBody">
+          <div class="hubUtilityActions single">
+            <button type="button" class="modalBtn hubAppearanceBtn" id="hubAppearanceBtn">姿を編集</button>
+          </div>
+          <div id="codexList"></div>
+        </div>
+      </details>
+    </section>
+
+    <div class="hubWorkspaceFooter">
+      <button type="button" class="modalBtn hidden" id="returnToAbyssBtn">現在の探索へ戻る</button>
+      <button type="button" class="modalBtn hidden" id="newRunBtn">新しい探索を始める</button>
+      <button type="button" class="modalBtn hidden" id="closeHub">閉じる</button>
+    </div>
   </div>
 </div>
 
@@ -6876,7 +7002,7 @@ function discoveryArchiveHubHtml(meta=state?.meta){
   {n:8,label:"収蔵者"},
   {n:DISCOVERY_ARCHIVE_TOTAL,label:"深淵編纂者"}
  ];
- return`<details class="discoveryArchive">
+ return`<details class="discoveryArchive" data-focus-key="discoveryArchive"${focusLayerOpenAttr(meta,"discoveryArchive")}>
   <summary><span><b>深淵収蔵録</b><small>伝説特性・番人刻印・根冠の発見記録。能力補正はありません。</small></span><strong>${count}/${DISCOVERY_ARCHIVE_TOTAL}・${stage.label}</strong></summary>
   <div class="discoveryArchiveMilestones">${milestones.map(m=>`<span class="${count>=m.n?"done":""}">${m.n}/${DISCOVERY_ARCHIVE_TOTAL} ${m.label}</span>`).join("")}</div>
   <div class="discoveryArchiveSection"><h4>伝説特性 ${archive.legendary.length}/4</h4><div class="discoveryArchiveGrid">${legendary}</div></div>
@@ -7931,6 +8057,8 @@ function validateMetaSaveShape(candidate){
  if(candidate.returnOverflow!==undefined&&!Array.isArray(candidate.returnOverflow))return"帰還保留箱データが不正です";
  if(candidate.upgrades!==undefined&&(!candidate.upgrades||typeof candidate.upgrades!=="object"||Array.isArray(candidate.upgrades)))return"恒久強化データが不正です";
  if(candidate.balanceMigrations!==undefined&&(!candidate.balanceMigrations||typeof candidate.balanceMigrations!=="object"||Array.isArray(candidate.balanceMigrations)))return"調整移行データが不正です";
+ if(candidate.focusLayers!==undefined&&(!candidate.focusLayers||typeof candidate.focusLayers!=="object"||Array.isArray(candidate.focusLayers)))return"UI開閉状態が不正です";
+ if(candidate.hubWorkspace!==undefined&&(!candidate.hubWorkspace||typeof candidate.hubWorkspace!=="object"||Array.isArray(candidate.hubWorkspace)))return"灯台画面状態が不正です";
  return"";
 }
 function validateHubSessionShape(candidate){
@@ -9024,6 +9152,7 @@ function setLighthouseGuideAdvanced(show){
 function focusLighthouseLoadout(){
  const guide=ensureLighthouseOnboardingMeta(state.meta);
  guide.advancedHubShown=true;
+ ensureHubWorkspace(state.meta).current="prep";
  saveMeta();
  renderHub();
  $("loadoutPanel").open=true;
@@ -9044,7 +9173,7 @@ function applyFirstLighthouseDisclosure(meta){
  const guide=ensureLighthouseOnboardingMeta(meta);
  const simple=!guide.firstDepartureComplete&&!guide.advancedHubShown;
  const advancedIds=[
-  "hubAccordionNav","overviewPanel","routeMasteryPanel","lastReportPanel",
+  "hubAccordionNav","routeMasteryPanel","lastReportPanel",
   "deathEchoPanel","relicVaultPanel","loadoutPanel","weaponOathPanel","insurancePanel","stashPanel","recordsPanel"
  ];
  for(const id of advancedIds)$(id)?.classList.toggle("hubFirstHidden",simple);
@@ -10569,8 +10698,8 @@ function expeditionReportHtml(report,compact=false){
   </div>
   ${expeditionHeroMomentHtml(report,compact)}
   ${expeditionEssentialSummaryHtml(report)}
-  <details class="expeditionDetailFold">
-   <summary><span>詳細記録を見る</span><small>戦闘・収支・世界変化</small></summary>
+  <details class="expeditionDetailFold" data-focus-key="expeditionDetails"${focusLayerOpenAttr(state?.meta,"expeditionDetails")}>
+   <summary><span>詳細記録</span><small>戦闘・収支・世界変化</small></summary>
    <div class="expeditionDetailBody">
   ${expeditionRecordBurstHtml(report)}
   <div class="expeditionMetricGrid">
@@ -10661,10 +10790,13 @@ function showExpeditionReport(report){
   ?"要点だけ表示しています。必要な時だけ詳細を開けます。"
   :"要点だけ表示しています。損失の内訳は詳細から確認できます。";
  $("expeditionResultBody").innerHTML=expeditionReportHtml(report,false);
+ bindFocusLayerDetails(state?.meta,$("gameOverOverlay"));
  $("gameOverOverlay").classList.remove("hidden");
 }
 function openLighthouseAfterDebrief(){
  $("gameOverOverlay").classList.add("hidden");
+ resetHubWorkspaceHome(state.meta);
+ saveMeta();
  renderHub();
  $("returnToAbyssBtn").classList.add("hidden");
  $("closeHub").classList.add("hidden");
@@ -16378,6 +16510,8 @@ function showLastOpenedRelicInStash(){
  lighthouseStashView.status="all";
  lighthouseStashView.sort="newest";
  lighthouseStashView.page=1;
+ ensureHubWorkspace(state.meta).current="stash";
+ saveMeta();
  renderHub();
 
  const panel=$("stashPanel");
@@ -19370,13 +19504,18 @@ function bindReturnOverflowActions(){
  panel.querySelector("[data-return-overflow-move-all]")?.addEventListener("click",moveAvailableReturnOverflow);
 }
 function focusReturnOverflow(){
- const overview=$("overviewPanel");if(overview)overview.open=true;
- const panel=$("returnOverflowPanel");
- if(panel){
-  panel.scrollIntoView({behavior:"smooth",block:"start"});
-  panel.classList.add("attention");
-  setTimeout(()=>panel.classList.remove("attention"),900);
- }
+ ensureHubWorkspace(state.meta).current="stash";
+ saveMeta();
+ renderHub();
+ requestAnimationFrame(()=>{
+  const panel=$("returnOverflowPanel");
+  if(panel){
+   panel.scrollIntoView({behavior:"smooth",block:"start"});
+   panel.classList.add("attention");
+   setTimeout(()=>panel.classList.remove("attention"),900);
+  }
+ });
+ return true;
 }
 function salvageValue(g){
  if(!g)return 0;
@@ -20516,8 +20655,8 @@ function renderLighthouseStash(meta=state.meta){
  list.querySelectorAll("[data-weapon-oath]").forEach(button=>button.onclick=()=>requestWeaponOath(Number(button.dataset.weaponOath)));
 }
 
-const hubManagedPanelIds=["overviewPanel","routeMasteryPanel","lastReportPanel","deathEchoPanel","relicVaultPanel","loadoutPanel","weaponOathPanel","insurancePanel","stashPanel","recordsPanel"];
-const hubPanelDefaults={overviewPanel:true,routeMasteryPanel:false,lastReportPanel:false,deathEchoPanel:false,relicVaultPanel:false,loadoutPanel:false,weaponOathPanel:false,insurancePanel:false,stashPanel:false,recordsPanel:false};
+const hubManagedPanelIds=["routeMasteryPanel","lastReportPanel","deathEchoPanel","relicVaultPanel","loadoutPanel","weaponOathPanel","insurancePanel","stashPanel","recordsPanel"];
+const hubPanelDefaults={routeMasteryPanel:true,lastReportPanel:false,deathEchoPanel:false,relicVaultPanel:false,loadoutPanel:true,weaponOathPanel:false,insurancePanel:false,stashPanel:true,recordsPanel:true};
 let applyingHubPanelState=false;
 function ensureHubPanelState(meta=state?.meta){
  if(!meta)return{open:{...hubPanelDefaults},signals:{}};
@@ -20531,6 +20670,87 @@ function ensureHubPanelState(meta=state?.meta){
  if(!meta.hubPanels.signals||typeof meta.hubPanels.signals!=="object")meta.hubPanels.signals={};
  for(const id of hubManagedPanelIds)if(typeof meta.hubPanels.open[id]!=="boolean")meta.hubPanels.open[id]=!!hubPanelDefaults[id];
  return meta.hubPanels;
+}
+const HUB_WORKSPACE_DATA={
+ home:{title:"深淵の灯台",intro:"必要なものだけ選んで確認できます。"},
+ prep:{title:"出撃準備",intro:"次の探索へ持ち込む装備・銘装・保険。"},
+ stash:{title:"倉庫",intro:"持ち帰った装備と封印遺物を整理します。"},
+ upgrade:{title:"強化",intro:"灯台基盤・研究・適応を育てます。"},
+ abyss:{title:"深淵",intro:"深度門・宿敵・遺響・世界変化を確認します。"},
+ records:{title:"記録",intro:"収蔵・図鑑・自己記録・探索履歴。"}
+};
+function ensureHubWorkspace(meta=state?.meta){
+ if(!meta)return{current:"home"};
+ if(!meta.hubWorkspace||typeof meta.hubWorkspace!=="object")meta.hubWorkspace={current:"home"};
+ if(!HUB_WORKSPACE_DATA[meta.hubWorkspace.current])meta.hubWorkspace.current="home";
+ return meta.hubWorkspace;
+}
+function currentHubWorkspace(meta=state?.meta){return ensureHubWorkspace(meta).current}
+function setHubWorkspace(page,{render=true,scroll=true}={}){
+ if(!HUB_WORKSPACE_DATA[page]||!state?.meta)return false;
+ ensureHubWorkspace(state.meta).current=page;
+ if(page!=="home"){
+  const guide=ensureLighthouseOnboardingMeta(state.meta);
+  guide.advancedHubShown=true;
+  const primaryPanel={prep:"loadoutPanel",stash:"stashPanel",abyss:"routeMasteryPanel",records:"recordsPanel"}[page];
+  if(primaryPanel)ensureHubPanelState(state.meta).open[primaryPanel]=true;
+ }
+ saveMeta();
+ if(render)renderHub();
+ if(scroll){
+  requestAnimationFrame(()=>{
+   const overlay=$("hubOverlay");
+   if(overlay)overlay.scrollTo?.({top:0,behavior:"smooth"});
+  });
+ }
+ return true;
+}
+function resetHubWorkspaceHome(meta=state?.meta){
+ if(!meta)return false;
+ ensureHubWorkspace(meta).current="home";
+ return true;
+}
+function hubWorkspaceBadgeData(meta=state?.meta){
+ ensureMetaLoadouts(meta);
+ const loadoutCount=lighthouseLoadoutSlots.filter(slot=>!!nextLoadoutGear(meta,slot)).length;
+ const overflow=ensureReturnOverflow(meta).length;
+ const upgrades=metaUpgradeCompletion(meta);
+ const research=meta.research?.points||0,adapt=meta.adaptationPoints||0;
+ const relics=(meta.sealedRelics||[]).length;
+ const echo=activeDeathEcho(meta);
+ const reaction=pendingLabyrinthReaction(meta);
+ const archive=discoveryArchiveCount(meta);
+ return{
+  prep:{text:`${loadoutCount}/8`,tone:loadoutCount?"good":""},
+  stash:{text:overflow?`${overflow} 要整理`:relics?`${relics}封`:`${meta.stash?.length||0}/${lighthouseStashCapacity(meta)}`,tone:overflow?"danger":relics?"gold":""},
+  upgrade:{text:(research+adapt)>0?`${research+adapt} 未使用`:`${upgrades.completed}/${upgrades.total}`,tone:(research+adapt)>0?"gold":upgrades.done?"good":""},
+  abyss:{text:meta.nemesis?"宿敵":echo?"遺響":reaction?"変化":"",tone:meta.nemesis?"danger":echo?"info":reaction?"gold":""},
+  records:{text:`${archive}/${DISCOVERY_ARCHIVE_TOTAL}`,tone:archive>=DISCOVERY_ARCHIVE_TOTAL?"gold":""}
+ };
+}
+function applyHubWorkspace(meta=state?.meta){
+ const page=currentHubWorkspace(meta);
+ for(const screen of document.querySelectorAll("#hubOverlay [data-hub-screen]")){
+  screen.classList.toggle("hidden",screen.dataset.hubScreen!==page);
+ }
+ const data=HUB_WORKSPACE_DATA[page]||HUB_WORKSPACE_DATA.home;
+ const title=$("hubWorkspaceTitle"),intro=$("hubIntro"),back=$("hubWorkspaceBack");
+ if(title)title.textContent=data.title;
+ if(intro)intro.textContent=data.intro;
+ if(back)back.classList.toggle("hidden",page==="home");
+ const badges=hubWorkspaceBadgeData(meta);
+ const ids={prep:"hubWorkspacePrepBadge",stash:"hubWorkspaceStashBadge",upgrade:"hubWorkspaceUpgradeBadge",abyss:"hubWorkspaceAbyssBadge",records:"hubWorkspaceRecordsBadge"};
+ for(const [key,id] of Object.entries(ids)){
+  const el=$(id),badge=badges[key];if(!el)continue;
+  el.textContent=badge?.text||"";
+  el.className=badge?.tone||"";
+  el.classList.toggle("hidden",!badge?.text);
+ }
+ document.querySelectorAll("#hubOverlay [data-hub-workspace]").forEach(button=>{
+  button.onclick=()=>setHubWorkspace(button.dataset.hubWorkspace);
+ });
+ if(back)back.onclick=()=>setHubWorkspace("home");
+ return page;
 }
 function appearanceReadyUnlockCount(meta=state?.meta){
  const appearance=currentAppearance();
@@ -20560,7 +20780,6 @@ function hubPanelNotifications(meta=state.meta){
  const researchPoints=meta.research?.points||0;
  const adaptationPoints=meta.adaptationPoints||0;
  return{
-  overviewPanel:{badge:(meta.shards||0)>0?`${meta.shards}欠片`:"",className:"gold",signal:""},
   routeMasteryPanel:{badge:"",className:"",signal:""},
   lastReportPanel:{badge:meta.lastExpeditionReport?`第${meta.lastExpeditionReport.floor}層`:"",className:"info",signal:""},
   deathEchoPanel:{badge:echo?"回収あり":"",className:"info",signal:echo?`echo:${echo.floor}:${echo.createdAt||echo.timestamp||echo.gear?.map(g=>g.id).join(',')}`:""},
@@ -20569,7 +20788,7 @@ function hubPanelNotifications(meta=state.meta){
   weaponOathPanel:{badge:oath.status==="lost"?"喪失":deepening?.pendingStage?"深化待ち":"",className:oath.status==="lost"?"":deepening?.pendingStage?"gold":"",signal:oath.status==="lost"?`lost:${oath.gearId}:${oath.lostAt}`:deepening?.pendingStage?`ready:${oath.gearId}:${deepening.pendingStage}`:""},
   insurancePanel:{badge:loadoutCount&&plan.mode==="none"?"未保険":plan.mode==="shards"?`${plan.slots.length}部位`:plan.mode==="soul"?"魂還石":"",className:plan.mode==="none"?"":"good",signal:loadoutCount&&plan.mode==="none"?`uninsured:${lighthouseLoadoutSlots.map(slot=>meta.nextLoadout?.[slot]||'').join('|')}`:""},
   stashPanel:{badge:(meta.stash||[]).length?`${meta.stash.length}件`:"",className:"",signal:""},
-  recordsPanel:{badge:(researchPoints+adaptationPoints+appearanceReady)>0?`${researchPoints+adaptationPoints+appearanceReady}件`:"",className:"gold",signal:(researchPoints||adaptationPoints||appearanceReady)?`records:${researchPoints}:${adaptationPoints}:${appearanceReady}`:""}
+  recordsPanel:{badge:appearanceReady>0?`${appearanceReady}姿`:"",className:"gold",signal:appearanceReady?`records:${appearanceReady}`:""}
  };
 }
 function appendHubSummaryBadge(summary,badge,className=""){
@@ -20579,7 +20798,7 @@ function appendHubSummaryBadge(summary,badge,className=""){
 function applyHubPanelState(meta=state.meta){
  const saved=ensureHubPanelState(meta),notifications=hubPanelNotifications(meta);
  const guide=ensureLighthouseOnboardingMeta(meta);
- if(!guide.firstDepartureComplete){saved.open.overviewPanel=true;saved.open.loadoutPanel=true;}
+ if(!guide.firstDepartureComplete){saved.open.loadoutPanel=true;}
  for(const id of hubManagedPanelIds){
   const signal=notifications[id]?.signal||"";
   if(signal&&saved.signals[id]!==signal){saved.open[id]=true;saved.signals[id]=signal;}
@@ -20596,7 +20815,7 @@ function applyHubPanelState(meta=state.meta){
  renderHubAccordionNav(meta,notifications);
 }
 function decorateHubPanelSummaries(notifications=hubPanelNotifications(state.meta)){
- const summaryByPanel={overviewPanel:"overviewSummary",routeMasteryPanel:"routeMasterySummary",lastReportPanel:"lastReportSummary",deathEchoPanel:"deathEchoSummary",relicVaultPanel:"relicVaultSummary",loadoutPanel:"loadoutSummary",weaponOathPanel:"weaponOathSummary",insurancePanel:"insuranceSummary",stashPanel:"stashSummary",recordsPanel:"recordsSummary"};
+ const summaryByPanel={routeMasteryPanel:"routeMasterySummary",lastReportPanel:"lastReportSummary",deathEchoPanel:"deathEchoSummary",relicVaultPanel:"relicVaultSummary",loadoutPanel:"loadoutSummary",weaponOathPanel:"weaponOathSummary",insurancePanel:"insuranceSummary",stashPanel:"stashSummary",recordsPanel:"recordsSummary"};
  for(const [panelId,summaryId] of Object.entries(summaryByPanel))appendHubSummaryBadge($(summaryId),notifications[panelId]?.badge,notifications[panelId]?.className);
 }
 function hubNavItems(){return[
@@ -20623,6 +20842,37 @@ function showPendingLighthouseRecoveryNotice(){
   renderLog();
  }
 }
+function ensureFocusLayerState(meta=state?.meta){
+ if(!meta)return{open:{}};
+ if(!meta.focusLayers||typeof meta.focusLayers!=="object")meta.focusLayers={open:{}};
+ if(!meta.focusLayers.open||typeof meta.focusLayers.open!=="object")meta.focusLayers.open={};
+ return meta.focusLayers;
+}
+function focusLayerIsOpen(meta,key,defaultOpen=false){
+ const stateData=ensureFocusLayerState(meta);
+ if(typeof stateData.open[key]!=="boolean")stateData.open[key]=!!defaultOpen;
+ return stateData.open[key];
+}
+function focusLayerOpenAttr(meta,key,defaultOpen=false){
+ return focusLayerIsOpen(meta,key,defaultOpen)?" open":"";
+}
+function setFocusLayerOpen(meta,key,open){
+ if(!key)return false;
+ ensureFocusLayerState(meta).open[key]=!!open;
+ return true;
+}
+function bindFocusLayerDetails(meta=state?.meta,root=document){
+ if(!root?.querySelectorAll)return;
+ root.querySelectorAll("details[data-focus-key]").forEach(detail=>{
+  const key=detail.dataset.focusKey;if(!key)return;
+  detail.open=focusLayerIsOpen(meta,key,detail.open);
+  detail.ontoggle=()=>{
+   setFocusLayerOpen(meta,key,detail.open);
+   saveMeta();
+   if(state?.expeditionEnded&&$("hubOverlay")&&!$("hubOverlay").classList.contains("hidden"))saveLighthouseSession("hub");
+  };
+ });
+}
 function hubWorldDetailHtml(meta=state?.meta){
  const pendingReaction=pendingLabyrinthReaction(meta);
  const adaptation=meta?.adaptation
@@ -20631,7 +20881,7 @@ function hubWorldDetailHtml(meta=state?.meta){
  const nemesis=meta?.nemesis
   ?`<div class="itemRow nemesisHubCard"><div class="top"><span>宿敵</span><span>${meta.nemesis.kills||1}勝・遭遇${meta.nemesis.encounters||0}</span></div><div class="desc"><b>${meta.nemesis.name}</b><br>追跡圏：第${Math.max(2,(meta.nemesis.floor||2)-1)}層以降${meta.nemesis.stolenGear?`<br><span class="nemesisStolen">奪われた装備：${gearLabel(meta.nemesis.stolenGear)}</span>`:""}</div></div>`
   :"";
- return`<details class="hubInnerFold">
+ return`<details class="hubInnerFold" data-focus-key="worldState"${focusLayerOpenAttr(meta,"worldState")}>
   <summary><span>世界・探索状態</span><small>宿敵・生態・迷宮反応</small></summary>
   <div class="hubInnerBody">
    ${recoveryAssistHubHtml(meta)}
@@ -20655,9 +20905,8 @@ function hubHomeSummaryHtml(meta=state?.meta){
  else if(meta?.nemesis)alerts.push({tone:"warn",title:"宿敵",text:`${meta.nemesis.name}が追跡中`});
  if(pendingReaction)alerts.push({tone:"info",title:"迷宮反応",text:`${labyrinthReactionData[pendingReaction.id]?.label||pendingReaction.label||"変化あり"}`});
  if(ensureRecoveryAssistMeta(meta).pending)alerts.push({tone:"good",title:"再起支援",text:"次の探索で発動"});
- const ready=!hasPendingReturnOverflow(meta)&&loadoutCount>0;
- return`${returnOverflowHubHtml(meta)}
- <div class="hubFocusHome">
+ const ready=!hasPendingReturnOverflow(meta)&&!!departureWeaponPreview(meta);
+ return`<div class="hubFocusHome">
   <div class="hubFocusHead"><div><b>${ready?"出発準備":"灯台"}</b><small>${ready?"必要なら装備だけ確認して出発できます。":"必要な項目だけ確認してください。"}</small></div><strong>${ready?"READY":"CHECK"}</strong></div>
   <div class="hubFocusMetrics">
    <div><b>${meta.shards||0}</b><small>欠片</small></div>
@@ -20668,122 +20917,135 @@ function hubHomeSummaryHtml(meta=state?.meta){
   ${alerts.length?`<div class="hubFocusAlerts">${alerts.slice(0,3).map(a=>`<span class="${a.tone}"><b>${a.title}</b>${a.text}</span>`).join("")}</div>`:""}
   ${record.deepestReturn?`<div class="hubFocusRecord">最深生還 第${record.deepestReturn}層</div>`:""}
   <button type="button" class="hubFocusDepart" id="hubFocusDepartBtn">${hasPendingReturnOverflow(meta)?"帰還保留を整理":ready?"探索へ出る":"出撃準備を進める"}</button>
- </div>
- ${hubWorldDetailHtml(meta)}`;
+ </div>`;
 }
 function hubProgressRecordsHtml(meta=state?.meta){
  const researchRows=Object.keys(researchData).map(type=>`${researchData[type].label} Lv${researchLevel(type)}`).join(" / ");
  const adaptationRows=(meta.abyssAdaptations||[]).map(id=>abyssAdaptationData[id]?.label||id).join(" / ")||"未獲得";
  const trainingRows=Object.keys(trainingData).map(type=>`${trainingData[type].label} R${trainingRank(type)}`).join(" / ");
  const masteryRows=Object.keys(weaponData).map(type=>`${weaponData[type].label} Lv${masteryLevel(type)}`).join(" / ");
+ return`<div class="hubWorkspaceInfoCard">
+  <div class="hubWorkspaceInfoHead"><b>成長状況</b><span>自動・恒久</span></div>
+  <div class="compactRecordRow"><b>研究</b><span>${researchRows}</span><small>未使用 ${meta.research?.points||0}</small></div>
+  <div class="compactRecordRow"><b>適応</b><span>${adaptationRows}</span><small>未使用 ${meta.adaptationPoints||0}</small></div>
+  <div class="compactRecordRow"><b>身体</b><span>${trainingRows}</span></div>
+  <div class="compactRecordRow"><b>武器</b><span>${masteryRows}</span></div>
+ </div>`;
+}
+function hubWorldMarkHtml(meta=state?.meta){
  const markLabels={mercy:"慈悲",greed:"欲望",defiance:"反抗",curiosity:"探究"};
  const dom=dominantMark(),worldEcho=activeWorldMarkEcho(meta);
- return`<details class="recordInnerFold">
-  <summary><span>成長・世界記録</span><small>研究 / 適応 / 熟練 / 世界の印</small></summary>
-  <div class="recordInnerBody">
-   <div class="compactRecordRow"><b>研究</b><span>${researchRows}</span><small>未使用 ${meta.research?.points||0}</small></div>
-   <div class="compactRecordRow"><b>適応</b><span>${adaptationRows}</span><small>未使用 ${meta.adaptationPoints||0}</small></div>
-   <div class="compactRecordRow"><b>身体</b><span>${trainingRows}</span></div>
-   <div class="compactRecordRow"><b>武器</b><span>${masteryRows}</span></div>
-   <div class="compactRecordRow"><b>世界の印</b><span>${worldEcho?worldEcho.label:(dom?markLabels[dom]:"未定")}</span><small>慈${meta.marks?.mercy||0} / 欲${meta.marks?.greed||0} / 反${meta.marks?.defiance||0} / 探${meta.marks?.curiosity||0}</small></div>
-  </div>
- </details>`;
+ return`<div class="hubWorkspaceInfoCard compact">
+  <div class="hubWorkspaceInfoHead"><b>世界の印</b><span>${worldEcho?worldEcho.label:(dom?markLabels[dom]:"未定")}</span></div>
+  <div class="hubWorkspaceMarkLine">慈 ${meta.marks?.mercy||0}　欲 ${meta.marks?.greed||0}　反 ${meta.marks?.defiance||0}　探 ${meta.marks?.curiosity||0}</div>
+ </div>`;
 }
+
 function renderHub(){
  const m=state.meta||defaultMeta();
  const guide=ensureLighthouseOnboardingMeta(m);
- $("hubIntro").textContent=guide.firstDepartureComplete
-  ?"必要な準備だけ確認して、次の探索へ。詳細情報は各項目を開くと確認できます。"
-  :"まず武器を選び、出撃準備を整えてください。";
-
+ ensureHubWorkspace(m);
  ensureMetaLoadouts(m);
  ensureRouteMastery(m);
  ensureInsuranceMeta(m);
- renderLighthouseLoadout();
- renderWeaponOath(m);
- renderInsurance(m);
- renderRouteMastery(m);
- renderDeathEcho(m);
- renderSealedRelicVault(m);
- $("researchBtn").textContent=`深淵研究（${m.research?.points||0}点）`;
- $("adaptBtn").textContent=(m.adaptationPoints||0)>0
-  ?`深淵適応を選ぶ（${m.adaptationPoints}点）`
-  :"深淵適応を確認";
- const lastReport=m.lastExpeditionReport;
- $("lastReportSummary").textContent=lastReport
-  ?`前回の探索結果・${lastReport.outcome==="return"?"帰還":"死亡"} 第${lastReport.floor}層`
-  :"前回の探索結果";
- $("lastReportBody").innerHTML=lastReport
-  ?expeditionReportHtml(lastReport,true)
-  :'<p class="note">完了した探索はまだありません。</p>';
- const pendingReaction=pendingLabyrinthReaction(m);
- $("hubSummary").innerHTML=hubHomeSummaryHtml(m);
  migrateMetaUpgradeCaps(m);
- const upgradeProgress=metaUpgradeCompletion(m);
- const upgradeCards=META_UPGRADE_IDS.map(id=>{
-  const data=META_UPGRADE_DATA[id];
-  const lvl=normalizedMetaUpgradeLevel(m,id),complete=lvl>=data.cap;
-  const cost=complete?0:upgradeCost(lvl),affordable=!complete&&(m.shards||0)>=cost;
-  const pct=Math.round(lvl/data.cap*100);
-  return`<div class="itemRow metaUpgradeCard ${complete?"complete":""}">
-   <div class="top"><span>${data.name} Lv${lvl}/${data.cap}</span><span>${complete?"完成":`${cost}欠片`}</span></div>
-   <div class="desc">${data.desc}<br><b>現在：${data.current(lvl)}</b><br>次：${complete?"—":data.step}</div>
-   <div class="metaUpgradeProgress"><i style="width:${pct}%"></i></div>
-   <button type="button" data-upgrade="${id}" ${affordable?"":"disabled"}>${complete?"完成済み":affordable?"強化する":`欠片不足 ${m.shards||0}/${cost}`}</button>
-  </div>`;
- }).join("");
- $("hubUpgrades").innerHTML=`<details class="hubInnerFold upgradeFold">
-  <summary><span>灯台基盤・恒久強化</span><small>${upgradeProgress.completed}/${upgradeProgress.total}系統完成</small></summary>
-  <div class="hubInnerBody">${metaUpgradeFoundationHtml(m)}${upgradeCards}</div>
- </details>`;
- $("hubSummary").querySelectorAll("[data-reaction-control]").forEach(button=>{
-  button.onclick=()=>setPendingReactionControl(button.dataset.reactionControl);
- });
- $("hubUpgrades").querySelectorAll("[data-upgrade]").forEach(b=>b.onclick=()=>buyMetaUpgrade(b.dataset.upgrade));
- renderLighthouseStash(m);
- $("overviewSummary").textContent=`灯台${hasPendingReturnOverflow(m)?`・要整理 ${ensureReturnOverflow(m).length}`:""}`;
- $("recordsSummary").textContent="研究・記録・姿";
 
- const entries=Object.entries(m.codex||{});
- const codexRows=entries.length?entries.map(([type,count])=>
-  `<div class="compactRecordRow"><b>${codexName(type)}</b><span>${codexInsight(type,count)}</span><small>${count}体</small></div>`
- ).join(""):'<p class="note">まだ記録はありません。</p>';
- const eventRows=(m.eventHistory||[]).slice(-8).reverse().map(e=>
-  `<div class="compactRecordRow"><b>${e.title}</b><span>${e.choice}</span><small>第${e.floor}層</small></div>`
- ).join("")||'<p class="note">まだ事件記録はありません。</p>';
- $("codexList").innerHTML=
-  hubProgressRecordsHtml(m)+
-  discoveryArchiveHubHtml(m)+
-  `<details class="recordInnerFold"><summary><span>探索自己記録</span><small>自己ベスト</small></summary><div class="recordInnerBody">${expeditionRecordsHubHtml(m)}</div></details>`+
-  `<details class="recordInnerFold"><summary><span>深淵図鑑</span><small>${entries.length}種</small></summary><div class="recordInnerBody">${codexRows}</div></details>`+
-  `<details class="recordInnerFold"><summary><span>事件記録</span><small>${Math.min(8,(m.eventHistory||[]).length)}件</small></summary><div class="recordInnerBody">${eventRows}</div></details>`;
+ const page=currentHubWorkspace(m);
 
- const researchTotal=Object.values(m.research?.levels||{}).reduce((sum,value)=>sum+(value||0),0);
- const hasResearch=(m.research?.points||0)>0||researchTotal>0;
- $("researchBtn").disabled=!hasResearch;
- $("researchBtn").title=hasResearch
-  ?"深淵研究を確認します。"
-  :"敵・罠・事件などを観察して研究点を得ると利用できます。";
- if(!hasResearch)$("researchBtn").textContent="深淵研究（観察で解放）";
-
- const hasAdaptation=(m.adaptationPoints||0)>0||(m.abyssAdaptations||[]).length>0;
- $("adaptBtn").disabled=!hasAdaptation;
- $("adaptBtn").title=hasAdaptation
-  ?"獲得済みの深淵適応を確認します。"
-  :"番人撃破などで適応点を得ると利用できます。";
- if(!hasAdaptation)$("adaptBtn").textContent="深淵適応（番人撃破で解放）";
-
- bindReturnOverflowActions();
- const focusDepart=$("hubFocusDepartBtn");
- if(focusDepart)focusDepart.onclick=()=>hasPendingReturnOverflow(m)?focusReturnOverflow():startFreshRunFromHub();
- $("hubSummary").querySelectorAll("[data-reaction-control]").forEach(button=>{
-  button.onclick=()=>setPendingReactionControl(button.dataset.reactionControl);
- });
+ // Home is intentionally cheap and always current.
+ $("hubSummary").innerHTML=hubHomeSummaryHtml(m);
  renderLighthouseOnboarding(m);
+
+ // Render only the active work area. Hidden workspaces keep their last DOM until opened.
+ if(page==="prep"){
+  renderLighthouseLoadout();
+  renderWeaponOath(m);
+  renderInsurance(m);
+ }
+
+ if(page==="stash"){
+  $("hubStashLead").innerHTML=returnOverflowHubHtml(m);
+  renderLighthouseStash(m);
+  renderSealedRelicVault(m);
+ }
+
+ if(page==="upgrade"){
+  const upgradeProgress=metaUpgradeCompletion(m);
+  const upgradeCards=META_UPGRADE_IDS.map(id=>{
+   const data=META_UPGRADE_DATA[id];
+   const lvl=normalizedMetaUpgradeLevel(m,id),complete=lvl>=data.cap;
+   const cost=complete?0:upgradeCost(lvl),affordable=!complete&&(m.shards||0)>=cost;
+   const pct=Math.round(lvl/data.cap*100);
+   return`<div class="itemRow metaUpgradeCard ${complete?"complete":""}">
+    <div class="top"><span>${data.name} Lv${lvl}/${data.cap}</span><span>${complete?"完成":`${cost}欠片`}</span></div>
+    <div class="desc">${data.desc}<br><b>現在：${data.current(lvl)}</b><br>次：${complete?"—":data.step}</div>
+    <div class="metaUpgradeProgress"><i style="width:${pct}%"></i></div>
+    <button type="button" data-upgrade="${id}" ${affordable?"":"disabled"}>${complete?"完成済み":affordable?"強化する":`欠片不足 ${m.shards||0}/${cost}`}</button>
+   </div>`;
+  }).join("");
+  $("hubUpgrades").innerHTML=`<div class="hubWorkspaceSectionHead"><b>灯台基盤</b><span>${upgradeProgress.completed}/${upgradeProgress.total}完成</span></div>${metaUpgradeFoundationHtml(m)}${upgradeCards}`;
+  $("hubGrowthSummary").innerHTML=hubProgressRecordsHtml(m);
+  $("hubUpgrades").querySelectorAll("[data-upgrade]").forEach(b=>b.onclick=()=>buyMetaUpgrade(b.dataset.upgrade));
+
+  $("researchBtn").textContent=`深淵研究（${m.research?.points||0}点）`;
+  $("adaptBtn").textContent=(m.adaptationPoints||0)>0?`深淵適応を選ぶ（${m.adaptationPoints}点）`:"深淵適応を確認";
+  const researchTotal=Object.values(m.research?.levels||{}).reduce((sum,value)=>sum+(value||0),0);
+  const hasResearch=(m.research?.points||0)>0||researchTotal>0;
+  $("researchBtn").disabled=!hasResearch;
+  $("researchBtn").title=hasResearch?"深淵研究を確認します。":"敵・罠・事件などを観察して研究点を得ると利用できます。";
+  if(!hasResearch)$("researchBtn").textContent="深淵研究（観察で解放）";
+  const hasAdaptation=(m.adaptationPoints||0)>0||(m.abyssAdaptations||[]).length>0;
+  $("adaptBtn").disabled=!hasAdaptation;
+  $("adaptBtn").title=hasAdaptation?"獲得済みの深淵適応を確認します。":"番人撃破などで適応点を得ると利用できます。";
+  if(!hasAdaptation)$("adaptBtn").textContent="深淵適応（番人撃破で解放）";
+ }
+
+ if(page==="abyss"){
+  $("hubDeepSummary").innerHTML=hubWorldDetailHtml(m)+hubWorldMarkHtml(m);
+  renderRouteMastery(m);
+  renderDeathEcho(m);
+  $("hubDeepSummary").querySelectorAll("[data-reaction-control]").forEach(button=>{
+   button.onclick=()=>setPendingReactionControl(button.dataset.reactionControl);
+  });
+ }
+
+ if(page==="records"){
+  const lastReport=m.lastExpeditionReport;
+  $("lastReportSummary").textContent=lastReport
+   ?`前回の探索結果・${lastReport.outcome==="return"?"帰還":"死亡"} 第${lastReport.floor}層`
+   :"前回の探索結果";
+  $("lastReportBody").innerHTML=lastReport?expeditionReportHtml(lastReport,true):'<p class="note">完了した探索はまだありません。</p>';
+  $("recordsSummary").textContent="収蔵・図鑑・記録";
+  const entries=Object.entries(m.codex||{});
+  const codexRows=entries.length?entries.map(([type,count])=>
+   `<div class="compactRecordRow"><b>${codexName(type)}</b><span>${codexInsight(type,count)}</span><small>${count}体</small></div>`
+  ).join(""):'<p class="note">まだ記録はありません。</p>';
+  const eventRows=(m.eventHistory||[]).slice(-8).reverse().map(e=>
+   `<div class="compactRecordRow"><b>${e.title}</b><span>${e.choice}</span><small>第${e.floor}層</small></div>`
+  ).join("")||'<p class="note">まだ事件記録はありません。</p>';
+  $("codexList").innerHTML=
+   discoveryArchiveHubHtml(m)+
+   `<details class="recordInnerFold" data-focus-key="personalRecords"${focusLayerOpenAttr(m,"personalRecords")}><summary><span>探索自己記録</span><small>自己ベスト</small></summary><div class="recordInnerBody">${expeditionRecordsHubHtml(m)}</div></details>`+
+   `<details class="recordInnerFold" data-focus-key="abyssCodex"${focusLayerOpenAttr(m,"abyssCodex")}><summary><span>深淵図鑑</span><small>${entries.length}種</small></summary><div class="recordInnerBody">${codexRows}</div></details>`+
+   `<details class="recordInnerFold" data-focus-key="eventRecords"${focusLayerOpenAttr(m,"eventRecords")}><summary><span>事件記録</span><small>${Math.min(8,(m.eventHistory||[]).length)}件</small></summary><div class="recordInnerBody">${eventRows}</div></details>`;
+ }
+
  applyHubPanelState(m);
+ bindFocusLayerDetails(m,$("hubOverlay"));
+ bindReturnOverflowActions();
+ applyHubWorkspace(m);
+
+ const focusDepart=$("hubFocusDepartBtn");
+ if(focusDepart)focusDepart.onclick=()=>{
+  if(hasPendingReturnOverflow(m))return focusReturnOverflow();
+  if(!departureWeaponPreview(m))return setHubWorkspace("prep");
+  return startFreshRunFromHub();
+ };
+
  showPendingLighthouseRecoveryNotice();
  saveMeta();
 }
+
 function openHub(){if(!state)return;returnToLighthouse()}
 function startFreshRunFromHub(){
  const meta=state.meta||defaultMeta();
