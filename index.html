@@ -5233,7 +5233,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.51.0 LIGHTHOUSE WORKSPACES</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.51.1 WORKSPACE HARDENING</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5818,6 +5818,7 @@ body,button,input,select,textarea{font-size:12px}
     </div>
 
     <div id="hubAccordionNav" class="hidden"></div>
+    <div id="hubRuntimeHealthBanner" class="hubRuntimeHealthBanner hidden"></div>
 
     <section class="hubWorkspaceScreen" id="hubWorkspaceHome" data-hub-screen="home">
       <div id="hubOnboarding"></div>
@@ -5938,6 +5939,26 @@ body,button,input,select,textarea{font-size:12px}
  "use strict";
  var bootFinished=false;
  var lastReason="";
+ window.__ABYSS_RUNTIME_ISSUES__=window.__ABYSS_RUNTIME_ISSUES__||[];
+ function captureEarlyRuntimeIssue(kind,message,source,line,column){
+  try{
+   window.__ABYSS_RUNTIME_ISSUES__.push({
+    kind:String(kind||"error"),
+    message:String(message||"不明なエラー").slice(0,500),
+    source:String(source||"").slice(-180),
+    line:Number(line||0),column:Number(column||0),at:Date.now()
+   });
+   window.__ABYSS_RUNTIME_ISSUES__=window.__ABYSS_RUNTIME_ISSUES__.slice(-12);
+  }catch(_){}
+ }
+ window.addEventListener("error",function(event){
+  captureEarlyRuntimeIssue("error",event.message,event.filename,event.lineno,event.colno);
+ });
+ window.addEventListener("unhandledrejection",function(event){
+  var reason=event&&event.reason;
+  captureEarlyRuntimeIssue("promise",reason&&reason.message?reason.message:String(reason||"Unhandled Promise"));
+ });
+
  function byId(id){return document.getElementById(id)}
  function reasonText(value){
   try{
@@ -16510,9 +16531,11 @@ function showLastOpenedRelicInStash(){
  lighthouseStashView.status="all";
  lighthouseStashView.sort="newest";
  lighthouseStashView.page=1;
+ captureHubWorkspaceScroll(state.meta,currentHubWorkspace(state.meta));
  ensureHubWorkspace(state.meta).current="stash";
+ ensureHubWorkspace(state.meta).scroll.stash=0;
  saveMeta();
- renderHub();
+ renderHub({captureScroll:false,restoreScroll:false});
 
  const panel=$("stashPanel");
  if(panel)panel.open=true;
@@ -19504,9 +19527,11 @@ function bindReturnOverflowActions(){
  panel.querySelector("[data-return-overflow-move-all]")?.addEventListener("click",moveAvailableReturnOverflow);
 }
 function focusReturnOverflow(){
+ captureHubWorkspaceScroll(state.meta,currentHubWorkspace(state.meta));
  ensureHubWorkspace(state.meta).current="stash";
+ ensureHubWorkspace(state.meta).scroll.stash=0;
  saveMeta();
- renderHub();
+ renderHub({captureScroll:false,restoreScroll:false});
  requestAnimationFrame(()=>{
   const panel=$("returnOverflowPanel");
   if(panel){
@@ -20680,14 +20705,32 @@ const HUB_WORKSPACE_DATA={
  records:{title:"記録",intro:"収蔵・図鑑・自己記録・探索履歴。"}
 };
 function ensureHubWorkspace(meta=state?.meta){
- if(!meta)return{current:"home"};
- if(!meta.hubWorkspace||typeof meta.hubWorkspace!=="object")meta.hubWorkspace={current:"home"};
+ if(!meta)return{current:"home",scroll:{}};
+ if(!meta.hubWorkspace||typeof meta.hubWorkspace!=="object")meta.hubWorkspace={current:"home",scroll:{}};
  if(!HUB_WORKSPACE_DATA[meta.hubWorkspace.current])meta.hubWorkspace.current="home";
+ if(!meta.hubWorkspace.scroll||typeof meta.hubWorkspace.scroll!=="object")meta.hubWorkspace.scroll={};
  return meta.hubWorkspace;
 }
 function currentHubWorkspace(meta=state?.meta){return ensureHubWorkspace(meta).current}
+function hubWorkspaceScrollHost(){return document.querySelector("#hubOverlay .hubWorkspaceCard")}
+function captureHubWorkspaceScroll(meta=state?.meta,page=currentHubWorkspace(meta)){
+ const host=hubWorkspaceScrollHost();
+ if(!meta||!host||$("hubOverlay")?.classList.contains("hidden"))return 0;
+ const value=Math.max(0,Math.round(host.scrollTop||0));
+ ensureHubWorkspace(meta).scroll[page]=value;
+ return value;
+}
+function restoreHubWorkspaceScroll(meta=state?.meta,page=currentHubWorkspace(meta),fallback=0){
+ const host=hubWorkspaceScrollHost();if(!host)return false;
+ const saved=Number(ensureHubWorkspace(meta).scroll?.[page]);
+ const top=Number.isFinite(saved)?Math.max(0,saved):Math.max(0,fallback||0);
+ requestAnimationFrame(()=>{host.scrollTop=top});
+ return true;
+}
 function setHubWorkspace(page,{render=true,scroll=true}={}){
  if(!HUB_WORKSPACE_DATA[page]||!state?.meta)return false;
+ const previous=currentHubWorkspace(state.meta);
+ captureHubWorkspaceScroll(state.meta,previous);
  ensureHubWorkspace(state.meta).current=page;
  if(page!=="home"){
   const guide=ensureLighthouseOnboardingMeta(state.meta);
@@ -20696,18 +20739,16 @@ function setHubWorkspace(page,{render=true,scroll=true}={}){
   if(primaryPanel)ensureHubPanelState(state.meta).open[primaryPanel]=true;
  }
  saveMeta();
- if(render)renderHub();
- if(scroll){
-  requestAnimationFrame(()=>{
-   const overlay=$("hubOverlay");
-   if(overlay)overlay.scrollTo?.({top:0,behavior:"smooth"});
-  });
- }
+ if(render)renderHub({captureScroll:false,restoreScroll:scroll});
+ else if(scroll)restoreHubWorkspaceScroll(state.meta,page,0);
  return true;
 }
+
 function resetHubWorkspaceHome(meta=state?.meta){
  if(!meta)return false;
- ensureHubWorkspace(meta).current="home";
+ const workspace=ensureHubWorkspace(meta);
+ workspace.current="home";
+ workspace.scroll.home=0;
  return true;
 }
 function hubWorkspaceBadgeData(meta=state?.meta){
@@ -20728,7 +20769,84 @@ function hubWorkspaceBadgeData(meta=state?.meta){
   records:{text:`${archive}/${DISCOVERY_ARCHIVE_TOTAL}`,tone:archive>=DISCOVERY_ARCHIVE_TOTAL?"gold":""}
  };
 }
+const CLIENT_HEALTH_KEY="abyssalRootsSoloV4ClientHealth";
+function clientHealthCriticalIds(){
+ return[
+  "hubOverlay","hubWorkspaceHome","hubWorkspacePrep","hubWorkspaceStash","hubWorkspaceUpgrade",
+  "hubWorkspaceAbyss","hubWorkspaceRecords","hubWorkspaceBack","hubWorkspaceTitle",
+  "hubSummary","loadoutPanel","stashPanel","hubUpgrades","routeMasteryPanel","recordsPanel"
+ ];
+}
+function saveClientHealthSnapshot(snapshot){
+ try{localStorage.setItem(CLIENT_HEALTH_KEY,JSON.stringify(snapshot))}catch(_){}
+}
+function clientRuntimeIssues(){
+ return Array.isArray(window.__ABYSS_RUNTIME_ISSUES__)?window.__ABYSS_RUNTIME_ISSUES__.slice(-8):[];
+}
+function runAbyssClientHealthCheck(context="runtime"){
+ const missing=clientHealthCriticalIds().filter(id=>!$(id));
+ const functions={
+  renderHub:typeof renderHub==="function",
+  setHubWorkspace:typeof setHubWorkspace==="function",
+  freshState:typeof freshState==="function",
+  saveMeta:typeof saveMeta==="function"
+ };
+ const missingFunctions=Object.entries(functions).filter(([,ok])=>!ok).map(([name])=>name);
+ const issues=clientRuntimeIssues();
+ const snapshot={
+  ok:missing.length===0&&missingFunctions.length===0,
+  context,
+  version:"3.51.1",
+  missing,
+  missingFunctions,
+  issueCount:issues.length,
+  lastIssue:issues[issues.length-1]||null,
+  at:Date.now()
+ };
+ window.__ABYSS_CLIENT_HEALTH__=snapshot;
+ saveClientHealthSnapshot(snapshot);
+ return snapshot;
+}
+function showHubRuntimeHealth(snapshot=runAbyssClientHealthCheck("hub")){
+ const banner=$("hubRuntimeHealthBanner");if(!banner)return snapshot;
+ if(snapshot.ok){
+  banner.classList.add("hidden");
+  banner.innerHTML="";
+  return snapshot;
+ }
+ const detail=[
+  snapshot.missing.length?`不足UI: ${snapshot.missing.join(", ")}`:"",
+  snapshot.missingFunctions.length?`不足処理: ${snapshot.missingFunctions.join(", ")}`:"",
+  snapshot.lastIssue?.message?`直近: ${snapshot.lastIssue.message}`:""
+ ].filter(Boolean).join(" / ");
+ banner.innerHTML=`<b>灯台UIを安全モードで復旧しました</b><span>${detail||"表示状態に不整合を検出しました。"}</span><button type="button" id="hubRuntimeRecoverBtn">灯台ホームへ戻す</button>`;
+ banner.classList.remove("hidden");
+ const button=$("hubRuntimeRecoverBtn");
+ if(button)button.onclick=()=>{
+  ensureHubWorkspace(state.meta).current="home";
+  ensureHubWorkspace(state.meta).scroll={};
+  saveMeta();renderHub({captureScroll:false,restoreScroll:false});
+ };
+ return snapshot;
+}
+function validateHubWorkspaceRuntime(meta=state?.meta){
+ const page=currentHubWorkspace(meta);
+ if(!HUB_WORKSPACE_DATA[page]){
+  ensureHubWorkspace(meta).current="home";
+  return{ok:false,recovered:true,reason:"invalid-page"};
+ }
+ const screens=[...document.querySelectorAll("#hubOverlay [data-hub-screen]")];
+ const current=screens.find(screen=>screen.dataset.hubScreen===page);
+ if(!current){
+  ensureHubWorkspace(meta).current="home";
+  return{ok:false,recovered:true,reason:"missing-screen"};
+ }
+ // The current page must be the only visible workspace.
+ for(const screen of screens)screen.classList.toggle("hidden",screen!==current);
+ return{ok:true,recovered:false,reason:""};
+}
 function applyHubWorkspace(meta=state?.meta){
+ validateHubWorkspaceRuntime(meta);
  const page=currentHubWorkspace(meta);
  for(const screen of document.querySelectorAll("#hubOverlay [data-hub-screen]")){
   screen.classList.toggle("hidden",screen.dataset.hubScreen!==page);
@@ -20941,8 +21059,10 @@ function hubWorldMarkHtml(meta=state?.meta){
  </div>`;
 }
 
-function renderHub(){
+function renderHub(options={}){
  const m=state.meta||defaultMeta();
+ const workspaceBefore=currentHubWorkspace(m);
+ if(options.captureScroll!==false)captureHubWorkspaceScroll(m,workspaceBefore);
  const guide=ensureLighthouseOnboardingMeta(m);
  ensureHubWorkspace(m);
  ensureMetaLoadouts(m);
@@ -21034,6 +21154,8 @@ function renderHub(){
  bindFocusLayerDetails(m,$("hubOverlay"));
  bindReturnOverflowActions();
  applyHubWorkspace(m);
+ showHubRuntimeHealth(runAbyssClientHealthCheck("renderHub"));
+ if(options.restoreScroll!==false)restoreHubWorkspaceScroll(m,currentHubWorkspace(m),0);
 
  const focusDepart=$("hubFocusDepartBtn");
  if(focusDepart)focusDepart.onclick=()=>{
@@ -23245,6 +23367,11 @@ function bootAbyssalRoots(){
   recoverCommittedExpeditionClosure();
   migrateLegacyLighthouseSession();
   updateContinueAvailability();
+  const clientHealth=runAbyssClientHealthCheck("boot");
+  if(!clientHealth.ok){
+   const note=$("titleStateNote");
+   if(note)note.textContent="UI自己診断で不整合を検出しました。保存データは削除していません。";
+  }
   window.__ABYSS_BOOT_OK__=true;
   window.dispatchEvent(new Event("abyss:boot-ok"));
   requestAnimationFrame(tickContinuousAnimation);
