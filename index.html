@@ -5537,11 +5537,150 @@ body,button,input,select,textarea{font-size:12px}
  color:#b7aabe;font-size:11.5px;line-height:1.38
 }
 
+
+/* v4.13 MOBILE CONTROL STACK
+   操作UIを情報パネルから完全分離。古いv4.05配置指定を最終層で上書きする。 */
+#actions.realtimePrototype{
+ display:grid;
+ grid-template-columns:150px minmax(0,1fr);
+ grid-template-rows:auto;
+ gap:8px;
+ align-items:stretch;
+}
+#actions.realtimePrototype #dpad{
+ grid-column:1;
+ grid-row:1;
+ align-self:center;
+}
+#actions.realtimePrototype #skills{
+ grid-column:2;
+ grid-row:1;
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ grid-template-rows:repeat(3,minmax(42px,auto));
+ gap:5px;
+}
+#actions.realtimePrototype #skills .skill{
+ min-width:0;
+ min-height:42px;
+ padding:4px 5px;
+}
+#actions.realtimePrototype .rtUtilitySkill{
+ border-color:#6f6388;
+ background:linear-gradient(180deg,#332944,#1b1624);
+}
+.rtBottomInfo{
+ margin:8px 0 0;
+}
+.quickBar{
+ position:relative;
+ z-index:6;
+}
+.quickBar #lastStandBtn small{
+ display:block;
+ font-size:11.5px;
+ line-height:1.05;
+}
+
+@media (max-width:600px){
+  /* 1画面固定HUDの操作枠は94pxのまま。十字キーと6操作を横並びにする。 */
+  #actions{
+    height:94px!important;
+    min-height:94px!important;
+    max-height:94px!important;
+    overflow:hidden;
+  }
+  #actions.realtimePrototype{
+    grid-template-columns:minmax(0,1fr) 136px!important;
+    grid-template-rows:94px!important;
+    gap:5px!important;
+    align-items:stretch!important;
+  }
+  #actions.realtimePrototype #skills{
+    grid-column:1!important;
+    grid-row:1!important;
+    height:94px;
+    min-height:0;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:repeat(3,1fr)!important;
+    gap:3px!important;
+    align-self:stretch;
+  }
+  #actions.realtimePrototype #dpad{
+    grid-column:2!important;
+    grid-row:1!important;
+    align-self:center;
+    justify-self:center;
+    grid-template-columns:repeat(3,44px)!important;
+    grid-template-rows:repeat(3,30px)!important;
+  }
+  #actions.realtimePrototype #skills .skill{
+    min-height:0!important;
+    height:auto!important;
+    padding:1px 2px!important;
+    border-radius:7px;
+    box-shadow:0 2px 0 #0b080d;
+    font-size:11.5px!important;
+    line-height:1.05;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+  }
+  #actions.realtimePrototype #skills .skill span{
+    display:none!important;
+  }
+  #actions.realtimePrototype .rtUtilitySkill{
+    display:block!important;
+    min-width:0!important;
+  }
+
+  /* 薬/壺/踏み止まり/メニューは必ず次の独立した1段。 */
+  .quickBar{
+    height:30px!important;
+    min-height:30px!important;
+    max-height:30px!important;
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-rows:30px!important;
+    gap:3px!important;
+    margin:0!important;
+    overflow:visible!important;
+  }
+  .quickBar button{
+    min-width:0!important;
+    height:30px!important;
+    padding:2px 2px!important;
+    font-size:11.5px!important;
+    line-height:1.05!important;
+    white-space:normal;
+  }
+  .quickBar #lastStandBtn small{
+    display:block!important;
+    font-size:11.5px!important;
+  }
+
+  /* REALTIME情報はスマホの固定操作画面には置かない。 */
+  #rtPrototypeBar.rtBottomInfo{
+    display:none!important;
+  }
+}
+
+/* より狭いiPhoneでも十字キーが横にはみ出さない。 */
+@media (max-width:370px){
+  #actions.realtimePrototype{
+    grid-template-columns:minmax(0,1fr) 124px!important;
+  }
+  #actions.realtimePrototype #dpad{
+    grid-template-columns:repeat(3,40px)!important;
+    grid-template-rows:repeat(3,30px)!important;
+  }
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.11 REALTIME CORE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.13 CONTROL STACK</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5586,20 +5725,6 @@ body,button,input,select,textarea{font-size:12px}
 </div>
 <div id="log"></div>
 <section id="actions">
-  <div id="rtPrototypeBar" class="rtPrototypeBar hidden" aria-live="polite">
-    <div class="rtPrototypeHead">
-      <b>REALTIME TEST</b>
-      <span id="rtPrototypeState">REALTIME</span>
-    </div>
-    <div class="rtPulseTrack"><i id="rtPulseFill"></i></div>
-    <div class="rtPrototypeActions">
-      <small id="rtPrototypeHint">世界は止まりません。中央ボタンは回避になります。</small>
-      <div class="rtPrototypeButtons">
-        <button type="button" id="rtFocusBtn">集中</button>
-        <button type="button" id="rtSearchBtn">探索</button>
-      </div>
-    </div>
-  </div>
   <div id="dpad">
     <button class="ctrl" id="up">▲</button>
     <button class="ctrl" id="left">◀</button>
@@ -5612,6 +5737,8 @@ body,button,input,select,textarea{font-size:12px}
     <button class="skill" id="volley">武器技<span>装備で変化 / CD5</span></button>
     <button class="skill" id="heal">治癒<span>自分を回復 / CD7</span></button>
     <button class="skill" id="search">探索<span>罠を看破 / CD6</span></button>
+    <button class="skill rtUtilitySkill" type="button" id="rtFocusBtn">集中<span>敵世界を低速化</span></button>
+    <button class="skill rtUtilitySkill" type="button" id="rtSearchBtn">探索<span>罠・隠し通路</span></button>
   </div>
 </section>
 <div class="quickBar">
@@ -5627,6 +5754,16 @@ body,button,input,select,textarea{font-size:12px}
   <button class="miniBtn" id="appearanceBtn">姿</button>
   <button class="miniBtn" id="saveBtn">保存</button>
   <button class="miniBtn" id="helpBtn">遊び方</button><button class="miniBtn" id="soundBtn">音ON</button><button class="miniBtn" id="hubBtn">帰還</button><button class="miniBtn" id="lightBtn">灯火</button><button class="miniBtn" id="rangeBtn">射程OFF</button>
+</div>
+<div id="rtPrototypeBar" class="rtPrototypeBar rtBottomInfo hidden" aria-live="polite">
+  <div class="rtPrototypeHead">
+    <b>REALTIME</b>
+    <span id="rtPrototypeState">REALTIME</span>
+  </div>
+  <div class="rtPulseTrack"><i id="rtPulseFill"></i></div>
+  <div class="rtPrototypeActions">
+    <small id="rtPrototypeHint">世界は止まりません。予兆を見て回避・武技・敵利用を選びます。</small>
+  </div>
 </div>
 </div>
 
@@ -5840,10 +5977,11 @@ body,button,input,select,textarea{font-size:12px}
           <li>iPhoneの仕様により、音は最初のタップ後に開始します。端末の消音スイッチや音量設定も影響します。</li>
           <li><b>リアルタイム戦闘・正式採用</b>：全階層で敵種ごとの実時間周期で世界が進み、何もしなくても敵が動きます。メニュー・レベルアップ選択・階層紹介など判断用UIを開いている間だけ敵時間が停止します。</li>
           <li><b>リアルタイム番人</b>：すべての番人は約0.84秒周期で判断し、固有大技の予兆は最低約0.84秒以上表示してから発動します。専用ボス欄にHP・形態・予兆名・発動までの残り時間を表示します。</li>
+          <li><b>v4.12・世界時間契約</b>：構え約1.05秒、踏み止まり約1.26秒、よろめき約0.63秒、凍結1段階約0.84秒を敵速度ではなく共通の世界時間で管理します。集中中は世界そのものが遅くなるため、これらの実時間も同じ倍率で伸びます。高速敵だけ凍結が即解除される、といった速度差による不公平をなくします。</li>
           <li><b>リアルタイム中の回避</b>：中央ボタンで最後に入力した方向へ最大2マス移動し、約0.43秒だけ敵の直接攻撃をすり抜けます。気力3、再使用約1.45秒です。</li>
           <li><b>リアルタイム中の集中</b>：気力2で2.6秒だけ敵行動間隔を遅くします。完全停止ではありません。</li>
           <li><b>武器の戦闘動詞</b>：全階層で武技選択画面を挟まず、主武技と副武技を独立ボタンから直接使います。剣=範囲斬り/予兆中断、槍=直線攻撃/後退、弓=連射/足止め、杖=範囲魔撃/凍結です。第1〜5層だけ副武技を試用解放し、第6層以降は熟練Lv2が必要です。</li>
-          <li><b>探索ボタン</b>：リアルタイム中は上部REALTIME TEST欄へ移動します。戦闘の4枠は「構え・主武技・治癒・副武技」に固定し、戦闘中に選択画面を挟みません。</li>
+          <li><b>探索ボタン</b>：リアルタイム中は上部REALTIME情報へ移動します。戦闘の4枠は「構え・主武技・治癒・副武技」に固定し、戦闘中に選択画面を挟みません。</li>
           <li><b>反撃好機</b>：リアルタイム中はターン数ではなく実時間で開きます。通常敵は約1.7秒、番人は約1.4秒が目安です。</li>
           <li><b>戦技変質</b>：魔法以上の武器に付くことがある、武技そのものを変える装備効果です。第1〜5層で生成される魔法以上の武器には試験的に必ず1つ付きます。例：旋撃で撃破するとCD短縮、退き突きが2マス後退、牽制射が分岐、凍結から砕氷爆発など。数値ではなく戦闘手順が変わります。</li>
           <li><b>敵を武器にする</b>：骨術師の射線へ別の敵を入れると誤射、穿ち獣の突進線へ敵や爆薬樽を残すと衝突、爆ぜ虫は倒された場所で爆発し別の爆ぜ虫や樽へ連鎖します。敵の予兆内に巻き込まれる敵には橙色の小さな枠が出ます。</li>
@@ -13038,7 +13176,10 @@ function enemyIntentTacticalHtml(enemy){
 }
 function lastStandStatus(){
  const hero=state.hero;
- if(hero.lastStandArmed)return{label:hero.lastStandRechargePending?"構え中・回復待ち":"構え中",className:"armed"};
+ if(hero.lastStandArmed){
+  const seconds=realtimePulseWindowSeconds(realtimeCombatRuntime.lastStandUntilPulse);
+  return{label:hero.lastStandRechargePending?`構え中 ${seconds.toFixed(1)}秒・回復待ち`:`構え中 ${seconds.toFixed(1)}秒`,className:"armed"};
+ }
  if(hero.lastStandUsed)return{label:"使用済み",className:"used"};
  return{label:"残り1回",className:"ready"};
 }
@@ -13107,9 +13248,9 @@ function openLastStandConfirm(){
    <div class="lastStandConfirmStat"><b>${state.hero.stamina}→${staminaAfterCost}</b><small>構えの気力消費</small></div>
   </div>
   <div class="lastStandConfirmEffect">
-   次の敵行動中に一度だけ、致命傷を耐えてHPを最大HPの25%まで立て直します。<br>
-   発動時は気力を3回復し、残りの敵行動を中断します。<br>
-   その後は2行動の衰弱になります。番人撃破時に残り1回へ回復しますが、2回分は蓄積しません。<br>
+   発動後約1.26秒の世界時間だけ、最初の致命傷を耐えてHPを最大HPの25%まで立て直します。<br>
+   発動時は気力を3回復し、その瞬間の残り敵行動を中断します。さらに短い被弾猶予が入ります。<br>
+   その後は約1.26秒の衰弱になります。集中中は世界時間に合わせて実時間も伸びます。番人撃破時に残り1回へ回復します。<br>
    現在値なら発動後の気力は最大${staminaAfterTrigger}です。
   </div>
   <div class="lastStandConfirmWarning ${lethal?"lethal":""}">
@@ -13140,15 +13281,16 @@ function armLastStand(confirmed=false){
  state.hero.lastStandUsed=true;
  state.hero.lastStandArmed=true;
  state.hero.lastStandTriggeredThisTurn=false;
+ realtimeCombatRuntime.lastStandUntilPulse=realtimePulse()+REALTIME_LAST_STAND_PULSES;
  state.lastAction="laststand";
- showCombatToast("踏み止まり","致命傷時にHP25%・気力+3・敵行動中断","guard");
- addLog("気力5を費やし、致命傷へ備えて踏み止まった。発動しなくても使用回数は戻らない。");
+ showCombatToast("踏み止まり","約1.26秒・致命傷時HP25% / 気力+3 / 敵行動中断","guard");
+ addLog("気力5を費やし、約1.26秒の世界時間だけ致命傷へ備えた。発動しなくても使用回数は戻らない。");
  endTurn();
  return true;
 }
 function triggerManualLastStand(incomingDamage){
  const hero=state.hero;
- if(!hero.lastStandArmed||hero.lastStandInvulnerable||incomingDamage<hero.hp)return false;
+ if(!hero.lastStandArmed||(realtimeCombatActive()&&!realtimeLastStandWindowActive())||hero.lastStandInvulnerable||incomingDamage<hero.hp)return false;
 
  const hpTarget=Math.max(1,Math.ceil(hero.maxHp*.25));
  const beforeStamina=hero.stamina;
@@ -13156,7 +13298,10 @@ function triggerManualLastStand(incomingDamage){
  hero.lastStandArmed=false;
  hero.lastStandTriggeredThisTurn=true;
  hero.lastStandInvulnerable=true;
- hero.exhaustedTurns=Math.max(hero.exhaustedTurns||0,2);
+ realtimeCombatRuntime.lastStandUntilPulse=0;
+ realtimeCombatRuntime.lastStandInvulnUntilPulse=realtimePulse()+REALTIME_LAST_STAND_INVULN_PULSES;
+ realtimeCombatRuntime.exhaustedUntilPulse=realtimePulse()+REALTIME_EXHAUSTION_PULSES;
+ hero.exhaustedTurns=1;
  hero.stamina=Math.min(effectiveMaxStamina(),hero.stamina+3);
  state.enemyTurnInterrupted=true;
  ensureCombatStats().lastStands++;
@@ -13169,7 +13314,7 @@ function triggerManualLastStand(incomingDamage){
   `HP${hpTarget}まで立て直し・気力${beforeStamina}→${hero.stamina}・敵行動中断`,
   "critical"
  );
- addLog(`踏み止まりが致命傷を防いだ。HPを${hpTarget}まで立て直し、気力が3回復した。衰弱は2行動。`);
+ addLog(`踏み止まりが致命傷を防いだ。HPを${hpTarget}まで立て直し、気力が3回復した。衰弱は約1.26秒の世界時間。`);
  return{hpTarget,staminaRecovered:hero.stamina-beforeStamina};
 }
 function applyHeroDamage(raw,sourceEnemy=null,options={}){
@@ -13189,12 +13334,12 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
   return 0;
  }
  let dmg=Math.max(0,Math.round(raw));
- if(options.guardable&&state.guardTurns>0){
+ if(options.guardable&&(realtimeCombatActive()?realtimeGuardActive():state.guardTurns>0)){
   const incoming=dmg;
   const guardRate=(state.meta?.adaptation==="anti_guard"?.5:.25)*(hasRunGrowthCrown("guard_bastion")?.70:1);
   dmg=Math.max(0,Math.floor(dmg*guardRate));
   const blocked=Math.max(0,incoming-dmg);
-  state.guardTurns=0;
+  consumeRealtimeGuard();
   ensureCombatStats().guards++;
   spawnHeroEffect("guard");
   spawnCombatText(state.player.x,state.player.y,blocked>0?`GUARD ${blocked}`:"GUARD","guard",38);
@@ -13204,7 +13349,7 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
   const focusRank=realtimeRunDraftRank("guard_focus");
   let braceCd=0,focusCut=0;
   if(braceRank&&sourceEnemy&&!sourceEnemy.boss&&state.enemies.includes(sourceEnemy)){
-   sourceEnemy.stagger=Math.max(sourceEnemy.stagger||0,1);
+   applyRealtimeEnemyControl(sourceEnemy,"stagger",1);
    spawnCombatText(sourceEnemy.x,sourceEnemy.y,"REBOUND","break",32);
    if(braceRank>=2)braceCd=realtimeDraftSharedCooldownReduce(2,"反圧構え");
   }
@@ -13393,7 +13538,7 @@ function triggerEnemyTacticalTerrainEntry(enemy){
  const terrain=terrainFeatureAt(enemy?.x,enemy?.y);if(!terrain||!enemy)return null;
  terrain.discovered=terrain.discovered||!!state.visible?.[key(enemy.x,enemy.y)];
  if(terrain.type==="roots"&&!enemy.boss&&!enemy.echoGuard){
-  enemy.terrainSlow=Math.max(enemy.terrainSlow||0,1);
+  applyRealtimeEnemyControl(enemy,"root",1);
   ensureRunStats().terrainSnares=(ensureRunStats().terrainSnares||0)+1;
  }
  if(terrain.type==="water"&&enemy.status?.burning>0){
@@ -13511,7 +13656,7 @@ function applyEnemyToolDamage(source,target,raw,label="事故",options={}){
  stats.enemyToolDamage=(stats.enemyToolDamage||0)+dmg;
  spawnCombatText(target.x,target.y,`事故 -${dmg}`,"critical",30);
  addLog(`${source?.name||"迷宮"}の${label}が${target.name}へ${dmg}ダメージ。`);
- if(options.stagger&&target.hp>0)target.stagger=Math.max(target.stagger||0,1);
+ if(options.stagger&&target.hp>0)applyRealtimeEnemyControl(target,"stagger",1);
 
  if(before>0&&target.hp<=0){
   target._enemyToolKill=true;
@@ -13745,7 +13890,7 @@ function activateFloorPhenomenon(){
   for(const enemy of state.enemies||[]){
    if(enemy.boss)continue;
    if(enemy.intent)clearEnemyIntent(enemy);
-   enemy.stagger=Math.max(enemy.stagger||0,1);
+   applyRealtimeEnemyControl(enemy,"stagger",1);
   }
   p.status="resolved";p.resolved=true;p.resolvedAtTurn=state.turn;
   ensureRunStats().floorPhenomenaResolved=(ensureRunStats().floorPhenomenaResolved||0)+1;
@@ -18679,7 +18824,7 @@ function applyElementHit(e,damage){
   else{e.status.burning=Math.max(e.status.burning||0,(state.meta?.adaptation==="anti_fire"?1:3)+researchStatusBonus("fire"));igniteAt(e.x,e.y,"炎属性");}
  }
  if(element==="frost"){
-  e.status.frozen=Math.max(e.status.frozen||0,(state.meta?.adaptation==="anti_frost"||currentBiomeKey()==="frost")?1:2);
+  applyRealtimeEnemyControl(e,"frozen",(state.meta?.adaptation==="anti_frost"||currentBiomeKey()==="frost")?1:2);
   addLog(e.name+"の動きが凍りついた。");
  }
  if(element==="storm"){
@@ -18687,7 +18832,7 @@ function applyElementHit(e,damage){
   if(nearby){
    const chainDamage=routeAdjustedEnemyDamage(nearby,Math.max(1,Math.floor(damage*(tagTier("storm")>=3?.55:.4))));
    nearby.hp-=chainDamage;
-   if(tagTier("storm")>=10&&rng()<.25){nearby.status=nearby.status||{};nearby.status.frozen=Math.max(nearby.status.frozen||0,1)}
+   if(tagTier("storm")>=10&&rng()<.25){nearby.status=nearby.status||{};applyRealtimeEnemyControl(nearby,"frozen",1)}
    addLog(`雷が${nearby.name}へ連鎖し${chainDamage}ダメージ。`);if(nearby.hp<=0)defeatEnemy(nearby)
   }
  }
@@ -19281,7 +19426,7 @@ function damageEnemy(e,damage,label=""){
  if(e.intent&&dmg>=Math.max(5,Math.floor(e.maxHp*.28))){
   const brokenIntent=e.intent;
   clearEnemyIntent(e);
-  e.stagger=1;
+  applyRealtimeEnemyControl(e,"stagger",1);
   ensureCombatStats().breaks++;
   const staminaGain=recoverStamina(1);
   spawnCombatText(e.x,e.y,"BREAK","break",42);
@@ -19360,6 +19505,7 @@ function tryNormalEnemyGearDrop(e,rollValue=null){
 }
 function defeatEnemy(e){
  if(!state.enemies.includes(e))return;
+ clearAllRealtimeEnemyControls(e);
  const hadIntentOnDefeat=!!e.intent;
  const wasBoss=!!e.boss;const wasNemesis=!!e.nemesis;const wasEchoGuard=!!e.echoGuard;const wasRelicRunner=!!e.realtimeRelicRunner;
  const killedByEnemyTool=!!e._enemyToolKill;
@@ -19901,7 +20047,7 @@ function chargeTowardMarkedCell(e,target,steps=3){
   if(other&&other!==e){
    const dealt=applyEnemyToolDamage(e,other,Math.round((e.atk+eliteAttackBonus(e))*1.25),"穿ち衝突",{stagger:true});
    if(state.enemies.includes(other)){
-    e.stagger=Math.max(e.stagger||0,1);
+    applyRealtimeEnemyControl(e,"stagger",1);
     spawnCombatText(e.x,e.y,"CRASH","break",34);
     showCombatToast("突進事故",`${e.name}が${other.name}へ衝突・双方停止`,"break");
     break;
@@ -19943,9 +20089,18 @@ function enemyTurn(){
    if(enc&&Number.isFinite(enc.wakeTurn)&&state.turn<=enc.wakeTurn)continue;
   }
   e.guarding=false;
-  if(e.status?.frozen>0){e.status.frozen--;addLog(e.name+"は凍結して動けない。");continue}
-  if((e.terrainSlow||0)>0){e.terrainSlow--;if(state.visible[key(e.x,e.y)])addLog(e.name+"は絡み根に足を取られて動けない。");continue}
-  if(e.stagger>0){e.stagger--;continue}
+  if(realtimeCombatActive()){
+   if((e.status?.frozen||0)>0)applyRealtimeEnemyControl(e,"frozen",e.status.frozen);
+   if((e.terrainSlow||0)>0)applyRealtimeEnemyControl(e,"root",e.terrainSlow);
+   if((e.stagger||0)>0)applyRealtimeEnemyControl(e,"stagger",e.stagger);
+   if(realtimeEnemyControlActive(e,"frozen"))continue;
+   if(realtimeEnemyControlActive(e,"root"))continue;
+   if(realtimeEnemyControlActive(e,"stagger"))continue;
+  }else{
+   if(e.status?.frozen>0){e.status.frozen--;addLog(e.name+"は凍結して動けない。");continue}
+   if((e.terrainSlow||0)>0){e.terrainSlow--;if(state.visible[key(e.x,e.y)])addLog(e.name+"は絡み根に足を取られて動けない。");continue}
+   if(e.stagger>0){e.stagger--;continue}
+  }
   if(e.boss&&realtimeCombatActive()&&(e.realtimeBossBreakUntilPulse||0)>(realtimeCombatRuntime.pulse||0))continue;
   if(e.boss&&e.intent&&realtimeCombatActive()&&(e.realtimeIntentReadyPulse||0)>(realtimeCombatRuntime.pulse||0))continue;
   if(e.realtimeRelicRunner){
@@ -20057,7 +20212,7 @@ function enemyTurn(){
    continue;
   }
 
-  if(eliteHas(e,"swift")&&state.turn%2===0&&dist>1){
+  if(!realtimeCombatActive()&&eliteHas(e,"swift")&&state.turn%2===0&&dist>1){
    stepTowardPlayer(e);
    if((e.terrainSlow||0)>0)continue;
   }
@@ -21205,7 +21360,7 @@ function useSecondaryWeaponArt(){
    const dealt=damageEnemy(e,Math.round(base*.9),"崩し斬り");
    if(dealt>0&&state.enemies.includes(e)&&hadIntent){
     const stillIntent=!!e.intent;if(stillIntent)clearEnemyIntent(e);
-    e.stagger=Math.max(e.stagger||0,1);
+    applyRealtimeEnemyControl(e,"stagger",1);
     if(stillIntent){ensureCombatStats().breaks++;updateFloorObjective()}
     if(activeCombatMutation("sword_break")){
      openCounterWindow(e,"断界歩",true);
@@ -21250,7 +21405,7 @@ function useSecondaryWeaponArt(){
    const dealt=damageEnemy(e,Math.round(base*.55),"牽制射");
    if(dealt>0&&state.enemies.includes(e)){
     const hadIntent=!!e.intent;if(hadIntent)clearEnemyIntent(e);
-    if(!e.boss)e.stagger=Math.max(e.stagger||0,1);
+    if(!e.boss)applyRealtimeEnemyControl(e,"stagger",1);
     if(hadIntent){ensureCombatStats().breaks++;updateFloorObjective()}
     if(activeCombatMutation("bow_split")){
      const second=state.enemies
@@ -21258,7 +21413,7 @@ function useSecondaryWeaponArt(){
       .sort((a,b)=>(b.intent?1:0)-(a.intent?1:0))[0];
      if(second){
       damageEnemy(second,Math.max(1,Math.round(base*.30)),"分岐矢");
-      if(state.enemies.includes(second))second.stagger=Math.max(second.stagger||0,1);
+      if(state.enemies.includes(second))applyRealtimeEnemyControl(second,"stagger",1);
       recordCombatMutationProc("bow_split");
       spawnCombatText(second.x,second.y,"SPLIT","break",32);
       addLog(`戦技変質「分岐牽制」：矢が${second.name}へ跳び、足を止めた。`);
@@ -21281,7 +21436,7 @@ function useSecondaryWeaponArt(){
     if(dealt>0&&state.enemies.includes(e)){
      e.status=e.status||{};
      const freezeTurns=activeCombatMutation("staff_permafrost")?2:1;
-     e.status.frozen=Math.max(e.status.frozen||0,freezeTurns);
+     applyRealtimeEnemyControl(e,"frozen",freezeTurns);
      spawnCombatText(e.x,e.y,freezeTurns>1?"DEEP FREEZE":"FREEZE","break",34);
     }
    }
@@ -21309,8 +21464,8 @@ function useSkill(name){
   if(!spendStamina(3))return;
   recordUsage("guard");gainTraining("strength",2);
   if(hasTalent("guard_regen"))recoverStamina(2);
-  state.guardTurns=1;state.lastAction="guard";
-  spawnHeroEffect("guard");addLog("足を止め、次の攻撃を受け流す構えを取った。");
+  activateRealtimeGuard();state.lastAction="guard";
+  spawnHeroEffect("guard");addLog("構えを取った。約1.05秒の世界時間内に受ける次の攻撃を受け流す。");
  }
  if(name==="volley"){gainMastery(weaponType(),2);
   if(weaponType()==="sword"||weaponType()==="spear")gainTraining("strength",3);
@@ -21346,7 +21501,7 @@ function useSkill(name){
    if(activeCombatMutation("spear_skewer")&&spearHits.length>=2){
     const pinned=[...spearHits].reverse().find(e=>state.enemies.includes(e)&&!e.boss);
     if(pinned){
-     pinned.stagger=Math.max(pinned.stagger||0,1);
+     applyRealtimeEnemyControl(pinned,"stagger",1);
      recordCombatMutationProc("spear_skewer");
      spawnCombatText(pinned.x,pinned.y,"PIN","break",34);
      addLog(`戦技変質「串刺し律」：${pinned.name}を列の後ろでよろめかせた。`);
@@ -21380,9 +21535,9 @@ function useSkill(name){
     .filter(o=>o.d<=5&&state.visible[key(o.e.x,o.e.y)]).sort((a,b)=>a.d-b.d);
    if(!candidates.length){recoverStamina(skillCost);addLog("火花を放つ相手が見えない。");return}
    const center=candidates[0].e;
-   const shatter=activeCombatMutation("staff_shatter")&&(center.status?.frozen||0)>0;
+   const shatter=activeCombatMutation("staff_shatter")&&(realtimeEnemyControlActive(center,"frozen")||(center.status?.frozen||0)>0);
    const cx=center.x,cy=center.y;
-   if(shatter)center.status.frozen=0;
+   if(shatter)clearRealtimeEnemyControl(center,"frozen");
    spawnPlayerAttackCells(crossAreaCells(cx,cy),"player_zone",18);
    damageEnemy(center,base,"火花");hit=true;
    for(const other of adjacentEnemiesAround(cx,cy)){
@@ -23110,7 +23265,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.11",
+  version:"4.13",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -23635,15 +23790,27 @@ const REALTIME_FOCUS_COOLDOWN_MS=7000;
 const REALTIME_DASH_COOLDOWN_MS=1450;
 const REALTIME_DASH_INVULN_MS=430;
 
+// v4.12: gameplay windows are measured in world pulses.
+// Focus slows the world interval, so these windows naturally stretch with the slowed world instead of expiring behind a menu or between enemy speeds.
+const REALTIME_GUARD_PULSES=5;          // about 1.05s normally
+const REALTIME_LAST_STAND_PULSES=6;     // about 1.26s normally
+const REALTIME_LAST_STAND_INVULN_PULSES=2;
+const REALTIME_EXHAUSTION_PULSES=6;
+const REALTIME_STAGGER_PULSES=3;        // about 0.63s normally
+const REALTIME_ROOT_PULSES=3;
+const REALTIME_FREEZE_PULSES=4;         // per freeze unit, about 0.84s normally
+
 const realtimeCombatRuntime={
  floor:0,nextWorldAt:0,nextPlayerActionAt:0,lastDir:[0,1],
  slowUntil:0,focusCooldownUntil:0,dashCooldownUntil:0,invulnerableUntil:0,
  pulse:0,floorGraceUntil:0,lastUiSecond:-1,
+ guardUntilPulse:0,lastStandUntilPulse:0,lastStandInvulnUntilPulse:0,exhaustedUntilPulse:0,
+ enemyControlUntil:{},
  enemyToolChain:0,lastEnemyToolKillAt:0
 };
 function realtimeNow(){return performance?.now?.()||Date.now()}
 function realtimeCombatActive(){
- // v4.11以降、探索中の戦闘方式は全階層リアルタイムが標準。
+ // v4.12以降、全階層リアルタイムを世界時間契約で統一。
  return!!state&&!state.gameOver&&!state.expeditionEnded&&state.floor>=1;
 }
 function realtimePlayerReady(){
@@ -23651,6 +23818,88 @@ function realtimePlayerReady(){
 }
 function realtimeFocusActive(now=realtimeNow()){return realtimeCombatActive()&&now<(realtimeCombatRuntime.slowUntil||0)}
 function realtimeWorldInterval(now=realtimeNow()){return realtimeFocusActive(now)?REALTIME_SLOW_WORLD_MS:REALTIME_WORLD_MS}
+function realtimePulse(){return realtimeCombatRuntime.pulse||0}
+function realtimePulseWindowActive(untilPulse){return realtimeCombatActive()&&Math.max(0,untilPulse||0)>0&&realtimePulse()<Math.max(0,untilPulse||0)}
+function realtimePulseWindowSeconds(untilPulse,now=realtimeNow()){
+ const pulses=Math.max(0,Math.max(0,untilPulse||0)-realtimePulse());
+ return pulses*realtimeWorldInterval(now)/1000;
+}
+function realtimeGuardActive(){return realtimePulseWindowActive(realtimeCombatRuntime.guardUntilPulse)}
+function activateRealtimeGuard(){
+ if(!realtimeCombatActive()){state.guardTurns=1;return}
+ realtimeCombatRuntime.guardUntilPulse=realtimePulse()+REALTIME_GUARD_PULSES;
+ state.guardTurns=1;
+}
+function consumeRealtimeGuard(){
+ realtimeCombatRuntime.guardUntilPulse=0;
+ state.guardTurns=0;
+}
+function realtimeLastStandWindowActive(){
+ return!!state?.hero?.lastStandArmed&&realtimePulseWindowActive(realtimeCombatRuntime.lastStandUntilPulse);
+}
+function realtimeLastStandInvulnerable(){
+ return realtimePulseWindowActive(realtimeCombatRuntime.lastStandInvulnUntilPulse);
+}
+function enemyControlKey(enemy,kind){return`${String(enemy?.id||enemy?.name||"enemy")}:${kind}`}
+function realtimeEnemyControlPulses(kind,units=1){
+ const unit=Math.max(1,Math.floor(Number(units)||1));
+ if(kind==="frozen")return REALTIME_FREEZE_PULSES*unit;
+ if(kind==="root")return REALTIME_ROOT_PULSES*unit;
+ return REALTIME_STAGGER_PULSES*unit;
+}
+function applyRealtimeEnemyControl(enemy,kind,units=1){
+ if(!enemy)return false;
+ const amount=Math.max(1,Math.floor(Number(units)||1));
+ if(!realtimeCombatActive()){
+  if(kind==="frozen"){enemy.status=enemy.status||{};enemy.status.frozen=Math.max(enemy.status.frozen||0,amount)}
+  else if(kind==="root")enemy.terrainSlow=Math.max(enemy.terrainSlow||0,amount);
+  else enemy.stagger=Math.max(enemy.stagger||0,amount);
+  return true;
+ }
+ const keyName=enemyControlKey(enemy,kind),current=realtimeCombatRuntime.enemyControlUntil[keyName]||0;
+ const until=realtimePulse()+realtimeEnemyControlPulses(kind,amount);
+ realtimeCombatRuntime.enemyControlUntil[keyName]=Math.max(current,until);
+ if(kind==="frozen"){enemy.status=enemy.status||{};enemy.status.frozen=0}
+ else if(kind==="root")enemy.terrainSlow=0;
+ else enemy.stagger=0;
+ return true;
+}
+function clearRealtimeEnemyControl(enemy,kind){
+ if(!enemy)return;
+ delete realtimeCombatRuntime.enemyControlUntil[enemyControlKey(enemy,kind)];
+ if(kind==="frozen"&&enemy.status)enemy.status.frozen=0;
+ if(kind==="root")enemy.terrainSlow=0;
+ if(kind==="stagger")enemy.stagger=0;
+}
+function clearAllRealtimeEnemyControls(enemy){
+ for(const kind of ["frozen","root","stagger"])delete realtimeCombatRuntime.enemyControlUntil[enemyControlKey(enemy,kind)];
+}
+function realtimeEnemyControlActive(enemy,kind){
+ if(!enemy||!realtimeCombatActive())return false;
+ const until=realtimeCombatRuntime.enemyControlUntil[enemyControlKey(enemy,kind)]||0;
+ if(until<=realtimePulse()){delete realtimeCombatRuntime.enemyControlUntil[enemyControlKey(enemy,kind)];return false}
+ return until>0;
+}
+function realtimeEnemyControlSeconds(enemy,kind,now=realtimeNow()){
+ const until=realtimeCombatRuntime.enemyControlUntil[enemyControlKey(enemy,kind)]||0;
+ return realtimePulseWindowSeconds(until,now);
+}
+function expireRealtimeTimeContract(){
+ if(!realtimeCombatActive())return;
+ if(realtimeCombatRuntime.guardUntilPulse&&realtimePulse()>=realtimeCombatRuntime.guardUntilPulse)consumeRealtimeGuard();
+ const hero=state.hero;
+ if(hero?.lastStandArmed&&realtimeCombatRuntime.lastStandUntilPulse&&realtimePulse()>=realtimeCombatRuntime.lastStandUntilPulse){
+  hero.lastStandArmed=false;
+  realtimeCombatRuntime.lastStandUntilPulse=0;
+  addLog("踏み止まりの防御時間が切れた。使用回数は消費済み。");
+  resolvePendingLastStandRecharge();
+ }
+ hero.lastStandInvulnerable=realtimeLastStandInvulnerable();
+ if(realtimeCombatRuntime.exhaustedUntilPulse&&realtimePulse()>=realtimeCombatRuntime.exhaustedUntilPulse){
+  realtimeCombatRuntime.exhaustedUntilPulse=0;
+  if(hero.exhaustedTurns){hero.exhaustedTurns=0;clampStaminaForHunger()}
+ }
+}
 function realtimeEnemyCadencePulses(enemy){
  if(!enemy)return 3;
  let cadence={
@@ -23721,6 +23970,15 @@ function syncRealtimeCombatRuntime(now=realtimeNow()){
   realtimeCombatRuntime.pulse=0;
   realtimeCombatRuntime.enemyToolChain=0;
   realtimeCombatRuntime.lastEnemyToolKillAt=0;
+  realtimeCombatRuntime.guardUntilPulse=0;
+  realtimeCombatRuntime.lastStandUntilPulse=0;
+  realtimeCombatRuntime.lastStandInvulnUntilPulse=0;
+  realtimeCombatRuntime.exhaustedUntilPulse=0;
+  realtimeCombatRuntime.enemyControlUntil={};
+  state.guardTurns=0;
+  if(state.hero.lastStandArmed){state.hero.lastStandArmed=false;resolvePendingLastStandRecharge()}
+  state.hero.lastStandInvulnerable=false;
+  state.hero.exhaustedTurns=0;
   realtimeCombatRuntime.floorGraceUntil=Math.max(realtimeCombatRuntime.floorGraceUntil||0,now+700);
   realtimeCombatRuntime.lastUiSecond=-1;
   if(state.realtimeIncident?.type==="greed_chest"){
@@ -23785,14 +24043,10 @@ function realtimeWorldStep(now=realtimeNow()){
 
  state.enemyTurnInterrupted=false;
  state.hero.lastStandTriggeredThisTurn=false;
- state.hero.lastStandInvulnerable=false;
+ expireRealtimeTimeContract();
 
  if(logicPulse){
   state.turn++;
-  if((state.hero.exhaustedTurns||0)>0){
-   state.hero.exhaustedTurns--;
-   clampStaminaForHunger();
-  }
   ensureBossProgressIntegrity("realtime-start");
   updateFloorObjective();
 
@@ -23816,14 +24070,8 @@ function realtimeWorldStep(now=realtimeNow()){
 
  if(logicPulse){
   ensureBossProgressIntegrity("realtime-end");
-  if(state.hero.lastStandArmed&&!state.hero.lastStandTriggeredThisTurn){
-   state.hero.lastStandArmed=false;
-   addLog("踏み止まりは発動しないまま解けた。");
-  }
   resolvePendingLastStandRecharge();
-  state.hero.lastStandInvulnerable=false;
   for(const k in state.cooldowns)state.cooldowns[k]=Math.max(0,state.cooldowns[k]-1);
-  state.guardTurns=Math.max(0,state.guardTurns-1);
   recoverStamina(1);
   updateVision();
   queueSave();
@@ -24763,7 +25011,7 @@ function renderHero(){
  $("hero").innerHTML=`<div class="member hasPortrait ${resourcePulseClass} ${h.hp<=0?"dead":""} ${threat.possibleLethal?"mortalDanger":""}">
   <canvas id="heroPortrait" class="heroPortrait" width="40" height="40" aria-label="探索者アイコン"></canvas>
   <div class="name">${h.name} <span class="visualBadge">PIXEL</span><span class="visualBadge">${state.audio?.enabled?"SOUND":"MUTE"}</span><span class="coordBadge">X${state.player.x} Y${state.player.y}</span>${danger?` <span class="intent">⚠ 固定予兆 ${danger}</span>`:""}${threat.possibleLethal?` <span class="mortalWarning ${threat.certainLethal?"certain":""}">${threat.certainLethal?"確定致死":"致死圏"}</span>`:""}</div>
-  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　探索余力:約${provisionStatus.turns}手　次:${provisionStatus.nextLabel}まで約${provisionStatus.nextTurns}手　携行糧:${state.provisions||0}/${provisionCapacity()}<br>才能:${(h.talents||[]).length}　樹脈:刃${runGrowthRank("force")}/護${runGrowthRank("guard")}/探${runGrowthRank("explore")}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${displayedRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${strainProfile.raw?` <span class="echoStrainState ${strainProfile.overflow?"capped":""}">歪み:${strainProfile.raw} / 気力-${strainProfile.effective}${strainProfile.overflow?`・効果上限${strainProfile.cap}`:""}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱${h.exhaustedTurns}</span>`:""}</div>
+  <div class="role">${h.role}　攻${totalAtk()}　防${totalDef()}　会心${Math.round(totalCrit()*100)}%　武器技:${weaponData[weaponType()].skill}<br>充足:${hungerStage().label}　探索余力:約${provisionStatus.turns}手　次:${provisionStatus.nextLabel}まで約${provisionStatus.nextTurns}手　携行糧:${state.provisions||0}/${provisionCapacity()}<br>才能:${(h.talents||[]).length}　樹脈:刃${runGrowthRank("force")}/護${runGrowthRank("guard")}/探${runGrowthRank("explore")}　視野:${visionRadius()}　灯火:${currentLight().label}/${currentLight().role} 燃料${state.light.fuel}<br>再出現:${state.ecology?.totalRespawns||0}/${respawnBudget()}　階層推奨Lv:${floorTargetLevel()}${displayedRoute()?`　進路:${routeProgressText()}`:""}<br>タグ合計:${Object.values(equippedTags()).reduce((a,b)=>a+b,0)}${resonance.tier?` <span class="echoResonanceState ${resonance.pressure?"pressure":""}">共鳴:${echoResonanceLabel(resonance)}</span>`:""}${strainProfile.raw?` <span class="echoStrainState ${strainProfile.overflow?"capped":""}">歪み:${strainProfile.raw} / 気力-${strainProfile.effective}${strainProfile.overflow?`・効果上限${strainProfile.cap}`:""}</span>`:""} <span class="lastStandState ${stand.className}">踏み止まり:${stand.label}</span>${h.exhaustedTurns?` <span class="lastStandState exhausted">衰弱 ${realtimePulseWindowSeconds(realtimeCombatRuntime.exhaustedUntilPulse).toFixed(1)}秒</span>`:""}</div>
   ${weaponOathRuntimeStripHtml(oathRun)}
   ${wardenImprintRuntimeHtml()}
   ${legendaryTraitRuntimeHtml()}
@@ -25404,7 +25652,10 @@ function enemyStatusTags(e){
  if(counterWindowActive(e))tags.push("反撃好機");
  if(e.status?.burning>0)tags.push("炎上 "+e.status.burning);
  if(e.status?.poison>0)tags.push("毒 "+e.status.poison);
- if(e.status?.frozen>0)tags.push("凍結 "+e.status.frozen);
+ if(realtimeEnemyControlActive(e,"frozen"))tags.push(`凍結 ${realtimeEnemyControlSeconds(e,"frozen").toFixed(1)}秒`);
+ else if(e.status?.frozen>0)tags.push("凍結 "+e.status.frozen);
+ if(realtimeEnemyControlActive(e,"stagger"))tags.push(`よろめき ${realtimeEnemyControlSeconds(e,"stagger").toFixed(1)}秒`);
+ if(realtimeEnemyControlActive(e,"root"))tags.push(`絡み根 ${realtimeEnemyControlSeconds(e,"root").toFixed(1)}秒`);
  if((e.alert||0)>0)tags.push("警戒 "+e.alert);
  if(e.respawned)tags.push("再生個体");
  return tags;
@@ -25886,11 +26137,15 @@ function renderSkills(){
   }
  }
 
- // 構えと治癒は両方式で共通。
+ // 構えはリアルタイム世界時間の固定窓。治癒は従来CD。
  for(const k of ["guard","heal"]){
-  const b=$(k);
-  b.disabled=state.cooldowns[k]>0||(k==="guard"&&state.hero.stamina<3)||(k==="heal"&&state.hero.stamina<4);
-  b.firstChild.textContent=({guard:"構え",heal:"治癒"}[k])+(state.cooldowns[k]>0?` ${realtimeCooldownText(state.cooldowns[k])}`:"");
+  const b=$(k),guardActive=k==="guard"&&realtimeGuardActive();
+  b.disabled=state.cooldowns[k]>0||guardActive||(k==="guard"&&state.hero.stamina<3)||(k==="heal"&&state.hero.stamina<4);
+  if(guardActive){
+   const seconds=realtimePulseWindowSeconds(realtimeCombatRuntime.guardUntilPulse);
+   b.firstChild.textContent=`構え ${seconds.toFixed(1)}s`;
+  }else b.firstChild.textContent=({guard:"構え",heal:"治癒"}[k])+(state.cooldowns[k]>0?` ${realtimeCooldownText(state.cooldowns[k])}`:"");
+  b.classList.toggle("active",guardActive);
  }
 
  const type=weaponType(),wd=weaponData[type],primaryButton=$("volley"),secondaryButton=$("search"),secondary=weaponSecondaryArtData[type];
@@ -25910,7 +26165,7 @@ function renderSkills(){
   secondaryButton.classList.add("artUnlocked");
   secondaryButton.disabled=artCd>0||!secondaryReady.ok;
   secondaryButton.firstChild.textContent=`${secondary.name}${artCdLabel}`;
-  secondaryButton.querySelector("span").textContent=`副技・気力${secondary.cost} / ${secondaryReady.reason}`;
+  secondaryButton.querySelector("span").textContent=`副技・気力${secondaryReady.cost} / ${secondaryReady.reason}`;
  }else{
   // 非探索状態などリアルタイム外の互換経路では従来UIを維持。
   secondaryButton.classList.remove("artUnlocked");
@@ -25937,7 +26192,7 @@ function renderSkills(){
  standBtn.classList.toggle("used",!!state.hero.lastStandUsed&&!state.hero.lastStandArmed);
  standBtn.classList.toggle("lethalReady",!!threat.possibleLethal&&!state.hero.lastStandUsed&&state.hero.stamina>=5);
  standBtn.innerHTML=state.hero.lastStandArmed
-  ?`<span>踏み止まり</span><small>${state.hero.lastStandRechargePending?"構え中・回復待ち":"構え中・次の敵行動"}</small>`
+  ?`<span>踏み止まり</span><small>${state.hero.lastStandRechargePending?`残${realtimePulseWindowSeconds(realtimeCombatRuntime.lastStandUntilPulse).toFixed(1)}s・回復待ち`:`残${realtimePulseWindowSeconds(realtimeCombatRuntime.lastStandUntilPulse).toFixed(1)}s`}</small>`
   :state.hero.lastStandUsed
    ?"<span>踏み止まり</span><small>使用済み</small>"
    :`<span>踏み止まり</span><small>残り1・気力5</small>`;
@@ -25948,7 +26203,7 @@ function renderSkills(){
    ?"気力5が必要です。"
    :threat.possibleLethal
     ?"致死予測あり。確認画面を開きます。"
-    :"次の敵行動中、致命傷を耐えてHP25%・気力+3・敵行動中断。確認画面を開きます。";
+    :"約1.26秒の世界時間だけ、最初の致命傷を耐えてHP25%・気力+3・敵行動中断。確認画面を開きます。";
 }
 function render(){
  if(!state)return;
