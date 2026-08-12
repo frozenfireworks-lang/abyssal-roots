@@ -5312,11 +5312,47 @@ body,button,input,select,textarea{font-size:12px}
  border-color:#55745d;color:#bce1c4;background:#0f1812
 }
 
+
+/* v4.00 COMBAT PROTOTYPE */
+.rtPrototypeBar{
+ display:grid;gap:5px;margin:0 0 7px;padding:7px 8px;
+ border:1px solid #766246;border-radius:9px;
+ background:linear-gradient(180deg,#17130d,#0e0c09);
+ color:#d9ceb7
+}
+.rtPrototypeHead,.rtPrototypeActions{
+ display:flex;align-items:center;justify-content:space-between;gap:7px
+}
+.rtPrototypeHead b{color:#ffe29a;font-size:11.5px;letter-spacing:.06em}
+.rtPrototypeHead span{color:#bcae91;font-size:11.5px;white-space:nowrap}
+.rtPrototypeActions small{min-width:0;color:#aea28b;font-size:11.5px;line-height:1.35}
+.rtPrototypeActions button{
+ flex:none;min-width:62px;padding:5px 7px;border:1px solid #695d7c;border-radius:7px;
+ background:linear-gradient(180deg,#302740,#191521);color:#e8ddf0;
+ font-size:11.5px;font-weight:800
+}
+.rtPrototypeActions button.active{
+ border-color:#8f7bc0;color:#fff1ff;box-shadow:0 0 0 1px rgba(143,123,192,.25) inset
+}
+.rtPrototypeActions button:disabled{opacity:.48}
+.rtPulseTrack{
+ height:6px;overflow:hidden;border:1px solid #574a38;border-radius:999px;background:#090806
+}
+.rtPulseTrack i{
+ display:block;height:100%;width:100%;
+ background:linear-gradient(90deg,#9b7942,#e9c86a);
+ transform-origin:left center
+}
+#actions.realtimePrototype #wait{
+ border-color:#7f5662;background:linear-gradient(180deg,#3a2028,#201116);color:#ffd4dc
+}
+#actions.realtimePrototype #guard{border-color:#5e755f}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.60.0 WARDEN MASTERY</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 4.00 COMBAT PROTOTYPE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5335,6 +5371,17 @@ body,button,input,select,textarea{font-size:12px}
 </div>
 <div id="log"></div>
 <section id="actions">
+  <div id="rtPrototypeBar" class="rtPrototypeBar hidden" aria-live="polite">
+    <div class="rtPrototypeHead">
+      <b>REALTIME TEST</b>
+      <span id="rtPrototypeState">第1〜3層のみ</span>
+    </div>
+    <div class="rtPulseTrack"><i id="rtPulseFill"></i></div>
+    <div class="rtPrototypeActions">
+      <small id="rtPrototypeHint">世界は止まりません。中央ボタンは回避になります。</small>
+      <button type="button" id="rtFocusBtn">集中</button>
+    </div>
+  </div>
   <div id="dpad">
     <button class="ctrl" id="up">▲</button>
     <button class="ctrl" id="left">◀</button>
@@ -5368,10 +5415,10 @@ body,button,input,select,textarea{font-size:12px}
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">迷宮探索 × 完全ソロ × 灯台管理画面・折りたたみ状態保存</p>
-    <p>一歩動けば敵も動く。頼れる仲間はいない。空腹、罠、装備の取捨選択を抱えながら、たった1人で終わりのない深層へ潜ってください。</p>
+    <p class="sub">v4 戦闘実験版 × 第1〜3層リアルタイム × 第4層以降は従来方式</p>
+    <p>第1〜3層では、立ち止まっていても敵が動きます。回避・構え・武器技・時間を遅くする「集中」を使い、新しい戦闘感触を試してください。</p>
     <div class="legend">
-      <div>世界樹：視界・探索・成長選択</div><div>シレン：ターン・空腹・自動生成</div>
+      <div>世界樹：視界・探索・成長選択</div><div>シレン：グリッド・空腹・自動生成</div>
       <div>Wizardry：暗闇・罠・死の重さ</div><div>Diablo：武器ビルド・接辞装備</div>
     </div>
     <button type="button" class="modalBtn hidden" id="newGameBtn">灯台から始める</button>
@@ -5573,7 +5620,9 @@ body,button,input,select,textarea{font-size:12px}
           <li>効果音は最大22音に制限し、足音や連撃の短時間連打を間引きます。重要な音は古い低優先音を止めて再生し、爆発・死亡・番人撃破時はBGMを短く下げます。</li>
           <li>アプリがバックグラウンドへ移るとBGMタイマーと全音源を停止し、AudioContextを休止します。復帰時は現在の灯台・探索・危険・番人場面から再開します。</li>
           <li>iPhoneの仕様により、音は最初のタップ後に開始します。端末の消音スイッチや音量設定も影響します。</li>
-          <li><b>1回行動するたびに1ターン進行</b>し、敵も動きます。</li>
+          <li><b>v4戦闘実験：第1〜3層</b>では約0.72秒ごとに敵側の時間が進み、何もしなくても敵が動きます。自分の移動・攻撃は敵行動を即座には発生させません。第4層以降は従来どおり1回行動するたびに1ターン進行します。</li>
+          <li><b>リアルタイム中の回避</b>：中央ボタンで最後に入力した方向へ最大2マス移動し、約0.43秒だけ敵の直接攻撃をすり抜けます。気力3、再使用約1.45秒です。</li>
+          <li><b>リアルタイム中の集中</b>：気力2で2.6秒だけ敵行動間隔を遅くします。完全停止ではありません。</li>
           <li><b>階層目標</b>を達成すると階段の封印が解けます。進捗は画面左上に表示され、達成時に欠片・現地素材などを獲得します。</li>
           <li><b>特異室</b>：番人階以外では、一部の部屋が武具庫・穴獣の巣・骨術祭壇・爆薬庫・狩人の間になります。完全に任意で、入室または先制攻撃すると戦闘が始まり、制圧すると部屋固有の戦利品が解放されます。階段解放には不要です。</li>
           <li>番人階以外は、指定行動が難しい場合でも迷宮を十分に踏破すれば代替達成できます。</li>
@@ -5599,7 +5648,7 @@ body,button,input,select,textarea{font-size:12px}
       <summary>基本操作とUI</summary>
       <div class="helpBody">
         <ul>
-          <li><b>休息</b>：通常の床では1ターン進めて気力を回復します。階段上では「回収」または「階段」に自動で変わります。</li>
+          <li><b>中央ボタン</b>：第1〜3層のリアルタイム実験中は「回避」。第4層以降は従来の「休息」で、通常床では1ターン進めて気力を回復します。階段上では「回収」または「階段」に自動で変わります。</li>
           <li><b>スキル</b>：武器や状況に応じて使う強行動です。気力を消費します。武器熟練Lv2以降は武器技ボタンが「武技選択」になり、通常武技と副武技を毎回選べます。</li>
           <li><b>クイック欄</b>：治癒薬・壺などを即使用できます。</li>
           <li><b>射程ボタン</b>：武器の攻撃範囲を表示します。</li>
@@ -12673,6 +12722,17 @@ function triggerManualLastStand(incomingDamage){
  return{hpTarget,staminaRecovered:hero.stamina-beforeStamina};
 }
 function applyHeroDamage(raw,sourceEnemy=null,options={}){
+ if(
+  realtimeCombatActive()&&
+  !options.trap&&
+  sourceEnemy&&
+  realtimeNow()<(realtimeCombatRuntime.invulnerableUntil||0)
+ ){
+  spawnCombatText(state.player.x,state.player.y,"DODGE","dodge",30);
+  spawnHeroEffect("guard");
+  feedbackHaptic("dodge");
+  return 0;
+ }
  if(state.hero.lastStandInvulnerable){
   spawnCombatText(state.player.x,state.player.y,"NO DAMAGE","guard",26);
   return 0;
@@ -19014,6 +19074,10 @@ function triggerTrap(){
  }
 }
 function endTurn(){
+ if(realtimeCombatActive()){
+  realtimeCommitPlayerAction();
+  return;
+ }
  state.turn++;
  state.enemyTurnInterrupted=false;
  state.hero.lastStandTriggeredThisTurn=false;
@@ -19252,7 +19316,11 @@ function drawVisualEffects(cam){
 let visualLoopErrorReported=false;
 function tickContinuousAnimation(){
  try{
-  if(state){updateVisualEffects();draw()}
+  if(state){
+   tickRealtimeCombat(realtimeNow());
+   updateVisualEffects();
+   draw();
+  }
   visualLoopErrorReported=false;
  }catch(error){
   if(!visualLoopErrorReported){
@@ -19621,6 +19689,7 @@ function performStairDescent(dx,dy,nx,ny){
 }
 function move(dx,dy){
  if(!canAct())return;
+ if(realtimeCombatActive()&&(dx||dy))realtimeCombatRuntime.lastDir=[dx,dy];
  const target=directionTarget(dx,dy);
  if(target?.blocked){addLog("近すぎて弓を引けない。距離を取る必要がある。");return}
  if(target?.enemy){
@@ -21664,7 +21733,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"3.60.0",
+  version:"4.00",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -22179,7 +22248,227 @@ function renderInventory(){
   box.appendChild(row);
  });
 }
-function canAct(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("weaponArtOverlay").classList.contains("hidden")&&$("threatOverlay").classList.contains("hidden")&&$("actionConfirmOverlay").classList.contains("hidden")&&$("stairShortcutOverlay").classList.contains("hidden")&&$("returnConfirmOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("routeOverlay").classList.contains("hidden")&&$("forkOverlay").classList.contains("hidden")&&$("firstTwentyMilestoneOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("audioOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
+
+const REALTIME_PROTOTYPE_MAX_FLOOR=3;
+const REALTIME_WORLD_MS=720;
+const REALTIME_SLOW_WORLD_MS=1220;
+const REALTIME_FOCUS_DURATION_MS=2600;
+const REALTIME_FOCUS_COOLDOWN_MS=7000;
+const REALTIME_DASH_COOLDOWN_MS=1450;
+const REALTIME_DASH_INVULN_MS=430;
+
+const realtimeCombatRuntime={
+ floor:0,nextWorldAt:0,nextPlayerActionAt:0,lastDir:[0,1],
+ slowUntil:0,focusCooldownUntil:0,dashCooldownUntil:0,invulnerableUntil:0,
+ lastUiSecond:-1
+};
+function realtimeNow(){return performance?.now?.()||Date.now()}
+function realtimeCombatActive(){
+ return!!state&&!state.gameOver&&!state.expeditionEnded&&state.floor>=1&&state.floor<=REALTIME_PROTOTYPE_MAX_FLOOR;
+}
+function realtimePlayerReady(){
+ return!realtimeCombatActive()||realtimeNow()>=(realtimeCombatRuntime.nextPlayerActionAt||0);
+}
+function realtimeFocusActive(now=realtimeNow()){return realtimeCombatActive()&&now<(realtimeCombatRuntime.slowUntil||0)}
+function realtimeWorldInterval(now=realtimeNow()){return realtimeFocusActive(now)?REALTIME_SLOW_WORLD_MS:REALTIME_WORLD_MS}
+function syncRealtimeCombatRuntime(now=realtimeNow()){
+ if(!realtimeCombatActive()){
+  realtimeCombatRuntime.floor=0;
+  return false;
+ }
+ if(realtimeCombatRuntime.floor!==state.floor){
+  realtimeCombatRuntime.floor=state.floor;
+  realtimeCombatRuntime.nextWorldAt=now+980;
+  realtimeCombatRuntime.nextPlayerActionAt=now;
+  realtimeCombatRuntime.invulnerableUntil=0;
+  realtimeCombatRuntime.slowUntil=0;
+  realtimeCombatRuntime.lastUiSecond=-1;
+  addLog(`COMBAT TEST：第${state.floor}層はリアルタイム。停止していても敵が行動する。`);
+ }
+ return true;
+}
+function realtimeActionLockMs(action=state?.lastAction){
+ if(action==="move")return 135;
+ if(action==="bow_attack")return 390;
+ if(action==="attack")return 310;
+ if(action==="guard")return 260;
+ if(action==="heal")return 520;
+ if(action==="search")return 430;
+ if(action==="dash")return 290;
+ if(action==="skill")return 420;
+ return 250;
+}
+function realtimeCommitPlayerAction(){
+ const now=realtimeNow();
+ realtimeCombatRuntime.nextPlayerActionAt=Math.max(realtimeCombatRuntime.nextPlayerActionAt||0,now+realtimeActionLockMs());
+ updateFloorObjective();
+ updateVision();
+ queueSave();
+ render();
+}
+function realtimeResourcePulse(){
+ const hungerDrain=(mutation()?.hungerDrain||1);
+ const lungPause=hasAbyssAdaptation("deepLungs")&&state.turn%10===0;
+ const crownTravelPause=hasRunGrowthCrown("explore_longroad")&&state.turn%4===0;
+ let actualHungerDrain=(lungPause||crownTravelPause)?0:hungerDrain;
+ if(actualHungerDrain>0&&(state.provisions||0)>0){
+  const covered=Math.min(state.provisions,actualHungerDrain);
+  state.provisions-=covered;
+  actualHungerDrain-=covered;
+ }
+ state.hunger=Math.max(0,state.hunger-actualHungerDrain);
+ updateHungerStageNotification();
+ if(!lungPause)consumeLightFuel();
+ if(state.hunger===0&&state.turn%4===0){
+  state.hero.hp=Math.max(0,state.hero.hp-2);
+  spawnHeroEffect("hurt");
+  addLog("枯渇で身体が削られ、HPを2失った。");
+  if(state.hero.hp<=0){
+   finishExpeditionDeath("充足が尽き、枯渇によって倒れた。");
+   return false;
+  }
+ }
+ return true;
+}
+function realtimeWorldStep(now=realtimeNow()){
+ if(!realtimeCombatActive()||!actionSceneClear())return false;
+ state.turn++;
+ state.enemyTurnInterrupted=false;
+ state.hero.lastStandTriggeredThisTurn=false;
+ state.hero.lastStandInvulnerable=false;
+ if((state.hero.exhaustedTurns||0)>0){
+  state.hero.exhaustedTurns--;
+  clampStaminaForHunger();
+ }
+ ensureBossProgressIntegrity("realtime-start");
+ updateFloorObjective();
+
+ // 資源消費は敵行動2回につき1回。入力回数ではなく経過時間で進む。
+ if(state.turn%2===0&&!realtimeResourcePulse())return false;
+
+ applyLightUtility();
+ updateStatuses();
+ updateRemains();
+ updateEnvironment();
+ processFloorPhenomenon();
+ updateEcology();
+ if(state.gameOver)return false;
+
+ enemyTurn();
+ ensureBossProgressIntegrity("realtime-end");
+ if(state.gameOver)return false;
+
+ if(state.hero.lastStandArmed&&!state.hero.lastStandTriggeredThisTurn){
+  state.hero.lastStandArmed=false;
+  addLog("踏み止まりは発動しないまま解けた。");
+ }
+ resolvePendingLastStandRecharge();
+ state.hero.lastStandInvulnerable=false;
+ for(const k in state.cooldowns)state.cooldowns[k]=Math.max(0,state.cooldowns[k]-1);
+ state.guardTurns=Math.max(0,state.guardTurns-1);
+ recoverStamina(1);
+ updateVision();
+ queueSave();
+ render();
+ return true;
+}
+function tickRealtimeCombat(now=realtimeNow()){
+ if(!syncRealtimeCombatRuntime(now))return;
+ if(!actionSceneClear()){
+  realtimeCombatRuntime.nextWorldAt=Math.max(realtimeCombatRuntime.nextWorldAt||0,now+180);
+  updateRealtimePrototypeUi(now);
+  return;
+ }
+ if(!realtimeCombatRuntime.nextWorldAt)realtimeCombatRuntime.nextWorldAt=now+980;
+ if(now>=realtimeCombatRuntime.nextWorldAt){
+  realtimeWorldStep(now);
+  realtimeCombatRuntime.nextWorldAt=now+realtimeWorldInterval(now);
+ }
+ updateRealtimePrototypeUi(now);
+}
+function realtimeDash(){
+ if(!realtimeCombatActive())return waitTurn();
+ if(!actionSceneClear()||!realtimePlayerReady())return false;
+ const now=realtimeNow();
+ if(now<(realtimeCombatRuntime.dashCooldownUntil||0)){
+  showCombatToast("回避 再使用待ち",`${Math.ceil((realtimeCombatRuntime.dashCooldownUntil-now)/100)/10}秒`,"miss");
+  return false;
+ }
+ if(!spendStamina(3))return false;
+ let [dx,dy]=realtimeCombatRuntime.lastDir||[0,1];
+ if(!dx&&!dy){dx=0;dy=1}
+ let moved=0;
+ for(let i=0;i<2;i++){
+  const nx=state.player.x+dx,ny=state.player.y+dy;
+  if(tile(nx,ny)!==1||enemyAt(nx,ny))break;
+  if(state.stairs?.x===nx&&state.stairs?.y===ny)break;
+  state.player.x=nx;state.player.y=ny;moved++;
+ }
+ if(!moved){
+  recoverStamina(3);
+  showCombatToast("回避できない","進行方向が塞がっている","miss");
+  return false;
+ }
+ startMoveAnim(dx*moved,dy*moved);
+ state.lastAction="dash";
+ realtimeCombatRuntime.invulnerableUntil=now+REALTIME_DASH_INVULN_MS;
+ realtimeCombatRuntime.dashCooldownUntil=now+REALTIME_DASH_COOLDOWN_MS;
+ recordFloorStep();
+ triggerPlayerTacticalTerrainEntry("dash");
+ revealNearbyTraps();
+ pickup();triggerTrap();triggerSpecialTile();triggerEvent();useShortcutIfPresent();triggerRoomEncounterEntry();
+ spawnCombatText(state.player.x,state.player.y,"DASH","dodge",32);
+ sfx("step");
+ realtimeCommitPlayerAction();
+ return true;
+}
+function realtimeFocus(){
+ if(!realtimeCombatActive()||!actionSceneClear())return false;
+ const now=realtimeNow();
+ if(now<(realtimeCombatRuntime.focusCooldownUntil||0))return false;
+ if(!spendStamina(2))return false;
+ realtimeCombatRuntime.slowUntil=now+REALTIME_FOCUS_DURATION_MS;
+ realtimeCombatRuntime.focusCooldownUntil=now+REALTIME_FOCUS_COOLDOWN_MS;
+ realtimeCombatRuntime.nextWorldAt=Math.max(realtimeCombatRuntime.nextWorldAt||0,now+880);
+ spawnHeroEffect("search");
+ showCombatToast("集中","2.6秒間、深淵の時間が鈍る","objective");
+ addLog("呼吸を研ぎ澄まし、一瞬だけ世界の流れを遅くした。");
+ updateRealtimePrototypeUi(now);
+ return true;
+}
+function updateRealtimePrototypeUi(now=realtimeNow()){
+ const bar=$("rtPrototypeBar"),actions=$("actions"),wait=$("wait"),focus=$("rtFocusBtn");
+ if(!bar||!actions||!wait||!focus)return;
+ const active=realtimeCombatActive();
+ bar.classList.toggle("hidden",!active);
+ actions.classList.toggle("realtimePrototype",active);
+ if(!active){
+  wait.textContent="休息";
+  focus.disabled=true;
+  return;
+ }
+ const hasCenterInteraction=playerOnStairs()||groundItemsAtPlayer().length>0;
+ if(!hasCenterInteraction){
+  wait.textContent="回避";
+  wait.title="最後に入力した方向へ最大2マス回避。気力3 / 再使用約1.45秒";
+ }
+ focus.disabled=now<(realtimeCombatRuntime.focusCooldownUntil||0);
+ focus.classList.toggle("active",realtimeFocusActive(now));
+ const remainFocus=Math.max(0,(realtimeCombatRuntime.slowUntil||0)-now);
+ const remainCd=Math.max(0,(realtimeCombatRuntime.focusCooldownUntil||0)-now);
+ focus.textContent=remainFocus>0?"集中中":remainCd>0?`集中 ${Math.ceil(remainCd/1000)}s`:"集中";
+ const interval=realtimeWorldInterval(now);
+ const remain=Math.max(0,(realtimeCombatRuntime.nextWorldAt||now)-now);
+ const pct=Math.max(0,Math.min(1,1-remain/interval));
+ const fill=$("rtPulseFill");if(fill)fill.style.width=`${Math.round(pct*100)}%`;
+ const stateLabel=$("rtPrototypeState");
+ if(stateLabel)stateLabel.textContent=realtimeFocusActive(now)?"時間低速":"敵行動 約0.72秒";
+ const hint=$("rtPrototypeHint");
+ if(hint)hint.textContent=`移動/攻撃は敵ターンを進めません。回避は最後に入力した方向へ2マス。`;
+}
+
+function actionSceneClear(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("weaponArtOverlay").classList.contains("hidden")&&$("threatOverlay").classList.contains("hidden")&&$("actionConfirmOverlay").classList.contains("hidden")&&$("stairShortcutOverlay").classList.contains("hidden")&&$("returnConfirmOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("routeOverlay").classList.contains("hidden")&&$("forkOverlay").classList.contains("hidden")&&$("firstTwentyMilestoneOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("audioOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
+function canAct(){return actionSceneClear()&&realtimePlayerReady()}
 let saveTimer=null;
 let lastActiveSaveResult=null;
 function queueSave(){
@@ -24066,6 +24355,7 @@ function render(){
  safeRenderPart("map",()=>draw());
  safeRenderPart("audioButton",()=>renderAudioButton());
  safeRenderPart("music",()=>updateMusicScene());
+ safeRenderPart("realtimePrototype",()=>updateRealtimePrototypeUi());
  if(repair.changed&&!state.expeditionEnded&&!state.gameOver)queueSave();
 }
 function startNew(){
@@ -24210,12 +24500,49 @@ $("saveBtn").onclick=()=>{
   );
  }
 };
-$("up").onclick=()=>move(0,-1);$("down").onclick=()=>move(0,1);$("left").onclick=()=>move(-1,0);$("right").onclick=()=>move(1,0);$("wait").onclick=waitTurn;
+function realtimeDirectionClick(button,dx,dy){
+ if(realtimeCombatActive()&&realtimeNow()<(button?._rtSuppressClickUntil||0))return;
+ move(dx,dy);
+}
+function bindRealtimeDirectionHold(id,dx,dy){
+ const button=$(id);if(!button)return;
+ let delayTimer=null,repeatTimer=null;
+ const clear=()=>{
+  clearTimeout(delayTimer);clearInterval(repeatTimer);
+  delayTimer=null;repeatTimer=null;
+  button._rtSuppressClickUntil=realtimeNow()+180;
+ };
+ button.addEventListener("pointerdown",event=>{
+  if(!realtimeCombatActive())return;
+  event.preventDefault();
+  button.setPointerCapture?.(event.pointerId);
+  move(dx,dy);
+  delayTimer=setTimeout(()=>{
+   repeatTimer=setInterval(()=>move(dx,dy),150);
+  },235);
+ });
+ button.addEventListener("pointerup",clear);
+ button.addEventListener("pointercancel",clear);
+ button.addEventListener("lostpointercapture",clear);
+}
+$("up").onclick=()=>realtimeDirectionClick($("up"),0,-1);
+$("down").onclick=()=>realtimeDirectionClick($("down"),0,1);
+$("left").onclick=()=>realtimeDirectionClick($("left"),-1,0);
+$("right").onclick=()=>realtimeDirectionClick($("right"),1,0);
+bindRealtimeDirectionHold("up",0,-1);bindRealtimeDirectionHold("down",0,1);bindRealtimeDirectionHold("left",-1,0);bindRealtimeDirectionHold("right",1,0);
+$("wait").onclick=()=>{
+ if(realtimeCombatActive()&&!playerOnStairs()&&groundItemsAtPlayer().length===0)return realtimeDash();
+ return waitTurn();
+};
+$("rtFocusBtn").onclick=realtimeFocus;
 $("guard").onclick=()=>useSkill("guard");$("volley").onclick=openWeaponArtOverlay;$("heal").onclick=()=>useSkill("heal");$("search").onclick=()=>useSkill("search");$("closeWeaponArt").onclick=closeWeaponArtOverlay;
 canvas.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchStart={x:t.clientX,y:t.clientY}},{passive:true});
 canvas.addEventListener("touchend",e=>{if(!touchStart)return;const t=e.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;touchStart=null;if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;if(Math.abs(dx)>Math.abs(dy))move(Math.sign(dx),0);else move(0,Math.sign(dy))},{passive:true});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("weaponArtOverlay").classList.contains("hidden")){e.preventDefault();closeWeaponArtOverlay();return}if(e.key==="Escape"&&!$("threatOverlay").classList.contains("hidden")){e.preventDefault();closeThreatOverlay();return}if(e.key==="Escape"&&!$("audioOverlay").classList.contains("hidden")){e.preventDefault();closeAudioSettings();return}
- if(e.key==="Escape"&&actionConfirmIsOpen()){e.preventDefault();closeActionConfirm(true);return}const m={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]};if(m[e.key]){e.preventDefault();move(...m[e.key])}});
+ if(e.key==="Escape"&&actionConfirmIsOpen()){e.preventDefault();closeActionConfirm(true);return}
+ if(realtimeCombatActive()&&(e.key===" "||e.code==="Space")){e.preventDefault();realtimeDash();return}
+ if(realtimeCombatActive()&&e.key==="Shift"){e.preventDefault();realtimeFocus();return}
+ const m={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]};if(m[e.key]){e.preventDefault();move(...m[e.key])}});
 
 updateVisualHeight();
 refreshViewportHeight();
