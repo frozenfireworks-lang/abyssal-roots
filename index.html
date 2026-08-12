@@ -5676,16 +5676,134 @@ body,button,input,select,textarea{font-size:12px}
   }
 }
 
+
+/* v4.14 FLOOR UI LAYERS */
+
+/* 階層移動通知はゲーム盤面のcontain/overflowから完全に独立。 */
+#floorBanner{
+ position:fixed!important;
+ top:50%!important;
+ left:max(12px,env(safe-area-inset-left,0px))!important;
+ right:max(12px,env(safe-area-inset-right,0px))!important;
+ bottom:auto!important;
+ z-index:9!important;
+ width:min(520px,calc(100vw - 24px))!important;
+ max-width:calc(100vw - 24px)!important;
+ min-height:0!important;
+ max-height:min(72dvh,620px)!important;
+ margin:0 auto!important;
+ padding:14px 15px 13px!important;
+ overflow-x:hidden!important;
+ overflow-y:auto!important;
+ overscroll-behavior:contain;
+ -webkit-overflow-scrolling:touch;
+ touch-action:pan-y!important;
+ pointer-events:none;
+ transform:translateY(calc(-50% + 12px)) scale(.965);
+ scrollbar-width:thin;
+}
+#floorBanner.show{
+ pointer-events:auto;
+}
+@keyframes floorDescentSequence{
+ 0%{opacity:0;transform:translateY(calc(-50% + 16px)) scale(.95);filter:blur(2px)}
+ 9%{opacity:1;transform:translateY(-50%) scale(1);filter:blur(0)}
+ 75%{opacity:1;transform:translateY(-50%) scale(1);filter:blur(0)}
+ 100%{opacity:0;transform:translateY(calc(-50% - 10px)) scale(1.012);filter:blur(.5px)}
+}
+.floorBannerScrollHint{
+ display:none;
+ position:sticky;
+ bottom:-1px;
+ margin:10px -8px -6px;
+ padding:5px 7px;
+ border-top:1px solid rgba(225,184,91,.35);
+ background:linear-gradient(180deg,rgba(12,9,15,.78),rgba(12,9,15,.98));
+ color:#cbbdce;
+ font-size:11.5px;
+ line-height:1.25;
+ text-align:center;
+}
+#floorBanner.scrollable .floorBannerScrollHint{display:block}
+
+/* 小画面では高さをさらに安全に制限。盤面の高さには依存しない。 */
+@media(max-width:600px){
+ #floorBanner{
+  top:50%!important;
+  left:10px!important;
+  right:10px!important;
+  width:calc(100vw - 20px)!important;
+  max-width:calc(100vw - 20px)!important;
+  max-height:68dvh!important;
+  padding:11px 12px 10px!important;
+ }
+ .floorBannerTitle{font-size:18px!important}
+ .floorBannerMeta{margin-top:5px!important;gap:3px!important}
+ .floorBannerGoal{margin-top:6px!important;padding-top:6px!important;line-height:1.4!important}
+}
+
+/*
+  折りたたみHUDは「ヘッダ / 開閉ヒント / 進捗バー」以外を無条件で隠す。
+  新しい階層要素を将来追加しても collapsed HUD が勝手に大型化しない。
+*/
+#floorGoal:not(.expanded){
+ width:min(48%,184px)!important;
+ max-width:min(48%,184px)!important;
+ max-height:50px!important;
+ min-height:0!important;
+ padding:5px 6px!important;
+ overflow:hidden!important;
+}
+#floorGoal:not(.expanded)>*:not(.floorGoalHeader):not(.floorGoalToggleHint):not(.floorGoalProgress){
+ display:none!important;
+}
+#floorGoal:not(.expanded) .floorGoalHeader{
+ display:flex!important;
+}
+#floorGoal:not(.expanded) .floorGoalToggleHint{
+ display:block!important;
+}
+#floorGoal:not(.expanded) .floorGoalProgress{
+ display:block!important;
+}
+#floorGoal:not(.expanded) .wardenAfterglow,
+#floorGoal:not(.expanded) .wardenClearStrip,
+#floorGoal:not(.expanded) .wardenBridge,
+#floorGoal:not(.expanded) .depthGateBuild,
+#floorGoal:not(.expanded) .floorGoalNemesis,
+#floorGoal:not(.expanded) .worldMarkEchoState,
+#floorGoal:not(.expanded) .abyssWhisperFloor,
+#floorGoal:not(.expanded) .deepWagerStatus{
+ display:none!important;
+}
+
+/* 展開時だけ詳細を見せる。展開サイズにも盤面を覆い尽くさない上限を置く。 */
+#floorGoal.expanded{
+ max-height:min(48dvh,330px)!important;
+ overscroll-behavior:contain;
+}
+@media(max-width:600px){
+ #floorGoal:not(.expanded){
+  width:min(45%,184px)!important;
+  max-width:min(45%,184px)!important;
+  max-height:48px!important;
+ }
+ #floorGoal.expanded{
+  width:min(78%,330px)!important;
+  max-width:min(78%,330px)!important;
+  max-height:min(46dvh,300px)!important;
+ }
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.13 CONTROL STACK</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.15 SIEGE SIGNAL</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
 <canvas id="game" width="374" height="462" aria-label="ダンジョン"></canvas>
-<div id="floorBanner"></div>
 <div id="impactOverlay" aria-hidden="true"></div>
 <div id="combatToast" aria-live="polite"></div>
 <div class="floorGoal" id="floorGoal"><b>探索目標</b><br>深淵へ踏み出す。</div>
@@ -5766,6 +5884,8 @@ body,button,input,select,textarea{font-size:12px}
   </div>
 </div>
 </div>
+
+<div id="floorBanner" aria-live="polite"></div>
 
 <div class="overlay" id="titleOverlay">
   <div class="card">
@@ -5985,6 +6105,7 @@ body,button,input,select,textarea{font-size:12px}
           <li><b>反撃好機</b>：リアルタイム中はターン数ではなく実時間で開きます。通常敵は約1.7秒、番人は約1.4秒が目安です。</li>
           <li><b>戦技変質</b>：魔法以上の武器に付くことがある、武技そのものを変える装備効果です。第1〜5層で生成される魔法以上の武器には試験的に必ず1つ付きます。例：旋撃で撃破するとCD短縮、退き突きが2マス後退、牽制射が分岐、凍結から砕氷爆発など。数値ではなく戦闘手順が変わります。</li>
           <li><b>敵を武器にする</b>：骨術師の射線へ別の敵を入れると誤射、穿ち獣の突進線へ敵や爆薬樽を残すと衝突、爆ぜ虫は倒された場所で爆発し別の爆ぜ虫や樽へ連鎖します。敵の予兆内に巻き込まれる敵には橙色の小さな枠が出ます。</li>
+          <li><b>包囲警報</b>：第8層以降、5層周期の「圧力階」では二方向から敵群が接近します。約4.6秒の準備警告中に通路・爆薬樽・逃げ道を選び、全滅させると希少以上の装備が残ります。包囲警報がある階では大型の迷宮現象を重ねず、通常敵と戦闘区画も少し減らしています。</li>
           <li><b>戦闘ビルド3択</b>：全階層でレベルアップすると敵時間が停止し、刃脈・護脈・探脈から1枚ずつ提示されます。同じカードは最大IIまで強化可能。撃破で武技CDを回す「血時計」、回避を連鎖させる「残像循環」、敵利用を主火力にする「誘導掌握」など、今回の探索だけのエンジンを組みます。</li>
           <li><b>逃走遺宝</b>：第2〜3層で稀に、紫脈封を持った金色の遺宝獣が出現します。画面の矢印と逃走時間を見て、追うか安全を取るかを即決してください。倒せばその場へ紫脈封を落とします。</li>
           <li><b>危険宝箱</b>：第2〜3層で現れることがあります。踏むと警報が鳴り7.2秒で再封印。中央の「開錠」を押して3.2秒その場に留まれば希少装備を獲得できます。開錠中も敵は動き、移動すると開錠進捗はリセットされます。</li>
@@ -11239,6 +11360,9 @@ function expeditionHeroMomentCandidates(report){
    .join(" / ");
   add(84,"run_build_online","combat","ビルド完成","今回だけの戦闘エンジンが回り始めた",`${build}。選んだ成長が${report.realtimeDraftProcs}回戦闘へ噛み合った。`);
  }
+ if((report.realtimeSiegesCleared||0)>0){
+  add(86,"siege_break","combat","包囲突破",`二方向からの敵群を崩壊させた`,`第${report.realtimeSiegeClearedFloor}層。準備時間で地形を選び、リアルタイムの包囲を切り抜けて希少以上の戦利品を残した。`);
+ }
  if((report.enemyToolKills||0)>=3){
   add(82,"turned_horde","combat","敵を敵へ向けた",`敵の攻撃で${report.enemyToolKills}体を撃破`,`突進・誤射・爆発を誘導し、正面から殴り合わず敵群を崩した。`);
  }
@@ -11324,6 +11448,11 @@ function buildExpeditionReport(outcome,details={}){
   realtimeGreedChestOpened:stats.realtimeGreedChestOpened||0,
   realtimeGreedChestOpenedFloor:stats.realtimeGreedChestOpenedFloor||0,
   realtimeGreedChestMissed:stats.realtimeGreedChestMissed||0,
+  realtimeSiegesWarned:stats.realtimeSiegesWarned||0,
+  realtimeSiegesStarted:stats.realtimeSiegesStarted||0,
+  realtimeSiegeKills:stats.realtimeSiegeKills||0,
+  realtimeSiegesCleared:stats.realtimeSiegesCleared||0,
+  realtimeSiegeClearedFloor:stats.realtimeSiegeClearedFloor||0,
   realtimePrimaryArts:stats.realtimePrimaryArts||0,
   realtimeSecondaryArts:stats.realtimeSecondaryArts||0,
   combatMutationProcs:stats.combatMutationProcs||0,
@@ -11451,6 +11580,7 @@ function buildExpeditionReport(outcome,details={}){
  else if(report.realtimeRelicRunnerEscaped)report.highlights.push(`逃走遺宝を追ったが、遺宝獣に紫脈封を持ち逃げされた`);
  if(report.realtimeGreedChestOpened)report.highlights.push(`危険宝箱の警報中に3.2秒の開錠を通し、第${report.realtimeGreedChestOpenedFloor}層で希少装備を奪った`);
  else if(report.realtimeGreedChestMissed)report.highlights.push(`危険宝箱へ手を掛けたが、再封印までに開け切れなかった`);
+ if(report.realtimeSiegesCleared)report.highlights.push(`第${report.realtimeSiegeClearedFloor}層の包囲警報を突破し、敵群${report.realtimeSiegeKills}体を崩して希少以上の戦利品を確保`);
  if(report.realtimeSecondaryArts>=2)report.highlights.push(`リアルタイム副武技を${report.realtimeSecondaryArts}回使い、殴り合い以外の制御・位置取りを実行`);
  if(report.combatMutationProcs>=2){
   const names=Object.entries(report.combatMutationProcIds||{}).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([id,count])=>`${combatMutationData[id]?.short||id}${count}`).join("・");
@@ -11850,6 +11980,7 @@ function roomEncounterCountForFloor(){
  let count=1;
  if(state.floor>=8)count++;
  if(state.floor>=16&&rng()<.55)count++;
+ if(state?.realtimeIncident?.type==="siege")count=Math.max(0,count-1);
  return floorPulseRoomEncounterCount(Math.min(3,count));
 }
 function roomEncounterTypePool(){
@@ -13785,6 +13916,8 @@ function floorPhenomenonEligible(){
 }
 function prepareFloorPhenomenon(){
  state.floorPhenomenon=null;
+ // 包囲警報がこの階の主事件。別の大型現象を重ねず、因果を読みやすくする。
+ if(state?.realtimeIncident?.type==="siege")return null;
  if(!floorPhenomenonEligible())return null;
  const seed=floorPhenomenonHash(`${state.expeditionId}|${state.floor}|living-floor`);
  const pulseChance=clamp(currentFloorPulse()?.phenomenonChance??.68,0,1);
@@ -15814,16 +15947,42 @@ function spawnRealtimePressureWave(){
  return true;
 }
 const REALTIME_RELIC_RUNNER_PULSES={2:42,3:46};
+const REALTIME_SIEGE_WARNING_PULSES=22;
+const realtimeSiegeDirections={
+ north:{label:"↑",dx:0,dy:-1},south:{label:"↓",dx:0,dy:1},
+ east:{label:"→",dx:1,dy:0},west:{label:"←",dx:-1,dy:0}
+};
+function realtimeSiegeEligible(){
+ return!!state&&state.floor>=8&&state.floor%5!==0&&!isRestFloor()&&floorPulsePhaseId(state.floor)==="pressure";
+}
+function realtimeSiegeDirectionPair(){
+ const ids=["north","south","east","west"].sort(()=>rng()-.5);
+ return ids.slice(0,2);
+}
+function realtimeSiegeDirectionText(ids=[]){
+ return ids.map(id=>realtimeSiegeDirections[id]?.label||"?").join(" + ");
+}
 function prepareRealtimeBroadcastIncident(){
- if(!state||state.floor<2||state.floor>REALTIME_INCIDENT_MAX_FLOOR){
-  if(state)state.realtimeIncident=null;
+ if(!state)return null;
+ if(realtimeSiegeEligible()){
+  if(state.realtimePressureWave?.active)state.realtimePressureWave.active=false;
+  state.realtimeIncident={
+   type:"siege",status:"armed",floor:state.floor,
+   triggerPulse:12,warningPulses:REALTIME_SIEGE_WARNING_PULSES,
+   remainingWarningPulses:REALTIME_SIEGE_WARNING_PULSES,
+   directionIds:realtimeSiegeDirectionPair(),enemyIds:[],totalEnemies:0,
+   lastKillX:null,lastKillY:null,rewardDropped:false
+  };
+  return state.realtimeIncident;
+ }
+ if(state.floor<2||state.floor>REALTIME_INCIDENT_MAX_FLOOR){
+  state.realtimeIncident=null;
   return null;
  }
  const stats=ensureRunStats();
  const runnerAvailable=(stats.realtimeRelicRunnerCaught||0)<=0&&(state.sealedRelics||[]).length<SEALED_RELIC_CARRY_CAP;
  const chestAvailable=(stats.realtimeGreedChestOpened||0)<=0;
  const roll=rng();
-
  let type="none";
  if(state.floor===2){
   if(runnerAvailable&&roll<.28)type="relic_runner";
@@ -15836,10 +15995,7 @@ function prepareRealtimeBroadcastIncident(){
   state.realtimeIncident={type:"none",status:"none",floor:state.floor};
   return state.realtimeIncident;
  }
-
- // 同じ階では大事件を一つに絞る。通常の密集波と欲張り事件を重ねない。
  if(state.realtimePressureWave?.active)state.realtimePressureWave.active=false;
-
  if(type==="greed_chest"){
   state.realtimeIncident={
    type,status:"armed",floor:state.floor,
@@ -15851,7 +16007,6 @@ function prepareRealtimeBroadcastIncident(){
   };
   return state.realtimeIncident;
  }
-
  state.realtimeIncident={
   type:"relic_runner",status:"armed",floor:state.floor,
   triggerPulse:10,enemyId:null,
@@ -15860,6 +16015,104 @@ function prepareRealtimeBroadcastIncident(){
  };
  return state.realtimeIncident;
 }
+function beginRealtimeSiegeWarning(){
+ const incident=state?.realtimeIncident;
+ if(!incident||incident.type!=="siege"||incident.status!=="armed")return false;
+ incident.status="warning";
+ incident.remainingWarningPulses=incident.warningPulses||REALTIME_SIEGE_WARNING_PULSES;
+ const dirs=realtimeSiegeDirectionText(incident.directionIds);
+ const stats=ensureRunStats();stats.realtimeSiegesWarned=(stats.realtimeSiegesWarned||0)+1;
+ triggerImpactFeedback("boss",{haptic:"boss",duration:580});
+ showCombatToast("包囲警報",`${dirs} から敵群接近・準備時間 約${(incident.remainingWarningPulses*realtimeWorldInterval()/1000).toFixed(1)}秒`,"critical");
+ addLog(`迷宮が軋む。${dirs}の二方向から敵群が接近している。今のうちに位置を選べ。`);
+ return true;
+}
+function realtimeSiegeSpawnCandidates(directionId,used=new Set()){
+ const dir=realtimeSiegeDirections[directionId];if(!dir)return[];
+ const out=[];
+ for(let y=1;y<ROWS-1;y++)for(let x=1;x<COLS-1;x++){
+  if(tile(x,y)!==1||used.has(key(x,y)))continue;
+  if(enemyAt(x,y)||itemAt(x,y)||specialAt(x,y)||envAt(x,y)||activeTrapAt(x,y))continue;
+  if(state.stairs?.x===x&&state.stairs?.y===y)continue;
+  const dx=x-state.player.x,dy=y-state.player.y,d=Math.abs(dx)+Math.abs(dy);
+  if(d<6||d>11)continue;
+  const forward=dx*dir.dx+dy*dir.dy;
+  const lateral=Math.abs(dx*dir.dy-dy*dir.dx);
+  if(forward<5||lateral>5)continue;
+  out.push({x,y,d,visible:!!state.visible?.[key(x,y)]});
+ }
+ out.sort((a,b)=>(a.visible-b.visible)||Math.abs(a.d-8)-Math.abs(b.d-8));
+ return out;
+}
+function realtimeSiegeEnemyTypes(count){
+ const base=state.floor>=16
+  ?["warg","skeleton","mage","bomber","charger","priest","leech"]
+  :state.floor>=11
+   ?["warg","skeleton","mage","bomber","charger","priest"]
+   :["warg","skeleton","mage","bomber"];
+ const types=[];
+ for(let i=0;i<count;i++)types.push(base[i%base.length]);
+ if(count>=4&&!types.includes("bomber"))types[count-1]="bomber";
+ return types;
+}
+function spawnRealtimeSiege(){
+ const incident=state?.realtimeIncident;
+ if(!incident||incident.type!=="siege"||incident.status!=="warning")return false;
+ const count=Math.min(7,4+Math.floor(Math.max(0,state.floor-8)/5));
+ const types=realtimeSiegeEnemyTypes(count),used=new Set(),spawned=[];
+ for(let i=0;i<types.length;i++){
+  const dirId=incident.directionIds[i%incident.directionIds.length];
+  let candidates=realtimeSiegeSpawnCandidates(dirId,used);
+  if(!candidates.length){
+   const fallback=randomFloorCell(6);if(!fallback)continue;
+   candidates=[fallback];
+  }
+  const point=choice(candidates.slice(0,Math.min(6,candidates.length)));
+  used.add(key(point.x,point.y));
+  const enemy=makeRoomEncounterEnemy(types[i],point,{id:`siege-${state.floor}`},i);
+  delete enemy.roomEncounterId;delete enemy.encounterDormant;
+  enemy.id=`siege-${state.floor}-${i}-${Math.floor(rng()*99999)}`;
+  enemy.realtimeSiegeEnemy=true;enemy.realtimeSiegeFloor=state.floor;
+  enemy.alert=6;enemy.lastSeen={x:state.player.x,y:state.player.y};enemy.home={x:point.x,y:point.y};
+  state.enemies.push(enemy);spawned.push(enemy.id);
+  spawnCombatText(point.x,point.y,"IN!","break",28);
+ }
+ if(!spawned.length){incident.status="none";return false}
+ incident.status="active";incident.enemyIds=spawned;incident.totalEnemies=spawned.length;
+ const stats=ensureRunStats();stats.realtimeSiegesStarted=(stats.realtimeSiegesStarted||0)+1;
+ spawnFeedbackBurst(state.player.x,state.player.y,"boss",10);
+ triggerImpactFeedback("boss",{haptic:"boss",duration:680});
+ showCombatToast("包囲開始",`${realtimeSiegeDirectionText(incident.directionIds)}・敵群 ${spawned.length}体`,"critical");
+ addLog(`包囲が始まった。${realtimeSiegeDirectionText(incident.directionIds)}から${spawned.length}体が流れ込む。敵同士をぶつけて崩せ。`);
+ return true;
+}
+function registerRealtimeSiegeDefeat(enemy){
+ const incident=state?.realtimeIncident;
+ if(!enemy?.realtimeSiegeEnemy||incident?.type!=="siege")return false;
+ incident.lastKillX=enemy.x;incident.lastKillY=enemy.y;
+ const stats=ensureRunStats();stats.realtimeSiegeKills=(stats.realtimeSiegeKills||0)+1;
+ return true;
+}
+function completeRealtimeSiege(){
+ const incident=state?.realtimeIncident;
+ if(!incident||incident.type!=="siege"||incident.status!=="active"||incident.rewardDropped)return false;
+ incident.status="secured";incident.rewardDropped=true;
+ let gear=rollGear(state.floor+1);
+ const rank=rarityOrder[gear.rarity]||0;if(rank<2)promoteGearRarity(gear,2-rank);
+ gear.identified=true;gear.cursed=false;gear.realtimeSiegeReward=true;ensureCombatMutation(gear,true);
+ let x=Number.isFinite(incident.lastKillX)?incident.lastKillX:state.player.x;
+ let y=Number.isFinite(incident.lastKillY)?incident.lastKillY:state.player.y;
+ if(tile(x,y)!==1){x=state.player.x;y=state.player.y}
+ state.items.push({x,y,type:"gear",gear,name:"包囲戦利品",realtimeSiegeReward:true});
+ const stats=ensureRunStats();stats.realtimeSiegesCleared=(stats.realtimeSiegesCleared||0)+1;stats.realtimeSiegeClearedFloor=state.floor;
+ spawnFeedbackBurst(x,y,"legendary",13);
+ triggerImpactFeedback("legendary",{haptic:"legendary",duration:760});
+ showCombatToast("包囲突破","敵群を崩壊・希少以上の戦利品が出現","legendary");
+ addLog(`包囲を突破した。最後の敵が倒れた場所に希少以上の「包囲戦利品」が残った。`);
+ sfx("legendary");queueSave();
+ return true;
+}
+
 function realtimeRunnerSpawnCell(){
  const candidates=[];
  for(let radius=4;radius<=7;radius++){
@@ -15947,7 +16200,25 @@ function escapeRealtimeRelicRunner(){
 }
 function processRealtimeBroadcastIncidentPulse(){
  const incident=state?.realtimeIncident;
- if(!incident||incident.type!=="relic_runner")return false;
+ if(!incident)return false;
+ if(incident.type==="siege"){
+  if(incident.status==="armed"){
+   if((realtimeCombatRuntime.pulse||0)>=incident.triggerPulse)return beginRealtimeSiegeWarning();
+   return false;
+  }
+  if(incident.status==="warning"){
+   incident.remainingWarningPulses=Math.max(0,(incident.remainingWarningPulses||0)-1);
+   if(incident.remainingWarningPulses<=0)return spawnRealtimeSiege();
+   return true;
+  }
+  if(incident.status==="active"){
+   const alive=(incident.enemyIds||[]).filter(id=>(state.enemies||[]).some(e=>e.id===id&&e.hp>0));
+   if(!alive.length)return completeRealtimeSiege();
+   return true;
+  }
+  return false;
+ }
+ if(incident.type!=="relic_runner")return false;
  if(incident.status==="armed"){
   if((realtimeCombatRuntime.pulse||0)>=incident.triggerPulse)return spawnRealtimeRelicRunner();
   return false;
@@ -15960,6 +16231,7 @@ function processRealtimeBroadcastIncidentPulse(){
  if(incident.remainingPulses<=0)return escapeRealtimeRelicRunner();
  return true;
 }
+
 function rewardRealtimeRelicRunner(enemy){
  if(!enemy?.realtimeRelicRunner)return false;
  const incident=state?.realtimeIncident;
@@ -15987,6 +16259,33 @@ function updateRealtimeIncidentUi(now=realtimeNow()){
  const incident=state?.realtimeIncident;
  if(!realtimeCombatActive()||!incident){
   bar.classList.add("hidden");bar.classList.remove("danger");return;
+ }
+
+ if(incident.type==="siege"){
+  if(["armed","none","secured"].includes(incident.status)){
+   bar.classList.add("hidden");bar.classList.remove("danger");return;
+  }
+  bar.classList.remove("hidden");bar.classList.add("danger");
+  $("rtIncidentReward").textContent="報酬：希少以上装備";
+  $("rtIncidentDirection").textContent=realtimeSiegeDirectionText(incident.directionIds);
+  if(incident.status==="warning"){
+   const remain=Math.max(0,incident.remainingWarningPulses||0),max=Math.max(1,incident.warningPulses||REALTIME_SIEGE_WARNING_PULSES);
+   const seconds=(remain*realtimeWorldInterval(now)/1000).toFixed(1);
+   $("rtIncidentTitle").textContent="包囲警報・接近中";
+   $("rtIncidentTimer").textContent=`襲来まで 約${seconds}秒`;
+   $("rtIncidentFill").style.width=`${Math.round(remain/max*100)}%`;
+   $("rtIncidentHint").textContent="二方向から来る。通路・爆薬樽・敵同士の射線を今のうちに選ぶ。";
+   return;
+  }
+  if(incident.status==="active"){
+   const alive=(incident.enemyIds||[]).filter(id=>(state.enemies||[]).some(e=>e.id===id&&e.hp>0)).length;
+   const total=Math.max(1,incident.totalEnemies||1),cleared=total-alive;
+   $("rtIncidentTitle").textContent="包囲戦・敵群侵入";
+   $("rtIncidentTimer").textContent=`残敵 ${alive}/${total}`;
+   $("rtIncidentFill").style.width=`${Math.round(cleared/total*100)}%`;
+   $("rtIncidentHint").textContent="全滅で希少以上装備。誤射・突進事故・爆ぜ連鎖を使えば一気に崩せる。";
+   return;
+  }
  }
 
  if(incident.type==="greed_chest"){
@@ -16297,6 +16596,7 @@ function tickRealtimeGreedChest(now=realtimeNow()){
  return true;
 }
 function plannedEnemyCount(){
+ const siegeOffset=state?.realtimeIncident?.type==="siege"?-2:0;
  const authored=firstDepthEnemyBudget();
  if(authored!==null){
   const biomePressure=(currentBiomeKey()==="furnace"||currentBiomeKey()==="crypt")?1:0;
@@ -16307,7 +16607,7 @@ function plannedEnemyCount(){
    reactionValue("enemyBonus")+
    floorForkValue("enemyBonus");
   const upper=authored+(isRestFloor()?2:5);
-  return clamp(authored+dynamic,Math.max(2,authored-2),upper);
+  return clamp(authored+dynamic+siegeOffset,Math.max(2,authored-2),upper);
  }
  const base=5+Math.floor(state.floor*1.15);
  const biomePressure=(currentBiomeKey()==="furnace"||currentBiomeKey()==="crypt")?1:0;
@@ -16315,7 +16615,7 @@ function plannedEnemyCount(){
  const cap=floorPlan().boss?20:26;
  return Math.max(3,Math.min(
   cap+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+Math.max(0,floorForkValue("enemyBonus"))+Math.max(0,deepCycleValue("enemyBonus"))+Math.max(0,pulse),
-  base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+floorForkValue("enemyBonus")+deepCycleValue("enemyBonus")+pulse
+  base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+floorForkValue("enemyBonus")+deepCycleValue("enemyBonus")+pulse+siegeOffset
  ));
 }
 function plannedTrapCount(){
@@ -19505,6 +19805,7 @@ function tryNormalEnemyGearDrop(e,rollValue=null){
 }
 function defeatEnemy(e){
  if(!state.enemies.includes(e))return;
+ if(e.realtimeSiegeEnemy)registerRealtimeSiegeDefeat(e);
  clearAllRealtimeEnemyControls(e);
  const hadIntentOnDefeat=!!e.intent;
  const wasBoss=!!e.boss;const wasNemesis=!!e.nemesis;const wasEchoGuard=!!e.echoGuard;const wasRelicRunner=!!e.realtimeRelicRunner;
@@ -23265,7 +23566,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.13",
+  version:"4.15",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -24897,9 +25198,15 @@ function showFloorBanner(){
   ${deepCycleBannerHtml()}
   ${recoveryAssistRunHtml()}
   ${wardenFloorBannerHtml(plan)}
-  ${isRouteFinaleFloor()?`<div class="floorBannerRouteFinale"><b>${routeData[state.routePlan.id].finaleName}</b><br>${routeFinaleDescription()}</div>`:""}`;
+  ${isRouteFinaleFloor()?`<div class="floorBannerRouteFinale"><b>${routeData[state.routePlan.id].finaleName}</b><br>${routeFinaleDescription()}</div>`:""}
+  <div class="floorBannerScrollHint">内容が多い階層です・上下にスクロールできます</div>`;
 
+ banner.scrollTop=0;
  banner.classList.add("show");
+ requestAnimationFrame(()=>{
+  if(!banner.classList.contains("show"))return;
+  banner.classList.toggle("scrollable",banner.scrollHeight>banner.clientHeight+3);
+ });
  const bannerFloor=state.floor;
  if(realtimeCombatActive()){
   const now=realtimeNow();
@@ -24908,7 +25215,7 @@ function showFloorBanner(){
  }
  clearTimeout(bannerTimer);
  bannerTimer=setTimeout(()=>{
-  banner.classList.remove("show","floorBannerBoss","floorBannerRest");
+  banner.classList.remove("show","floorBannerBoss","floorBannerRest","scrollable");
   if(state&&state.floor===bannerFloor&&realtimeCombatActive()){
    const now=realtimeNow();
    realtimeCombatRuntime.floorGraceUntil=now+800;
