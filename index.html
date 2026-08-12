@@ -5409,11 +5409,112 @@ body,button,input,select,textarea{font-size:12px}
 }
 .rtBossBar.break{border-color:#657d61;background:linear-gradient(180deg,#10190f,#091008)}
 
+
+/* v4.05 CONTROL CLEAR */
+
+#actions.realtimePrototype .rtPrototypeBar{
+ grid-column:1;
+ grid-row:1;
+ margin:0;
+ align-self:stretch
+}
+#actions.realtimePrototype #dpad{
+ grid-column:2;
+ grid-row:1
+}
+#actions.realtimePrototype #skills{
+ grid-column:1 / -1;
+ grid-row:2;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:5px
+}
+#actions.realtimePrototype #skills .skill{
+ min-height:48px;
+ padding:4px 3px;
+ font-size:11.5px
+}
+#actions.realtimePrototype #skills .skill span{
+ font-size:11.5px;
+ line-height:1.2
+}
+
+.rtFloatingHud{
+ position:absolute;
+ left:7px;
+ right:7px;
+ bottom:7px;
+ z-index:5;
+ pointer-events:none;
+ display:grid;
+ gap:5px
+}
+.rtFloatingHud .rtIncidentBar,
+.rtFloatingHud .rtBossBar{
+ margin:0;
+ padding:6px 8px;
+ gap:3px;
+ background-color:rgba(15,10,8,.90);
+ backdrop-filter:blur(4px);
+ -webkit-backdrop-filter:blur(4px);
+ box-shadow:0 5px 18px rgba(0,0,0,.55)
+}
+.rtFloatingHud .rtIncidentBar small,
+.rtFloatingHud .rtBossBar small{
+ display:none
+}
+.rtFloatingHud .rtIncidentTrack,
+.rtFloatingHud .rtBossHp{
+ height:6px
+}
+
+
+/* v4.06 COMBAT VERBS */
+.rtPrototypeActions{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) auto;
+ align-items:end
+}
+.rtPrototypeButtons{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(48px,1fr));
+ gap:4px
+}
+.rtPrototypeButtons button{
+ min-width:48px;
+ padding:5px 6px
+}
+#actions.realtimePrototype #volley{
+ border-color:#8b683e;
+ background:linear-gradient(180deg,#3a2c1e,#21180f)
+}
+#actions.realtimePrototype #search{
+ border-color:#526c7f;
+ background:linear-gradient(180deg,#223744,#121e25)
+}
+#actions.realtimePrototype #search:disabled,
+#actions.realtimePrototype #volley:disabled{opacity:.42}
+
+
+/* v4.07 SKILL MUTATIONS */
+.combatMutationChip{
+ display:block;
+ margin-top:4px;
+ padding:5px 6px;
+ border:1px solid #735e37;
+ border-radius:7px;
+ background:#1a140b;
+ color:#cbbd9a;
+ font-size:11.5px;
+ line-height:1.38
+}
+.combatMutationChip b{color:#ffe08a;font-size:11.5px}
+.stashBadge.combatMutation{border-color:#806332;color:#f2cf73;background:#211708}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 4.04 FIRST WARDEN LIVE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 4.07 SKILL MUTATIONS</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5429,20 +5530,7 @@ body,button,input,select,textarea{font-size:12px}
   </div>
   <button type="button" id="returnPromptBtn">帰還する</button>
 </div>
-</div>
-<div id="log"></div>
-<section id="actions">
-  <div id="rtPrototypeBar" class="rtPrototypeBar hidden" aria-live="polite">
-    <div class="rtPrototypeHead">
-      <b>REALTIME TEST</b>
-      <span id="rtPrototypeState">第1〜5層</span>
-    </div>
-    <div class="rtPulseTrack"><i id="rtPulseFill"></i></div>
-    <div class="rtPrototypeActions">
-      <small id="rtPrototypeHint">世界は止まりません。中央ボタンは回避になります。</small>
-      <button type="button" id="rtFocusBtn">集中</button>
-    </div>
-  </div>
+<div id="rtFloatingHud" class="rtFloatingHud">
   <div id="rtIncidentBar" class="rtIncidentBar hidden" aria-live="assertive">
     <div class="rtIncidentHead">
       <b id="rtIncidentTitle">逃走遺宝</b>
@@ -5463,9 +5551,27 @@ body,button,input,select,textarea{font-size:12px}
     <div class="rtBossHp"><i id="rtBossHpFill"></i></div>
     <div class="rtBossMeta">
       <strong id="rtBossIntent">接近中</strong>
-      <span id="rtBossTimer">次行動 約1.1秒</span>
+      <span id="rtBossTimer">次行動 約1.0秒</span>
     </div>
     <small id="rtBossHint">赤い予兆から離れるか、攻撃で態勢を崩す。</small>
+  </div>
+</div>
+</div>
+<div id="log"></div>
+<section id="actions">
+  <div id="rtPrototypeBar" class="rtPrototypeBar hidden" aria-live="polite">
+    <div class="rtPrototypeHead">
+      <b>REALTIME TEST</b>
+      <span id="rtPrototypeState">第1〜5層</span>
+    </div>
+    <div class="rtPulseTrack"><i id="rtPulseFill"></i></div>
+    <div class="rtPrototypeActions">
+      <small id="rtPrototypeHint">世界は止まりません。中央ボタンは回避になります。</small>
+      <div class="rtPrototypeButtons">
+        <button type="button" id="rtFocusBtn">集中</button>
+        <button type="button" id="rtSearchBtn">探索</button>
+      </div>
+    </div>
   </div>
   <div id="dpad">
     <button class="ctrl" id="up">▲</button>
@@ -5706,9 +5812,13 @@ body,button,input,select,textarea{font-size:12px}
           <li>アプリがバックグラウンドへ移るとBGMタイマーと全音源を停止し、AudioContextを休止します。復帰時は現在の灯台・探索・危険・番人場面から再開します。</li>
           <li>iPhoneの仕様により、音は最初のタップ後に開始します。端末の消音スイッチや音量設定も影響します。</li>
           <li><b>v4戦闘実験：第1〜5層</b>では敵種ごとの実時間周期で世界が進み、何もしなくても敵が動きます。第4層は事件なしの準備階、第5層は初のリアルタイム番人戦です。第6層以降は従来どおり1回行動するたびに1ターン進行します。</li>
-          <li><b>第5層・リアルタイム番人</b>：鎖縛の門衛は約1.08秒周期で判断し、攻撃予兆も約1.08秒表示してから発動します。専用ボス欄にHP・形態・予兆名・発動までの残り時間を表示します。</li>
+          <li><b>第5層・リアルタイム番人</b>：鎖縛の門衛は約0.96秒周期で判断し、攻撃予兆も約0.96秒表示してから発動します。専用ボス欄にHP・形態・予兆名・発動までの残り時間を表示します。</li>
           <li><b>リアルタイム中の回避</b>：中央ボタンで最後に入力した方向へ最大2マス移動し、約0.43秒だけ敵の直接攻撃をすり抜けます。気力3、再使用約1.45秒です。</li>
           <li><b>リアルタイム中の集中</b>：気力2で2.6秒だけ敵行動間隔を遅くします。完全停止ではありません。</li>
+          <li><b>v4.06・武器の戦闘動詞</b>：第1〜5層では武技選択画面を開かず、主武技と副武技を2つの独立ボタンとして直接使えます。剣=範囲斬り/予兆中断、槍=直線攻撃/後退、弓=連射/足止め、杖=範囲魔撃/凍結です。副武技は試作区間だけ熟練Lvに関係なく試用できます。</li>
+          <li><b>探索ボタン</b>：リアルタイム中は上部REALTIME TEST欄へ移動します。戦闘の4枠は「構え・主武技・治癒・副武技」に固定し、戦闘中に選択画面を挟みません。</li>
+          <li><b>反撃好機</b>：リアルタイム中はターン数ではなく実時間で開きます。通常敵は約1.7秒、番人は約1.4秒が目安です。</li>
+          <li><b>戦技変質</b>：魔法以上の武器に付くことがある、武技そのものを変える装備効果です。第1〜5層で生成される魔法以上の武器には試験的に必ず1つ付きます。例：旋撃で撃破するとCD短縮、退き突きが2マス後退、牽制射が分岐、凍結から砕氷爆発など。数値ではなく戦闘手順が変わります。</li>
           <li><b>逃走遺宝</b>：第2〜3層で稀に、紫脈封を持った金色の遺宝獣が出現します。画面の矢印と逃走時間を見て、追うか安全を取るかを即決してください。倒せばその場へ紫脈封を落とします。</li>
           <li><b>危険宝箱</b>：第2〜3層で現れることがあります。踏むと警報が鳴り7.2秒で再封印。中央の「開錠」を押して3.2秒その場に留まれば希少装備を獲得できます。開錠中も敵は動き、移動すると開錠進捗はリセットされます。</li>
           <li><b>階層目標</b>を達成すると階段の封印が解けます。進捗は画面左上に表示され、達成時に欠片・現地素材などを獲得します。</li>
@@ -6925,6 +7035,9 @@ function promoteGearRarity(gear,steps=1){
  if(gear.rarity==="legendary"&&!gear.trait){
   gear.trait=choice(legendaryTraitIds);
  }
+ if(gear.slot==="weapon"&&(rarityOrder[gear.rarity]||0)>=2&&!gear.combatMutation){
+  ensureCombatMutation(gear,true);
+ }
  return gear;
 }
 function completeRouteAtBoss(enemy,rewardGear){
@@ -7243,6 +7356,7 @@ function gearRevealPresentation(gear,beforeSignal,source="identify",title="鑑�
  const trait=legendaryTraitInfo(gear);
  const imprint=wardenImprintInfo(gear);
  const rootTune=rootTunedGearInfo(gear);
+ const mutation=combatMutationInfo(gear);
  const rank=rarityOrder[gear.rarity]||0;
  const discoveries=[];
  registerGearArchiveDiscoveries(gear,source,{silentFeedback:true,deferSave:true,collect:discoveries});
@@ -7252,6 +7366,7 @@ function gearRevealPresentation(gear,beforeSignal,source="identify",title="鑑�
   trait?`固有 ${trait.label}`:"",
   imprint?`刻印 ${imprint.label}`:"",
   rootTune?rootTune.short:"",
+  mutation?`戦技変質 ${mutation.label}`:"",
   gear.cursed?"呪具":"",
   discoveryText
  ].filter(Boolean).join(" / ");
@@ -7271,7 +7386,7 @@ function gearRevealPresentation(gear,beforeSignal,source="identify",title="鑑�
   sfx(gear.cursed?"rare":"objective");
  }
  saveMeta();
- return{rarity,trait,imprint,rootTune,rank,discoveries,detail,kind,beforeSignal};
+ return{rarity,trait,imprint,rootTune,mutation,rank,discoveries,detail,kind,beforeSignal};
 }
 function revealGearIdentity(gear,source="identify",title="鑑定結果"){
  if(!gear||gear.identified)return null;
@@ -7279,7 +7394,7 @@ function revealGearIdentity(gear,source="identify",title="鑑定結果"){
  gear.identified=true;
  if(!gear.manualLock)applyPickupProtection(gear,false);
  const result=gearRevealPresentation(gear,beforeSignal,source,title);
- addLog(`「${gearLabel(gear)}」の正体が判明。${beforeSignal.label} → ${result.rarity.label}${result.trait?`・固有「${result.trait.label}」`:""}${gear.cursed?"・呪具":""}。`);
+ addLog(`「${gearLabel(gear)}」の正体が判明。${beforeSignal.label} → ${result.rarity.label}${result.trait?`・固有「${result.trait.label}」`:""}${result.mutation?`・戦技変質「${result.mutation.label}」`:""}${gear.cursed?"・呪具":""}。`);
  return result;
 }
 function discoveryArchiveCellHtml(kind,id,found){
@@ -10892,6 +11007,10 @@ function buildExpeditionReport(outcome,details={}){
   realtimeGreedChestOpened:stats.realtimeGreedChestOpened||0,
   realtimeGreedChestOpenedFloor:stats.realtimeGreedChestOpenedFloor||0,
   realtimeGreedChestMissed:stats.realtimeGreedChestMissed||0,
+  realtimePrimaryArts:stats.realtimePrimaryArts||0,
+  realtimeSecondaryArts:stats.realtimeSecondaryArts||0,
+  combatMutationProcs:stats.combatMutationProcs||0,
+  combatMutationProcIds:{...(stats.combatMutationProcIds||{})},
   deepBoundaryClears:[...(stats.deepBoundaryClears||[])],
   rootTunedGearFound:stats.rootTunedGearFound||0,
   strongMysteryGearFound:stats.strongMysteryGearFound||0,
@@ -11008,6 +11127,11 @@ function buildExpeditionReport(outcome,details={}){
  else if(report.realtimeRelicRunnerEscaped)report.highlights.push(`逃走遺宝を追ったが、遺宝獣に紫脈封を持ち逃げされた`);
  if(report.realtimeGreedChestOpened)report.highlights.push(`危険宝箱の警報中に3.2秒の開錠を通し、第${report.realtimeGreedChestOpenedFloor}層で希少装備を奪った`);
  else if(report.realtimeGreedChestMissed)report.highlights.push(`危険宝箱へ手を掛けたが、再封印までに開け切れなかった`);
+ if(report.realtimeSecondaryArts>=2)report.highlights.push(`リアルタイム副武技を${report.realtimeSecondaryArts}回使い、殴り合い以外の制御・位置取りを実行`);
+ if(report.combatMutationProcs>=2){
+  const names=Object.entries(report.combatMutationProcIds||{}).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([id,count])=>`${combatMutationData[id]?.short||id}${count}`).join("・");
+  report.highlights.push(`戦技変質が${report.combatMutationProcs}回発動${names?`（${names}）`:""}し、装備効果が戦闘手順を変えた`);
+ }
  const reportGrowth=report.runGrowth||{force:0,guard:0,explore:0};
  const reportGrowthBranch=["force","guard","explore"].sort((a,b)=>(reportGrowth[b]||0)-(reportGrowth[a]||0))[0];
  if((reportGrowth[reportGrowthBranch]||0)>=2)report.highlights.push(`樹脈は${runGrowthBranchData[reportGrowthBranch].label}${reportGrowth[reportGrowthBranch]}まで深化`);
@@ -12388,7 +12512,11 @@ function ensureCombatStats(){
  return state.combatStats;
 }
 function counterWindowActive(enemy){
- return !!enemy&&Number.isFinite(enemy.counterWindowTurn)&&enemy.counterWindowTurn===state.turn;
+ if(!enemy)return false;
+ if(realtimeCombatActive()&&Number.isFinite(enemy.counterWindowUntilMs)){
+  return realtimeNow()<=enemy.counterWindowUntilMs;
+ }
+ return Number.isFinite(enemy.counterWindowTurn)&&enemy.counterWindowTurn===state.turn;
 }
 function counterWindowMultiplier(enemy){
  const growthBonus=runGrowthHas("force",2)?.10:0;
@@ -12400,6 +12528,11 @@ function openCounterWindow(enemy,reason="見切り",nextPlayerTurn=false){
  if(!enemy||!state.enemies?.includes(enemy)||enemy.hp<=0)return false;
  const targetTurn=state.turn+(nextPlayerTurn?1:0);
  if(!Number.isFinite(enemy.counterWindowTurn)||enemy.counterWindowTurn<targetTurn)enemy.counterWindowTurn=targetTurn;
+ if(realtimeCombatActive()){
+  const base=enemy.boss?1400:1700;
+  const duration=base+(nextPlayerTurn?180:0);
+  enemy.counterWindowUntilMs=Math.max(enemy.counterWindowUntilMs||0,realtimeNow()+duration);
+ }
  enemy.counterWindowReason=reason;
  spawnCombatText(enemy.x,enemy.y,"OPEN","dodge",34);
  return true;
@@ -12408,6 +12541,7 @@ function consumeCounterWindow(enemy){
  if(!counterWindowActive(enemy))return 1;
  const mult=counterWindowMultiplier(enemy);
  enemy.counterWindowTurn=-1;
+ enemy.counterWindowUntilMs=0;
  enemy.counterWindowReason="";
  ensureCombatStats().counters++;
  const pct=Math.round((mult-1)*100);
@@ -17426,6 +17560,86 @@ function rollGearTags(rarity,element,slot){
  return tags;
 }
 function gearTagPower(g){return Object.values(effectiveGearTags(g)).reduce((a,b)=>a+b,0)}
+
+const combatMutationData={
+ sword_whirl:{
+  weaponType:"sword",label:"血旋連舞",short:"血旋",
+  desc:"旋撃で2体以上を巻き込み1体でも倒すと、共有武技CDを3短縮。包囲へ自分から踏み込む価値が生まれる。"
+ },
+ sword_break:{
+  weaponType:"sword",label:"断界歩",short:"断界",
+  desc:"崩し斬りで予兆を断つと共有武技CDを2短縮し、反撃好機を0.7秒延長。危険な予兆へ攻め込む型。"
+ },
+ spear_recoil:{
+  weaponType:"spear",label:"二段退き",short:"二退",
+  desc:"退き突き成功時、安全ならさらに1マス退く。敵との間合いを大きく作り直す。"
+ },
+ spear_skewer:{
+  weaponType:"spear",label:"串刺し律",short:"串律",
+  desc:"貫突で2体以上を同時に刺すと、最後に当たった通常敵を1行動よろめかせる。敵列を作るほど強い。"
+ },
+ bow_split:{
+  weaponType:"bow",label:"分岐牽制",short:"分岐",
+  desc:"牽制射が命中すると、その敵の2マス以内にいる別の通常敵へ弱い追撃が跳び、短く足止めする。"
+ },
+ bow_cross:{
+  weaponType:"bow",label:"交差連射",short:"交差",
+  desc:"連射の2射目は可能なら別の敵を狙う。単体火力を捨て、2方向の圧力を同時に削る。"
+ },
+ staff_shatter:{
+  weaponType:"staff",label:"砕氷火花",short:"砕氷",
+  desc:"火花の中心が凍結中なら凍結を消費して砕氷爆発。周囲の敵へ追加ダメージを与える。"
+ },
+ staff_permafrost:{
+  weaponType:"staff",label:"永久氷環",short:"永氷",
+  desc:"氷環の凍結が1→2行動へ延長。3体以上を同時に凍らせると共有武技CDを2短縮。"
+ }
+};
+const combatMutationIdsByWeapon={
+ sword:["sword_whirl","sword_break"],
+ spear:["spear_recoil","spear_skewer"],
+ bow:["bow_split","bow_cross"],
+ staff:["staff_shatter","staff_permafrost"]
+};
+function combatMutationInfo(g){
+ const id=g?.combatMutation;
+ const info=id?combatMutationData[id]:null;
+ return info&&g?.slot==="weapon"&&info.weaponType===g.weaponType?{id,...info}:null;
+}
+function activeCombatMutation(id=null){
+ const info=combatMutationInfo(state?.weapon);
+ if(!info)return id?false:null;
+ return id?info.id===id:info;
+}
+function rollCombatMutation(rarity,weaponType,force=false){
+ const pool=combatMutationIdsByWeapon[weaponType]||[];
+ if(!pool.length||rarity==="common")return null;
+ const chance={magic:.55,rare:1,legendary:1}[rarity]||0;
+ if(!force&&rng()>=chance)return null;
+ return choice(pool);
+}
+function ensureCombatMutation(g,force=false){
+ if(!g||g.slot!=="weapon"||!g.weaponType||g.combatMutation)return g;
+ g.combatMutation=rollCombatMutation(g.rarity,g.weaponType,force);
+ return g;
+}
+function combatMutationSummaryHtml(g){
+ const info=combatMutationInfo(g);
+ if(!info)return"";
+ return`<span class="combatMutationChip"><b>戦技変質・${info.label}</b> ${info.desc}</span>`;
+}
+function activeCombatMutationHint(){
+ const info=activeCombatMutation();
+ return info?` / 変質「${info.short}」`: "";
+}
+function recordCombatMutationProc(id){
+ const info=combatMutationData[id];if(!info)return;
+ const stats=ensureRunStats();
+ stats.combatMutationProcs=(stats.combatMutationProcs||0)+1;
+ stats.combatMutationProcIds=stats.combatMutationProcIds||{};
+ stats.combatMutationProcIds[id]=(stats.combatMutationProcIds[id]||0)+1;
+}
+
 function tagDamageMultiplier(e){
  let mult=1;
  if(tagTier("fire")>=6&&e.status?.burning>0)mult*=1.2;
@@ -17564,7 +17778,8 @@ function rollGear(sourceLevel=floorTargetLevel()){
  const element=rarity==="common"?null:(rng()<.48?choice(Object.keys(elementData)):null);
  const trait=rarity==="legendary"?choice(legendaryTraitIds):null;
  const tags=rollGearTags(rarity,element,slot);
- return{id:"g"+Date.now()+Math.floor(rng()*99999),slot,rarity,name,weaponType,atk,def,hunger,crit,cursed,identified:rng()>=.48,element,trait,kills:0,itemLevel,requiredLevel,attuned:false,attunedAt:null,attunementSource:"field",tags,bondTraits:[],bondPending:0,locked:false,autoLockInitialized:false,manualLock:false};
+ const combatMutation=slot==="weapon"?rollCombatMutation(rarity,weaponType,realtimeCombatActive()&&rarity!=="common"):null;
+ return{id:"g"+Date.now()+Math.floor(rng()*99999),slot,rarity,name,weaponType,atk,def,hunger,crit,cursed,identified:rng()>=.48,element,trait,combatMutation,kills:0,itemLevel,requiredLevel,attuned:false,attunedAt:null,attunementSource:"field",tags,bondTraits:[],bondPending:0,locked:false,autoLockInitialized:false,manualLock:false};
 }
 
 const SEALED_RELIC_CARRY_CAP=3;
@@ -19706,8 +19921,9 @@ function pickup(){
   );
  }else{
   const rootTune=rootTunedGearInfo(item.gear);
+  const mutation=combatMutationInfo(item.gear);
   if(item.gear.identified){
-   addLog(`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。${rootTune?` ${rootTunedGearSummary(item.gear,false)}。`:""}`);
+   addLog(`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。${rootTune?` ${rootTunedGearSummary(item.gear,false)}。`:""}${mutation?` 戦技変質「${mutation.label}」。`:""}`);
    if(rootTune||pickupRarityRank>=2||pickupDiscoveries.length){
     const title=pickupDiscoveries.length
      ?"戦利品・NEW DISCOVERY"
@@ -19717,6 +19933,7 @@ function pickup(){
     const detail=[
      `${rarityData[item.gear.rarity]?.label||"装備"}・${gearLabel(item.gear)}`,
      rootTune?rootTunedGearSummary(item.gear,true):"",
+     mutation?`戦技変質 ${mutation.label}`:"",
      pickupDiscoveryText
     ].filter(Boolean).join(" / ");
     showCombatToast(title,detail,pickupDiscoveries.length||pickupRarityRank>=3?"legendary":pickupRarityRank>=2?"rare":"objective");
@@ -20502,8 +20719,28 @@ const weaponSecondaryArtData={
  bow:{name:"牽制射",cost:6,cooldown:7,desc:"視界内2〜6マスの敵へ低威力射撃。命中した通常敵を1ターン止め、予兆も中断する。"},
  staff:{name:"氷環",cost:8,cooldown:8,desc:"上下左右の隣接敵へ低威力の冷気を放ち、命中した敵を1ターン凍結する。"}
 };
+const realtimeWeaponDoctrineData={
+ sword:{label:"近接制圧",hint:"旋撃＝包囲をまとめて斬る / 崩し斬り＝赤い予兆を断つ"},
+ spear:{label:"間合い操作",hint:"貫突＝直線をまとめて刺す / 退き突き＝攻撃しながら距離を作る"},
+ bow:{label:"遠隔制御",hint:"連射＝離れた敵を削る / 牽制射＝危険な敵を止める"},
+ staff:{label:"群体制御",hint:"火花＝敵群へ連鎖 / 氷環＝囲まれた時に凍結して逃げ道を作る"}
+};
+function realtimeWeaponDoctrine(type=weaponType()){
+ return realtimeWeaponDoctrineData[type]||{label:"戦闘",hint:"武技を使い分ける"};
+}
+function realtimeCooldownText(turns){
+ const value=Math.max(0,Math.floor(Number(turns)||0));
+ if(!value)return"";
+ if(!realtimeCombatActive())return String(value);
+ const seconds=value*realtimeWorldInterval(realtimeNow())*3/1000;
+ return`${seconds<10?seconds.toFixed(1):Math.ceil(seconds)}s`;
+}
 function weaponPrimaryArtCost(type=weaponType()){return{sword:6,spear:7,bow:6,staff:8}[type]||6}
-function weaponSecondaryArtUnlocked(type=weaponType()){return masteryLevel(type)>=2}
+function weaponSecondaryArtUnlocked(type=weaponType()){
+ // v4.06の1〜5層では戦闘感触を比較するため副武技を試用解放。
+ // 第6層以降は従来どおり熟練Lv2が必要。
+ return(realtimeCombatActive()&&state?.floor<=REALTIME_PROTOTYPE_MAX_FLOOR)||masteryLevel(type)>=2;
+}
 function weaponArtSafeRepositionCell(x,y){
  if(tile(x,y)!==1||enemyAt(x,y))return false;
  if(state.stairs?.x===x&&state.stairs?.y===y)return false;
@@ -20595,7 +20832,7 @@ function useSecondaryWeaponArt(){
  if(type==="sword"||type==="spear")gainTraining("strength",3);else gainTraining("focus",3);
  state.lastAction="skill";
  const base=Math.round(hungerAdjustedAttack(8+state.level*2+equippedAtk()+(state.fieldForgeAtk||0)));
- let used=false;
+ let used=false,mutationCooldownReduction=0;
  if(type==="sword"){
   const e=ready.target,hadIntent=!!e?.intent;
   if(e&&state.enemies.includes(e)){
@@ -20605,6 +20842,14 @@ function useSecondaryWeaponArt(){
     const stillIntent=!!e.intent;if(stillIntent)clearEnemyIntent(e);
     e.stagger=Math.max(e.stagger||0,1);
     if(stillIntent){ensureCombatStats().breaks++;updateFloorObjective()}
+    if(activeCombatMutation("sword_break")){
+     openCounterWindow(e,"断界歩",true);
+     if(Number.isFinite(e.counterWindowUntilMs))e.counterWindowUntilMs+=700;
+     mutationCooldownReduction=2;
+     recordCombatMutationProc("sword_break");
+     spawnCombatText(e.x,e.y,"SEVER","critical",34);
+     addLog("戦技変質「断界歩」：反撃好機が延び、共有武技CDが2短縮。");
+    }
     spawnCombatText(e.x,e.y,"BREAK","break",42);showCombatToast("崩し斬り",`${e.name}の攻撃態勢を強制中断`,"break");
     addLog(`崩し斬りで${e.name}の予兆を断ち切った。`);
    }
@@ -20618,7 +20863,17 @@ function useSecondaryWeaponArt(){
    damageEnemy(e,Math.round(base*.85),"退き突き");
    if(!state.gameOver&&weaponArtSafeRepositionCell(ready.bx,ready.by)){
     startMoveAnim(-ready.dx,-ready.dy);state.player.x=ready.bx;state.player.y=ready.by;recordFloorStep();triggerPlayerTacticalTerrainEntry("weapon_art");revealNearbyTraps();triggerRoomEncounterEntry();
-    addLog("退き突きで1マス退き、間合いを作った。");
+    let retreated=1;
+    if(activeCombatMutation("spear_recoil")){
+     const bx2=state.player.x-ready.dx,by2=state.player.y-ready.dy;
+     if(weaponArtSafeRepositionCell(bx2,by2)){
+      state.player.x=bx2;state.player.y=by2;recordFloorStep();triggerPlayerTacticalTerrainEntry("weapon_art");revealNearbyTraps();triggerRoomEncounterEntry();
+      retreated=2;
+      recordCombatMutationProc("spear_recoil");
+      spawnCombatText(state.player.x,state.player.y,"2 STEP","dodge",32);
+     }
+    }
+    addLog(`退き突きで${retreated}マス退き、間合いを作った。`);
    }else if(!state.gameOver)addLog("退路が塞がり、その場で突きを放った。");
    used=true;
   }
@@ -20632,6 +20887,18 @@ function useSecondaryWeaponArt(){
     const hadIntent=!!e.intent;if(hadIntent)clearEnemyIntent(e);
     if(!e.boss)e.stagger=Math.max(e.stagger||0,1);
     if(hadIntent){ensureCombatStats().breaks++;updateFloorObjective()}
+    if(activeCombatMutation("bow_split")){
+     const second=state.enemies
+      .filter(o=>o!==e&&!o.boss&&Math.abs(o.x-e.x)+Math.abs(o.y-e.y)<=2&&state.visible[key(o.x,o.y)])
+      .sort((a,b)=>(b.intent?1:0)-(a.intent?1:0))[0];
+     if(second){
+      damageEnemy(second,Math.max(1,Math.round(base*.30)),"分岐矢");
+      if(state.enemies.includes(second))second.stagger=Math.max(second.stagger||0,1);
+      recordCombatMutationProc("bow_split");
+      spawnCombatText(second.x,second.y,"SPLIT","break",32);
+      addLog(`戦技変質「分岐牽制」：矢が${second.name}へ跳び、足を止めた。`);
+     }
+    }
     spawnCombatText(e.x,e.y,e.boss?"BREAK":"PIN","break",38);
     showCombatToast("牽制射",e.boss?`${e.name}の予兆を中断`:`${e.name}を1ターン足止め`,"break");
     addLog(e.boss?`牽制射で${e.name}の予兆を乱した。`:`牽制射で${e.name}の動きを止めた。`);
@@ -20647,16 +20914,27 @@ function useSecondaryWeaponArt(){
     if(!state.enemies.includes(e))continue;
     const dealt=damageEnemy(e,Math.round(base*.5),"氷環");
     if(dealt>0&&state.enemies.includes(e)){
-     e.status=e.status||{};e.status.frozen=Math.max(e.status.frozen||0,1);
-     spawnCombatText(e.x,e.y,"FREEZE","break",34);
+     e.status=e.status||{};
+     const freezeTurns=activeCombatMutation("staff_permafrost")?2:1;
+     e.status.frozen=Math.max(e.status.frozen||0,freezeTurns);
+     spawnCombatText(e.x,e.y,freezeTurns>1?"DEEP FREEZE":"FREEZE","break",34);
     }
+   }
+   if(activeCombatMutation("staff_permafrost")&&targets.length>=3){
+    mutationCooldownReduction=2;
+    recordCombatMutationProc("staff_permafrost");
+    addLog("戦技変質「永久氷環」：3体以上を封じ、共有武技CDが2短縮。");
    }
    addLog(`氷環が周囲${targets.length}体を凍てつかせた。`);showCombatToast("氷環",`隣接${targets.length}体を制圧`,"objective");used=true;
   }
  }
  if(!used){recoverStamina(data.cost);addLog("副武技は成立しなかった。");render();return false}
+ if(realtimeCombatActive()){
+  const stats=ensureRunStats();
+  stats.realtimeSecondaryArts=(stats.realtimeSecondaryArts||0)+1;
+ }
  spawnHeroEffect(type==="staff"?"arcane":type==="bow"?"shot":type==="spear"?"pierce":"slash");
- state.cooldowns.volley=data.cooldown+1;
+ state.cooldowns.volley=Math.max(1,data.cooldown+1-mutationCooldownReduction);
  endTurn();return true;
 }
 
@@ -20676,29 +20954,60 @@ function useSkill(name){
   if(!spendStamina(skillCost))return;
   state.lastAction="skill";
   const wt=weaponType(),base=Math.round(hungerAdjustedAttack(8+state.level*2+equippedAtk()+(state.fieldForgeAtk||0)));
-  let hit=false;
+  let hit=false,mutationCooldownReduction=0;
   if(wt==="sword"){
    const targets=adjacentEnemiesAround(state.player.x,state.player.y);
    if(!targets.length){recoverStamina(skillCost);addLog("旋撃の届く敵がいない。");return}
-   spawnPlayerAttackCells(targets.map(e=>({x:e.x,y:e.y})),"player_zone",16);targets.forEach(e=>{if(state.enemies.includes(e))damageEnemy(e,Math.round(base*.9),"旋撃")});hit=true;
+   spawnPlayerAttackCells(targets.map(e=>({x:e.x,y:e.y})),"player_zone",16);
+   targets.forEach(e=>{if(state.enemies.includes(e))damageEnemy(e,Math.round(base*.9),"旋撃")});
+   if(activeCombatMutation("sword_whirl")&&targets.length>=2&&targets.some(e=>e.hp<=0)){
+    mutationCooldownReduction=3;
+    recordCombatMutationProc("sword_whirl");
+    spawnCombatText(state.player.x,state.player.y,"BLOOD SPIN","critical",34);
+    addLog("戦技変質「血旋連舞」：包囲を斬り抜け、共有武技CDが3短縮。");
+   }
+   hit=true;
   }
   if(wt==="spear"){
+   const spearHits=[];
    for(const [dx,dy] of dirs){
     for(let d=1;d<=3;d++){
      if(!pathClear(dx,dy,d))break;
      const e=enemyAtDistance(dx,dy,d);
-     if(e){spawnPlayerAttackCells([{x:e.x,y:e.y}],"player_zone",16);damageEnemy(e,base,"貫突");hit=true}
+     if(e){spawnPlayerAttackCells([{x:e.x,y:e.y}],"player_zone",16);damageEnemy(e,base,"貫突");spearHits.push(e);hit=true}
     }
    }
    if(!hit){recoverStamina(skillCost);addLog("貫突の直線上に敵がいない。");return}
+   if(activeCombatMutation("spear_skewer")&&spearHits.length>=2){
+    const pinned=[...spearHits].reverse().find(e=>state.enemies.includes(e)&&!e.boss);
+    if(pinned){
+     pinned.stagger=Math.max(pinned.stagger||0,1);
+     recordCombatMutationProc("spear_skewer");
+     spawnCombatText(pinned.x,pinned.y,"PIN","break",34);
+     addLog(`戦技変質「串刺し律」：${pinned.name}を列の後ろでよろめかせた。`);
+    }
+   }
   }
   if(wt==="bow"){
    const candidates=state.enemies.map(e=>({e,d:Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)}))
     .filter(o=>o.d<=6&&state.visible[key(o.e.x,o.e.y)]).sort((a,b)=>a.d-b.d);
    if(!candidates.length){recoverStamina(skillCost);addLog("連射できる敵が見えない。");return}
+   let firstTarget=null,crossed=false;
    for(let i=0;i<2;i++){
-    const target=candidates.find(o=>state.enemies.includes(o.e));
-    if(!target)break;spawnPlayerAttackCells(lineCells(state.player.x,state.player.y,target.e.x,target.e.y),"player_zone",16);damageEnemy(target.e,Math.round(base*.72),"連射");hit=true;
+    let target=null;
+    if(i===1&&activeCombatMutation("bow_cross")&&firstTarget){
+     target=candidates.find(o=>state.enemies.includes(o.e)&&o.e!==firstTarget);
+     if(target)crossed=true;
+    }
+    target=target||candidates.find(o=>state.enemies.includes(o.e));
+    if(!target)break;
+    if(i===0)firstTarget=target.e;
+    spawnPlayerAttackCells(lineCells(state.player.x,state.player.y,target.e.x,target.e.y),"player_zone",16);
+    damageEnemy(target.e,Math.round(base*.72),"連射");hit=true;
+   }
+   if(crossed){
+    recordCombatMutationProc("bow_cross");
+    addLog("戦技変質「交差連射」：2射目を別の敵へ振り分けた。");
    }
   }
   if(wt==="staff"){
@@ -20706,13 +21015,31 @@ function useSkill(name){
     .filter(o=>o.d<=5&&state.visible[key(o.e.x,o.e.y)]).sort((a,b)=>a.d-b.d);
    if(!candidates.length){recoverStamina(skillCost);addLog("火花を放つ相手が見えない。");return}
    const center=candidates[0].e;
-   spawnPlayerAttackCells(crossAreaCells(center.x,center.y),"player_zone",18);
+   const shatter=activeCombatMutation("staff_shatter")&&(center.status?.frozen||0)>0;
+   const cx=center.x,cy=center.y;
+   if(shatter)center.status.frozen=0;
+   spawnPlayerAttackCells(crossAreaCells(cx,cy),"player_zone",18);
    damageEnemy(center,base,"火花");hit=true;
-   for(const other of adjacentEnemiesAround(center.x,center.y)){
+   for(const other of adjacentEnemiesAround(cx,cy)){
     if(other!==center&&state.enemies.includes(other))damageEnemy(other,Math.round(base*.65),"爆ぜ");
    }
+   if(shatter){
+    const burst=state.enemies.filter(e=>e!==center&&Math.abs(e.x-cx)+Math.abs(e.y-cy)<=2);
+    spawnPlayerAttackCells(burst.map(e=>({x:e.x,y:e.y})),"player_blast",20);
+    for(const e of [...burst])if(state.enemies.includes(e))damageEnemy(e,Math.max(1,Math.round(base*.38)),"砕氷");
+    recordCombatMutationProc("staff_shatter");
+    spawnCombatText(cx,cy,"SHATTER","critical",38);
+    addLog("戦技変質「砕氷火花」：凍結を砕き、周囲へ追加爆発を起こした。");
+   }
   }
-  if(hit){spawnHeroEffect(weaponType()==="staff"?"arcane":"slash");state.cooldowns.volley=6;}
+  if(hit){
+   if(realtimeCombatActive()){
+    const stats=ensureRunStats();
+    stats.realtimePrimaryArts=(stats.realtimePrimaryArts||0)+1;
+   }
+   spawnHeroEffect(weaponType()==="staff"?"arcane":"slash");
+   state.cooldowns.volley=Math.max(1,6-mutationCooldownReduction);
+  }
  }
  if(name==="heal"){
   if(!spendStamina(4))return;
@@ -21104,7 +21431,7 @@ function gearScore(g){
  const echoScore=echoGearScoreBreakdown(g).total;
  return stats.atk*2.2+stats.def*2+gearSupplyBonus(g)*.12+((g.crit||0)+weaponDeepeningEffectValue(g,"crit"))*100+
         gearTagPower(g)*1.35+(rarityOrder[g.rarity]||0)*5+bondStage(g)*3+
-        echoScore+legendaryTraitScore(g)+(g.identified?1:-2);
+        (combatMutationInfo(g)?8:0)+echoScore+legendaryTraitScore(g)+(g.identified?1:-2);
 }
 function sortedInventoryItems(){
  const mode=state.inventorySort||"score";
@@ -22130,6 +22457,7 @@ function stashSearchText(g){
  return[
   gearLabel(g),g.name,rarityData[g.rarity]?.label,equippedSlotLabel(normalizeLoadoutSlot(g.slot)),
   bondStages[bondStage(g)]?.label,bondTraitSummary(g),weaponDeepeningSummary(g,true),trait,
+  combatMutationInfo(g)?.label||"",combatMutationInfo(g)?.desc||"",
   g.origin==="sealed_relic"?"封印開封品":"",
   rootTunedGearInfo(g)?.label||"",rootTunedGearInfo(g)?.short||"",
   Object.entries(effectiveGearTags(g)).filter(([,value])=>value>0).map(([id])=>tagData[id]?.label||id).join(" ")
@@ -22231,6 +22559,7 @@ function lighthouseStashCardHtml(meta,entry){
     ${g.wardenTrophyFloor?`<span class="stashBadge warden">第${g.wardenTrophyFloor}層番人</span>`:""}
     ${wardenImprintInfo(g)?`<span class="stashBadge warden">刻印 ${wardenImprintInfo(g).label}</span>`:""}
     ${g.rarity==="legendary"?'<span class="stashBadge legendary">伝説</span>':""}
+    ${combatMutationInfo(g)?`<span class="stashBadge combatMutation">戦技 ${combatMutationInfo(g).short}</span>`:""}
     ${oathCurrent?'<span class="stashBadge oath">誓約</span>':""}
     ${echoStrain(g)>0?`<span class="stashBadge strain">歪み${echoStrain(g)}</span>`:""}
    </div>
@@ -22243,7 +22572,8 @@ function lighthouseStashCardHtml(meta,entry){
    <div class="stashCompareTags">タグ差：${stashTagDeltaHtml(comparison)}</div>
   </div>
   ${lighthouseStashBuildPreviewHtml(meta,g)}
-  <div class="stashQuickStats">候補性能　攻${stats.atk} / 防${stats.def} / 会心${Math.round(stashGearCrit(g)*100)}% / 追加充足${gearSupplyBonus(g)}${rootTunedGearInfo(g)?`<br>樹脈適合：${rootTunedGearSummary(g,false)}`:""}${legendary?`<br>固有：${legendary.label}`:""}</div>
+  <div class="stashQuickStats">候補性能　攻${stats.atk} / 防${stats.def} / 会心${Math.round(stashGearCrit(g)*100)}% / 追加充足${gearSupplyBonus(g)}${rootTunedGearInfo(g)?`<br>樹脈適合：${rootTunedGearSummary(g,false)}`:""}${legendary?`<br>固有：${legendary.label}`:""}${combatMutationInfo(g)?`<br>戦技変質：${combatMutationInfo(g).label}`:""}</div>
+  ${combatMutationSummaryHtml(g)}
   <details class="stashCompactDetails"><summary>進化・刻印・分解価値の詳細</summary><div class="stashDetailBody">
    探索同調Lv${gearAttunementLevel(g)}・灯台調律済み<br>
    ${tagSummaryHtml(effectiveGearTags(g))}${legendaryTraitSummaryHtml(g)}<br>
@@ -22414,7 +22744,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.04",
+  version:"4.07",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -22913,7 +23243,7 @@ function renderInventory(){
   const unknownHint=hasTalent("keen_eye")?`攻撃 +${g.atk} / 防御 +${g.def} までは見抜ける。`:"性能不明。";
   const equipReady=canEquipGearNow(g);
   const detail=g.identified
-   ?`ILv${g.itemLevel||1} / ${gearAttunementBadgeHtml(g)} / 推奨度 ${Math.round(gearScore(g))} / ${g.weaponType?"型："+weaponData[g.weaponType].label+" / ":""}攻撃 +${g.atk} / 防御 +${g.def}${g.hunger?" / 最大充足 +"+gearSupplyBonus(g):""}${g.crit?" / 会心 +"+Math.round(g.crit*100)+"%":""}${elem}${trait}${rootTune?`<br>${rootTunedGearBadgeHtml(g)} ${rootTunedGearSummary(g,false)}`:""}<br>${tagSummaryHtml(effectiveGearTags(g))}${legendaryTraitSummaryHtml(g)}<br><span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0}${nextBondKills(g)?` / 次:${nextBondKills(g)}`:" / 最大"}</span><br>進化:${bondTraitSummary(g)}${weaponDeepeningSummaryHtml(g)}${echoImprintHtml(g)}${echoGearScoreText(g)?`<span class="echoScoreNote ${echoGearScoreBreakdown(g).total<0?"negative":""}">推奨度補正：${echoGearScoreText(g)}</span>`:""}<br>${compareText(g)}<br>${tagComparisonHtml(g)}`
+   ?`ILv${g.itemLevel||1} / ${gearAttunementBadgeHtml(g)} / 推奨度 ${Math.round(gearScore(g))} / ${g.weaponType?"型："+weaponData[g.weaponType].label+" / ":""}攻撃 +${g.atk} / 防御 +${g.def}${g.hunger?" / 最大充足 +"+gearSupplyBonus(g):""}${g.crit?" / 会心 +"+Math.round(g.crit*100)+"%":""}${elem}${trait}${rootTune?`<br>${rootTunedGearBadgeHtml(g)} ${rootTunedGearSummary(g,false)}`:""}<br>${tagSummaryHtml(effectiveGearTags(g))}${legendaryTraitSummaryHtml(g)}${combatMutationSummaryHtml(g)}<br><span class="bondStage">${bondStages[bondStage(g)].label} / 撃破${g.kills||0}${nextBondKills(g)?` / 次:${nextBondKills(g)}`:" / 最大"}</span><br>進化:${bondTraitSummary(g)}${weaponDeepeningSummaryHtml(g)}${echoImprintHtml(g)}${echoGearScoreText(g)?`<span class="echoScoreNote ${echoGearScoreBreakdown(g).total<0?"negative":""}">推奨度補正：${echoGearScoreText(g)}</span>`:""}<br>${compareText(g)}<br>${tagComparisonHtml(g)}`
    :`${gearAttunementBadgeHtml(g)}<br>${unidentifiedGearSignalHtml(g)}${rootTune?`<br>${rootTunedGearBadgeHtml(g)} ${rootTune.label}の反応を確認`:""}<br>${unknownHint} 正確なレア度・固有特性・呪いは未判明。鑑定紙片1枚、現地素材2、または8Gで鑑定可能。装備して確かめることもできる。`;
   row.innerHTML=`<div class="top">${title}<span>${g.locked?"🔒 ":""}${equippedSlotLabel(g.slot)}</span></div><div class="desc">${detail}</div>
    <div class="itemActions">
@@ -22932,8 +23262,8 @@ function renderInventory(){
 
 const REALTIME_PROTOTYPE_MAX_FLOOR=5;
 const REALTIME_INCIDENT_MAX_FLOOR=3;
-const REALTIME_WORLD_MS=270;
-const REALTIME_SLOW_WORLD_MS=455;
+const REALTIME_WORLD_MS=240;
+const REALTIME_SLOW_WORLD_MS=405;
 const REALTIME_FOCUS_DURATION_MS=2600;
 const REALTIME_FOCUS_COOLDOWN_MS=7000;
 const REALTIME_DASH_COOLDOWN_MS=1450;
@@ -23096,7 +23426,7 @@ function realtimeWorldStep(now=realtimeNow()){
   ensureBossProgressIntegrity("realtime-start");
   updateFloorObjective();
 
-  // 約0.81秒を従来の「1ターン相当」として資源・状態・CDを進める。
+  // 約0.72秒を従来の「1ターン相当」として資源・状態・CDを進める。
   if(state.turn%2===0&&!realtimeResourcePulse())return false;
   applyLightUtility();
   updateStatuses();
@@ -23110,7 +23440,7 @@ function realtimeWorldStep(now=realtimeNow()){
  // 配信向け事件も同じ世界時間で進む。メニュー/階層紹介中はtick自体が止まるため不公平な消失は起きない。
  processRealtimeBroadcastIncidentPulse();
 
- // 敵AIだけは270ms刻み。実際に動くかは敵種ごとのcadenceで判定する。
+ // 敵AIだけは240ms刻み。実際に動くかは敵種ごとのcadenceで判定する。
  enemyTurn();
  if(state.gameOver)return false;
 
@@ -23240,14 +23570,16 @@ function updateRealtimeBossUi(now=realtimeNow()){
  }
 }
 function updateRealtimePrototypeUi(now=realtimeNow()){
- const bar=$("rtPrototypeBar"),actions=$("actions"),wait=$("wait"),focus=$("rtFocusBtn");
- if(!bar||!actions||!wait||!focus)return;
+ const bar=$("rtPrototypeBar"),actions=$("actions"),wait=$("wait"),focus=$("rtFocusBtn"),searchButton=$("rtSearchBtn");
+ if(!bar||!actions||!wait||!focus||!searchButton)return;
  const active=realtimeCombatActive();
  bar.classList.toggle("hidden",!active);
  actions.classList.toggle("realtimePrototype",active);
  if(!active){
   wait.textContent="休息";
   focus.disabled=true;
+  searchButton.disabled=true;
+  searchButton.textContent="探索";
   updateRealtimeIncidentUi(now);
   updateRealtimeBossUi(now);
   return;
@@ -23266,17 +23598,21 @@ function updateRealtimePrototypeUi(now=realtimeNow()){
  const remainFocus=Math.max(0,(realtimeCombatRuntime.slowUntil||0)-now);
  const remainCd=Math.max(0,(realtimeCombatRuntime.focusCooldownUntil||0)-now);
  focus.textContent=remainFocus>0?"集中中":remainCd>0?`集中 ${Math.ceil(remainCd/1000)}s`:"集中";
+ const searchCd=Math.max(0,state.cooldowns?.search||0);
+ searchButton.disabled=realtimeGreedChestChanneling()||searchCd>0||(state.hero?.stamina||0)<2;
+ searchButton.textContent=searchCd>0?`探索 ${realtimeCooldownText(searchCd)}`:"探索";
  const interval=realtimeWorldInterval(now);
  const remain=Math.max(0,(realtimeCombatRuntime.nextWorldAt||now)-now);
  const pct=Math.max(0,Math.min(1,1-remain/interval));
  const fill=$("rtPulseFill");if(fill)fill.style.width=`${Math.round(pct*100)}%`;
  const stateLabel=$("rtPrototypeState");
  const introSafe=realtimeFloorIntroVisible()||now<(realtimeCombatRuntime.floorGraceUntil||0);
- if(stateLabel)stateLabel.textContent=introSafe?"SAFE・敵時間停止":realtimeFocusActive(now)?"時間低速":"敵速度 速/標/遅";
+ const doctrine=realtimeWeaponDoctrine();
+ if(stateLabel)stateLabel.textContent=introSafe?"SAFE・敵時間停止":realtimeFocusActive(now)?"時間低速":`${weaponData[weaponType()]?.label||"武器"}・${doctrine.label}`;
  const hint=$("rtPrototypeHint");
  if(hint)hint.textContent=introSafe
   ?"階層紹介中は敵が完全停止。紹介終了後も0.8秒だけ先に動けます。"
-  :`速い敵は約0.54秒、標準0.81秒、遅い敵1.08秒。敵詳細でも確認できます。`;
+  :`${doctrine.hint}${activeCombatMutationHint()}`;
  updateRealtimeIncidentUi(now);
  updateRealtimeBossUi(now);
 }
@@ -24720,7 +25056,12 @@ function inspectTileAt(x,y){
   body+=enemyIntentTacticalHtml(enemy);
   body+=enemyArchetypeHintHtml(enemy);
   body+=tacticalPackHintHtml(enemy);
-  if(counterWindowActive(enemy))body+=`<div class="counterWindowCard"><b>反撃好機</b><br>${enemy.boss?"次の一撃が+15%":"次の一撃が+30%"}。攻撃せず次の行動へ進むと隙は閉じます。</div>`;
+  if(counterWindowActive(enemy)){
+   const realtimeRemain=realtimeCombatActive()&&Number.isFinite(enemy.counterWindowUntilMs)
+    ?Math.max(0,(enemy.counterWindowUntilMs-realtimeNow())/1000)
+    :0;
+   body+=`<div class="counterWindowCard"><b>反撃好機</b><br>${enemy.boss?"次の一撃が+15%":"次の一撃が+30%"}。${realtimeCombatActive()?`残り約${realtimeRemain.toFixed(1)}秒。`:"攻撃せず次の行動へ進むと隙は閉じます。"}</div>`;
+  }
   body+=eliteMutationTacticalHtml(enemy);
   if(terrain)body+=tacticalTerrainInfoHtml(terrain);
   if(enemy.boss){
@@ -25163,16 +25504,46 @@ function renderSkills(){
   }
  }
 
- for(const k of ["guard","heal","search"]){
-  const b=$(k);b.disabled=state.cooldowns[k]>0 || (k==="guard"&&state.hero.stamina<3) || (k==="heal"&&state.hero.stamina<4) || (k==="search"&&state.hero.stamina<2);
-  b.firstChild.textContent=({guard:"構え",heal:"治癒",search:"探索"}[k])+(state.cooldowns[k]>0?" "+state.cooldowns[k]:"")
+ // 構えと治癒は両方式で共通。
+ for(const k of ["guard","heal"]){
+  const b=$(k);
+  b.disabled=state.cooldowns[k]>0||(k==="guard"&&state.hero.stamina<3)||(k==="heal"&&state.hero.stamina<4);
+  b.firstChild.textContent=({guard:"構え",heal:"治癒"}[k])+(state.cooldowns[k]>0?` ${realtimeCooldownText(state.cooldowns[k])}`:"");
  }
- const wd=weaponData[weaponType()],b=$("volley"),secondary=weaponSecondaryArtData[weaponType()],artUnlocked=weaponSecondaryArtUnlocked();
- const minArtCost=artUnlocked?Math.min(weaponPrimaryArtCost(),secondary.cost):weaponPrimaryArtCost();
- b.disabled=state.cooldowns.volley>0 || state.hero.stamina<minArtCost;
- b.classList.toggle("artUnlocked",artUnlocked);
- b.firstChild.textContent=(artUnlocked?"武技選択":wd.skill)+(state.cooldowns.volley>0?" "+state.cooldowns.volley:"");
- b.querySelector("span").textContent=artUnlocked?`${wd.skill} / ${secondary.name}・共有CD`:wd.skillDesc;
+
+ const type=weaponType(),wd=weaponData[type],primaryButton=$("volley"),secondaryButton=$("search"),secondary=weaponSecondaryArtData[type];
+ const artCd=Math.max(0,state.cooldowns.volley||0);
+ const artCdLabel=artCd?` ${realtimeCooldownText(artCd)}`:"";
+
+ if(realtimeCombatActive()){
+  // リアルタイム中は選択画面を挟まず、主武技/副武技を別ボタンへ直接露出する。
+  const primaryReady=weaponPrimaryArtReadiness(type);
+  const secondaryReady=weaponSecondaryArtReadiness(type);
+
+  primaryButton.classList.add("artUnlocked");
+  primaryButton.disabled=artCd>0||!primaryReady.ok;
+  primaryButton.firstChild.textContent=`${wd.skill}${artCdLabel}`;
+  primaryButton.querySelector("span").textContent=`主技・気力${primaryReady.cost} / ${primaryReady.reason}`;
+
+  secondaryButton.classList.add("artUnlocked");
+  secondaryButton.disabled=artCd>0||!secondaryReady.ok;
+  secondaryButton.firstChild.textContent=`${secondary.name}${artCdLabel}`;
+  secondaryButton.querySelector("span").textContent=`副技・気力${secondary.cost} / ${secondaryReady.reason}`;
+ }else{
+  // 第6層以降は従来どおり探索ボタン＋武技選択UI。
+  secondaryButton.classList.remove("artUnlocked");
+  secondaryButton.disabled=state.cooldowns.search>0||state.hero.stamina<2;
+  secondaryButton.firstChild.textContent="探索"+(state.cooldowns.search>0?" "+state.cooldowns.search:"");
+  secondaryButton.querySelector("span").textContent="罠を看破 / CD6";
+
+  const artUnlocked=weaponSecondaryArtUnlocked(type);
+  const minArtCost=artUnlocked?Math.min(weaponPrimaryArtCost(type),secondary.cost):weaponPrimaryArtCost(type);
+  primaryButton.disabled=artCd>0||state.hero.stamina<minArtCost;
+  primaryButton.classList.toggle("artUnlocked",artUnlocked);
+  primaryButton.firstChild.textContent=(artUnlocked?"武技選択":wd.skill)+(artCd>0?" "+artCd:"");
+  primaryButton.querySelector("span").textContent=artUnlocked?`${wd.skill} / ${secondary.name}・共有CD`:wd.skillDesc;
+ }
+
  $("quickPotion").textContent=`薬 ${state.consumables.potion||0}`;
  $("quickBomb").textContent=`壺 ${state.consumables.bomb||0}`;
  $("quickPotion").disabled=(state.consumables.potion||0)<=0;
@@ -25393,7 +25764,12 @@ function realtimeCenterAction(){
 }
 $("wait").onclick=realtimeCenterAction;
 $("rtFocusBtn").onclick=realtimeFocus;
-$("guard").onclick=()=>useSkill("guard");$("volley").onclick=openWeaponArtOverlay;$("heal").onclick=()=>useSkill("heal");$("search").onclick=()=>useSkill("search");$("closeWeaponArt").onclick=closeWeaponArtOverlay;
+$("rtSearchBtn").onclick=()=>useSkill("search");
+$("guard").onclick=()=>useSkill("guard");
+$("volley").onclick=()=>realtimeCombatActive()?useSkill("volley"):openWeaponArtOverlay();
+$("heal").onclick=()=>useSkill("heal");
+$("search").onclick=()=>realtimeCombatActive()?useSecondaryWeaponArt():useSkill("search");
+$("closeWeaponArt").onclick=closeWeaponArtOverlay;
 canvas.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchStart={x:t.clientX,y:t.clientY}},{passive:true});
 canvas.addEventListener("touchend",e=>{if(!touchStart)return;const t=e.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;touchStart=null;if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;if(Math.abs(dx)>Math.abs(dy))move(Math.sign(dx),0);else move(0,Math.sign(dy))},{passive:true});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("weaponArtOverlay").classList.contains("hidden")){e.preventDefault();closeWeaponArtOverlay();return}if(e.key==="Escape"&&!$("threatOverlay").classList.contains("hidden")){e.preventDefault();closeThreatOverlay();return}if(e.key==="Escape"&&!$("audioOverlay").classList.contains("hidden")){e.preventDefault();closeAudioSettings();return}
