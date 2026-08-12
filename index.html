@@ -5541,7 +5541,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 4.10 RUN DRAFT ENGINE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.11 REALTIME CORE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5589,7 +5589,7 @@ body,button,input,select,textarea{font-size:12px}
   <div id="rtPrototypeBar" class="rtPrototypeBar hidden" aria-live="polite">
     <div class="rtPrototypeHead">
       <b>REALTIME TEST</b>
-      <span id="rtPrototypeState">第1〜5層</span>
+      <span id="rtPrototypeState">REALTIME</span>
     </div>
     <div class="rtPulseTrack"><i id="rtPulseFill"></i></div>
     <div class="rtPrototypeActions">
@@ -5633,8 +5633,8 @@ body,button,input,select,textarea{font-size:12px}
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">v4 戦闘実験版 × 第1〜5層リアルタイム × 第5層は初のリアルタイム番人</p>
-    <p>第1〜5層では世界が止まりません。第4層で整え、第5層の番人で「予兆を読む・避ける・攻め込む」がリアルタイムでも面白いかを試してください。</p>
+    <p class="sub">リアルタイム戦闘 × 武器戦術 × ラン中ビルド × 敵利用</p>
+    <p>戦闘は全階層リアルタイムです。止まって考えるのではなく、予兆を読み、回避・武技・敵利用・その探索だけのビルドで深淵を突破してください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：グリッド・空腹・自動生成</div>
       <div>Wizardry：暗闇・罠・死の重さ</div><div>Diablo：武器ビルド・接辞装備</div>
@@ -5838,16 +5838,16 @@ body,button,input,select,textarea{font-size:12px}
           <li>効果音は最大22音に制限し、足音や連撃の短時間連打を間引きます。重要な音は古い低優先音を止めて再生し、爆発・死亡・番人撃破時はBGMを短く下げます。</li>
           <li>アプリがバックグラウンドへ移るとBGMタイマーと全音源を停止し、AudioContextを休止します。復帰時は現在の灯台・探索・危険・番人場面から再開します。</li>
           <li>iPhoneの仕様により、音は最初のタップ後に開始します。端末の消音スイッチや音量設定も影響します。</li>
-          <li><b>v4戦闘実験：第1〜5層</b>では敵種ごとの実時間周期で世界が進み、何もしなくても敵が動きます。第4層は事件なしの準備階、第5層は初のリアルタイム番人戦です。第6層以降は従来どおり1回行動するたびに1ターン進行します。</li>
-          <li><b>第5層・リアルタイム番人</b>：鎖縛の門衛は約0.84秒周期で判断し、攻撃予兆も約0.84秒表示してから発動します。専用ボス欄にHP・形態・予兆名・発動までの残り時間を表示します。</li>
+          <li><b>リアルタイム戦闘・正式採用</b>：全階層で敵種ごとの実時間周期で世界が進み、何もしなくても敵が動きます。メニュー・レベルアップ選択・階層紹介など判断用UIを開いている間だけ敵時間が停止します。</li>
+          <li><b>リアルタイム番人</b>：すべての番人は約0.84秒周期で判断し、固有大技の予兆は最低約0.84秒以上表示してから発動します。専用ボス欄にHP・形態・予兆名・発動までの残り時間を表示します。</li>
           <li><b>リアルタイム中の回避</b>：中央ボタンで最後に入力した方向へ最大2マス移動し、約0.43秒だけ敵の直接攻撃をすり抜けます。気力3、再使用約1.45秒です。</li>
           <li><b>リアルタイム中の集中</b>：気力2で2.6秒だけ敵行動間隔を遅くします。完全停止ではありません。</li>
-          <li><b>v4.06・武器の戦闘動詞</b>：第1〜5層では武技選択画面を開かず、主武技と副武技を2つの独立ボタンとして直接使えます。剣=範囲斬り/予兆中断、槍=直線攻撃/後退、弓=連射/足止め、杖=範囲魔撃/凍結です。副武技は試作区間だけ熟練Lvに関係なく試用できます。</li>
+          <li><b>武器の戦闘動詞</b>：全階層で武技選択画面を挟まず、主武技と副武技を独立ボタンから直接使います。剣=範囲斬り/予兆中断、槍=直線攻撃/後退、弓=連射/足止め、杖=範囲魔撃/凍結です。第1〜5層だけ副武技を試用解放し、第6層以降は熟練Lv2が必要です。</li>
           <li><b>探索ボタン</b>：リアルタイム中は上部REALTIME TEST欄へ移動します。戦闘の4枠は「構え・主武技・治癒・副武技」に固定し、戦闘中に選択画面を挟みません。</li>
           <li><b>反撃好機</b>：リアルタイム中はターン数ではなく実時間で開きます。通常敵は約1.7秒、番人は約1.4秒が目安です。</li>
           <li><b>戦技変質</b>：魔法以上の武器に付くことがある、武技そのものを変える装備効果です。第1〜5層で生成される魔法以上の武器には試験的に必ず1つ付きます。例：旋撃で撃破するとCD短縮、退き突きが2マス後退、牽制射が分岐、凍結から砕氷爆発など。数値ではなく戦闘手順が変わります。</li>
           <li><b>敵を武器にする</b>：骨術師の射線へ別の敵を入れると誤射、穿ち獣の突進線へ敵や爆薬樽を残すと衝突、爆ぜ虫は倒された場所で爆発し別の爆ぜ虫や樽へ連鎖します。敵の予兆内に巻き込まれる敵には橙色の小さな枠が出ます。</li>
-          <li><b>v4.10・戦闘ビルド3択</b>：第1〜5層でレベルアップすると敵時間が停止し、刃脈・護脈・探脈から1枚ずつ提示されます。同じカードは最大IIまで強化可能。撃破で武技CDを回す「血時計」、回避を連鎖させる「残像循環」、敵利用を主火力にする「誘導掌握」など、今回の探索だけのエンジンを組みます。</li>
+          <li><b>戦闘ビルド3択</b>：全階層でレベルアップすると敵時間が停止し、刃脈・護脈・探脈から1枚ずつ提示されます。同じカードは最大IIまで強化可能。撃破で武技CDを回す「血時計」、回避を連鎖させる「残像循環」、敵利用を主火力にする「誘導掌握」など、今回の探索だけのエンジンを組みます。</li>
           <li><b>逃走遺宝</b>：第2〜3層で稀に、紫脈封を持った金色の遺宝獣が出現します。画面の矢印と逃走時間を見て、追うか安全を取るかを即決してください。倒せばその場へ紫脈封を落とします。</li>
           <li><b>危険宝箱</b>：第2〜3層で現れることがあります。踏むと警報が鳴り7.2秒で再封印。中央の「開錠」を押して3.2秒その場に留まれば希少装備を獲得できます。開錠中も敵は動き、移動すると開錠進捗はリセットされます。</li>
           <li><b>階層目標</b>を達成すると階段の封印が解けます。進捗は画面左上に表示され、達成時に欠片・現地素材などを獲得します。</li>
@@ -5875,7 +5875,7 @@ body,button,input,select,textarea{font-size:12px}
       <summary>基本操作とUI</summary>
       <div class="helpBody">
         <ul>
-          <li><b>中央ボタン</b>：第1〜5層のリアルタイム実験中は通常「回避」。危険宝箱上では「開錠」、階段・拾得物上では従来どおり「回収 / 階段」へ変わります。第6層以降は「休息」へ戻ります。</li>
+          <li><b>中央ボタン</b>：全階層で通常は「回避」。危険宝箱上では「開錠」、階段・拾得物上では「回収 / 階段」へ自動で変わります。リアルタイム戦闘中に旧式の「休息」へ戻ることはありません。</li>
           <li><b>スキル</b>：武器や状況に応じて使う強行動です。気力を消費します。武器熟練Lv2以降は武器技ボタンが「武技選択」になり、通常武技と副武技を毎回選べます。</li>
           <li><b>クイック欄</b>：治癒薬・壺などを即使用できます。</li>
           <li><b>射程ボタン</b>：武器の攻撃範囲を表示します。</li>
@@ -18070,7 +18070,7 @@ function rollGear(sourceLevel=floorTargetLevel()){
  const element=rarity==="common"?null:(rng()<.48?choice(Object.keys(elementData)):null);
  const trait=rarity==="legendary"?choice(legendaryTraitIds):null;
  const tags=rollGearTags(rarity,element,slot);
- const combatMutation=slot==="weapon"?rollCombatMutation(rarity,weaponType,realtimeCombatActive()&&rarity!=="common"):null;
+ const combatMutation=slot==="weapon"?rollCombatMutation(rarity,weaponType,state?.floor<=REALTIME_ONBOARDING_MAX_FLOOR&&rarity!=="common"):null;
  return{id:"g"+Date.now()+Math.floor(rng()*99999),slot,rarity,name,weaponType,atk,def,hunger,crit,cursed,identified:rng()>=.48,element,trait,combatMutation,kills:0,itemLevel,requiredLevel,attuned:false,attunedAt:null,attunementSource:"field",tags,bondTraits:[],bondPending:0,locked:false,autoLockInitialized:false,manualLock:false};
 }
 
@@ -19799,12 +19799,12 @@ function resolveWardenIntent(enemy,intent,cells,playerInTarget){
 function performWardenTurn(enemy,dist){
  const profile=wardenProfileFor(enemy);
  const phaseShifted=enterWardenPhaseTwo(enemy);
- if(phaseShifted&&realtimeCombatActive()&&(enemy.bossFloor||state.floor)===5){
+ if(phaseShifted&&realtimeCombatActive()){
   clearEnemyIntent(enemy);
   enemy.realtimeBossBreakUntilPulse=(realtimeCombatRuntime.pulse||0)+4;
   spawnFeedbackBurst(enemy.x,enemy.y,"boss",10);
   showCombatToast("番人変調・隙","第二形態へ移る一瞬だけ攻め込める","objective");
-  addLog("鎖縛の門衛が鎖を地へ打ち、第二形態へ移る。一瞬だけ動きが止まった。");
+  addLog(`${profile.name}が第二形態へ変調する。一瞬だけ攻め込める隙が生まれた。`);
   return;
  }
  enemy.bossCycle=(enemy.bossCycle||0)+1;
@@ -21101,9 +21101,9 @@ function weaponPrimaryArtCost(type=weaponType()){
  return realtimeDraftArtCost(base);
 }
 function weaponSecondaryArtUnlocked(type=weaponType()){
- // v4.06の1〜5層では戦闘感触を比較するため副武技を試用解放。
- // 第6層以降は従来どおり熟練Lv2が必要。
- return(realtimeCombatActive()&&state?.floor<=REALTIME_PROTOTYPE_MAX_FLOOR)||masteryLevel(type)>=2;
+ // 第1〜5層は導入区間として副武技を試用解放。
+ // 第6層以降は正式な熟練Lv2条件へ移行する。
+ return(state?.floor<=REALTIME_ONBOARDING_MAX_FLOOR)||masteryLevel(type)>=2;
 }
 function weaponArtSafeRepositionCell(x,y){
  if(tile(x,y)!==1||enemyAt(x,y))return false;
@@ -23110,7 +23110,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.10",
+  version:"4.11",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -23626,8 +23626,8 @@ function renderInventory(){
  });
 }
 
-const REALTIME_PROTOTYPE_MAX_FLOOR=5;
 const REALTIME_INCIDENT_MAX_FLOOR=3;
+const REALTIME_ONBOARDING_MAX_FLOOR=5;
 const REALTIME_WORLD_MS=210;
 const REALTIME_SLOW_WORLD_MS=355;
 const REALTIME_FOCUS_DURATION_MS=2600;
@@ -23643,7 +23643,8 @@ const realtimeCombatRuntime={
 };
 function realtimeNow(){return performance?.now?.()||Date.now()}
 function realtimeCombatActive(){
- return!!state&&!state.gameOver&&!state.expeditionEnded&&state.floor>=1&&state.floor<=REALTIME_PROTOTYPE_MAX_FLOOR;
+ // v4.11以降、探索中の戦闘方式は全階層リアルタイムが標準。
+ return!!state&&!state.gameOver&&!state.expeditionEnded&&state.floor>=1;
 }
 function realtimePlayerReady(){
  return!realtimeCombatActive()||realtimeNow()>=(realtimeCombatRuntime.nextPlayerActionAt||0);
@@ -23658,7 +23659,7 @@ function realtimeEnemyCadencePulses(enemy){
   skeleton:4,priest:4
  }[enemy.type]||3;
  if(enemy.boss){
-  cadence=(enemy.bossFloor||state?.floor)===5?4:3;
+  cadence=4;
  }
  if(typeof eliteHas==="function"&&eliteHas(enemy,"swift")&&!enemy.boss)cadence=Math.max(2,cadence-1);
  return cadence;
@@ -23730,7 +23731,7 @@ function syncRealtimeCombatRuntime(now=realtimeNow()){
    state.realtimeIncident.lastWindowAt=now;
    state.realtimeIncident.lastChannelAt=now;
   }
-  addLog(`COMBAT TEST：第${state.floor}層はリアルタイム。停止していても敵が行動する。`);
+  addLog(`REALTIME：第${state.floor}層へ侵入。停止していても深淵の時間は進む。`);
  }
  return true;
 }
@@ -23899,7 +23900,7 @@ function realtimeFocus(){
 function updateRealtimeBossUi(now=realtimeNow()){
  const bar=$("rtBossBar");
  if(!bar)return;
- const boss=realtimeCombatActive()&&state?.floor===5&&!state?.bossDefeated?livingFloorBoss():null;
+ const boss=realtimeCombatActive()&&!state?.bossDefeated?livingFloorBoss():null;
  if(!boss){
   bar.classList.add("hidden");
   bar.classList.remove("intent","phase2","break");
@@ -23931,11 +23932,12 @@ function updateRealtimeBossUi(now=realtimeNow()){
   $("rtBossTimer").textContent=`発動 約${seconds}秒`;
   $("rtBossHint").textContent=intentCounterHint(boss);
  }else{
-  $("rtBossIntent").textContent=(boss.phase||1)>=2?"第二形態・鎖圧上昇":"接近 / 間合い探り";
+  const profile=wardenProfileFor(boss);
+  $("rtBossIntent").textContent=(boss.phase||1)>=2?`第二形態・${profile.short}`:`${profile.short}・間合い探り`;
   $("rtBossTimer").textContent=`次行動 約${seconds}秒`;
   $("rtBossHint").textContent=(boss.phase||1)>=2
-   ?"2マス以内では鎖薙ぎを狙う。予兆を見て回避か態勢崩し。"
-   :"隣接すると飛びかかり予兆。HP50%以下で第二形態へ移行。";
+   ?`${profile.hint} 第二形態では攻撃圧が上がる。`
+   :`${profile.hint} HP50%未満で第二形態へ変調する。`;
  }
 }
 function updateRealtimePrototypeUi(now=realtimeNow()){
@@ -25320,7 +25322,7 @@ function setEnemyIntent(e,intent){
  e.intent=intent;
  e.intentTarget={x:state.player.x,y:state.player.y};
  e.intentCells=buildEnemyIntentCells(e,intent,e.intentTarget);
- if(realtimeCombatActive()&&e?.boss&&(e.bossFloor||state.floor)===5){
+ if(realtimeCombatActive()&&e?.boss){
   e.realtimeIntentReadyPulse=(realtimeCombatRuntime.pulse||0)+4;
  }
 }
@@ -25910,7 +25912,7 @@ function renderSkills(){
   secondaryButton.firstChild.textContent=`${secondary.name}${artCdLabel}`;
   secondaryButton.querySelector("span").textContent=`副技・気力${secondary.cost} / ${secondaryReady.reason}`;
  }else{
-  // 第6層以降は従来どおり探索ボタン＋武技選択UI。
+  // 非探索状態などリアルタイム外の互換経路では従来UIを維持。
   secondaryButton.classList.remove("artUnlocked");
   secondaryButton.disabled=state.cooldowns.search>0||state.hero.stamina<2;
   secondaryButton.firstChild.textContent="探索"+(state.cooldowns.search>0?" "+state.cooldowns.search:"");
