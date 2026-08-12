@@ -5229,11 +5229,94 @@ body,button,input,select,textarea{font-size:12px}
  .hubWorkspaceTop{top:-14px;margin:-4px -2px 8px;padding:10px 2px 8px}
 }
 
+
+/* v3.53.0 STAKE CHECK */
+.stairDecisionCard{
+ margin:8px 0;padding:8px;border:1px solid #665538;border-radius:9px;
+ background:linear-gradient(180deg,#19140c,#100d09)
+}
+.stairDecisionCard.danger{border-color:#834b56;background:linear-gradient(180deg,#211015,#120a0d)}
+.stairDecisionCard.safe{border-color:#4e735c;background:linear-gradient(180deg,#101a13,#0b110d)}
+.stairDecisionCard.reward{border-color:#7f6b3d;background:linear-gradient(180deg,#1e180b,#110e08)}
+.stairDecisionCard.choice{border-color:#526f83;background:linear-gradient(180deg,#101923,#0b1117)}
+.stairDecisionHead{display:flex;justify-content:space-between;gap:7px;align-items:flex-start}
+.stairDecisionHead>b{color:#eedaa5;font-size:12px;line-height:1.35}
+.stairDecisionHead .danger{flex:none;padding:2px 5px;border:1px solid #844c55;border-radius:999px;color:#efb0b9;font-size:11.5px}
+.stairDecisionColumns{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
+.stairDecisionColumns>div{min-width:0;padding:6px;border:1px solid #403727;border-radius:7px;background:#0d0b08}
+.stairDecisionColumns small{display:block;color:#9f9275;font-size:11.5px}
+.stairDecisionChips{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.stairDecisionChips span{padding:2px 4px;border:1px solid #51472f;border-radius:999px;color:#cfbf92;font-size:11.5px}
+.stairDecisionChips b{color:#f0d992;font-size:11.5px}
+.stairDecisionNext{display:block;margin-top:3px;color:#f0d994;font-size:12px}
+.stairDecisionColumns>div>span{display:block;margin-top:2px;color:#b8aa88;font-size:11.5px;line-height:1.35}
+.stairDecisionLoss{margin-top:6px;color:#b99ca1;font-size:11.5px;line-height:1.35}
+.returnDecisionNext{
+ margin:7px 0;padding:7px;border-left:3px solid #7f6b3d;border-radius:6px;background:#151107
+}
+.returnDecisionNext b{display:block;color:#e8ce84;font-size:11.5px}
+.returnDecisionNext span,.returnDecisionNext small{display:block;margin-top:2px;color:#b8aa88;font-size:11.5px;line-height:1.35}
+.returnPromptText small{font-variant-numeric:tabular-nums}
+@media(max-width:390px){
+ .stairDecisionColumns{grid-template-columns:1fr}
+}
+
+
+/* v3.55.0 WARDEN AFTERGLOW */
+.wardenAfterglow{
+ margin:6px 0;padding:7px 8px;border:1px solid #6f6240;border-radius:8px;
+ background:linear-gradient(180deg,rgba(27,22,12,.92),rgba(13,11,8,.92))
+}
+.wardenAfterglow b{display:block;color:#ebd48a;font-size:12px;letter-spacing:.06em}
+.wardenAfterglow span{display:block;margin-top:2px;color:#c7ba91;font-size:11.5px;line-height:1.35}
+.wardenAfterglow small{display:block;margin-top:2px;color:#9f957b;font-size:11.5px;line-height:1.35}
+
+
+/* v3.57.0 MASTERED LIMITS */
+.trainingCell.complete,.researchCell.complete,.researchProject.complete{
+ border-color:#526b58;background:rgba(15,25,17,.76)
+}
+.trainingCell.complete>b,.researchCell.complete>b,.researchProject.complete .top span:first-child{color:#bfe0c5}
+.trainingCell small,.researchProject small{font-size:11.5px;color:#948b99}
+.researchProject.complete button:disabled{opacity:.58}
+
+
+/* v3.58.0 WAGER LADDER */
+.relicVaultCard.wagerGuaranteed{
+ border-color:#a47d37;
+ box-shadow:0 0 0 1px rgba(180,137,55,.34) inset
+}
+.relicVaultCard.wagerGuaranteed>b,.relicVaultCard.wagerGuaranteed>div>b{color:#ffe17f}
+
+
+/* v3.60.0 WARDEN MASTERY */
+.wardenMasteryStatus{
+ display:grid;gap:2px;margin-top:5px;padding:6px 7px;
+ border:1px solid #66553a;border-radius:7px;background:#151108;
+ color:#bdaf90;font-size:11.5px;line-height:1.35
+}
+.wardenMasteryStatus b{color:#e7cf8c;font-size:11.5px}
+.wardenMasteryStatus span{color:#c4b797;font-size:11.5px}
+.wardenMasteryStatus small{color:#9e927b;font-size:11.5px}
+.wardenMasteryStatus.complete{border-color:#55745d;background:#0f1812}
+.wardenMasteryStatus.complete b{color:#bce1c4}
+.wardenMasteryStatus.complete small{color:#9fc9aa}
+.floorBannerWardenMastery{
+ margin-top:5px;padding:5px 6px;border-left:3px solid #c8a74f;
+ border-radius:5px;background:rgba(8,7,4,.45);color:#d7c7a1;
+ font-size:11.5px;line-height:1.4
+}
+.floorBannerWardenMastery b{color:#ffe7a0;font-size:11.5px}
+.floorBannerWardenMastery span{display:block;color:#afd8b6;font-size:11.5px}
+.wardenBridgeLoot span.mastery{
+ border-color:#55745d;color:#bce1c4;background:#0f1812
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.51.1 WORKSPACE HARDENING</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 3.60.0 WARDEN MASTERY</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6960,7 +7043,7 @@ function archiveDiscoveryInfo(kind,id){
  }
  return null;
 }
-function recordArchiveDiscovery(kind,id,source=""){
+function recordArchiveDiscovery(kind,id,source="",options={}){
  if(!archiveDiscoveryValid(kind,id)||!state?.meta)return false;
  const archive=ensureDiscoveryArchive(state.meta);
  const list=kind==="legendary"?archive.legendary:kind==="imprint"?archive.imprints:archive.crowns;
@@ -6980,30 +7063,87 @@ function recordArchiveDiscovery(kind,id,source=""){
   if(info?.label&&!stats.archiveDiscoveryLabels.includes(info.label))stats.archiveDiscoveryLabels.push(info.label);
   stats.archiveDiscoveryLabels=stats.archiveDiscoveryLabels.slice(-8);
  }
- addLog(`深淵収蔵録へ${info?.label||id}を新規登録した。収蔵 ${after}/${DISCOVERY_ARCHIVE_TOTAL}。`);
- showCombatToast("NEW DISCOVERY",`${info?.label||id}・収蔵 ${after}/${DISCOVERY_ARCHIVE_TOTAL}`,"critical");
- try{
-  spawnFeedbackBurst(state.player?.x||0,state.player?.y||0,"legendary",12);
-  triggerImpactFeedback("legendary",{haptic:"legendary",duration:760});
-  sfx("legendary");
- }catch(_){}
- if(newStage.level>oldStage.level){
-  addLog(`深淵収蔵録の段階が「${newStage.label}」へ進んだ。能力補正はなく、発見記録だけが残る。`);
-  showCombatToast("収蔵段階 更新",`${newStage.label}・${after}/${DISCOVERY_ARCHIVE_TOTAL}`,"objective");
+ const discovery={
+  kind,id,source,label:info?.label||id,short:info?.short||info?.label||id,
+  before,after,stageChanged:newStage.level>oldStage.level,stageLabel:newStage.label
+ };
+ if(Array.isArray(options.collect))options.collect.push(discovery);
+ addLog(`深淵収蔵録へ${discovery.label}を新規登録した。収蔵 ${after}/${DISCOVERY_ARCHIVE_TOTAL}。`);
+ if(discovery.stageChanged)addLog(`深淵収蔵録の段階が「${newStage.label}」へ進んだ。能力補正はなく、発見記録だけが残る。`);
+
+ // 鑑定・装備判明・拾得など、別の主演出がある時はそこへ統合する。
+ if(!options.silentFeedback){
+  const detail=`${discovery.label}・収蔵 ${after}/${DISCOVERY_ARCHIVE_TOTAL}${discovery.stageChanged?`・${newStage.label}へ`:""}`;
+  showCombatToast(discovery.stageChanged?"NEW DISCOVERY・収蔵更新":"NEW DISCOVERY",detail,"critical");
+  try{
+   spawnFeedbackBurst(state.player?.x||0,state.player?.y||0,"legendary",12);
+   triggerImpactFeedback("legendary",{haptic:"legendary",duration:760});
+   sfx("legendary");
+  }catch(_){}
  }
- saveMeta();
+ if(!options.deferSave)saveMeta();
  return true;
 }
-function registerGearArchiveDiscoveries(gear,source="gear"){
+function registerGearArchiveDiscoveries(gear,source="gear",options={}){
  if(!gear)return 0;
  let gained=0;
  const imprint=ensureWardenImprint(gear);
- if(imprint&&recordArchiveDiscovery("imprint",imprint,source))gained++;
+ if(imprint&&recordArchiveDiscovery("imprint",imprint,source,options))gained++;
  if(gear.identified&&gear.rarity==="legendary"){
   const trait=ensureLegendaryTrait(gear);
-  if(trait&&recordArchiveDiscovery("legendary",trait,source))gained++;
+  if(trait&&recordArchiveDiscovery("legendary",trait,source,options))gained++;
  }
  return gained;
+}
+function gearRevealDiscoverySummary(discoveries=[]){
+ if(!discoveries.length)return"";
+ const labels=discoveries.map(entry=>entry.short||entry.label).slice(0,2).join("・");
+ const last=discoveries[discoveries.length-1];
+ return`NEW ${labels} / 収蔵 ${last.after}/${DISCOVERY_ARCHIVE_TOTAL}${discoveries.some(entry=>entry.stageChanged)?` / ${last.stageLabel}`:""}`;
+}
+function gearRevealPresentation(gear,beforeSignal,source="identify",title="鑑定結果"){
+ const rarity=rarityData[gear.rarity]||rarityData.common;
+ const trait=legendaryTraitInfo(gear);
+ const imprint=wardenImprintInfo(gear);
+ const rootTune=rootTunedGearInfo(gear);
+ const rank=rarityOrder[gear.rarity]||0;
+ const discoveries=[];
+ registerGearArchiveDiscoveries(gear,source,{silentFeedback:true,deferSave:true,collect:discoveries});
+ const discoveryText=gearRevealDiscoverySummary(discoveries);
+ const detail=[
+  `${beforeSignal?.label?`${beforeSignal.label} → `:""}${rarity.label}・${gearLabel(gear)}`,
+  trait?`固有 ${trait.label}`:"",
+  imprint?`刻印 ${imprint.label}`:"",
+  rootTune?rootTune.short:"",
+  gear.cursed?"呪具":"",
+  discoveryText
+ ].filter(Boolean).join(" / ");
+ const kind=discoveries.length||rank>=3?"legendary":rank>=2?"rare":gear.cursed?"critical":"objective";
+ const revealTitle=discoveries.length
+  ?`${title}・NEW DISCOVERY`
+  :title;
+ showCombatToast(revealTitle,detail,kind);
+ const burstKind=discoveries.length||rank>=3?"legendary":rank>=2?"rare":gear.cursed?"critical":"objective";
+ if(rank>=2||discoveries.length){
+  const feedbackKind=discoveries.length||rank>=3?"legendary":"rare";
+  spawnFeedbackBurst(state.player?.x||0,state.player?.y||0,feedbackKind,feedbackKind==="legendary"?16:10);
+  triggerImpactFeedback(feedbackKind,{haptic:feedbackKind,duration:feedbackKind==="legendary"?860:640});
+  sfx(feedbackKind);
+ }else{
+  triggerImpactFeedback(burstKind,{haptic:burstKind,duration:gear.cursed?480:360});
+  sfx(gear.cursed?"rare":"objective");
+ }
+ saveMeta();
+ return{rarity,trait,imprint,rootTune,rank,discoveries,detail,kind,beforeSignal};
+}
+function revealGearIdentity(gear,source="identify",title="鑑定結果"){
+ if(!gear||gear.identified)return null;
+ const beforeSignal=unidentifiedGearSignal(gear);
+ gear.identified=true;
+ if(!gear.manualLock)applyPickupProtection(gear,false);
+ const result=gearRevealPresentation(gear,beforeSignal,source,title);
+ addLog(`「${gearLabel(gear)}」の正体が判明。${beforeSignal.label} → ${result.rarity.label}${result.trait?`・固有「${result.trait.label}」`:""}${gear.cursed?"・呪具":""}。`);
+ return result;
 }
 function discoveryArchiveCellHtml(kind,id,found){
  const info=archiveDiscoveryInfo(kind,id);
@@ -7034,31 +7174,47 @@ function discoveryArchiveHubHtml(meta=state?.meta){
 
 
 const trainingData={
- endurance:{label:"持久",desc:"移動・被弾・休息で鍛錬"},
- strength:{label:"筋力",desc:"近接攻撃・構えで鍛錬"},
- focus:{label:"集中",desc:"弓・杖・治癒で鍛錬"},
- perception:{label:"知覚",desc:"探索・罠発見・隠し通路で鍛錬"}
+ endurance:{label:"持久",desc:"移動・被弾・休息で鍛錬",effect:"最大HP",cap:5,unit:3,suffix:""},
+ strength:{label:"筋力",desc:"近接攻撃・構えで鍛錬",effect:"攻撃",cap:4,unit:1,suffix:""},
+ focus:{label:"集中",desc:"弓・杖・治癒で鍛錬",effect:"最大気力",cap:3,unit:1,suffix:""},
+ perception:{label:"知覚",desc:"探索・罠発見・隠し通路で鍛錬",effect:"視野",cap:3,unit:1,suffix:""}
 };
 function trainingXp(type){return state.meta?.bodyTraining?.[type]||0}
 function trainingRankFromXp(xp){
- // 必要量が二次的に増えるため、エンドレスでも急激にインフレしない。
+ // Rankは生涯記録として無限に伸びる。戦闘効果だけを有限化する。
  return Math.floor(Math.sqrt(Math.max(0,xp)/18));
 }
 function trainingRank(type){return trainingRankFromXp(trainingXp(type))}
+function trainingRawBonusFromXp(xp){return Math.floor(trainingRankFromXp(xp)/3)}
+function trainingRawBonus(type){return trainingRawBonusFromXp(trainingXp(type))}
+function trainingEffectCap(type){return Math.max(0,trainingData[type]?.cap||0)}
+function trainingBonusFromXp(type,xp){
+ return Math.min(trainingEffectCap(type),trainingRawBonusFromXp(xp));
+}
 function trainingBonus(type){
- const rank=trainingRank(type);
- // 序盤は実感があり、以降は3ランクごとの緩やかな成長。
- return Math.floor(rank/3);
+ return trainingBonusFromXp(type,trainingXp(type));
+}
+function trainingEffectComplete(type){return trainingBonus(type)>=trainingEffectCap(type)}
+function trainingEffectValue(type,bonus=trainingBonus(type)){
+ const data=trainingData[type];
+ return Math.max(0,bonus)*(data?.unit||1);
+}
+function trainingEffectLabel(type){
+ const data=trainingData[type],bonus=trainingBonus(type),cap=trainingEffectCap(type);
+ const value=trainingEffectValue(type,bonus),max=trainingEffectValue(type,cap);
+ return`${data?.effect||"効果"} +${value}${data?.suffix||""} / 最大+${max}${data?.suffix||""}`;
 }
 function gainTraining(type,amount=1){
- if(!state?.meta)return;
+ if(!state?.meta||!trainingData[type])return;
  state.meta.bodyTraining=state.meta.bodyTraining||{endurance:0,strength:0,focus:0,perception:0};
  const beforeRank=trainingRank(type);
  const beforeBonus=trainingBonus(type);
- state.meta.bodyTraining[type]=(state.meta.bodyTraining[type]||0)+amount;
+ state.meta.bodyTraining[type]=(state.meta.bodyTraining[type]||0)+Math.max(0,amount||0);
  const afterRank=trainingRank(type);
  const afterBonus=trainingBonus(type);
- if(afterRank>beforeRank)addLog(trainingData[type].label+"鍛錬がRank "+afterRank+"になった。");
+ if(afterRank>beforeRank){
+  addLog(trainingData[type].label+"鍛錬がRank "+afterRank+"になった。"+(trainingEffectComplete(type)?" 能力効果は完成済み。":""));
+ }
  if(afterBonus>beforeBonus){
   if(type==="endurance"){
    state.hero.maxHp+=3*(afterBonus-beforeBonus);
@@ -7068,20 +7224,26 @@ function gainTraining(type,amount=1){
    state.hero.maxStamina+=afterBonus-beforeBonus;
    state.hero.stamina+=afterBonus-beforeBonus;
   }
+  if(trainingEffectComplete(type)){
+   addLog(`${trainingData[type].label}鍛錬の能力効果が完成した。以後も経験とRankは記録される。`);
+   showCombatToast("身体鍛錬 完成",`${trainingData[type].label}・${trainingEffectLabel(type)}`,"objective");
+  }
  }
  saveMeta();
 }
-function bodyMaxHpBonus(){return trainingBonus("endurance")*3}
-function bodyAttackBonus(){return trainingBonus("strength")}
-function bodyStaminaBonus(){return trainingBonus("focus")}
-function bodyVisionBonus(){return trainingBonus("perception")}
+function bodyMaxHpBonus(){return trainingEffectValue("endurance")}
+function bodyAttackBonus(){return trainingEffectValue("strength")}
+function bodyStaminaBonus(){return trainingEffectValue("focus")}
+function bodyVisionBonus(){return trainingEffectValue("perception")}
 function trainingSummaryHtml(){
  return `<div class="trainingBox"><b>身体鍛錬</b><div class="trainingGrid">${
-  Object.keys(trainingData).map(type=>`<div class="trainingCell"><b>${trainingData[type].label} R${trainingRank(type)}</b>
-  経験 ${trainingXp(type)} / 効果 +${trainingBonus(type)}<br>${trainingData[type].desc}</div>`).join("")
+  Object.keys(trainingData).map(type=>{
+   const data=trainingData[type],rank=trainingRank(type),bonus=trainingBonus(type),cap=trainingEffectCap(type);
+   return`<div class="trainingCell ${bonus>=cap?"complete":""}"><b>${data.label} R${rank}${bonus>=cap?"・能力完成":""}</b>
+   経験 ${trainingXp(type)}<br>${trainingEffectLabel(type)}<br><small>${data.desc}${bonus>=cap?"。以後のRankは生涯記録。":""}</small></div>`;
+  }).join("")
  }</div></div>`;
 }
-
 
 const abyssAdaptationData={
  nightEyes:{label:"夜目",desc:"消灯時の視野+2"},
@@ -7194,16 +7356,67 @@ function revealNearbyTraps(){
 
 
 const researchData={
- anatomy:{label:"解剖学",desc:"敵の弱点・経験値・HP情報を解析"},
- ecology:{label:"生態学",desc:"勢力・リポップ・ドロップ傾向を解析"},
- arcana:{label:"秘術学",desc:"属性・呪い・タグ相性を解析"},
- survival:{label:"生存学",desc:"罠・食料・灯火・環境物を解析"}
+ anatomy:{label:"解剖学",desc:"敵の弱点・経験値・HP情報を解析",cap:7,complete:"解析経験値補正 最大+20%"},
+ ecology:{label:"生態学",desc:"勢力・リポップ・ドロップ傾向を解析",cap:6,complete:"装備ドロップ補正 最大+12%"},
+ arcana:{label:"秘術学",desc:"属性・呪い・タグ相性を解析",cap:4,complete:"状態異常持続補正 最大+2"},
+ survival:{label:"生存学",desc:"罠・食料・灯火・環境物を解析",cap:7,complete:"罠被害軽減 最大35%"}
 };
 function ensureResearch(){
  if(!state.meta.research)state.meta.research={points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}};
+ if(!state.meta.research.levels||typeof state.meta.research.levels!=="object")state.meta.research.levels={anatomy:0,ecology:0,arcana:0,survival:0};
+ if(!state.meta.research.observations||typeof state.meta.research.observations!=="object")state.meta.research.observations={enemy:0,trap:0,item:0,event:0,biome:0};
+ if(!state.meta.research.prestige||typeof state.meta.research.prestige!=="object")state.meta.research.prestige={};
 }
-function researchLevel(type){ensureResearch();return state.meta.research.levels[type]||0}
-function researchCost(type){return 4+(researchLevel(type)*5)}
+function researchCap(type){return Math.max(0,researchData[type]?.cap||0)}
+function researchLevel(type){ensureResearch();return Math.min(researchCap(type),Math.max(0,state.meta.research.levels[type]||0))}
+function researchComplete(type){return researchLevel(type)>=researchCap(type)}
+function researchCompletion(){
+ const types=Object.keys(researchData);
+ const completed=types.filter(type=>researchComplete(type)).length;
+ return{completed,total:types.length,done:completed>=types.length};
+}
+function researchSpendablePoints(){
+ return researchCompletion().done?0:Math.max(0,state.meta?.research?.points||0);
+}
+function researchCostForLevel(level){return 4+(Math.max(0,level||0)*5)}
+function researchCost(type){return researchComplete(type)?0:researchCostForLevel(researchLevel(type))}
+function researchOverflowRefund(rawLevel,cap){
+ let refund=0;
+ for(let level=cap;level<rawLevel;level++)refund+=researchCostForLevel(level);
+ return refund;
+}
+function migrateResearchCaps(meta=state?.meta){
+ if(!meta)return{changed:false,refund:0,details:[]};
+ meta.research=meta.research&&typeof meta.research==="object"?meta.research:{points:0,levels:{},observations:{}};
+ meta.research.levels=meta.research.levels&&typeof meta.research.levels==="object"?meta.research.levels:{};
+ meta.research.prestige=meta.research.prestige&&typeof meta.research.prestige==="object"?meta.research.prestige:{};
+ meta.balanceMigrations=meta.balanceMigrations&&typeof meta.balanceMigrations==="object"?meta.balanceMigrations:{};
+ const migrationDone=!!meta.balanceMigrations.researchCapsV357;
+ let refund=0,changed=false,details=[];
+ for(const type of Object.keys(researchData)){
+  const cap=researchCap(type);
+  const raw=Math.max(0,Math.floor(Number(meta.research.levels[type])||0));
+  if(raw>cap){
+   const overflow=raw-cap;
+   if(!migrationDone){
+    const returned=researchOverflowRefund(raw,cap);
+    refund+=returned;
+    details.push({type,raw,cap,overflow,refund:returned});
+    meta.research.prestige[type]=(meta.research.prestige[type]||0)+overflow;
+   }
+   meta.research.levels[type]=cap;
+   changed=true;
+  }else if(meta.research.levels[type]!==raw){
+   meta.research.levels[type]=raw;changed=true;
+  }
+ }
+ if(!migrationDone){
+  meta.research.points=Math.max(0,Math.floor(Number(meta.research.points)||0))+refund;
+  meta.balanceMigrations.researchCapsV357={at:Date.now(),refund,details};
+  changed=true;
+ }
+ return{changed,refund,details};
+}
 function gainObservation(kind,amount=1){
  ensureResearch();
  amount=Math.max(0,Math.round(amount*(activeRoute()?.observationMul||1)));
@@ -7213,7 +7426,7 @@ function gainObservation(kind,amount=1){
  const afterTotal=Object.values(obs).reduce((a,b)=>a+b,0);
  const beforePoints=Math.floor(beforeTotal/8);
  const afterPoints=Math.floor(afterTotal/8);
- if(afterPoints>beforePoints){
+ if(afterPoints>beforePoints&&!researchCompletion().done){
   state.meta.research.points+=afterPoints-beforePoints;
   addLog("研究点を "+(afterPoints-beforePoints)+" 得た。");
  }
@@ -7222,11 +7435,18 @@ function gainObservation(kind,amount=1){
 }
 function buyResearch(type){
  ensureResearch();
+ if(!researchData[type])return;
+ if(researchComplete(type)){
+  addLog(researchData[type].label+"は完成している。これ以上、研究点は消費しない。");
+  return;
+ }
  const cost=researchCost(type);
  if(state.meta.research.points<cost){addLog("研究点が足りない。");return}
  state.meta.research.points-=cost;
- state.meta.research.levels[type]=(state.meta.research.levels[type]||0)+1;
- addLog(researchData[type].label+"がLv"+researchLevel(type)+"になった。");
+ state.meta.research.levels[type]=researchLevel(type)+1;
+ const completed=researchComplete(type);
+ addLog(researchData[type].label+"がLv"+researchLevel(type)+(completed?"で完成した。":"になった。"));
+ if(completed)showCombatToast("深淵研究 完成",`${researchData[type].label}・${researchData[type].complete}`,"objective");
  saveMeta();renderResearch();render();
 }
 function researchXpBonus(enemy){
@@ -7266,18 +7486,26 @@ function researchSummaryHtml(){
  ensureResearch();
  const r=state.meta.research;
  return `<div class="researchBox"><b>深淵研究　未使用 ${r.points}</b><div class="researchGrid">${
-  Object.keys(researchData).map(type=>`<div class="researchCell"><b>${researchData[type].label} Lv${researchLevel(type)}</b>${researchData[type].desc}</div>`).join("")
+  Object.keys(researchData).map(type=>{
+   const data=researchData[type],lvl=researchLevel(type),complete=researchComplete(type);
+   return`<div class="researchCell ${complete?"complete":""}"><b>${data.label} Lv${lvl}/${data.cap}${complete?"・完成":""}</b>${complete?data.complete:data.desc}</div>`;
+  }).join("")
  }</div></div>`;
 }
 function renderResearch(){
  ensureResearch();
  const r=state.meta.research;
- $("researchSummary").innerHTML=`<div class="itemRow"><div class="top"><span>研究点</span><span>${r.points}</span></div>
- <div class="desc">敵 ${r.observations.enemy||0} / 罠 ${r.observations.trap||0} / 装備 ${r.observations.item||0} / 事件 ${r.observations.event||0} / バイオーム ${r.observations.biome||0}</div></div>`;
+ const completion=researchCompletion();
+ $("researchSummary").innerHTML=`<div class="itemRow ${completion.done?"complete":""}"><div class="top"><span>${completion.done?"深淵研究・完成":"研究点"}</span><span>${completion.done?`${completion.completed}/${completion.total}`:r.points}</span></div>
+ <div class="desc">敵 ${r.observations.enemy||0} / 罠 ${r.observations.trap||0} / 装備 ${r.observations.item||0} / 事件 ${r.observations.event||0} / バイオーム ${r.observations.biome||0}${completion.done&&r.points?`<br><small>余剰研究点 ${r.points} は保存されています。</small>`:""}</div></div>`;
  $("researchProjects").innerHTML=Object.keys(researchData).map(type=>{
-  const cost=researchCost(type),lvl=researchLevel(type);
-  return `<div class="itemRow"><div class="top"><span>${researchData[type].label} Lv${lvl}</span><span>${cost}点</span></div>
-  <div class="desc">${researchData[type].desc}</div><button type="button" data-research="${type}">研究する</button></div>`;
+  const data=researchData[type],cost=researchCost(type),lvl=researchLevel(type),complete=researchComplete(type);
+  const prestige=Math.max(0,state.meta.research.prestige?.[type]||0);
+  return `<div class="itemRow researchProject ${complete?"complete":""}">
+   <div class="top"><span>${data.label} Lv${lvl}/${data.cap}</span><span>${complete?"完成":`${cost}点`}</span></div>
+   <div class="desc">${complete?data.complete:data.desc}${prestige?`<br><small>旧研究記録 +${prestige}（能力補正なし）</small>`:""}</div>
+   <button type="button" data-research="${type}" ${complete?"disabled":""}>${complete?"研究完成":"研究する"}</button>
+  </div>`;
  }).join("");
  $("researchProjects").querySelectorAll("[data-research]").forEach(b=>b.onclick=()=>buyResearch(b.dataset.research));
 }
@@ -8212,9 +8440,13 @@ function loadMeta(){
   notePersistentRecovery("灯台データ",selected);
   const data=persistentClone(selected.data);
   const migration=migrateMetaUpgradeCaps(data);
-  if(selected.source!=="primary"||migration.changed)atomicSaveMetaData(data);
+  const researchMigration=migrateResearchCaps(data);
+  if(selected.source!=="primary"||migration.changed||researchMigration.changed)atomicSaveMetaData(data);
   mirrorLegacyMeta(data);
-  if(migration.refund>0)pendingLighthouseRecoveryNotice=`恒久強化の上限調整により、超過購入分${migration.refund}欠片を返還しました`;
+  const notices=[];
+  if(migration.refund>0)notices.push(`恒久強化の超過購入分${migration.refund}欠片を返還`);
+  if(researchMigration.refund>0)notices.push(`研究上限超過分${researchMigration.refund}研究点を返還`);
+  if(notices.length)pendingLighthouseRecoveryNotice=notices.join("・")+"しました";
   return data;
  }
  try{
@@ -8223,8 +8455,12 @@ function loadMeta(){
   const legacy=JSON.parse(raw);
   if(validateMetaSaveShape(legacy))return null;
   const migration=migrateMetaUpgradeCaps(legacy);
+  const researchMigration=migrateResearchCaps(legacy);
   if(journal.invalid.length)pendingLighthouseRecoveryNotice="灯台データを旧保存から復旧しました";
-  if(migration.refund>0)pendingLighthouseRecoveryNotice=`旧保存を復旧し、恒久強化の超過購入分${migration.refund}欠片も返還しました`;
+  const legacyRefunds=[];
+  if(migration.refund>0)legacyRefunds.push(`恒久強化${migration.refund}欠片`);
+  if(researchMigration.refund>0)legacyRefunds.push(`研究${researchMigration.refund}点`);
+  if(legacyRefunds.length)pendingLighthouseRecoveryNotice=`旧保存を復旧し、超過分（${legacyRefunds.join("・")}）を返還しました`;
   atomicSaveMetaData(legacy);
   return persistentClone(legacy);
  }catch(error){return null}
@@ -9754,10 +9990,11 @@ function applyMetaToFreshState(newState){
  if((meta.marks?.defiance||0)>=5)candidates.push("anti_guard");
  meta.adaptation=candidates.length?candidates[Math.floor(Math.random()*candidates.length)]:null;
  migrateMetaUpgradeCaps(meta);
+ migrateResearchCaps(meta);
  newState.meta=meta;
- newState.hero.maxHp+=normalizedMetaUpgradeLevel(meta,"vitality")*4+Math.floor(trainingRankFromXp(meta.bodyTraining?.endurance||0)/3)*3;
+ newState.hero.maxHp+=normalizedMetaUpgradeLevel(meta,"vitality")*4+trainingEffectValue("endurance",trainingBonusFromXp("endurance",meta.bodyTraining?.endurance||0));
  newState.hero.hp=newState.hero.maxHp;
- newState.hero.maxStamina+=normalizedMetaUpgradeLevel(meta,"focus")+Math.floor(trainingRankFromXp(meta.bodyTraining?.focus||0)/3);
+ newState.hero.maxStamina+=normalizedMetaUpgradeLevel(meta,"focus")+trainingEffectValue("focus",trainingBonusFromXp("focus",meta.bodyTraining?.focus||0));
  newState.hero.stamina=newState.hero.maxStamina;
  newState.maxHunger+=normalizedMetaUpgradeLevel(meta,"supply")*120;
  ensureMetaLoadouts(meta);
@@ -9945,6 +10182,21 @@ function createDeathEchoFromCurrentRun(cause,killer=null,candidateGear=null){
   copy.deathEchoRecovered=false;
   return copy;
  });
+ const assist=activeRecoveryAssist();
+ const safeguardPrevious=!!previous&&!!assist?.echoSafeguard&&state.floor<=assist.floorLimit;
+ if(safeguardPrevious){
+  addLog(`再起支援が以前の遺響（第${previous.floor}層・装備${previous.gear?.length||0}個）を固定した。今回失った装備で上書きされない。`);
+  return{
+   stored:0,
+   abandoned:candidates.length,
+   replaced:0,
+   targetFloor:previous.floor,
+   echo:null,
+   safeguarded:previous.gear?.length||0,
+   safeguardedFloor:previous.floor
+  };
+ }
+
  const replaced=previous?.gear?.length||0;
  const previousOathLost=!!previous?.gear?.some(gear=>isWeaponOathGear(gear,state.meta));
 
@@ -10364,6 +10616,9 @@ function expeditionHeroMomentCandidates(report){
  if(report.firstTwentyFirstClear){
   add(100,"first_depth_clear","legendary","深淵の節目","最初の20層を踏破した",`第20層の最終関門を越え、この迷宮の完成見本を初めて突破した。`);
  }
+ if((report.wardenMasteries||0)>=4){
+  add(94,"warden_mastery","combat","四関門・完全攻略","4体すべての番人攻略試練を達成",`鎖薙ぎ・墓標列・炉心落とし・根檻をそれぞれ見切り、全ての番人戦利品を熟達報酬へ高めた。`);
+ }
  const latestBoundary=report.deepBoundaryClears?.[report.deepBoundaryClears.length-1]||null;
  if(latestBoundary){
   add(latestBoundary.firstClear?99:91,"deep_boundary","legendary",latestBoundary.firstClear?"深度境界・初踏破":"深度境界突破",
@@ -10475,6 +10730,8 @@ function buildExpeditionReport(outcome,details={}){
   turns:state.turn,
   kills:Math.max(0,(state.meta.totalKills||0)-(stats.startTotalKills||0)),
   bosses:stats.bossesDefeated||0,
+  wardenMasteries:stats.wardenMasteries||0,
+  wardenMasteryFloors:[...(stats.wardenMasteryFloors||[])],
   objectives:stats.objectivesCompleted||0,
   routesCompleted:stats.routesCompleted||0,
   roomEncountersCleared:stats.roomEncountersCleared||0,
@@ -10540,6 +10797,8 @@ function buildExpeditionReport(outcome,details={}){
   echoStored:details.echo?.stored||0,
   echoAbandoned:details.echo?.abandoned||0,
   echoReplaced:details.echo?.replaced||0,
+  echoSafeguarded:details.echo?.safeguarded||0,
+  echoSafeguardedFloor:details.echo?.safeguardedFloor||null,
   echoTargetFloor:details.echo?.targetFloor||null,
   deathEchoRecovered:stats.deathEchoRecovered||0,
   echoMarksGained:stats.echoMarksGained||0,
@@ -10572,7 +10831,15 @@ function buildExpeditionReport(outcome,details={}){
   firstTwentyRewardAnchor:stats.firstTwentyRewardAnchor||0,
   deepCycle:(()=>{const law=deepCycleLawForFloor();return law?{cycle:law.cycle,id:law.id,label:law.label,pressure:law.pressure}:null})(),
   whisper:details.whisper?{...details.whisper}:null,
-  recoveryAssist:details.recoveryAssist?{sourceFloor:details.recoveryAssist.sourceFloor,floorLimit:details.recoveryAssist.floorLimit,itemBonus:details.recoveryAssist.itemBonus,gearLevelBonus:details.recoveryAssist.gearLevelBonus}:null,
+  recoveryAssist:details.recoveryAssist?{
+   sourceFloor:details.recoveryAssist.sourceFloor,
+   floorLimit:details.recoveryAssist.floorLimit,
+   itemBonus:details.recoveryAssist.itemBonus,
+   gearLevelBonus:details.recoveryAssist.gearLevelBonus,
+   echoSafeguard:!!details.recoveryAssist.echoSafeguard,
+   cacheFloors:recoveryAssistCacheFloors(details.recoveryAssist.floorLimit),
+   retry:!!details.recoveryAssist.retry
+  }:null,
   deepWager:details.deepWager?{...details.deepWager}:null,
   deepWagerLost:details.deepWagerLost?{...details.deepWagerLost}:null,
   runGrowth:{...ensureRunGrowth()},
@@ -10589,7 +10856,9 @@ function buildExpeditionReport(outcome,details={}){
  if(report.firstTwentyFirstClear)report.highlights.push(`第一深度圏を初踏破・欠片+${report.firstTwentyRewardShards} / 魂還石+${report.firstTwentyRewardAnchor}`);
  else if(report.firstTwentyCleared)report.highlights.push("第一深度圏・第20層を踏破");
  if(report.deepCycle)report.highlights.push(`第${report.deepCycle.cycle}深度圏「${report.deepCycle.label}」へ到達`);
- if(report.recoveryAssist)report.highlights.push(`次の探索に再起支援・第${report.recoveryAssist.floorLimit}層まで物資と装備再建を補助`);
+ if(report.wardenMasteries)report.highlights.push(`番人攻略試練 ${report.wardenMasteries}回達成${report.wardenMasteries>=4?"・四関門すべてを見切った":""}`);
+ if(report.echoSafeguarded)report.highlights.push(`再起支援が第${report.echoSafeguardedFloor}層の遺響・装備${report.echoSafeguarded}個を上書きから保護`);
+ if(report.recoveryAssist)report.highlights.push(`次の探索に再起支援・第${report.recoveryAssist.floorLimit}層まで物資と目標報酬の再建箱で補助`);
  if(report.deepWager?.paidShards)report.highlights.push(`深層懸賞・連破${report.deepWager.streak}を生還確定：${report.deepWager.paidShards}欠片${report.deepWager.paidRelic?` / ${report.deepWager.paidRelic.label}`:""}`);
  if(report.deepWagerLost?.pendingShards)report.highlights.push(`深層懸賞・連破${report.deepWagerLost.streak}の${report.deepWagerLost.pendingShards}欠片${report.deepWagerLost.sealLabel?` / ${report.deepWagerLost.sealLabel}`:""}を死亡で失った`);
  if(report.nemesisTheft?.gearName)report.highlights.push(`宿敵「${report.nemesisTheft.name}」が「${report.nemesisTheft.gearName}」を奪った`);
@@ -10667,6 +10936,7 @@ function expeditionEssentialSummaryHtml(report){
  if(returned&&report.sealedRelicsReturned)key.push({text:`封印 ${report.sealedRelicsReturned}持帰り`,tone:"good"});
  if(returned&&report.overflowStored)key.push({text:`保留箱 ${report.overflowStored}`,tone:"info"});
  if(!returned&&report.insuredRecovered)key.push({text:`保険回収 ${report.insuredRecovered}`,tone:"good"});
+ if(!returned&&report.echoSafeguarded)key.push({text:`旧遺響を保護 ${report.echoSafeguarded}`,tone:"good"});
  if(!returned&&report.echoStored)key.push({text:`遺響 ${report.echoStored}`,tone:"info"});
  if(!returned&&report.permanentlyDestroyed)key.push({text:`完全消失 ${report.permanentlyDestroyed}`,tone:"bad"});
  if(!returned&&report.nemesisStolen)key.push({text:"宿敵に奪取",tone:"bad"});
@@ -10705,6 +10975,7 @@ function expeditionReportHtml(report,compact=false){
       `<span class="expeditionPill">携行装備なし</span>`,
     report.insuredRecovered?`<span class="expeditionPill good">保険回収 ${report.insuredRecovered}部位</span>`:"",
     report.insuranceMissed?`<span class="expeditionPill bad">保険回収失敗 ${report.insuranceMissed}</span>`:"",
+    report.echoSafeguarded?`<span class="expeditionPill good">以前の遺響を保護 ${report.echoSafeguarded}個・第${report.echoSafeguardedFloor}層</span>`:"",
     report.echoStored?`<span class="expeditionPill good">遺響に残存 ${report.echoStored}</span>`:"",
     report.nemesisStolen?`<span class="expeditionPill bad">宿敵に奪取 ${report.nemesisStolen}</span>`:"",
     report.permanentlyDestroyed?`<span class="expeditionPill bad">完全消失 ${report.permanentlyDestroyed}</span>`:"",
@@ -10925,10 +11196,11 @@ function addSpecialRoom(){
  if(state.rooms.length<3)return;
  const room=choice(state.rooms.slice(1,-1));
  const echo=activeWorldMarkEcho();
- const types=["shrine","treasure","flood","collapse"];
+ let types=["shrine","treasure","flood","collapse"];
  if(echo?.key==="mercy")types.push("shrine");
  if(echo?.key==="greed")types.push("treasure","treasure");
  if(echo?.key==="curiosity")types.push("shrine");
+ types=floorPulseSpecialRoomPool(types);
  const type=choice(types);
  const cx=room.cx,cy=room.cy;
  state.specialTiles.push({x:cx,y:cy,type,used:false});
@@ -10954,11 +11226,11 @@ function roomEncounterAt(x,y){
  })||null;
 }
 function roomEncounterCountForFloor(){
- if(state.floor<=1||state.floor%5===0)return 0;
+ if(state.floor<=1||state.floor%5===0||isRestFloor())return 0;
  let count=1;
  if(state.floor>=8)count++;
  if(state.floor>=16&&rng()<.55)count++;
- return Math.min(3,count);
+ return floorPulseRoomEncounterCount(Math.min(3,count));
 }
 function roomEncounterTypePool(){
  const biome=currentBiomeKey();
@@ -11101,8 +11373,8 @@ function makeTacticalPackEnemy(type,p,pack,index){
 }
 function tacticalPackCountForFloor(){
  if(state.floor<7||state.floor%5===0||isRestFloor())return 0;
- const base=state.floor>=16&&state.rooms.length>=8?2:1;
- return Math.min(3,base+deepCycleValue("packBonus"));
+ const base=Math.min(3,(state.floor>=16&&state.rooms.length>=8?2:1)+deepCycleValue("packBonus"));
+ return floorPulseTacticalPackCount(base);
 }
 function prepareTacticalPack(pack){
  const room=state.rooms?.[pack.roomIndex];if(!room)return false;
@@ -11300,12 +11572,98 @@ const wardenProfiles={
   color:"#70ae63",accent:"#e0f5a5",hp:1.32,atk:1.18,def:1.08,bonusShards:5
  }
 };
+const firstDepthWardenMasteryData={
+ chain:{
+  intent:"chain_sweep",
+  label:"鎖薙ぎを見切る",
+  challenge:"鎖薙ぎを回避、または予兆中に態勢崩し",
+  success:"鎖薙ぎの間合いを読み切った"
+ },
+ oracle:{
+  intent:"grave_volley",
+  label:"墓標列を見切る",
+  challenge:"墓標列を回避、または予兆中に態勢崩し",
+  success:"墓標列の射線を読み切った"
+ },
+ furnace:{
+  intent:"furnace_slam",
+  label:"炉心落としを見切る",
+  challenge:"炉心落としを回避、または予兆中に態勢崩し",
+  success:"着弾地点を読み切った"
+ },
+ root:{
+  intent:"root_cage",
+  label:"根檻を見切る",
+  challenge:"根檻の中心へ留まる、または予兆中に態勢崩し",
+  success:"閉じる根の安全域を読み切った"
+ }
+};
+function firstDepthWardenMasteryEligible(enemy=null){
+ const floor=enemy?.bossFloor||state?.floor||0;
+ return!!enemy?.boss&&floor>0&&floor<=20&&floor%5===0;
+}
+function ensureWardenMasteryState(enemy=null){
+ const floor=enemy?.bossFloor||state?.floor||0;
+ const key=enemy?.wardenKey||wardenProfileKeyForFloor(floor);
+ if(!state.wardenMastery||state.wardenMastery.floor!==floor||state.wardenMastery.key!==key){
+  state.wardenMastery={
+   floor,key,completed:false,method:"",intent:"",
+   completedAtTurn:null,rewardApplied:false
+  };
+ }
+ return state.wardenMastery;
+}
+function wardenMasteryData(enemy=null){
+ const floor=enemy?.bossFloor||state?.floor||0;
+ const key=enemy?.wardenKey||wardenProfileKeyForFloor(floor);
+ return firstDepthWardenMasteryData[key]||null;
+}
+function wardenMasteryCompleted(floor=state?.floor||0,key=wardenProfileKeyForFloor(floor)){
+ return!!state?.wardenMastery&&state.wardenMastery.floor===floor&&state.wardenMastery.key===key&&state.wardenMastery.completed;
+}
+function awardWardenMastery(enemy,intent,method="見切り"){
+ if(!firstDepthWardenMasteryEligible(enemy))return false;
+ const data=wardenMasteryData(enemy);if(!data||intent!==data.intent)return false;
+ const mastery=ensureWardenMasteryState(enemy);
+ if(mastery.completed)return false;
+ mastery.completed=true;
+ mastery.method=String(method||"見切り");
+ mastery.intent=intent;
+ mastery.completedAtTurn=state.turn||0;
+ const stats=ensureRunStats();
+ stats.wardenMasteries=(stats.wardenMasteries||0)+1;
+ stats.wardenMasteryFloors=Array.isArray(stats.wardenMasteryFloors)?stats.wardenMasteryFloors:[];
+ if(!stats.wardenMasteryFloors.includes(mastery.floor))stats.wardenMasteryFloors.push(mastery.floor);
+ spawnCombatText(enemy.x,enemy.y,"MASTERED","break",46);
+ spawnFeedbackBurst(enemy.x,enemy.y,"objective",9);
+ triggerImpactFeedback("objective",{haptic:"objective",duration:560});
+ showCombatToast("番人攻略・見切り",`${data.success} / 戦利品ILv+1`,"objective");
+ addLog(`攻略試練「${data.label}」達成。${data.success}。番人戦利品ILv+1。`);
+ renderFloorGoal();
+ return true;
+}
+function wardenMasteryStatusHtml(){
+ if(state?.floor>20||state?.floor%5!==0||state?.bossDefeated)return"";
+ const boss=livingFloorBoss();
+ if(!boss)return"";
+ const data=wardenMasteryData(boss);if(!data)return"";
+ const mastery=ensureWardenMasteryState(boss);
+ return`<div class="wardenMasteryStatus ${mastery.completed?"complete":""}">
+  <b>攻略試練 ${mastery.completed?"達成":"未達"}</b>
+  <span>${data.challenge}</span>
+  <small>${mastery.completed?`${mastery.method}成功・戦利品ILv+1`:"成功すると今回の番人戦利品ILv+1"}</small>
+ </div>`;
+}
 const firstDepthWardenCadence={
  5:{gate:"第一関門",index:1,next:"第6〜10層：暗闇・勢力争い・ビルド形成",minRarity:"magic",trophyNote:"最初の番人戦利品は魔法以上を保証。"},
  10:{gate:"第二関門",index:2,next:"第11〜15層：再生生態・未鑑定・追跡・環境戦",minRarity:"rare",trophyNote:"第二関門以降の番人戦利品は希少以上を保証。"},
  15:{gate:"第三関門",index:3,next:"第16〜20層：熟練・研究・高密度・最終決戦",minRarity:"rare",itemLevelBonus:1,trophyNote:"第三関門は希少以上に加え、戦利品ILvを+1。"},
  20:{gate:"最終関門",index:4,next:"第一深度圏の向こう：終わりなき深淵",minRarity:"rare",trophyNote:"初踏破時は番人戦利品が伝説へ昇格。"}
 };
+const DEEP_WAGER_SHARD_CAP=96;
+const DEEP_WAGER_LEGENDARY_STREAK=6;
+const DEEP_WAGER_JACKPOT_STREAK=10;
+
 function ensureDeepWager(){
  if(!state)return null;
  if(!state.deepWager||typeof state.deepWager!=="object"){
@@ -11313,6 +11671,7 @@ function ensureDeepWager(){
  }
  const wager=state.deepWager;
  wager.streak=Math.max(0,Math.floor(Number(wager.streak)||0));
+ // 旧進行中探索で96を超えていた仮確保は没収しない。以後の増額だけ停止する。
  wager.pendingShards=Math.max(0,Math.floor(Number(wager.pendingShards)||0));
  wager.lastWardenFloor=Math.max(0,Math.floor(Number(wager.lastWardenFloor)||0));
  wager.highestWardenFloor=Math.max(0,Math.floor(Number(wager.highestWardenFloor)||0));
@@ -11334,15 +11693,45 @@ function deepWagerIncrementForStreak(streak){
  const n=Math.max(1,Math.floor(streak||1));
  return Math.min(16,4+(n-1)*3);
 }
+function deepWagerTargetShards(streak){
+ const n=Math.max(0,Math.floor(streak||0));
+ let total=0;
+ for(let i=1;i<=n;i++)total+=deepWagerIncrementForStreak(i);
+ return Math.min(DEEP_WAGER_SHARD_CAP,total);
+}
+function deepWagerRelicGuarantee(streak){
+ const n=Math.max(0,Math.floor(streak||0));
+ if(n>=DEEP_WAGER_JACKPOT_STREAK)return"jackpot";
+ if(n>=DEEP_WAGER_LEGENDARY_STREAK)return"legendary";
+ return null;
+}
+function deepWagerRelicQualityLabel(streak){
+ const guarantee=deepWagerRelicGuarantee(streak);
+ if(guarantee==="jackpot")return"深層遺宝確定";
+ if(guarantee==="legendary")return"伝説以上確定";
+ return"";
+}
+function deepWagerNextQualityMilestone(streak){
+ const n=Math.max(0,Math.floor(streak||0));
+ if(n<DEEP_WAGER_LEGENDARY_STREAK)return{streak:DEEP_WAGER_LEGENDARY_STREAK,label:"黒金封が伝説以上確定"};
+ if(n<DEEP_WAGER_JACKPOT_STREAK)return{streak:DEEP_WAGER_JACKPOT_STREAK,label:"黒金封が深層遺宝確定"};
+ return null;
+}
 function deepWagerSnapshot(){
  const wager=ensureDeepWager();
  if(!wager||wager.streak<=0)return null;
  const seal=deepWagerSealForStreak(wager.streak);
+ const guarantee=deepWagerRelicGuarantee(wager.streak);
  return{
   streak:wager.streak,
   pendingShards:wager.pendingShards,
+  shardCap:DEEP_WAGER_SHARD_CAP,
+  shardsCapped:wager.pendingShards>=DEEP_WAGER_SHARD_CAP,
   seal,
   sealLabel:seal?(sealedRelicSealData[seal]?.label||seal):null,
+  guarantee,
+  qualityLabel:deepWagerRelicQualityLabel(wager.streak),
+  nextQuality:deepWagerNextQualityMilestone(wager.streak),
   lastWardenFloor:wager.lastWardenFloor,
   highestWardenFloor:wager.highestWardenFloor,
   startedAt:wager.startedAt,
@@ -11353,34 +11742,57 @@ function deepenWagerAfterWarden(floor=state?.floor||1){
  if(floor<=20||floor%5!==0)return null;
  const wager=ensureDeepWager();
  if(!wager||wager.settled)return null;
- // 同じ番人の二重記録では増えない。
  if(wager.lastWardenFloor===floor)return deepWagerSnapshot();
+
  wager.streak++;
- wager.pendingShards+=deepWagerIncrementForStreak(wager.streak);
+ const target=deepWagerTargetShards(wager.streak);
+ const before=wager.pendingShards;
+ // 旧版で既に上限超過している仮確保は保護し、新規増加だけ止める。
+ if(before<DEEP_WAGER_SHARD_CAP)wager.pendingShards=Math.max(before,target);
+ const gained=Math.max(0,wager.pendingShards-before);
+
  wager.lastWardenFloor=floor;
  wager.highestWardenFloor=Math.max(wager.highestWardenFloor||0,floor);
  wager.startedAt=wager.startedAt||Date.now();
+
  const seal=deepWagerSealForStreak(wager.streak);
- const sealText=seal?` / 生還時 ${sealedRelicSealData[seal]?.label||seal}×1`:"";
- addLog(`深層懸賞が連破${wager.streak}へ上昇。仮確保 ${wager.pendingShards}欠片${sealText}。死亡すると全て失う。`);
- showCombatToast("深層懸賞 上昇",`連破${wager.streak}・帰還で${wager.pendingShards}欠片${seal?` + ${sealedRelicSealData[seal]?.label}`:""}`,"critical");
+ const quality=deepWagerRelicQualityLabel(wager.streak);
+ const previousQuality=deepWagerRelicQualityLabel(wager.streak-1);
+ const qualityChanged=!!quality&&quality!==previousQuality;
+ const nextQuality=deepWagerNextQualityMilestone(wager.streak);
+ const sealText=seal?` / 生還時 ${sealedRelicSealData[seal]?.label||seal}×1${quality?`・${quality}`:""}`:"";
+ const shardText=gained>0
+  ?`${wager.pendingShards}欠片（+${gained}）`
+  :`${wager.pendingShards}欠片・上限到達`;
+ const nextText=!gained&&nextQuality?` / 次：連破${nextQuality.streak} ${nextQuality.label}`:"";
+
+ addLog(`深層懸賞が連破${wager.streak}へ上昇。仮確保 ${shardText}${sealText}${nextText}。死亡すると全て失う。`);
+ showCombatToast(
+  qualityChanged&&quality==="深層遺宝確定"?"深層懸賞・極点":qualityChanged&&quality==="伝説以上確定"?"深層懸賞・質変化":"深層懸賞 上昇",
+  `連破${wager.streak}・${shardText}${seal?` + ${sealedRelicSealData[seal]?.label}`:""}${quality?` / ${quality}`:""}${nextText}`,
+  qualityChanged?"legendary":"critical"
+ );
  return deepWagerSnapshot();
 }
 function deepWagerPayoutPreview(){
  const wager=deepWagerSnapshot();
  if(!wager)return null;
+ const relicText=wager.sealLabel
+  ?` + ${wager.sealLabel}×1${wager.qualityLabel?`（${wager.qualityLabel}）`:""}`
+  :"";
  return{
   ...wager,
-  text:`${wager.pendingShards}欠片${wager.sealLabel?` + ${wager.sealLabel}×1`:""}`
+  text:`${wager.pendingShards}欠片${wager.shardsCapped?"・上限":""}${relicText}`
  };
 }
-function createDeepWagerRelic(seal,floor){
+function createDeepWagerRelic(seal,floor,streak=ensureDeepWager()?.streak||0){
  if(!seal)return null;
  const relic=createSealedRelic(seal==="blackgold"?"boss":"elite",floor||state.floor);
  relic.source="wager";
  relic.seal=seal;
  relic.wagerReward=true;
- relic.wagerStreak=ensureDeepWager()?.streak||0;
+ relic.wagerStreak=Math.max(0,Math.floor(streak||0));
+ relic.wagerGuaranteeTier=deepWagerRelicGuarantee(relic.wagerStreak);
  relic.rewardSeed=sealedRelicHash(`${relic.id}|deep-wager|${seal}|${relic.wagerStreak}`);
  return relic;
 }
@@ -11392,7 +11804,7 @@ function settleDeepWagerOnReturn(){
  if(shards>0)state.meta.shards=(state.meta.shards||0)+shards;
  let relic=null;
  if(snapshot.seal){
-  relic=createDeepWagerRelic(snapshot.seal,snapshot.highestWardenFloor||state.floor);
+  relic=createDeepWagerRelic(snapshot.seal,snapshot.highestWardenFloor||state.floor,snapshot.streak);
   const vault=ensureSealedRelicMeta(state.meta);
   vault.relics.push({...relic,returnedAt:Date.now(),wagerPayout:true});
   vault.fortune.firstFound=true;
@@ -11400,27 +11812,35 @@ function settleDeepWagerOnReturn(){
  wager.settled=true;
  snapshot.settled=true;
  snapshot.paidShards=shards;
- snapshot.paidRelic=relic?{id:relic.id,seal:relic.seal,label:sealedRelicSealData[relic.seal]?.label||relic.seal}:null;
+ snapshot.paidRelic=relic?{
+  id:relic.id,seal:relic.seal,label:sealedRelicSealData[relic.seal]?.label||relic.seal,
+  guarantee:relic.wagerGuaranteeTier||null
+ }:null;
  saveMeta();
- addLog(`深層懸賞を灯台へ持ち帰った。${shards}欠片${relic?`と${sealedRelicSealData[relic.seal]?.label}を確定`:"を確定"}。`);
+ const quality=relic?.wagerGuaranteeTier==="jackpot"?"・深層遺宝確定":relic?.wagerGuaranteeTier==="legendary"?"・伝説以上確定":"";
+ addLog(`深層懸賞を灯台へ持ち帰った。${shards}欠片${relic?`と${sealedRelicSealData[relic.seal]?.label}${quality}を確定`:"を確定"}。`);
  return snapshot;
 }
 function deepWagerStatusHtml(){
  const wager=deepWagerPayoutPreview();
  if(!wager)return"";
- return`<div class="deepWagerState"><b>深層懸賞・連破${wager.streak}</b><span>仮確保 ${wager.text}</span><small>灯台へ生還すると確定。死亡するとこの懸賞は全て消失。</small></div>`;
+ const next=wager.nextQuality;
+ return`<div class="deepWagerState"><b>深層懸賞・連破${wager.streak}</b><span>仮確保 ${wager.text}</span><small>${next?`次の質変化：連破${next.streak} ${next.label}。`:"報酬品質は極点。以後は連破記録を更新。"} 灯台へ生還すると確定、死亡で全消失。</small></div>`;
 }
 function deepWagerBridgeHtml(){
  const wager=deepWagerPayoutPreview();
  if(!wager||state.floor<=20)return"";
- const nextIncrement=deepWagerIncrementForStreak(wager.streak+1);
- const nextShards=wager.pendingShards+nextIncrement;
- const nextSeal=deepWagerSealForStreak(wager.streak+1);
+ const nextStreak=wager.streak+1;
+ const nextShards=Math.max(wager.pendingShards,deepWagerTargetShards(nextStreak));
+ const nextSeal=deepWagerSealForStreak(nextStreak);
+ const nextQuality=deepWagerRelicQualityLabel(nextStreak);
+ const shardChange=nextShards>wager.pendingShards?`${nextShards}欠片`:`${wager.pendingShards}欠片・上限`;
+ const nextMilestone=deepWagerNextQualityMilestone(wager.streak);
  return`<div class="deepWagerBridge">
   <div class="deepWagerBridgeTop"><b>深層懸賞・連破${wager.streak}</b><span>未確定</span></div>
   <div class="deepWagerBridgeNow">今帰還：<strong>${wager.text}</strong> を確定</div>
-  <div class="deepWagerBridgeNext">次の深層番人まで進み倒す：<strong>${nextShards}欠片${nextSeal?` + ${sealedRelicSealData[nextSeal]?.label}×1`:""}</strong>まで上昇</div>
-  <small>次へ進んだ時点では失いませんが、灯台へ戻る前に死亡すると懸賞全体を失います。</small>
+  <div class="deepWagerBridgeNext">次の深層番人を倒す：<strong>${shardChange}${nextSeal?` + ${sealedRelicSealData[nextSeal]?.label}×1`:""}${nextQuality?`（${nextQuality}）`:""}</strong></div>
+  <small>${nextMilestone?`質的報酬の次節目：連破${nextMilestone.streak} ${nextMilestone.label}。`:"欠片と品質は極点。さらに進む価値は深度・番人戦利品・自己記録へ移る。"} 灯台へ戻る前に死亡すると懸賞全体を失います。</small>
  </div>`;
 }
 function wardenCadenceForFloor(floor=state?.floor||1){
@@ -11461,6 +11881,14 @@ function prepareWardenTrophy(gear,enemy,profile){
  const currentRank=rarityOrder[gear.rarity]||0;
  if(currentRank<targetRank)promoteGearRarity(gear,targetRank-currentRank);
  reinforceWardenTrophyLevel(gear,cadence.itemLevelBonus||0);
+ const mastery=wardenMasteryCompleted(floor,profile?.key||wardenProfileKeyForFloor(floor));
+ if(mastery){
+  reinforceWardenTrophyLevel(gear,1);
+  gear.wardenMastery=true;
+  gear.wardenMasteryMethod=state.wardenMastery?.method||"見切り";
+  gear.wardenMasteryFloor=floor;
+  if(state.wardenMastery)state.wardenMastery.rewardApplied=true;
+ }
  gear.wardenTrophyFloor=floor;
  gear.wardenTrophyKey=profile?.key||wardenProfileKeyForFloor(floor);
  gear.wardenImprint=gear.wardenTrophyKey;
@@ -11478,9 +11906,10 @@ function prepareWardenTrophy(gear,enemy,profile){
 function wardenTrophyPublicLabel(gear){
  if(!gear)return"番人戦利品";
  const rarity=rarityData[gear.rarity]?.label||"装備";
- if(gear.identified)return`${rarity}・${gearLabel(gear)}`;
+ const mastery=gear.wardenMastery?"・熟達":"";
+ if(gear.identified)return`${rarity}・${gearLabel(gear)}${mastery}`;
  const signal=unidentifiedGearSignal(gear);
- return`未鑑定${equippedSlotLabel(gear.slot)}・${signal.label}`;
+ return`未鑑定${equippedSlotLabel(gear.slot)}・${signal.label}${mastery}`;
 }
 function wardenTrophyLocation(gearId){
  if(!gearId)return"整理済み";
@@ -11501,6 +11930,13 @@ function recordWardenVictory(enemy,profile,rewardGear,routeResult=null,extras={}
   routeLabel:routeResult?.label||null,routeReward:routeResult?.rewardSummary||null,
   shards:5+(state.floorObjective?.reward?.shards||0)+(profile.bonusShards||0)+(routeResult?.shardReward||0)+(state.firstTwentyMilestonePending?.firstClear?(state.firstTwentyMilestonePending.shards||0):0),
   soulAnchorFound:!!extras.soulAnchorFound,sealedRelicDropped:!!extras.sealedRelicDropped,
+  mastery:rewardGear.wardenMastery?{
+   completed:true,
+   key:profile.key,
+   label:firstDepthWardenMasteryData[profile.key]?.label||"攻略試練",
+   method:rewardGear.wardenMasteryMethod||state.wardenMastery?.method||"見切り",
+   reward:"番人戦利品ILv+1"
+  }:null,
   next:cadence.next,trophyNote:cadence.trophyNote
  };
  const unlockedGate=unlockDepthGateAfterWarden(floor,state.meta);
@@ -11514,7 +11950,11 @@ function recordWardenVictory(enemy,profile,rewardGear,routeResult=null,extras={}
    stats.deepBoundaryClears=stats.deepBoundaryClears.slice(-12);
   }
   addLog(`第${record.deepBoundary.cycle}深度圏「${record.deepBoundary.completedLabel}」を完全踏破した。次は第${record.deepBoundary.nextCycle}深度圏「${record.deepBoundary.nextLabel}」。`);
-  showCombatToast("深度境界 突破",`第${floor}層・伝説番人戦利品 / 黒金封 / 第${floor+1}層門`,"legendary");
+  showCombatToast(
+   record.deepBoundary?.firstClear?"深度境界・初踏破":"深度境界 突破",
+   `第${floor}層・伝説番人戦利品 / 黒金封${record.deepBoundary?.firstClear?` / 第${floor+1}層門 解放`:""}`,
+   "legendary"
+  );
   try{triggerImpactFeedback("legendary",{haptic:"legendary",duration:980})}catch(_){}
  }
  const wager=deepenWagerAfterWarden(floor);
@@ -11522,12 +11962,59 @@ function recordWardenVictory(enemy,profile,rewardGear,routeResult=null,extras={}
  state.lastWardenVictory=record;
  return record;
 }
+function activeWardenAfterglow(){
+ return state?.wardenAfterglow?.floor===state?.floor&&state?.bossDefeated?state.wardenAfterglow:null;
+}
+function enterWardenAfterglow(boss,profile=wardenProfileFor(boss)){
+ if(!boss||!state?.bossDefeated)return null;
+ const summonIds=new Set((state.enemies||[]).filter(enemy=>enemy?.summonedBy===boss.id).map(enemy=>enemy.id));
+ const summonsCollapsed=summonIds.size;
+ if(summonsCollapsed){
+  state.enemies=state.enemies.filter(enemy=>!summonIds.has(enemy.id));
+ }
+ let hazardsCleared=0;
+ state.environment=(state.environment||[]).filter(object=>{
+  if(object?.bossMade){hazardsCleared++;return false}
+  return true;
+ });
+ if(Array.isArray(state.attackTelegraphs)){
+  state.attackTelegraphs=state.attackTelegraphs.filter(zone=>zone?.sourceId!==boss.id);
+ }
+ if(state.ecology){
+  state.ecology.spawnClock=0;
+  state.ecology.afterglowLocked=true;
+ }
+ const staminaBefore=state.hero?.stamina||0;
+ const staminaGain=recoverStamina(2);
+ state.wardenAfterglow={
+  floor:state.floor,
+  bossName:profile?.name||boss.name||"番人",
+  startedAtTurn:state.turn||0,
+  summonsCollapsed,
+  hazardsCleared,
+  staminaGain,
+  respawnSuppressed:true
+ };
+ addLog(`番人の圧が消え、迷宮が静まった。新たな敵の再出現はこの階では止まる。${summonsCollapsed?` 従者${summonsCollapsed}体も崩れた。`:""}${hazardsCleared?` 番人由来の危険地形${hazardsCleared}個が消えた。`:""}${staminaGain?` 気力+${staminaGain}。`:""}`);
+ updateMusicScene(true);
+ return state.wardenAfterglow;
+}
+function wardenAfterglowHtml(){
+ const glow=activeWardenAfterglow();if(!glow)return"";
+ const details=[
+  "敵の再出現停止",
+  glow.summonsCollapsed?`従者${glow.summonsCollapsed}体消滅`:"",
+  glow.hazardsCleared?`危険地形${glow.hazardsCleared}解除`:"",
+  glow.staminaGain?`気力+${glow.staminaGain}`:""
+ ].filter(Boolean);
+ return`<div class="wardenAfterglow"><b>WARDEN DOWN</b><span>${details.join("・")}</span><small>戦利品を拾い、帰還か続行かを決める時間。</small></div>`;
+}
 function wardenVictoryStatusHtml(){
  if(!state?.bossDefeated||state.floor%5!==0)return"";
  const cadence=wardenCadenceForFloor(state.floor);
  const victory=state.lastWardenVictory;
  const location=victory?.rewardGearId?wardenTrophyLocation(victory.rewardGearId):"戦利品を確認";
- return`${deepBoundaryVictoryHtml(victory)}<div class="wardenClearStrip ${victory?.deepBoundary?"deepBoundary":""}"><b>${cadence.gate} 突破</b><span>${victory?.bossName||wardenProfileFor().name} / 戦利品 ${location}</span><small>階段→次の進路</small></div>`;
+ return`${wardenAfterglowHtml()}<div class="wardenClearStrip ${victory?.deepBoundary?"deepBoundary":""}"><b>${cadence.gate} 突破</b><span>${victory?.bossName||wardenProfileFor().name} / 戦利品 ${location}</span><small>階段→帰還または次の進路</small></div>`;
 }
 function wardenRouteBridgeHtml(){
  if(!state?.bossDefeated||state.floor%5!==0)return"";
@@ -11537,13 +12024,14 @@ function wardenRouteBridgeHtml(){
  const location=victory?.rewardGearId?wardenTrophyLocation(victory.rewardGearId):"戦利品を確認";
  const lootClass=location==="回収済み"?"good":location.includes("未回収")?"warn":"";
  const reward=victory?.rewardLabel||cadence.trophyNote;
- return`${deepBoundaryVictoryHtml(victory)}<div class="wardenBridge ${victory?.deepBoundary?"deepBoundary":""}"><div class="wardenBridgeTop"><b>${cadence.gate}・${victory?.bossName||wardenProfileFor().name}を突破</b><span>${state.floor<=20?`${cadence.index}/4 関門`:`第${state.floor}層`}</span></div><div class="wardenBridgeBar"><i style="width:${progress}%"></i></div><div class="wardenBridgeLoot"><span class="${lootClass}">戦利品 ${location}</span><span>${reward}</span>${victory?.shards?`<span class="good">欠片 +${victory.shards}</span>`:""}${victory?.sealedRelicDropped?'<span class="good">封印遺物 出現</span>':""}${victory?.soulAnchorFound?'<span class="good">魂還石 入手</span>':""}${victory?.routeReward?`<span class="good">進路踏破 ${victory.routeReward}</span>`:""}</div><div class="wardenBridgeNext"><b>次の区間</b> ${cadence.next}<br>ここから先の危険と報酬傾向を、下の3進路から選びます。</div>${deepWagerBridgeHtml()}</div>`;
+ return`${deepBoundaryVictoryHtml(victory)}<div class="wardenBridge ${victory?.deepBoundary?"deepBoundary":""}"><div class="wardenBridgeTop"><b>${cadence.gate}・${victory?.bossName||wardenProfileFor().name}を突破</b><span>${state.floor<=20?`${cadence.index}/4 関門`:`第${state.floor}層`}</span></div><div class="wardenBridgeBar"><i style="width:${progress}%"></i></div><div class="wardenBridgeLoot"><span class="${lootClass}">戦利品 ${location}</span><span>${reward}</span>${victory?.shards?`<span class="good">欠片 +${victory.shards}</span>`:""}${victory?.sealedRelicDropped?'<span class="good">封印遺物 出現</span>':""}${victory?.soulAnchorFound?'<span class="good">魂還石 入手</span>':""}${victory?.routeReward?`<span class="good">進路踏破 ${victory.routeReward}</span>`:""}${victory?.mastery?'<span class="mastery">攻略試練・ILv+1</span>':""}</div><div class="wardenBridgeNext"><b>次の区間</b> ${cadence.next}<br>ここから先の危険と報酬傾向を、下の3進路から選びます。</div>${deepWagerBridgeHtml()}</div>`;
 }
 function wardenFloorBannerHtml(plan=floorPlan()){
  if(!plan?.boss)return"";
  const cadence=wardenCadenceForFloor(state.floor);
  const profile=wardenProfileFor();
- return`<div class="floorBannerWarden ${deepCycleBoundaryFloor(state.floor)?"deepBoundary":""}"><div class="floorBannerWardenHead"><b>${cadence.gate}・${profile.name}</b><span>${state.floor<=20?`${cadence.index}/4 関門`:deepCycleBoundaryFloor(state.floor)?"境界番人":"深層番人"}</span></div><small>${profile.hint}${deepCycleBoundaryFloor(state.floor)?" / 深度境界補正：HP+18%・攻撃+8%・防御+1":""}</small>${deepWardenShiftHtml(state.floor)}</div>`;
+ const mastery=state.floor<=20?firstDepthWardenMasteryData[profile.key]:null;
+ return`<div class="floorBannerWarden ${deepCycleBoundaryFloor(state.floor)?"deepBoundary":""}"><div class="floorBannerWardenHead"><b>${cadence.gate}・${profile.name}</b><span>${state.floor<=20?`${cadence.index}/4 関門`:deepCycleBoundaryFloor(state.floor)?"境界番人":"深層番人"}</span></div><small>${profile.hint}${deepCycleBoundaryFloor(state.floor)?" / 深度境界補正：HP+18%・攻撃+8%・防御+1":""}</small>${mastery?`<div class="floorBannerWardenMastery"><b>攻略試練</b> ${mastery.challenge}<span>成功：番人戦利品ILv+1</span></div>`:""}${deepWardenShiftHtml(state.floor)}</div>`;
 }
 function wardenProfileKeyForFloor(floor=state.floor){
  const index=(Math.max(1,Math.floor(floor/5))-1)%4;
@@ -11625,6 +12113,7 @@ function spawnFloorBoss(recovery=false){
   recoveredFromSoftlock:!!recovery,
   alert:0,lastSeen:null,faction:"guardian",home:{x:p.x,y:p.y},patrol:0,rivalId:null,status:{}
  };
+ if(firstDepthWardenMasteryEligible(boss))ensureWardenMasteryState(boss);
  applyRouteFinaleToBoss(boss);
  state.enemies.push(boss);
  sfx("boss");updateMusicScene(true);
@@ -12546,13 +13035,15 @@ const floorPhenomenonData={
  migration:{label:"生態流入",short:"流入",warning:"遠い通路から、ひとつの群れがこちらへ移動する足音が響く。",desc:"遠方から一勢力の群れが流入する。流入個体を全て倒すと欠片+1と勢力固有物資。",duration:0,tone:"danger"}
 };
 function floorPhenomenonEligible(){
- return state.floor>=3&&!floorPlan().boss&&!isRestFloor();
+ // 1〜5層は基本操作の教材を優先。最初の世界現象は第6層以降。
+ return state.floor>=6&&!floorPlan().boss&&!isRestFloor();
 }
 function prepareFloorPhenomenon(){
  state.floorPhenomenon=null;
  if(!floorPhenomenonEligible())return null;
  const seed=floorPhenomenonHash(`${state.expeditionId}|${state.floor}|living-floor`);
- if(seed%100>=68)return null;
+ const pulseChance=clamp(currentFloorPulse()?.phenomenonChance??.68,0,1);
+ if(seed%100>=Math.round(pulseChance*100))return null;
  const biome=currentBiomeKey();
  const pool=["gloom","tremor","stillness","migration","flare"];
  if(biome==="crypt")pool.push("gloom","migration");
@@ -12784,7 +13275,7 @@ function deepEliteSecondaryChance(){
  return Math.min(.36,.18+zone*.06);
 }
 function applyEliteMutation(enemy){
- const chance=clamp(.16+routeValue("eliteBonus")+resonanceBonus("eliteChance")+reactionValue("eliteBonus")+floorForkValue("eliteBonus")+deepCycleValue("eliteBonus"),.04,.82);
+ const chance=clamp(.16+routeValue("eliteBonus")+resonanceBonus("eliteChance")+reactionValue("eliteBonus")+floorForkValue("eliteBonus")+deepCycleValue("eliteBonus")+floorPulseValue("eliteBonus"),.04,.82);
  if(enemy.boss||rng()>chance)return;
  const pool=eliteMutationPoolFor(enemy);
  const affix=choice(pool);
@@ -13821,7 +14312,7 @@ function addFloorEvents(){
  state.events=[];
  const echo=activeWorldMarkEcho();
  const markEventBonus=echo?.key==="curiosity"?.05*echo.tier:0;
- const eventThreshold=clamp(.7+routeValue("eventBonus")+reactionValue("eventBonus")+floorForkValue("eventBonus")+markEventBonus,.2,.98);
+ const eventThreshold=clamp(.7+routeValue("eventBonus")+reactionValue("eventBonus")+floorForkValue("eventBonus")+markEventBonus+floorPulseValue("eventBonus"),.2,.98);
  if(state.floor===1||rng()>=eventThreshold)return;
  const p=randomFloorCell(5);if(!p)return;
  const def=choice(eventDefs);
@@ -13972,6 +14463,92 @@ function floorPlan(){
  };
 }
 
+/* v3.56.0 FIRST DEPTH PASS
+   1〜20層はゲームの完成見本として、敵密度を作者側で明示する。
+   再生生態があるため、初期配置を下げても任意レベリングは失われない。 */
+const firstTwentyEnemyBudget={
+ 1:4, 2:6, 3:7, 4:3, 5:4,
+ 6:7, 7:8, 8:10, 9:4, 10:5,
+ 11:9,12:10,13:12,14:5,15:6,
+ 16:11,17:12,18:14,19:6,20:7
+};
+function firstDepthEnemyBudget(floor=state?.floor||1){
+ const value=firstTwentyEnemyBudget[Math.max(1,Math.floor(Number(floor)||1))];
+ return Number.isFinite(value)?value:null;
+}
+
+/* v3.52.0: Existing systems are paced into a five-floor emotional wave.
+   This is intentionally not a new resource, menu, or permanent progression layer. */
+const floorPulseData={
+ intro:{id:"intro",label:"導入",short:"導入",desc:"最初の五層は既存チュートリアル配分を優先する。"},
+ breath:{id:"breath",label:"静穏",short:"静穏",desc:"直前の山場から立て直す。敵の密度と再出現を抑え、探索の余白を作る。"},
+ rise:{id:"rise",label:"上昇",short:"上昇",desc:"通常密度へ戻り、次の山場へ向けて緊張を積み上げる。"},
+ pressure:{id:"pressure",label:"圧力",short:"圧力",desc:"敵・変異・戦闘区画・迷宮現象が重なりやすい高圧階。"},
+ harvest:{id:"harvest",label:"実り",short:"実り",desc:"戦闘密度を落とし、探索・事件・戦利品へ比重を戻す。"},
+ boss:{id:"boss",label:"番人",short:"番人",desc:"五層周期の頂点。追加の雑音を抑え、番人戦を主役にする。"}
+};
+function floorPulsePhaseId(floor=state?.floor||1){
+ floor=Math.max(1,Math.floor(Number(floor)||1));
+ if(floor<=5)return"intro";
+ const slot=((floor-1)%5)+1;
+ return slot===1?"breath":slot===2?"rise":slot===3?"pressure":slot===4?"harvest":"boss";
+}
+function floorPulseProfile(floor=state?.floor||1){
+ const id=floorPulsePhaseId(floor),data=floorPulseData[id]||floorPulseData.rise;
+ const deep=floor>20;
+ const values={
+  intro:{enemyBonus:0,itemBonus:0,trapBonus:0,eliteBonus:0,respawnBonus:0,eventBonus:0,phenomenonChance:.68},
+  breath:{enemyBonus:deep?-2:-1,itemBonus:deep?1:0,trapBonus:-1,eliteBonus:deep?-.04:-.02,respawnBonus:deep?-2:-1,eventBonus:.12,phenomenonChance:.18},
+  rise:{enemyBonus:0,itemBonus:0,trapBonus:0,eliteBonus:0,respawnBonus:0,eventBonus:0,phenomenonChance:.38},
+  pressure:{enemyBonus:deep?2:1,itemBonus:0,trapBonus:1,eliteBonus:deep?.06:.03,respawnBonus:deep?2:1,eventBonus:-.20,phenomenonChance:.72},
+  harvest:{enemyBonus:deep?-1:0,itemBonus:deep?2:1,trapBonus:-1,eliteBonus:deep?-.03:-.015,respawnBonus:deep?-2:-1,eventBonus:.15,phenomenonChance:.10},
+  boss:{enemyBonus:0,itemBonus:0,trapBonus:0,eliteBonus:0,respawnBonus:0,eventBonus:0,phenomenonChance:0}
+ }[id]||{};
+ return{...data,...values,floor,deep};
+}
+function prepareFloorPulse(){
+ const profile=floorPulseProfile();
+ state.floorPulse={...profile,preparedAtTurn:state.turn||0};
+ return state.floorPulse;
+}
+function currentFloorPulse(){
+ if(state?.floorPulse?.floor===state?.floor)return state.floorPulse;
+ return floorPulseProfile();
+}
+function floorPulseValue(keyName){return Number(currentFloorPulse()?.[keyName]||0)}
+function floorPulseRoomEncounterCount(base){
+ const pulse=currentFloorPulse();
+ if(state.floor<=5)return base;
+ if(isRestFloor()||pulse.id==="boss")return 0;
+ if(pulse.id==="breath")return Math.min(base,1);
+ if(pulse.id==="pressure"){
+  const cap=state.floor<=20?2:3;
+  return Math.min(cap,Math.max(1,base+1));
+ }
+ if(pulse.id==="harvest")return Math.min(base,1);
+ return base;
+}
+function floorPulseTacticalPackCount(base){
+ const pulse=currentFloorPulse();
+ if(state.floor<=5)return base;
+ if(isRestFloor()||pulse.id==="boss"||pulse.id==="breath"||pulse.id==="harvest")return 0;
+ if(pulse.id==="pressure")return Math.min(state.floor<=20?1:3,base+1);
+ return state.floor<=20?Math.min(1,base):base;
+}
+function floorPulseSpecialRoomPool(baseTypes){
+ const pulse=currentFloorPulse();
+ const types=[...baseTypes];
+ if(state.floor<=5)return types;
+ if(pulse.id==="breath")types.push("shrine","shrine","treasure");
+ if(pulse.id==="pressure")types.push("collapse","flood","collapse");
+ if(pulse.id==="harvest")types.push("treasure","treasure","shrine","treasure");
+ return types;
+}
+function floorPulseBannerLabel(){
+ const pulse=currentFloorPulse();
+ return state.floor>20&&pulse.id!=="boss"?`探索脈動：${pulse.short}`:"";
+}
+
 
 const depthGateDefaults={selectedStart:1,unlocked:[1],history:[]};
 function ensureDepthGateMeta(meta=state?.meta){
@@ -14080,7 +14657,7 @@ function depthGateHubHtml(meta=state?.meta){
  return`<section class="depthGateCard"><div class="depthGateHead"><b>深度門</b><span>踏破済み区間だけ選択可能</span></div><div class="depthGateLead">毎回第1層から潜る必要はありません。装備を再建したい時は浅層から、十分に整っている時は解放済みの深度圏へ直行できます。</div>${boundaryHistory}<div class="depthGateChoices">${options}</div>${status}${build}</section>`;
 }
 
-const recoveryAssistDefaults={pending:false,sourceFloor:0,floorLimit:0,itemBonus:0,gearLevelBonus:0,oathRelief:false,createdAt:0,timesUsed:0};
+const recoveryAssistDefaults={pending:false,sourceFloor:0,floorLimit:0,itemBonus:0,gearLevelBonus:0,oathRelief:false,echoSafeguard:false,retryBudget:0,createdAt:0,timesUsed:0};
 function ensureRecoveryAssistMeta(meta=state?.meta){
  if(!meta)return{...recoveryAssistDefaults};
  if(!meta.recoveryAssist||typeof meta.recoveryAssist!=="object")meta.recoveryAssist={...recoveryAssistDefaults};
@@ -14091,12 +14668,38 @@ function ensureRecoveryAssistMeta(meta=state?.meta){
  r.itemBonus=Math.max(0,Math.floor(Number(r.itemBonus)||0));
  r.gearLevelBonus=Math.max(0,Math.floor(Number(r.gearLevelBonus)||0));
  r.timesUsed=Math.max(0,Math.floor(Number(r.timesUsed)||0));
+ r.retryBudget=Math.max(0,Math.min(1,Math.floor(Number(r.retryBudget)||0)));
  return r;
+}
+function recoveryAssistCacheFloors(floorLimit){
+ const limit=Math.max(0,Math.floor(Number(floorLimit)||0));
+ if(limit>=15)return[2,5,8,11,14];
+ if(limit>=10)return[2,5,8];
+ if(limit>=5)return[2,4];
+ return[];
 }
 function scheduleRecoveryAssistAfterDeath(deathLoss,cause=""){
  const lost=Math.max(0,deathLoss?.unprotected||0);
  const floor=Math.max(1,state?.floor||1);
  const gates=ensureDepthGateMeta(state.meta);gates.selectedStart=1;
+ const previousRuntime=state?.recoveryAssist;
+
+ // 再起支援中の浅層再死亡には1回だけ再挑戦を与える。無限支援にはしない。
+ if(previousRuntime?.active&&floor<=previousRuntime.floorLimit&&(previousRuntime.retryBudget||0)>0){
+  const r=ensureRecoveryAssistMeta(state.meta);
+  r.pending=true;
+  r.sourceFloor=previousRuntime.sourceFloor;
+  r.floorLimit=previousRuntime.floorLimit;
+  r.itemBonus=previousRuntime.itemBonus;
+  r.gearLevelBonus=previousRuntime.gearLevelBonus;
+  r.oathRelief=!!previousRuntime.oathRelief;
+  r.echoSafeguard=!!previousRuntime.echoSafeguard;
+  r.retryBudget=Math.max(0,(previousRuntime.retryBudget||0)-1);
+  r.createdAt=Date.now();
+  r.cause=String(cause||"");
+  return{...r,retry:true};
+ }
+
  if(floor<10||lost<2)return null;
  const r=ensureRecoveryAssistMeta(state.meta);
  const floorLimit=floor>=30?15:floor>=20?10:5;
@@ -14106,17 +14709,93 @@ function scheduleRecoveryAssistAfterDeath(deathLoss,cause=""){
  r.itemBonus=floor>=20?2:1;
  r.gearLevelBonus=1;
  r.oathRelief=true;
+ r.echoSafeguard=!!activeDeathEcho(state.meta);
+ r.retryBudget=1;
  r.createdAt=Date.now();
  r.cause=String(cause||"");
- return{...r};
+ return{...r,retry:false};
 }
 function claimRecoveryAssistForDeparture(meta){
  const r=ensureRecoveryAssistMeta(meta);
  if(!r.pending)return null;
- const runtime={active:true,sourceFloor:r.sourceFloor,floorLimit:r.floorLimit,itemBonus:r.itemBonus,gearLevelBonus:r.gearLevelBonus,oathRelief:!!r.oathRelief,startedAt:Date.now()};
+ const runtime={
+  active:true,sourceFloor:r.sourceFloor,floorLimit:r.floorLimit,
+  itemBonus:r.itemBonus,gearLevelBonus:r.gearLevelBonus,
+  oathRelief:!!r.oathRelief,echoSafeguard:!!r.echoSafeguard,
+  retryBudget:r.retryBudget||0,
+  cacheFloors:recoveryAssistCacheFloors(r.floorLimit),
+  claimedCaches:[],
+  startedAt:Date.now()
+ };
  r.pending=false;
  r.timesUsed=(r.timesUsed||0)+1;
  return runtime;
+}
+function recoveryAssistCachePending(floor=state?.floor||1){
+ const r=state?.recoveryAssist;
+ if(!r?.active||floor>r.floorLimit)return false;
+ const claimed=new Set(Array.isArray(r.claimedCaches)?r.claimedCaches:[]);
+ return(Array.isArray(r.cacheFloors)?r.cacheFloors:[]).includes(floor)&&!claimed.has(floor);
+}
+function recoveryCacheCandidateScore(gear){
+ if(!gear)return-Infinity;
+ const current=equippedItem(gear.slot);
+ const currentScore=current&&!isStarterGear(current)?gearScore(current):current?gearScore(current)*.55:0;
+ const emptyBonus=!current||isStarterGear(current)?18:0;
+ const equipable=canEquipGearNow(gear)?7:-18;
+ return gearScore(gear)-currentScore+emptyBonus+equipable;
+}
+function createRecoveryCacheGear(){
+ const source=Math.max(1,state.floor);
+ const candidates=[];
+ for(let i=0;i<9;i++){
+  const gear=rollGear(source);
+  if((rarityOrder[gear.rarity]||0)<1)promoteGearRarity(gear,1);
+  gear.identified=true;
+  gear.cursed=false;
+  gear.recoveryCache=true;
+  gear.recoverySourceFloor=state.recoveryAssist?.sourceFloor||0;
+  applyPickupProtection(gear,false);
+  candidates.push(gear);
+ }
+ const usable=candidates.filter(gear=>canEquipGearNow(gear));
+ const pool=usable.length?usable:candidates;
+ pool.sort((a,b)=>recoveryCacheCandidateScore(b)-recoveryCacheCandidateScore(a));
+ return pool[0]||null;
+}
+function recoveryCacheSpawnPoint(){
+ const blocked=(x,y)=>{
+  if(!inside(x,y)||tile(x,y)!==1)return true;
+  if(enemyAt(x,y)||itemAt(x,y)||specialAt(x,y)||envAt(x,y)||activeTrapAt(x,y))return true;
+  return false;
+ };
+ const origins=[state.stairs,state.player].filter(Boolean);
+ for(const origin of origins){
+  for(let radius=0;radius<=3;radius++){
+   for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+    if(Math.abs(dx)+Math.abs(dy)!==radius)continue;
+    const x=origin.x+dx,y=origin.y+dy;
+    if(!blocked(x,y))return{x,y};
+   }
+  }
+ }
+ return randomFloorCell(0);
+}
+function spawnRecoveryCacheIfDue(){
+ if(!recoveryAssistCachePending())return false;
+ const gear=createRecoveryCacheGear(),point=recoveryCacheSpawnPoint();
+ if(!gear||!point)return false;
+ state.items.push({x:point.x,y:point.y,type:"gear",gear,recoveryCache:true});
+ state.recoveryAssist.claimedCaches=Array.isArray(state.recoveryAssist.claimedCaches)?state.recoveryAssist.claimedCaches:[];
+ state.recoveryAssist.claimedCaches.push(state.floor);
+ addLog(`再起支援の再建箱が開いた。第${state.floor}層の目標達成報酬として「${gearLabel(gear)}」が現れた。`);
+ spawnFeedbackBurst(point.x,point.y,"objective",7);
+ return true;
+}
+function recoveryAssistNextCacheFloor(){
+ const r=activeRecoveryAssist();if(!r)return null;
+ const claimed=new Set(Array.isArray(r.claimedCaches)?r.claimedCaches:[]);
+ return(Array.isArray(r.cacheFloors)?r.cacheFloors:[]).find(floor=>floor>=state.floor&&!claimed.has(floor))||null;
 }
 function activeRecoveryAssist(){
  const r=state?.recoveryAssist;
@@ -14131,11 +14810,13 @@ function recoveryOathReliefActive(meta=state?.meta){
 }
 function recoveryAssistHubHtml(meta=state?.meta){
  const r=ensureRecoveryAssistMeta(meta);if(!r.pending)return"";
- return`<div class="recoveryAssistCard"><b>再起支援・次の探索のみ</b><span>第${r.sourceFloor}層で大きな装備損失を受けたため、第1〜${r.floorLimit}層では物資+${r.itemBonus}、装備ILv+${r.gearLevelBonus}。銘装を保持している場合は浅層でも経験を得られます。敵の強さは現在階層どおりで、最高到達階による恒久強化はありません。</span></div>`;
+ const caches=recoveryAssistCacheFloors(r.floorLimit);
+ return`<div class="recoveryAssistCard"><b>再起支援・${r.retryBudget<1?"再挑戦":"次の探索"}</b><span>第1〜${r.floorLimit}層で物資+${r.itemBonus} / 装備ILv+${r.gearLevelBonus}。第${caches.join("・")}層では階層目標を達成すると再建箱が開きます。${r.echoSafeguard?"支援区間で再死亡しても、以前の遺響は上書きされません。":""}</span></div>`;
 }
 function recoveryAssistRunHtml(){
  const r=activeRecoveryAssist();if(!r)return"";
- return`<div class="recoveryAssistRun"><b>再起支援</b>　第${r.floorLimit}層まで物資+${r.itemBonus} / 装備ILv+${r.gearLevelBonus}${r.oathRelief?" / 銘装の浅層XP制限解除":""}</div>`;
+ const next=recoveryAssistNextCacheFloor();
+ return`<div class="recoveryAssistRun"><b>再起支援</b>　第${r.floorLimit}層まで物資+${r.itemBonus} / 装備ILv+${r.gearLevelBonus}${next?` / 次の再建箱 第${next}層`:""}${r.echoSafeguard?" / 遺響保護":""}</div>`;
 }
 
 const deepCycleLawData={
@@ -14329,18 +15010,33 @@ function abyssForkReportHtml(report){
  return`<div class="forkReport"><b>深脈分岐 ${list.length}回${special.length?`・特殊路${special.length}回`:""}</b><br>${labels}</div>`;
 }
 function plannedEnemyCount(){
- if(state.floor===1)return 4;
+ const authored=firstDepthEnemyBudget();
+ if(authored!==null){
+  const biomePressure=(currentBiomeKey()==="furnace"||currentBiomeKey()==="crypt")?1:0;
+  const dynamic=
+   biomePressure+
+   routeValue("enemyBonus")+
+   resonanceBonus("enemyCount")+
+   reactionValue("enemyBonus")+
+   floorForkValue("enemyBonus");
+  const upper=authored+(isRestFloor()?2:5);
+  return clamp(authored+dynamic,Math.max(2,authored-2),upper);
+ }
  const base=5+Math.floor(state.floor*1.15);
  const biomePressure=(currentBiomeKey()==="furnace"||currentBiomeKey()==="crypt")?1:0;
+ const pulse=floorPulseValue("enemyBonus");
  const cap=floorPlan().boss?20:26;
- return Math.max(3,Math.min(cap+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+Math.max(0,floorForkValue("enemyBonus"))+Math.max(0,deepCycleValue("enemyBonus")),base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+floorForkValue("enemyBonus")+deepCycleValue("enemyBonus")));
+ return Math.max(3,Math.min(
+  cap+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+Math.max(0,floorForkValue("enemyBonus"))+Math.max(0,deepCycleValue("enemyBonus"))+Math.max(0,pulse),
+  base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+floorForkValue("enemyBonus")+deepCycleValue("enemyBonus")+pulse
+ ));
 }
 function plannedTrapCount(){
  const base=isRestFloor()?1:Math.min(10,2+Math.floor(state.floor/3));
- return clamp(base+routeValue("trapBonus")+reactionValue("trapBonus")+floorForkValue("trapBonus"),0,16);
+ return clamp(base+routeValue("trapBonus")+reactionValue("trapBonus")+floorForkValue("trapBonus")+floorPulseValue("trapBonus"),0,16);
 }
 function plannedItemCount(){
- const normal=4+Math.floor(state.floor/2)+(mutation()?.itemBonus||0)+(hasTalent("scavenger")?1:0)+(runGrowthHas("explore",4)?1:0)+routeValue("itemBonus")+reactionValue("itemBonus")+floorForkValue("itemBonus")+deepCycleValue("itemBonus")+recoveryAssistValue("itemBonus");
+ const normal=4+Math.floor(state.floor/2)+(mutation()?.itemBonus||0)+(hasTalent("scavenger")?1:0)+(runGrowthHas("explore",4)?1:0)+routeValue("itemBonus")+reactionValue("itemBonus")+floorForkValue("itemBonus")+deepCycleValue("itemBonus")+recoveryAssistValue("itemBonus")+floorPulseValue("itemBonus");
  return state.floor===1?7:Math.max(2,normal);
 }
 function placeGuaranteedItem(type,name,minDist=3){
@@ -14352,11 +15048,40 @@ function applyFloorPacingRewards(){
   placeGuaranteedItem("potion","治癒薬");
   placeGuaranteedItem("food","乾燥肉");
   placeGuaranteedItem("oil","灯油");
-  if(rng()<.35)placeGuaranteedItem("retreat","帰還楔");
+
+  // 第4層は最初の番人へ向かう導入なので従来通り低確率。
+  // 9/14/19層は「帰還か続行か」を必ず実際に選べる節目にする。
+  if([9,14,19].includes(state.floor))placeGuaranteedItem("retreat","帰還楔",4);
+  else if(rng()<.35)placeGuaranteedItem("retreat","帰還楔");
  }
- if([3,8,12,16,19].includes(state.floor)){
+
+ if([3,8,16,19].includes(state.floor)){
   const p=randomFloorCell(4);
   if(p)state.items.push({x:p.x,y:p.y,type:"gear",gear:rollGear(floorTargetLevel())});
+ }
+
+ // 第12層は未鑑定・鑑定・呪いを学ぶ専用教材。
+ if(state.floor===12){
+  const p=randomFloorCell(4);
+  if(p){
+   const gear=rollGear(floorTargetLevel());
+   gear.identified=false;
+   gear.firstDepthLesson="unidentified";
+   state.items.push({x:p.x,y:p.y,type:"gear",gear,firstDepthLesson:true});
+  }
+  placeGuaranteedItem("identify","鑑定紙片",4);
+  placeGuaranteedItem("purify","解呪の灰",4);
+ }
+
+ if(state.floor>20&&currentFloorPulse()?.id==="harvest"){
+  const p=randomFloorCell(5);
+  if(p){
+   const gear=rollGear(floorTargetLevel());
+   gear.pulseHarvest=true;
+   gear.pulseHarvestFloor=state.floor;
+   state.items.push({x:p.x,y:p.y,type:"gear",gear});
+  }
+  placeGuaranteedItem("identify","鑑定紙片",4);
  }
 }
 const firstTwentyObjectives={
@@ -14425,7 +15150,10 @@ function objectiveRewardForFloor(){
   provisions:(plan.rest?60:0)+floorForkValue("objectiveProvisions")
  };
 }
-function objectiveFallbackTarget(){return Math.min(70,34+Math.floor(state.floor*1.5));}
+function objectiveFallbackTarget(){
+ if(state.floor<=20)return Math.min(42,22+state.floor);
+ return Math.min(70,34+Math.floor(state.floor*1.5));
+}
 function createFloorObjective(){
  const base=firstTwentyObjectives[state.floor]||genericFloorObjective();
  return{...base,completed:false,claimed:false,completionMethod:null,
@@ -14481,13 +15209,14 @@ function completeFloorObjective(method="primary"){
  const provisionGain=gainProvisions(objective.reward.provisions||0);
  if(provisionGain.overflow)addLog(`階層報酬の携行糧は上限により${provisionGain.gained}/${provisionGain.requested}手を収納した。`);
  const run=ensureRunStats();run.objectivesCompleted=(run.objectivesCompleted||0)+1;
+ const recoveryCacheSpawned=spawnRecoveryCacheIfDue();
  spawnCombatText(state.player.x,state.player.y,"UNSEALED","dodge",48);
  spawnFeedbackBurst(state.player.x,state.player.y,"objective",12);
  triggerImpactFeedback("objective",{haptic:"objective",duration:680});
  const primaryBonusText=method==="primary"?floorObjectivePrimaryBonusText(objective):"";
- showCombatToast("階層目標達成",`${method==="fallback"?"踏破による代替達成・":""}階段解放 / ${floorObjectiveRewardText(objective)}${primaryBonusText?` / 主条件 ${primaryBonusText}`:""}`,"objective");
+ showCombatToast("階層目標達成",`${method==="fallback"?"踏破による代替達成・":""}階段解放 / ${floorObjectiveRewardText(objective)}${primaryBonusText?` / 主条件 ${primaryBonusText}`:""}${recoveryCacheSpawned?" / 再建箱":""}`,"objective");
  sfx("objective");
- addLog(`階層目標「${objective.title}」を${method==="fallback"?"代替踏破で": ""}達成。階段の封印が解けた。${floorObjectiveRewardText(objective)}${primaryBonusText?` / 主条件ボーナス ${primaryBonusText}`:""}`);
+ addLog(`階層目標「${objective.title}」を${method==="fallback"?"代替踏破で": ""}達成。階段の封印が解けた。${floorObjectiveRewardText(objective)}${primaryBonusText?` / 主条件ボーナス ${primaryBonusText}`:""}${recoveryCacheSpawned?" / 再建箱が開いた":""}`);
  saveMeta();saveGame();return true;
 }
 function updateFloorObjective(){
@@ -14524,6 +15253,7 @@ function renderFloorGoal(){
   <div class="floorGoalText">${objective.desc}　${progress}/${objective.target}</div>
   <div class="floorGoalProgress"><i style="width:${ratio}%"></i></div>
   <div class="floorGoalReward">報酬 ${floorObjectiveRewardText(objective)}${primaryBonus?` / <span class="floorGoalPrimaryBonus">主条件 ${primaryBonus}</span>`:""}${fallback?` / ${fallback}`:""} ${roomEncounterStatusHtml()}</div>
+  ${wardenMasteryStatusHtml()}
   ${wardenVictoryStatusHtml()}
   ${routeFloorStatusHtml()}
   ${livingEcologyFloorStatusHtml()}
@@ -14555,6 +15285,7 @@ function generateFloor(){
  maintainLabyrinthReactionLifecycle(true);
  prepareLabyrinthReactionForExpedition();
  chooseFloorMutation();
+ prepareFloorPulse();
  state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
  state.rooms=[];
 
@@ -14604,7 +15335,7 @@ function generateFloor(){
  }
  const start=state.rooms[0],end=state.rooms[state.rooms.length-1];
  state.player={x:start.cx,y:start.cy};state.stairs={x:end.cx,y:end.cy};
- state.visual=state.visual||{};state.visual.moveFrames=0;state.visual.attackFrames=0;state.visual.damageFrames=0;state.visual.flash=0;state.visual.shake=0;state.visual.hitX=null;state.visual.hitY=null;state.visual.effects=[];state.enemies=[];state.items=[];state.remains=[];state.ecology={spawnClock:0,totalRespawns:0,killsThisFloor:0};state.traps=[];state.specialTiles=[];state.environment=[];state.terrainFeatures=[];state.terrainKnowledge={};state.secretWalls=[];state.shortcuts=[];state.events=[];state.roomEncounters=[];state.visited={};state.visible={};state.bossDefeated=false;state.floorStats=null;state.floorObjective=null;state.floorPhenomenon=null;
+ state.visual=state.visual||{};state.visual.moveFrames=0;state.visual.attackFrames=0;state.visual.damageFrames=0;state.visual.flash=0;state.visual.shake=0;state.visual.hitX=null;state.visual.hitY=null;state.visual.effects=[];state.enemies=[];state.items=[];state.remains=[];state.ecology={spawnClock:0,totalRespawns:0,killsThisFloor:0};state.traps=[];state.specialTiles=[];state.environment=[];state.terrainFeatures=[];state.terrainKnowledge={};state.secretWalls=[];state.shortcuts=[];state.events=[];state.roomEncounters=[];state.visited={};state.visible={};state.bossDefeated=false;state.wardenAfterglow=null;state.wardenMastery=null;state.floorStats=null;state.floorObjective=null;state.floorPhenomenon=null;
  const enemyCount=plannedEnemyCount();
  for(let i=0;i<enemyCount;i++){
   const p=randomFloorCell(6);
@@ -16325,8 +17056,18 @@ function sealedRelicRewardSpec(relic,meta=state?.meta,options={}){
  const seal=sealedRelicSealData[relic?.seal]||sealedRelicSealData.ash;
  const box=sealedRelicRandomBox(`${relic?.rewardSeed||relic?.id}|tier`);
  const roll=sealedRelicRandom(box);
+ const wagerGuarantee=relic?.wagerReward?relic?.wagerGuaranteeTier:null;
  const resonanceReady=fortune.misses>=SEALED_RELIC_PITY;
- const useResonance=!!options.useResonance&&resonanceReady;
+ const useResonance=!!options.useResonance&&resonanceReady&&!wagerGuarantee;
+ if(wagerGuarantee==="jackpot"){
+  return{tier:"jackpot",kind:"gear",label:"深層遺宝",wagerGuaranteed:true,shards:8};
+ }
+ if(wagerGuarantee==="legendary"){
+  const jackpot=.012+seal.bias*.35;
+  return roll<jackpot
+   ?{tier:"jackpot",kind:"gear",label:"深層遺宝",wagerGuaranteed:true,shards:8}
+   :{tier:"legendary",kind:"gear",label:"伝説装備",wagerGuaranteed:true,shards:4};
+ }
  if(useResonance){
   return roll<(.12+seal.bias*.5)
    ?{tier:"jackpot",kind:"gear",label:"深層遺宝",pity:true,resonanceApplied:true,shards:8}
@@ -16406,21 +17147,23 @@ function applySealedRelicReward(relic,options={}){
   const fortune=nextVault.fortune;
   const high=actualTier==="legendary"||actualTier==="jackpot";
   const resonanceApplied=!!spec.resonanceApplied;
+  const wagerGuaranteed=!!spec.wagerGuaranteed;
   if(high){
    fortune.legendaryOpened++;
    if(actualTier==="jackpot")fortune.jackpots++;
   }
   if(resonanceApplied){
    fortune.misses=0;
+  }else if(wagerGuaranteed){
+   // 深層懸賞の保証は黄金残響とは別報酬。蓄積中/充填済みの残響を消費・リセットしない。
   }else if(!high){
    fortune.misses=Math.min(SEALED_RELIC_PITY,fortune.misses+1);
   }else if(fortune.misses<SEALED_RELIC_PITY){
-   // 通常開封で自然に伝説以上を引いた場合だけ、未充填の連敗値をリセット。
    fortune.misses=0;
   }
   // 既に黄金残響が満ちている場合、通常開封で自然伝説を引いても確定権は保持する。
   fortune.totalOpened++;
-  const entry={id:nextRelic.id,floor:nextRelic.floor,source:nextRelic.source,seal:nextRelic.seal,tier:actualTier,label:actualTier==="jackpot"?"深層遺宝":actualTier==="legendary"?"伝説装備":spec.label,gearName:gear?gearLabel(gear):"",shards:spec.shards||0,openedAt:Date.now(),pity:!!spec.pity,resonanceApplied:!!spec.resonanceApplied};
+  const entry={id:nextRelic.id,floor:nextRelic.floor,source:nextRelic.source,seal:nextRelic.seal,tier:actualTier,label:actualTier==="jackpot"?"深層遺宝":actualTier==="legendary"?"伝説装備":spec.label,gearName:gear?gearLabel(gear):"",shards:spec.shards||0,openedAt:Date.now(),pity:!!spec.pity,resonanceApplied:!!spec.resonanceApplied,wagerGuaranteed:!!spec.wagerGuaranteed,wagerStreak:nextRelic.wagerStreak||0};
   fortune.history.push(entry);fortune.history=fortune.history.slice(-24);
   nextMeta.sealedRelics=nextVault.relics.filter(item=>item.id!==nextRelic.id);
 
@@ -16546,7 +17289,7 @@ function showLastOpenedRelicInStash(){
 function requestGoldenResonanceOpen(relicId){
  const {relics,fortune}=ensureSealedRelicMeta(state.meta);
  const relic=relics.find(item=>item.id===relicId);
- if(!relic||fortune.misses<SEALED_RELIC_PITY)return false;
+ if(!relic||fortune.misses<SEALED_RELIC_PITY||relic.wagerGuaranteeTier)return false;
  const seal=sealedRelicSealData[relic.seal]||sealedRelicSealData.ash;
  return openActionConfirm({
   title:"黄金残響を注ぐ",
@@ -16563,7 +17306,7 @@ function renderSealedRelicVault(meta=state.meta){
  const pct=Math.round(Math.min(SEALED_RELIC_PITY,fortune.misses)/SEALED_RELIC_PITY*100);
  const ready=fortune.misses>=SEALED_RELIC_PITY;
  const history=fortune.history.slice(-5).reverse();
- body.innerHTML=`<div class="relicVaultIntro"><div class="relicVaultLead"><b>封印遺物庫</b><small>探索中に見つかる封印遺物は、灯台へ生還するまで中身が分かりません。封印の色は期待度の目安だけを示し、携行中に死亡すると失います。</small></div><div class="relicFortune ${ready?"ready":""}"><div class="relicFortuneHead"><b>黄金残響 ${fortune.misses}/${SEALED_RELIC_PITY}</b><small>${ready?"充填済み。好きな未開封の封印へ「黄金残響を注ぐ」で伝説以上を確定できます。通常開封では消費しません。":"伝説以上が出なかった通常開封で蓄積。満ちると、好きな封印へ1回だけ伝説以上を確定できます。"}</small></div><div class="relicFortuneBar"><i style="width:${pct}%"></i></div></div></div>${relics.length?`<div class="relicVaultGrid">${relics.map((relic,index)=>{const seal=sealedRelicSealData[relic.seal]||sealedRelicSealData.ash;const blocked=(meta.stash||[]).length>=lighthouseStashCapacity(meta);const waiting=index>0;return`<div class="relicVaultCard ${relic.seal}"><div><b>${seal.glyph} ${seal.label}</b><div class="relicVaultMeta"><span>第${relic.floor}層</span><span>${sealedRelicSourceLabel(relic.source)}</span></div></div><small>${seal.desc}</small><div class="relicVaultActions"><button type="button" data-open-relic="${relic.id}" ${blocked||waiting?"disabled":""}>${blocked?"倉庫を1枠空ける":waiting?"通常開封は前の封印から":"封印を解く"}</button>${ready?`<button type="button" class="goldenResonanceBtn" data-golden-relic="${relic.id}" ${blocked?"disabled":""}>黄金残響を注ぐ</button>`:""}</div></div>`}).join("")}</div>`:'<p class="note">未開封の封印遺物はありません。通常敵からも極低確率で現れ、変異個体・特異室・番人ほど見つけやすくなります。</p>'}${history.length?`<div class="relicHistory"><b>最近の開封</b>${history.map(entry=>`<div class="relicHistoryItem"><span class="relicHistoryFloor">第${entry.floor}層</span> <span class="relicHistoryReward">${entry.label}${entry.gearName?`「${entry.gearName}」`:""}</span></div>`).join("")}</div>`:""}`;
+ body.innerHTML=`<div class="relicVaultIntro"><div class="relicVaultLead"><b>封印遺物庫</b><small>探索中に見つかる封印遺物は、灯台へ生還するまで中身が分かりません。封印の色は期待度の目安だけを示し、携行中に死亡すると失います。</small></div><div class="relicFortune ${ready?"ready":""}"><div class="relicFortuneHead"><b>黄金残響 ${fortune.misses}/${SEALED_RELIC_PITY}</b><small>${ready?"充填済み。好きな未開封の封印へ「黄金残響を注ぐ」で伝説以上を確定できます。通常開封では消費しません。":"伝説以上が出なかった通常開封で蓄積。満ちると、好きな封印へ1回だけ伝説以上を確定できます。"}</small></div><div class="relicFortuneBar"><i style="width:${pct}%"></i></div></div></div>${relics.length?`<div class="relicVaultGrid">${relics.map((relic,index)=>{const seal=sealedRelicSealData[relic.seal]||sealedRelicSealData.ash;const blocked=(meta.stash||[]).length>=lighthouseStashCapacity(meta);const waiting=index>0;const wagerQuality=relic.wagerGuaranteeTier==="jackpot"?"深層遺宝確定":relic.wagerGuaranteeTier==="legendary"?"伝説以上確定":"";return`<div class="relicVaultCard ${relic.seal} ${wagerQuality?"wagerGuaranteed":""}"><div><b>${seal.glyph} ${seal.label}${wagerQuality?`・${wagerQuality}`:""}</b><div class="relicVaultMeta"><span>第${relic.floor}層</span><span>${sealedRelicSourceLabel(relic.source)}</span>${relic.wagerStreak?`<span>連破${relic.wagerStreak}</span>`:""}</div></div><small>${wagerQuality?`深層懸賞の質保証：${wagerQuality}。黄金残響は消費せず保持されます。`:seal.desc}</small><div class="relicVaultActions"><button type="button" data-open-relic="${relic.id}" ${blocked||waiting?"disabled":""}>${blocked?"倉庫を1枠空ける":waiting?"通常開封は前の封印から":"封印を解く"}</button>${ready&&!relic.wagerGuaranteeTier?`<button type="button" class="goldenResonanceBtn" data-golden-relic="${relic.id}" ${blocked?"disabled":""}>黄金残響を注ぐ</button>`:""}</div></div>`}).join("")}</div>`:'<p class="note">未開封の封印遺物はありません。通常敵からも極低確率で現れ、変異個体・特異室・番人ほど見つけやすくなります。</p>'}${history.length?`<div class="relicHistory"><b>最近の開封</b>${history.map(entry=>`<div class="relicHistoryItem"><span class="relicHistoryFloor">第${entry.floor}層</span> <span class="relicHistoryReward">${entry.label}${entry.gearName?`「${entry.gearName}」`:""}</span></div>`).join("")}</div>`:""}`;
  body.querySelectorAll?.("[data-open-relic]").forEach(button=>button.onclick=()=>beginSealedRelicOpen(button.dataset.openRelic));
  body.querySelectorAll?.("[data-golden-relic]").forEach(button=>button.onclick=()=>requestGoldenResonanceOpen(button.dataset.goldenRelic));
 }
@@ -17050,6 +17793,12 @@ function musicConfig(scene){
   melodies:[[0,null,null,2,null,1],[0,null,-1,null,-2,null]],
   harp:[0,3]
  };
+ if(base==="afterglow")return{
+  bpm:74,transpose:1,scale:"bright",drum:"sparse",
+  drone:.0032,whistle:.0076,harpVolume:.0074,whistleOctave:1,
+  melodies:[[0,null,2,4,null,3],[4,3,2,null,1,0],[0,2,null,5,4,null],[3,null,2,1,null,0]],
+  harp:[0,4,5,2]
+ };
  return{
   bpm:96,transpose:journeyTranspose,scale:"bright",drum:"soft",
   drone:.0042,whistle:.0096,harpVolume:.0072,whistleOctave:1,
@@ -17100,12 +17849,13 @@ function audioSceneForState(){
  let threatCount=0;try{threatCount=currentThreatForecast().count||0}catch(error){}
  const hpRatio=(state.hero?.hp||1)/Math.max(1,state.hero?.maxHp||1);
  if(threatCount>=2||hpRatio<=.3)return"danger";
+ if(activeWardenAfterglow())return"afterglow";
  let biome="roots";try{biome=currentBiomeKey?.()||"roots"}catch(error){}
  return`explore:${biome}`;
 }
 function audioSceneDisplay(scene=audioSceneForState()){
  const [base,biome]=scene.split(":");
- if(base==="title")return"灯台への序奏";if(base==="lighthouse")return"灯台の旅支度";if(base==="danger")return"迫る足音";if(base==="boss")return"番人の輪舞";if(base==="death")return"失われた残響";
+ if(base==="title")return"灯台への序奏";if(base==="lighthouse")return"灯台の旅支度";if(base==="danger")return"迫る足音";if(base==="boss")return"番人の輪舞";if(base==="afterglow")return"番人の余韻";if(base==="death")return"失われた残響";
  return`深淵の旅路・${({roots:"根迷宮",crypt:"古き石廊",furnace:"火の工房",frost:"白銀洞",fungal:"光茸の小径"}[biome]||"迷宮")}`;
 }
 function rampMusicLane(lane,target,now,duration){
@@ -17312,6 +18062,7 @@ function damageEnemy(e,damage,label=""){
   showCombatToast("態勢崩し",`${e.name}の${enemyIntentDisplayName(brokenIntent)}を中断${staminaGain?"・気力+1":""}・次手に反撃好機`,"break");
   addLog(`${e.name}の攻撃態勢を崩した！${staminaGain?" 気力が1戻った。":""} 次の行動に反撃好機が残る。`);
   updateFloorObjective();
+  if(e?.boss)awardWardenMastery(e,brokenIntent,"態勢崩し");
  }
  addLog((label?label+" ":"")+e.name+"に "+dmg+" ダメージ。");
  if(e.hp<=0)defeatEnemy(e);
@@ -17439,6 +18190,7 @@ function defeatEnemy(e){
 
   restoreLastStandFromWarden();
   const profile=wardenProfileFor(e);
+  enterWardenAfterglow(e,profile);
   const rewardGear=prepareWardenTrophy(rollGear((e.level||floorTargetLevel())+1),e,profile);
   if(state.floor===20)grantFirstTwentyClearReward(rewardGear);
   const routeResult=completeRouteAtBoss(e,rewardGear);
@@ -17467,7 +18219,7 @@ function defeatEnemy(e){
   state.pendingWardenVictoryRecord={enemy:e,profile,rewardGear,routeResult,soulAnchorFound};
   addLog(`${profile.name}が崩れ、階段の封印が解けた！`);
   addLog(`${wardenCadenceForFloor(state.floor).gate}突破。番人戦利品「${wardenTrophyPublicLabel(rewardGear)}」が残された。`);
-  addLog(`番人固有報酬：深淵の欠片+${profile.bonusShards||0}。`);
+  addLog(`番人固有報酬：深淵の欠片+${profile.bonusShards||0}。${rewardGear.wardenMastery?" 攻略試練達成により戦利品ILv+1。":""}`);
  }else{
   if(!rewardDeepElite(e))tryNormalEnemyGearDrop(e);
   livingEcologyResourceReward(e);
@@ -17560,11 +18312,11 @@ function bomberExplosion(e){
 function floorEnemyCap(){
  const base=7+Math.floor(state.floor*1.6);
  const roomBonus=Math.floor((state.rooms?.length||8)/4);
- return Math.min(30,base+roomBonus+resonanceBonus("enemyCount"));
+ return Math.max(4,Math.min(30,base+roomBonus+resonanceBonus("enemyCount")+floorPulseValue("respawnBonus")));
 }
 function respawnBudget(){
- // 1階あたりの再出現総数。深層ほど多いが無限ではない。
- return Math.min(24,5+Math.floor(state.floor*.9)+resonanceBonus("respawns"));
+ // 1階あたりの再出現総数。深層ほど多いが無限ではなく、五層周期でも呼吸する。
+ return Math.max(1,Math.min(24,5+Math.floor(state.floor*.9)+resonanceBonus("respawns")+floorPulseValue("respawnBonus")));
 }
 function respawnXpMultiplier(){
  const kills=state.ecology?.killsThisFloor||0;
@@ -17582,6 +18334,9 @@ function validRespawnCell(p){
  return tile(p.x,p.y)===1;
 }
 function spawnEcologyEnemy(){
+ if(isRestFloor())return false;
+ if(state.floor%5===0&&state.bossDefeated)return false;
+ if(activeWardenAfterglow())return false;
  if(state.floor%5===0&&!state.bossDefeated)return false;
  if(state.enemies.length>=floorEnemyCap())return false;
  if((state.ecology.totalRespawns||0)>=respawnBudget())return false;
@@ -17625,6 +18380,8 @@ function spawnEcologyEnemy(){
 }
 function updateEcology(){
  state.ecology=state.ecology||{spawnClock:0,totalRespawns:0,killsThisFloor:0};
+ if(isRestFloor())return;
+ if(activeWardenAfterglow()||(state.floor%5===0&&state.bossDefeated))return;
  if(floorPhenomenonValue("respawnPause"))return;
  state.ecology.spawnClock++;
  const interval=Math.max(9,16-Math.floor(state.floor/4));
@@ -17769,12 +18526,13 @@ function resolveWardenIntent(enemy,intent,cells,playerInTarget){
    const stayed=target&&state.player.x===target.x&&state.player.y===target.y;
    if(stayed){
     spawnCombatText(state.player.x,state.player.y,"STAY","dodge",42);
-    showCombatToast("根檻を見切った","動かず中心へ留まった","dodge");
     addLog("根檻の中心へ留まり、閉じる根をやり過ごした。");
     ensureCombatStats().dodges++;
     recoverStamina(1);
     openCounterWindow(enemy,"根檻の見切り");
     updateFloorObjective();
+    const mastered=awardWardenMastery(enemy,intent,"中心待機");
+    if(!mastered)showCombatToast("根檻を見切った","動かず中心へ留まった","dodge");
    }else registerIntentDodge(enemy,intent);
   }
   clearEnemyIntent(enemy);
@@ -18179,35 +18937,66 @@ function pickup(){
   ?(pickupRarityRank>=3?"legendary":pickupRarityRank>=2?"rare":"pickup")
   :(mysteryRank>=3?"legendary":mysteryRank>=2?"rare":"pickup");
  state.inventory.push(item.gear);
- registerGearArchiveDiscoveries(item.gear,wardenTrophy?"warden_pickup":"gear_pickup");
- if(feedbackKind==="legendary"||feedbackKind==="rare"||wardenTrophy){
-  const burstKind=feedbackKind==="legendary"?"legendary":"rare";
-  const burstCount=wardenTrophy?(feedbackKind==="legendary"?16:11):(feedbackKind==="legendary"?14:9);
+ const pickupDiscoveries=[];
+ registerGearArchiveDiscoveries(
+  item.gear,
+  wardenTrophy?"warden_pickup":"gear_pickup",
+  {silentFeedback:true,deferSave:true,collect:pickupDiscoveries}
+ );
+ const pickupDiscoveryText=gearRevealDiscoverySummary(pickupDiscoveries);
+ const unifiedFeedbackKind=pickupDiscoveries.length?"legendary":feedbackKind;
+
+ if(unifiedFeedbackKind==="legendary"||unifiedFeedbackKind==="rare"||wardenTrophy){
+  const burstKind=unifiedFeedbackKind==="legendary"?"legendary":"rare";
+  const burstCount=pickupDiscoveries.length?16:wardenTrophy?(unifiedFeedbackKind==="legendary"?16:11):(unifiedFeedbackKind==="legendary"?14:9);
   spawnFeedbackBurst(state.player.x,state.player.y,burstKind,burstCount);
-  triggerImpactFeedback(burstKind,{haptic:burstKind,duration:wardenTrophy?720:(feedbackKind==="legendary"?760:580)});
+  triggerImpactFeedback(burstKind,{haptic:burstKind,duration:pickupDiscoveries.length?840:wardenTrophy?720:(unifiedFeedbackKind==="legendary"?760:580)});
  }else feedbackHaptic("pickup");
- sfx(feedbackKind==="legendary"?"legendary":feedbackKind==="rare"||wardenTrophy?"rare":"pickup");
+ sfx(unifiedFeedbackKind==="legendary"?"legendary":unifiedFeedbackKind==="rare"||wardenTrophy?"rare":"pickup");
+
  if(wardenTrophy){
   const floor=item.gear.wardenTrophyFloor||state.floor;
   const rootTune=rootTunedGearInfo(item.gear);
   const signal=item.gear.identified?null:unidentifiedGearSignal(item.gear);
-  addLog(`第${floor}層の番人戦利品「${item.gear.identified?wardenTrophyPublicLabel(item.gear):`未鑑定${equippedSlotLabel(item.gear.slot)}・${signal.label}`}」を確保した。${rootTune?` ${rootTunedGearSummary(item.gear,false)}。`:""}`);
-  showCombatToast("番人戦利品を確保",`${item.gear.identified?wardenTrophyPublicLabel(item.gear):signal.label} / ILv${item.gear.itemLevel||1}${rootTune?` / ${rootTune.short}`:""}`,item.gear.identified&&pickupRarityRank>=3?"legendary":signal?.id==="anomaly"?"critical":"objective");
+  const publicName=item.gear.identified?wardenTrophyPublicLabel(item.gear):`未鑑定${equippedSlotLabel(item.gear.slot)}・${signal.label}`;
+  addLog(`第${floor}層の番人戦利品「${publicName}」を確保した。${rootTune?` ${rootTunedGearSummary(item.gear,false)}。`:""}`);
+  showCombatToast(
+   pickupDiscoveries.length?"番人戦利品・NEW DISCOVERY":"番人戦利品を確保",
+   `${item.gear.identified?wardenTrophyPublicLabel(item.gear):signal.label} / ILv${item.gear.itemLevel||1}${rootTune?` / ${rootTune.short}`:""}${pickupDiscoveryText?` / ${pickupDiscoveryText}`:""}`,
+   pickupDiscoveries.length?"legendary":item.gear.identified&&pickupRarityRank>=3?"legendary":signal?.id==="anomaly"?"critical":"objective"
+  );
  }else{
   const rootTune=rootTunedGearInfo(item.gear);
   if(item.gear.identified){
    addLog(`${rarityData[item.gear.rarity].label}装備「${item.gear.name}」を拾った。${rootTune?` ${rootTunedGearSummary(item.gear,false)}。`:""}`);
-   if(rootTune)showCombatToast("樹脈適合の戦利品",`${rootTune.label}・${rootTunedGearSummary(item.gear,true)}`,"objective");
+   if(rootTune||pickupRarityRank>=2||pickupDiscoveries.length){
+    const title=pickupDiscoveries.length
+     ?"戦利品・NEW DISCOVERY"
+     :pickupRarityRank>=3?"伝説の戦利品"
+     :pickupRarityRank>=2?"希少な戦利品"
+     :"樹脈適合の戦利品";
+    const detail=[
+     `${rarityData[item.gear.rarity]?.label||"装備"}・${gearLabel(item.gear)}`,
+     rootTune?rootTunedGearSummary(item.gear,true):"",
+     pickupDiscoveryText
+    ].filter(Boolean).join(" / ");
+    showCombatToast(title,detail,pickupDiscoveries.length||pickupRarityRank>=3?"legendary":pickupRarityRank>=2?"rare":"objective");
+   }
   }else{
    const signal=unidentifiedGearSignal(item.gear);
    addLog(`正体不明の装備を拾った。${signal.label}。${rootTune?` ${rootTune.label}の反応も重なっている。`:""}`);
-   if(signal.id==="anomaly"){
-    showCombatToast("異常な遺物反応",`${rootTune?`${rootTune.short} / `:""}鑑定するまで正体・呪いは不明`,"critical");
+   if(signal.id==="anomaly"||pickupDiscoveries.length){
+    showCombatToast(
+     pickupDiscoveries.length?"未鑑定戦利品・NEW DISCOVERY":"異常な遺物反応",
+     `${rootTune?`${rootTune.short} / `:""}${signal.label}${pickupDiscoveryText?` / ${pickupDiscoveryText}`:""} / 鑑定まで正体・呪いは不明`,
+     pickupDiscoveries.length?"legendary":"critical"
+    );
    }else if(signal.id==="strong"||rootTune){
     showCombatToast("未鑑定戦利品",`${signal.label}${rootTune?` / ${rootTune.short}`:""}・鑑定候補`,"objective");
    }
   }
  }
+ if(pickupDiscoveries.length)saveMeta();
  return true;
 }
 function triggerTrap(){
@@ -18786,7 +19575,24 @@ function attemptStairDescent(dx=0,dy=0,nx=state.stairs.x,ny=state.stairs.y){
   return true;
  }
  const goal=firstTwentyPlan[nextFloor],nextLabel=goal?`「${goal.title}」`:`第${nextFloor}層`;
- return openActionConfirm({title:"次の階層へ進む",tone:"warning",confirmLabel:`第${nextFloor}層へ降りる`,body:`<div class="actionConfirmLead">第${currentFloor}層を離れ、${nextLabel}へ進みます。</div><div class="actionConfirmMetrics"><div class="actionConfirmMetric"><b>${currentFloor}→${nextFloor}</b><small>階層</small></div><div class="actionConfirmMetric"><b>${state.hero.hp}/${state.hero.maxHp}</b><small>現在HP</small></div><div class="actionConfirmMetric"><b>${state.hunger}/${effectiveMaxHunger()}</b><small>現在の充足</small></div><div class="actionConfirmMetric"><b>約${provisionStatusSnapshot().turns}手</b><small>探索余力</small></div><div class="actionConfirmMetric"><b>${state.inventory.length}/${inventoryCapacity()}</b><small>荷物</small></div></div><div class="actionConfirmWarning">一度降りると、この階層の未回収品・事件・古い昇降路へ戻れません。</div>`,onCancel:()=>addLog("階段の前で足を止めた。"),onConfirm:()=>{if(state.floor!==currentFloor){addLog("階層状態が変化したため、降下を中止した。");return false}performStairDescent(dx,dy,nx,ny);return true}});
+ const returnStatus=returnAccessStatus(),canExtract=returnStatus.ready;
+ return openActionConfirm({
+  title:"続行する？",
+  tone:"warning",
+  cancelLabel:canExtract?"この階に残る / 帰還を考える":"この階に残る",
+  confirmLabel:`第${nextFloor}層へ降りる`,
+  body:`<div class="actionConfirmLead">第${currentFloor}層を離れ、${nextLabel}へ進みます。</div>
+   ${stairDecisionCardHtml(canExtract)}
+   <div class="actionConfirmMetrics">
+    <div class="actionConfirmMetric"><b>${state.hero.hp}/${state.hero.maxHp}</b><small>現在HP</small></div>
+    <div class="actionConfirmMetric"><b>${state.hunger}/${effectiveMaxHunger()}</b><small>現在の充足</small></div>
+    <div class="actionConfirmMetric"><b>約${provisionStatusSnapshot().turns}手</b><small>探索余力</small></div>
+    <div class="actionConfirmMetric"><b>${state.inventory.length}/${inventoryCapacity()}</b><small>荷物</small></div>
+   </div>
+   <div class="actionConfirmWarning">降りると、この階層の未回収品・事件・古い昇降路へ戻れません。${canExtract?" 戻れば階段前の帰還ボタンから、今の成果を灯台へ確定できます。":""}</div>`,
+  onCancel:()=>addLog(canExtract?"階段の前で足を止めた。帰還するなら画面下の帰還案内から確定できる。":"階段の前で足を止めた。"),
+  onConfirm:()=>{if(state.floor!==currentFloor){addLog("階層状態が変化したため、降下を中止した。");return false}performStairDescent(dx,dy,nx,ny);return true}
+ });
 }
 
 function performStairDescent(dx,dy,nx,ny){
@@ -19258,35 +20064,11 @@ function compareText(g){
 }
 function identifyItem(id){
  const g=state.inventory.find(i=>i.id===id);if(!g||g.identified)return;
- const beforeSignal=unidentifiedGearSignal(g);
  if(state.consumables.identify>0)state.consumables.identify--;
  else if((state.fieldScrap||0)>=2)state.fieldScrap-=2;
  else if(state.gold>=8)state.gold-=8;
  else{addLog("鑑定紙片・現地素材2・8Gのいずれも足りない。");return}
- g.identified=true;
- if(!g.manualLock)applyPickupProtection(g,false);
- const rarity=rarityData[g.rarity]||rarityData.common;
- const trait=legendaryTraitInfo(g);
- const rootTune=rootTunedGearInfo(g);
- const rank=rarityOrder[g.rarity]||0;
- const revealKind=rank>=3?"legendary":rank>=2?"rare":"objective";
- const revealDetail=[
-  `${rarity.label}・${gearLabel(g)}`,
-  trait?`固有「${trait.label}」`:"",
-  rootTune?rootTune.short:"",
-  g.cursed?"呪具":""
- ].filter(Boolean).join(" / ");
- addLog(`「${gearLabel(g)}」を鑑定した。${beforeSignal.label}の正体は${rarity.label}${trait?`・固有「${trait.label}」`:""}${g.cursed?"・呪具":""}だった。`);
- showCombatToast("鑑定結果",revealDetail,revealKind);
- registerGearArchiveDiscoveries(g,"identify");
- if(rank>=2){
-  spawnFeedbackBurst(state.player.x,state.player.y,rank>=3?"legendary":"rare",rank>=3?15:9);
-  triggerImpactFeedback(rank>=3?"legendary":"rare",{haptic:rank>=3?"legendary":"rare",duration:rank>=3?820:620});
-  sfx(rank>=3?"legendary":"rare");
- }else{
-  triggerImpactFeedback("objective",{haptic:"objective",duration:360});
-  sfx("objective");
- }
+ revealGearIdentity(g,"identify","鑑定結果");
  renderInventory();render();saveGame();
 }
 function usePotion(){
@@ -19314,14 +20096,7 @@ function executeEquipItem(id,identifyOnEquip=false){
  const g=state.inventory.find(item=>item.id===id);if(!g)return false;if(!canEquipGearNow(g)){addLog(`未調律装備の同調Lv${gearAttunementLevel(g)}に達していない。灯台へ持ち帰れば次回からLv1で装備できる。`);return false}
  const old=equippedItem(g.slot);if(old?.cursed){addLog("呪具が外れない。解呪の灰が必要だ。");return false}
  if(identifyOnEquip&&!g.identified){
-  const beforeSignal=unidentifiedGearSignal(g);
-  g.identified=true;
-  const rarity=rarityData[g.rarity]||rarityData.common;
-  if(!g.manualLock)applyPickupProtection(g,false);
-  const trait=legendaryTraitInfo(g);
-  addLog(`身につけた瞬間、${beforeSignal.label}の正体が判明した。${rarity.label}${trait?`・固有「${trait.label}」`:""}${g.cursed?"・呪具":""}。`);
-  showCombatToast("装備して判明",`${rarity.label}・${gearLabel(g)}${trait?` / ${trait.label}`:""}${g.cursed?" / 呪具":""}`,(rarityOrder[g.rarity]||0)>=3?"legendary":(rarityOrder[g.rarity]||0)>=2?"rare":g.cursed?"critical":"objective");
-  registerGearArchiveDiscoveries(g,"equip_reveal");
+  revealGearIdentity(g,"equip_reveal","装備して判明");
  }
  setEquippedItem(g.slot,g);state.inventory=state.inventory.filter(item=>item!==g);if(old)state.inventory.push(old);state.hunger=Math.min(state.hunger,effectiveMaxHunger());if(g.cursed)addLog("呪いが絡みつき、装備が外れなくなった！");addLog(equippedSlotLabel(g.slot)+"へ装備した。");renderInventory();saveGame();render();return true;
 }
@@ -19785,6 +20560,98 @@ function pickupGroundItemFromInventory(){
  if(picked)saveGame();
  renderInventory();render();
 }
+function carryStakesSnapshot(){
+ const carried=[...new Map(
+  [...allEquippedItems(),...state.inventory]
+   .filter(g=>g&&!isStarterGear(g))
+   .map(g=>[g.id,g])
+ ).values()];
+ const stashIds=new Set((state.meta?.stash||[]).map(g=>g.id));
+ const newGear=carried.filter(g=>!stashIds.has(g.id));
+ const sealed=(state.sealedRelics||[]).length;
+ const scrapShards=Math.floor((state.fieldScrap||0)/5);
+ const wager=deepWagerPayoutPreview();
+ const visibleHighSignal=newGear.filter(g=>{
+  if(g.identified)return(rarityOrder[g.rarity]||0)>=2||!!g.wardenTrophyFloor||!!g.deepBoundaryTrophy||!!g.nemesisRecovered;
+  const signal=unidentifiedGearSignal(g);
+  return signal?.id==="strong"||signal?.id==="anomaly"||!!g.wardenTrophyFloor||!!g.deepBoundaryTrophy||!!g.nemesisRecovered;
+ }).length;
+ return{
+  carried:carried.length,
+  newGear:newGear.length,
+  sealed,
+  scrapShards,
+  wager,
+  visibleHighSignal
+ };
+}
+function nextFloorRiskSnapshot(currentFloor=state?.floor||1){
+ const nextFloor=currentFloor+1;
+ if(shouldOfferAbyssFork(currentFloor)){
+  return{floor:nextFloor,id:"fork",label:"深脈分岐",tone:"choice",detail:"次の1階だけ危険と報酬を選べる"};
+ }
+ const plan=firstTwentyPlan[nextFloor]||null;
+ if(plan?.boss||nextFloor%5===0){
+  return{floor:nextFloor,id:"boss",label:"番人",tone:"danger",detail:"5層周期の頂点"};
+ }
+ if(plan?.rest){
+  return{floor:nextFloor,id:"rest",label:"補給・静穏",tone:"safe",detail:"戦闘密度を抑えた立て直し階"};
+ }
+ const pulse=floorPulseProfile(nextFloor);
+ const map={
+  breath:{tone:"safe",label:"静穏",detail:"敵と再出現が少ない"},
+  rise:{tone:"normal",label:"上昇",detail:"通常密度へ戻る"},
+  pressure:{tone:"danger",label:"圧力",detail:"敵・変異・戦団が増える"},
+  harvest:{tone:"reward",label:"実り",detail:"戦闘を抑え、戦利品が増える"},
+  intro:{tone:"normal",label:plan?.title||"探索",detail:plan?.goal||"次の階層"}
+ };
+ const info=map[pulse?.id]||map.intro;
+ return{floor:nextFloor,id:pulse?.id||"normal",...info};
+}
+function carryStakeShortText(snapshot=carryStakesSnapshot()){
+ const parts=[`装備${snapshot.carried}`];
+ if(snapshot.newGear)parts.push(`新${snapshot.newGear}`);
+ if(snapshot.visibleHighSignal)parts.push(`注目${snapshot.visibleHighSignal}`);
+ if(snapshot.sealed)parts.push(`封印${snapshot.sealed}`);
+ if(snapshot.scrapShards)parts.push(`欠片+${snapshot.scrapShards}`);
+ if(snapshot.wager?.pendingShards)parts.push(`懸賞${snapshot.wager.pendingShards}`);
+ return parts.slice(0,4).join("・");
+}
+function nextFloorRiskShortText(snapshot=nextFloorRiskSnapshot()){
+ return`次 第${snapshot.floor}層・${snapshot.label}`;
+}
+function stairDecisionSummary(){
+ const carry=carryStakesSnapshot(),next=nextFloorRiskSnapshot();
+ const hpRate=state.hero.maxHp>0?state.hero.hp/state.hero.maxHp:1;
+ const hungerRate=effectiveMaxHunger()>0?state.hunger/effectiveMaxHunger():1;
+ const dangerSignals=[];
+ if(hpRate<=.35)dangerSignals.push("HP低");
+ if(hungerRate<=.15)dangerSignals.push("飢餓域");
+ if(provisionStatusSnapshot().turns<=90)dangerSignals.push("余力少");
+ return{
+  carry,next,dangerSignals,
+  prompt:`確定 ${carryStakeShortText(carry)} ｜ ${nextFloorRiskShortText(next)}`,
+  lossLabel:carry.carried?`死亡時：携行装備${carry.carried}個が全損対象`:"死亡時：携行装備なし"
+ };
+}
+function stairDecisionCardHtml(canExtract=returnAccessStatus().ready){
+ const info=stairDecisionSummary(),next=info.next,carry=info.carry;
+ const nowParts=[
+  `<span>装備 <b>${carry.carried}</b></span>`,
+  carry.newGear?`<span>新規 <b>${carry.newGear}</b></span>`:"",
+  carry.sealed?`<span>封印 <b>${carry.sealed}</b></span>`:"",
+  carry.wager?.pendingShards?`<span>懸賞 <b>${carry.wager.pendingShards}欠片</b></span>`:"",
+  carry.scrapShards?`<span>素材換算 <b>+${carry.scrapShards}欠片</b></span>`:""
+ ].filter(Boolean).join("");
+ return`<div class="stairDecisionCard ${next.tone}">
+  <div class="stairDecisionHead"><b>${canExtract?"今の成果を確定するか、もう1層欲張るか":"現在の成果を抱えたまま、もう1層進むか"}</b>${info.dangerSignals.length?`<span class="danger">${info.dangerSignals.join(" / ")}</span>`:""}</div>
+  <div class="stairDecisionColumns">
+   <div><small>${canExtract?"今帰ると確定":"現在の携行価値"}</small><div class="stairDecisionChips">${nowParts}</div></div>
+   <div><small>続行すると</small><b class="stairDecisionNext">第${next.floor}層・${next.label}</b><span>${next.detail}</span></div>
+  </div>
+  <div class="stairDecisionLoss">${info.lossLabel}。保険・遺響など既存の救済は通常どおり適用。</div>
+ </div>`;
+}
 function returnAccessStatus(){
  if(!state||state.expeditionEnded||state.gameOver){
   return{near:false,ready:false,id:null,title:"帰還不可",detail:"探索中ではありません。"};
@@ -19878,6 +20745,7 @@ function openReturnConfirm(){
       倉庫の空きは${preview.available}枠です。
      </div>`}
   ${deepWagerPayoutPreview()?`<div class="returnConfirmWager"><b>深層懸賞を確定</b><span>連破${deepWagerPayoutPreview().streak}・${deepWagerPayoutPreview().text}</span><small>この帰還を確定すると灯台資産になります。死亡まで持ち越す必要はありません。</small></div>`:""}
+  <div class="returnDecisionNext"><b>${nextFloorRiskShortText()}</b><span>${nextFloorRiskSnapshot().detail}</span><small>帰還すると、この次階への挑戦は新しい探索でやり直します。</small></div>
   <div class="returnConfirmNote">
    帰還するとHP・気力・充足は完全回復し、携行糧と今回限りの現地強化は失われます。
    ${markerCost?"「帰還を確定」を押した時だけ帰還楔を1個消費します。":"この帰還では帰還楔を消費しません。"}
@@ -19910,10 +20778,10 @@ function renderReturnPrompt(){
  if(!status.near)return;
 
  title.textContent=status.title;
- detail.textContent=status.detail;
+ detail.textContent=status.ready?stairDecisionSummary().prompt:status.detail;
  button.disabled=!status.ready;
  button.textContent=status.ready
-  ?(status.free?"無料で帰還":"楔を使って帰還")
+  ?(status.free?"成果を確定":"楔で確定")
   :"帰還不可";
 
  const cam=cameraOrigin();
@@ -20756,7 +21624,7 @@ function hubWorkspaceBadgeData(meta=state?.meta){
  const loadoutCount=lighthouseLoadoutSlots.filter(slot=>!!nextLoadoutGear(meta,slot)).length;
  const overflow=ensureReturnOverflow(meta).length;
  const upgrades=metaUpgradeCompletion(meta);
- const research=meta.research?.points||0,adapt=meta.adaptationPoints||0;
+ const research=researchCompletion().done?0:(meta.research?.points||0),adapt=meta.adaptationPoints||0;
  const relics=(meta.sealedRelics||[]).length;
  const echo=activeDeathEcho(meta);
  const reaction=pendingLabyrinthReaction(meta);
@@ -20796,7 +21664,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"3.51.1",
+  version:"3.60.0",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -21038,16 +21906,17 @@ function hubHomeSummaryHtml(meta=state?.meta){
  </div>`;
 }
 function hubProgressRecordsHtml(meta=state?.meta){
- const researchRows=Object.keys(researchData).map(type=>`${researchData[type].label} Lv${researchLevel(type)}`).join(" / ");
+ const researchDone=Object.keys(researchData).filter(type=>researchComplete(type)).length;
  const adaptationRows=(meta.abyssAdaptations||[]).map(id=>abyssAdaptationData[id]?.label||id).join(" / ")||"未獲得";
- const trainingRows=Object.keys(trainingData).map(type=>`${trainingData[type].label} R${trainingRank(type)}`).join(" / ");
+ const trainingDone=Object.keys(trainingData).filter(type=>trainingEffectComplete(type)).length;
+ const trainingRanks=Object.keys(trainingData).map(type=>`${trainingData[type].label}R${trainingRank(type)}`).join("・");
  const masteryRows=Object.keys(weaponData).map(type=>`${weaponData[type].label} Lv${masteryLevel(type)}`).join(" / ");
  return`<div class="hubWorkspaceInfoCard">
-  <div class="hubWorkspaceInfoHead"><b>成長状況</b><span>自動・恒久</span></div>
-  <div class="compactRecordRow"><b>研究</b><span>${researchRows}</span><small>未使用 ${meta.research?.points||0}</small></div>
+  <div class="hubWorkspaceInfoHead"><b>成長状況</b><span>能力効果には完成点あり</span></div>
+  <div class="compactRecordRow"><b>研究</b><span>${researchDone}/4 完成</span><small>${researchDone>=4?"能力完成":`未使用 ${meta.research?.points||0}`}</small></div>
   <div class="compactRecordRow"><b>適応</b><span>${adaptationRows}</span><small>未使用 ${meta.adaptationPoints||0}</small></div>
-  <div class="compactRecordRow"><b>身体</b><span>${trainingRows}</span></div>
-  <div class="compactRecordRow"><b>武器</b><span>${masteryRows}</span></div>
+  <div class="compactRecordRow"><b>身体</b><span>能力 ${trainingDone}/4 完成</span><small>${trainingRanks}</small></div>
+  <div class="compactRecordRow"><b>武器</b><span>${masteryRows}</span><small>Lv5で完成</small></div>
  </div>`;
 }
 function hubWorldMarkHtml(meta=state?.meta){
@@ -21069,6 +21938,7 @@ function renderHub(options={}){
  ensureRouteMastery(m);
  ensureInsuranceMeta(m);
  migrateMetaUpgradeCaps(m);
+ migrateResearchCaps(m);
 
  const page=currentHubWorkspace(m);
 
@@ -21107,12 +21977,13 @@ function renderHub(options={}){
   $("hubGrowthSummary").innerHTML=hubProgressRecordsHtml(m);
   $("hubUpgrades").querySelectorAll("[data-upgrade]").forEach(b=>b.onclick=()=>buyMetaUpgrade(b.dataset.upgrade));
 
-  $("researchBtn").textContent=`深淵研究（${m.research?.points||0}点）`;
+  const researchState=researchCompletion();
+  $("researchBtn").textContent=researchState.done?"深淵研究（完成）":`深淵研究（${m.research?.points||0}点）`;
   $("adaptBtn").textContent=(m.adaptationPoints||0)>0?`深淵適応を選ぶ（${m.adaptationPoints}点）`:"深淵適応を確認";
   const researchTotal=Object.values(m.research?.levels||{}).reduce((sum,value)=>sum+(value||0),0);
-  const hasResearch=(m.research?.points||0)>0||researchTotal>0;
+  const hasResearch=researchState.done||(m.research?.points||0)>0||researchTotal>0;
   $("researchBtn").disabled=!hasResearch;
-  $("researchBtn").title=hasResearch?"深淵研究を確認します。":"敵・罠・事件などを観察して研究点を得ると利用できます。";
+  $("researchBtn").title=researchState.done?"完成した研究と観察記録を確認します。":hasResearch?"深淵研究を確認します。":"敵・罠・事件などを観察して研究点を得ると利用できます。";
   if(!hasResearch)$("researchBtn").textContent="深淵研究（観察で解放）";
   const hasAdaptation=(m.adaptationPoints||0)>0||(m.abyssAdaptations||[]).length>0;
   $("adaptBtn").disabled=!hasAdaptation;
@@ -21665,6 +22536,7 @@ function loadGame(){
   const persistedMeta=loadMeta();
   state.meta=persistedMeta||state.meta||defaultMeta();
   migrateMetaUpgradeCaps(state.meta);
+  migrateResearchCaps(state.meta);
   if(!state.meta.stash)state.meta.stash=[];
   if(!state.meta.upgrades)state.meta.upgrades={vitality:0,focus:0,pack:0,supply:0};
   if(typeof state.meta.upgrades.supply!=="number")state.meta.upgrades.supply=0;
@@ -21945,6 +22817,8 @@ function showFloorBanner(){
  if(reaction)extra.push(`迷宮反応：${reactionShortLabel(reaction)}・${reactionActiveProgressLabel(reaction)}`);
  const depthLaw=deepCycleLawForFloor();
  if(depthLaw)extra.push(`深度圏：${depthLaw.label}`);
+ const pulseLabel=floorPulseBannerLabel();
+ if(pulseLabel)extra.push(pulseLabel);
 
  banner.classList.remove("show","floorBannerBoss","floorBannerRest");
  void banner.offsetWidth;
@@ -22630,6 +23504,7 @@ function registerIntentDodge(e,intent){
   if(restored>0){spawnCombatText(state.player.x,state.player.y,`充足+${restored}`,"heal",30);addLog(`飢圧律を見切り、充足が${restored}戻った。`)}
  }
  updateFloorObjective();
+ if(e?.boss)awardWardenMastery(e,intent,"回避");
  clearEnemyIntent(e);
 }
 function registerIntentBlocked(e,intent){
