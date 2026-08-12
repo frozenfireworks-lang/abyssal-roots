@@ -5348,11 +5348,72 @@ body,button,input,select,textarea{font-size:12px}
 }
 #actions.realtimePrototype #guard{border-color:#5e755f}
 
+
+/* v4.02 STREAM INCIDENTS */
+.rtIncidentBar{
+ display:grid;gap:5px;margin:0 0 7px;padding:8px 9px;
+ border:1px solid #9b7538;border-radius:9px;
+ background:linear-gradient(180deg,#241a0b,#120d08);
+ box-shadow:inset 0 0 20px rgba(235,192,74,.08);
+ color:#ddcfa8
+}
+.rtIncidentHead,.rtIncidentMeta{
+ display:flex;align-items:center;justify-content:space-between;gap:8px
+}
+.rtIncidentHead b{font-size:12px;color:#ffe285;letter-spacing:.04em}
+.rtIncidentHead span{
+ padding:2px 6px;border:1px solid #8c6e36;border-radius:999px;
+ color:#f4d77b;background:#171006;font-size:11.5px;font-weight:800
+}
+.rtIncidentMeta strong{font-size:18px;color:#fff0a4;line-height:1}
+.rtIncidentMeta span{font-size:11.5px;color:#dfc98e;font-weight:800}
+.rtIncidentBar small{font-size:11.5px;color:#b7a883;line-height:1.4}
+.rtIncidentTrack{
+ height:7px;overflow:hidden;border:1px solid #6c542d;border-radius:999px;background:#0a0704
+}
+.rtIncidentTrack i{
+ display:block;height:100%;width:100%;
+ background:linear-gradient(90deg,#d5a13f,#ffe478);
+ transform-origin:left center
+}
+.rtIncidentBar.danger{border-color:#9d4d4f;background:linear-gradient(180deg,#241011,#120809)}
+.rtIncidentBar.danger .rtIncidentHead b{color:#ffb7ac}
+.rtIncidentBar.danger .rtIncidentTrack i{background:linear-gradient(90deg,#a43f45,#ff8a69)}
+
+
+/* v4.04 FIRST WARDEN LIVE */
+.rtBossBar{
+ display:grid;gap:5px;margin:0 0 7px;padding:8px 9px;
+ border:1px solid #765f3d;border-radius:9px;
+ background:linear-gradient(180deg,#19130c,#0d0a07);color:#d8c8a5
+}
+.rtBossHead,.rtBossMeta{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.rtBossHead b{font-size:12px;color:#f0d58d}
+.rtBossHead span{
+ padding:2px 6px;border:1px solid #5f4e34;border-radius:999px;
+ color:#b9aa89;font-size:11.5px;font-weight:800
+}
+.rtBossHp{
+ height:8px;overflow:hidden;border:1px solid #5a4630;border-radius:999px;background:#080604
+}
+.rtBossHp i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#9e594a,#d58a58)}
+.rtBossMeta strong{font-size:11.5px;color:#dfccb0}
+.rtBossMeta span{font-size:11.5px;color:#c2ae83;font-weight:800;white-space:nowrap}
+.rtBossBar small{font-size:11.5px;color:#a99b82;line-height:1.4}
+.rtBossBar.intent{
+ border-color:#9b4e4e;background:linear-gradient(180deg,#21100f,#100807)
+}
+.rtBossBar.intent .rtBossMeta strong{color:#ffb2a1}
+.rtBossBar.phase2{
+ border-color:#8f6f37;box-shadow:inset 0 0 20px rgba(225,174,70,.08)
+}
+.rtBossBar.break{border-color:#657d61;background:linear-gradient(180deg,#10190f,#091008)}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 4.00 COMBAT PROTOTYPE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 4.04 FIRST WARDEN LIVE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5374,13 +5435,37 @@ body,button,input,select,textarea{font-size:12px}
   <div id="rtPrototypeBar" class="rtPrototypeBar hidden" aria-live="polite">
     <div class="rtPrototypeHead">
       <b>REALTIME TEST</b>
-      <span id="rtPrototypeState">第1〜3層のみ</span>
+      <span id="rtPrototypeState">第1〜5層</span>
     </div>
     <div class="rtPulseTrack"><i id="rtPulseFill"></i></div>
     <div class="rtPrototypeActions">
       <small id="rtPrototypeHint">世界は止まりません。中央ボタンは回避になります。</small>
       <button type="button" id="rtFocusBtn">集中</button>
     </div>
+  </div>
+  <div id="rtIncidentBar" class="rtIncidentBar hidden" aria-live="assertive">
+    <div class="rtIncidentHead">
+      <b id="rtIncidentTitle">逃走遺宝</b>
+      <span id="rtIncidentReward">紫脈封</span>
+    </div>
+    <div class="rtIncidentMeta">
+      <strong id="rtIncidentDirection">→</strong>
+      <span id="rtIncidentTimer">逃走まで 10.0秒</span>
+    </div>
+    <div class="rtIncidentTrack"><i id="rtIncidentFill"></i></div>
+    <small id="rtIncidentHint">倒せば報酬。追えば敵の群れへ踏み込む危険があります。</small>
+  </div>
+  <div id="rtBossBar" class="rtBossBar hidden" aria-live="polite">
+    <div class="rtBossHead">
+      <b id="rtBossName">鎖縛の門衛</b>
+      <span id="rtBossPhase">PHASE 1</span>
+    </div>
+    <div class="rtBossHp"><i id="rtBossHpFill"></i></div>
+    <div class="rtBossMeta">
+      <strong id="rtBossIntent">接近中</strong>
+      <span id="rtBossTimer">次行動 約1.1秒</span>
+    </div>
+    <small id="rtBossHint">赤い予兆から離れるか、攻撃で態勢を崩す。</small>
   </div>
   <div id="dpad">
     <button class="ctrl" id="up">▲</button>
@@ -5415,8 +5500,8 @@ body,button,input,select,textarea{font-size:12px}
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">v4 戦闘実験版 × 第1〜3層リアルタイム × 第4層以降は従来方式</p>
-    <p>第1〜3層では、立ち止まっていても敵が動きます。回避・構え・武器技・時間を遅くする「集中」を使い、新しい戦闘感触を試してください。</p>
+    <p class="sub">v4 戦闘実験版 × 第1〜5層リアルタイム × 第5層は初のリアルタイム番人</p>
+    <p>第1〜5層では世界が止まりません。第4層で整え、第5層の番人で「予兆を読む・避ける・攻め込む」がリアルタイムでも面白いかを試してください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：グリッド・空腹・自動生成</div>
       <div>Wizardry：暗闇・罠・死の重さ</div><div>Diablo：武器ビルド・接辞装備</div>
@@ -5620,9 +5705,12 @@ body,button,input,select,textarea{font-size:12px}
           <li>効果音は最大22音に制限し、足音や連撃の短時間連打を間引きます。重要な音は古い低優先音を止めて再生し、爆発・死亡・番人撃破時はBGMを短く下げます。</li>
           <li>アプリがバックグラウンドへ移るとBGMタイマーと全音源を停止し、AudioContextを休止します。復帰時は現在の灯台・探索・危険・番人場面から再開します。</li>
           <li>iPhoneの仕様により、音は最初のタップ後に開始します。端末の消音スイッチや音量設定も影響します。</li>
-          <li><b>v4戦闘実験：第1〜3層</b>では約0.72秒ごとに敵側の時間が進み、何もしなくても敵が動きます。自分の移動・攻撃は敵行動を即座には発生させません。第4層以降は従来どおり1回行動するたびに1ターン進行します。</li>
+          <li><b>v4戦闘実験：第1〜5層</b>では敵種ごとの実時間周期で世界が進み、何もしなくても敵が動きます。第4層は事件なしの準備階、第5層は初のリアルタイム番人戦です。第6層以降は従来どおり1回行動するたびに1ターン進行します。</li>
+          <li><b>第5層・リアルタイム番人</b>：鎖縛の門衛は約1.08秒周期で判断し、攻撃予兆も約1.08秒表示してから発動します。専用ボス欄にHP・形態・予兆名・発動までの残り時間を表示します。</li>
           <li><b>リアルタイム中の回避</b>：中央ボタンで最後に入力した方向へ最大2マス移動し、約0.43秒だけ敵の直接攻撃をすり抜けます。気力3、再使用約1.45秒です。</li>
           <li><b>リアルタイム中の集中</b>：気力2で2.6秒だけ敵行動間隔を遅くします。完全停止ではありません。</li>
+          <li><b>逃走遺宝</b>：第2〜3層で稀に、紫脈封を持った金色の遺宝獣が出現します。画面の矢印と逃走時間を見て、追うか安全を取るかを即決してください。倒せばその場へ紫脈封を落とします。</li>
+          <li><b>危険宝箱</b>：第2〜3層で現れることがあります。踏むと警報が鳴り7.2秒で再封印。中央の「開錠」を押して3.2秒その場に留まれば希少装備を獲得できます。開錠中も敵は動き、移動すると開錠進捗はリセットされます。</li>
           <li><b>階層目標</b>を達成すると階段の封印が解けます。進捗は画面左上に表示され、達成時に欠片・現地素材などを獲得します。</li>
           <li><b>特異室</b>：番人階以外では、一部の部屋が武具庫・穴獣の巣・骨術祭壇・爆薬庫・狩人の間になります。完全に任意で、入室または先制攻撃すると戦闘が始まり、制圧すると部屋固有の戦利品が解放されます。階段解放には不要です。</li>
           <li>番人階以外は、指定行動が難しい場合でも迷宮を十分に踏破すれば代替達成できます。</li>
@@ -5648,7 +5736,7 @@ body,button,input,select,textarea{font-size:12px}
       <summary>基本操作とUI</summary>
       <div class="helpBody">
         <ul>
-          <li><b>中央ボタン</b>：第1〜3層のリアルタイム実験中は「回避」。第4層以降は従来の「休息」で、通常床では1ターン進めて気力を回復します。階段上では「回収」または「階段」に自動で変わります。</li>
+          <li><b>中央ボタン</b>：第1〜5層のリアルタイム実験中は通常「回避」。危険宝箱上では「開錠」、階段・拾得物上では従来どおり「回収 / 階段」へ変わります。第6層以降は「休息」へ戻ります。</li>
           <li><b>スキル</b>：武器や状況に応じて使う強行動です。気力を消費します。武器熟練Lv2以降は武器技ボタンが「武技選択」になり、通常武技と副武技を毎回選べます。</li>
           <li><b>クイック欄</b>：治癒薬・壺などを即使用できます。</li>
           <li><b>射程ボタン</b>：武器の攻撃範囲を表示します。</li>
@@ -10717,6 +10805,16 @@ function expeditionHeroMomentCandidates(report){
  if(report.anomalyMysteryGearFound>0){
   add(78,"anomaly_loot","loot","異常反応",`異常な遺物反応を${report.anomalyMysteryGearFound}個発見`,`正体の読めない高反応装備を抱えた探索になった。`);
  }
+ if(report.realtimeRelicRunnerCaught){
+  add(77,"relic_chase","loot","欲張り成功","逃走遺宝を追い切った",`逃げる遺宝獣を危険の中まで追い、第${report.realtimeRelicRunnerCaughtFloor}層で紫脈封を叩き落とした。`);
+ }else if(report.realtimeRelicRunnerEscaped){
+  add(58,"relic_chase_lost","loss","あと一歩","逃走遺宝を取り逃した",`紫脈封を抱えた遺宝獣は、追撃を振り切って迷宮の奥へ消えた。`);
+ }
+ if(report.realtimeGreedChestOpened){
+  add(79,"danger_chest","loot","欲張り成功","警報の中で危険宝箱を開け切った",`敵が迫る中で3.2秒その場に留まり、第${report.realtimeGreedChestOpenedFloor}層の希少装備を奪い取った。`);
+ }else if(report.realtimeGreedChestMissed){
+  add(57,"danger_chest_lost","loss","欲張り失敗","危険宝箱が目の前で再封印",`敵への対処と開錠の判断が噛み合わず、高反応装備を取り逃した。`);
+ }
  if(report.bosses>=2){
   add(75+Math.min(5,report.bosses),"warden_run","combat","番人連戦",`番人を${report.bosses}体撃破`,`一度の探索で複数の関門を突破した。`);
  }
@@ -10786,6 +10884,14 @@ function buildExpeditionReport(outcome,details={}){
   roomEncountersCleared:stats.roomEncountersCleared||0,
   tacticalPacksCleared:stats.tacticalPacksCleared||0,
   deepElitesDefeated:stats.deepElitesDefeated||0,
+  realtimeRelicRunnerSpawned:stats.realtimeRelicRunnerSpawned||0,
+  realtimeRelicRunnerCaught:stats.realtimeRelicRunnerCaught||0,
+  realtimeRelicRunnerCaughtFloor:stats.realtimeRelicRunnerCaughtFloor||0,
+  realtimeRelicRunnerEscaped:stats.realtimeRelicRunnerEscaped||0,
+  realtimeGreedChestFound:stats.realtimeGreedChestFound||0,
+  realtimeGreedChestOpened:stats.realtimeGreedChestOpened||0,
+  realtimeGreedChestOpenedFloor:stats.realtimeGreedChestOpenedFloor||0,
+  realtimeGreedChestMissed:stats.realtimeGreedChestMissed||0,
   deepBoundaryClears:[...(stats.deepBoundaryClears||[])],
   rootTunedGearFound:stats.rootTunedGearFound||0,
   strongMysteryGearFound:stats.strongMysteryGearFound||0,
@@ -10898,6 +11004,10 @@ function buildExpeditionReport(outcome,details={}){
 
  if(report.whisper?.rewarded)report.highlights.push(`深淵の囁き「${report.whisper.label}」を完遂し、${report.whisper.rewardLabel}を獲得`);
  else if(report.whisper?.status==="lost")report.highlights.push(`囁きの条件を達成したが、生還できず${report.whisper.rewardLabel}を失った`);
+ if(report.realtimeRelicRunnerCaught)report.highlights.push(`逃走遺宝を追い切り、第${report.realtimeRelicRunnerCaughtFloor}層で紫脈封を叩き落とした`);
+ else if(report.realtimeRelicRunnerEscaped)report.highlights.push(`逃走遺宝を追ったが、遺宝獣に紫脈封を持ち逃げされた`);
+ if(report.realtimeGreedChestOpened)report.highlights.push(`危険宝箱の警報中に3.2秒の開錠を通し、第${report.realtimeGreedChestOpenedFloor}層で希少装備を奪った`);
+ else if(report.realtimeGreedChestMissed)report.highlights.push(`危険宝箱へ手を掛けたが、再封印までに開け切れなかった`);
  const reportGrowth=report.runGrowth||{force:0,guard:0,explore:0};
  const reportGrowthBranch=["force","guard","explore"].sort((a,b)=>(reportGrowth[b]||0)-(reportGrowth[a]||0))[0];
  if((reportGrowth[reportGrowthBranch]||0)>=2)report.highlights.push(`樹脈は${runGrowthBranchData[reportGrowthBranch].label}${reportGrowth[reportGrowthBranch]}まで深化`);
@@ -12793,6 +12903,10 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
 function triggerSpecialTile(){
  const t=specialAt(state.player.x,state.player.y);
  if(!t||t.used)return;
+ if(t.type==="greed_chest"){
+  primeRealtimeGreedChest(t);
+  return;
+ }
  if(t.type==="shrine"){
   t.used=true;
   if(state.hero.hp<state.hero.maxHp*.5){
@@ -15069,6 +15183,548 @@ function abyssForkReportHtml(report){
  const labels=list.slice(-6).map(entry=>`第${entry.targetFloor}層 ${entry.label}`).join(" → ");
  return`<div class="forkReport"><b>深脈分岐 ${list.length}回${special.length?`・特殊路${special.length}回`:""}</b><br>${labels}</div>`;
 }
+const realtimePressureWaveData={
+ rush:{label:"走獣群",types:["warg","warg","skeleton"],hint:"素早い穴獣が前へ出る。囲まれる前に通路へ抜ける。"},
+ cross:{label:"挟撃群",types:["warg","mage","warg"],hint:"穴獣が距離を詰め、骨術師が後ろから射線を作る。"},
+ powder:{label:"爆ぜ群",types:["warg","bomber","skeleton","bomber"],hint:"爆ぜ虫を敵ごと巻き込める位置へ誘導すると一気に崩せる。"}
+};
+function prepareRealtimePressureWave(){
+ if(!state)return null;
+ if(state.floor<1||state.floor>REALTIME_INCIDENT_MAX_FLOOR){
+  state.realtimePressureWave=null;return null;
+ }
+ if(state.floor===1){
+  state.realtimePressureWave={active:false,floor:1};return state.realtimePressureWave;
+ }
+ const chance=state.floor===2?.42:.62;
+ if(rng()>=chance){
+  state.realtimePressureWave={active:false,floor:state.floor};return state.realtimePressureWave;
+ }
+ const ids=state.floor===2?["rush","cross"]:["rush","cross","powder"];
+ const id=choice(ids),data=realtimePressureWaveData[id];
+ state.realtimePressureWave={active:true,floor:state.floor,id,label:data.label,hint:data.hint,enemyIds:[],roomIndex:null};
+ return state.realtimePressureWave;
+}
+function realtimePressureWaveRoomCandidates(){
+ if(!state?.rooms?.length)return[];
+ const blockedRooms=new Set([
+  ...(state.roomEncounters||[]).map(enc=>enc.roomIndex),
+  ...(state.tacticalPacks||[]).map(pack=>pack.roomIndex)
+ ]);
+ return state.rooms.map((room,index)=>({room,index}))
+  .filter(entry=>entry.index>0&&entry.index<state.rooms.length-1&&!blockedRooms.has(entry.index));
+}
+function spawnRealtimePressureWave(){
+ const wave=state?.realtimePressureWave;
+ if(!wave?.active)return false;
+ const candidates=realtimePressureWaveRoomCandidates();
+ if(!candidates.length){wave.active=false;return false}
+ // できるだけ開始地点から離れた部屋へ密集させ、最初から即死させず「遭遇した瞬間の焦り」を作る。
+ candidates.sort((a,b)=>{
+  const da=Math.abs(a.room.cx-state.player.x)+Math.abs(a.room.cy-state.player.y);
+  const db=Math.abs(b.room.cx-state.player.x)+Math.abs(b.room.cy-state.player.y);
+  return db-da;
+ });
+ const pool=candidates.slice(0,Math.max(1,Math.ceil(candidates.length*.45)));
+ const entry=choice(pool),used=new Set(),data=realtimePressureWaveData[wave.id];
+ wave.roomIndex=entry.index;
+ for(let i=0;i<data.types.length;i++){
+  const point=randomRoomEncounterCell(entry.room,used,true);if(!point)break;
+  used.add(key(point.x,point.y));
+  const enemy=makeRoomEncounterEnemy(data.types[i],point,{id:`rt-${wave.id}-${state.floor}`},i);
+  delete enemy.roomEncounterId;delete enemy.encounterDormant;
+  enemy.id=`rtwave-${state.floor}-${wave.id}-${i}-${Math.floor(rng()*9999)}`;
+  enemy.realtimeWave=true;enemy.realtimeWaveId=wave.id;enemy.realtimeWaveLabel=wave.label;
+  enemy.home={x:point.x,y:point.y};enemy.alert=0;enemy.lastSeen=null;
+  state.enemies.push(enemy);wave.enemyIds.push(enemy.id);
+ }
+ if(!wave.enemyIds.length){wave.active=false;return false}
+ addLog(`この階には通常より濃い気配がある。「${wave.label}」が迷宮の一角に集まっている。`);
+ return true;
+}
+const REALTIME_RELIC_RUNNER_PULSES={2:42,3:46};
+function prepareRealtimeBroadcastIncident(){
+ if(!state||state.floor<2||state.floor>REALTIME_INCIDENT_MAX_FLOOR){
+  if(state)state.realtimeIncident=null;
+  return null;
+ }
+ const stats=ensureRunStats();
+ const runnerAvailable=(stats.realtimeRelicRunnerCaught||0)<=0&&(state.sealedRelics||[]).length<SEALED_RELIC_CARRY_CAP;
+ const chestAvailable=(stats.realtimeGreedChestOpened||0)<=0;
+ const roll=rng();
+
+ let type="none";
+ if(state.floor===2){
+  if(runnerAvailable&&roll<.28)type="relic_runner";
+  else if(chestAvailable&&roll<(runnerAvailable?.58:.42))type="greed_chest";
+ }else{
+  if(runnerAvailable&&roll<.42)type="relic_runner";
+  else if(chestAvailable&&roll<(runnerAvailable?.76:.58))type="greed_chest";
+ }
+ if(type==="none"){
+  state.realtimeIncident={type:"none",status:"none",floor:state.floor};
+  return state.realtimeIncident;
+ }
+
+ // 同じ階では大事件を一つに絞る。通常の密集波と欲張り事件を重ねない。
+ if(state.realtimePressureWave?.active)state.realtimePressureWave.active=false;
+
+ if(type==="greed_chest"){
+  state.realtimeIncident={
+   type,status:"armed",floor:state.floor,
+   tileX:null,tileY:null,
+   windowMs:7200,remainingWindowMs:7200,
+   requiredChannelMs:3200,channelProgressMs:0,
+   lastChannelAt:0,lastWindowAt:0,
+   guardIds:[]
+  };
+  return state.realtimeIncident;
+ }
+
+ state.realtimeIncident={
+  type:"relic_runner",status:"armed",floor:state.floor,
+  triggerPulse:10,enemyId:null,
+  maxPulses:REALTIME_RELIC_RUNNER_PULSES[state.floor]||42,
+  remainingPulses:0,rewardSeal:"violet",spawnedAtTurn:0
+ };
+ return state.realtimeIncident;
+}
+function realtimeRunnerSpawnCell(){
+ const candidates=[];
+ for(let radius=4;radius<=7;radius++){
+  for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+   if(Math.abs(dx)+Math.abs(dy)!==radius)continue;
+   const x=state.player.x+dx,y=state.player.y+dy;
+   if(!inside(x,y)||tile(x,y)!==1)continue;
+   if(enemyAt(x,y)||itemAt(x,y)||envAt(x,y))continue;
+   if(state.stairs?.x===x&&state.stairs?.y===y)continue;
+   if(state.visible?.[key(x,y)])candidates.push({x,y});
+  }
+  if(candidates.length)break;
+ }
+ return candidates.length?choice(candidates):randomFloorCell(5);
+}
+function spawnRealtimeRelicRunner(){
+ const incident=state?.realtimeIncident;
+ if(!incident||incident.type!=="relic_runner"||incident.status!=="armed")return false;
+ const p=realtimeRunnerSpawnCell();if(!p)return false;
+ const level=Math.max(1,rollEnemyLevel(false));
+ const hp=12+level*2;
+ const enemy={
+  id:`relic-runner-${state.floor}-${Math.floor(rng()*1e9)}`,
+  x:p.x,y:p.y,type:"warg",name:"遺宝獣",level,
+  hp,maxHp:hp,atk:0,def:0,xp:8+level*2,
+  intent:null,stagger:0,guarding:false,alert:0,lastSeen:null,
+  faction:"beast",home:{x:p.x,y:p.y},patrol:0,rivalId:null,status:{},
+  realtimeRelicRunner:true,realtimeRunnerGracePulses:2
+ };
+ state.enemies.push(enemy);
+ incident.status="active";
+ incident.enemyId=enemy.id;
+ incident.remainingPulses=incident.maxPulses;
+ incident.spawnedAtTurn=state.turn||0;
+ const stats=ensureRunStats();
+ stats.realtimeRelicRunnerSpawned=(stats.realtimeRelicRunnerSpawned||0)+1;
+ const dir=realtimeRunnerDirectionLabel(enemy);
+ spawnFeedbackBurst(enemy.x,enemy.y,"rare",9);
+ triggerImpactFeedback("rare",{haptic:"rare",duration:620});
+ showCombatToast("逃走遺宝 出現",`${dir} 遺宝獣が紫脈封を持って逃げる！`,"critical");
+ addLog(`金色の「遺宝獣」が${dir}に出現。紫脈封を抱えたまま逃走を始めた。`);
+ sfx("rare");
+ queueSave();
+ return true;
+}
+function realtimeRunnerDirectionLabel(enemy){
+ if(!enemy||!state)return"？";
+ const dx=enemy.x-state.player.x,dy=enemy.y-state.player.y;
+ const h=Math.abs(dx)>=2?dx>0?"→":"←":"";
+ const v=Math.abs(dy)>=2?dy>0?"↓":"↑":"";
+ if(v&&h){
+  if(v==="↑"&&h==="→")return"↗";
+  if(v==="↑"&&h==="←")return"↖";
+  if(v==="↓"&&h==="→")return"↘";
+  return"↙";
+ }
+ return h||v||"●";
+}
+function realtimeRunnerMove(enemy){
+ const choices=[];
+ for(const [dx,dy] of dirs){
+  const x=enemy.x+dx,y=enemy.y+dy;
+  if(tile(x,y)!==1||enemyAt(x,y)||(x===state.player.x&&y===state.player.y))continue;
+  if(state.stairs?.x===x&&state.stairs?.y===y)continue;
+  const distance=Math.abs(x-state.player.x)+Math.abs(y-state.player.y);
+  const nearbyEnemies=(state.enemies||[]).filter(other=>other!==enemy&&Math.abs(other.x-x)+Math.abs(other.y-y)<=2).length;
+  choices.push({dx,dy,distance,score:distance+nearbyEnemies*.35+rng()*.15});
+ }
+ if(!choices.length)return false;
+ choices.sort((a,b)=>b.score-a.score);
+ return tryMoveEnemy(enemy,[[choices[0].dx,choices[0].dy]]);
+}
+function escapeRealtimeRelicRunner(){
+ const incident=state?.realtimeIncident;
+ if(!incident||incident.status!=="active")return false;
+ const enemy=(state.enemies||[]).find(e=>e.id===incident.enemyId);
+ if(enemy)state.enemies=state.enemies.filter(e=>e!==enemy);
+ incident.status="escaped";incident.remainingPulses=0;
+ const stats=ensureRunStats();
+ stats.realtimeRelicRunnerEscaped=(stats.realtimeRelicRunnerEscaped||0)+1;
+ showCombatToast("逃走遺宝 消失","紫脈封を抱えたまま迷宮の奥へ逃げ切られた","miss");
+ addLog("遺宝獣を追い切れなかった。紫脈封の光が迷宮の奥へ消えた。");
+ queueSave();
+ return true;
+}
+function processRealtimeBroadcastIncidentPulse(){
+ const incident=state?.realtimeIncident;
+ if(!incident||incident.type!=="relic_runner")return false;
+ if(incident.status==="armed"){
+  if((realtimeCombatRuntime.pulse||0)>=incident.triggerPulse)return spawnRealtimeRelicRunner();
+  return false;
+ }
+ if(incident.status!=="active")return false;
+ const enemy=(state.enemies||[]).find(e=>e.id===incident.enemyId);
+ if(!enemy)return false;
+ if((enemy.realtimeRunnerGracePulses||0)>0)enemy.realtimeRunnerGracePulses--;
+ incident.remainingPulses=Math.max(0,(incident.remainingPulses||0)-1);
+ if(incident.remainingPulses<=0)return escapeRealtimeRelicRunner();
+ return true;
+}
+function rewardRealtimeRelicRunner(enemy){
+ if(!enemy?.realtimeRelicRunner)return false;
+ const incident=state?.realtimeIncident;
+ if(incident?.enemyId===enemy.id){
+  incident.status="secured";
+  incident.remainingPulses=0;
+ }
+ const relic=createSealedRelic("elite",state.floor);
+ relic.source="chase";
+ relic.seal="violet";
+ state.items.push({x:enemy.x,y:enemy.y,type:"sealed_relic",name:"逃走遺宝",relic,realtimeChaseReward:true});
+ const stats=ensureRunStats();
+ stats.realtimeRelicRunnerCaught=(stats.realtimeRelicRunnerCaught||0)+1;
+ stats.realtimeRelicRunnerCaughtFloor=state.floor;
+ spawnFeedbackBurst(enemy.x,enemy.y,"legendary",13);
+ triggerImpactFeedback("legendary",{haptic:"legendary",duration:760});
+ showCombatToast("逃走遺宝 確保","追撃成功・紫脈封を叩き落とした","objective");
+ addLog("遺宝獣を追い詰めた！ 抱えていた紫脈封が床へ転がった。");
+ sfx("legendary");
+ return true;
+}
+function updateRealtimeIncidentUi(now=realtimeNow()){
+ const bar=$("rtIncidentBar");
+ if(!bar)return;
+ const incident=state?.realtimeIncident;
+ if(!realtimeCombatActive()||!incident){
+  bar.classList.add("hidden");bar.classList.remove("danger");return;
+ }
+
+ if(incident.type==="greed_chest"){
+  tickRealtimeGreedChest(now);
+  const tile=(state.specialTiles||[]).find(t=>t.type==="greed_chest"&&t.x===incident.tileX&&t.y===incident.tileY);
+  const visible=tile&&state.visible?.[key(tile.x,tile.y)];
+  if(!tile||["secured","sealed","none","armed"].includes(incident.status)||(incident.status==="placed"&&!visible)){
+   bar.classList.add("hidden");bar.classList.remove("danger");return;
+  }
+  bar.classList.remove("hidden");
+  $("rtIncidentReward").textContent="報酬：希少装備";
+  $("rtIncidentDirection").textContent=realtimeRunnerDirectionLabel(tile);
+  if(incident.status==="placed"){
+   $("rtIncidentTitle").textContent="危険宝箱";
+   $("rtIncidentTimer").textContent="踏めば警報開始";
+   $("rtIncidentFill").style.width="100%";
+   $("rtIncidentHint").textContent="開錠3.2秒。警報中も敵は止まりません。";
+   bar.classList.remove("danger");
+   return;
+  }
+
+  const remain=Math.max(0,incident.remainingWindowMs||0);
+  const windowPct=Math.max(0,Math.min(1,remain/Math.max(1,incident.windowMs||7200)));
+  if(incident.status==="channeling"){
+   const progress=Math.max(0,incident.channelProgressMs||0);
+   const required=Math.max(1,incident.requiredChannelMs||3200);
+   $("rtIncidentTitle").textContent="危険宝箱・開錠中";
+   $("rtIncidentTimer").textContent=`開錠 ${(progress/1000).toFixed(1)}/${(required/1000).toFixed(1)}秒 ・ 再封印 ${(remain/1000).toFixed(1)}秒`;
+   $("rtIncidentFill").style.width=`${Math.round(progress/required*100)}%`;
+   $("rtIncidentHint").textContent="動けば中断。敵の攻撃を受けても開錠は続く。耐えるか、手を離すか。";
+   bar.classList.add("danger");
+  }else{
+   $("rtIncidentTitle").textContent="危険宝箱・警報";
+   $("rtIncidentTimer").textContent=`再封印まで ${(remain/1000).toFixed(1)}秒`;
+   $("rtIncidentFill").style.width=`${Math.round(windowPct*100)}%`;
+   $("rtIncidentHint").textContent="中央の「開錠」で開始。集中や位置取りは開ける前に使う。";
+   bar.classList.toggle("danger",remain<=3200);
+  }
+  return;
+ }
+
+ if(incident.type!=="relic_runner"||incident.status!=="active"){
+  bar.classList.add("hidden");bar.classList.remove("danger");return;
+ }
+ const enemy=(state.enemies||[]).find(e=>e.id===incident.enemyId);
+ if(!enemy){bar.classList.add("hidden");return}
+ bar.classList.remove("hidden");
+ const remaining=Math.max(0,incident.remainingPulses||0);
+ const max=Math.max(1,incident.maxPulses||1);
+ const seconds=(remaining*realtimeWorldInterval(now)/1000).toFixed(1);
+ $("rtIncidentTitle").textContent="逃走遺宝・遺宝獣";
+ $("rtIncidentReward").textContent="報酬：紫脈封";
+ $("rtIncidentDirection").textContent=realtimeRunnerDirectionLabel(enemy);
+ $("rtIncidentTimer").textContent=`逃走まで 約${seconds}秒`;
+ $("rtIncidentFill").style.width=`${Math.round(remaining/max*100)}%`;
+ $("rtIncidentHint").textContent="追えば危険、諦めれば安全。倒した場所に紫脈封を落とします。";
+ bar.classList.toggle("danger",remaining<=12);
+}
+function realtimeGreedChestTile(){
+ return(state?.specialTiles||[]).find(tile=>tile.type==="greed_chest"&&!tile.used)||null;
+}
+function realtimeGreedChestAtPlayer(){
+ const tile=realtimeGreedChestTile();
+ return tile&&tile.x===state.player.x&&tile.y===state.player.y?tile:null;
+}
+function realtimeGreedChestChanneling(){
+ return state?.realtimeIncident?.type==="greed_chest"&&state.realtimeIncident.status==="channeling";
+}
+function realtimeGreedChestRoomCandidates(){
+ if(!state?.rooms?.length)return[];
+ const blockedRooms=new Set([
+  ...(state.roomEncounters||[]).map(enc=>enc.roomIndex),
+  ...(state.tacticalPacks||[]).map(pack=>pack.roomIndex)
+ ]);
+ return state.rooms.map((room,index)=>({room,index}))
+  .filter(entry=>
+   entry.index>0&&entry.index<state.rooms.length-1&&
+   !blockedRooms.has(entry.index)&&
+   !roomEncounterRoomBlocked(entry.room)
+  );
+}
+function realtimeGreedChestPlacementCell(room){
+ if(!room)return null;
+ const cells=[];
+ for(let y=room.y+1;y<room.y+room.h-1;y++)for(let x=room.x+1;x<room.x+room.w-1;x++){
+  if(tacticalTerrainPlacementBlocked(x,y))continue;
+  cells.push({x,y,d:Math.abs(x-room.cx)+Math.abs(y-room.cy)});
+ }
+ if(!cells.length)return null;
+ cells.sort((a,b)=>a.d-b.d);
+ return choice(cells.slice(0,Math.min(cells.length,6)));
+}
+function spawnRealtimeGreedChest(){
+ const incident=state?.realtimeIncident;
+ if(!incident||incident.type!=="greed_chest"||incident.status!=="armed")return false;
+ const candidates=realtimeGreedChestRoomCandidates();
+ if(!candidates.length){incident.status="none";return false}
+ candidates.sort((a,b)=>{
+  const da=Math.abs(a.room.cx-state.player.x)+Math.abs(a.room.cy-state.player.y);
+  const db=Math.abs(b.room.cx-state.player.x)+Math.abs(b.room.cy-state.player.y);
+  return db-da;
+ });
+ const pool=candidates.slice(0,Math.max(1,Math.ceil(candidates.length*.55)));
+ const entry=choice(pool);
+ const point=realtimeGreedChestPlacementCell(entry.room);
+ if(!point){incident.status="none";return false}
+ const tile={
+  x:point.x,y:point.y,type:"greed_chest",used:false,
+  discovered:false,opened:false,sealed:false,realtimeGreedChest:true
+ };
+ state.specialTiles.push(tile);
+ incident.status="placed";
+ incident.tileX=point.x;incident.tileY=point.y;incident.roomIndex=entry.index;
+ addLog("この階のどこかで、重い錠が脈打つ音がした。");
+ return true;
+}
+function realtimeGreedGuardSpawnCell(tile,minDist=4,maxDist=7){
+ const hidden=[],visible=[];
+ for(let y=Math.max(1,tile.y-maxDist);y<=Math.min(ROWS-2,tile.y+maxDist);y++){
+  for(let x=Math.max(1,tile.x-maxDist);x<=Math.min(COLS-2,tile.x+maxDist);x++){
+   const d=Math.abs(x-tile.x)+Math.abs(y-tile.y);
+   if(d<minDist||d>maxDist||tileAtBlockedForGreedGuard(x,y))continue;
+   const entry={x,y,d};
+   (state.visible?.[key(x,y)]?visible:hidden).push(entry);
+  }
+ }
+ const pool=hidden.length?hidden:visible;
+ if(!pool.length)return null;
+ pool.sort((a,b)=>Math.abs(a.d-5)-Math.abs(b.d-5));
+ return choice(pool.slice(0,Math.min(pool.length,8)));
+}
+function tileAtBlockedForGreedGuard(x,y){
+ if(!inside(x,y)||tile(x,y)!==1)return true;
+ if(state.player.x===x&&state.player.y===y)return true;
+ if(state.stairs?.x===x&&state.stairs?.y===y)return true;
+ if(enemyAt(x,y)||itemAt(x,y)||specialAt(x,y)||envAt(x,y)||activeTrapAt(x,y))return true;
+ return false;
+}
+function createRealtimeGreedGuard(type,p,index){
+ const base={
+  skeleton:{name:"警報骸兵",hp:12,atk:4,def:2,xp:5},
+  warg:{name:"警報穴獣",hp:8,atk:5,def:0,xp:5},
+  mage:{name:"警報骨術師",hp:7,atk:5,def:0,xp:6}
+ }[type]||{name:"警報獣",hp:8,atk:5,def:0,xp:5};
+ const level=Math.max(1,rollEnemyLevel(false));
+ return{
+  id:`greed-guard-${state.floor}-${index}-${Math.floor(rng()*99999)}`,
+  x:p.x,y:p.y,type,name:base.name,level,
+  hp:base.hp+level*2,maxHp:base.hp+level*2,
+  atk:base.atk+Math.floor(level*.65),def:base.def+Math.floor(level/6),
+  xp:base.xp+level,intent:null,stagger:0,guarding:false,
+  alert:5,lastSeen:{x:state.player.x,y:state.player.y},
+  faction:enemyFaction(type),home:{x:p.x,y:p.y},patrol:0,rivalId:null,status:{},
+  realtimeGreedGuard:true
+ };
+}
+function awakenRealtimeGreedChestThreat(tile){
+ const incident=state?.realtimeIncident;
+ if(!incident||!tile)return 0;
+ for(const enemy of state.enemies||[]){
+  if(enemy.boss||enemy.echoGuard||enemy.realtimeRelicRunner)continue;
+  const d=Math.abs(enemy.x-tile.x)+Math.abs(enemy.y-tile.y);
+  if(d<=9){
+   enemy.alert=Math.max(enemy.alert||0,5);
+   enemy.lastSeen={x:state.player.x,y:state.player.y};
+  }
+ }
+ const types=state.floor>=3?["warg","mage","warg"]:["warg","skeleton"];
+ let spawned=0;
+ for(let i=0;i<types.length;i++){
+  const p=realtimeGreedGuardSpawnCell(tile);if(!p)break;
+  const enemy=createRealtimeGreedGuard(types[i],p,i);
+  state.enemies.push(enemy);
+  incident.guardIds.push(enemy.id);
+  spawned++;
+ }
+ return spawned;
+}
+function primeRealtimeGreedChest(tile){
+ const incident=state?.realtimeIncident;
+ if(!tile||tile.used||!incident||incident.type!=="greed_chest")return false;
+ tile.discovered=true;
+ if(incident.status!=="placed")return false;
+ const now=realtimeNow();
+ incident.status="primed";
+ incident.remainingWindowMs=incident.windowMs||7200;
+ incident.channelProgressMs=0;
+ incident.lastWindowAt=now;
+ incident.lastChannelAt=now;
+ const spawned=awakenRealtimeGreedChestThreat(tile);
+ const stats=ensureRunStats();
+ stats.realtimeGreedChestFound=(stats.realtimeGreedChestFound||0)+1;
+ spawnFeedbackBurst(tile.x,tile.y,"rare",9);
+ triggerImpactFeedback("rare",{haptic:"rare",duration:560});
+ showCombatToast("危険宝箱・警報",`7.2秒で再封印 / 開錠には3.2秒必要${spawned?` / 気配${spawned}体接近`:""}`,"critical");
+ addLog(`危険宝箱を踏んだ。警報が鳴り、7.2秒後に再封印される。開錠中も敵は止まらない。`);
+ sfx("rare");
+ queueSave();
+ return true;
+}
+function startRealtimeGreedChestChannel(){
+ const incident=state?.realtimeIncident,tile=realtimeGreedChestAtPlayer();
+ if(!incident||incident.type!=="greed_chest"||!tile||tile.used)return false;
+ if(incident.status==="channeling")return cancelRealtimeGreedChestChannel("手を離した");
+ if(incident.status!=="primed")return false;
+ if((incident.remainingWindowMs||0)<=incident.requiredChannelMs*.45){
+  showCombatToast("開錠を急げ","封印まで残りわずか","critical");
+ }
+ incident.status="channeling";
+ incident.channelProgressMs=0;
+ incident.lastChannelAt=realtimeNow();
+ spawnCombatText(tile.x,tile.y,"UNLOCK","break",34);
+ showCombatToast("危険宝箱 開錠開始","3.2秒その場に留まれ・敵時間は停止しない","critical");
+ addLog("危険宝箱へ手を掛けた。移動すれば開錠は中断される。");
+ return true;
+}
+function cancelRealtimeGreedChestChannel(reason="中断"){
+ const incident=state?.realtimeIncident;
+ if(!incident||incident.type!=="greed_chest"||incident.status!=="channeling")return false;
+ incident.status="primed";
+ incident.channelProgressMs=0;
+ incident.lastChannelAt=realtimeNow();
+ showCombatToast("開錠 中断",`${reason} / 封印時間は進み続ける`,"miss");
+ return true;
+}
+function createRealtimeGreedChestReward(){
+ const candidates=[];
+ for(let i=0;i<4;i++){
+  const gear=rollGear((state.floor||1)+1);
+  while((rarityOrder[gear.rarity]||0)<2)promoteGearRarity(gear,1);
+  gear.identified=true;
+  gear.cursed=false;
+  gear.locked=true;
+  gear.realtimeGreedChestReward=true;
+  gear.origin="danger_chest";
+  candidates.push(gear);
+ }
+ candidates.sort((a,b)=>gearScore(b)-gearScore(a));
+ return candidates[0]||null;
+}
+function completeRealtimeGreedChest(){
+ const incident=state?.realtimeIncident,tile=realtimeGreedChestAtPlayer();
+ if(!incident||incident.type!=="greed_chest"||incident.status!=="channeling"||!tile)return false;
+ const gear=createRealtimeGreedChestReward();if(!gear)return false;
+ tile.used=true;tile.opened=true;
+ incident.status="secured";
+ incident.channelProgressMs=incident.requiredChannelMs||3200;
+ incident.remainingWindowMs=Math.max(0,incident.remainingWindowMs||0);
+ state.items.push({x:tile.x,y:tile.y,type:"gear",gear,realtimeGreedChestReward:true});
+ const stats=ensureRunStats();
+ stats.realtimeGreedChestOpened=(stats.realtimeGreedChestOpened||0)+1;
+ stats.realtimeGreedChestOpenedFloor=state.floor;
+ spawnFeedbackBurst(tile.x,tile.y,"legendary",14);
+ triggerImpactFeedback("legendary",{haptic:"legendary",duration:820});
+ spawnCombatText(tile.x,tile.y,"OPEN!","critical",42);
+ showCombatToast("欲張り成功",`危険宝箱 開錠 / 希少装備「${gearLabel(gear)}」`,"objective");
+ addLog(`警報の中で危険宝箱をこじ開けた。希少装備「${gearLabel(gear)}」が現れた。`);
+ sfx("legendary");
+ queueSave();
+ return true;
+}
+function sealRealtimeGreedChest(){
+ const incident=state?.realtimeIncident;
+ if(!incident||incident.type!=="greed_chest"||!["primed","channeling"].includes(incident.status))return false;
+ const tile=realtimeGreedChestTile();
+ if(tile){tile.used=true;tile.sealed=true}
+ incident.status="sealed";incident.channelProgressMs=0;incident.remainingWindowMs=0;
+ const stats=ensureRunStats();
+ stats.realtimeGreedChestMissed=(stats.realtimeGreedChestMissed||0)+1;
+ showCombatToast("危険宝箱 再封印","欲張る猶予を失った","miss");
+ addLog("危険宝箱の錠が閉じ切った。中の高反応装備にはもう手が届かない。");
+ queueSave();
+ return true;
+}
+function tickRealtimeGreedChest(now=realtimeNow()){
+ const incident=state?.realtimeIncident;
+ if(!incident||incident.type!=="greed_chest"||!["primed","channeling"].includes(incident.status))return false;
+ if(!Number.isFinite(incident.lastWindowAt)||incident.lastWindowAt<=0||incident.lastWindowAt>now+1000)incident.lastWindowAt=now;
+ if(!Number.isFinite(incident.lastChannelAt)||incident.lastChannelAt<=0||incident.lastChannelAt>now+1000)incident.lastChannelAt=now;
+
+ if(!actionSceneClear()||realtimeFloorIntroVisible()){
+  if(incident.status==="channeling")cancelRealtimeGreedChestChannel("画面を離れた");
+  incident.lastWindowAt=now;
+  incident.lastChannelAt=now;
+  return false;
+ }
+
+ let windowDelta=Math.max(0,now-(incident.lastWindowAt||now));
+ windowDelta=Math.min(100,windowDelta);
+ incident.lastWindowAt=now;
+ incident.remainingWindowMs=Math.max(0,(incident.remainingWindowMs||0)-windowDelta);
+
+ if(incident.status==="channeling"){
+  const tile=realtimeGreedChestAtPlayer();
+  if(!tile){
+   cancelRealtimeGreedChestChannel("宝箱から離れた");
+  }else{
+   let channelDelta=Math.max(0,now-(incident.lastChannelAt||now));
+   channelDelta=Math.min(100,channelDelta);
+   incident.lastChannelAt=now;
+   incident.channelProgressMs=Math.min(incident.requiredChannelMs||3200,(incident.channelProgressMs||0)+channelDelta);
+   if(incident.channelProgressMs>=(incident.requiredChannelMs||3200))return completeRealtimeGreedChest();
+  }
+ }else{
+  incident.lastChannelAt=now;
+ }
+ if((incident.remainingWindowMs||0)<=0)return sealRealtimeGreedChest();
+ return true;
+}
 function plannedEnemyCount(){
  const authored=firstDepthEnemyBudget();
  if(authored!==null){
@@ -15346,6 +16002,8 @@ function generateFloor(){
  prepareLabyrinthReactionForExpedition();
  chooseFloorMutation();
  prepareFloorPulse();
+ prepareRealtimePressureWave();
+ prepareRealtimeBroadcastIncident();
  state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
  state.rooms=[];
 
@@ -15459,6 +16117,8 @@ function generateFloor(){
  addTacticalTerrain();
  addRoomEncounters();
  addTacticalPacks();
+ spawnRealtimeGreedChest();
+ spawnRealtimePressureWave();
  applyFloorPacingRewards();
  prepareFloorPhenomenon();
  prepareRouteFinaleFloor();
@@ -16944,9 +17604,9 @@ function createSealedRelic(source="ordinary",floor=state?.floor||1){
  const seal=sealedRelicSealForSource(source);
  return{id,floor:Math.max(1,floor),source,seal,createdAt:Date.now(),rewardSeed:sealedRelicHash(`${id}|reward|${floor}|${source}`)};
 }
-function sealedRelicSourceLabel(source){return({ordinary:"敵の遺骸",elite:"変異個体",nemesis:"宿敵",boss:"番人",room:"特異室",whisper:"深淵の囁き",wager:"深層懸賞"}[source]||"深淵")}
+function sealedRelicSourceLabel(source){return({ordinary:"敵の遺骸",elite:"変異個体",nemesis:"宿敵",boss:"番人",room:"特異室",whisper:"深淵の囁き",wager:"深層懸賞",chase:"逃走遺宝"}[source]||"深淵")}
 function maybeDropSealedRelic(enemy){
- if(!enemy||enemy.echoGuard)return false;
+ if(!enemy||enemy.echoGuard||enemy.realtimeRelicRunner)return false;
  const {fortune}=ensureSealedRelicMeta(state.meta);
  let chance=enemy.boss?.30:enemy.nemesis?.14:enemy.deepElite?.10:enemy.elite?.038:.0035;
  chance=Math.min(1,chance*(deepCycleLawForFloor()?.relicMultiplier||1));
@@ -18194,7 +18854,7 @@ function tryNormalEnemyGearDrop(e,rollValue=null){
 function defeatEnemy(e){
  if(!state.enemies.includes(e))return;
  const hadIntentOnDefeat=!!e.intent;
- const wasBoss=!!e.boss;const wasNemesis=!!e.nemesis;const wasEchoGuard=!!e.echoGuard;
+ const wasBoss=!!e.boss;const wasNemesis=!!e.nemesis;const wasEchoGuard=!!e.echoGuard;const wasRelicRunner=!!e.realtimeRelicRunner;
  if(wasBoss)sfx("bossVictory");else if(e.elite||wasNemesis)sfx("eliteKill");
  spreadTagDeathEffects(e);
  addRemains(e);
@@ -18281,8 +18941,11 @@ function defeatEnemy(e){
   addLog(`${wardenCadenceForFloor(state.floor).gate}突破。番人戦利品「${wardenTrophyPublicLabel(rewardGear)}」が残された。`);
   addLog(`番人固有報酬：深淵の欠片+${profile.bonusShards||0}。${rewardGear.wardenMastery?" 攻略試練達成により戦利品ILv+1。":""}`);
  }else{
-  if(!rewardDeepElite(e))tryNormalEnemyGearDrop(e);
-  livingEcologyResourceReward(e);
+  const chaseReward=wasRelicRunner?rewardRealtimeRelicRunner(e):false;
+  if(!chaseReward){
+   if(!rewardDeepElite(e))tryNormalEnemyGearDrop(e);
+   livingEcologyResourceReward(e);
+  }
  }
  const sealedRelicDropped=maybeDropSealedRelic(e);
  if(wasBoss&&state.pendingWardenVictoryRecord){
@@ -18602,7 +19265,15 @@ function resolveWardenIntent(enemy,intent,cells,playerInTarget){
 }
 function performWardenTurn(enemy,dist){
  const profile=wardenProfileFor(enemy);
- enterWardenPhaseTwo(enemy);
+ const phaseShifted=enterWardenPhaseTwo(enemy);
+ if(phaseShifted&&realtimeCombatActive()&&(enemy.bossFloor||state.floor)===5){
+  clearEnemyIntent(enemy);
+  enemy.realtimeBossBreakUntilPulse=(realtimeCombatRuntime.pulse||0)+4;
+  spawnFeedbackBurst(enemy.x,enemy.y,"boss",10);
+  showCombatToast("番人変調・隙","第二形態へ移る一瞬だけ攻め込める","objective");
+  addLog("鎖縛の門衛が鎖を地へ打ち、第二形態へ移る。一瞬だけ動きが止まった。");
+  return;
+ }
  enemy.bossCycle=(enemy.bossCycle||0)+1;
 
  if(profile.key==="chain"){
@@ -18709,6 +19380,7 @@ function enemyTurn(){
  for(const e of [...state.enemies]){
   if(state.enemyTurnInterrupted)break;
   if(!state.enemies.includes(e))continue;
+  if(realtimeCombatActive()&&!realtimeEnemyActsThisPulse(e))continue;
   if(e.roomEncounterId){
    const enc=roomEncounterById(e.roomEncounterId);
    if(enc&&!enc.triggered)continue;
@@ -18718,6 +19390,13 @@ function enemyTurn(){
   if(e.status?.frozen>0){e.status.frozen--;addLog(e.name+"は凍結して動けない。");continue}
   if((e.terrainSlow||0)>0){e.terrainSlow--;if(state.visible[key(e.x,e.y)])addLog(e.name+"は絡み根に足を取られて動けない。");continue}
   if(e.stagger>0){e.stagger--;continue}
+  if(e.boss&&realtimeCombatActive()&&(e.realtimeBossBreakUntilPulse||0)>(realtimeCombatRuntime.pulse||0))continue;
+  if(e.boss&&e.intent&&realtimeCombatActive()&&(e.realtimeIntentReadyPulse||0)>(realtimeCombatRuntime.pulse||0))continue;
+  if(e.realtimeRelicRunner){
+   if((e.realtimeRunnerGracePulses||0)>0)continue;
+   realtimeRunnerMove(e);
+   continue;
+  }
   const dist=distanceToPlayer(e);
   const aware=updateEnemyAwareness(e);
   if(!aware&&!e.intent){
@@ -19688,6 +20367,7 @@ function performStairDescent(dx,dy,nx,ny){
  }
 }
 function move(dx,dy){
+ if(realtimeGreedChestChanneling())cancelRealtimeGreedChestChannel("移動した");
  if(!canAct())return;
  if(realtimeCombatActive()&&(dx||dy))realtimeCombatRuntime.lastDir=[dx,dy];
  const target=directionTarget(dx,dy);
@@ -20141,6 +20821,7 @@ function identifyItem(id){
  renderInventory();render();saveGame();
 }
 function usePotion(){
+ if(realtimeGreedChestChanneling()){showCombatToast("開錠中","手を離すか、開け切る必要がある","miss");return}
  if(state.consumables.potion<=0){addLog("治癒薬を持っていない。");return}
  if(state.hero.hp>=state.hero.maxHp){addLog("HPは既に満タンだ。");return}
  state.consumables.potion--;
@@ -21733,7 +22414,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.00",
+  version:"4.04",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -22249,9 +22930,10 @@ function renderInventory(){
  });
 }
 
-const REALTIME_PROTOTYPE_MAX_FLOOR=3;
-const REALTIME_WORLD_MS=720;
-const REALTIME_SLOW_WORLD_MS=1220;
+const REALTIME_PROTOTYPE_MAX_FLOOR=5;
+const REALTIME_INCIDENT_MAX_FLOOR=3;
+const REALTIME_WORLD_MS=270;
+const REALTIME_SLOW_WORLD_MS=455;
 const REALTIME_FOCUS_DURATION_MS=2600;
 const REALTIME_FOCUS_COOLDOWN_MS=7000;
 const REALTIME_DASH_COOLDOWN_MS=1450;
@@ -22260,7 +22942,7 @@ const REALTIME_DASH_INVULN_MS=430;
 const realtimeCombatRuntime={
  floor:0,nextWorldAt:0,nextPlayerActionAt:0,lastDir:[0,1],
  slowUntil:0,focusCooldownUntil:0,dashCooldownUntil:0,invulnerableUntil:0,
- lastUiSecond:-1
+ pulse:0,floorGraceUntil:0,lastUiSecond:-1
 };
 function realtimeNow(){return performance?.now?.()||Date.now()}
 function realtimeCombatActive(){
@@ -22271,6 +22953,62 @@ function realtimePlayerReady(){
 }
 function realtimeFocusActive(now=realtimeNow()){return realtimeCombatActive()&&now<(realtimeCombatRuntime.slowUntil||0)}
 function realtimeWorldInterval(now=realtimeNow()){return realtimeFocusActive(now)?REALTIME_SLOW_WORLD_MS:REALTIME_WORLD_MS}
+function realtimeEnemyCadencePulses(enemy){
+ if(!enemy)return 3;
+ let cadence={
+  warg:2,charger:2,
+  mage:3,bomber:3,leech:3,warden:3,
+  skeleton:4,priest:4
+ }[enemy.type]||3;
+ if(enemy.boss){
+  cadence=(enemy.bossFloor||state?.floor)===5?4:3;
+ }
+ if(typeof eliteHas==="function"&&eliteHas(enemy,"swift")&&!enemy.boss)cadence=Math.max(2,cadence-1);
+ return cadence;
+}
+function realtimeEnemySpeedLabel(enemy){
+ const cadence=realtimeEnemyCadencePulses(enemy);
+ const seconds=(cadence*REALTIME_WORLD_MS/1000).toFixed(2);
+ if(enemy?.boss)return`番人・約${seconds}秒`;
+ return cadence<=2?`速・約${seconds}秒`:cadence>=4?`遅・約${seconds}秒`:`標準・約${seconds}秒`;
+}
+function realtimeEnemyActsThisPulse(enemy){
+ if(!realtimeCombatActive())return true;
+ const cadence=realtimeEnemyCadencePulses(enemy);
+ const id=String(enemy?.id||enemy?.name||"enemy");
+ let hash=0;for(let i=0;i<id.length;i++)hash=(hash*31+id.charCodeAt(i))>>>0;
+ const phase=hash%cadence;
+ return((realtimeCombatRuntime.pulse||0)+phase)%cadence===0;
+}
+function realtimeEnemyPulsesUntilAction(enemy){
+ if(!enemy)return 0;
+ const cadence=realtimeEnemyCadencePulses(enemy);
+ const id=String(enemy?.id||enemy?.name||"enemy");
+ let hash=0;for(let i=0;i<id.length;i++)hash=(hash*31+id.charCodeAt(i))>>>0;
+ const phase=hash%cadence;
+ const pulse=realtimeCombatRuntime.pulse||0;
+ const readyStep=enemy?.intent?Math.max(1,(enemy.realtimeIntentReadyPulse||0)-pulse):1;
+ const searchMax=Math.max(cadence,readyStep+cadence);
+ for(let step=1;step<=searchMax;step++){
+  if(step<readyStep)continue;
+  if((pulse+step+phase)%cadence===0)return step;
+ }
+ return searchMax;
+}
+function realtimeEnemyActionSeconds(enemy,now=realtimeNow()){
+ if(!enemy)return 0;
+ const interval=realtimeWorldInterval(now);
+ const pulses=Math.max(1,realtimeEnemyPulsesUntilAction(enemy));
+ const untilNextPulse=Math.max(0,(realtimeCombatRuntime.nextWorldAt||now)-now);
+ return Math.max(0,(untilNextPulse+(pulses-1)*interval)/1000);
+}
+function realtimeFloorIntroVisible(){
+ return!!$("floorBanner")?.classList.contains("show");
+}
+function realtimeFloorIntroBlocking(now=realtimeNow()){
+ if(realtimeFloorIntroVisible())return true;
+ return now<(realtimeCombatRuntime.floorGraceUntil||0);
+}
 function syncRealtimeCombatRuntime(now=realtimeNow()){
  if(!realtimeCombatActive()){
   realtimeCombatRuntime.floor=0;
@@ -22282,7 +23020,17 @@ function syncRealtimeCombatRuntime(now=realtimeNow()){
   realtimeCombatRuntime.nextPlayerActionAt=now;
   realtimeCombatRuntime.invulnerableUntil=0;
   realtimeCombatRuntime.slowUntil=0;
+  realtimeCombatRuntime.pulse=0;
+  realtimeCombatRuntime.floorGraceUntil=Math.max(realtimeCombatRuntime.floorGraceUntil||0,now+700);
   realtimeCombatRuntime.lastUiSecond=-1;
+  if(state.realtimeIncident?.type==="greed_chest"){
+   if(state.realtimeIncident.status==="channeling"){
+    state.realtimeIncident.status="primed";
+    state.realtimeIncident.channelProgressMs=0;
+   }
+   state.realtimeIncident.lastWindowAt=now;
+   state.realtimeIncident.lastChannelAt=now;
+  }
   addLog(`COMBAT TEST：第${state.floor}層はリアルタイム。停止していても敵が行動する。`);
  }
  return true;
@@ -22331,50 +23079,61 @@ function realtimeResourcePulse(){
  return true;
 }
 function realtimeWorldStep(now=realtimeNow()){
- if(!realtimeCombatActive()||!actionSceneClear())return false;
- state.turn++;
+ if(!realtimeCombatActive()||!actionSceneClear()||realtimeFloorIntroBlocking(now))return false;
+ realtimeCombatRuntime.pulse=(realtimeCombatRuntime.pulse||0)+1;
+ const logicPulse=realtimeCombatRuntime.pulse%3===0;
+
  state.enemyTurnInterrupted=false;
  state.hero.lastStandTriggeredThisTurn=false;
  state.hero.lastStandInvulnerable=false;
- if((state.hero.exhaustedTurns||0)>0){
-  state.hero.exhaustedTurns--;
-  clampStaminaForHunger();
+
+ if(logicPulse){
+  state.turn++;
+  if((state.hero.exhaustedTurns||0)>0){
+   state.hero.exhaustedTurns--;
+   clampStaminaForHunger();
+  }
+  ensureBossProgressIntegrity("realtime-start");
+  updateFloorObjective();
+
+  // 約0.81秒を従来の「1ターン相当」として資源・状態・CDを進める。
+  if(state.turn%2===0&&!realtimeResourcePulse())return false;
+  applyLightUtility();
+  updateStatuses();
+  updateRemains();
+  updateEnvironment();
+  processFloorPhenomenon();
+  updateEcology();
+  if(state.gameOver)return false;
  }
- ensureBossProgressIntegrity("realtime-start");
- updateFloorObjective();
 
- // 資源消費は敵行動2回につき1回。入力回数ではなく経過時間で進む。
- if(state.turn%2===0&&!realtimeResourcePulse())return false;
+ // 配信向け事件も同じ世界時間で進む。メニュー/階層紹介中はtick自体が止まるため不公平な消失は起きない。
+ processRealtimeBroadcastIncidentPulse();
 
- applyLightUtility();
- updateStatuses();
- updateRemains();
- updateEnvironment();
- processFloorPhenomenon();
- updateEcology();
- if(state.gameOver)return false;
-
+ // 敵AIだけは270ms刻み。実際に動くかは敵種ごとのcadenceで判定する。
  enemyTurn();
- ensureBossProgressIntegrity("realtime-end");
  if(state.gameOver)return false;
 
- if(state.hero.lastStandArmed&&!state.hero.lastStandTriggeredThisTurn){
-  state.hero.lastStandArmed=false;
-  addLog("踏み止まりは発動しないまま解けた。");
+ if(logicPulse){
+  ensureBossProgressIntegrity("realtime-end");
+  if(state.hero.lastStandArmed&&!state.hero.lastStandTriggeredThisTurn){
+   state.hero.lastStandArmed=false;
+   addLog("踏み止まりは発動しないまま解けた。");
+  }
+  resolvePendingLastStandRecharge();
+  state.hero.lastStandInvulnerable=false;
+  for(const k in state.cooldowns)state.cooldowns[k]=Math.max(0,state.cooldowns[k]-1);
+  state.guardTurns=Math.max(0,state.guardTurns-1);
+  recoverStamina(1);
+  updateVision();
+  queueSave();
  }
- resolvePendingLastStandRecharge();
- state.hero.lastStandInvulnerable=false;
- for(const k in state.cooldowns)state.cooldowns[k]=Math.max(0,state.cooldowns[k]-1);
- state.guardTurns=Math.max(0,state.guardTurns-1);
- recoverStamina(1);
- updateVision();
- queueSave();
  render();
  return true;
 }
 function tickRealtimeCombat(now=realtimeNow()){
  if(!syncRealtimeCombatRuntime(now))return;
- if(!actionSceneClear()){
+ if(!actionSceneClear()||realtimeFloorIntroBlocking(now)){
   realtimeCombatRuntime.nextWorldAt=Math.max(realtimeCombatRuntime.nextWorldAt||0,now+180);
   updateRealtimePrototypeUi(now);
   return;
@@ -22388,7 +23147,8 @@ function tickRealtimeCombat(now=realtimeNow()){
 }
 function realtimeDash(){
  if(!realtimeCombatActive())return waitTurn();
- if(!actionSceneClear()||!realtimePlayerReady())return false;
+ if(realtimeGreedChestChanneling())return false;
+ if(!actionSceneClear()||realtimeFloorIntroVisible()||!realtimePlayerReady())return false;
  const now=realtimeNow();
  if(now<(realtimeCombatRuntime.dashCooldownUntil||0)){
   showCombatToast("回避 再使用待ち",`${Math.ceil((realtimeCombatRuntime.dashCooldownUntil-now)/100)/10}秒`,"miss");
@@ -22423,7 +23183,8 @@ function realtimeDash(){
  return true;
 }
 function realtimeFocus(){
- if(!realtimeCombatActive()||!actionSceneClear())return false;
+ if(realtimeGreedChestChanneling())return false;
+ if(!realtimeCombatActive()||!actionSceneClear()||realtimeFloorIntroVisible())return false;
  const now=realtimeNow();
  if(now<(realtimeCombatRuntime.focusCooldownUntil||0))return false;
  if(!spendStamina(2))return false;
@@ -22436,6 +23197,48 @@ function realtimeFocus(){
  updateRealtimePrototypeUi(now);
  return true;
 }
+function updateRealtimeBossUi(now=realtimeNow()){
+ const bar=$("rtBossBar");
+ if(!bar)return;
+ const boss=realtimeCombatActive()&&state?.floor===5&&!state?.bossDefeated?livingFloorBoss():null;
+ if(!boss){
+  bar.classList.add("hidden");
+  bar.classList.remove("intent","phase2","break");
+  return;
+ }
+ bar.classList.remove("hidden");
+ bar.classList.toggle("intent",!!boss.intent);
+ bar.classList.toggle("phase2",(boss.phase||1)>=2);
+ const breakPulses=Math.max(0,(boss.realtimeBossBreakUntilPulse||0)-(realtimeCombatRuntime.pulse||0));
+ bar.classList.toggle("break",breakPulses>0);
+
+ $("rtBossName").textContent=boss.name;
+ $("rtBossPhase").textContent=`PHASE ${boss.phase||1}`;
+ const hpPct=Math.max(0,Math.min(100,Math.round((boss.hp/Math.max(1,boss.maxHp))*100)));
+ $("rtBossHpFill").style.width=`${hpPct}%`;
+
+ if(breakPulses>0){
+  const seconds=(breakPulses*realtimeWorldInterval(now)/1000).toFixed(1);
+  $("rtBossIntent").textContent="変調中・攻撃好機";
+  $("rtBossTimer").textContent=`再始動 約${seconds}秒`;
+  $("rtBossHint").textContent="第二形態へ移る隙。ここだけは欲張って攻め込める。";
+  return;
+ }
+
+ const seconds=realtimeEnemyActionSeconds(boss,now).toFixed(1);
+ if(boss.intent){
+  const intent=enemyIntentDisplayName(boss.intent);
+  $("rtBossIntent").textContent=`予兆：${intent}`;
+  $("rtBossTimer").textContent=`発動 約${seconds}秒`;
+  $("rtBossHint").textContent=intentCounterHint(boss);
+ }else{
+  $("rtBossIntent").textContent=(boss.phase||1)>=2?"第二形態・鎖圧上昇":"接近 / 間合い探り";
+  $("rtBossTimer").textContent=`次行動 約${seconds}秒`;
+  $("rtBossHint").textContent=(boss.phase||1)>=2
+   ?"2マス以内では鎖薙ぎを狙う。予兆を見て回避か態勢崩し。"
+   :"隣接すると飛びかかり予兆。HP50%以下で第二形態へ移行。";
+ }
+}
 function updateRealtimePrototypeUi(now=realtimeNow()){
  const bar=$("rtPrototypeBar"),actions=$("actions"),wait=$("wait"),focus=$("rtFocusBtn");
  if(!bar||!actions||!wait||!focus)return;
@@ -22445,14 +23248,20 @@ function updateRealtimePrototypeUi(now=realtimeNow()){
  if(!active){
   wait.textContent="休息";
   focus.disabled=true;
+  updateRealtimeIncidentUi(now);
+  updateRealtimeBossUi(now);
   return;
  }
- const hasCenterInteraction=playerOnStairs()||groundItemsAtPlayer().length>0;
- if(!hasCenterInteraction){
+ const greedChest=realtimeGreedChestAtPlayer();
+ const hasCenterInteraction=playerOnStairs()||groundItemsAtPlayer().length>0||!!greedChest;
+ if(greedChest&&!greedChest.used&&["primed","channeling"].includes(state.realtimeIncident?.status)){
+  wait.textContent=realtimeGreedChestChanneling()?"中断":"開錠";
+  wait.title=realtimeGreedChestChanneling()?"開錠を中断して戦闘へ戻る":"3.2秒その場に留まり危険宝箱を開ける";
+ }else if(!hasCenterInteraction){
   wait.textContent="回避";
   wait.title="最後に入力した方向へ最大2マス回避。気力3 / 再使用約1.45秒";
  }
- focus.disabled=now<(realtimeCombatRuntime.focusCooldownUntil||0);
+ focus.disabled=realtimeGreedChestChanneling()||now<(realtimeCombatRuntime.focusCooldownUntil||0);
  focus.classList.toggle("active",realtimeFocusActive(now));
  const remainFocus=Math.max(0,(realtimeCombatRuntime.slowUntil||0)-now);
  const remainCd=Math.max(0,(realtimeCombatRuntime.focusCooldownUntil||0)-now);
@@ -22462,13 +23271,18 @@ function updateRealtimePrototypeUi(now=realtimeNow()){
  const pct=Math.max(0,Math.min(1,1-remain/interval));
  const fill=$("rtPulseFill");if(fill)fill.style.width=`${Math.round(pct*100)}%`;
  const stateLabel=$("rtPrototypeState");
- if(stateLabel)stateLabel.textContent=realtimeFocusActive(now)?"時間低速":"敵行動 約0.72秒";
+ const introSafe=realtimeFloorIntroVisible()||now<(realtimeCombatRuntime.floorGraceUntil||0);
+ if(stateLabel)stateLabel.textContent=introSafe?"SAFE・敵時間停止":realtimeFocusActive(now)?"時間低速":"敵速度 速/標/遅";
  const hint=$("rtPrototypeHint");
- if(hint)hint.textContent=`移動/攻撃は敵ターンを進めません。回避は最後に入力した方向へ2マス。`;
+ if(hint)hint.textContent=introSafe
+  ?"階層紹介中は敵が完全停止。紹介終了後も0.8秒だけ先に動けます。"
+  :`速い敵は約0.54秒、標準0.81秒、遅い敵1.08秒。敵詳細でも確認できます。`;
+ updateRealtimeIncidentUi(now);
+ updateRealtimeBossUi(now);
 }
 
 function actionSceneClear(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("weaponArtOverlay").classList.contains("hidden")&&$("threatOverlay").classList.contains("hidden")&&$("actionConfirmOverlay").classList.contains("hidden")&&$("stairShortcutOverlay").classList.contains("hidden")&&$("returnConfirmOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("routeOverlay").classList.contains("hidden")&&$("forkOverlay").classList.contains("hidden")&&$("firstTwentyMilestoneOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("audioOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
-function canAct(){return actionSceneClear()&&realtimePlayerReady()}
+function canAct(){return actionSceneClear()&&!realtimeFloorIntroVisible()&&!realtimeGreedChestChanneling()&&realtimePlayerReady()}
 let saveTimer=null;
 let lastActiveSaveResult=null;
 function queueSave(){
@@ -23108,6 +23922,7 @@ function showFloorBanner(){
  if(depthLaw)extra.push(`深度圏：${depthLaw.label}`);
  const pulseLabel=floorPulseBannerLabel();
  if(pulseLabel)extra.push(pulseLabel);
+ if(state.realtimePressureWave?.active)extra.push(`危険兆候：${state.realtimePressureWave.label}`);
 
  banner.classList.remove("show","floorBannerBoss","floorBannerRest");
  void banner.offsetWidth;
@@ -23130,9 +23945,21 @@ function showFloorBanner(){
   ${isRouteFinaleFloor()?`<div class="floorBannerRouteFinale"><b>${routeData[state.routePlan.id].finaleName}</b><br>${routeFinaleDescription()}</div>`:""}`;
 
  banner.classList.add("show");
+ const bannerFloor=state.floor;
+ if(realtimeCombatActive()){
+  const now=realtimeNow();
+  realtimeCombatRuntime.floorGraceUntil=Math.max(realtimeCombatRuntime.floorGraceUntil||0,now+6700);
+  realtimeCombatRuntime.nextWorldAt=Math.max(realtimeCombatRuntime.nextWorldAt||0,now+6700);
+ }
  clearTimeout(bannerTimer);
  bannerTimer=setTimeout(()=>{
   banner.classList.remove("show","floorBannerBoss","floorBannerRest");
+  if(state&&state.floor===bannerFloor&&realtimeCombatActive()){
+   const now=realtimeNow();
+   realtimeCombatRuntime.floorGraceUntil=now+800;
+   realtimeCombatRuntime.nextWorldAt=now+800;
+   updateRealtimePrototypeUi(now);
+  }
  },5900);
 }
 function renderStats(){
@@ -23406,7 +24233,7 @@ function drawHeroSprite(x,y,hurt,t){
 function drawEnemySprite(e,x,y,t){
  const bob=Math.sin(t*.1+e.x*.7+e.y)*.65;
  const base=e.bossColor||{skeleton:"#d5d8e1",warg:"#c76673",mage:"#9a84e4",bomber:"#e2a24d",priest:"#d2b7df",charger:"#bd705e",leech:"#70a47d",warden:"#dbc45b"}[e.type]||"#ddd";
- const accent=e.echoGuard?"#69d8eb":e.nemesis?"#ff4f73":(e.bossColor||eliteColor(e)||base);
+ const accent=e.realtimeRelicRunner?"#e9bd49":e.echoGuard?"#69d8eb":e.nemesis?"#ff4f73":(e.bossColor||eliteColor(e)||base);
 
  ctx.save();
  ctx.globalAlpha=.32;ctx.fillStyle="#000";ctx.beginPath();ctx.ellipse(x+11,y+18,7,3,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
@@ -23470,6 +24297,16 @@ function drawEnemySprite(e,x,y,t){
   ctx.strokeStyle=eliteColor(e)||"#f0d37a";
   ctx.lineWidth=2;
   ctx.strokeRect(x+1.5,y+1.5,TILE-3,TILE-3);
+ }
+ if(e.realtimeRelicRunner){
+  const pulse=(Math.sin(t*.28)+1)*.5;
+  ctx.strokeStyle=`rgba(255,224,105,${.72+.28*pulse})`;
+  ctx.lineWidth=2;
+  ctx.strokeRect(x+1.5,y+1.5,TILE-3,TILE-3);
+  ctx.fillStyle="#ffe46f";
+  ctx.beginPath();
+  ctx.moveTo(x+11,y+1+bob);ctx.lineTo(x+14,y+4+bob);ctx.lineTo(x+11,y+7+bob);ctx.lineTo(x+8,y+4+bob);
+  ctx.closePath();ctx.fill();
  }
  if(e.intent||e.nemesis||e.echoGuard){
   ctx.strokeStyle=e.echoGuard?"#69d8eb":e.nemesis?"#ff4f73":"#ff5368";
@@ -23591,6 +24428,17 @@ function drawSpecialTileSprite(tileData,x,y,t){
   ctx.fillStyle="#6e4e2f";ctx.fillRect(x+4,y+9,14,9);
   ctx.fillStyle="#d5af50";ctx.fillRect(x+4,y+8,14,3);ctx.fillRect(x+10,y+12,2,4);
   ctx.fillStyle="#ffefb3";ctx.fillRect(x+6,y+11,2,2);ctx.fillRect(x+14,y+11,2,2);
+ }else if(tileData.type==="greed_chest"){
+  const pulse=.65+.35*((Math.sin(t*.24)+1)*.5);
+  ctx.fillStyle=tileData.sealed?"#392d29":"#57331f";ctx.fillRect(x+3,y+9,16,9);
+  ctx.fillStyle=tileData.opened?"#7f7048":"#c78d32";ctx.fillRect(x+3,y+7,16,4);
+  ctx.fillStyle=tileData.sealed?"#665b55":"#ffe072";ctx.fillRect(x+9,y+11,4,5);
+  ctx.strokeStyle=tileData.opened?"#b8d995":tileData.sealed?"#71645e":`rgba(255,110,72,${pulse})`;
+  ctx.lineWidth=2;ctx.strokeRect(x+2.5,y+6.5,17,12);
+  if(!tileData.opened&&!tileData.sealed){
+   ctx.fillStyle=`rgba(255,220,95,${.55+.35*pulse})`;
+   ctx.fillRect(x+10,y+2,2,4);
+  }
  }else if(tileData.type==="flood"){
   ctx.fillStyle="rgba(92,155,206,.16)";ctx.fillRect(x+2,y+5,18,14);
   ctx.strokeStyle="#69a6d1";
@@ -23760,12 +24608,16 @@ function setEnemyIntent(e,intent){
  e.intent=intent;
  e.intentTarget={x:state.player.x,y:state.player.y};
  e.intentCells=buildEnemyIntentCells(e,intent,e.intentTarget);
+ if(realtimeCombatActive()&&e?.boss&&(e.bossFloor||state.floor)===5){
+  e.realtimeIntentReadyPulse=(realtimeCombatRuntime.pulse||0)+4;
+ }
 }
 function clearEnemyIntent(e){
  e.intent=null;
  e.intentTarget=null;
  e.intentCells=[];
  e.intentAllyId=null;
+ e.realtimeIntentReadyPulse=0;
 }
 function enemyIntentCells(e){
  if(!e?.intent)return[];
@@ -23860,7 +24712,7 @@ function inspectTileAt(x,y){
  if(enemy){
   title=enemy.name;
   const tags=enemyStatusTags(enemy);
-  body+=`<p>Lv${enemy.level||floorTargetLevel()}　経験値補正 ${xpPercentForEnemy(enemy)}%<br>HP ${enemy.hp}/${enemy.maxHp}<br>攻撃 ${enemy.atk}${eliteAttackBonus(enemy)?` <b>(${enemy.atk+eliteAttackBonus(enemy)})</b>`:""} / 防御 ${enemy.def}${effectiveEnemyDefense(enemy)!==enemy.def?` <b>(${effectiveEnemyDefense(enemy)})</b>`:""}<br>勢力 ${factionData[enemy.faction]?.label||"不明"}</p>`;
+  body+=`<p>Lv${enemy.level||floorTargetLevel()}　経験値補正 ${xpPercentForEnemy(enemy)}%${realtimeCombatActive()?`<br>行動速度 <b>${realtimeEnemySpeedLabel(enemy)}</b>`:""}<br>HP ${enemy.hp}/${enemy.maxHp}<br>攻撃 ${enemy.atk}${eliteAttackBonus(enemy)?` <b>(${enemy.atk+eliteAttackBonus(enemy)})</b>`:""} / 防御 ${enemy.def}${effectiveEnemyDefense(enemy)!==enemy.def?` <b>(${effectiveEnemyDefense(enemy)})</b>`:""}<br>勢力 ${factionData[enemy.faction]?.label||"不明"}</p>`;
   body+=enemyResearchInfo(enemy);
   body+=tags.length
    ?tags.map(t=>`<span class="statusTag">${t}</span>`).join("")
@@ -23887,9 +24739,12 @@ function inspectTileAt(x,y){
   if(item.type==="sealed_relic"&&item.relic){const seal=sealedRelicSealData[item.relic.seal]||sealedRelicSealData.ash;body+=`<p><b>${seal.label}の封印遺物</b><br>${seal.desc}<br>灯台まで持ち帰ると開封できます。死亡すると失います。</p>`;}
   else body+=`<p>${item.type==="gear"?(item.gear.identified?gearLabel(item.gear):"未鑑定装備"):item.type}</p>`;
  }else if(special){
-  const names={shrine:"祭壇",treasure:"宝物庫",flood:"水没区画",collapse:"崩落区画",death_echo:"遺響の墓標"};
+  const names={shrine:"祭壇",treasure:"宝物庫",greed_chest:"危険宝箱",flood:"水没区画",collapse:"崩落区画",death_echo:"遺響の墓標"};
   title=names[special.type]||"特殊地点";
-  if(special.type==="death_echo"){
+  if(special.type==="greed_chest"){
+   const incident=state.realtimeIncident;
+   body+=`<p class="tacticalNote">${special.opened?"開錠済み。":special.sealed?"再封印され、もう開かない。":incident?.status==="channeling"?"開錠中。敵時間は止まらない。":"踏み込むと7.2秒の警報が始まる。開錠には3.2秒その場へ留まる必要がある。"}</p>`;
+  }else if(special.type==="death_echo"){
    const echo=activeDeathEcho();
    body+=`<p class="tacticalNote">${
     special.used
@@ -24530,17 +25385,20 @@ $("down").onclick=()=>realtimeDirectionClick($("down"),0,1);
 $("left").onclick=()=>realtimeDirectionClick($("left"),-1,0);
 $("right").onclick=()=>realtimeDirectionClick($("right"),1,0);
 bindRealtimeDirectionHold("up",0,-1);bindRealtimeDirectionHold("down",0,1);bindRealtimeDirectionHold("left",-1,0);bindRealtimeDirectionHold("right",1,0);
-$("wait").onclick=()=>{
+function realtimeCenterAction(){
+ if(realtimeGreedChestChanneling())return cancelRealtimeGreedChestChannel("手を離した");
+ if(realtimeCombatActive()&&realtimeGreedChestAtPlayer())return startRealtimeGreedChestChannel();
  if(realtimeCombatActive()&&!playerOnStairs()&&groundItemsAtPlayer().length===0)return realtimeDash();
  return waitTurn();
-};
+}
+$("wait").onclick=realtimeCenterAction;
 $("rtFocusBtn").onclick=realtimeFocus;
 $("guard").onclick=()=>useSkill("guard");$("volley").onclick=openWeaponArtOverlay;$("heal").onclick=()=>useSkill("heal");$("search").onclick=()=>useSkill("search");$("closeWeaponArt").onclick=closeWeaponArtOverlay;
 canvas.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchStart={x:t.clientX,y:t.clientY}},{passive:true});
 canvas.addEventListener("touchend",e=>{if(!touchStart)return;const t=e.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;touchStart=null;if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;if(Math.abs(dx)>Math.abs(dy))move(Math.sign(dx),0);else move(0,Math.sign(dy))},{passive:true});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("weaponArtOverlay").classList.contains("hidden")){e.preventDefault();closeWeaponArtOverlay();return}if(e.key==="Escape"&&!$("threatOverlay").classList.contains("hidden")){e.preventDefault();closeThreatOverlay();return}if(e.key==="Escape"&&!$("audioOverlay").classList.contains("hidden")){e.preventDefault();closeAudioSettings();return}
  if(e.key==="Escape"&&actionConfirmIsOpen()){e.preventDefault();closeActionConfirm(true);return}
- if(realtimeCombatActive()&&(e.key===" "||e.code==="Space")){e.preventDefault();realtimeDash();return}
+ if(realtimeCombatActive()&&(e.key===" "||e.code==="Space")){e.preventDefault();realtimeCenterAction();return}
  if(realtimeCombatActive()&&e.key==="Shift"){e.preventDefault();realtimeFocus();return}
  const m={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]};if(m[e.key]){e.preventDefault();move(...m[e.key])}});
 
