@@ -5510,11 +5510,38 @@ body,button,input,select,textarea{font-size:12px}
 .combatMutationChip b{color:#ffe08a;font-size:11.5px}
 .stashBadge.combatMutation{border-color:#806332;color:#f2cf73;background:#211708}
 
+
+/* v4.10 RUN DRAFT ENGINE */
+.runDraftSummary{
+ display:grid;gap:5px;margin:7px 0 9px;padding:7px 8px;
+ border:1px solid #62526e;border-radius:8px;background:#15101b
+}
+.runDraftSummary>b{font-size:11.5px;color:#e3d4aa}
+.runDraftSummary>div{display:flex;flex-wrap:wrap;gap:4px}
+.runDraftSummary.empty{display:flex;justify-content:space-between;align-items:center}
+.runDraftSummary.empty span{font-size:11.5px;color:#a99caf}
+.runDraftChip{
+ padding:2px 6px;border:1px solid #66596e;border-radius:999px;
+ font-size:11.5px;color:#d8cedf;background:#211929
+}
+.runDraftChip.force{border-color:#7c4a48;color:#f1b0a7}
+.runDraftChip.guard{border-color:#557059;color:#b9dfbe}
+.runDraftChip.explore{border-color:#4f687a;color:#b8dbea}
+.runDraftChoice{position:relative}
+.runDraftRank{
+ display:inline-block;margin:1px 0 5px;padding:2px 6px;border-radius:999px;
+ background:#120e16;border:1px solid #574860;color:#f0d88d;font-size:11.5px;font-weight:800
+}
+.runDraftSynergy{
+ display:block;margin-top:5px;padding-top:5px;border-top:1px solid #46394d;
+ color:#b7aabe;font-size:11.5px;line-height:1.38
+}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 4.07 SKILL MUTATIONS</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">試作版 4.10 RUN DRAFT ENGINE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5551,7 +5578,7 @@ body,button,input,select,textarea{font-size:12px}
     <div class="rtBossHp"><i id="rtBossHpFill"></i></div>
     <div class="rtBossMeta">
       <strong id="rtBossIntent">接近中</strong>
-      <span id="rtBossTimer">次行動 約1.0秒</span>
+      <span id="rtBossTimer">次行動 約0.8秒</span>
     </div>
     <small id="rtBossHint">赤い予兆から離れるか、攻撃で態勢を崩す。</small>
   </div>
@@ -5812,13 +5839,15 @@ body,button,input,select,textarea{font-size:12px}
           <li>アプリがバックグラウンドへ移るとBGMタイマーと全音源を停止し、AudioContextを休止します。復帰時は現在の灯台・探索・危険・番人場面から再開します。</li>
           <li>iPhoneの仕様により、音は最初のタップ後に開始します。端末の消音スイッチや音量設定も影響します。</li>
           <li><b>v4戦闘実験：第1〜5層</b>では敵種ごとの実時間周期で世界が進み、何もしなくても敵が動きます。第4層は事件なしの準備階、第5層は初のリアルタイム番人戦です。第6層以降は従来どおり1回行動するたびに1ターン進行します。</li>
-          <li><b>第5層・リアルタイム番人</b>：鎖縛の門衛は約0.96秒周期で判断し、攻撃予兆も約0.96秒表示してから発動します。専用ボス欄にHP・形態・予兆名・発動までの残り時間を表示します。</li>
+          <li><b>第5層・リアルタイム番人</b>：鎖縛の門衛は約0.84秒周期で判断し、攻撃予兆も約0.84秒表示してから発動します。専用ボス欄にHP・形態・予兆名・発動までの残り時間を表示します。</li>
           <li><b>リアルタイム中の回避</b>：中央ボタンで最後に入力した方向へ最大2マス移動し、約0.43秒だけ敵の直接攻撃をすり抜けます。気力3、再使用約1.45秒です。</li>
           <li><b>リアルタイム中の集中</b>：気力2で2.6秒だけ敵行動間隔を遅くします。完全停止ではありません。</li>
           <li><b>v4.06・武器の戦闘動詞</b>：第1〜5層では武技選択画面を開かず、主武技と副武技を2つの独立ボタンとして直接使えます。剣=範囲斬り/予兆中断、槍=直線攻撃/後退、弓=連射/足止め、杖=範囲魔撃/凍結です。副武技は試作区間だけ熟練Lvに関係なく試用できます。</li>
           <li><b>探索ボタン</b>：リアルタイム中は上部REALTIME TEST欄へ移動します。戦闘の4枠は「構え・主武技・治癒・副武技」に固定し、戦闘中に選択画面を挟みません。</li>
           <li><b>反撃好機</b>：リアルタイム中はターン数ではなく実時間で開きます。通常敵は約1.7秒、番人は約1.4秒が目安です。</li>
           <li><b>戦技変質</b>：魔法以上の武器に付くことがある、武技そのものを変える装備効果です。第1〜5層で生成される魔法以上の武器には試験的に必ず1つ付きます。例：旋撃で撃破するとCD短縮、退き突きが2マス後退、牽制射が分岐、凍結から砕氷爆発など。数値ではなく戦闘手順が変わります。</li>
+          <li><b>敵を武器にする</b>：骨術師の射線へ別の敵を入れると誤射、穿ち獣の突進線へ敵や爆薬樽を残すと衝突、爆ぜ虫は倒された場所で爆発し別の爆ぜ虫や樽へ連鎖します。敵の予兆内に巻き込まれる敵には橙色の小さな枠が出ます。</li>
+          <li><b>v4.10・戦闘ビルド3択</b>：第1〜5層でレベルアップすると敵時間が停止し、刃脈・護脈・探脈から1枚ずつ提示されます。同じカードは最大IIまで強化可能。撃破で武技CDを回す「血時計」、回避を連鎖させる「残像循環」、敵利用を主火力にする「誘導掌握」など、今回の探索だけのエンジンを組みます。</li>
           <li><b>逃走遺宝</b>：第2〜3層で稀に、紫脈封を持った金色の遺宝獣が出現します。画面の矢印と逃走時間を見て、追うか安全を取るかを即決してください。倒せばその場へ紫脈封を落とします。</li>
           <li><b>危険宝箱</b>：第2〜3層で現れることがあります。踏むと警報が鳴り7.2秒で再封印。中央の「開錠」を押して3.2秒その場に留まれば希少装備を獲得できます。開錠中も敵は動き、移動すると開錠進捗はリセットされます。</li>
           <li><b>階層目標</b>を達成すると階段の封印が解けます。進捗は画面左上に表示され、達成時に欠片・現地素材などを獲得します。</li>
@@ -6422,6 +6451,144 @@ const elementData={
  venom:{label:"毒",color:"#78c86a"},
  blood:{label:"血",color:"#d85b72"}
 };
+const realtimeRunDraftData=[
+ {id:"blood_clock",branch:"force",name:"血時計",short:"血時",maxRank:2,
+  desc:["自分の攻撃で敵を倒すたび、共有武技CDを1短縮。","自分の攻撃で敵を倒すたび、共有武技CDを2短縮。"],
+  synergy:"通常攻撃→武技→撃破→また武技、の回転を作る。"},
+ {id:"counter_engine",branch:"force",name:"返刃機関",short:"返機",maxRank:2,
+  desc:["反撃好機を攻撃で消費すると共有武技CDを1短縮。","反撃好機を消費すると共有武技CDを2短縮し、気力+1。"],
+  synergy:"回避・態勢崩しを火力ループへ変える。"},
+ {id:"redline_arts",branch:"force",name:"赤線武技",short:"赤線",maxRank:2,
+  desc:["HP40%以下では主武技・副武技の気力消費-1。","HP40%以下では主武技・副武技の気力消費-2。"],
+  synergy:"瀕死で帰るか、武技を連打して押し切るかのチキンレース。"},
+
+ {id:"slipstream",branch:"guard",name:"残像循環",short:"残像",maxRank:2,
+  desc:["敵予兆を回避すると回避CDを0.35秒短縮。","敵予兆を回避すると回避CDを0.70秒短縮し、追加で気力+1。"],
+  synergy:"避け続けるほど次の回避が間に合う。"},
+ {id:"brace_spike",branch:"guard",name:"反圧構え",short:"反圧",maxRank:2,
+  desc:["構え成功時、攻撃してきた通常敵を1行動よろめかせる。","構え成功時によろめかせ、共有武技CDを2短縮。"],
+  synergy:"逃げるだけでなく、わざと受けて敵のテンポを奪う。"},
+ {id:"guard_focus",branch:"guard",name:"静止加速",short:"静加",maxRank:2,
+  desc:["構え成功時、集中の再使用待ちを1.4秒短縮。","構え成功時、集中の再使用待ちを2.8秒短縮。"],
+  synergy:"受け切る→世界を遅くする、という立て直しループ。"},
+
+ {id:"turner",branch:"explore",name:"誘導掌握",short:"誘導",maxRank:2,
+  desc:["敵利用ダメージ+25%。敵利用撃破で気力+1。","敵利用ダメージ+50%。敵利用撃破で気力+2。"],
+  synergy:"誤射・突進・爆発を主火力に変える。"},
+ {id:"accident_engine",branch:"explore",name:"事故機関",short:"事故",maxRank:2,
+  desc:["敵利用撃破で共有武技CDを1短縮。","敵利用撃破で共有武技CDを2短縮。"],
+  synergy:"敵同士を倒させるほど自分の武技まで回り始める。"},
+ {id:"hunter_step",branch:"explore",name:"狩場転位",short:"転位",maxRank:2,
+  desc:["敵利用撃破で回避CDを0.7秒短縮。","敵利用撃破で回避CDを即時回復。"],
+  synergy:"爆発や誤射を決めた直後、そのまま危険地帯を抜ける。"}
+];
+
+function ensureRealtimeRunDrafts(){
+ if(!state)return{};
+ if(!state.realtimeRunDrafts||typeof state.realtimeRunDrafts!=="object")state.realtimeRunDrafts={};
+ for(const draft of realtimeRunDraftData){
+  const value=Number(state.realtimeRunDrafts[draft.id])||0;
+  state.realtimeRunDrafts[draft.id]=Math.max(0,Math.min(draft.maxRank||2,Math.floor(value)));
+ }
+ return state.realtimeRunDrafts;
+}
+function realtimeRunDraftInfo(id){return realtimeRunDraftData.find(d=>d.id===id)||null}
+function realtimeRunDraftRank(id){
+ const info=realtimeRunDraftInfo(id);if(!info)return 0;
+ return ensureRealtimeRunDrafts()[id]||0;
+}
+function realtimeRunDraftAtMax(id){
+ const info=realtimeRunDraftInfo(id);return!!info&&realtimeRunDraftRank(id)>=(info.maxRank||2);
+}
+function realtimeRunDraftCurrentDesc(draft,rank=realtimeRunDraftRank(draft.id)){
+ const next=Math.max(1,Math.min(draft.maxRank||2,rank));
+ return draft.desc?.[next-1]||"";
+}
+function realtimeRunDraftNextDesc(draft){
+ const next=Math.min(draft.maxRank||2,realtimeRunDraftRank(draft.id)+1);
+ return draft.desc?.[next-1]||"";
+}
+function realtimeRunDraftBranchCards(branch){
+ return realtimeRunDraftData.filter(d=>d.branch===branch&&!realtimeRunDraftAtMax(d.id));
+}
+function realtimeRunDraftSummaryHtml(){
+ const owned=realtimeRunDraftData.filter(d=>realtimeRunDraftRank(d.id)>0);
+ if(!owned.length)return`<div class="runDraftSummary empty"><b>今回の戦闘ビルド</b><span>まだ何も選んでいない</span></div>`;
+ return`<div class="runDraftSummary"><b>今回の戦闘ビルド</b><div>${owned.map(d=>`<span class="runDraftChip ${d.branch}"><b>${d.short}</b> ${"ⅠⅡ".charAt(Math.max(0,realtimeRunDraftRank(d.id)-1))}</span>`).join("")}</div></div>`;
+}
+function realtimeRunDraftCardHtml(draft){
+ const rank=realtimeRunDraftRank(draft.id),next=rank+1,data=runGrowthBranchData[draft.branch];
+ const rankText=rank?`${rank} → ${next}`:`NEW → ${next}`;
+ return`<span class="rootChoiceHeader"><b>${draft.name}</b><span class="rootBranchBadge">${data.label}</span></span>
+  <span class="runDraftRank">${rankText} / ${draft.maxRank}</span>
+  <small>${realtimeRunDraftNextDesc(draft)}</small>
+  <span class="runDraftSynergy">${draft.synergy}</span>
+  <span class="rootChoiceFooter">${runGrowthChoiceFooter(draft.branch)}</span>`;
+}
+function acquireRealtimeRunDraft(draft){
+ if(!draft||realtimeRunDraftAtMax(draft.id))return false;
+ const drafts=ensureRealtimeRunDrafts();
+ drafts[draft.id]=(drafts[draft.id]||0)+1;
+ const rank=drafts[draft.id];
+ const growth=advanceRunGrowth(draft.branch);
+ const stats=ensureRunStats();
+ stats.realtimeDraftPicks=(stats.realtimeDraftPicks||0)+1;
+ stats.realtimeDraftIds=stats.realtimeDraftIds||{};
+ stats.realtimeDraftIds[draft.id]=rank;
+ $("levelOverlay").classList.add("hidden");
+ showCombatToast("戦闘ビルド更新",`${draft.name} ${"ⅠⅡ".charAt(Math.max(0,rank-1))}・${realtimeRunDraftCurrentDesc(draft,rank)}`,"objective");
+ finishRunGrowthLevelChoice(growth,`戦闘ビルド「${draft.name}」を獲得。${realtimeRunDraftCurrentDesc(draft,rank)}`);
+ return true;
+}
+function showRealtimeRunDraftChoices(){
+ const pendingCrown=runGrowthCrownAvailableBranch();
+ if(pendingCrown){showRunGrowthCrownChoices(pendingCrown);return true}
+
+ const pool=[];
+ for(const branch of runGrowthBranches){
+  const candidates=realtimeRunDraftBranchCards(branch);
+  const candidate=pickRunGrowthCandidate(candidates);
+  if(candidate)pool.push(candidate);
+ }
+ if(!pool.length)return false;
+
+ const box=$("levelChoices");
+ box.innerHTML=runGrowthSummaryHtml()+realtimeRunDraftSummaryHtml();
+ for(const draft of pool){
+  const b=document.createElement("button");
+  b.className=`choiceBtn rootChoice runDraftChoice ${draft.branch}`;
+  b.innerHTML=realtimeRunDraftCardHtml(draft);
+  b.onclick=()=>acquireRealtimeRunDraft(draft);
+  box.appendChild(b);
+ }
+ $("levelOverlay").querySelector("h2").textContent="戦闘ビルド・3択";
+ $("levelOverlay").querySelector("p").textContent="敵時間は停止中。今回の探索だけの戦い方を一つ選んでください。帰還・死亡でリセットされます。";
+ $("levelOverlay").classList.remove("hidden");
+ return true;
+}
+function realtimeDraftArtCost(base){
+ const rank=realtimeRunDraftRank("redline_arts");
+ if(!rank||!realtimeCombatActive()||state.hero.hp>state.hero.maxHp*.40)return Math.max(1,base);
+ return Math.max(1,base-rank);
+}
+function realtimeDraftSharedCooldownReduce(amount,label="ビルド"){
+ const reduction=Math.max(0,Math.floor(Number(amount)||0));
+ if(!reduction||!state?.cooldowns)return 0;
+ const before=Math.max(0,state.cooldowns.volley||0);
+ state.cooldowns.volley=Math.max(0,before-reduction);
+ const actual=before-state.cooldowns.volley;
+ if(actual>0)addLog(`${label}：共有武技CD ${before}→${state.cooldowns.volley}。`);
+ return actual;
+}
+function realtimeDraftDashCooldownReduce(ms,label="ビルド"){
+ if(!realtimeCombatActive())return 0;
+ const now=realtimeNow(),before=Math.max(now,realtimeCombatRuntime.dashCooldownUntil||0);
+ realtimeCombatRuntime.dashCooldownUntil=Math.max(now,before-Math.max(0,Number(ms)||0));
+ const actual=Math.max(0,before-realtimeCombatRuntime.dashCooldownUntil);
+ if(actual>0&&label)addLog(`${label}：回避再使用を${(actual/1000).toFixed(2)}秒短縮。`);
+ return actual;
+}
+
 const talentData=[
  {id:"guard_regen",branch:"guard",name:"静息の構え",desc:"構え使用時、気力を2回復",apply(){}},
  {id:"bombproof",branch:"guard",name:"爆圧耐性",desc:"爆発ダメージを半減",apply(){}},
@@ -10925,6 +11092,18 @@ function expeditionHeroMomentCandidates(report){
  }else if(report.realtimeRelicRunnerEscaped){
   add(58,"relic_chase_lost","loss","あと一歩","逃走遺宝を取り逃した",`紫脈封を抱えた遺宝獣は、追撃を振り切って迷宮の奥へ消えた。`);
  }
+ if((report.realtimeDraftPicks||0)>=3&&(report.realtimeDraftProcs||0)>=5){
+  const build=Object.entries(report.realtimeRunDrafts||{})
+   .filter(([,rank])=>rank>0)
+   .sort((a,b)=>b[1]-a[1])
+   .slice(0,3)
+   .map(([id,rank])=>`${realtimeRunDraftInfo(id)?.name||id}${"ⅠⅡ".charAt(Math.max(0,rank-1))}`)
+   .join(" / ");
+  add(84,"run_build_online","combat","ビルド完成","今回だけの戦闘エンジンが回り始めた",`${build}。選んだ成長が${report.realtimeDraftProcs}回戦闘へ噛み合った。`);
+ }
+ if((report.enemyToolKills||0)>=3){
+  add(82,"turned_horde","combat","敵を敵へ向けた",`敵の攻撃で${report.enemyToolKills}体を撃破`,`突進・誤射・爆発を誘導し、正面から殴り合わず敵群を崩した。`);
+ }
  if(report.realtimeGreedChestOpened){
   add(79,"danger_chest","loot","欲張り成功","警報の中で危険宝箱を開け切った",`敵が迫る中で3.2秒その場に留まり、第${report.realtimeGreedChestOpenedFloor}層の希少装備を奪い取った。`);
  }else if(report.realtimeGreedChestMissed){
@@ -11011,6 +11190,12 @@ function buildExpeditionReport(outcome,details={}){
   realtimeSecondaryArts:stats.realtimeSecondaryArts||0,
   combatMutationProcs:stats.combatMutationProcs||0,
   combatMutationProcIds:{...(stats.combatMutationProcIds||{})},
+  enemyToolDamage:stats.enemyToolDamage||0,
+  enemyToolKills:stats.enemyToolKills||0,
+  enemyToolKillKinds:{...(stats.enemyToolKillKinds||{})},
+  realtimeDraftPicks:stats.realtimeDraftPicks||0,
+  realtimeDraftProcs:stats.realtimeDraftProcs||0,
+  realtimeDraftIds:{...(stats.realtimeDraftIds||{})},
   deepBoundaryClears:[...(stats.deepBoundaryClears||[])],
   rootTunedGearFound:stats.rootTunedGearFound||0,
   strongMysteryGearFound:stats.strongMysteryGearFound||0,
@@ -11118,6 +11303,7 @@ function buildExpeditionReport(outcome,details={}){
   deepWagerLost:details.deepWagerLost?{...details.deepWagerLost}:null,
   runGrowth:{...ensureRunGrowth()},
   runGrowthCrown:runGrowthCrownInfo()?{...runGrowthCrownInfo()}:null,
+  realtimeRunDrafts:{...ensureRealtimeRunDrafts()},
   highlights:[]
  };
 
@@ -11131,6 +11317,19 @@ function buildExpeditionReport(outcome,details={}){
  if(report.combatMutationProcs>=2){
   const names=Object.entries(report.combatMutationProcIds||{}).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([id,count])=>`${combatMutationData[id]?.short||id}${count}`).join("・");
   report.highlights.push(`戦技変質が${report.combatMutationProcs}回発動${names?`（${names}）`:""}し、装備効果が戦闘手順を変えた`);
+ }
+ if(report.enemyToolKills>0){
+  const kinds=Object.entries(report.enemyToolKillKinds||{}).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([kind,count])=>`${kind}${count}`).join("・");
+  report.highlights.push(`敵や地形を武器にして${report.enemyToolKills}体撃破${kinds?`（${kinds}）`:""} / 間接ダメージ${report.enemyToolDamage}`);
+ }
+ if(report.realtimeDraftPicks>0){
+  const build=Object.entries(report.realtimeRunDrafts||{})
+   .filter(([,rank])=>rank>0)
+   .sort((a,b)=>b[1]-a[1])
+   .slice(0,4)
+   .map(([id,rank])=>`${realtimeRunDraftInfo(id)?.short||id}${"ⅠⅡ".charAt(Math.max(0,rank-1))}`)
+   .join("・");
+  report.highlights.push(`今回の戦闘ビルド：${build||"未完成"} / 選択${report.realtimeDraftPicks}回 / 発動${report.realtimeDraftProcs}回`);
  }
  const reportGrowth=report.runGrowth||{force:0,guard:0,explore:0};
  const reportGrowthBranch=["force","guard","explore"].sort((a,b)=>(reportGrowth[b]||0)-(reportGrowth[a]||0))[0];
@@ -12547,9 +12746,16 @@ function consumeCounterWindow(enemy){
  const pct=Math.round((mult-1)*100);
  const chainGain=wardenImprintCount("chain")?recoverStamina(1):0;
  const crownGain=hasRunGrowthCrown("force_riposte")?recoverStamina(1):0;
+ const counterEngineRank=realtimeRunDraftRank("counter_engine");
+ const counterDraftCd=counterEngineRank?realtimeDraftSharedCooldownReduce(counterEngineRank,"返刃機関"):0;
+ const counterDraftStamina=counterEngineRank>=2?recoverStamina(1):0;
+ if(counterEngineRank){
+  const stats=ensureRunStats();stats.realtimeDraftProcs=(stats.realtimeDraftProcs||0)+1;
+  spawnCombatText(enemy.x,enemy.y,"ENGINE","critical",30);
+ }
  spawnCombatText(enemy.x,enemy.y,`COUNTER +${pct}%`,"critical",42);
- showCombatToast("反撃成功",`${enemy.name}の隙へ一撃・威力+${pct}%${chainGain?"・鎖返し 気力+1":""}${crownGain?"・返し刃 気力+1":""}`,"break");
- addLog(`${enemy.name}の反撃好機を捉え、次の一撃を${pct}%増幅した。${chainGain?" 番人刻印「鎖返し」で気力が1戻った。":""}${crownGain?" 根冠「返し刃」でさらに気力が1戻った。":""}`);
+ showCombatToast("反撃成功",`${enemy.name}の隙へ一撃・威力+${pct}%${chainGain?"・鎖返し 気力+1":""}${crownGain?"・返し刃 気力+1":""}${counterDraftCd?`・返刃機関 CD-${counterDraftCd}`:""}${counterDraftStamina?"・気力+1":""}`,"break");
+ addLog(`${enemy.name}の反撃好機を捉え、次の一撃を${pct}%増幅した。${chainGain?" 番人刻印「鎖返し」で気力が1戻った。":""}${crownGain?" 根冠「返し刃」でさらに気力が1戻った。":""}${counterEngineRank?` 戦闘ビルド「返刃機関」が回った。`:""}`);
  return mult;
 }
 function showCombatToast(title,detail="",kind=""){
@@ -12650,12 +12856,13 @@ function intentRangeLabel(intent){
 function intentCounterHint(enemy){
  if(!enemy?.intent)return"予兆は出ていない。";
  if(enemy.intent==="root_cage")return"予兆の中心に留まると回避できる。周囲8マスへ動かない。";
- if(enemy.intent==="bolt")return"予兆線から横へ外れるか、壁・別の敵を間へ入れる。";
- if(enemy.intent==="explode")return"爆発個体から2マス以上離れる。";
+ if(enemy.intent==="bolt")return"予兆線から外れる。別の敵を線上へ入れると骨弾がその敵へ誤射する。";
+ if(enemy.intent==="explode")return"爆発個体から離れる。敵や爆薬樽へ隣接させて倒すと爆発連鎖を狙える。";
+ if(enemy.intent==="charge")return"突進線から外れ、線上へ別の敵や爆薬樽を残すと穿ち獣が巻き込む。";
  if(enemy.intent==="chain_sweep")return"番人から3マス以上離れるか、予兆外へ移動する。";
  if(enemy.intent==="grave_volley")return"固定された3マス列から外れる。";
  if(enemy.intent==="furnace_slam")return"中心と斜め4マスを避ける。";
- return"固定された予兆マスから外れるか、構えで最初の1発を軽減する。";
+ return"固定予兆から外れる。別の敵が予兆マスへ入れば、その敵を身代わりにできる。";
 }
 function currentThreatForecast(){
  if(!state)return{
@@ -12993,8 +13200,22 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
   spawnCombatText(state.player.x,state.player.y,blocked>0?`GUARD ${blocked}`:"GUARD","guard",38);
   openCounterWindow(sourceEnemy,"構え");
   const crownGuardGain=hasRunGrowthCrown("guard_rebound")?recoverStamina(2):0;
-  showCombatToast("構え成功",blocked>0?`${blocked}ダメージを軽減・反撃好機${crownGuardGain?"・返気 気力+2":""}`:`衝撃を完全に受け流した・反撃好機${crownGuardGain?"・返気 気力+2":""}`,"guard");
-  addLog(`構えで衝撃を受け流し、${blocked}ダメージを軽減した！${sourceEnemy?" 反撃好機が開いた。":""}${crownGuardGain?" 根冠「返気」で気力が2戻った。":""}`);
+  const braceRank=realtimeRunDraftRank("brace_spike");
+  const focusRank=realtimeRunDraftRank("guard_focus");
+  let braceCd=0,focusCut=0;
+  if(braceRank&&sourceEnemy&&!sourceEnemy.boss&&state.enemies.includes(sourceEnemy)){
+   sourceEnemy.stagger=Math.max(sourceEnemy.stagger||0,1);
+   spawnCombatText(sourceEnemy.x,sourceEnemy.y,"REBOUND","break",32);
+   if(braceRank>=2)braceCd=realtimeDraftSharedCooldownReduce(2,"反圧構え");
+  }
+  if(focusRank&&realtimeCombatActive()){
+   const now=realtimeNow(),before=Math.max(now,realtimeCombatRuntime.focusCooldownUntil||0);
+   realtimeCombatRuntime.focusCooldownUntil=Math.max(now,before-(focusRank>=2?2800:1400));
+   focusCut=Math.max(0,before-realtimeCombatRuntime.focusCooldownUntil);
+  }
+  if(braceRank||focusRank){const stats=ensureRunStats();stats.realtimeDraftProcs=(stats.realtimeDraftProcs||0)+1}
+  showCombatToast("構え成功",blocked>0?`${blocked}ダメージを軽減・反撃好機${crownGuardGain?"・返気 気力+2":""}${braceRank?"・反圧":""}${braceCd?` CD-${braceCd}`:""}${focusCut?`・集中-${(focusCut/1000).toFixed(1)}秒`:""}`:`衝撃を完全に受け流した・反撃好機${crownGuardGain?"・返気 気力+2":""}${braceRank?"・反圧":""}${focusCut?`・集中-${(focusCut/1000).toFixed(1)}秒`:""}`,"guard");
+  addLog(`構えで衝撃を受け流し、${blocked}ダメージを軽減した！${sourceEnemy?" 反撃好機が開いた。":""}${crownGuardGain?" 根冠「返気」で気力が2戻った。":""}${braceRank?" 戦闘ビルド「反圧構え」が敵のテンポを止めた。":""}${focusCut?" 「静止加速」で集中の再使用が早まった。":""}`);
   updateFloorObjective();
  }
  if(tagTier("bone")>=6)dmg=Math.max(0,Math.round(dmg*.88));
@@ -13241,6 +13462,80 @@ function igniteAt(x,y,source="炎"){
  const barrel=envAt(x,y,"barrel");
  if(barrel&&barrel.active)explodeBarrel(barrel);
 }
+function recordEnemyToolKill(source,target,label="事故"){
+ const stats=ensureRunStats();
+ stats.enemyToolKills=(stats.enemyToolKills||0)+1;
+ stats.enemyToolKillKinds=stats.enemyToolKillKinds||{};
+ const keyName=String(label||"事故");
+ stats.enemyToolKillKinds[keyName]=(stats.enemyToolKillKinds[keyName]||0)+1;
+
+ const now=realtimeNow();
+ const chained=realtimeCombatActive()&&now-(realtimeCombatRuntime.lastEnemyToolKillAt||0)<=1800;
+ realtimeCombatRuntime.enemyToolChain=chained?(realtimeCombatRuntime.enemyToolChain||0)+1:1;
+ realtimeCombatRuntime.lastEnemyToolKillAt=now;
+ const chain=realtimeCombatRuntime.enemyToolChain||1;
+
+ const turnerRank=realtimeRunDraftRank("turner");
+ const accidentRank=realtimeRunDraftRank("accident_engine");
+ const hunterRank=realtimeRunDraftRank("hunter_step");
+ const draftStamina=turnerRank?recoverStamina(turnerRank):0;
+ const draftCd=accidentRank?realtimeDraftSharedCooldownReduce(accidentRank,"事故機関"):0;
+ let draftDash=0;
+ if(hunterRank){
+  if(hunterRank>=2){
+   const now2=realtimeNow(),before2=Math.max(now2,realtimeCombatRuntime.dashCooldownUntil||0);
+   realtimeCombatRuntime.dashCooldownUntil=now2;
+   draftDash=Math.max(0,before2-now2);
+  }else draftDash=realtimeDraftDashCooldownReduce(700,"狩場転位");
+ }
+ if(turnerRank||accidentRank||hunterRank){const stats2=ensureRunStats();stats2.realtimeDraftProcs=(stats2.realtimeDraftProcs||0)+1}
+
+ spawnCombatText(target.x,target.y,chain>=2?`CHAIN ×${chain}`:"TURNED","critical",chain>=2?40:34);
+ if(chain>=2){
+  showCombatToast(`利用連鎖 ×${chain}`,`${source?.name||"迷宮"}の${label}で${target.name}を撃破${draftStamina?`・気力+${draftStamina}`:""}${draftCd?`・武技CD-${draftCd}`:""}${draftDash?"・回避再使用短縮":""}`,"critical");
+  triggerImpactFeedback("critical",{haptic:"critical",duration:430+Math.min(260,chain*45)});
+ }else{
+  showCombatToast("敵を利用",`${source?.name||"迷宮"}の${label}で${target.name}を倒した${draftStamina?`・気力+${draftStamina}`:""}${draftCd?`・武技CD-${draftCd}`:""}${draftDash?"・回避再使用短縮":""}`,"objective");
+ }
+}
+function applyEnemyToolDamage(source,target,raw,label="事故",options={}){
+ if(!target||!state.enemies.includes(target)||target===source)return 0;
+ const before=target.hp;
+ const base=Math.max(1,Math.round(Number(raw)||1)-effectiveEnemyDefense(target));
+ const turnerRank=realtimeRunDraftRank("turner");
+ const boosted=Math.max(1,Math.round(base*(1+turnerRank*.25)));
+ const dmg=routeAdjustedEnemyDamage(target,boosted);
+ target.hp-=dmg;
+
+ const stats=ensureRunStats();
+ stats.enemyToolDamage=(stats.enemyToolDamage||0)+dmg;
+ spawnCombatText(target.x,target.y,`事故 -${dmg}`,"critical",30);
+ addLog(`${source?.name||"迷宮"}の${label}が${target.name}へ${dmg}ダメージ。`);
+ if(options.stagger&&target.hp>0)target.stagger=Math.max(target.stagger||0,1);
+
+ if(before>0&&target.hp<=0){
+  target._enemyToolKill=true;
+  recordEnemyToolKill(source,target,label);
+  defeatEnemy(target);
+ }
+ return dmg;
+}
+function enemyCollateralTargetFromCells(source,cells=[]){
+ for(const c of cells){
+  if(state.player.x===c.x&&state.player.y===c.y)break;
+  const target=enemyAt(c.x,c.y);
+  if(target&&target!==source)return target;
+ }
+ return null;
+}
+function enemyCollateralThreatened(target){
+ if(!target||!state?.enemies)return false;
+ return state.enemies.some(source=>{
+  if(source===target||!source.intent)return false;
+  if(!["bolt","charge","explode","heavy","lunge"].includes(source.intent))return false;
+  return enemyIntentCells(source).some(c=>c.x===target.x&&c.y===target.y);
+ });
+}
 function explodeBarrel(barrel){
  if(!barrel.active)return;
  barrel.active=false;
@@ -13250,10 +13545,7 @@ function explodeBarrel(barrel){
   const tx=barrel.x+dx,ty=barrel.y+dy;
   const enemy=enemyAt(tx,ty);
   if(enemy){
-   const enemyDamage=routeAdjustedEnemyDamage(enemy,12+state.floor*2);
-   enemy.hp-=enemyDamage;
-   addLog(`${enemy.name}が爆風で${enemyDamage}ダメージ。`);
-   if(enemy.hp<=0)defeatEnemy(enemy);
+   applyEnemyToolDamage(null,enemy,12+state.floor*2,"爆薬樽");
   }
   if(state.player.x===tx&&state.player.y===ty){
    let raw=Math.max(2,10+state.floor-totalDef());if(hasTalent("bombproof"))raw=Math.floor(raw*.5);
@@ -19070,10 +19362,20 @@ function defeatEnemy(e){
  if(!state.enemies.includes(e))return;
  const hadIntentOnDefeat=!!e.intent;
  const wasBoss=!!e.boss;const wasNemesis=!!e.nemesis;const wasEchoGuard=!!e.echoGuard;const wasRelicRunner=!!e.realtimeRelicRunner;
+ const killedByEnemyTool=!!e._enemyToolKill;
+ const deathDetonation=e.type==="bomber"&&!e._detonated;
  if(wasBoss)sfx("bossVictory");else if(e.elite||wasNemesis)sfx("eliteKill");
  spreadTagDeathEffects(e);
  addRemains(e);
  state.enemies=state.enemies.filter(x=>x!==e);
+ if(!killedByEnemyTool&&realtimeCombatActive()){
+  const bloodClockRank=realtimeRunDraftRank("blood_clock");
+  if(bloodClockRank){
+   const reduced=realtimeDraftSharedCooldownReduce(bloodClockRank,"血時計");
+   const stats=ensureRunStats();stats.realtimeDraftProcs=(stats.realtimeDraftProcs||0)+1;
+   if(reduced)spawnCombatText(e.x,e.y,`CD -${reduced}`,"critical",28);
+  }
+ }
  if(state.visual?.hitX===e.x&&state.visual?.hitY===e.y){
   state.visual.flash=0;state.visual.hitX=null;state.visual.hitY=null;
  }
@@ -19109,7 +19411,7 @@ function defeatEnemy(e){
  }
  if(wasNemesis)recordNemesisVictory(e);
  if(wasEchoGuard)markDeathEchoGuardDefeated(e);
- if(eliteHas(e,"volatile")){
+ if(eliteHas(e,"volatile")&&e.type!=="bomber"){
   const ghost={x:e.x,y:e.y,active:true};
   explodeBarrel(ghost);
  }
@@ -19171,6 +19473,9 @@ function defeatEnemy(e){
  updateRoomEncounters();
  updateTacticalPacks();
  checkLevel();
+ // 爆ぜ虫は撃破報酬の処理を終えてから死亡爆発する。
+ // これにより爆発で探索者が倒れても、死亡処理の途中で撃破関数が走り続けない。
+ if(deathDetonation&&!state.gameOver)bomberExplosion(e);
 }
 function adjacentEnemiesAround(x,y){
  return dirs.map(([dx,dy])=>enemyAt(x+dx,y+dy)).filter(Boolean);
@@ -19228,17 +19533,30 @@ function weaponAttack(e,dx,dy,distance){
  return false;
 }
 function bomberExplosion(e){
- const targets=[...state.enemies].filter(other=>other!==e&&Math.abs(other.x-e.x)+Math.abs(other.y-e.y)<=1);
- const playerHit=Math.abs(state.player.x-e.x)+Math.abs(state.player.y-e.y)<=1;
+ if(!e||e._detonated)return;
+ e._detonated=true;
+ const origin={x:e.x,y:e.y};
+ state.enemies=state.enemies.filter(x=>x!==e);
+ const targets=[...state.enemies].filter(other=>Math.abs(other.x-origin.x)+Math.abs(other.y-origin.y)<=1);
+ const playerHit=Math.abs(state.player.x-origin.x)+Math.abs(state.player.y-origin.y)<=1;
  addLog(e.name+"が爆発した！");
+ spawnTileEffect(origin.x,origin.y,"bomb",22);
  if(playerHit){
   let raw=Math.max(1,e.atk+eliteAttackBonus(e)-totalDef());if(hasTalent("bombproof"))raw=Math.floor(raw*.5);
   const dmg=applyHeroDamage(raw,e,{guardable:true});addLog("爆風で "+dmg+" ダメージ。");
  }
  for(const other of targets){
-  const enemyDamage=routeAdjustedEnemyDamage(other,Math.max(2,Math.floor((e.atk+eliteAttackBonus(e))*.8)-effectiveEnemyDefense(other)));
-  other.hp-=enemyDamage;
-  if(other.hp<=0)defeatEnemy(other);
+  if(state.enemies.includes(other)){
+   applyEnemyToolDamage(e,other,Math.max(2,Math.floor((e.atk+eliteAttackBonus(e))*.8)),"爆ぜ連鎖");
+  }
+ }
+ const cells=[[0,0],...dirs];
+ for(const [dx,dy] of cells){
+  const tx=origin.x+dx,ty=origin.y+dy;
+  const barrel=envAt(tx,ty,"barrel");
+  if(barrel?.active)explodeBarrel(barrel);
+  const oil=envAt(tx,ty,"oil");
+  if(oil?.active&&!oil.burning){oil.burning=true;oil.timer=Math.max(oil.timer||0,4)}
  }
  state.enemies=state.enemies.filter(x=>x!==e);
  if(state.hero.hp<=0){
@@ -19571,9 +19889,32 @@ function resolveGraveDirge(e){
 }
 function chargeTowardMarkedCell(e,target,steps=3){
  if(!target)return;
+ const dx=Math.sign(target.x-e.x),dy=Math.sign(target.y-e.y);
+ if(!dx&&!dy)return;
  for(let i=0;i<steps;i++){
   if(Math.abs(e.x-target.x)+Math.abs(e.y-target.y)<=1)break;
-  const beforeX=e.x,beforeY=e.y;moveTowardPoint(e,target);if(e.x===beforeX&&e.y===beforeY)break;
+  const nx=e.x+dx,ny=e.y+dy;
+  if(tile(nx,ny)!==1)break;
+  if(state.player.x===nx&&state.player.y===ny)break;
+
+  const other=enemyAt(nx,ny);
+  if(other&&other!==e){
+   const dealt=applyEnemyToolDamage(e,other,Math.round((e.atk+eliteAttackBonus(e))*1.25),"穿ち衝突",{stagger:true});
+   if(state.enemies.includes(other)){
+    e.stagger=Math.max(e.stagger||0,1);
+    spawnCombatText(e.x,e.y,"CRASH","break",34);
+    showCombatToast("突進事故",`${e.name}が${other.name}へ衝突・双方停止`,"break");
+    break;
+   }
+   if(dealt>0){
+    spawnCombatText(nx,ny,"RAM","critical",34);
+   }
+  }
+
+  const barrel=envAt(nx,ny,"barrel");
+  if(barrel?.active)explodeBarrel(barrel);
+  if(enemyAt(nx,ny))break;
+  e.x=nx;e.y=ny;triggerEnemyTacticalTerrainEntry(e);
  }
 }
 function resolvePiercingCharge(e,cells,playerInTarget){
@@ -19659,6 +20000,15 @@ function enemyTurn(){
 
    if(intent==="bolt"){
     spawnEnemyAttackCells(cells,"enemy_bolt",18);
+    const collateral=enemyCollateralTargetFromCells(e,cells);
+    if(collateral){
+     applyEnemyToolDamage(e,collateral,Math.round((e.atk+eliteAttackBonus(e))*1.10),"骨弾誤射",{stagger:true});
+     spawnCombatText(collateral.x,collateral.y,"CROSSFIRE","critical",34);
+     showCombatToast("骨弾誤射",`${collateral.name}を射線へ巻き込んだ`,"objective");
+     openCounterWindow(e,"骨弾誤射");
+     clearEnemyIntent(e);
+     continue;
+    }
     if(!playerInTarget){
      registerIntentDodge(e,intent);
      continue;
@@ -19675,6 +20025,17 @@ function enemyTurn(){
 
    if(e.type==="warden"&&resolveWardenIntent(e,intent,cells,playerInTarget)){
     if(state.gameOver)return;
+    continue;
+   }
+
+   const meleeCollateral=["heavy","lunge"].includes(intent)?enemyCollateralTargetFromCells(e,cells):null;
+   if(meleeCollateral){
+    spawnEnemyAttackCells(cells,intent==="heavy"?"enemy_heavy":"enemy_melee",17);
+    const mult=intent==="heavy"?1.35:1.0;
+    const label=intent==="heavy"?"盾打ち誤爆":"飛びかかり誤爆";
+    applyEnemyToolDamage(e,meleeCollateral,Math.round((e.atk+eliteAttackBonus(e))*mult),label,{stagger:true});
+    openCounterWindow(e,`同士討ち・${enemyIntentDisplayName(intent)}`);
+    clearEnemyIntent(e);
     continue;
    }
 
@@ -20735,7 +21096,10 @@ function realtimeCooldownText(turns){
  const seconds=value*realtimeWorldInterval(realtimeNow())*3/1000;
  return`${seconds<10?seconds.toFixed(1):Math.ceil(seconds)}s`;
 }
-function weaponPrimaryArtCost(type=weaponType()){return{sword:6,spear:7,bow:6,staff:8}[type]||6}
+function weaponPrimaryArtCost(type=weaponType()){
+ const base={sword:6,spear:7,bow:6,staff:8}[type]||6;
+ return realtimeDraftArtCost(base);
+}
 function weaponSecondaryArtUnlocked(type=weaponType()){
  // v4.06の1〜5層では戦闘感触を比較するため副武技を試用解放。
  // 第6層以降は従来どおり熟練Lv2が必要。
@@ -20766,13 +21130,14 @@ function weaponPrimaryArtReadiness(type=weaponType()){
 function weaponSecondaryArtReadiness(type=weaponType()){
  const data=weaponSecondaryArtData[type];
  if(!data)return{ok:false,reason:"副武技なし"};
- if(!weaponSecondaryArtUnlocked(type))return{ok:false,cost:data.cost,reason:"武器熟練Lv2で解放"};
- if((state.hero?.stamina||0)<data.cost)return{ok:false,cost:data.cost,reason:`気力${data.cost}が必要`};
+ const cost=realtimeDraftArtCost(data.cost);
+ if(!weaponSecondaryArtUnlocked(type))return{ok:false,cost:cost,reason:"武器熟練Lv2で解放"};
+ if((state.hero?.stamina||0)<cost)return{ok:false,cost:cost,reason:`気力${cost}が必要`};
  if(type==="sword"){
   const targets=adjacentEnemiesAround(state.player.x,state.player.y).filter(e=>!!e.intent);
-  if(!targets.length)return{ok:false,cost:data.cost,reason:"隣接する予兆中の敵がいない"};
+  if(!targets.length)return{ok:false,cost:cost,reason:"隣接する予兆中の敵がいない"};
   targets.sort((a,b)=>(b.boss?1:0)-(a.boss?1:0)||(b.elite?1:0)-(a.elite?1:0));
-  return{ok:true,cost:data.cost,target:targets[0],reason:`${targets[0].name}の予兆を中断`};
+  return{ok:true,cost:cost,target:targets[0],reason:`${targets[0].name}の予兆を中断`};
  }
  if(type==="spear"){
   const candidates=[];
@@ -20787,23 +21152,23 @@ function weaponSecondaryArtReadiness(type=weaponType()){
     }
    }
   }
-  if(!candidates.length)return{ok:false,cost:data.cost,reason:"敵と退路が一直線に揃っていない"};
+  if(!candidates.length)return{ok:false,cost:cost,reason:"敵と退路が一直線に揃っていない"};
   candidates.sort((a,b)=>(b.target.intent?1:0)-(a.target.intent?1:0)||a.d-b.d);
-  return{ok:true,cost:data.cost,...candidates[0],reason:`${candidates[0].target.name}を突いて1マス後退`};
+  return{ok:true,cost:cost,...candidates[0],reason:`${candidates[0].target.name}を突いて1マス後退`};
  }
  if(type==="bow"){
   const targets=state.enemies.map(e=>({target:e,d:Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)}))
    .filter(o=>o.d>=2&&o.d<=6&&state.visible[key(o.target.x,o.target.y)])
    .sort((a,b)=>(b.target.intent?1:0)-(a.target.intent?1:0)||(b.target.elite?1:0)-(a.target.elite?1:0)||a.d-b.d);
-  if(!targets.length)return{ok:false,cost:data.cost,reason:"2〜6マスに見えている敵がいない"};
-  return{ok:true,cost:data.cost,...targets[0],reason:`${targets[0].target.name}を牽制`};
+  if(!targets.length)return{ok:false,cost:cost,reason:"2〜6マスに見えている敵がいない"};
+  return{ok:true,cost:cost,...targets[0],reason:`${targets[0].target.name}を牽制`};
  }
  if(type==="staff"){
   const targets=adjacentEnemiesAround(state.player.x,state.player.y);
-  if(!targets.length)return{ok:false,cost:data.cost,reason:"隣接する敵がいない"};
-  return{ok:true,cost:data.cost,targets,reason:`隣接${targets.length}体を凍結`};
+  if(!targets.length)return{ok:false,cost:cost,reason:"隣接する敵がいない"};
+  return{ok:true,cost:cost,targets,reason:`隣接${targets.length}体を凍結`};
  }
- return{ok:false,cost:data.cost,reason:"使用条件を満たしていない"};
+ return{ok:false,cost:cost,reason:"使用条件を満たしていない"};
 }
 function closeWeaponArtOverlay(){const o=$("weaponArtOverlay");if(o)o.classList.add("hidden")}
 function openWeaponArtOverlay(){
@@ -20827,7 +21192,7 @@ function useSecondaryWeaponArt(){
  if(!canAct()||state.cooldowns.volley>0)return false;
  const type=weaponType(),data=weaponSecondaryArtData[type],ready=weaponSecondaryArtReadiness(type);
  if(!data||!ready.ok){addLog(ready?.reason||"副武技を使えない。");render();return false}
- if(!spendStamina(data.cost))return false;
+ if(!spendStamina(ready.cost))return false;
  gainMastery(type,3);recordUsage(type);if(equippedElement())recordUsage(equippedElement());
  if(type==="sword"||type==="spear")gainTraining("strength",3);else gainTraining("focus",3);
  state.lastAction="skill";
@@ -20928,7 +21293,7 @@ function useSecondaryWeaponArt(){
    addLog(`氷環が周囲${targets.length}体を凍てつかせた。`);showCombatToast("氷環",`隣接${targets.length}体を制圧`,"objective");used=true;
   }
  }
- if(!used){recoverStamina(data.cost);addLog("副武技は成立しなかった。");render();return false}
+ if(!used){recoverStamina(ready.cost);addLog("副武技は成立しなかった。");render();return false}
  if(realtimeCombatActive()){
   const stats=ensureRunStats();
   stats.realtimeSecondaryArts=(stats.realtimeSecondaryArts||0)+1;
@@ -21062,6 +21427,7 @@ function useSkill(name){
 function checkLevel(){
  if(state.xp<state.nextXp)return;
  state.level++;state.xp-=state.nextXp;state.nextXp=Math.round(state.nextXp*1.45);sfx("level");
+ if(realtimeCombatActive()&&showRealtimeRunDraftChoices())return;
  if(state.level%3===0)showTalentChoices();else showLevelChoices();
 }
 const perks=[
@@ -22744,7 +23110,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.07",
+  version:"4.10",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -23262,8 +23628,8 @@ function renderInventory(){
 
 const REALTIME_PROTOTYPE_MAX_FLOOR=5;
 const REALTIME_INCIDENT_MAX_FLOOR=3;
-const REALTIME_WORLD_MS=240;
-const REALTIME_SLOW_WORLD_MS=405;
+const REALTIME_WORLD_MS=210;
+const REALTIME_SLOW_WORLD_MS=355;
 const REALTIME_FOCUS_DURATION_MS=2600;
 const REALTIME_FOCUS_COOLDOWN_MS=7000;
 const REALTIME_DASH_COOLDOWN_MS=1450;
@@ -23272,7 +23638,8 @@ const REALTIME_DASH_INVULN_MS=430;
 const realtimeCombatRuntime={
  floor:0,nextWorldAt:0,nextPlayerActionAt:0,lastDir:[0,1],
  slowUntil:0,focusCooldownUntil:0,dashCooldownUntil:0,invulnerableUntil:0,
- pulse:0,floorGraceUntil:0,lastUiSecond:-1
+ pulse:0,floorGraceUntil:0,lastUiSecond:-1,
+ enemyToolChain:0,lastEnemyToolKillAt:0
 };
 function realtimeNow(){return performance?.now?.()||Date.now()}
 function realtimeCombatActive(){
@@ -23351,6 +23718,8 @@ function syncRealtimeCombatRuntime(now=realtimeNow()){
   realtimeCombatRuntime.invulnerableUntil=0;
   realtimeCombatRuntime.slowUntil=0;
   realtimeCombatRuntime.pulse=0;
+  realtimeCombatRuntime.enemyToolChain=0;
+  realtimeCombatRuntime.lastEnemyToolKillAt=0;
   realtimeCombatRuntime.floorGraceUntil=Math.max(realtimeCombatRuntime.floorGraceUntil||0,now+700);
   realtimeCombatRuntime.lastUiSecond=-1;
   if(state.realtimeIncident?.type==="greed_chest"){
@@ -23426,7 +23795,7 @@ function realtimeWorldStep(now=realtimeNow()){
   ensureBossProgressIntegrity("realtime-start");
   updateFloorObjective();
 
-  // 約0.72秒を従来の「1ターン相当」として資源・状態・CDを進める。
+  // 約0.63秒を従来の「1ターン相当」として資源・状態・CDを進める。
   if(state.turn%2===0&&!realtimeResourcePulse())return false;
   applyLightUtility();
   updateStatuses();
@@ -23440,7 +23809,7 @@ function realtimeWorldStep(now=realtimeNow()){
  // 配信向け事件も同じ世界時間で進む。メニュー/階層紹介中はtick自体が止まるため不公平な消失は起きない。
  processRealtimeBroadcastIncidentPulse();
 
- // 敵AIだけは240ms刻み。実際に動くかは敵種ごとのcadenceで判定する。
+ // 敵AIだけは210ms刻み。実際に動くかは敵種ごとのcadenceで判定する。
  enemyTurn();
  if(state.gameOver)return false;
 
@@ -24634,6 +25003,13 @@ function drawEnemySprite(e,x,y,t){
   ctx.lineWidth=2;
   ctx.strokeRect(x+1.5,y+1.5,TILE-3,TILE-3);
  }
+ if(enemyCollateralThreatened(e)){
+  ctx.strokeStyle="#f5a24a";
+  ctx.lineWidth=2;
+  ctx.strokeRect(x+4.5,y+4.5,TILE-9,TILE-9);
+  ctx.fillStyle="#ffd179";
+  ctx.fillRect(x+TILE-6,y+2,3,3);
+ }
  if(e.realtimeRelicRunner){
   const pulse=(Math.sin(t*.28)+1)*.5;
   ctx.strokeStyle=`rgba(255,224,105,${.72+.28*pulse})`;
@@ -24968,10 +25344,14 @@ function enemyIntentHitsPlayer(e){
 function registerIntentDodge(e,intent){
  const name=enemyIntentDisplayName(intent);
  const staminaGain=recoverStamina(1);
+ const slipRank=realtimeRunDraftRank("slipstream");
+ const slipCut=slipRank?realtimeDraftDashCooldownReduce(slipRank>=2?700:350,"残像循環"):0;
+ const slipStamina=slipRank>=2?recoverStamina(1):0;
+ if(slipRank){const stats=ensureRunStats();stats.realtimeDraftProcs=(stats.realtimeDraftProcs||0)+1}
  ensureCombatStats().dodges++;
  openCounterWindow(e,`回避・${name}`);
  spawnCombatText(state.player.x,state.player.y,staminaGain?"DODGE +1":"DODGE","dodge",42);
- showCombatToast("回避成功",`${e.name}の${name}を避けた${staminaGain?"・気力+1":""}・反撃好機`,"dodge");
+ showCombatToast("回避成功",`${e.name}の${name}を避けた${staminaGain?"・気力+1":""}${slipStamina?"・残像循環 気力+1":""}${slipCut?`・回避CD-${(slipCut/1000).toFixed(2)}秒`:""}・反撃好機`,"dodge");
  addLog(`${e.name}の${name}を回避した！${staminaGain?" 気力が1戻った。":""} 反撃好機が開いた。`);
  const wardenShift=e?.boss?deepWardenShiftForFloor(e.bossFloor||state.floor):null;
  if(wardenShift?.id==="famine"){
