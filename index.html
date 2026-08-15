@@ -5795,11 +5795,37 @@ body,button,input,select,textarea{font-size:12px}
  }
 }
 
+
+/* v4.16 TEMPTATION HARVEST */
+.stairDecisionTemptation{
+ margin-top:7px;
+ padding:7px 8px;
+ border:1px solid #8c6444;
+ border-radius:8px;
+ background:linear-gradient(180deg,#28160f,#160e0b);
+ color:#ddc6ab;
+ font-size:11.5px;
+ line-height:1.38
+}
+.stairDecisionTemptation b{
+ display:block;
+ color:#ffd681;
+ font-size:12px;
+ margin-bottom:2px
+}
+.stairDecisionTemptation span{display:block}
+.stairDecisionTemptation.claimed{
+ border-color:#77548d;
+ background:linear-gradient(180deg,#211329,#130c18);
+ color:#d5bddf
+}
+.stairDecisionTemptation.claimed b{color:#e6b8ff}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.15 SIEGE SIGNAL</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.18 WARDEN RHYTHM</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6096,15 +6122,18 @@ body,button,input,select,textarea{font-size:12px}
           <li>アプリがバックグラウンドへ移るとBGMタイマーと全音源を停止し、AudioContextを休止します。復帰時は現在の灯台・探索・危険・番人場面から再開します。</li>
           <li>iPhoneの仕様により、音は最初のタップ後に開始します。端末の消音スイッチや音量設定も影響します。</li>
           <li><b>リアルタイム戦闘・正式採用</b>：全階層で敵種ごとの実時間周期で世界が進み、何もしなくても敵が動きます。メニュー・レベルアップ選択・階層紹介など判断用UIを開いている間だけ敵時間が停止します。</li>
-          <li><b>リアルタイム番人</b>：すべての番人は約0.84秒周期で判断し、固有大技の予兆は最低約0.84秒以上表示してから発動します。専用ボス欄にHP・形態・予兆名・発動までの残り時間を表示します。</li>
+          <li><b>リアルタイム番人</b>：番人は約0.84秒周期。固有大技は約0.84〜1.68秒の固定予兆を出し、解決後は約1.68秒必ず硬直します。第5層は円/十字の鎖、第10層は列/十字の墓標、第15層は斜め/十字の炉心、第20層は「中心に留まる根檻」と「外へ逃げる根冠大環」を見分けます。ボスHUDは予兆秒数と硬直秒数を直接表示します。</li>
           <li><b>v4.12・世界時間契約</b>：構え約1.05秒、踏み止まり約1.26秒、よろめき約0.63秒、凍結1段階約0.84秒を敵速度ではなく共通の世界時間で管理します。集中中は世界そのものが遅くなるため、これらの実時間も同じ倍率で伸びます。高速敵だけ凍結が即解除される、といった速度差による不公平をなくします。</li>
           <li><b>リアルタイム中の回避</b>：中央ボタンで最後に入力した方向へ最大2マス移動し、約0.43秒だけ敵の直接攻撃をすり抜けます。気力3、再使用約1.45秒です。</li>
           <li><b>リアルタイム中の集中</b>：気力2で2.6秒だけ敵行動間隔を遅くします。完全停止ではありません。</li>
           <li><b>武器の戦闘動詞</b>：全階層で武技選択画面を挟まず、主武技と副武技を独立ボタンから直接使います。剣=範囲斬り/予兆中断、槍=直線攻撃/後退、弓=連射/足止め、杖=範囲魔撃/凍結です。第1〜5層だけ副武技を試用解放し、第6層以降は熟練Lv2が必要です。</li>
-          <li><b>探索ボタン</b>：リアルタイム中は上部REALTIME情報へ移動します。戦闘の4枠は「構え・主武技・治癒・副武技」に固定し、戦闘中に選択画面を挟みません。</li>
+          <li><b>戦闘操作</b>：スマホでは「構え・主武技・治癒・副武技・集中・探索」の6枠を十字キー横へ固定しています。REALTIME情報は操作領域から分離され、戦闘中に選択画面を挟みません。</li>
+          <li><b>番人第二形態</b>：HP50%未満で約0.84秒の変調隙が発生。その後は第5層「鎖薙ぎ⇄鎖十字」、第10層「墓標列⇄墓標十字＋召喚」、第15層「炉心落とし⇄炉脈十字」、第20層「根檻⇄根冠大環」という、避け方が異なる2択パターンへ変化します。</li>
           <li><b>反撃好機</b>：リアルタイム中はターン数ではなく実時間で開きます。通常敵は約1.7秒、番人は約1.4秒が目安です。</li>
           <li><b>戦技変質</b>：魔法以上の武器に付くことがある、武技そのものを変える装備効果です。第1〜5層で生成される魔法以上の武器には試験的に必ず1つ付きます。例：旋撃で撃破するとCD短縮、退き突きが2マス後退、牽制射が分岐、凍結から砕氷爆発など。数値ではなく戦闘手順が変わります。</li>
           <li><b>敵を武器にする</b>：骨術師の射線へ別の敵を入れると誤射、穿ち獣の突進線へ敵や爆薬樽を残すと衝突、爆ぜ虫は倒された場所で爆発し別の爆ぜ虫や樽へ連鎖します。敵の予兆内に巻き込まれる敵には橙色の小さな枠が出ます。</li>
+          <li><b>上昇階・深淵適応体</b>：第7 / 12 / 17 / 22…層では1体の「深淵適応体」が出現します。HP55%で約1.26秒の変異を開始。変異完成前に倒せば魔法以上、完成後の新特性まで攻略して倒せば希少以上の装備になります。</li>
+          <li><b>実り階・深淵の誘い</b>：第9層以降の「実り」階では、階層目標を達成して階段が解放された後にだけ遠方へ誘惑が現れます。無視して帰還してもよく、奪うと戦技変質付き希少以上武器を即入手する代わりに徴収者2〜3体が追跡します。「帰れるのに欲張るか」を選ぶイベントです。</li>
           <li><b>包囲警報</b>：第8層以降、5層周期の「圧力階」では二方向から敵群が接近します。約4.6秒の準備警告中に通路・爆薬樽・逃げ道を選び、全滅させると希少以上の装備が残ります。包囲警報がある階では大型の迷宮現象を重ねず、通常敵と戦闘区画も少し減らしています。</li>
           <li><b>戦闘ビルド3択</b>：全階層でレベルアップすると敵時間が停止し、刃脈・護脈・探脈から1枚ずつ提示されます。同じカードは最大IIまで強化可能。撃破で武技CDを回す「血時計」、回避を連鎖させる「残像循環」、敵利用を主火力にする「誘導掌握」など、今回の探索だけのエンジンを組みます。</li>
           <li><b>逃走遺宝</b>：第2〜3層で稀に、紫脈封を持った金色の遺宝獣が出現します。画面の矢印と逃走時間を見て、追うか安全を取るかを即決してください。倒せばその場へ紫脈封を落とします。</li>
@@ -11360,6 +11389,19 @@ function expeditionHeroMomentCandidates(report){
    .join(" / ");
   add(84,"run_build_online","combat","ビルド完成","今回だけの戦闘エンジンが回り始めた",`${build}。選んだ成長が${report.realtimeDraftProcs}回戦闘へ噛み合った。`);
  }
+ if((report.harvestTemptationsClaimed||0)>0&&report.outcome==="return"){
+  add(89,"harvest_greed_escape","loot","欲張って生還","帰れる状況から誘惑の武器を奪った",`第${report.harvestTemptationClaimedFloor}層。安全な帰還を一度捨て、徴収者を背負ったまま戦技変質武器を灯台へ持ち帰った。`);
+ }else if((report.harvestTemptationsOffered||0)>0&&(report.harvestTemptationsClaimed||0)===0&&report.outcome==="return"){
+  add(66,"harvest_discipline","return","欲を断った","深淵の誘いを無視して成果を確定",`取れば強い武器があった。それでも現在の戦利品を失わない判断を選んだ。`);
+ }
+ if((report.realtimeWardenSignatureReads||0)>=5&&(report.realtimeWardenRecoveryHits||0)>=4&&(report.realtimeWardenSignatureHits||0)<=1){
+  add(90,"warden_rhythm","combat","番人の呼吸を読んだ","大技を見切り、硬直へ反撃を差し込んだ",`固有大技を${report.realtimeWardenSignatureReads}回回避し、反撃時間へ${report.realtimeWardenRecoveryHits}回攻撃を通した。リアルタイム番人の攻防を主導した。`);
+ }
+ if((report.realtimeAdaptationsDefeatedAfter||0)>0){
+  add(83,"adaptive_hunt","combat","変異を見て狩った","深淵適応を完成させてから撃破",`安全に仕留める機会を捨て、変異後の戦い方へ切り替えて希少以上の報酬を奪った。`);
+ }else if((report.realtimeAdaptationsPrevented||0)>0){
+  add(64,"adaptive_denied","combat","適応阻止","変異完成前に深淵適応体を仕留めた",`報酬の格上げより安全を選び、危険な第二形態そのものを発生させなかった。`);
+ }
  if((report.realtimeSiegesCleared||0)>0){
   add(86,"siege_break","combat","包囲突破",`二方向からの敵群を崩壊させた`,`第${report.realtimeSiegeClearedFloor}層。準備時間で地形を選び、リアルタイムの包囲を切り抜けて希少以上の戦利品を残した。`);
  }
@@ -11453,6 +11495,23 @@ function buildExpeditionReport(outcome,details={}){
   realtimeSiegeKills:stats.realtimeSiegeKills||0,
   realtimeSiegesCleared:stats.realtimeSiegesCleared||0,
   realtimeSiegeClearedFloor:stats.realtimeSiegeClearedFloor||0,
+  harvestTemptationsOffered:stats.harvestTemptationsOffered||0,
+  harvestTemptationsClaimed:stats.harvestTemptationsClaimed||0,
+  harvestTemptationsCleared:stats.harvestTemptationsCleared||0,
+  harvestTemptationsSkipped:stats.harvestTemptationsSkipped||0,
+  harvestTemptationClaimedFloor:stats.harvestTemptationClaimedFloor||0,
+  realtimeAdaptationsSeen:stats.realtimeAdaptationsSeen||0,
+  realtimeAdaptationsTriggered:stats.realtimeAdaptationsTriggered||0,
+  realtimeAdaptationsCompleted:stats.realtimeAdaptationsCompleted||0,
+  realtimeAdaptationsDefeated:stats.realtimeAdaptationsDefeated||0,
+  realtimeAdaptationsDefeatedAfter:stats.realtimeAdaptationsDefeatedAfter||0,
+  realtimeAdaptationsPrevented:stats.realtimeAdaptationsPrevented||0,
+  realtimeAdaptationLastFloor:stats.realtimeAdaptationLastFloor||0,
+  realtimeWardenSignatures:stats.realtimeWardenSignatures||0,
+  realtimeWardenSignatureReads:stats.realtimeWardenSignatureReads||0,
+  realtimeWardenSignatureHits:stats.realtimeWardenSignatureHits||0,
+  realtimeWardenRecoveryHits:stats.realtimeWardenRecoveryHits||0,
+  realtimeWardenRecoveryDamage:stats.realtimeWardenRecoveryDamage||0,
   realtimePrimaryArts:stats.realtimePrimaryArts||0,
   realtimeSecondaryArts:stats.realtimeSecondaryArts||0,
   combatMutationProcs:stats.combatMutationProcs||0,
@@ -11581,6 +11640,11 @@ function buildExpeditionReport(outcome,details={}){
  if(report.realtimeGreedChestOpened)report.highlights.push(`危険宝箱の警報中に3.2秒の開錠を通し、第${report.realtimeGreedChestOpenedFloor}層で希少装備を奪った`);
  else if(report.realtimeGreedChestMissed)report.highlights.push(`危険宝箱へ手を掛けたが、再封印までに開け切れなかった`);
  if(report.realtimeSiegesCleared)report.highlights.push(`第${report.realtimeSiegeClearedFloor}層の包囲警報を突破し、敵群${report.realtimeSiegeKills}体を崩して希少以上の戦利品を確保`);
+ if(report.harvestTemptationsClaimed)report.highlights.push(`帰還条件達成後も欲張り、第${report.harvestTemptationClaimedFloor}層の「深淵の誘い」から戦技変質武器を奪取`);
+ else if(report.harvestTemptationsOffered>0&&report.outcome==="return")report.highlights.push(`深淵の誘いを断り、確定済みの成果を優先して生還`);
+ if(report.realtimeAdaptationsDefeatedAfter)report.highlights.push(`第${report.realtimeAdaptationLastFloor}層で深淵適応を完成させた個体を撃破し、希少以上の報酬を獲得`);
+ else if(report.realtimeAdaptationsPrevented)report.highlights.push(`深淵適応体を変異完成前に仕留め、危険な第二形態を阻止`);
+ if(report.realtimeWardenSignatureReads>0)report.highlights.push(`番人の固有大技を${report.realtimeWardenSignatureReads}回見切り、硬直中に${report.realtimeWardenRecoveryHits}回・${report.realtimeWardenRecoveryDamage}ダメージを差し返した`);
  if(report.realtimeSecondaryArts>=2)report.highlights.push(`リアルタイム副武技を${report.realtimeSecondaryArts}回使い、殴り合い以外の制御・位置取りを実行`);
  if(report.combatMutationProcs>=2){
   const names=Object.entries(report.combatMutationProcIds||{}).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([id,count])=>`${combatMutationData[id]?.short||id}${count}`).join("・");
@@ -12292,32 +12356,32 @@ function roomEncounterMarkerColor(enc){
 const wardenProfiles={
  chain:{
   key:"chain",short:"鎖番",name:"鎖縛の門衛",
-  desc:"鎖薙ぎで周囲を広く制圧する近接番人。",
-  hint:"距離2以内の鎖薙ぎは外側へ離脱するか、構え・態勢崩しで対処する。",
+  desc:"円形の鎖薙ぎと十字の鎖路を切り替え、立ち位置を試す近接番人。",
+  hint:"鎖薙ぎは外へ、鎖十字は斜めへ。大技後の硬直に主武技を差し込む。",
   intro:"階層の奥から、石床を削る鎖の音が響いている。",
   phase:"鎖縛の門衛が鎖を解き、薙ぎ払いの間合いを広げた！",
   color:"#d3ba58",accent:"#fff0a8",hp:1.00,atk:1.00,def:1.00,bonusShards:1
  },
  oracle:{
   key:"oracle",short:"神託",name:"墓標の神託者",
-  desc:"墓標列を固定し、亡者を呼び戻す遠隔番人。",
-  hint:"紫の墓標列から横へ外れる。召喚された亡者を放置しすぎない。",
+  desc:"墓標列と墓標十字で安全地帯を切り替え、亡者も呼び戻す遠隔番人。",
+  hint:"墓標列は横へ、墓標十字は斜めへ。第二形態の召喚を溜めすぎない。",
   intro:"骨の祈りが重なり、遠くで墓標が一斉にこちらを向いた。",
   phase:"墓標の神託者が第二の声を開き、亡者を呼び戻した！",
   color:"#9d82df",accent:"#efe0ff",hp:.92,atk:1.08,def:.90,bonusShards:2
  },
  furnace:{
   key:"furnace",short:"熔炉",name:"熔炉の巨像",
-  desc:"着弾地点を炎上させ、戦場そのものを狭める重装番人。",
-  hint:"橙色の斜交差から離れ、生成された炎を番人や爆薬樽へ利用する。",
+  desc:"斜めの炉心落としと十字の炉脈を交互に撃ち、炎上床で戦場を削る重装番人。",
+  hint:"炉心落としは縦横へ、炉脈十字は斜めへ。大技後の硬直中に火力を集中する。",
   intro:"空気が焼け、巨大な炉心の鼓動が階層全体を揺らしている。",
   phase:"熔炉の巨像の外殻が割れ、炉心が露出した！",
   color:"#dc7442",accent:"#ffe0a1",hp:1.18,atk:1.14,def:1.18,bonusShards:3
  },
  root:{
   key:"root",short:"根冠",name:"根冠の王",
-  desc:"周囲を囲む根檻と広い薙ぎ払いを交互に使う深層の王。",
-  hint:"緑の根檻は中心に留まれば安全。第二形態では鎖状の広範囲攻撃も混ざる。",
+  desc:"「動くな」の根檻と「離れろ」の根冠大環を交互に使う深層の王。",
+  hint:"根檻は中心に留まる。根冠大環は3マス外へ離れる。正反対の判断を見分ける。",
   intro:"床下の根が脈打ち、階層そのものが王の呼吸を始めた。",
   phase:"根冠の王が床へ根を下ろし、階層全体と一体化した！",
   color:"#70ae63",accent:"#e0f5a5",hp:1.32,atk:1.18,def:1.08,bonusShards:5
@@ -13044,8 +13108,10 @@ function spawnCombatText(x,y,textValue,style="damage",life=34){
 function intentDamageMultiplier(intent){
  return{
   lunge:1,heavy:1.35,bolt:1.1,explode:1,
-  chain_sweep:1.25,grave_volley:1.18,
-  furnace_slam:1.42,root_cage:1.12
+  chain_sweep:1.25,chain_cross:1.18,
+  grave_volley:1.18,grave_cross:1.28,
+  furnace_slam:1.42,furnace_cross:1.26,
+  root_cage:1.12,root_sweep:1.30
  }[intent]||1;
 }
 function estimateMitigatedHeroDamage(raw,sourceEnemy=null,options={}){
@@ -13117,9 +13183,13 @@ function intentRangeLabel(intent){
   bolt:"直線・最大5",
   explode:"自身＋上下左右",
   chain_sweep:"周囲・距離1〜2",
+  chain_cross:"番人中心・十字3マス",
   grave_volley:"固定3マス列",
+  grave_cross:"着弾点・十字2マス",
   furnace_slam:"中心＋斜め4",
-  root_cage:"中心以外の周囲8"
+  furnace_cross:"中心＋上下左右2",
+  root_cage:"中心以外の周囲8",
+  root_sweep:"番人周囲・距離1〜2"
  }[intent]||"固定予兆";
 }
 function intentCounterHint(enemy){
@@ -13128,9 +13198,13 @@ function intentCounterHint(enemy){
  if(enemy.intent==="bolt")return"予兆線から外れる。別の敵を線上へ入れると骨弾がその敵へ誤射する。";
  if(enemy.intent==="explode")return"爆発個体から離れる。敵や爆薬樽へ隣接させて倒すと爆発連鎖を狙える。";
  if(enemy.intent==="charge")return"突進線から外れ、線上へ別の敵や爆薬樽を残すと穿ち獣が巻き込む。";
- if(enemy.intent==="chain_sweep")return"番人から3マス以上離れるか、予兆外へ移動する。";
- if(enemy.intent==="grave_volley")return"固定された3マス列から外れる。";
- if(enemy.intent==="furnace_slam")return"中心と斜め4マスを避ける。";
+ if(enemy.intent==="chain_sweep")return"鎖の円から3マス以上離れる。回避後は番人が長く硬直する。";
+ if(enemy.intent==="chain_cross")return"十字の鎖路から斜め方向へ外れる。外側へ逃げる必要はない。";
+ if(enemy.intent==="grave_volley")return"固定された3マス列から横へ外れる。";
+ if(enemy.intent==="grave_cross")return"着弾点の縦横線を避け、斜め位置へ抜ける。";
+ if(enemy.intent==="furnace_slam")return"中心と斜め4マスを避ける。炎上床の生成位置も見る。";
+ if(enemy.intent==="furnace_cross")return"着弾点から斜めへ抜ける。上下左右は2マス先まで危険。";
+ if(enemy.intent==="root_sweep")return"根の大環から3マス以上離れる。根檻とは逆に『動く』攻撃。";
  return"固定予兆から外れる。別の敵が予兆マスへ入れば、その敵を身代わりにできる。";
 }
 function currentThreatForecast(){
@@ -13534,6 +13608,10 @@ function applyHeroDamage(raw,sourceEnemy=null,options={}){
 function triggerSpecialTile(){
  const t=specialAt(state.player.x,state.player.y);
  if(!t||t.used)return;
+ if(t.type==="temptation_cache"){
+  openHarvestTemptation(t);
+  return;
+ }
  if(t.type==="greed_chest"){
   primeRealtimeGreedChest(t);
   return;
@@ -13782,6 +13860,9 @@ function applyEnemyToolDamage(source,target,raw,label="事故",options={}){
  const boosted=Math.max(1,Math.round(base*(1+turnerRank*.25)));
  const dmg=routeAdjustedEnemyDamage(target,boosted);
  target.hp-=dmg;
+ if(target.realtimeAdaptive&&!target.adaptationTriggered&&target.hp>0&&target.hp<=target.maxHp*(target.adaptationThreshold||.55)){
+  beginRiseAdaptation(target);
+ }
 
  const stats=ensureRunStats();
  stats.enemyToolDamage=(stats.enemyToolDamage||0)+dmg;
@@ -14140,12 +14221,14 @@ function eliteMutationPoolFor(enemy){
 }
 function applyEliteMutationEffect(enemy,affix){
  if(!enemy||!affix)return;
+ const hpRatio=enemy.maxHp>0?Math.max(0,Math.min(1,enemy.hp/enemy.maxHp)):1;
  if(affix==="brutal")enemy.atk+=3;
- if(affix==="swift"){enemy.maxHp=Math.max(1,enemy.maxHp-2);enemy.hp=enemy.maxHp}
+ if(affix==="swift")enemy.maxHp=Math.max(1,enemy.maxHp-2);
  if(affix==="armored")enemy.def+=3;
- if(affix==="volatile"){enemy.maxHp+=4;enemy.hp=enemy.maxHp}
- if(affix==="vampiric"){enemy.maxHp+=3;enemy.hp=enemy.maxHp}
- if(affix==="lightEater"){enemy.maxHp=Math.max(1,enemy.maxHp-1);enemy.hp=enemy.maxHp}
+ if(affix==="volatile")enemy.maxHp+=4;
+ if(affix==="vampiric")enemy.maxHp+=3;
+ if(affix==="lightEater")enemy.maxHp=Math.max(1,enemy.maxHp-1);
+ enemy.hp=Math.max(1,Math.min(enemy.maxHp,Math.round(enemy.maxHp*hpRatio)));
 }
 function deepEliteSecondaryChance(){
  if(state.floor<21)return 0;
@@ -14202,9 +14285,20 @@ function eliteMutationStateLabel(e,id){
  return"常時";
 }
 function eliteMutationTacticalHtml(e){
- const ids=eliteMutationIds(e);if(!ids.length)return"";
- const lead=e?.deepElite?`<div class="deepEliteDoctrineLead"><b>双相変異</b><span>二つの変異特性が同時に作用する深層個体。撃破すれば上質な装備を確定で落とす。</span></div>`:"";
- return lead+ids.map(id=>{const data=eliteMutationData[id];return`<div class="eliteDoctrineCard" style="border-color:${data.color}"><b>${data.label}変異</b><span class="eliteDoctrineState">${eliteMutationStateLabel(e,id)}</span><br>${data.desc}<span class="eliteDoctrineHint">対処：${data.hint}</span></div>`}).join("");
+ const ids=eliteMutationIds(e);
+ const incident=e?.realtimeAdaptive?riseAdaptationIncident():null;
+ const adaptiveLead=e?.realtimeAdaptive
+  ?`<div class="deepEliteDoctrineLead"><b>深淵適応体</b><span>${
+    e.adaptationState==="watching"
+     ?"HP55%で戦闘中変異。完成前なら魔法以上、完成後まで戦えば希少以上の装備を落とす。"
+     :e.adaptationState==="mutating"
+      ?`${eliteMutationData[incident?.mutationId]?.label||"未知"}へ変異中。今なら停止しているが、完成前撃破は安全報酬になる。`
+      :`適応完了。${eliteMutationData[e.adaptationMutationId]?.hint||"獲得した変異特性へ対処する。"}`
+   }</span></div>`
+  :"";
+ if(!ids.length)return adaptiveLead;
+ const lead=e?.deepElite?`<div class="deepEliteDoctrineLead"><b>双相変異</b><span>二つの変異特性が同時に作用する深層個体。</span></div>`:"";
+ return adaptiveLead+lead+ids.map(id=>{const data=eliteMutationData[id];return`<div class="eliteDoctrineCard" style="border-color:${data.color}"><b>${data.label}変異</b><span class="eliteDoctrineState">${eliteMutationStateLabel(e,id)}</span><br>${data.desc}<span class="eliteDoctrineHint">対処：${data.hint}</span></div>`}).join("");
 }
 function eliteDirectHitEffect(e,dmg){
  if(!e||dmg<=0)return;
@@ -15962,6 +16056,375 @@ function realtimeSiegeDirectionPair(){
 function realtimeSiegeDirectionText(ids=[]){
  return ids.map(id=>realtimeSiegeDirections[id]?.label||"?").join(" + ");
 }
+
+function harvestTemptationEligible(){
+ // 実り階9/14/19は第一深度では意図的に休息階でもある。
+ // 「安全に帰れる状態から欲張る」事件なのでrestを除外しない。
+ return!!state&&state.floor>=9&&state.floor%5!==0&&floorPulsePhaseId(state.floor)==="harvest";
+}
+function harvestTemptationTile(){
+ return(state?.specialTiles||[]).find(tile=>tile.type==="temptation_cache"&&!tile.used)||null;
+}
+function harvestTemptationIncident(){
+ const incident=state?.realtimeIncident;
+ return incident?.type==="temptation"?incident:null;
+}
+function harvestTemptationRoomCandidates(){
+ if(!state?.rooms?.length)return[];
+ const stairsRoom=state.rooms.findIndex(room=>roomContains(room,state.stairs.x,state.stairs.y));
+ const playerRoom=state.rooms.findIndex(room=>roomContains(room,state.player.x,state.player.y));
+ return realtimeGreedChestRoomCandidates()
+  .filter(entry=>entry.index!==stairsRoom&&entry.index!==playerRoom)
+  .map(entry=>({
+   ...entry,
+   score:
+    Math.abs(entry.room.cx-state.stairs.x)+Math.abs(entry.room.cy-state.stairs.y)+
+    Math.abs(entry.room.cx-state.player.x)+Math.abs(entry.room.cy-state.player.y)
+  }))
+  .sort((a,b)=>b.score-a.score);
+}
+function revealHarvestTemptation(){
+ const incident=harvestTemptationIncident();
+ if(!incident||incident.status!=="armed"||!floorObjectiveComplete())return false;
+ if(harvestTemptationTile()){incident.status="offered";return true}
+
+ const candidates=harvestTemptationRoomCandidates();
+ let point=null,roomIndex=-1;
+ for(const entry of candidates.slice(0,Math.max(1,Math.ceil(candidates.length*.55)))){
+  point=realtimeGreedChestPlacementCell(entry.room);
+  if(point){roomIndex=entry.index;break}
+ }
+ if(!point){
+  point=randomFloorCell(7);
+  if(!point){incident.status="none";return false}
+ }
+
+ const tile={
+  x:point.x,y:point.y,type:"temptation_cache",used:false,
+  discovered:true,harvestTemptation:true
+ };
+ state.specialTiles.push(tile);
+ incident.status="offered";
+ incident.tileX=point.x;incident.tileY=point.y;incident.roomIndex=roomIndex;
+ incident.hunterIds=[];
+ incident.rewardLabel="戦技変質・希少以上武器";
+
+ const stats=ensureRunStats();
+ stats.harvestTemptationsOffered=(stats.harvestTemptationsOffered||0)+1;
+
+ spawnFeedbackBurst(state.player.x,state.player.y,"rare",8);
+ triggerImpactFeedback("rare",{haptic:"rare",duration:520});
+ showCombatToast(
+  "帰還条件達成・深淵の誘い",
+  `${realtimeRunnerDirectionLabel(tile)} に戦技変質武器の反応。帰るなら無視できる。`,
+  "objective"
+ );
+ addLog(`階段は解放された。しかし${realtimeRunnerDirectionLabel(tile)}の奥で、高反応の武器が探索者を誘っている。取りに行く必要はない。`);
+ queueSave();
+ return true;
+}
+function createHarvestTemptationReward(){
+ const candidates=[];
+ for(let i=0;i<32&&candidates.length<4;i++){
+  const gear=rollGear((state.floor||1)+2);
+  if(gear.slot!=="weapon")continue;
+  while((rarityOrder[gear.rarity]||0)<2)promoteGearRarity(gear,1);
+  gear.identified=true;
+  gear.cursed=false;
+  gear.locked=true;
+  ensureCombatMutation(gear,true);
+  gear.origin="harvest_temptation";
+  gear.harvestTemptationReward=true;
+  candidates.push(gear);
+ }
+ if(!candidates.length)return null;
+ candidates.sort((a,b)=>gearScore(b)-gearScore(a));
+ return candidates[0];
+}
+function spawnHarvestTemptationHunters(tile){
+ const incident=harvestTemptationIncident();
+ if(!incident||!tile)return 0;
+ const count=state.floor>=24?3:2;
+ const types=state.floor>=19?["warg","mage","skeleton"]:["warg","mage"];
+ const spawned=[];
+ const used=new Set();
+ for(let i=0;i<count;i++){
+  let point=null;
+  const pool=realtimeGreedGuardSpawnCell(tile,5,9);
+  if(pool&&!used.has(key(pool.x,pool.y)))point=pool;
+  if(!point){
+   const fallback=randomFloorCell(5);
+   if(fallback&&!used.has(key(fallback.x,fallback.y)))point=fallback;
+  }
+  if(!point)continue;
+  used.add(key(point.x,point.y));
+  const type=types[i%types.length];
+  const hunter=createRealtimeGreedGuard(type,point,40+i);
+  hunter.id=`temptation-hunter-${state.floor}-${i}-${Math.floor(rng()*99999)}`;
+  hunter.name=type==="mage"?"徴収骨術師":type==="skeleton"?"徴収骸兵":"徴収穴獣";
+  hunter.realtimeTemptationHunter=true;
+  hunter.alert=8;
+  hunter.lastSeen={x:state.player.x,y:state.player.y};
+  state.enemies.push(hunter);
+  spawned.push(hunter.id);
+ }
+ incident.hunterIds=spawned;
+ return spawned.length;
+}
+function claimHarvestTemptation(tile){
+ const incident=harvestTemptationIncident();
+ if(!incident||incident.status!=="offered"||!tile||tile.used)return false;
+ if(state.inventory.length>=inventoryCapacity()){
+  showCombatToast("荷物が満杯","1枠空けてから誘惑の武器を奪ってください","warning");
+  addLog("誘惑の武器を持つ余裕がない。荷物を整理すれば再び奪える。");
+  return false;
+ }
+
+ const gear=createHarvestTemptationReward();
+ if(!gear){
+  showCombatToast("反応が崩れた","武器生成に失敗したため誘惑を解除","warning");
+  incident.status="none";tile.used=true;return false;
+ }
+
+ applyPickupProtection(gear,false);
+ state.inventory.push(gear);
+ tile.used=true;
+ incident.status="pursuit";
+ incident.rewardId=gear.id;
+ incident.rewardName=gearLabel(gear);
+ incident.claimedAtFloor=state.floor;
+
+ const stats=ensureRunStats();
+ stats.itemsFound=(stats.itemsFound||0)+1;
+ stats.gearFound=(stats.gearFound||0)+1;
+ stats.harvestTemptationsClaimed=(stats.harvestTemptationsClaimed||0)+1;
+ stats.harvestTemptationClaimedFloor=state.floor;
+
+ const hunters=spawnHarvestTemptationHunters(tile);
+ recordFloorPickup(true);
+ spawnPickupEffect("gear");
+ spawnFeedbackBurst(tile.x,tile.y,"legendary",12);
+ triggerImpactFeedback("legendary",{haptic:"legendary",duration:760});
+ spawnCombatText(tile.x,tile.y,"GREED","critical",42);
+ showCombatToast("欲張り開始",`${gearLabel(gear)}を奪取・追跡者${hunters}体が覚醒`,"critical");
+ addLog(`深淵の誘いから「${gearLabel(gear)}」を奪った。${hunters?`徴収者${hunters}体が追跡を始めた。`:"気配は消えた。"}`);
+ queueSave();
+ return true;
+}
+function openHarvestTemptation(tile){
+ const incident=harvestTemptationIncident();
+ if(!incident||incident.status!=="offered"||!tile||tile.used)return false;
+ const carry=carryStakesSnapshot();
+ const full=state.inventory.length>=inventoryCapacity();
+ return openActionConfirm({
+  title:"深淵の誘い",
+  tone:"danger",
+  cancelLabel:"帰還を優先する",
+  confirmLabel:full?"荷物を整理してから":"奪って逃げる",
+  body:`<div class="actionConfirmLead">階段はすでに解放されています。ここで引き返せば、この武器を取る必要はありません。</div>
+   <div class="actionConfirmMetrics">
+    <div class="actionConfirmMetric"><b>希少以上</b><small>武器品質</small></div>
+    <div class="actionConfirmMetric"><b>確定</b><small>戦技変質</small></div>
+    <div class="actionConfirmMetric"><b>${state.floor>=24?3:2}体</b><small>奪取後の追跡</small></div>
+    <div class="actionConfirmMetric"><b>${state.inventory.length}/${inventoryCapacity()}</b><small>現在の荷物</small></div>
+   </div>
+   <div class="actionConfirmWarning">奪うと徴収者が覚醒します。武器は即座に荷物へ入りますが、死亡すれば他の携行装備と同じく喪失対象です。</div>
+   <div class="actionConfirmLead">現在の持帰価値：${carryStakeShortText(carry)}</div>
+   ${full?`<div class="actionConfirmWarning">荷物が満杯です。先に装備を整理してください。</div>`:""}`,
+  onCancel:()=>addLog("深淵の誘いを前に踏み止まり、帰還という安全策を残した。"),
+  onConfirm:()=>claimHarvestTemptation(tile)
+ });
+}
+function updateHarvestTemptationState(){
+ const incident=harvestTemptationIncident();
+ if(!incident)return false;
+ if(incident.status==="armed"&&floorObjectiveComplete())return revealHarvestTemptation();
+ if(incident.status!=="pursuit")return false;
+
+ const alive=(incident.hunterIds||[]).filter(id=>(state.enemies||[]).some(e=>e.id===id&&e.hp>0)).length;
+ if(alive>0)return false;
+
+ incident.status="secured";
+ const stats=ensureRunStats();
+ stats.harvestTemptationsCleared=(stats.harvestTemptationsCleared||0)+1;
+ showCombatToast("追跡撃破","誘惑の武器を持ったまま徴収者を振り切った","objective");
+ addLog("徴収者の気配が途絶えた。誘惑の武器はまだ荷物の中にある。生還すれば確定できる。");
+ queueSave();
+ return true;
+}
+function harvestTemptationDecisionHtml(){
+ const incident=harvestTemptationIncident();
+ if(!incident)return"";
+ const tile=harvestTemptationTile();
+ if(incident.status==="offered"&&tile){
+  return`<div class="stairDecisionTemptation"><b>帰還か、欲張るか</b><span>${realtimeRunnerDirectionLabel(tile)} に「戦技変質・希少以上武器」。未回収ならそのまま安全に無視できます。</span></div>`;
+ }
+ if(["pursuit","secured"].includes(incident.status)){
+  const alive=(incident.hunterIds||[]).filter(id=>(state.enemies||[]).some(e=>e.id===id&&e.hp>0)).length;
+  return`<div class="stairDecisionTemptation claimed"><b>欲張った戦利品を携行中</b><span>${incident.rewardName||"誘惑の武器"}${alive?` / 追跡者${alive}体`:" / 追跡撃破済み"}。ここで帰れば成果を確定できます。</span></div>`;
+ }
+ return"";
+}
+function riseAdaptationEligible(){
+ return!!state&&state.floor>=7&&state.floor%5!==0&&!isRestFloor()&&floorPulsePhaseId(state.floor)==="rise";
+}
+function riseAdaptationIncident(){
+ const incident=state?.realtimeIncident;
+ return incident?.type==="adaptation"?incident:null;
+}
+function riseAdaptiveEnemy(){
+ const incident=riseAdaptationIncident();
+ return incident?.enemyId?(state.enemies||[]).find(e=>e.id===incident.enemyId)||null:null;
+}
+function riseAdaptationMutationPool(enemy){
+ const used=new Set(eliteMutationIds(enemy));
+ return eliteMutationPoolFor(enemy).filter(id=>!used.has(id));
+}
+function armRiseAdaptationEnemy(){
+ const incident=riseAdaptationIncident();
+ if(!incident||incident.status!=="armed"||!state?.enemies?.length)return false;
+
+ const candidates=state.enemies
+  .filter(e=>!e.boss&&!e.echoGuard&&!e.realtimeSiegeEnemy&&!e.realtimeRelicRunner&&!e.realtimeTemptationHunter&&e.type!=="bomber")
+  .map(e=>({
+   e,
+   affixes:eliteMutationIds(e).length,
+   d:Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y)
+  }))
+  .sort((a,b)=>(a.affixes-b.affixes)||(b.d-a.d));
+ if(!candidates.length){incident.status="none";return false}
+
+ const picked=candidates[0].e;
+ picked.realtimeAdaptive=true;
+ picked.adaptationState="watching";
+ picked.adaptationTriggered=false;
+ picked.adaptationCompleted=false;
+ picked.adaptationBaseName=picked.name;
+ picked.adaptationThreshold=.55;
+ const bonus=Math.max(4,Math.round(picked.maxHp*.22));
+ picked.maxHp+=bonus;picked.hp+=bonus;picked.xp+=8;
+ picked.name=`適応・${picked.name}`;
+
+ incident.enemyId=picked.id;
+ incident.status="watching";
+ incident.threshold=.55;
+ incident.totalMutationPulses=6;
+ incident.mutationId=null;
+ incident.mutationReadyPulse=0;
+
+ const stats=ensureRunStats();
+ stats.realtimeAdaptationsSeen=(stats.realtimeAdaptationsSeen||0)+1;
+ addLog(`この階に「${picked.name}」がいる。HP55%付近まで追い詰めると、戦闘中に深淵へ適応する気配がある。`);
+ return true;
+}
+function beginRiseAdaptation(enemy){
+ const incident=riseAdaptationIncident();
+ if(!enemy?.realtimeAdaptive||enemy.adaptationTriggered||!incident||incident.enemyId!==enemy.id||enemy.hp<=0)return false;
+ const pool=riseAdaptationMutationPool(enemy);
+ if(!pool.length){enemy.adaptationTriggered=true;enemy.adaptationState="adapted";incident.status="adapted";return false}
+
+ const mutationId=choice(pool),data=eliteMutationData[mutationId];
+ enemy.adaptationTriggered=true;
+ enemy.adaptationState="mutating";
+ enemy.adaptationMutationId=mutationId;
+ clearEnemyIntent(enemy);
+
+ incident.status="mutating";
+ incident.mutationId=mutationId;
+ incident.mutationReadyPulse=(realtimeCombatRuntime.pulse||0)+(incident.totalMutationPulses||6);
+
+ const stats=ensureRunStats();
+ stats.realtimeAdaptationsTriggered=(stats.realtimeAdaptationsTriggered||0)+1;
+
+ spawnFeedbackBurst(enemy.x,enemy.y,"boss",10);
+ triggerImpactFeedback("boss",{haptic:"boss",duration:600});
+ spawnCombatText(enemy.x,enemy.y,"ADAPT","critical",40);
+ showCombatToast("深淵適応・変異開始",`${data?.label||"未知"}へ変質 / 約${((incident.totalMutationPulses||6)*realtimeWorldInterval()/1000).toFixed(1)}秒`,"critical");
+ addLog(`${enemy.name}が戦闘中に変異を始めた。${data?.label||"未知"}への適応が完了する前なら、まだ仕留められる。`);
+ return true;
+}
+function completeRiseAdaptation(enemy){
+ const incident=riseAdaptationIncident();
+ if(!enemy?.realtimeAdaptive||enemy.adaptationState!=="mutating"||!incident||incident.enemyId!==enemy.id)return false;
+ const id=incident.mutationId||enemy.adaptationMutationId;
+ const data=eliteMutationData[id];
+ if(!data){enemy.adaptationState="adapted";incident.status="adapted";return false}
+
+ if(!enemy.elite)enemy.elite=id;
+ else if(!enemy.eliteSecondary&&enemy.elite!==id)enemy.eliteSecondary=id;
+ applyEliteMutationEffect(enemy,id);
+ enemy.xp+=7;
+ enemy.adaptationState="adapted";
+ enemy.adaptationCompleted=true;
+ incident.status="adapted";
+
+ if(enemy.eliteSecondary){
+  enemy.deepElite=true;
+  enemy.name=`適応双相・${enemy.adaptationBaseName||enemy.name}`;
+ }else{
+  enemy.name=`${data.label}適応・${enemy.adaptationBaseName||enemy.name}`;
+ }
+
+ const stats=ensureRunStats();
+ stats.realtimeAdaptationsCompleted=(stats.realtimeAdaptationsCompleted||0)+1;
+
+ spawnFeedbackBurst(enemy.x,enemy.y,"legendary",12);
+ triggerImpactFeedback("legendary",{haptic:"rare",duration:680});
+ spawnCombatText(enemy.x,enemy.y,`ADAPTED ${data.label}`,"critical",38);
+ showCombatToast("深淵適応 完了",`${data.label}変異を獲得・撃破報酬が希少以上へ上昇`,"critical");
+ addLog(`${enemy.name}への適応が完成した。危険は増したが、ここから倒せば希少以上の装備を残す。`);
+ return true;
+}
+function processRiseAdaptationPulse(){
+ const incident=riseAdaptationIncident();
+ if(!incident||incident.status!=="mutating")return false;
+ const enemy=riseAdaptiveEnemy();
+ if(!enemy){incident.status="none";return false}
+ if((realtimeCombatRuntime.pulse||0)>=(incident.mutationReadyPulse||0))return completeRiseAdaptation(enemy);
+ return true;
+}
+function riseAdaptationRewardGear(enemy,completed=false){
+ const level=Math.max(1,(enemy?.level||floorTargetLevel())+(completed?2:1));
+ const candidates=[rollGear(level),rollGear(level)];
+ candidates.sort((a,b)=>gearScore(b)-gearScore(a));
+ const gear=candidates[0];
+ const minimum=completed?2:1;
+ while((rarityOrder[gear.rarity]||0)<minimum)promoteGearRarity(gear,1);
+ gear.identified=true;
+ gear.cursed=false;
+ gear.adaptationReward=true;
+ gear.adaptationCompleted=completed;
+ gear.adaptationFloor=state.floor;
+ return gear;
+}
+function rewardRiseAdaptiveEnemy(enemy){
+ if(!enemy?.realtimeAdaptive)return false;
+ const incident=riseAdaptationIncident();
+ const completed=!!enemy.adaptationCompleted;
+ const gear=riseAdaptationRewardGear(enemy,completed);
+ state.items.push({x:enemy.x,y:enemy.y,type:"gear",gear,realtimeAdaptationReward:true});
+ if(incident?.enemyId===enemy.id)incident.status="secured";
+
+ const stats=ensureRunStats();
+ stats.realtimeAdaptationsDefeated=(stats.realtimeAdaptationsDefeated||0)+1;
+ if(completed)stats.realtimeAdaptationsDefeatedAfter=(stats.realtimeAdaptationsDefeatedAfter||0)+1;
+ else stats.realtimeAdaptationsPrevented=(stats.realtimeAdaptationsPrevented||0)+1;
+ stats.realtimeAdaptationLastFloor=state.floor;
+
+ const feedback=completed?"legendary":"rare";
+ spawnFeedbackBurst(enemy.x,enemy.y,feedback,completed?13:9);
+ triggerImpactFeedback(feedback,{haptic:completed?"legendary":"rare",duration:completed?760:560});
+ showCombatToast(
+  completed?"適応体 突破":"適応阻止",
+  completed?`変異後撃破・${rarityData[gear.rarity]?.label||"希少"}以上装備`:`変異完成前に撃破・${rarityData[gear.rarity]?.label||"魔法"}以上装備`,
+  "objective"
+ );
+ addLog(completed
+  ?`深淵適応体の完成形を倒した。${rarityData[gear.rarity]?.label||"希少"}以上の装備が残った。`
+  :`深淵適応が完成する前に仕留めた。危険を抑えた代わりに報酬は魔法以上に留まる。`);
+ return true;
+}
+
 function prepareRealtimeBroadcastIncident(){
  if(!state)return null;
  if(realtimeSiegeEligible()){
@@ -15972,6 +16435,21 @@ function prepareRealtimeBroadcastIncident(){
    remainingWarningPulses:REALTIME_SIEGE_WARNING_PULSES,
    directionIds:realtimeSiegeDirectionPair(),enemyIds:[],totalEnemies:0,
    lastKillX:null,lastKillY:null,rewardDropped:false
+  };
+  return state.realtimeIncident;
+ }
+ if(harvestTemptationEligible()){
+  state.realtimeIncident={
+   type:"temptation",status:"armed",floor:state.floor,
+   tileX:null,tileY:null,hunterIds:[],rewardId:null,rewardName:null
+  };
+  return state.realtimeIncident;
+ }
+ if(riseAdaptationEligible()){
+  state.realtimeIncident={
+   type:"adaptation",status:"armed",floor:state.floor,
+   enemyId:null,mutationId:null,threshold:.55,
+   totalMutationPulses:6,mutationReadyPulse:0
   };
   return state.realtimeIncident;
  }
@@ -16201,6 +16679,7 @@ function escapeRealtimeRelicRunner(){
 function processRealtimeBroadcastIncidentPulse(){
  const incident=state?.realtimeIncident;
  if(!incident)return false;
+ if(incident.type==="adaptation")return processRiseAdaptationPulse();
  if(incident.type==="siege"){
   if(incident.status==="armed"){
    if((realtimeCombatRuntime.pulse||0)>=incident.triggerPulse)return beginRealtimeSiegeWarning();
@@ -16258,6 +16737,82 @@ function updateRealtimeIncidentUi(now=realtimeNow()){
  if(!bar)return;
  const incident=state?.realtimeIncident;
  if(!realtimeCombatActive()||!incident){
+  bar.classList.add("hidden");bar.classList.remove("danger");return;
+ }
+
+ if(incident.type==="adaptation"){
+  const enemy=riseAdaptiveEnemy();
+  if(!enemy||["none","secured"].includes(incident.status)){
+   bar.classList.add("hidden");bar.classList.remove("danger");return;
+  }
+  bar.classList.remove("hidden");
+  $("rtIncidentDirection").textContent=realtimeRunnerDirectionLabel(enemy);
+  const hpPct=Math.max(0,Math.round(enemy.hp/Math.max(1,enemy.maxHp)*100));
+
+  if(incident.status==="watching"){
+   $("rtIncidentTitle").textContent="深淵適応体・観測";
+   $("rtIncidentReward").textContent="変異前：魔法以上 / 変異後：希少以上";
+   $("rtIncidentTimer").textContent=`HP ${hpPct}% ・ 55%で適応開始`;
+   $("rtIncidentFill").style.width=`${Math.max(0,Math.min(100,(hpPct-55)/45*100))}%`;
+   $("rtIncidentHint").textContent="早く倒せば安全。変異を完成させてから倒せば報酬が上がる。";
+   bar.classList.remove("danger");
+   return;
+  }
+
+  if(incident.status==="mutating"){
+   const data=eliteMutationData[incident.mutationId],remain=Math.max(0,(incident.mutationReadyPulse||0)-(realtimeCombatRuntime.pulse||0));
+   const total=Math.max(1,incident.totalMutationPulses||6);
+   $("rtIncidentTitle").textContent=`深淵適応・${data?.label||"変異"}へ変質`;
+   $("rtIncidentReward").textContent="今倒す：魔法以上 / 完成後：希少以上";
+   $("rtIncidentTimer").textContent=`適応完了まで 約${(remain*realtimeWorldInterval(now)/1000).toFixed(1)}秒`;
+   $("rtIncidentFill").style.width=`${Math.round((total-remain)/total*100)}%`;
+   $("rtIncidentHint").textContent=`${data?.hint||"変異後は戦い方が変わる。"} 変異中は敵が停止している。`;
+   bar.classList.add("danger");
+   return;
+  }
+
+  if(incident.status==="adapted"){
+   const data=eliteMutationData[incident.mutationId];
+   $("rtIncidentTitle").textContent=`適応完了・${data?.label||"変異"}`;
+   $("rtIncidentReward").textContent="撃破報酬：希少以上装備";
+   $("rtIncidentTimer").textContent=`HP ${hpPct}% ・ 新特性が有効`;
+   $("rtIncidentFill").style.width=`${100-hpPct}%`;
+   $("rtIncidentHint").textContent=data?.hint||"新しい変異特性を見て戦い方を切り替える。";
+   bar.classList.add("danger");
+   return;
+  }
+
+  bar.classList.add("hidden");bar.classList.remove("danger");return;
+ }
+
+ if(incident.type==="temptation"){
+  updateHarvestTemptationState();
+  const tile=harvestTemptationTile();
+  if(["armed","none"].includes(incident.status)){
+   if(incident.status==="armed"&&floorObjectiveComplete())revealHarvestTemptation();
+   bar.classList.add("hidden");bar.classList.remove("danger");return;
+  }
+  if(incident.status==="offered"&&tile){
+   bar.classList.remove("hidden");bar.classList.remove("danger");
+   $("rtIncidentTitle").textContent="帰還か、欲張るか";
+   $("rtIncidentReward").textContent="報酬：戦技変質武器";
+   $("rtIncidentDirection").textContent=realtimeRunnerDirectionLabel(tile);
+   $("rtIncidentTimer").textContent="時間制限なし・無視して帰還可能";
+   $("rtIncidentFill").style.width="100%";
+   $("rtIncidentHint").textContent="階段は解放済み。取れば徴収者が追跡する。";
+   return;
+  }
+  if(["pursuit","secured"].includes(incident.status)){
+   const alive=(incident.hunterIds||[]).filter(id=>(state.enemies||[]).some(e=>e.id===id&&e.hp>0)).length;
+   bar.classList.remove("hidden");bar.classList.toggle("danger",alive>0);
+   $("rtIncidentTitle").textContent=alive?"欲張り戦利品・持逃げ中":"欲張り戦利品・追跡撃破";
+   $("rtIncidentReward").textContent=incident.rewardName||"誘惑の武器";
+   $("rtIncidentDirection").textContent=realtimeRunnerDirectionLabel(state.stairs);
+   $("rtIncidentTimer").textContent=alive?`追跡者 ${alive}体 / 矢印は階段`:"階段へ戻れば成果を確定できる";
+   $("rtIncidentFill").style.width=alive?"52%":"100%";
+   $("rtIncidentHint").textContent=alive?"倒しても、振り切って帰ってもよい。死亡すれば武器も失う。":"ここからは安全に帰るか、さらに奥へ進むか。";
+   return;
+  }
   bar.classList.add("hidden");bar.classList.remove("danger");return;
  }
 
@@ -16797,13 +17352,14 @@ function completeFloorObjective(method="primary"){
  if(provisionGain.overflow)addLog(`階層報酬の携行糧は上限により${provisionGain.gained}/${provisionGain.requested}手を収納した。`);
  const run=ensureRunStats();run.objectivesCompleted=(run.objectivesCompleted||0)+1;
  const recoveryCacheSpawned=spawnRecoveryCacheIfDue();
+ const temptationOffered=revealHarvestTemptation();
  spawnCombatText(state.player.x,state.player.y,"UNSEALED","dodge",48);
  spawnFeedbackBurst(state.player.x,state.player.y,"objective",12);
  triggerImpactFeedback("objective",{haptic:"objective",duration:680});
  const primaryBonusText=method==="primary"?floorObjectivePrimaryBonusText(objective):"";
- showCombatToast("階層目標達成",`${method==="fallback"?"踏破による代替達成・":""}階段解放 / ${floorObjectiveRewardText(objective)}${primaryBonusText?` / 主条件 ${primaryBonusText}`:""}${recoveryCacheSpawned?" / 再建箱":""}`,"objective");
+ showCombatToast("階層目標達成",`${method==="fallback"?"踏破による代替達成・":""}階段解放 / ${floorObjectiveRewardText(objective)}${primaryBonusText?` / 主条件 ${primaryBonusText}`:""}${recoveryCacheSpawned?" / 再建箱":""}${temptationOffered?" / 深淵の誘い":""}`,"objective");
  sfx("objective");
- addLog(`階層目標「${objective.title}」を${method==="fallback"?"代替踏破で": ""}達成。階段の封印が解けた。${floorObjectiveRewardText(objective)}${primaryBonusText?` / 主条件ボーナス ${primaryBonusText}`:""}${recoveryCacheSpawned?" / 再建箱が開いた":""}`);
+ addLog(`階層目標「${objective.title}」を${method==="fallback"?"代替踏破で": ""}達成。階段の封印が解けた。${floorObjectiveRewardText(objective)}${primaryBonusText?` / 主条件ボーナス ${primaryBonusText}`:""}${recoveryCacheSpawned?" / 再建箱が開いた":""}${temptationOffered?" / 遠方に深淵の誘いが現れた":""}`);
  saveMeta();saveGame();return true;
 }
 function updateFloorObjective(){
@@ -16951,6 +17507,7 @@ function generateFloor(){
   applyEliteMutation(enemy);
   state.enemies.push(enemy);
  }
+ armRiseAdaptationEnemy();
  const itemCount=plannedItemCount();
  for(let i=0;i<itemCount;i++){
   const p=randomFloorCell(3);
@@ -19690,9 +20247,19 @@ function damageEnemy(e,damage,label=""){
  damage=applyTraitDamage(damage,e)*echoHit.multiplier*counterMult*biomeDamageModifier(equippedElement())*tagDamageMultiplier(e)*lightDamageMultiplier(e)*terrainAttack.mult;
  const baseDmg=Math.max(1,Math.round((Math.round(damage)-effectiveEnemyDefense(e))*guardMul*(mutation()?.damageMul||1)));
  const dmg=routeAdjustedEnemyDamage(e,baseDmg);
- ensureRunStats().damageDealt+=dmg;
+ const damageStats=ensureRunStats();
+ damageStats.damageDealt+=dmg;
+ if(e?.boss&&realtimeCombatActive()&&(e.realtimeBossRecoveryUntilPulse||0)>(realtimeCombatRuntime.pulse||0)){
+  damageStats.realtimeWardenRecoveryHits=(damageStats.realtimeWardenRecoveryHits||0)+1;
+  damageStats.realtimeWardenRecoveryDamage=(damageStats.realtimeWardenRecoveryDamage||0)+dmg;
+  e.realtimeRecoveryPunishHits=(e.realtimeRecoveryPunishHits||0)+1;
+  if(e.realtimeRecoveryPunishHits===1)spawnCombatText(e.x,e.y,"PUNISH","critical",32);
+ }
  if(terrainAttack.mult!==1){ensureRunStats().terrainElementHits=(ensureRunStats().terrainElementHits||0)+1;spawnCombatText(e.x,e.y,terrainAttack.label,terrainAttack.mult>1?"break":"miss",26)}
  e.hp-=dmg;
+ if(e.realtimeAdaptive&&!e.adaptationTriggered&&e.hp>0&&e.hp<=e.maxHp*(e.adaptationThreshold||.55)){
+  beginRiseAdaptation(e);
+ }
  const wasCritical=String(label).includes("会心");
  spawnAttackEffect(e.x,e.y,label);
  spawnCombatText(e.x,e.y,wasCritical?`CRIT ${dmg}`:`-${dmg}`,wasCritical?"critical":"damage",wasCritical?42:30);
@@ -19906,8 +20473,11 @@ function defeatEnemy(e){
   addLog(`番人固有報酬：深淵の欠片+${profile.bonusShards||0}。${rewardGear.wardenMastery?" 攻略試練達成により戦利品ILv+1。":""}`);
  }else{
   const chaseReward=wasRelicRunner?rewardRealtimeRelicRunner(e):false;
-  if(!chaseReward){
+  const adaptationReward=e.realtimeAdaptive?rewardRiseAdaptiveEnemy(e):false;
+  if(!chaseReward&&!adaptationReward){
    if(!rewardDeepElite(e))tryNormalEnemyGearDrop(e);
+   livingEcologyResourceReward(e);
+  }else if(adaptationReward){
    livingEcologyResourceReward(e);
   }
  }
@@ -20188,34 +20758,45 @@ function enterWardenPhaseTwo(enemy){
  return true;
 }
 function resolveWardenIntent(enemy,intent,cells,playerInTarget){
- if(!["chain_sweep","grave_volley","furnace_slam","root_cage"].includes(intent))return false;
+ if(!realtimeWardenSignatureIntent(intent))return false;
 
- if(intent==="chain_sweep"){
+ const finish=(hit)=>{
+  recordRealtimeWardenSignature(enemy,intent,hit);
+  startRealtimeWardenRecovery(enemy,intent);
+  clearEnemyIntent(enemy);
+  return true;
+ };
+
+ if(intent==="chain_sweep"||intent==="chain_cross"||intent==="root_sweep"){
   spawnEnemyAttackCells(cells,"enemy_heavy",22);
-  if(playerInTarget)enemyAttack(enemy,1.25,"鎖薙ぎ");
+  const mult=intent==="chain_sweep"?1.25:intent==="chain_cross"?1.18:1.30;
+  const label=intent==="chain_sweep"?"鎖薙ぎ":intent==="chain_cross"?"鎖十字":"根冠大環";
+  if(playerInTarget)enemyAttack(enemy,mult,label);
   else registerIntentDodge(enemy,intent);
-  clearEnemyIntent(enemy);
-  return true;
+  return finish(playerInTarget);
  }
 
- if(intent==="grave_volley"){
+ if(intent==="grave_volley"||intent==="grave_cross"){
   spawnEnemyAttackCells(cells,"enemy_bolt",22);
+  const mult=intent==="grave_cross"?1.28:1.18;
+  const label=intent==="grave_cross"?"墓標十字":"墓標列";
   if(playerInTarget){
-   enemyAttack(enemy,1.18,"墓標列");
-   state.hero.stamina=Math.max(0,state.hero.stamina-1);
-   addLog("墓標の冷気で気力を1失った。");
+   enemyAttack(enemy,mult,label);
+   const drain=intent==="grave_cross"?2:1;
+   state.hero.stamina=Math.max(0,state.hero.stamina-drain);
+   addLog(`${label}の冷気で気力を${drain}失った。`);
   }else registerIntentDodge(enemy,intent);
-  clearEnemyIntent(enemy);
-  return true;
+  return finish(playerInTarget);
  }
 
- if(intent==="furnace_slam"){
+ if(intent==="furnace_slam"||intent==="furnace_cross"){
   spawnEnemyAttackCells(cells,"enemy_blast",24);
-  if(playerInTarget)enemyAttack(enemy,1.42,"炉心落とし");
+  const mult=intent==="furnace_slam"?1.42:1.26;
+  const label=intent==="furnace_slam"?"炉心落とし":"炉脈十字";
+  if(playerInTarget)enemyAttack(enemy,mult,label);
   else registerIntentDodge(enemy,intent);
   addBossBurningGround(cells);
-  clearEnemyIntent(enemy);
-  return true;
+  return finish(playerInTarget);
  }
 
  if(intent==="root_cage"){
@@ -20238,8 +20819,7 @@ function resolveWardenIntent(enemy,intent,cells,playerInTarget){
     if(!mastered)showCombatToast("根檻を見切った","動かず中心へ留まった","dodge");
    }else registerIntentDodge(enemy,intent);
   }
-  clearEnemyIntent(enemy);
-  return true;
+  return finish(playerInTarget);
  }
  return false;
 }
@@ -20249,6 +20829,7 @@ function performWardenTurn(enemy,dist){
  if(phaseShifted&&realtimeCombatActive()){
   clearEnemyIntent(enemy);
   enemy.realtimeBossBreakUntilPulse=(realtimeCombatRuntime.pulse||0)+4;
+  enemy.bossCycle=0;
   spawnFeedbackBurst(enemy.x,enemy.y,"boss",10);
   showCombatToast("番人変調・隙","第二形態へ移る一瞬だけ攻め込める","objective");
   addLog(`${profile.name}が第二形態へ変調する。一瞬だけ攻め込める隙が生まれた。`);
@@ -20257,14 +20838,22 @@ function performWardenTurn(enemy,dist){
  enemy.bossCycle=(enemy.bossCycle||0)+1;
 
  if(profile.key==="chain"){
-  if(enemy.phase>=2&&dist<=2){
-   setEnemyIntent(enemy,"chain_sweep");
-   addLog("鎖縛の門衛が鎖を大きく巡らせた！");
-   return;
+  if(enemy.phase>=2){
+   const aligned=enemy.x===state.player.x||enemy.y===state.player.y;
+   if(enemy.bossCycle%2===0&&aligned&&dist<=3){
+    setEnemyIntent(enemy,"chain_cross");
+    addLog("鎖縛の門衛が鎖を十字へ張り、逃げ道を切り分けた！");
+    return;
+   }
+   if(dist<=2){
+    setEnemyIntent(enemy,"chain_sweep");
+    addLog("鎖縛の門衛が鎖を大きく巡らせた！");
+    return;
+   }
   }
   if(dist===1){
-   setEnemyIntent(enemy,enemy.phase>=2?"heavy":"lunge");
-   addLog(enemy.phase>=2?"門衛が鎖柄を振り上げた！":"門衛が鎖を引いた！");
+   setEnemyIntent(enemy,"lunge");
+   addLog("門衛が鎖を引き、飛びかかる構えを取った！");
    return;
   }
   stepTowardPlayer(enemy);
@@ -20283,8 +20872,11 @@ function performWardenTurn(enemy,dist){
    return;
   }
   if(dist<=6){
-   setEnemyIntent(enemy,"grave_volley");
-   addLog("墓標の神託者が紫の墓標列を定めた！");
+   const intent=enemy.phase>=2&&enemy.bossCycle%2===0?"grave_cross":"grave_volley";
+   setEnemyIntent(enemy,intent);
+   addLog(intent==="grave_cross"
+    ?"墓標の神託者が探索者の足元へ十字の墓標を重ねた！"
+    :"墓標の神託者が紫の墓標列を定めた！");
    return;
   }
   stepTowardPlayer(enemy);
@@ -20293,8 +20885,11 @@ function performWardenTurn(enemy,dist){
 
  if(profile.key==="furnace"){
   if(dist<=5){
-   setEnemyIntent(enemy,"furnace_slam");
-   addLog("熔炉の巨像が炉心を持ち上げ、着弾地点を灼いた！");
+   const intent=enemy.phase>=2&&enemy.bossCycle%2===0?"furnace_cross":"furnace_slam";
+   setEnemyIntent(enemy,intent);
+   addLog(intent==="furnace_cross"
+    ?"熔炉の巨像が炉脈を十字へ噴き上げた！"
+    :"熔炉の巨像が炉心を持ち上げ、着弾地点を灼いた！");
    return;
   }
   stepTowardPlayer(enemy);
@@ -20302,15 +20897,20 @@ function performWardenTurn(enemy,dist){
  }
 
  if(profile.key==="root"){
-  const useCage=enemy.phase===1||enemy.bossCycle%2===1;
-  if(useCage){
+  if(enemy.phase===1){
    setEnemyIntent(enemy,"root_cage");
    addLog("根冠の王が探索者の周囲へ根檻を伸ばした！");
    return;
   }
+  const intent=enemy.bossCycle%2===1?"root_cage":"root_sweep";
+  if(intent==="root_cage"){
+   setEnemyIntent(enemy,intent);
+   addLog("根冠の王が再び中心だけを残して根檻を閉じる！");
+   return;
+  }
   if(dist<=2){
-   setEnemyIntent(enemy,"chain_sweep");
-   addLog("根冠の王が根の大環を薙ぎ払う！");
+   setEnemyIntent(enemy,"root_sweep");
+   addLog("根冠の王が根の大環を薙ぎ払い、中心から追い出そうとする！");
    return;
   }
   stepTowardPlayer(enemy);
@@ -20402,6 +21002,8 @@ function enemyTurn(){
    if((e.terrainSlow||0)>0){e.terrainSlow--;if(state.visible[key(e.x,e.y)])addLog(e.name+"は絡み根に足を取られて動けない。");continue}
    if(e.stagger>0){e.stagger--;continue}
   }
+  if(e.realtimeAdaptive&&e.adaptationState==="mutating")continue;
+  if(e.boss&&realtimeCombatActive()&&(e.realtimeBossRecoveryUntilPulse||0)>(realtimeCombatRuntime.pulse||0))continue;
   if(e.boss&&realtimeCombatActive()&&(e.realtimeBossBreakUntilPulse||0)>(realtimeCombatRuntime.pulse||0))continue;
   if(e.boss&&e.intent&&realtimeCombatActive()&&(e.realtimeIntentReadyPulse||0)>(realtimeCombatRuntime.pulse||0))continue;
   if(e.realtimeRelicRunner){
@@ -21384,6 +21986,10 @@ function performStairDescent(dx,dy,nx,ny){
  revealNearbyTraps();pickup();triggerTrap();triggerSpecialTile();triggerEvent();
  if(state.gameOver){render();return}
  const previousFloor=state.floor;
+ const temptationBeforeDescent=harvestTemptationIncident();
+ if(temptationBeforeDescent?.status==="offered"){
+  const stats=ensureRunStats();stats.harvestTemptationsSkipped=(stats.harvestTemptationsSkipped||0)+1;
+ }
  try{
   state.floor++;sfx("stairs");
   triggerImpactFeedback("stairs",{haptic:"stairs",duration:620});
@@ -22548,6 +23154,7 @@ function stairDecisionCardHtml(canExtract=returnAccessStatus().ready){
    <div><small>${canExtract?"今帰ると確定":"現在の携行価値"}</small><div class="stairDecisionChips">${nowParts}</div></div>
    <div><small>続行すると</small><b class="stairDecisionNext">第${next.floor}層・${next.label}</b><span>${next.detail}</span></div>
   </div>
+  ${harvestTemptationDecisionHtml()}
   <div class="stairDecisionLoss">${info.lossLabel}。保険・遺響など既存の救済は通常どおり適用。</div>
  </div>`;
 }
@@ -23566,7 +24173,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.15",
+  version:"4.18",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -24459,7 +25066,8 @@ function updateRealtimeBossUi(now=realtimeNow()){
  bar.classList.toggle("intent",!!boss.intent);
  bar.classList.toggle("phase2",(boss.phase||1)>=2);
  const breakPulses=Math.max(0,(boss.realtimeBossBreakUntilPulse||0)-(realtimeCombatRuntime.pulse||0));
- bar.classList.toggle("break",breakPulses>0);
+ const recoveryPulses=Math.max(0,(boss.realtimeBossRecoveryUntilPulse||0)-(realtimeCombatRuntime.pulse||0));
+ bar.classList.toggle("break",breakPulses>0||recoveryPulses>0);
 
  $("rtBossName").textContent=boss.name;
  $("rtBossPhase").textContent=`PHASE ${boss.phase||1}`;
@@ -24473,12 +25081,20 @@ function updateRealtimeBossUi(now=realtimeNow()){
   $("rtBossHint").textContent="第二形態へ移る隙。ここだけは欲張って攻め込める。";
   return;
  }
+ if(recoveryPulses>0){
+  const seconds=(recoveryPulses*realtimeWorldInterval(now)/1000).toFixed(1);
+  $("rtBossIntent").textContent="大技硬直・反撃時間";
+  $("rtBossTimer").textContent=`再始動 約${seconds}秒`;
+  $("rtBossHint").textContent="今は番人が動かない。主武技・副武技・通常攻撃を差し込む時間。";
+  return;
+ }
 
  const seconds=realtimeEnemyActionSeconds(boss,now).toFixed(1);
  if(boss.intent){
   const intent=enemyIntentDisplayName(boss.intent);
+  const intentSeconds=realtimeWardenIntentSeconds(boss,now);
   $("rtBossIntent").textContent=`予兆：${intent}`;
-  $("rtBossTimer").textContent=`発動 約${seconds}秒`;
+  $("rtBossTimer").textContent=`発動 約${intentSeconds.toFixed(1)}秒`;
   $("rtBossHint").textContent=intentCounterHint(boss);
  }else{
   const profile=wardenProfileFor(boss);
@@ -25567,6 +26183,17 @@ function drawEnemySprite(e,x,y,t){
   ctx.fillStyle="#ffd179";
   ctx.fillRect(x+TILE-6,y+2,3,3);
  }
+ if(e.realtimeAdaptive){
+  const adaptPulse=(Math.sin(t*.25)+1)*.5;
+  const mutating=e.adaptationState==="mutating";
+  ctx.strokeStyle=mutating?`rgba(255,119,214,${.74+.26*adaptPulse})`:`rgba(191,125,255,${.62+.30*adaptPulse})`;
+  ctx.lineWidth=2;
+  ctx.strokeRect(x+.5,y+.5,TILE-1,TILE-1);
+  ctx.fillStyle=mutating?"#ff91df":"#d2a1ff";
+  ctx.beginPath();
+  ctx.moveTo(x+11,y+1+bob);ctx.lineTo(x+15,y+5+bob);ctx.lineTo(x+11,y+9+bob);ctx.lineTo(x+7,y+5+bob);
+  ctx.closePath();ctx.fill();
+ }
  if(e.realtimeRelicRunner){
   const pulse=(Math.sin(t*.28)+1)*.5;
   ctx.strokeStyle=`rgba(255,224,105,${.72+.28*pulse})`;
@@ -25708,6 +26335,14 @@ function drawSpecialTileSprite(tileData,x,y,t){
    ctx.fillStyle=`rgba(255,220,95,${.55+.35*pulse})`;
    ctx.fillRect(x+10,y+2,2,4);
   }
+ }else if(tileData.type==="temptation_cache"){
+  const pulse=(Math.sin(t*.22+tileData.x)+1)*.5;
+  ctx.fillStyle="#281831";ctx.fillRect(x+5,y+13,12,5);
+  ctx.fillStyle="#7d4da1";ctx.fillRect(x+8,y+8,6,7);
+  ctx.fillStyle=`rgba(255,215,105,${.68+.28*pulse})`;
+  ctx.beginPath();ctx.moveTo(x+11,y+2);ctx.lineTo(x+16,y+8);ctx.lineTo(x+11,y+13);ctx.lineTo(x+6,y+8);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=`rgba(229,164,255,${.62+.32*pulse})`;ctx.lineWidth=2;
+  ctx.strokeRect(x+3.5,y+4.5,15,14);
  }else if(tileData.type==="flood"){
   ctx.fillStyle="rgba(92,155,206,.16)";ctx.fillRect(x+2,y+5,18,14);
   ctx.strokeStyle="#69a6d1";
@@ -25792,8 +26427,10 @@ function enemyIntentDisplayName(intent){
  return{
   lunge:"飛びかかり",heavy:"強打",bolt:"骨弾",explode:"爆発",
   dirge:"墓鐘祈祷",charge:"穿ち突進",light_drain:"吸光",
-  chain_sweep:"鎖薙ぎ",grave_volley:"墓標列",
-  furnace_slam:"炉心落とし",root_cage:"根檻"
+  chain_sweep:"鎖薙ぎ",chain_cross:"鎖十字",
+  grave_volley:"墓標列",grave_cross:"墓標十字",
+  furnace_slam:"炉心落とし",furnace_cross:"炉脈十字",
+  root_cage:"根檻",root_sweep:"根冠大環"
  }[intent]||"攻撃";
 }
 function buildEnemyIntentCells(e,intent,target={x:state.player.x,y:state.player.y}){
@@ -25834,10 +26471,18 @@ function buildEnemyIntentCells(e,intent,target={x:state.player.x,y:state.player.
   }
   return normalizeCells(cells);
  }
- if(intent==="chain_sweep"){
+ if(intent==="chain_sweep"||intent==="root_sweep"){
   for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
    const distance=Math.abs(dx)+Math.abs(dy);
    if(distance>=1&&distance<=2&&tile(e.x+dx,e.y+dy)===1)cells.push({x:e.x+dx,y:e.y+dy});
+  }
+  return normalizeCells(cells);
+ }
+ if(intent==="chain_cross"){
+  for(const [dx,dy] of dirs)for(let d=1;d<=3;d++){
+   const x=e.x+dx*d,y=e.y+dy*d;
+   if(tile(x,y)!==1)break;
+   cells.push({x,y});
   }
   return normalizeCells(cells);
  }
@@ -25856,10 +26501,26 @@ function buildEnemyIntentCells(e,intent,target={x:state.player.x,y:state.player.
   }
   return normalizeCells(cells);
  }
+ if(intent==="grave_cross"){
+  cells.push({x:target.x,y:target.y});
+  for(const [dx,dy] of dirs)for(let d=1;d<=2;d++){
+   const x=target.x+dx*d,y=target.y+dy*d;
+   if(tile(x,y)===1)cells.push({x,y});
+  }
+  return normalizeCells(cells);
+ }
  if(intent==="furnace_slam"){
   cells.push({x:target.x,y:target.y});
   for(const [dx,dy] of [[-1,-1],[1,-1],[-1,1],[1,1]]){
    if(tile(target.x+dx,target.y+dy)===1)cells.push({x:target.x+dx,y:target.y+dy});
+  }
+  return normalizeCells(cells);
+ }
+ if(intent==="furnace_cross"){
+  cells.push({x:target.x,y:target.y});
+  for(const [dx,dy] of dirs)for(let d=1;d<=2;d++){
+   const x=target.x+dx*d,y=target.y+dy*d;
+   if(tile(x,y)===1)cells.push({x,y});
   }
   return normalizeCells(cells);
  }
@@ -25873,12 +26534,45 @@ function buildEnemyIntentCells(e,intent,target={x:state.player.x,y:state.player.
  cells.push({x:target.x,y:target.y});
  return normalizeCells(cells);
 }
+function realtimeWardenSignatureIntent(intent){
+ return["chain_sweep","chain_cross","grave_volley","grave_cross","furnace_slam","furnace_cross","root_cage","root_sweep"].includes(intent);
+}
+function realtimeWardenWindupPulses(enemy,intent){
+ if(!enemy?.boss||!realtimeCombatActive())return 0;
+ // 強い形状ほど2番人行動ぶん見せる。4pulse=.84秒 / 8pulse=1.68秒。
+ return["chain_cross","grave_cross","furnace_slam","root_cage"].includes(intent)?8:4;
+}
+function realtimeWardenRecoveryPulses(intent){
+ return realtimeWardenSignatureIntent(intent)?8:0;
+}
+function startRealtimeWardenRecovery(enemy,intent){
+ if(!enemy?.boss||!realtimeCombatActive()||!realtimeWardenSignatureIntent(intent))return 0;
+ const pulses=realtimeWardenRecoveryPulses(intent);
+ enemy.realtimeBossRecoveryUntilPulse=(realtimeCombatRuntime.pulse||0)+pulses;
+ enemy.realtimeRecoveryPunishHits=0;
+ return pulses;
+}
+function realtimeWardenIntentSeconds(enemy,now=realtimeNow()){
+ if(!enemy?.boss||!enemy.intent)return 0;
+ const pulses=Math.max(0,(enemy.realtimeIntentReadyPulse||0)-(realtimeCombatRuntime.pulse||0));
+ return pulses*realtimeWorldInterval(now)/1000;
+}
+function recordRealtimeWardenSignature(enemy,intent,hit){
+ if(!enemy?.boss||!realtimeWardenSignatureIntent(intent))return;
+ const stats=ensureRunStats();
+ stats.realtimeWardenSignatures=(stats.realtimeWardenSignatures||0)+1;
+ if(hit)stats.realtimeWardenSignatureHits=(stats.realtimeWardenSignatureHits||0)+1;
+ else stats.realtimeWardenSignatureReads=(stats.realtimeWardenSignatureReads||0)+1;
+ if(!hit){
+  spawnCombatText(state.player.x,state.player.y,"WARDEN READ","dodge",38);
+ }
+}
 function setEnemyIntent(e,intent){
  e.intent=intent;
  e.intentTarget={x:state.player.x,y:state.player.y};
  e.intentCells=buildEnemyIntentCells(e,intent,e.intentTarget);
  if(realtimeCombatActive()&&e?.boss){
-  e.realtimeIntentReadyPulse=(realtimeCombatRuntime.pulse||0)+4;
+  e.realtimeIntentReadyPulse=(realtimeCombatRuntime.pulse||0)+realtimeWardenWindupPulses(e,intent);
  }
 }
 function clearEnemyIntent(e){
@@ -26020,11 +26714,13 @@ function inspectTileAt(x,y){
   if(item.type==="sealed_relic"&&item.relic){const seal=sealedRelicSealData[item.relic.seal]||sealedRelicSealData.ash;body+=`<p><b>${seal.label}の封印遺物</b><br>${seal.desc}<br>灯台まで持ち帰ると開封できます。死亡すると失います。</p>`;}
   else body+=`<p>${item.type==="gear"?(item.gear.identified?gearLabel(item.gear):"未鑑定装備"):item.type}</p>`;
  }else if(special){
-  const names={shrine:"祭壇",treasure:"宝物庫",greed_chest:"危険宝箱",flood:"水没区画",collapse:"崩落区画",death_echo:"遺響の墓標"};
+  const names={shrine:"祭壇",treasure:"宝物庫",greed_chest:"危険宝箱",temptation_cache:"深淵の誘い",flood:"水没区画",collapse:"崩落区画",death_echo:"遺響の墓標"};
   title=names[special.type]||"特殊地点";
   if(special.type==="greed_chest"){
    const incident=state.realtimeIncident;
    body+=`<p class="tacticalNote">${special.opened?"開錠済み。":special.sealed?"再封印され、もう開かない。":incident?.status==="channeling"?"開錠中。敵時間は止まらない。":"踏み込むと7.2秒の警報が始まる。開錠には3.2秒その場へ留まる必要がある。"}</p>`;
+  }else if(special.type==="temptation_cache"){
+   body+=`<p class="tacticalNote">階段は既に解放済み。触れると「戦技変質付き・希少以上武器」を奪うか確認できます。奪取後は徴収者が追跡します。</p>`;
   }else if(special.type==="death_echo"){
    const echo=activeDeathEcho();
    body+=`<p class="tacticalNote">${
