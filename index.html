@@ -5825,7 +5825,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.22 DENSITY UP</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.23 TEMPO 150</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6122,10 +6122,10 @@ body,button,input,select,textarea{font-size:12px}
           <li>アプリがバックグラウンドへ移るとBGMタイマーと全音源を停止し、AudioContextを休止します。復帰時は現在の灯台・探索・危険・番人場面から再開します。</li>
           <li>iPhoneの仕様により、音は最初のタップ後に開始します。端末の消音スイッチや音量設定も影響します。</li>
           <li><b>リアルタイム戦闘・正式採用</b>：全階層で敵種ごとの実時間周期で世界が進み、何もしなくても敵が動きます。メニュー・レベルアップ選択・階層紹介など判断用UIを開いている間だけ敵時間が停止します。</li>
-          <li><b>v4.20・敵テンポ</b>：通常時の敵判断は、速い敵約0.36秒・標準約0.54秒・遅い敵約0.72秒・番人約0.72秒。以前より約14%高速化しています。一方、構え・踏み止まり・凍結・番人予兆などの防御時間は別に補正して短縮しないようにしています。</li>
+          <li><b>v4.23・敵テンポ</b>：通常時は速い敵約0.30秒・標準約0.45秒・遅い敵約0.60秒・番人約0.60秒。v4.22よりさらに約17%高速化しています。構え・凍結・番人予兆・事件警告はpulse数を補正し、敵の高速化ほどは短くなりません。</li>
           <li><b>v4.21・敵の生息行動</b>：未発見の敵も棒立ちせず、種類ごとの間隔で巣・部屋の周辺を巡回します。穴獣や穿ち獣は広く直進気味、骸兵は狭く巡回、術師・司祭はゆっくり歩きます。移動によって視線が通れば発見されます。また正面視界でなくても開けた斜め位置に居続けると「？」警戒が蓄積し、確率でこちらの気配に気づきます。</li>
           <li><b>v4.22・敵密度</b>：第1〜20層の通常個体数を全体的に増加。序盤は+1〜2、通常探索は主に+2、休息階は+1、番人階は据え置きです。包囲階は通常個体を増やした上で従来の包囲襲来も発生します。第21層以降の通常個体上限も26→28へ上げています。</li>
-          <li><b>リアルタイム番人</b>：番人は約0.72秒周期。固有大技は約0.90〜1.62秒の固定予兆を出し、解決後は約1.62秒必ず硬直します。第5層は円/十字の鎖、第10層は列/十字の墓標、第15層は斜め/十字の炉心、第20層は「中心に留まる根檻」と「外へ逃げる根冠大環」を見分けます。ボスHUDは予兆秒数と硬直秒数を直接表示します。</li>
+          <li><b>リアルタイム番人</b>：番人は約0.60秒周期。固有大技は約0.90〜1.65秒の固定予兆を出し、解決後は約1.65秒必ず硬直します。第5層は円/十字の鎖、第10層は列/十字の墓標、第15層は斜め/十字の炉心、第20層は「中心に留まる根檻」と「外へ逃げる根冠大環」を見分けます。ボスHUDは予兆秒数と硬直秒数を直接表示します。</li>
           <li><b>番人予兆の盤面表示</b>：危険床は番人ごとの色と形状記号で表示し、実際に通行できる安全候補だけを青緑色で「安全」と表示します。根檻だけは中心へ「留」を表示。番人または着弾地点の上には「外へ 1.2」「斜め 0.8」のように、避け方と残り秒数を直接表示します。</li>
           <li><b>v4.12・世界時間契約</b>：構え約1.08秒、踏み止まり約1.26秒、よろめき約0.72秒、凍結1段階約0.90秒を敵速度ではなく共通の世界時間で管理します。集中中は世界そのものが遅くなるため、これらの実時間も同じ倍率で伸びます。高速敵だけ凍結が即解除される、といった速度差による不公平をなくします。</li>
           <li><b>リアルタイム中の回避</b>：中央ボタンで最後に入力した方向へ最大2マス移動し、約0.43秒だけ敵の直接攻撃をすり抜けます。気力3、再使用約1.45秒です。</li>
@@ -16209,8 +16209,8 @@ function spawnRealtimePressureWave(){
  addLog(`この階には通常より濃い気配がある。「${wave.label}」が迷宮の一角に集まっている。`);
  return true;
 }
-const REALTIME_RELIC_RUNNER_PULSES={2:63,3:68};
-const REALTIME_SIEGE_WARNING_PULSES=26;
+const REALTIME_RELIC_RUNNER_PULSES={2:76,3:82};
+const REALTIME_SIEGE_WARNING_PULSES=31;
 const realtimeSiegeDirections={
  north:{label:"↑",dx:0,dy:-1},south:{label:"↓",dx:0,dy:1},
  east:{label:"→",dx:1,dy:0},west:{label:"←",dx:-1,dy:0}
@@ -16500,7 +16500,7 @@ function beginRiseAdaptation(enemy){
 
  incident.status="mutating";
  incident.mutationId=mutationId;
- incident.mutationReadyPulse=(realtimeCombatRuntime.pulse||0)+(incident.totalMutationPulses||7);
+ incident.mutationReadyPulse=(realtimeCombatRuntime.pulse||0)+(incident.totalMutationPulses||8);
 
  const stats=ensureRunStats();
  stats.realtimeAdaptationsTriggered=(stats.realtimeAdaptationsTriggered||0)+1;
@@ -16508,7 +16508,7 @@ function beginRiseAdaptation(enemy){
  spawnFeedbackBurst(enemy.x,enemy.y,"boss",10);
  triggerImpactFeedback("boss",{haptic:"boss",duration:600});
  spawnCombatText(enemy.x,enemy.y,"ADAPT","critical",40);
- showCombatToast("深淵適応・変異開始",`${data?.label||"未知"}へ変質 / 約${((incident.totalMutationPulses||7)*realtimeWorldInterval()/1000).toFixed(1)}秒`,"critical");
+ showCombatToast("深淵適応・変異開始",`${data?.label||"未知"}へ変質 / 約${((incident.totalMutationPulses||8)*realtimeWorldInterval()/1000).toFixed(1)}秒`,"critical");
  addLog(`${enemy.name}が戦闘中に変異を始めた。${data?.label||"未知"}への適応が完了する前なら、まだ仕留められる。`);
  return true;
 }
@@ -16600,7 +16600,7 @@ function prepareRealtimeBroadcastIncident(){
   if(state.realtimePressureWave?.active)state.realtimePressureWave.active=false;
   state.realtimeIncident={
    type:"siege",status:"armed",floor:state.floor,
-   triggerPulse:14,warningPulses:REALTIME_SIEGE_WARNING_PULSES,
+   triggerPulse:17,warningPulses:REALTIME_SIEGE_WARNING_PULSES,
    remainingWarningPulses:REALTIME_SIEGE_WARNING_PULSES,
    directionIds:realtimeSiegeDirectionPair(),enemyIds:[],totalEnemies:0,
    lastKillX:null,lastKillY:null,rewardDropped:false
@@ -16618,7 +16618,7 @@ function prepareRealtimeBroadcastIncident(){
   state.realtimeIncident={
    type:"adaptation",status:"armed",floor:state.floor,
    enemyId:null,mutationId:null,threshold:.55,
-   totalMutationPulses:7,mutationReadyPulse:0
+   totalMutationPulses:8,mutationReadyPulse:0
   };
   return state.realtimeIncident;
  }
@@ -16656,8 +16656,8 @@ function prepareRealtimeBroadcastIncident(){
  }
  state.realtimeIncident={
   type:"relic_runner",status:"armed",floor:state.floor,
-  triggerPulse:12,enemyId:null,
-  maxPulses:REALTIME_RELIC_RUNNER_PULSES[state.floor]||63,
+  triggerPulse:14,enemyId:null,
+  maxPulses:REALTIME_RELIC_RUNNER_PULSES[state.floor]||76,
   remainingPulses:0,rewardSeal:"violet",spawnedAtTurn:0
  };
  return state.realtimeIncident;
@@ -21006,7 +21006,7 @@ function performWardenTurn(enemy,dist){
  const phaseShifted=enterWardenPhaseTwo(enemy);
  if(phaseShifted&&realtimeCombatActive()){
   clearEnemyIntent(enemy);
-  enemy.realtimeBossBreakUntilPulse=(realtimeCombatRuntime.pulse||0)+5;
+  enemy.realtimeBossBreakUntilPulse=(realtimeCombatRuntime.pulse||0)+6;
   enemy.bossCycle=0;
   spawnFeedbackBurst(enemy.x,enemy.y,"boss",10);
   showCombatToast("番人変調・隙","第二形態へ移る一瞬だけ攻め込める","objective");
@@ -22325,11 +22325,15 @@ const realtimeWeaponDoctrineData={
 function realtimeWeaponDoctrine(type=weaponType()){
  return realtimeWeaponDoctrineData[type]||{label:"戦闘",hint:"武技を使い分ける"};
 }
+function realtimeLogicStepSeconds(now=realtimeNow()){
+ const focusScale=realtimeWorldInterval(now)/REALTIME_WORLD_MS;
+ return REALTIME_LOGIC_WORLD_MS*focusScale/1000;
+}
 function realtimeCooldownText(turns){
  const value=Math.max(0,Math.floor(Number(turns)||0));
  if(!value)return"";
  if(!realtimeCombatActive())return String(value);
- const seconds=value*realtimeWorldInterval(realtimeNow())*3/1000;
+ const seconds=value*realtimeLogicStepSeconds(realtimeNow());
  return`${seconds<10?seconds.toFixed(1):Math.ceil(seconds)}s`;
 }
 function weaponPrimaryArtCost(type=weaponType()){
@@ -24347,7 +24351,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.22",
+  version:"4.23",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -24865,24 +24869,23 @@ function renderInventory(){
 
 const REALTIME_INCIDENT_MAX_FLOOR=3;
 const REALTIME_ONBOARDING_MAX_FLOOR=5;
-const REALTIME_WORLD_MS=180;
-const REALTIME_SLOW_WORLD_MS=305;
+const REALTIME_WORLD_MS=150;
+const REALTIME_SLOW_WORLD_MS=255;
 const REALTIME_FOCUS_DURATION_MS=2600;
 const REALTIME_FOCUS_COOLDOWN_MS=7000;
 const REALTIME_DASH_COOLDOWN_MS=1450;
 const REALTIME_DASH_INVULN_MS=430;
 const REALTIME_LOGIC_WORLD_MS=630; // cooldown/hunger/status economy stays at the previous average rhythm
 
-// v4.20: enemy AI is faster, but player-facing gameplay windows are retuned in pulses
-// so guard / last stand / crowd control do not silently shrink with the faster scheduler.
-// Focus slows the world interval, so these windows naturally stretch with the slowed world instead of expiring behind a menu or between enemy speeds.
-const REALTIME_GUARD_PULSES=6;          // about 1.08s normally
-const REALTIME_LAST_STAND_PULSES=7;     // 1.26s normally
-const REALTIME_LAST_STAND_INVULN_PULSES=3; // 0.54s; faster enemies do not immediately re-kill after proc
-const REALTIME_EXHAUSTION_PULSES=7;     // 1.26s
-const REALTIME_STAGGER_PULSES=4;        // about 0.72s normally
-const REALTIME_ROOT_PULSES=4;           // about 0.72s normally
-const REALTIME_FREEZE_PULSES=5;         // per freeze unit, about 0.90s normally
+// v4.23: enemy AI is 150ms/pulse, but player-facing reaction windows are separately retuned.
+// Focus slows the world interval, so these windows stretch with the slowed world.
+const REALTIME_GUARD_PULSES=7;          // about 1.05s normally
+const REALTIME_LAST_STAND_PULSES=8;     // about 1.20s normally
+const REALTIME_LAST_STAND_INVULN_PULSES=4; // about 0.60s
+const REALTIME_EXHAUSTION_PULSES=8;     // about 1.20s
+const REALTIME_STAGGER_PULSES=5;        // about 0.75s normally
+const REALTIME_ROOT_PULSES=5;           // about 0.75s normally
+const REALTIME_FREEZE_PULSES=6;         // per freeze unit, exactly 0.90s normally
 
 const realtimeCombatRuntime={
  floor:0,nextWorldAt:0,nextPlayerActionAt:0,lastDir:[0,1],
@@ -25137,7 +25140,7 @@ function realtimeWorldStep(now=realtimeNow()){
   ensureBossProgressIntegrity("realtime-start");
   updateFloorObjective();
 
-  // AIは180ms刻みだが、資源・状態・CDは平均約0.63秒の旧契約を維持する。
+  // AIは150ms刻みだが、資源・状態・CDは平均約0.63秒の独立契約を維持する。
   if(state.turn%2===0&&!realtimeResourcePulse())return false;
   applyLightUtility();
   updateStatuses();
@@ -25151,7 +25154,7 @@ function realtimeWorldStep(now=realtimeNow()){
  // 配信向け事件も同じ世界時間で進む。メニュー/階層紹介中はtick自体が止まるため不公平な消失は起きない。
  processRealtimeBroadcastIncidentPulse();
 
- // 敵AIは180ms刻み。実際に動くかは敵種ごとのcadenceで判定する。
+ // 敵AIは150ms刻み。実際に動くかは敵種ごとのcadenceで判定する。
  enemyTurn();
  if(state.gameOver)return false;
 
@@ -25169,7 +25172,7 @@ function realtimeWorldStep(now=realtimeNow()){
 function tickRealtimeCombat(now=realtimeNow()){
  if(!syncRealtimeCombatRuntime(now))return;
  if(!actionSceneClear()||realtimeFloorIntroBlocking(now)){
-  realtimeCombatRuntime.nextWorldAt=Math.max(realtimeCombatRuntime.nextWorldAt||0,now+180);
+  realtimeCombatRuntime.nextWorldAt=Math.max(realtimeCombatRuntime.nextWorldAt||0,now+REALTIME_WORLD_MS);
   updateRealtimePrototypeUi(now);
   return;
  }
@@ -26718,11 +26721,11 @@ function realtimeWardenSignatureIntent(intent){
 }
 function realtimeWardenWindupPulses(enemy,intent){
  if(!enemy?.boss||!realtimeCombatActive())return 0;
- // 180ms基準。軽い予兆5pulse=.90秒 / 強い予兆9pulse=1.62秒。
- return["chain_cross","grave_cross","furnace_slam","root_cage"].includes(intent)?9:5;
+ // 150ms基準。軽い予兆6pulse=.90秒 / 強い予兆11pulse=1.65秒。
+ return["chain_cross","grave_cross","furnace_slam","root_cage"].includes(intent)?11:6;
 }
 function realtimeWardenRecoveryPulses(intent){
- return realtimeWardenSignatureIntent(intent)?9:0;
+ return realtimeWardenSignatureIntent(intent)?11:0;
 }
 function startRealtimeWardenRecovery(enemy,intent){
  if(!enemy?.boss||!realtimeCombatActive()||!realtimeWardenSignatureIntent(intent))return 0;
