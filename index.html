@@ -5825,7 +5825,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.18 WARDEN RHYTHM</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.20 TEMPO 180</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6122,13 +6122,15 @@ body,button,input,select,textarea{font-size:12px}
           <li>アプリがバックグラウンドへ移るとBGMタイマーと全音源を停止し、AudioContextを休止します。復帰時は現在の灯台・探索・危険・番人場面から再開します。</li>
           <li>iPhoneの仕様により、音は最初のタップ後に開始します。端末の消音スイッチや音量設定も影響します。</li>
           <li><b>リアルタイム戦闘・正式採用</b>：全階層で敵種ごとの実時間周期で世界が進み、何もしなくても敵が動きます。メニュー・レベルアップ選択・階層紹介など判断用UIを開いている間だけ敵時間が停止します。</li>
-          <li><b>リアルタイム番人</b>：番人は約0.84秒周期。固有大技は約0.84〜1.68秒の固定予兆を出し、解決後は約1.68秒必ず硬直します。第5層は円/十字の鎖、第10層は列/十字の墓標、第15層は斜め/十字の炉心、第20層は「中心に留まる根檻」と「外へ逃げる根冠大環」を見分けます。ボスHUDは予兆秒数と硬直秒数を直接表示します。</li>
-          <li><b>v4.12・世界時間契約</b>：構え約1.05秒、踏み止まり約1.26秒、よろめき約0.63秒、凍結1段階約0.84秒を敵速度ではなく共通の世界時間で管理します。集中中は世界そのものが遅くなるため、これらの実時間も同じ倍率で伸びます。高速敵だけ凍結が即解除される、といった速度差による不公平をなくします。</li>
+          <li><b>v4.20・敵テンポ</b>：通常時の敵判断は、速い敵約0.36秒・標準約0.54秒・遅い敵約0.72秒・番人約0.72秒。以前より約14%高速化しています。一方、構え・踏み止まり・凍結・番人予兆などの防御時間は別に補正して短縮しないようにしています。</li>
+          <li><b>リアルタイム番人</b>：番人は約0.72秒周期。固有大技は約0.90〜1.62秒の固定予兆を出し、解決後は約1.62秒必ず硬直します。第5層は円/十字の鎖、第10層は列/十字の墓標、第15層は斜め/十字の炉心、第20層は「中心に留まる根檻」と「外へ逃げる根冠大環」を見分けます。ボスHUDは予兆秒数と硬直秒数を直接表示します。</li>
+          <li><b>番人予兆の盤面表示</b>：危険床は番人ごとの色と形状記号で表示し、実際に通行できる安全候補だけを青緑色で「安全」と表示します。根檻だけは中心へ「留」を表示。番人または着弾地点の上には「外へ 1.2」「斜め 0.8」のように、避け方と残り秒数を直接表示します。</li>
+          <li><b>v4.12・世界時間契約</b>：構え約1.08秒、踏み止まり約1.26秒、よろめき約0.72秒、凍結1段階約0.90秒を敵速度ではなく共通の世界時間で管理します。集中中は世界そのものが遅くなるため、これらの実時間も同じ倍率で伸びます。高速敵だけ凍結が即解除される、といった速度差による不公平をなくします。</li>
           <li><b>リアルタイム中の回避</b>：中央ボタンで最後に入力した方向へ最大2マス移動し、約0.43秒だけ敵の直接攻撃をすり抜けます。気力3、再使用約1.45秒です。</li>
           <li><b>リアルタイム中の集中</b>：気力2で2.6秒だけ敵行動間隔を遅くします。完全停止ではありません。</li>
           <li><b>武器の戦闘動詞</b>：全階層で武技選択画面を挟まず、主武技と副武技を独立ボタンから直接使います。剣=範囲斬り/予兆中断、槍=直線攻撃/後退、弓=連射/足止め、杖=範囲魔撃/凍結です。第1〜5層だけ副武技を試用解放し、第6層以降は熟練Lv2が必要です。</li>
           <li><b>戦闘操作</b>：スマホでは「構え・主武技・治癒・副武技・集中・探索」の6枠を十字キー横へ固定しています。REALTIME情報は操作領域から分離され、戦闘中に選択画面を挟みません。</li>
-          <li><b>番人第二形態</b>：HP50%未満で約0.84秒の変調隙が発生。その後は第5層「鎖薙ぎ⇄鎖十字」、第10層「墓標列⇄墓標十字＋召喚」、第15層「炉心落とし⇄炉脈十字」、第20層「根檻⇄根冠大環」という、避け方が異なる2択パターンへ変化します。</li>
+          <li><b>番人第二形態</b>：HP50%未満で約0.90秒の変調隙が発生。その後は第5層「鎖薙ぎ⇄鎖十字」、第10層「墓標列⇄墓標十字＋召喚」、第15層「炉心落とし⇄炉脈十字」、第20層「根檻⇄根冠大環」という、避け方が異なる2択パターンへ変化します。</li>
           <li><b>反撃好機</b>：リアルタイム中はターン数ではなく実時間で開きます。通常敵は約1.7秒、番人は約1.4秒が目安です。</li>
           <li><b>戦技変質</b>：魔法以上の武器に付くことがある、武技そのものを変える装備効果です。第1〜5層で生成される魔法以上の武器には試験的に必ず1つ付きます。例：旋撃で撃破するとCD短縮、退き突きが2マス後退、牽制射が分岐、凍結から砕氷爆発など。数値ではなく戦闘手順が変わります。</li>
           <li><b>敵を武器にする</b>：骨術師の射線へ別の敵を入れると誤射、穿ち獣の突進線へ敵や爆薬樽を残すと衝突、爆ぜ虫は倒された場所で爆発し別の爆ぜ虫や樽へ連鎖します。敵の予兆内に巻き込まれる敵には橙色の小さな枠が出ます。</li>
@@ -16040,8 +16042,8 @@ function spawnRealtimePressureWave(){
  addLog(`この階には通常より濃い気配がある。「${wave.label}」が迷宮の一角に集まっている。`);
  return true;
 }
-const REALTIME_RELIC_RUNNER_PULSES={2:42,3:46};
-const REALTIME_SIEGE_WARNING_PULSES=22;
+const REALTIME_RELIC_RUNNER_PULSES={2:63,3:68};
+const REALTIME_SIEGE_WARNING_PULSES=26;
 const realtimeSiegeDirections={
  north:{label:"↑",dx:0,dy:-1},south:{label:"↓",dx:0,dy:1},
  east:{label:"→",dx:1,dy:0},west:{label:"←",dx:-1,dy:0}
@@ -16331,7 +16333,7 @@ function beginRiseAdaptation(enemy){
 
  incident.status="mutating";
  incident.mutationId=mutationId;
- incident.mutationReadyPulse=(realtimeCombatRuntime.pulse||0)+(incident.totalMutationPulses||6);
+ incident.mutationReadyPulse=(realtimeCombatRuntime.pulse||0)+(incident.totalMutationPulses||7);
 
  const stats=ensureRunStats();
  stats.realtimeAdaptationsTriggered=(stats.realtimeAdaptationsTriggered||0)+1;
@@ -16339,7 +16341,7 @@ function beginRiseAdaptation(enemy){
  spawnFeedbackBurst(enemy.x,enemy.y,"boss",10);
  triggerImpactFeedback("boss",{haptic:"boss",duration:600});
  spawnCombatText(enemy.x,enemy.y,"ADAPT","critical",40);
- showCombatToast("深淵適応・変異開始",`${data?.label||"未知"}へ変質 / 約${((incident.totalMutationPulses||6)*realtimeWorldInterval()/1000).toFixed(1)}秒`,"critical");
+ showCombatToast("深淵適応・変異開始",`${data?.label||"未知"}へ変質 / 約${((incident.totalMutationPulses||7)*realtimeWorldInterval()/1000).toFixed(1)}秒`,"critical");
  addLog(`${enemy.name}が戦闘中に変異を始めた。${data?.label||"未知"}への適応が完了する前なら、まだ仕留められる。`);
  return true;
 }
@@ -16431,7 +16433,7 @@ function prepareRealtimeBroadcastIncident(){
   if(state.realtimePressureWave?.active)state.realtimePressureWave.active=false;
   state.realtimeIncident={
    type:"siege",status:"armed",floor:state.floor,
-   triggerPulse:12,warningPulses:REALTIME_SIEGE_WARNING_PULSES,
+   triggerPulse:14,warningPulses:REALTIME_SIEGE_WARNING_PULSES,
    remainingWarningPulses:REALTIME_SIEGE_WARNING_PULSES,
    directionIds:realtimeSiegeDirectionPair(),enemyIds:[],totalEnemies:0,
    lastKillX:null,lastKillY:null,rewardDropped:false
@@ -16449,7 +16451,7 @@ function prepareRealtimeBroadcastIncident(){
   state.realtimeIncident={
    type:"adaptation",status:"armed",floor:state.floor,
    enemyId:null,mutationId:null,threshold:.55,
-   totalMutationPulses:6,mutationReadyPulse:0
+   totalMutationPulses:7,mutationReadyPulse:0
   };
   return state.realtimeIncident;
  }
@@ -16487,8 +16489,8 @@ function prepareRealtimeBroadcastIncident(){
  }
  state.realtimeIncident={
   type:"relic_runner",status:"armed",floor:state.floor,
-  triggerPulse:10,enemyId:null,
-  maxPulses:REALTIME_RELIC_RUNNER_PULSES[state.floor]||42,
+  triggerPulse:12,enemyId:null,
+  maxPulses:REALTIME_RELIC_RUNNER_PULSES[state.floor]||63,
   remainingPulses:0,rewardSeal:"violet",spawnedAtTurn:0
  };
  return state.realtimeIncident;
@@ -20828,7 +20830,7 @@ function performWardenTurn(enemy,dist){
  const phaseShifted=enterWardenPhaseTwo(enemy);
  if(phaseShifted&&realtimeCombatActive()){
   clearEnemyIntent(enemy);
-  enemy.realtimeBossBreakUntilPulse=(realtimeCombatRuntime.pulse||0)+4;
+  enemy.realtimeBossBreakUntilPulse=(realtimeCombatRuntime.pulse||0)+5;
   enemy.bossCycle=0;
   spawnFeedbackBurst(enemy.x,enemy.y,"boss",10);
   showCombatToast("番人変調・隙","第二形態へ移る一瞬だけ攻め込める","objective");
@@ -24173,7 +24175,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.18",
+  version:"4.20",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -24691,27 +24693,29 @@ function renderInventory(){
 
 const REALTIME_INCIDENT_MAX_FLOOR=3;
 const REALTIME_ONBOARDING_MAX_FLOOR=5;
-const REALTIME_WORLD_MS=210;
-const REALTIME_SLOW_WORLD_MS=355;
+const REALTIME_WORLD_MS=180;
+const REALTIME_SLOW_WORLD_MS=305;
 const REALTIME_FOCUS_DURATION_MS=2600;
 const REALTIME_FOCUS_COOLDOWN_MS=7000;
 const REALTIME_DASH_COOLDOWN_MS=1450;
 const REALTIME_DASH_INVULN_MS=430;
+const REALTIME_LOGIC_WORLD_MS=630; // cooldown/hunger/status economy stays at the previous average rhythm
 
-// v4.12: gameplay windows are measured in world pulses.
+// v4.20: enemy AI is faster, but player-facing gameplay windows are retuned in pulses
+// so guard / last stand / crowd control do not silently shrink with the faster scheduler.
 // Focus slows the world interval, so these windows naturally stretch with the slowed world instead of expiring behind a menu or between enemy speeds.
-const REALTIME_GUARD_PULSES=5;          // about 1.05s normally
-const REALTIME_LAST_STAND_PULSES=6;     // about 1.26s normally
-const REALTIME_LAST_STAND_INVULN_PULSES=2;
-const REALTIME_EXHAUSTION_PULSES=6;
-const REALTIME_STAGGER_PULSES=3;        // about 0.63s normally
-const REALTIME_ROOT_PULSES=3;
-const REALTIME_FREEZE_PULSES=4;         // per freeze unit, about 0.84s normally
+const REALTIME_GUARD_PULSES=6;          // about 1.08s normally
+const REALTIME_LAST_STAND_PULSES=7;     // 1.26s normally
+const REALTIME_LAST_STAND_INVULN_PULSES=3; // 0.54s; faster enemies do not immediately re-kill after proc
+const REALTIME_EXHAUSTION_PULSES=7;     // 1.26s
+const REALTIME_STAGGER_PULSES=4;        // about 0.72s normally
+const REALTIME_ROOT_PULSES=4;           // about 0.72s normally
+const REALTIME_FREEZE_PULSES=5;         // per freeze unit, about 0.90s normally
 
 const realtimeCombatRuntime={
  floor:0,nextWorldAt:0,nextPlayerActionAt:0,lastDir:[0,1],
  slowUntil:0,focusCooldownUntil:0,dashCooldownUntil:0,invulnerableUntil:0,
- pulse:0,floorGraceUntil:0,lastUiSecond:-1,
+ pulse:0,logicWorldMs:0,floorGraceUntil:0,lastUiSecond:-1,
  guardUntilPulse:0,lastStandUntilPulse:0,lastStandInvulnUntilPulse:0,exhaustedUntilPulse:0,
  enemyControlUntil:{},
  enemyToolChain:0,lastEnemyToolKillAt:0
@@ -24876,6 +24880,7 @@ function syncRealtimeCombatRuntime(now=realtimeNow()){
   realtimeCombatRuntime.invulnerableUntil=0;
   realtimeCombatRuntime.slowUntil=0;
   realtimeCombatRuntime.pulse=0;
+  realtimeCombatRuntime.logicWorldMs=0;
   realtimeCombatRuntime.enemyToolChain=0;
   realtimeCombatRuntime.lastEnemyToolKillAt=0;
   realtimeCombatRuntime.guardUntilPulse=0;
@@ -24947,7 +24952,9 @@ function realtimeResourcePulse(){
 function realtimeWorldStep(now=realtimeNow()){
  if(!realtimeCombatActive()||!actionSceneClear()||realtimeFloorIntroBlocking(now))return false;
  realtimeCombatRuntime.pulse=(realtimeCombatRuntime.pulse||0)+1;
- const logicPulse=realtimeCombatRuntime.pulse%3===0;
+ realtimeCombatRuntime.logicWorldMs=(realtimeCombatRuntime.logicWorldMs||0)+REALTIME_WORLD_MS;
+ const logicPulse=realtimeCombatRuntime.logicWorldMs>=REALTIME_LOGIC_WORLD_MS;
+ if(logicPulse)realtimeCombatRuntime.logicWorldMs-=REALTIME_LOGIC_WORLD_MS;
 
  state.enemyTurnInterrupted=false;
  state.hero.lastStandTriggeredThisTurn=false;
@@ -24958,7 +24965,7 @@ function realtimeWorldStep(now=realtimeNow()){
   ensureBossProgressIntegrity("realtime-start");
   updateFloorObjective();
 
-  // 約0.63秒を従来の「1ターン相当」として資源・状態・CDを進める。
+  // AIは180ms刻みだが、資源・状態・CDは平均約0.63秒の旧契約を維持する。
   if(state.turn%2===0&&!realtimeResourcePulse())return false;
   applyLightUtility();
   updateStatuses();
@@ -24972,7 +24979,7 @@ function realtimeWorldStep(now=realtimeNow()){
  // 配信向け事件も同じ世界時間で進む。メニュー/階層紹介中はtick自体が止まるため不公平な消失は起きない。
  processRealtimeBroadcastIncidentPulse();
 
- // 敵AIだけは210ms刻み。実際に動くかは敵種ごとのcadenceで判定する。
+ // 敵AIは180ms刻み。実際に動くかは敵種ごとのcadenceで判定する。
  enemyTurn();
  if(state.gameOver)return false;
 
@@ -26539,11 +26546,11 @@ function realtimeWardenSignatureIntent(intent){
 }
 function realtimeWardenWindupPulses(enemy,intent){
  if(!enemy?.boss||!realtimeCombatActive())return 0;
- // 強い形状ほど2番人行動ぶん見せる。4pulse=.84秒 / 8pulse=1.68秒。
- return["chain_cross","grave_cross","furnace_slam","root_cage"].includes(intent)?8:4;
+ // 180ms基準。軽い予兆5pulse=.90秒 / 強い予兆9pulse=1.62秒。
+ return["chain_cross","grave_cross","furnace_slam","root_cage"].includes(intent)?9:5;
 }
 function realtimeWardenRecoveryPulses(intent){
- return realtimeWardenSignatureIntent(intent)?8:0;
+ return realtimeWardenSignatureIntent(intent)?9:0;
 }
 function startRealtimeWardenRecovery(enemy,intent){
  if(!enemy?.boss||!realtimeCombatActive()||!realtimeWardenSignatureIntent(intent))return 0;
@@ -26832,6 +26839,129 @@ function drawMiniMap(){
  ctx.restore();
 }
 
+const wardenTelegraphVisualData={
+ chain_sweep:{family:"chain",danger:"#ffe070",fill:[221,185,67],glyph:"OUT",rule:"外へ"},
+ chain_cross:{family:"chain",danger:"#ffe070",fill:[221,185,67],glyph:"DIAG",rule:"斜め"},
+ grave_volley:{family:"oracle",danger:"#e1a8ff",fill:[164,91,234],glyph:"SIDE",rule:"横へ"},
+ grave_cross:{family:"oracle",danger:"#e1a8ff",fill:[164,91,234],glyph:"DIAG",rule:"斜め"},
+ furnace_slam:{family:"furnace",danger:"#ffb45c",fill:[255,92,42],glyph:"AXIS",rule:"縦横"},
+ furnace_cross:{family:"furnace",danger:"#ffb45c",fill:[255,92,42],glyph:"DIAG",rule:"斜め"},
+ root_cage:{family:"root",danger:"#aae680",fill:[87,174,87],glyph:"STAY",rule:"留まる"},
+ root_sweep:{family:"root",danger:"#aae680",fill:[87,174,87],glyph:"OUT",rule:"外へ"}
+};
+function wardenTelegraphVisual(intent){return wardenTelegraphVisualData[intent]||null}
+function wardenTelegraphSafeCells(enemy){
+ if(!enemy?.boss||!wardenTelegraphVisual(enemy.intent))return[];
+ const danger=new Set(enemyIntentCells(enemy).map(c=>key(c.x,c.y)));
+ const target=enemy.intentTarget||{x:state.player.x,y:state.player.y};
+ const out=[],push=(x,y,label)=>{
+  if(!inside(x,y)||tile(x,y)!==1||danger.has(key(x,y)))return;
+  if(enemyAt(x,y))return;
+  if(activeTrapAt(x,y)?.revealed)return;
+  const hazard=envAt(x,y);
+  if(hazard?.active&&hazard.burning)return;
+  out.push({x,y,label});
+ };
+
+ if(enemy.intent==="root_cage"){
+  push(target.x,target.y,"留");
+  return out;
+ }
+
+ if(["chain_cross","grave_cross","furnace_cross"].includes(enemy.intent)){
+  const origin=enemy.intent==="chain_cross"?enemy:target;
+  for(const [dx,dy] of [[-1,-1],[1,-1],[-1,1],[1,1]])push(origin.x+dx,origin.y+dy,"安全");
+  return out;
+ }
+
+ if(enemy.intent==="furnace_slam"){
+  // 炉心落としは中心+斜めが危険。隣接する縦横4方向を視覚的な逃げ候補にする。
+  for(const [dx,dy] of dirs)push(target.x+dx,target.y+dy,"安全");
+  return out;
+ }
+
+ if(enemy.intent==="grave_volley"){
+  // 墓標列の長軸に対して横へ1マス外れる候補を提示。
+  const cells=enemyIntentCells(enemy);
+  const horizontal=cells.length>=2&&cells.every(c=>c.y===cells[0].y);
+  if(horizontal){
+   push(target.x,target.y-1,"安全");push(target.x,target.y+1,"安全");
+  }else{
+   push(target.x-1,target.y,"安全");push(target.x+1,target.y,"安全");
+  }
+  return out;
+ }
+
+ if(["chain_sweep","root_sweep"].includes(enemy.intent)){
+  // 円形大技は候補を全部光らせず、現在位置から近い安全床4つだけを示す。
+  for(let dy=-3;dy<=3;dy++)for(let dx=-3;dx<=3;dx++){
+   if(Math.abs(dx)+Math.abs(dy)!==3)continue;
+   push(enemy.x+dx,enemy.y+dy,"安全");
+  }
+  out.sort((a,b)=>
+   (Math.abs(a.x-state.player.x)+Math.abs(a.y-state.player.y))-
+   (Math.abs(b.x-state.player.x)+Math.abs(b.y-state.player.y))
+  );
+  return out.slice(0,4);
+ }
+ return out;
+}
+function wardenTelegraphCountdown(enemy,now=realtimeNow()){
+ if(!enemy?.boss||!enemy.intent||!realtimeCombatActive())return"";
+ const seconds=realtimeWardenIntentSeconds(enemy,now);
+ if(seconds<=0)return"NOW";
+ return seconds<1?seconds.toFixed(1):seconds.toFixed(1);
+}
+function drawWardenSafeCell(cell,t,sx,sy,inView){
+ if(!inView(cell.x,cell.y)||!state.visible[key(cell.x,cell.y)])return;
+ const px=sx(cell.x),py=sy(cell.y);
+ const pulse=(Math.sin(t*.22+cell.x*.8+cell.y*.4)+1)*.5;
+ ctx.save();
+ ctx.fillStyle=`rgba(86,226,197,${.10+.07*pulse})`;
+ ctx.fillRect(px+3,py+3,TILE-6,TILE-6);
+ ctx.strokeStyle=`rgba(141,255,226,${.78+.18*pulse})`;
+ ctx.lineWidth=2;
+ ctx.strokeRect(px+4,py+4,TILE-8,TILE-8);
+ ctx.fillStyle="#dffff4";
+ ctx.font="bold 9px system-ui,sans-serif";
+ ctx.textAlign="center";
+ ctx.textBaseline="middle";
+ ctx.fillText(cell.label||"SAFE",px+TILE/2,py+TILE/2+.5);
+ ctx.restore();
+}
+function drawWardenTelegraphInstruction(enemy,t,sx,sy,inView){
+ if(!enemy?.boss||!enemy.intent||!wardenTelegraphVisual(enemy.intent))return;
+ const visual=wardenTelegraphVisual(enemy.intent);
+ const safe=wardenTelegraphSafeCells(enemy);
+ for(const cell of safe)drawWardenSafeCell(cell,t,sx,sy,inView);
+
+ let anchor={x:enemy.x,y:enemy.y};
+ if(!inView(anchor.x,anchor.y)||!state.visible[key(anchor.x,anchor.y)]){
+  const target=enemy.intentTarget;
+  if(!target||!inView(target.x,target.y)||!state.visible[key(target.x,target.y)])return;
+  anchor=target;
+ }
+ const px=sx(anchor.x),py=sy(anchor.y);
+ const countdown=wardenTelegraphCountdown(enemy);
+ const rule=visual.rule;
+ const width=Math.max(34,Math.max(countdown.length,rule.length)*6+8);
+ const x=Math.max(1,Math.min(canvas.width-width-1,px+TILE/2-width/2));
+ const y=Math.max(2,py-18);
+
+ ctx.save();
+ ctx.globalAlpha=.94;
+ ctx.fillStyle="rgba(12,8,16,.88)";
+ ctx.fillRect(x,y,width,15);
+ ctx.strokeStyle=visual.danger;
+ ctx.lineWidth=1.5;
+ ctx.strokeRect(x+.5,y+.5,width-1,14);
+ ctx.textAlign="center";
+ ctx.textBaseline="middle";
+ ctx.font="bold 9px system-ui,sans-serif";
+ ctx.fillStyle="#fff7dd";
+ ctx.fillText(`${rule} ${countdown}`,x+width/2,y+7.5);
+ ctx.restore();
+}
 function draw(){
  const cam=cameraOrigin();
  const t=(state.visual?.time||0);
@@ -26889,90 +27019,77 @@ function draw(){
   ctx.strokeRect(sx(c.x)+3,sy(c.y)+3,TILE-6,TILE-6);
  }
 
- // 敵の次ターン攻撃範囲：通常攻撃と四種の番人攻撃を描き分ける。
+ // 敵の固定予兆。番人は技名を読まなくても形と安全候補で判断できる視覚言語を使う。
  const dangerPulse=(Math.sin(t*.26)+1)*.5;
  for(const e of state.enemies){
   const cells=enemyIntentCells(e);
+  if(!cells.length)continue;
   const target=e.intentTarget||cells[cells.length-1];
+  const wardenVisual=e.boss?wardenTelegraphVisual(e.intent):null;
+
   for(const c of cells){
    if(!inView(c.x,c.y)||!state.visible[key(c.x,c.y)])continue;
    const px=sx(c.x),py=sy(c.y);
    const explode=e.intent==="explode";
    const bolt=e.intent==="bolt";
    const heavy=e.intent==="heavy";
-   const chain=e.intent==="chain_sweep";
-   const grave=e.intent==="grave_volley";
-   const furnace=e.intent==="furnace_slam";
-   const root=e.intent==="root_cage";
+   const family=wardenVisual?.family||"";
 
-   ctx.fillStyle=chain
-    ?`rgba(221,185,67,${.16+.12*dangerPulse})`
-    :grave
-    ?`rgba(164,91,234,${.19+.11*dangerPulse})`
-    :furnace
-    ?`rgba(255,92,42,${.22+.13*dangerPulse})`
-    :root
-    ?`rgba(87,174,87,${.18+.11*dangerPulse})`
-    :explode
-    ?`rgba(255,116,42,${.20+.12*dangerPulse})`
-    :bolt
-    ?`rgba(190,76,255,${.17+.11*dangerPulse})`
-    :heavy
-    ?`rgba(132,30,50,${.26+.13*dangerPulse})`
-    :`rgba(255,68,94,${.18+.12*dangerPulse})`;
+   if(wardenVisual){
+    const [r,g,b]=wardenVisual.fill;
+    ctx.fillStyle=`rgba(${r},${g},${b},${.17+.13*dangerPulse})`;
+    ctx.strokeStyle=wardenVisual.danger;
+   }else{
+    ctx.fillStyle=explode
+     ?`rgba(255,116,42,${.20+.12*dangerPulse})`
+     :bolt
+     ?`rgba(190,76,255,${.17+.11*dangerPulse})`
+     :heavy
+     ?`rgba(132,30,50,${.26+.13*dangerPulse})`
+     :`rgba(255,68,94,${.18+.12*dangerPulse})`;
+    ctx.strokeStyle=explode
+     ?"rgba(255,195,91,.99)"
+     :bolt
+     ?"rgba(222,157,255,.99)"
+     :heavy
+     ?"rgba(255,111,132,.99)"
+     :"rgba(255,144,158,.98)";
+   }
+
    ctx.fillRect(px+1,py+1,TILE-2,TILE-2);
-
-   ctx.strokeStyle=chain
-    ?"rgba(255,224,112,.99)"
-    :grave
-    ?"rgba(225,168,255,.99)"
-    :furnace
-    ?"rgba(255,180,92,.99)"
-    :root
-    ?"rgba(170,230,128,.99)"
-    :explode
-    ?"rgba(255,195,91,.99)"
-    :bolt
-    ?"rgba(222,157,255,.99)"
-    :heavy
-    ?"rgba(255,111,132,.99)"
-    :"rgba(255,144,158,.98)";
-   ctx.lineWidth=(heavy||chain||furnace)?2.5:1.5;
+   ctx.lineWidth=wardenVisual?2.5:(heavy?2.5:1.5);
    ctx.strokeRect(px+2.5,py+2.5,TILE-5,TILE-5);
 
-   if(explode||furnace){
-    ctx.beginPath();
-    if(furnace){
-     ctx.moveTo(px+5,py+5);ctx.lineTo(px+17,py+17);
-     ctx.moveTo(px+17,py+5);ctx.lineTo(px+5,py+17);
-    }else{
-     ctx.moveTo(px+6,py+11);ctx.lineTo(px+16,py+11);
-     ctx.moveTo(px+11,py+6);ctx.lineTo(px+11,py+16);
-    }
-    ctx.stroke();
-   }else if(bolt||grave){
-    ctx.beginPath();
-    if(grave){
-     ctx.moveTo(px+5,py+6);ctx.lineTo(px+17,py+6);
-     ctx.moveTo(px+5,py+11);ctx.lineTo(px+17,py+11);
-     ctx.moveTo(px+5,py+16);ctx.lineTo(px+17,py+16);
-    }else{
-     const dx=Math.sign((target?.x??c.x)-e.x),dy=Math.sign((target?.y??c.y)-e.y);
-     ctx.moveTo(px+11-dx*5,py+11-dy*5);
-     ctx.lineTo(px+11+dx*5,py+11+dy*5);
-    }
-    ctx.stroke();
-   }else if(root){
-    ctx.beginPath();
+   // 形状記号も色と併用する。色覚差や配信圧縮でも技の種類を識別できる。
+   ctx.beginPath();
+   if(e.intent==="furnace_slam"){
+    ctx.moveTo(px+5,py+5);ctx.lineTo(px+17,py+17);
+    ctx.moveTo(px+17,py+5);ctx.lineTo(px+5,py+17);
+   }else if(["chain_cross","grave_cross","furnace_cross"].includes(e.intent)){
+    ctx.moveTo(px+5,py+11);ctx.lineTo(px+17,py+11);
+    ctx.moveTo(px+11,py+5);ctx.lineTo(px+11,py+17);
+   }else if(e.intent==="grave_volley"){
+    ctx.moveTo(px+5,py+6);ctx.lineTo(px+17,py+6);
+    ctx.moveTo(px+5,py+11);ctx.lineTo(px+17,py+11);
+    ctx.moveTo(px+5,py+16);ctx.lineTo(px+17,py+16);
+   }else if(e.intent==="root_cage"){
     ctx.moveTo(px+5,py+17);ctx.quadraticCurveTo(px+8,py+8,px+11,py+5);
     ctx.moveTo(px+17,py+17);ctx.quadraticCurveTo(px+14,py+8,px+11,py+5);
-    ctx.stroke();
+   }else if(["chain_sweep","root_sweep"].includes(e.intent)){
+    ctx.arc(px+11,py+11,5.5,0,Math.PI*2);
+    ctx.moveTo(px+11,py+3);ctx.lineTo(px+11,py+7);
+   }else if(explode){
+    ctx.moveTo(px+6,py+11);ctx.lineTo(px+16,py+11);
+    ctx.moveTo(px+11,py+6);ctx.lineTo(px+11,py+16);
+   }else if(bolt){
+    const dx=Math.sign((target?.x??c.x)-e.x),dy=Math.sign((target?.y??c.y)-e.y);
+    ctx.moveTo(px+11-dx*5,py+11-dy*5);
+    ctx.lineTo(px+11+dx*5,py+11+dy*5);
    }else{
-    ctx.beginPath();
     ctx.moveTo(px+5,py+16);ctx.lineTo(px+16,py+5);
-    if(heavy||chain){ctx.moveTo(px+7,py+18);ctx.lineTo(px+18,py+7)}
-    ctx.stroke();
+    if(heavy){ctx.moveTo(px+7,py+18);ctx.lineTo(px+18,py+7)}
    }
+   ctx.stroke();
 
    if(c.x===state.player.x&&c.y===state.player.y){
     ctx.fillStyle="#fff0f2";
@@ -26980,6 +27097,8 @@ function draw(){
     ctx.fillRect(px+10,py+14,2,2);
    }
   }
+
+  if(wardenVisual)drawWardenTelegraphInstruction(e,t,sx,sy,inView);
  }
 
  if(state.visible[key(state.stairs.x,state.stairs.y)]){
