@@ -5825,7 +5825,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.20 TEMPO 180</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.22 DENSITY UP</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6123,6 +6123,8 @@ body,button,input,select,textarea{font-size:12px}
           <li>iPhoneの仕様により、音は最初のタップ後に開始します。端末の消音スイッチや音量設定も影響します。</li>
           <li><b>リアルタイム戦闘・正式採用</b>：全階層で敵種ごとの実時間周期で世界が進み、何もしなくても敵が動きます。メニュー・レベルアップ選択・階層紹介など判断用UIを開いている間だけ敵時間が停止します。</li>
           <li><b>v4.20・敵テンポ</b>：通常時の敵判断は、速い敵約0.36秒・標準約0.54秒・遅い敵約0.72秒・番人約0.72秒。以前より約14%高速化しています。一方、構え・踏み止まり・凍結・番人予兆などの防御時間は別に補正して短縮しないようにしています。</li>
+          <li><b>v4.21・敵の生息行動</b>：未発見の敵も棒立ちせず、種類ごとの間隔で巣・部屋の周辺を巡回します。穴獣や穿ち獣は広く直進気味、骸兵は狭く巡回、術師・司祭はゆっくり歩きます。移動によって視線が通れば発見されます。また正面視界でなくても開けた斜め位置に居続けると「？」警戒が蓄積し、確率でこちらの気配に気づきます。</li>
+          <li><b>v4.22・敵密度</b>：第1〜20層の通常個体数を全体的に増加。序盤は+1〜2、通常探索は主に+2、休息階は+1、番人階は据え置きです。包囲階は通常個体を増やした上で従来の包囲襲来も発生します。第21層以降の通常個体上限も26→28へ上げています。</li>
           <li><b>リアルタイム番人</b>：番人は約0.72秒周期。固有大技は約0.90〜1.62秒の固定予兆を出し、解決後は約1.62秒必ず硬直します。第5層は円/十字の鎖、第10層は列/十字の墓標、第15層は斜め/十字の炉心、第20層は「中心に留まる根檻」と「外へ逃げる根冠大環」を見分けます。ボスHUDは予兆秒数と硬直秒数を直接表示します。</li>
           <li><b>番人予兆の盤面表示</b>：危険床は番人ごとの色と形状記号で表示し、実際に通行できる安全候補だけを青緑色で「安全」と表示します。根檻だけは中心へ「留」を表示。番人または着弾地点の上には「外へ 1.2」「斜め 0.8」のように、避け方と残り秒数を直接表示します。</li>
           <li><b>v4.12・世界時間契約</b>：構え約1.08秒、踏み止まり約1.26秒、よろめき約0.72秒、凍結1段階約0.90秒を敵速度ではなく共通の世界時間で管理します。集中中は世界そのものが遅くなるため、これらの実時間も同じ倍率で伸びます。高速敵だけ凍結が即解除される、といった速度差による不公平をなくします。</li>
@@ -11514,6 +11516,11 @@ function buildExpeditionReport(outcome,details={}){
   realtimeWardenSignatureHits:stats.realtimeWardenSignatureHits||0,
   realtimeWardenRecoveryHits:stats.realtimeWardenRecoveryHits||0,
   realtimeWardenRecoveryDamage:stats.realtimeWardenRecoveryDamage||0,
+  enemyHabitatSteps:stats.enemyHabitatSteps||0,
+  enemyDiscoveries:stats.enemyDiscoveries||0,
+  enemyPeripheralDiscoveries:stats.enemyPeripheralDiscoveries||0,
+  initialEnemyPopulation:stats.initialEnemyPopulation||0,
+  peakInitialFloorPopulation:stats.peakInitialFloorPopulation||0,
   realtimePrimaryArts:stats.realtimePrimaryArts||0,
   realtimeSecondaryArts:stats.realtimeSecondaryArts||0,
   combatMutationProcs:stats.combatMutationProcs||0,
@@ -11647,6 +11654,7 @@ function buildExpeditionReport(outcome,details={}){
  if(report.realtimeAdaptationsDefeatedAfter)report.highlights.push(`第${report.realtimeAdaptationLastFloor}層で深淵適応を完成させた個体を撃破し、希少以上の報酬を獲得`);
  else if(report.realtimeAdaptationsPrevented)report.highlights.push(`深淵適応体を変異完成前に仕留め、危険な第二形態を阻止`);
  if(report.realtimeWardenSignatureReads>0)report.highlights.push(`番人の固有大技を${report.realtimeWardenSignatureReads}回見切り、硬直中に${report.realtimeWardenRecoveryHits}回・${report.realtimeWardenRecoveryDamage}ダメージを差し返した`);
+ if(report.enemyPeripheralDiscoveries>=3)report.highlights.push(`巡回中の敵に気配を${report.enemyPeripheralDiscoveries}回察知され、未発見状態から戦闘へ移行した`);
  if(report.realtimeSecondaryArts>=2)report.highlights.push(`リアルタイム副武技を${report.realtimeSecondaryArts}回使い、殴り合い以外の制御・位置取りを実行`);
  if(report.combatMutationProcs>=2){
   const names=Object.entries(report.combatMutationProcIds||{}).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([id,count])=>`${combatMutationData[id]?.short||id}${count}`).join("・");
@@ -14974,7 +14982,9 @@ function autonomousEnemyTurn(e){
 }
 
 function enemyDetectionRadius(e){
- const base={skeleton:4,warg:5,mage:7,bomber:4,warden:8}[e.type]||4;
+ const base={
+  skeleton:4,warg:6,mage:7,bomber:4,priest:6,charger:5,leech:6,warden:8
+ }[e.type]||4;
  // 光の騒音は以前より弱くし、敵がマップ全体から集まらないようにする。
  const light=currentLight();
  return Math.max(1,base+Math.ceil(light.noise*.35)+(light.detectionMod||0)+(eliteHas(e,"swift")?1:0)+(eliteHas(e,"lightEater")&&light.radius>0?2:0)-(tagTier("shadow")>=3?1:0)+floorPhenomenonValue("enemyDetection"));
@@ -14990,6 +15000,32 @@ function clearLineBetween(ax,ay,bx,by,maxRange){
  }
  return true;
 }
+// 斜め方向の「視界の端」を判定するための格子レイ。
+// これは確定発見ではなく peripheral notice の候補判定だけに使う。
+function clearPeripheralSightBetween(ax,ay,bx,by,maxRange){
+ const manhattan=Math.abs(ax-bx)+Math.abs(ay-by);
+ if(manhattan>maxRange)return false;
+ let x=ax,y=ay;
+ const dx=Math.abs(bx-ax),dy=Math.abs(by-ay);
+ const sxStep=ax<bx?1:-1,syStep=ay<by?1:-1;
+ let err=dx-dy;
+ let guard=0;
+ while((x!==bx||y!==by)&&guard++<32){
+  const prevX=x,prevY=y;
+  const e2=err*2;
+  if(e2>-dy){err-=dy;x+=sxStep}
+  if(e2<dx){err+=dx;y+=syStep}
+  if(x!==prevX&&y!==prevY){
+   // 両脇が壁の完全な角越しは視認できない。
+   const sideA=inside(x,prevY)&&tile(x,prevY)===1;
+   const sideB=inside(prevX,y)&&tile(prevX,y)===1;
+   if(!sideA&&!sideB)return false;
+  }
+  if(x===bx&&y===by)break;
+  if(!inside(x,y)||tile(x,y)!==1)return false;
+ }
+ return x===bx&&y===by;
+}
 function enemySeesPlayer(e){
  const radius=enemyDetectionRadius(e);
  return clearLineBetween(e.x,e.y,state.player.x,state.player.y,radius);
@@ -15002,14 +15038,59 @@ function enemyHearsPlayer(e){
  if(state.lastAction==="move"&&e.type==="warg")return d<=(hasAbyssAdaptation("echoStep")?5:6);
  return false;
 }
+const enemyPeripheralNoticeBase={
+ skeleton:.08,warg:.22,mage:.14,bomber:.07,priest:.13,charger:.12,leech:.18
+};
+function enemyPeripheralNoticesPlayer(e){
+ if(!realtimeCombatActive()||e?.boss||e?.echoGuard)return false;
+ const radius=enemyDetectionRadius(e);
+ const dist=Math.abs(e.x-state.player.x)+Math.abs(e.y-state.player.y);
+ if(dist<2||dist>radius+1){
+  e.suspicion=Math.max(0,(e.suspicion||0)-8);
+  return false;
+ }
+ if(!clearPeripheralSightBetween(e.x,e.y,state.player.x,state.player.y,radius+1)){
+  e.suspicion=Math.max(0,(e.suspicion||0)-6);
+  return false;
+ }
+
+ // 視界の端に何度も居続けるほど「何かいる」と気づく。
+ const proximity=Math.max(0,(radius+1-dist)/(radius+1));
+ const actionBoost=state.lastAction==="move"?1.18:state.lastAction==="attack"?1.32:1;
+ const light=currentLight();
+ const lightBoost=1+Math.min(.35,(light.noise||0)*.10);
+ const suspicionGain=8+Math.round(proximity*12)+(e.type==="warg"||e.type==="leech"?5:0);
+ e.suspicion=Math.min(100,(e.suspicion||0)+suspicionGain);
+
+ const base=enemyPeripheralNoticeBase[e.type]??.08;
+ const chance=Math.min(.62,(base+proximity*.10+(e.suspicion||0)*.0018)*actionBoost*lightBoost);
+ if(rng()>=chance)return false;
+
+ e.suspicion=0;
+ return true;
+}
+function markEnemyDiscovery(e,sense){
+ const newly=!(e.alert>0)&&!e.lastSeen;
+ if(!newly)return;
+ const stats=ensureRunStats();
+ stats.enemyDiscoveries=(stats.enemyDiscoveries||0)+1;
+ if(sense==="peripheral")stats.enemyPeripheralDiscoveries=(stats.enemyPeripheralDiscoveries||0)+1;
+ if(state.visible[key(e.x,e.y)]){
+  spawnCombatText(e.x,e.y,sense==="sound"?"♪ !":"!","critical",30);
+ }
+}
 function updateEnemyAwareness(e){
  const sees=enemySeesPlayer(e);
  const hears=enemyHearsPlayer(e);
- if(sees||hears){
+ const peripheral=!sees&&!hears&&enemyPeripheralNoticesPlayer(e);
+ if(sees||hears||peripheral){
+  const sense=sees?"sight":hears?"sound":"peripheral";
+  markEnemyDiscovery(e,sense);
   e.rivalId=null;
   e.alert=e.boss||e.nemesis?8:5;
   e.lastSeen={x:state.player.x,y:state.player.y};
-  if(e.tacticalPackId)alertTacticalPack(e.tacticalPackId,sees?"sight":"sound");
+  e.suspicion=0;
+  if(e.tacticalPackId)alertTacticalPack(e.tacticalPackId,sense==="sound"?"sound":"sight");
   return true;
  }
  if((e.alert||0)>0){
@@ -15024,6 +15105,90 @@ function moveTowardPoint(e,target){
  const dx=Math.sign(target.x-e.x),dy=Math.sign(target.y-e.y);
  const options=Math.abs(target.x-e.x)>Math.abs(target.y-e.y)?[[dx,0],[0,dy]]:[[0,dy],[dx,0]];
  return tryMoveEnemy(e,options);
+}
+const enemyHabitatProfiles={
+ skeleton:{min:7,max:11,radius:4,inertia:.62,moveChance:.84},
+ warg:{min:4,max:7,radius:7,inertia:.72,moveChance:.94},
+ mage:{min:6,max:10,radius:5,inertia:.50,moveChance:.78},
+ bomber:{min:7,max:12,radius:4,inertia:.44,moveChance:.72},
+ priest:{min:8,max:13,radius:5,inertia:.48,moveChance:.72},
+ charger:{min:5,max:9,radius:6,inertia:.70,moveChance:.88},
+ leech:{min:5,max:9,radius:6,inertia:.58,moveChance:.86}
+};
+function enemyHabitatProfile(e){
+ return enemyHabitatProfiles[e?.type]||{min:7,max:12,radius:5,inertia:.55,moveChance:.78};
+}
+function ensureEnemyHabitat(e){
+ if(!e)return null;
+ const profile=enemyHabitatProfile(e);
+ if(!Number.isFinite(e.habitatNextPulse)){
+  e.habitatNextPulse=(realtimeCombatRuntime.pulse||0)+rint(profile.min,profile.max);
+ }
+ if(!Array.isArray(e.habitatDir)||e.habitatDir.length!==2)e.habitatDir=choice(dirs).slice();
+ if(!Number.isFinite(e.habitatSteps))e.habitatSteps=0;
+ return profile;
+}
+function enemyHabitatHomeDistance(e,x=e.x,y=e.y){
+ const home=e.home||{x:e.x,y:e.y};
+ return Math.abs(x-home.x)+Math.abs(y-home.y);
+}
+function habitatStepAllowed(e,dx,dy,radius){
+ const nx=e.x+dx,ny=e.y+dy;
+ if(tile(nx,ny)!==1||enemyAt(nx,ny))return false;
+ if(nx===state.player.x&&ny===state.player.y)return false;
+ return enemyHabitatHomeDistance(e,nx,ny)<=radius;
+}
+function enemyHabitatStepOptions(e,profile){
+ const preferred=e.habitatDir||choice(dirs);
+ const candidates=[];
+ if(rng()<profile.inertia)candidates.push(preferred);
+ // 種ごとに少し違う「歩き癖」。穴獣/穿ち獣は直進しやすく、術師系は向きを変えやすい。
+ const shuffled=[...dirs].sort(()=>rng()-.5);
+ for(const dir of shuffled){
+  if(!candidates.some(([dx,dy])=>dx===dir[0]&&dy===dir[1]))candidates.push(dir);
+ }
+ return candidates.filter(([dx,dy])=>habitatStepAllowed(e,dx,dy,profile.radius));
+}
+function enemyHabitatTurn(e){
+ if(!realtimeCombatActive()||e?.boss||e?.echoGuard||e?.realtimeRelicRunner)return false;
+ const profile=ensureEnemyHabitat(e);
+ const pulse=realtimeCombatRuntime.pulse||0;
+ if(pulse<(e.habitatNextPulse||0))return true;
+
+ e.habitatNextPulse=pulse+rint(profile.min,profile.max);
+ e.patrol=(e.patrol||0)+1;
+
+ const homeDist=enemyHabitatHomeDistance(e);
+ let moved=false;
+ if(homeDist>profile.radius){
+  moved=moveTowardPoint(e,e.home);
+ }else if(rng()<profile.moveChance){
+  const options=enemyHabitatStepOptions(e,profile);
+  if(options.length){
+   const chosen=options[0];
+   moved=tryMoveEnemy(e,[chosen]);
+   if(moved)e.habitatDir=chosen.slice();
+  }
+ }
+
+ // 行き止まりや「立ち止まって周囲を見る」時は次の進行方向を変える。
+ if(!moved&&rng()<.72)e.habitatDir=choice(dirs).slice();
+
+ if(moved){
+  e.habitatSteps=(e.habitatSteps||0)+1;
+  const stats=ensureRunStats();
+  stats.enemyHabitatSteps=(stats.enemyHabitatSteps||0)+1;
+
+  // 生息移動した結果、真正面の視線が通ったならその場で気づく。
+  if(enemySeesPlayer(e)){
+   markEnemyDiscovery(e,"sight");
+   e.alert=5;
+   e.lastSeen={x:state.player.x,y:state.player.y};
+   e.suspicion=0;
+   if(e.tacticalPackId)alertTacticalPack(e.tacticalPackId,"sight");
+  }
+ }
+ return true;
 }
 function darknessPenalty(){
  if(floorPhenomenonValue("ambientLight"))return false;
@@ -15441,10 +15606,12 @@ function floorPlan(){
    1〜20層はゲームの完成見本として、敵密度を作者側で明示する。
    再生生態があるため、初期配置を下げても任意レベリングは失われない。 */
 const firstTwentyEnemyBudget={
- 1:4, 2:6, 3:7, 4:3, 5:4,
- 6:7, 7:8, 8:10, 9:4, 10:5,
- 11:9,12:10,13:12,14:5,15:6,
- 16:11,17:12,18:14,19:6,20:7
+ // v4.22: 通常探索は常に複数の気配が巡回する密度へ。
+ // 休息階は+1程度、番人階は据え置き、通常/圧力階は主に+2。
+ 1:5, 2:8, 3:9, 4:4, 5:4,
+ 6:9, 7:10, 8:12, 9:5, 10:5,
+ 11:11,12:12,13:14,14:6,15:6,
+ 16:13,17:14,18:16,19:7,20:7
 };
 function firstDepthEnemyBudget(floor=state?.floor||1){
  const value=firstTwentyEnemyBudget[Math.max(1,Math.floor(Number(floor)||1))];
@@ -17169,11 +17336,17 @@ function plannedEnemyCount(){
  const base=5+Math.floor(state.floor*1.15);
  const biomePressure=(currentBiomeKey()==="furnace"||currentBiomeKey()==="crypt")?1:0;
  const pulse=floorPulseValue("enemyBonus");
- const cap=floorPlan().boss?20:26;
+ const cap=floorPlan().boss?20:28;
  return Math.max(3,Math.min(
   cap+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+Math.max(0,floorForkValue("enemyBonus"))+Math.max(0,deepCycleValue("enemyBonus"))+Math.max(0,pulse),
   base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+floorForkValue("enemyBonus")+deepCycleValue("enemyBonus")+pulse+siegeOffset
  ));
+}
+function floorLivingDensityLabel(count=plannedEnemyCount()){
+ if(state.floor%5===0)return`番人層・通常個体 ${count}`;
+ if(isRestFloor())return`休息層・通常個体 ${count}`;
+ if(state?.realtimeIncident?.type==="siege")return`包囲層・初期個体 ${count} + 襲来`;
+ return`通常個体 ${count}`;
 }
 function plannedTrapCount(){
  const base=isRestFloor()?1:Math.min(10,2+Math.floor(state.floor/3));
@@ -17484,6 +17657,9 @@ function generateFloor(){
  state.player={x:start.cx,y:start.cy};state.stairs={x:end.cx,y:end.cy};
  state.visual=state.visual||{};state.visual.moveFrames=0;state.visual.attackFrames=0;state.visual.damageFrames=0;state.visual.flash=0;state.visual.shake=0;state.visual.hitX=null;state.visual.hitY=null;state.visual.effects=[];state.enemies=[];state.items=[];state.remains=[];state.ecology={spawnClock:0,totalRespawns:0,killsThisFloor:0};state.traps=[];state.specialTiles=[];state.environment=[];state.terrainFeatures=[];state.terrainKnowledge={};state.secretWalls=[];state.shortcuts=[];state.events=[];state.roomEncounters=[];state.visited={};state.visible={};state.bossDefeated=false;state.wardenAfterglow=null;state.wardenMastery=null;state.floorStats=null;state.floorObjective=null;state.floorPhenomenon=null;
  const enemyCount=plannedEnemyCount();
+ const densityStats=ensureRunStats();
+ densityStats.initialEnemyPopulation=(densityStats.initialEnemyPopulation||0)+enemyCount;
+ densityStats.peakInitialFloorPopulation=Math.max(densityStats.peakInitialFloorPopulation||0,enemyCount);
  for(let i=0;i<enemyCount;i++){
   const p=randomFloorCell(6);
   if(!p)break;
@@ -21017,19 +21193,15 @@ function enemyTurn(){
   const aware=updateEnemyAwareness(e);
   if(!aware&&!e.intent){
    if(autonomousEnemyTurn(e))continue;
-   e.patrol=(e.patrol||0)+1;
-   if(e.patrol%3===0){
-    const homeDist=Math.abs(e.x-e.home.x)+Math.abs(e.y-e.home.y);
-    if(homeDist>5)moveTowardPoint(e,e.home);
-    else if(rng()<.34)tryMoveEnemy(e,[...dirs].sort(()=>rng()-.5));
-   }
+   enemyHabitatTurn(e);
    continue;
   }
   if(!enemySeesPlayer(e)&&e.lastSeen&&!e.intent){
    const reached=e.x===e.lastSeen.x&&e.y===e.lastSeen.y;
    if(reached){
     e.lastSeen=null;e.alert=0;
-    if(rng()<.35)tryMoveEnemy(e,[...dirs].sort(()=>rng()-.5));
+    e.suspicion=Math.max(18,e.suspicion||0);
+    e.habitatNextPulse=(realtimeCombatRuntime.pulse||0)+2;
    }else{
     moveTowardPoint(e,e.lastSeen);
    }
@@ -24175,7 +24347,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.20",
+  version:"4.22",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -26665,6 +26837,7 @@ function enemyStatusTags(e){
  if(realtimeEnemyControlActive(e,"stagger"))tags.push(`よろめき ${realtimeEnemyControlSeconds(e,"stagger").toFixed(1)}秒`);
  if(realtimeEnemyControlActive(e,"root"))tags.push(`絡み根 ${realtimeEnemyControlSeconds(e,"root").toFixed(1)}秒`);
  if((e.alert||0)>0)tags.push("警戒 "+e.alert);
+ if((e.suspicion||0)>=28&&(e.alert||0)<=0)tags.push("気配を探っている");
  if(e.respawned)tags.push("再生個体");
  return tags;
 }
@@ -27154,6 +27327,10 @@ function draw(){
   if(e.status?.poison>0){ctx.fillStyle="#79c76b";ctx.fillRect(x+7,y+5,3,3)}
   if(e.status?.frozen>0){ctx.fillStyle="#86d4ff";ctx.fillRect(x+11,y+5,3,3)}
   if((e.alert||0)>0&&!e.intent){ctx.fillStyle="#f0d36b";ctx.fillRect(x+16,y+5,3,3)}
+  else if((e.suspicion||0)>=28&&!e.intent){
+   ctx.fillStyle="#f0d36b";ctx.font="bold 9px system-ui,sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
+   ctx.fillText("?",x+18,y+7);
+  }
   if(counterWindowActive(e)){
    ctx.strokeStyle="#f3d06b";ctx.lineWidth=1;
    ctx.strokeRect(x+1.5,y+1.5,TILE-3,TILE-3);
