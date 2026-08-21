@@ -5825,11 +5825,11 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.23 TEMPO 150</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.26 WORLD DEPTH</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
-<canvas id="game" width="374" height="462" aria-label="ダンジョン"></canvas>
+<canvas id="game" width="748" height="924" aria-label="ダンジョン"></canvas>
 <div id="impactOverlay" aria-hidden="true"></div>
 <div id="combatToast" aria-live="polite"></div>
 <div class="floorGoal" id="floorGoal"><b>探索目標</b><br>深淵へ踏み出す。</div>
@@ -6125,6 +6125,9 @@ body,button,input,select,textarea{font-size:12px}
           <li><b>v4.23・敵テンポ</b>：通常時は速い敵約0.30秒・標準約0.45秒・遅い敵約0.60秒・番人約0.60秒。v4.22よりさらに約17%高速化しています。構え・凍結・番人予兆・事件警告はpulse数を補正し、敵の高速化ほどは短くなりません。</li>
           <li><b>v4.21・敵の生息行動</b>：未発見の敵も棒立ちせず、種類ごとの間隔で巣・部屋の周辺を巡回します。穴獣や穿ち獣は広く直進気味、骸兵は狭く巡回、術師・司祭はゆっくり歩きます。移動によって視線が通れば発見されます。また正面視界でなくても開けた斜め位置に居続けると「？」警戒が蓄積し、確率でこちらの気配に気づきます。</li>
           <li><b>v4.22・敵密度</b>：第1〜20層の通常個体数を全体的に増加。序盤は+1〜2、通常探索は主に+2、休息階は+1、番人階は据え置きです。包囲階は通常個体を増やした上で従来の包囲襲来も発生します。第21層以降の通常個体上限も26→28へ上げています。</li>
+          <li><b>v4.24・狩りの位置取り</b>：発見後の敵は全員が同じ最短経路へ並ばず、役割で位置を選びます。穴獣・穿ち獣は空いている側面へ回り込み、骸兵は正面を詰め、骨術師・司祭は3〜5マスの射線位置、灯喰らいは2マス前後、爆ぜ虫は混雑していない接近路を狙います。三方向以上を塞がれると「包囲」と表示します。</li>
+          <li><b>v4.25・現代高精細ドット</b>：ゲーム画面の内部描画を2倍解像度化し、同じ17×21マスの視界とレトロなドット輪郭を維持したまま、0.5px単位の装飾、ランタンの発光、装備の金具、敵の微細な発光、床・壁の微細亀裂、霧と微粒子を追加しています。ゲーム判定や当たり判定は変更していません。</li>
+          <li><b>v4.26・迷宮景観密度</b>：墓廟の骨・鎖・葬送紋、炉心の熱亀裂・鋲板、凍結回廊の氷晶・氷裂、菌糸庭園の発光茸・蔓を背景装飾として追加。キャラ/敵には接地影、主人公ランタンには揺れ、階段・遺物・高レア装備には局所光と微細な煌めきを追加しています。</li>
           <li><b>リアルタイム番人</b>：番人は約0.60秒周期。固有大技は約0.90〜1.65秒の固定予兆を出し、解決後は約1.65秒必ず硬直します。第5層は円/十字の鎖、第10層は列/十字の墓標、第15層は斜め/十字の炉心、第20層は「中心に留まる根檻」と「外へ逃げる根冠大環」を見分けます。ボスHUDは予兆秒数と硬直秒数を直接表示します。</li>
           <li><b>番人予兆の盤面表示</b>：危険床は番人ごとの色と形状記号で表示し、実際に通行できる安全候補だけを青緑色で「安全」と表示します。根檻だけは中心へ「留」を表示。番人または着弾地点の上には「外へ 1.2」「斜め 0.8」のように、避け方と残り秒数を直接表示します。</li>
           <li><b>v4.12・世界時間契約</b>：構え約1.08秒、踏み止まり約1.26秒、よろめき約0.72秒、凍結1段階約0.90秒を敵速度ではなく共通の世界時間で管理します。集中中は世界そのものが遅くなるため、これらの実時間も同じ倍率で伸びます。高速敵だけ凍結が即解除される、といった速度差による不公平をなくします。</li>
@@ -6684,7 +6687,10 @@ body,button,input,select,textarea{font-size:12px}
 <script>
 "use strict";
 const COLS=35, ROWS=39, VIEW_COLS=17, VIEW_ROWS=21, TILE=22;
+const CANVAS_W=VIEW_COLS*TILE,CANVAS_H=VIEW_ROWS*TILE,RENDER_SCALE=2;
 const canvas=document.getElementById("game"), ctx=canvas.getContext("2d");
+ctx.imageSmoothingEnabled=false;
+ctx.setTransform(RENDER_SCALE,0,0,RENDER_SCALE,0,0);
 const $=id=>document.getElementById(id);
 const FLOOR_GOAL_EXPANDED_KEY="abyssal-roots-floor-goal-expanded";
 let floorGoalExpanded=false;
@@ -8566,6 +8572,66 @@ function drawBaseExplorer(g,palette,dark,skin,hurt,bob){
  g.fillStyle=hurt?"#ff7d8d":palette.body;g.fillRect(7,10+bob,9,6);
  g.fillStyle=palette.cloak;g.fillRect(6,13+bob,11,6);
 }
+function explorerLanternVisual(){
+ const type=state?.light?.on&&state?.light?.fuel>0?state.light.type:"none";
+ if(type==="arcane")return{core:"#d8fbff",mid:"#68cfff",glow:"rgba(84,194,255,.34)"};
+ if(type==="lantern")return{core:"#fff2bd",mid:"#ffc66d",glow:"rgba(255,188,82,.32)"};
+ if(type==="torch")return{core:"#fff0a0",mid:"#ff9b45",glow:"rgba(255,130,50,.30)"};
+ return{core:"#4d4656",mid:"#312a39",glow:"rgba(0,0,0,0)"};
+}
+function drawModernExplorerDetails(g,palette,dark,skin,bob,showAura){
+ const light=explorerLanternVisual();
+ const lanternSwing=Math.sin((state.visual?.time||0)*.075)*.75;
+
+ // 現代的な高密度ドット：0.5 logical px = backing canvas 1 physical px.
+ g.save();
+ g.lineWidth=.5;
+
+ // face/hair separation
+ g.fillStyle="#241b28";g.fillRect(8.5,4.5+bob,6,.5);
+ g.fillStyle="#efe1d8";g.fillRect(9.5,6.5+bob,4,.5);
+ g.fillStyle=palette.trim;g.globalAlpha=.82;g.fillRect(12.5,7+bob,.5,.5);g.globalAlpha=1;
+
+ // layered leather harness + belt hardware
+ g.fillStyle="#352a31";g.fillRect(7.5,11.5+bob,9,.5);
+ g.fillRect(8.5,14.5+bob,7,.5);
+ g.strokeStyle="#8d776b";
+ g.beginPath();g.moveTo(8,10.5+bob);g.lineTo(15.5,16.5+bob);
+ g.moveTo(15.5,10.5+bob);g.lineTo(8.5,16.5+bob);g.stroke();
+ g.fillStyle="#d1ad65";g.fillRect(11,14+bob,1.5,1);
+ g.fillStyle="#55423c";g.fillRect(6,15+bob,2,2);g.fillRect(15.5,15.5+bob,2,1.5);
+
+ // ragged cloak micro edge
+ g.fillStyle=palette.trim;g.globalAlpha=.42;
+ g.fillRect(5,18.5+bob,2,.5);g.fillRect(8,19+bob,1.5,.5);
+ g.fillRect(16,18.5+bob,2,.5);g.globalAlpha=1;
+
+ // boots / metal buckles
+ g.fillStyle="#0d0b10";g.fillRect(6.5,18+bob,4,3);g.fillRect(13.5,18+bob,4,3);
+ g.fillStyle="#7d6c66";g.fillRect(7,19+bob,3,.5);g.fillRect(14,19+bob,3,.5);
+
+ // lantern in the off hand: a visual identity anchor from the approved concepts.
+ g.save();g.translate(lanternSwing,0);
+ if(showAura&&light.glow!=="rgba(0,0,0,0)"){
+  const glow=g.createRadialGradient(4.5,12+bob,.5,4.5,12+bob,8);
+  glow.addColorStop(0,light.glow);glow.addColorStop(1,"rgba(0,0,0,0)");
+  g.fillStyle=glow;g.fillRect(-4,3+bob,17,18);
+ }
+ g.strokeStyle="#9d8766";g.lineWidth=.75;
+ g.beginPath();g.arc(4.5,8+bob,2,Math.PI,0);g.stroke();
+ g.fillStyle="#241e22";g.fillRect(2.5,8+bob,4,6);
+ g.strokeStyle="#a69172";g.strokeRect(2.75,8.25+bob,3.5,5.5);
+ g.fillStyle=light.mid;g.fillRect(3.5,10+bob,2,2.5);
+ g.fillStyle=light.core;g.fillRect(4,10.5+bob,1,1);
+ g.fillStyle="#d0b47b";g.fillRect(3,8+bob,3,.5);g.fillRect(3,13.5+bob,3,.5);
+ g.restore();
+
+ // sword edge catches lantern light
+ g.strokeStyle=light.core;g.globalAlpha=.72;
+ g.beginPath();g.moveTo(18,11+bob);g.lineTo(20,17+bob);g.stroke();
+ g.globalAlpha=1;
+ g.restore();
+}
 function drawAppearanceSigil(g,sigil,palette,dark,bob){
  switch(sigil){
   case "ember":
@@ -8798,6 +8864,7 @@ function drawExplorerFigure(g,x,y,scale=1,hurt=false,bob=0,showAura=true){
    break;
  }
 
+ drawModernExplorerDetails(g,palette,dark,skin,bob,showAura);
  drawAppearanceSigil(g,sigil,palette,dark,bob);
 
  g.fillStyle=dark;
@@ -11398,6 +11465,9 @@ function expeditionHeroMomentCandidates(report){
  }else if((report.harvestTemptationsOffered||0)>0&&(report.harvestTemptationsClaimed||0)===0&&report.outcome==="return"){
   add(66,"harvest_discipline","return","欲を断った","深淵の誘いを無視して成果を確定",`取れば強い武器があった。それでも現在の戦利品を失わない判断を選んだ。`);
  }
+ if((report.realtimeSurroundedEvents||0)>=2&&(report.maxAdjacentThreats||0)>=3&&report.outcome==="return"){
+  add(87,"surround_escape","combat","包囲から生還","三方向以上の包囲を何度も突破",`高速化した敵群に${report.realtimeSurroundedEvents}回囲まれながら、位置取りと武技で退路を作って灯台まで帰還した。`);
+ }
  if((report.realtimeWardenSignatureReads||0)>=5&&(report.realtimeWardenRecoveryHits||0)>=4&&(report.realtimeWardenSignatureHits||0)<=1){
   add(90,"warden_rhythm","combat","番人の呼吸を読んだ","大技を見切り、硬直へ反撃を差し込んだ",`固有大技を${report.realtimeWardenSignatureReads}回回避し、反撃時間へ${report.realtimeWardenRecoveryHits}回攻撃を通した。リアルタイム番人の攻防を主導した。`);
  }
@@ -11521,6 +11591,10 @@ function buildExpeditionReport(outcome,details={}){
   enemyPeripheralDiscoveries:stats.enemyPeripheralDiscoveries||0,
   initialEnemyPopulation:stats.initialEnemyPopulation||0,
   peakInitialFloorPopulation:stats.peakInitialFloorPopulation||0,
+  combatFormationMoves:stats.combatFormationMoves||0,
+  combatFlankMoves:stats.combatFlankMoves||0,
+  realtimeSurroundedEvents:stats.realtimeSurroundedEvents||0,
+  maxAdjacentThreats:stats.maxAdjacentThreats||0,
   realtimePrimaryArts:stats.realtimePrimaryArts||0,
   realtimeSecondaryArts:stats.realtimeSecondaryArts||0,
   combatMutationProcs:stats.combatMutationProcs||0,
@@ -11655,6 +11729,7 @@ function buildExpeditionReport(outcome,details={}){
  else if(report.realtimeAdaptationsPrevented)report.highlights.push(`深淵適応体を変異完成前に仕留め、危険な第二形態を阻止`);
  if(report.realtimeWardenSignatureReads>0)report.highlights.push(`番人の固有大技を${report.realtimeWardenSignatureReads}回見切り、硬直中に${report.realtimeWardenRecoveryHits}回・${report.realtimeWardenRecoveryDamage}ダメージを差し返した`);
  if(report.enemyPeripheralDiscoveries>=3)report.highlights.push(`巡回中の敵に気配を${report.enemyPeripheralDiscoveries}回察知され、未発見状態から戦闘へ移行した`);
+ if(report.realtimeSurroundedEvents>0)report.highlights.push(`敵群に${report.realtimeSurroundedEvents}回包囲され、最大${report.maxAdjacentThreats}方向から同時に圧力を受けた`);
  if(report.realtimeSecondaryArts>=2)report.highlights.push(`リアルタイム副武技を${report.realtimeSecondaryArts}回使い、殴り合い以外の制御・位置取りを実行`);
  if(report.combatMutationProcs>=2){
   const names=Object.entries(report.combatMutationProcIds||{}).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([id,count])=>`${combatMutationData[id]?.short||id}${count}`).join("・");
@@ -21299,25 +21374,28 @@ function enemyTurn(){
    if(ally&&dist>=2){setSupportIntent(e,"dirge",ally);addLog(`${e.name}が${ally.name}へ墓鐘の祈りを始めた！`);continue}
    if(dist===1){stepAwayFromPlayer(e);continue}
    if(ally){moveTowardPoint(e,ally);continue}
-   stepTowardPlayer(e);continue;
+   if(!combatFormationMove(e,"ranged"))stepTowardPlayer(e);
+   continue;
   }
 
   if(e.type==="charger"){
    const aligned=e.x===state.player.x||e.y===state.player.y;
    if(aligned&&dist>=2&&dist<=5){setEnemyIntent(e,"charge");addLog(e.name+"が一直線に地面を掻き、突進態勢に入った！");continue}
    if(dist===1){enemyAttack(e,.9,"角突き");if(state.gameOver)return;continue}
-   if(dist<=4){flankPlayer(e);continue}
-   stepTowardPlayer(e);continue;
+   if(!combatFormationMove(e,"flank"))stepTowardPlayer(e);
+   continue;
   }
 
   if(e.type==="leech"){
    if(dist<=2){setEnemyIntent(e,"light_drain");addLog(e.name+"が灯火へ口を開き、吸光を始めた！");continue}
-   stepTowardPlayer(e);continue;
+   if(!combatFormationMove(e,"harass"))stepTowardPlayer(e);
+   continue;
   }
 
   if(e.type==="bomber"){
    if(dist===1){setEnemyIntent(e,"explode");addLog(e.name+"の腹部が赤く膨らんだ！");continue}
-   stepTowardPlayer(e);continue;
+   if(!combatFormationMove(e,"breach"))stepTowardPlayer(e);
+   continue;
   }
 
   if(e.type==="mage"){
@@ -21325,21 +21403,62 @@ function enemyTurn(){
     setEnemyIntent(e,"bolt");addLog(e.name+"が骨弾の詠唱を始めた！");continue;
    }
    if(dist===1){stepAwayFromPlayer(e);continue}
-   stepTowardPlayer(e);continue;
+   if(!combatFormationMove(e,"ranged"))stepTowardPlayer(e);
+   continue;
   }
 
   if(e.type==="warg"){
    if(dist===1){setEnemyIntent(e,"lunge");addLog(e.name+"が低く身構えた！");continue}
-   if(dist<=3){flankPlayer(e);continue}
-   stepTowardPlayer(e);continue;
+   if(!combatFormationMove(e,"flank"))stepTowardPlayer(e);
+   continue;
   }
 
   if(e.type==="skeleton"){
    if(dist===1){setEnemyIntent(e,"heavy");addLog(e.name+"が盾を構えて武器を振り上げた！");continue}
-   if(dist===2){e.guarding=true;stepTowardPlayer(e);continue}
-   stepTowardPlayer(e);continue;
+   if(dist===2)e.guarding=true;
+   if(!combatFormationMove(e,"front"))stepTowardPlayer(e);
+   continue;
   }
  }
+}
+function realtimeAdjacentThreatMask(){
+ let mask=0;
+ const around=[[0,-1,1],[1,0,2],[0,1,4],[-1,0,8]];
+ for(const [dx,dy,bit] of around){
+  const enemy=enemyAt(state.player.x+dx,state.player.y+dy);
+  if(enemy&&!enemy.rivalId&&(enemy.boss||enemy.intent||enemy.alert>0||enemy.lastSeen))mask|=bit;
+ }
+ return mask;
+}
+function bitCount4(mask){
+ let count=0;
+ for(const bit of[1,2,4,8])if(mask&bit)count++;
+ return count;
+}
+function updateRealtimeSurroundPressure(){
+ if(!realtimeCombatActive())return 0;
+ const mask=realtimeAdjacentThreatMask();
+ const previous=realtimeCombatRuntime.surroundMask||0;
+ const count=bitCount4(mask),before=bitCount4(previous);
+ realtimeCombatRuntime.surroundMask=mask;
+
+ if(count>=3&&before<3){
+  const pulse=realtimeCombatRuntime.pulse||0;
+  const stats=ensureRunStats();
+  stats.realtimeSurroundedEvents=(stats.realtimeSurroundedEvents||0)+1;
+  stats.maxAdjacentThreats=Math.max(stats.maxAdjacentThreats||0,count);
+  if(pulse-(realtimeCombatRuntime.surroundAnnouncedPulse||-999)>=12){
+   realtimeCombatRuntime.surroundAnnouncedPulse=pulse;
+   spawnCombatText(state.player.x,state.player.y,count===4?"四方包囲":"包囲","critical",42);
+   showCombatToast(
+    count===4?"四方を塞がれた":"包囲・3方向",
+    "ダッシュ・旋撃・氷環・敵同士の攻撃で突破口を作れ",
+    "critical"
+   );
+   triggerImpactFeedback("critical",{haptic:"heavy",duration:460});
+  }
+ }
+ return count;
 }
 function enemyAttack(e,mult=1,label="攻撃"){
  let raw=Math.max(1,Math.round((e.atk+eliteAttackBonus(e)+rint(-1,2))*mult*(mutation()?.damageMul||1))-totalDef());
@@ -22304,10 +22423,103 @@ function stepAwayFromPlayer(e){
  const dx=-Math.sign(state.player.x-e.x),dy=-Math.sign(state.player.y-e.y);
  return tryMoveEnemy(e,[[dx,0],[0,dy],...[...dirs].sort(()=>rng()-.5)]);
 }
+
+function combatApproachSide(x,y){
+ const dx=x-state.player.x,dy=y-state.player.y;
+ if(Math.abs(dx)>=Math.abs(dy))return dx>=0?"east":"west";
+ return dy>=0?"south":"north";
+}
+function combatFormationAllies(e){
+ return(state.enemies||[]).filter(other=>
+  other!==e&&!other.boss&&!other.echoGuard&&!other.realtimeRelicRunner&&
+  !other.rivalId&&(other.alert>0||other.lastSeen)&&
+  Math.abs(other.x-state.player.x)+Math.abs(other.y-state.player.y)<=6
+ );
+}
+function combatSideOccupancy(e,side){
+ return combatFormationAllies(e).filter(other=>
+  combatApproachSide(other.x,other.y)===side&&
+  Math.abs(other.x-state.player.x)+Math.abs(other.y-state.player.y)<=3
+ ).length;
+}
+function combatFormationCellSafe(e,x,y){
+ if(tile(x,y)!==1||enemyAt(x,y)||(x===state.player.x&&y===state.player.y))return false;
+ const trap=activeTrapAt(x,y);
+ if(trap?.revealed)return false;
+ const env=envAt(x,y);
+ if(env?.active&&env.burning)return false;
+ return true;
+}
+function combatFormationRole(e){
+ if(e.type==="warg"||e.type==="charger")return"flank";
+ if(e.type==="mage"||e.type==="priest")return"ranged";
+ if(e.type==="bomber")return"breach";
+ if(e.type==="leech")return"harass";
+ return"front";
+}
+function combatFormationScore(e,x,y,role){
+ const d=Math.abs(x-state.player.x)+Math.abs(y-state.player.y);
+ const side=combatApproachSide(x,y);
+ const sideCrowd=combatSideOccupancy(e,side);
+ const nearbyAllies=combatFormationAllies(e).filter(other=>Math.abs(other.x-x)+Math.abs(other.y-y)<=1).length;
+ let score=0;
+
+ if(role==="ranged"){
+  score-=Math.abs(d-4)*2.2;
+  if(d>=3&&d<=5)score+=4;
+  if(clearLineBetween(x,y,state.player.x,state.player.y,6))score+=7;
+  if(d<=1)score-=10;
+  score-=nearbyAllies*1.8;
+ }else if(role==="flank"){
+  score-=Math.abs(d-1)*2.5;
+  if(d<=2)score+=3.5;
+  score-=sideCrowd*4.5;
+  score-=nearbyAllies*2.2;
+  const currentSide=combatApproachSide(e.x,e.y);
+  if(side!==currentSide)score+=2.2;
+ }else if(role==="breach"){
+  score-=Math.abs(d-1)*2.8;
+  score-=sideCrowd*2.2;
+  score-=nearbyAllies*1.5;
+ }else if(role==="harass"){
+  score-=Math.abs(d-2)*2.4;
+  if(d===2)score+=3;
+  score-=sideCrowd*3;
+  score-=nearbyAllies*1.8;
+ }else{
+  score-=Math.abs(d-1)*3;
+  score-=sideCrowd*2.4;
+  score-=nearbyAllies*1.6;
+ }
+
+ // 少量の揺らぎで完全に同じ個体群が同じ経路へ固定されるのを防ぐ。
+ return score+rng()*.35;
+}
+function combatFormationMove(e,role=combatFormationRole(e)){
+ const candidates=[];
+ for(const [dx,dy] of dirs){
+  const x=e.x+dx,y=e.y+dy;
+  if(!combatFormationCellSafe(e,x,y))continue;
+  candidates.push({dx,dy,x,y,score:combatFormationScore(e,x,y,role)});
+ }
+ if(!candidates.length)return false;
+ candidates.sort((a,b)=>b.score-a.score);
+ const best=candidates[0];
+ const currentScore=combatFormationScore(e,e.x,e.y,role)-.30;
+ // 横移動/後退を許すが、ほぼ同価値なら無意味に震えない。
+ if(best.score<currentScore-.15)return false;
+ const moved=tryMoveEnemy(e,[[best.dx,best.dy]]);
+ if(moved){
+  const stats=ensureRunStats();
+  stats.combatFormationMoves=(stats.combatFormationMoves||0)+1;
+  if(role==="flank"&&combatApproachSide(best.x,best.y)!==combatApproachSide(e.x-best.dx,e.y-best.dy)){
+   stats.combatFlankMoves=(stats.combatFlankMoves||0)+1;
+  }
+ }
+ return moved;
+}
 function flankPlayer(e){
- const px=state.player.x-e.x,py=state.player.y-e.y;
- const options=Math.abs(px)>=Math.abs(py)?[[0,Math.sign(py)||1],[0,-(Math.sign(py)||1)]]:[[Math.sign(px)||1,0],[-(Math.sign(px)||1),0]];
- if(!tryMoveEnemy(e,options))stepTowardPlayer(e);
+ if(!combatFormationMove(e,"flank"))stepTowardPlayer(e);
 }
 
 const weaponSecondaryArtData={
@@ -24351,7 +24563,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.23",
+  version:"4.26",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -24893,7 +25105,8 @@ const realtimeCombatRuntime={
  pulse:0,logicWorldMs:0,floorGraceUntil:0,lastUiSecond:-1,
  guardUntilPulse:0,lastStandUntilPulse:0,lastStandInvulnUntilPulse:0,exhaustedUntilPulse:0,
  enemyControlUntil:{},
- enemyToolChain:0,lastEnemyToolKillAt:0
+ enemyToolChain:0,lastEnemyToolKillAt:0,
+ surroundMask:0,surroundAnnouncedPulse:-999
 };
 function realtimeNow(){return performance?.now?.()||Date.now()}
 function realtimeCombatActive(){
@@ -25057,6 +25270,8 @@ function syncRealtimeCombatRuntime(now=realtimeNow()){
   realtimeCombatRuntime.pulse=0;
   realtimeCombatRuntime.logicWorldMs=0;
   realtimeCombatRuntime.enemyToolChain=0;
+  realtimeCombatRuntime.surroundMask=0;
+  realtimeCombatRuntime.surroundAnnouncedPulse=-999;
   realtimeCombatRuntime.lastEnemyToolKillAt=0;
   realtimeCombatRuntime.guardUntilPulse=0;
   realtimeCombatRuntime.lastStandUntilPulse=0;
@@ -25157,6 +25372,7 @@ function realtimeWorldStep(now=realtimeNow()){
  // 敵AIは150ms刻み。実際に動くかは敵種ごとのcadenceで判定する。
  enemyTurn();
  if(state.gameOver)return false;
+ updateRealtimeSurroundPressure();
 
  if(logicPulse){
   ensureBossProgressIntegrity("realtime-end");
@@ -26242,6 +26458,14 @@ function drawWallTile(px,py,x,y,vis){
    ctx.beginPath();ctx.moveTo(px+5,py+16);ctx.lineTo(px+9,py+13);ctx.lineTo(px+12,py+9);ctx.stroke();
   }
  }
+ if(vis){
+  ctx.save();ctx.lineWidth=.5;
+  ctx.strokeStyle="rgba(230,215,235,.10)";
+  if((x*11+y*7)%5===0){
+   ctx.beginPath();ctx.moveTo(px+4.5,py+4.5);ctx.lineTo(px+8.5,py+7.5);ctx.lineTo(px+6.5,py+11.5);ctx.stroke();
+  }
+  ctx.restore();
+ }
 }
 function drawFloorTile(px,py,x,y,vis){
  const biome=currentBiome();
@@ -26285,10 +26509,161 @@ function drawFloorTile(px,py,x,y,vis){
    ctx.strokeStyle="rgba(125,166,97,.24)";
    ctx.beginPath();ctx.moveTo(px+4,py+15);ctx.quadraticCurveTo(px+10,py+9,px+17,py+12);ctx.stroke();
  }
+
+ if(vis){
+  ctx.save();
+  ctx.lineWidth=.5;
+  const seed=(x*37+y*53)%29;
+  if(seed%4===0){
+   ctx.strokeStyle="rgba(225,216,232,.12)";
+   ctx.beginPath();ctx.moveTo(px+3.5,py+5.5);ctx.lineTo(px+7.5,py+8.5);ctx.lineTo(px+6.5,py+12.5);ctx.stroke();
+  }
+  if(seed%5===0){
+   ctx.fillStyle="rgba(255,238,205,.12)";ctx.fillRect(px+15.5,py+5.5,.5,.5);
+   ctx.fillRect(px+4.5,py+16.5,.5,.5);
+  }
+  ctx.restore();
+ }
+}
+function visualTileSeed(x,y,salt=0){
+ return Math.abs(((x+11)*73856093)^((y+17)*19349663)^((state.floor+salt)*83492791))>>>0;
+}
+function drawBiomeFloorDecoration(px,py,x,y,t,vis){
+ if(!vis)return;
+ const biome=currentBiomeKey(),seed=visualTileSeed(x,y,3),pulse=(Math.sin(t*.07+x*.8+y*.45)+1)*.5;
+ ctx.save();ctx.lineWidth=.5;
+
+ if(biome==="crypt"){
+  if(seed%13===0){
+   ctx.strokeStyle="rgba(214,205,194,.34)";
+   ctx.beginPath();ctx.moveTo(px+5,py+15);ctx.lineTo(px+10,py+12);ctx.moveTo(px+7,py+11);ctx.lineTo(px+12,py+16);ctx.stroke();
+   ctx.fillStyle="rgba(236,225,210,.26)";ctx.fillRect(px+4.5,py+14.5,1,1);ctx.fillRect(px+11.5,py+15.5,1,1);
+  }else if(seed%17===0){
+   ctx.strokeStyle="rgba(164,136,187,.28)";
+   ctx.beginPath();ctx.arc(px+11,py+11,5,0,Math.PI*2);ctx.stroke();
+   ctx.beginPath();ctx.moveTo(px+11,py+6);ctx.lineTo(px+11,py+16);ctx.moveTo(px+7,py+11);ctx.lineTo(px+15,py+11);ctx.stroke();
+  }
+ }else if(biome==="furnace"){
+  if(seed%11===0){
+   ctx.strokeStyle=`rgba(255,100,55,${.28+.16*pulse})`;ctx.lineWidth=1;
+   ctx.beginPath();ctx.moveTo(px+3,py+16);ctx.lineTo(px+8,py+12);ctx.lineTo(px+12,py+14);ctx.lineTo(px+18,py+7);ctx.stroke();
+   ctx.fillStyle=`rgba(255,195,92,${.18+.12*pulse})`;ctx.fillRect(px+11.5,py+13.5,1,.5);
+  }else if(seed%19===0){
+   ctx.fillStyle="rgba(107,70,64,.22)";ctx.fillRect(px+5,py+7,12,9);
+   ctx.strokeStyle="rgba(183,118,91,.25)";ctx.strokeRect(px+5.5,py+7.5,11,8);
+   ctx.fillStyle="rgba(225,148,100,.34)";
+   for(const [dx,dy] of [[6,8],[15,8],[6,14],[15,14]])ctx.fillRect(px+dx,py+dy,.5,.5);
+  }
+ }else if(biome==="frost"){
+  if(seed%10===0){
+   ctx.fillStyle=`rgba(148,224,255,${.30+.12*pulse})`;
+   ctx.beginPath();ctx.moveTo(px+7,py+17);ctx.lineTo(px+9,py+9);ctx.lineTo(px+11,py+17);ctx.fill();
+   ctx.beginPath();ctx.moveTo(px+11,py+17);ctx.lineTo(px+14,py+12);ctx.lineTo(px+16,py+17);ctx.fill();
+   ctx.fillStyle="rgba(235,252,255,.42)";ctx.fillRect(px+8.5,py+11,.5,3);
+  }else if(seed%16===0){
+   ctx.strokeStyle="rgba(173,226,245,.27)";
+   ctx.beginPath();ctx.moveTo(px+4,py+8);ctx.lineTo(px+10,py+11);ctx.lineTo(px+16,py+7);
+   ctx.moveTo(px+10,py+11);ctx.lineTo(px+12,py+17);ctx.stroke();
+  }
+ }else if(biome==="fungal"){
+  if(seed%9===0){
+   const glow=.34+.16*pulse;
+   ctx.fillStyle=`rgba(136,221,116,${glow})`;
+   ctx.beginPath();ctx.arc(px+7,py+14,3,Math.PI,0);ctx.fill();ctx.fillRect(px+6.5,py+14,1,4);
+   ctx.fillStyle=`rgba(192,248,159,${glow*.9})`;
+   ctx.beginPath();ctx.arc(px+14,py+11,2,Math.PI,0);ctx.fill();ctx.fillRect(px+13.5,py+11,1,3);
+  }else if(seed%15===0){
+   ctx.strokeStyle="rgba(94,153,87,.30)";
+   ctx.beginPath();ctx.moveTo(px+3,py+18);ctx.bezierCurveTo(px+7,py+14,px+5,py+9,px+12,py+7);ctx.stroke();
+   ctx.beginPath();ctx.moveTo(px+10,py+17);ctx.quadraticCurveTo(px+15,py+13,px+18,py+9);ctx.stroke();
+  }
+ }
+ ctx.restore();
+}
+function drawBiomeWallDecoration(px,py,x,y,t,vis){
+ if(!vis)return;
+ const biome=currentBiomeKey(),seed=visualTileSeed(x,y,7),pulse=(Math.sin(t*.055+x*.37+y*.61)+1)*.5;
+ ctx.save();ctx.lineWidth=.5;
+ if(biome==="crypt"&&seed%12===0){
+  ctx.strokeStyle="rgba(140,126,151,.34)";
+  ctx.beginPath();ctx.moveTo(px+15,py+1);ctx.lineTo(px+15,py+13);ctx.stroke();
+  for(let iy=3;iy<13;iy+=3)ctx.strokeRect(px+14.25,py+iy,.75,1.5);
+ }else if(biome==="furnace"&&seed%10===0){
+  ctx.strokeStyle="rgba(170,87,66,.30)";ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(px+4,py+5);ctx.lineTo(px+17,py+5);ctx.lineTo(px+17,py+17);ctx.stroke();
+  ctx.fillStyle=`rgba(255,108,58,${.18+.10*pulse})`;ctx.fillRect(px+16.5,py+11,.5,4);
+ }else if(biome==="frost"&&seed%9===0){
+  ctx.fillStyle=`rgba(160,225,248,${.24+.10*pulse})`;
+  for(const dx of[5,10,15]){
+   const h=3+((seed+dx)%6);
+   ctx.beginPath();ctx.moveTo(px+dx-1,py+2);ctx.lineTo(px+dx,py+2+h);ctx.lineTo(px+dx+1,py+2);ctx.fill();
+  }
+ }else if(biome==="fungal"&&seed%8===0){
+  ctx.strokeStyle="rgba(98,151,81,.31)";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(px+3,py+2);ctx.bezierCurveTo(px+9,py+7,px+4,py+14,px+13,py+20);ctx.stroke();
+  ctx.fillStyle=`rgba(137,218,113,${.20+.10*pulse})`;ctx.fillRect(px+8,py+9,1,1);ctx.fillRect(px+13,py+16,.5,.5);
+ }
+ ctx.restore();
+}
+function drawActorGroundShadow(x,y,scale=1,alpha=.28){
+ ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle="#000";
+ ctx.beginPath();ctx.ellipse(x+11,y+18.5,7*scale,2.3*scale,0,0,Math.PI*2);ctx.fill();
+ ctx.restore();
 }
 function drawHeroSprite(x,y,hurt,t){
  const bob=Math.sin(t*.12)*.65;
  drawExplorerFigure(ctx,x,y,1,hurt,bob,true);
+}
+function drawModernEnemyDetails(e,x,y,bob,accent,t){
+ ctx.save();
+ ctx.lineWidth=.5;
+ const pulse=(Math.sin(t*.12+e.x*.9+e.y*.4)+1)*.5;
+
+ if(e.type==="skeleton"){
+  ctx.fillStyle="#fff8df";ctx.fillRect(x+9,y+5+bob,.5,.5);ctx.fillRect(x+14,y+5+bob,.5,.5);
+  ctx.fillStyle="#b79c72";ctx.fillRect(x+5.5,y+12+bob,.5,5);
+  ctx.fillStyle="#5e5267";ctx.fillRect(x+7.5,y+11+bob,7,.5);
+ }else if(e.type==="warg"){
+  ctx.fillStyle="#f5c9c1";ctx.fillRect(x+16.5,y+8+bob,.5,.5);
+  ctx.fillStyle="#2b1519";ctx.fillRect(x+7,y+6+bob,5,.5);
+  ctx.strokeStyle="#a55a61";ctx.beginPath();ctx.moveTo(x+5,y+11+bob);ctx.lineTo(x+3.5,y+9.5+bob);ctx.stroke();
+ }else if(e.type==="mage"){
+  const glow=ctx.createRadialGradient(x+17,y+7+bob,.5,x+17,y+7+bob,6);
+  glow.addColorStop(0,`rgba(140,226,255,${.25+.15*pulse})`);glow.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle=glow;ctx.fillRect(x+11,y+1+bob,12,12);
+  ctx.fillStyle="#e9fbff";ctx.fillRect(x+16.5,y+6.5+bob,1,1);
+  ctx.fillStyle="#71648b";ctx.fillRect(x+6.5,y+15+bob,8,.5);
+ }else if(e.type==="bomber"){
+  const core=`rgba(255,202,92,${.55+.35*pulse})`;
+  ctx.fillStyle=core;ctx.fillRect(x+10,y+10+bob,2,2);
+  ctx.fillStyle="#ff8a47";ctx.fillRect(x+11,y+8+bob,.5,1);
+  ctx.strokeStyle="#6b3a2f";ctx.beginPath();ctx.arc(x+11,y+12+bob,5,0,Math.PI*2);ctx.stroke();
+ }else if(e.type==="priest"){
+  ctx.strokeStyle=`rgba(236,205,255,${.45+.25*pulse})`;
+  ctx.beginPath();ctx.arc(x+11.5,y+5+bob,6,Math.PI,0);ctx.stroke();
+  ctx.fillStyle="#fff0b8";ctx.fillRect(x+16.5,y+8+bob,.5,5);
+  ctx.fillStyle="#75617e";ctx.fillRect(x+7,y+14+bob,8,.5);
+ }else if(e.type==="charger"){
+  ctx.fillStyle="#fff0d7";ctx.beginPath();ctx.moveTo(x+16,y+6+bob);ctx.lineTo(x+21.5,y+4.5+bob);ctx.lineTo(x+18,y+7+bob);ctx.fill();
+  ctx.fillStyle="#7c493e";ctx.fillRect(x+6,y+15+bob,11,.5);
+  ctx.fillStyle="#e08a70";ctx.fillRect(x+14.5,y+8+bob,.5,.5);
+ }else if(e.type==="leech"){
+  const glow=ctx.createRadialGradient(x+11,y+10+bob,1,x+11,y+10+bob,7);
+  glow.addColorStop(0,`rgba(190,255,136,${.18+.14*pulse})`);glow.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle=glow;ctx.fillRect(x+3,y+2+bob,16,17);
+  ctx.fillStyle="#efffc4";ctx.fillRect(x+9,y+9+bob,.5,1);ctx.fillRect(x+13.5,y+9+bob,.5,1);
+ }else{
+  const bossGlow=ctx.createRadialGradient(x+11,y+10+bob,1,x+11,y+10+bob,10);
+  bossGlow.addColorStop(0,`${e.bossColor||"#dbc45b"}33`);bossGlow.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle=bossGlow;ctx.fillRect(x,y,22,22);
+  ctx.fillStyle="#fff2b1";ctx.fillRect(x+9.5,y+8+bob,.5,.5);ctx.fillRect(x+13.5,y+8+bob,.5,.5);
+ }
+
+ // common armor/fur micro-rim: half-pixel line survives as one backing pixel.
+ ctx.strokeStyle=accent;ctx.globalAlpha=.48;
+ ctx.beginPath();ctx.moveTo(x+6,y+18.5+bob);ctx.lineTo(x+17,y+18.5+bob);ctx.stroke();
+ ctx.globalAlpha=1;
+ ctx.restore();
 }
 function drawEnemySprite(e,x,y,t){
  const bob=Math.sin(t*.1+e.x*.7+e.y)*.65;
@@ -26353,6 +26728,7 @@ function drawEnemySprite(e,x,y,t){
   ctx.strokeStyle="#fff1a8";ctx.strokeRect(x+4.5,y+4.5,14,15);
  }
 
+ drawModernEnemyDetails(e,x,y,bob,accent,t);
  if(e.elite){
   ctx.strokeStyle=eliteColor(e)||"#f0d37a";
   ctx.lineWidth=2;
@@ -26391,6 +26767,27 @@ function drawEnemySprite(e,x,y,t){
   ctx.lineWidth=(e.nemesis||e.echoGuard)?3:2;
   ctx.strokeRect(x+2,y+2,TILE-4,TILE-4);
  }
+ ctx.restore();
+}
+function itemVisualGlow(item){
+ if(!item)return null;
+ if(item.type==="sealed_relic")return{color:"rgba(200,140,255,.30)",radius:13};
+ if(item.type==="gear"&&item.gear){
+  const rarity=rarityOrder[item.gear.rarity]||0;
+  if(rarity>=4)return{color:"rgba(255,213,111,.34)",radius:15};
+  if(rarity>=3)return{color:"rgba(209,154,255,.28)",radius:13};
+  if(rarity>=2)return{color:"rgba(119,184,255,.23)",radius:11};
+ }
+ if(item.type==="purify")return{color:"rgba(255,226,129,.20)",radius:10};
+ return null;
+}
+function drawItemGroundGlow(item,x,y,t){
+ const data=itemVisualGlow(item);if(!data)return;
+ const pulse=(Math.sin(t*.11+x*.33+y*.21)+1)*.5;
+ ctx.save();ctx.globalCompositeOperation="screen";
+ const glow=ctx.createRadialGradient(x+11,y+12,1,x+11,y+12,data.radius+2*pulse);
+ glow.addColorStop(0,data.color);glow.addColorStop(1,"rgba(0,0,0,0)");
+ ctx.fillStyle=glow;ctx.fillRect(x-data.radius,y-data.radius,22+data.radius*2,22+data.radius*2);
  ctx.restore();
 }
 function drawItemSprite(item,x,y,t){
@@ -26466,6 +26863,20 @@ function drawItemSprite(item,x,y,t){
    ctx.fillStyle="#887b91";ctx.fillRect(x+6,y+7,11,10);
    ctx.strokeStyle="#e2d6e9";ctx.lineWidth=1.5;ctx.strokeRect(x+6.5,y+7.5,10,9);
    ctx.fillStyle="#f0d37a";ctx.fillRect(x+10,y+10,3,3);
+  }
+
+  const glowData=itemVisualGlow(item);
+  if(glowData){
+   const rarityPulse=(Math.sin(t*.15+x*.17+y*.23)+1)*.5;
+   ctx.globalAlpha=.45+.35*rarityPulse;
+   ctx.fillStyle=rarityColor;
+   ctx.fillRect(x+4,y+5,.5,2);
+   ctx.fillRect(x+3.25,y+5.75,2,.5);
+   if((item.type==="sealed_relic")||(gear&&(rarityOrder[gear.rarity]||0)>=3)){
+    ctx.fillRect(x+17,y+12,.5,2);
+    ctx.fillRect(x+16.25,y+12.75,2,.5);
+   }
+   ctx.globalAlpha=1;
   }
  }finally{
   ctx.restore();
@@ -26545,6 +26956,14 @@ function drawSpecialTileSprite(tileData,x,y,t){
   ctx.strokeStyle=tileData.sealed?"#bd70d9":"#7ee6c5";
   ctx.strokeRect(x+3.5,y+3.5,15,16);
  }
+ ctx.save();ctx.lineWidth=.5;ctx.globalAlpha=.55;
+ if(["shrine","treasure","greed_chest","temptation_cache","death_echo"].includes(tileData.type)){
+  ctx.strokeStyle="rgba(255,244,220,.34)";
+  ctx.strokeRect(x+3.5,y+3.5,15,15);
+  ctx.fillStyle="rgba(255,255,255,.46)";
+  ctx.fillRect(x+5,y+5,.5,.5);
+ }
+ ctx.restore();
 }
 function drawEnvironmentSprite(o,x,y,t){
  if(o.type==="barrel"){
@@ -26590,21 +27009,42 @@ function drawRemainSprite(r,x,y,t){
  ctx.restore();
 }
 function drawStairsTile(x,y,t){
- const unlocked=floorObjectiveComplete(),pulse=.82+Math.sin(t*.1)*.08;
- ctx.save();ctx.fillStyle="#0c0912";ctx.fillRect(x+3,y+3,16,16);
- ctx.strokeStyle=unlocked?"#e1b85b":"#86546d";ctx.lineWidth=unlocked?1.5:2;ctx.strokeRect(x+4.5,y+4.5,13,13);
- ctx.fillStyle=unlocked?"rgba(225,184,91,.12)":`rgba(145,57,93,${.14+.06*Math.sin(t*.12)})`;
- ctx.beginPath();ctx.arc(x+11,y+11,7*pulse,0,Math.PI*2);ctx.fill();
+ const unlocked=floorObjectiveComplete(),pulse=(Math.sin(t*.09)+1)*.5;
+ ctx.save();
+
+ const well=ctx.createRadialGradient(x+11,y+12,1,x+11,y+12,10);
+ well.addColorStop(0,unlocked?"rgba(226,184,91,.22)":"rgba(126,45,82,.17)");
+ well.addColorStop(.58,"rgba(13,8,17,.72)");
+ well.addColorStop(1,"rgba(3,2,6,.96)");
+ ctx.fillStyle=well;ctx.fillRect(x+1,y+1,20,20);
+
+ ctx.strokeStyle=unlocked?"#e1b85b":"#86546d";ctx.lineWidth=unlocked?1.5:2;
+ ctx.strokeRect(x+3.5,y+3.5,15,15);
+
  if(unlocked){
-  ctx.fillStyle="#e1b85b";ctx.fillRect(x+7,y+7,8,2);ctx.fillRect(x+9,y+10,6,2);ctx.fillRect(x+10,y+13,4,2);
-  ctx.fillStyle="#fff0c4";ctx.fillRect(x+10,y+6,2,1);
+  const steps=[[5,6,12],[7,9,9],[9,12,6],[10,15,4]];
+  for(let i=0;i<steps.length;i++){
+   const [dx,dy,w]=steps[i];
+   ctx.fillStyle=i===0?"#c99d4f":i===1?"#95743d":i===2?"#5f4b31":"#332a26";
+   ctx.fillRect(x+dx,y+dy,w,2);
+  }
+  ctx.fillStyle=`rgba(255,228,155,${.55+.25*pulse})`;ctx.fillRect(x+10,y+5,2,1);
+  ctx.strokeStyle=`rgba(255,225,143,${.35+.30*pulse})`;ctx.lineWidth=.5;
+  ctx.beginPath();ctx.arc(x+11,y+11,8+pulse,0,Math.PI*2);ctx.stroke();
+  for(let i=0;i<3;i++){
+   const a=t*.025+i*2.1;
+   ctx.fillStyle=`rgba(255,225,154,${.34+.20*pulse})`;
+   ctx.fillRect(x+11+Math.cos(a)*7,y+11+Math.sin(a)*6,.5,.5);
+  }
  }else{
-  ctx.strokeStyle="#d58aa8";ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x+5,y+6);ctx.lineTo(x+17,y+18);ctx.moveTo(x+17,y+6);ctx.lineTo(x+5,y+18);ctx.stroke();
-  ctx.fillStyle="#efb2ca";ctx.fillRect(x+9,y+9,5,5);ctx.fillStyle="#3b1d2a";ctx.fillRect(x+11,y+10,1,3);
+  ctx.strokeStyle="#d58aa8";ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(x+5,y+6);ctx.lineTo(x+17,y+18);ctx.moveTo(x+17,y+6);ctx.lineTo(x+5,y+18);ctx.stroke();
+  ctx.fillStyle="#efb2ca";ctx.fillRect(x+9,y+9,5,5);
+  ctx.fillStyle="#3b1d2a";ctx.fillRect(x+11,y+10,1,3);
+  ctx.fillStyle=`rgba(220,80,128,${.16+.10*pulse})`;ctx.beginPath();ctx.arc(x+11,y+11,8,0,Math.PI*2);ctx.fill();
  }
  ctx.restore();
 }
-
 function enemyIntentDisplayName(intent){
  return{
   lunge:"飛びかかり",heavy:"強打",bolt:"骨弾",explode:"爆発",
@@ -26954,7 +27394,7 @@ function drawMiniMap(){
  ctx.save();
  ctx.globalCompositeOperation="source-over";
 
- const mmW=88,mmH=96,mmX=canvas.width-mmW-5,mmY=5;
+ const mmW=88,mmH=96,mmX=CANVAS_W-mmW-5,mmY=5;
  const opacity=miniMapOpacityProfile(mmX,mmY,mmW,mmH);
 
  // 位置は右上に固定し、背景だけを透過する。
@@ -27121,7 +27561,7 @@ function drawWardenTelegraphInstruction(enemy,t,sx,sy,inView){
  const countdown=wardenTelegraphCountdown(enemy);
  const rule=visual.rule;
  const width=Math.max(34,Math.max(countdown.length,rule.length)*6+8);
- const x=Math.max(1,Math.min(canvas.width-width-1,px+TILE/2-width/2));
+ const x=Math.max(1,Math.min(CANVAS_W-width-1,px+TILE/2-width/2));
  const y=Math.max(2,py-18);
 
  ctx.save();
@@ -27138,6 +27578,96 @@ function drawWardenTelegraphInstruction(enemy,t,sx,sy,inView){
  ctx.fillText(`${rule} ${countdown}`,x+width/2,y+7.5);
  ctx.restore();
 }
+function visualBiomeProfile(){
+ const key=currentBiomeKey();
+ return{
+  crypt:{mist:"rgba(128,110,160,.055)",mote:"#c9b9df",glow:"#8674a8"},
+  furnace:{mist:"rgba(150,54,38,.055)",mote:"#ff9a58",glow:"#e45835"},
+  frost:{mist:"rgba(78,150,190,.060)",mote:"#d4f5ff",glow:"#73c8ef"},
+  fungal:{mist:"rgba(80,145,88,.060)",mote:"#b4ef9a",glow:"#77c983"}
+ }[key]||{mist:"rgba(120,110,140,.05)",mote:"#ddd",glow:"#999"};
+}
+function drawModernAtmosphere(t){
+ const profile=visualBiomeProfile();
+ ctx.save();
+
+ // broad depth tint: smooth modern lighting over crisp pixel geometry
+ const top=ctx.createLinearGradient(0,0,0,CANVAS_H);
+ top.addColorStop(0,profile.mist);
+ top.addColorStop(.48,"rgba(0,0,0,0)");
+ top.addColorStop(1,"rgba(0,0,0,.13)");
+ ctx.fillStyle=top;ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+
+ // drifting high-resolution pixel motes
+ for(let i=0;i<24;i++){
+  const mx=((i*83+t*.16)%(CANVAS_W+50))-25;
+  const my=((i*47+t*.09+Math.sin(t*.018+i)*18)%(CANVAS_H+30))-15;
+  const alpha=.035+(i%5)*.012;
+  ctx.globalAlpha=alpha;
+  ctx.fillStyle=profile.mote;
+  const size=(i%4===0)?1:.5;
+  ctx.fillRect(Math.round(mx*2)/2,Math.round(my*2)/2,size,size);
+ }
+ ctx.globalAlpha=1;
+
+ // very subtle edge-root silhouettes; atmosphere only, never gameplay information.
+ ctx.strokeStyle=profile.glow;ctx.globalAlpha=.045;ctx.lineWidth=1;
+ for(let i=0;i<5;i++){
+  const y=40+i*92+Math.sin(t*.01+i)*7;
+  ctx.beginPath();ctx.moveTo(0,y);ctx.quadraticCurveTo(22+i*4,y+18,10+i*3,y+48);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(CANVAS_W,y+28);ctx.quadraticCurveTo(CANVAS_W-25-i*3,y+43,CANVAS_W-12-i*2,y+71);ctx.stroke();
+ }
+ ctx.restore();
+}
+function drawWorldRelicLights(sx,sy,inView,t){
+ ctx.save();ctx.globalCompositeOperation="screen";
+ const pulse=(Math.sin(t*.085)+1)*.5;
+ const add=(gx,gy,color,radius)=>{
+  const grad=ctx.createRadialGradient(gx,gy,1,gx,gy,radius);
+  grad.addColorStop(0,color);grad.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle=grad;ctx.fillRect(gx-radius,gy-radius,radius*2,radius*2);
+ };
+
+ if(state?.stairs&&floorObjectiveComplete()&&inView(state.stairs.x,state.stairs.y)&&state.visible[key(state.stairs.x,state.stairs.y)]){
+  add(sx(state.stairs.x)+11,sy(state.stairs.y)+11,`rgba(255,211,117,${.10+.06*pulse})`,28);
+ }
+
+ for(const tileData of state.specialTiles||[]){
+  if(tileData.used||!inView(tileData.x,tileData.y)||!state.visible[key(tileData.x,tileData.y)])continue;
+  const gx=sx(tileData.x)+11,gy=sy(tileData.y)+11;
+  if(tileData.type==="shrine")add(gx,gy,`rgba(255,221,130,${.11+.05*pulse})`,25);
+  else if(tileData.type==="treasure")add(gx,gy,`rgba(255,194,81,${.10+.05*pulse})`,23);
+  else if(tileData.type==="greed_chest"&&!tileData.sealed)add(gx,gy,`rgba(255,91,70,${.11+.06*pulse})`,25);
+  else if(tileData.type==="temptation_cache")add(gx,gy,`rgba(213,132,255,${.13+.07*pulse})`,29);
+  else if(tileData.type==="death_echo")add(gx,gy,`rgba(105,225,255,${.12+.06*pulse})`,28);
+ }
+
+ for(const item of state.items||[]){
+  if(!inView(item.x,item.y)||!state.visible[key(item.x,item.y)])continue;
+  const data=itemVisualGlow(item);if(!data)continue;
+  const color=item.type==="sealed_relic"
+   ?`rgba(190,120,255,${.08+.05*pulse})`
+   :item.type==="gear"&&(rarityOrder[item.gear?.rarity]||0)>=4
+    ?`rgba(255,210,103,${.08+.05*pulse})`
+    :`rgba(135,173,255,${.07+.04*pulse})`;
+  add(sx(item.x)+11,sy(item.y)+11,color,data.radius+10);
+ }
+ ctx.restore();
+}
+function drawHeroLanternBloom(sx,sy,t){
+ if(!state?.light?.on||state.light.fuel<=0)return;
+ const type=state.light.type;
+ const profile=type==="arcane"
+  ?{inner:"rgba(190,244,255,.28)",mid:"rgba(80,190,255,.12)"}
+  :{inner:"rgba(255,239,177,.28)",mid:"rgba(255,164,70,.12)"};
+ const x=sx(state.player.x)+TILE/2,y=sy(state.player.y)+TILE/2;
+ const radius=Math.max(42,visionRadius()*TILE*.43);
+ ctx.save();ctx.globalCompositeOperation="screen";
+ const glow=ctx.createRadialGradient(x,y,2,x,y,radius);
+ glow.addColorStop(0,profile.inner);glow.addColorStop(.35,profile.mid);glow.addColorStop(1,"rgba(0,0,0,0)");
+ ctx.fillStyle=glow;ctx.fillRect(x-radius,y-radius,radius*2,radius*2);
+ ctx.restore();
+}
 function draw(){
  const cam=cameraOrigin();
  const t=(state.visual?.time||0);
@@ -27145,7 +27675,7 @@ function draw(){
  const shake=shakeAmount>0?((state.visual.time%2===0?1:-1)*shakeAmount):0;
  ctx.save();
  ctx.translate(shake,shake);
- ctx.fillStyle="#050407";ctx.fillRect(-8,-8,canvas.width+16,canvas.height+16);
+ ctx.fillStyle="#050407";ctx.fillRect(-8,-8,CANVAS_W+16,CANVAS_H+16);
 
  const sx=x=>(x-cam.x)*TILE,sy=y=>(y-cam.y)*TILE;
  const inView=(x,y)=>x>=cam.x&&x<cam.x+VIEW_COLS&&y>=cam.y&&y<cam.y+VIEW_ROWS;
@@ -27156,15 +27686,16 @@ function draw(){
   if(!seen){
    ctx.fillStyle="#040306";ctx.fillRect(px,py,TILE,TILE);continue;
   }
-  if(tile(x,y)===0)drawWallTile(px,py,x,y,vis);
-  else{
+  if(tile(x,y)===0){
+   drawWallTile(px,py,x,y,vis);
+   drawBiomeWallDecoration(px,py,x,y,t,vis);
+  }else{
    drawFloorTile(px,py,x,y,vis);
-   if(vis&&currentBiomeKey()==="crypt"&&(x*5+y*7)%23===0){ctx.fillStyle="#7e7188";ctx.fillRect(px+9,py+7,2,8);ctx.fillRect(px+6,py+10,8,2)}
-   if(vis&&currentBiomeKey()==="furnace"&&(x*3+y*11)%19===0){ctx.fillStyle="#7d3025";ctx.fillRect(px+4,py+16,13,2)}
-   if(vis&&currentBiomeKey()==="frost"&&(x*7+y*2)%17===0){ctx.strokeStyle="#83c5df";ctx.beginPath();ctx.moveTo(px+6,py+16);ctx.lineTo(px+11,py+7);ctx.lineTo(px+16,py+16);ctx.stroke()}
-   if(vis&&currentBiomeKey()==="fungal"&&(x*2+y*5)%17===0){ctx.fillStyle="#78a765";ctx.beginPath();ctx.arc(px+10,py+13,3,Math.PI,0);ctx.fill();ctx.fillRect(px+9,py+13,2,5)}
+   drawBiomeFloorDecoration(px,py,x,y,t,vis);
   }
  }
+
+ drawModernAtmosphere(t);
 
  const drawText=(t,x,y,color,size=15)=>{
   if(!inView(x,y))return;
@@ -27318,11 +27849,13 @@ function draw(){
  }});
  state.items.forEach(i=>{if(state.visible[key(i.x,i.y)]){
   const x=sx(i.x),y=sy(i.y);
+  drawItemGroundGlow(i,x,y,t);
   drawItemSprite(i,x,y,t);
  }});
 
  state.enemies.forEach(e=>{if(state.visible[key(e.x,e.y)]){
   const x=sx(e.x),y=sy(e.y);
+  drawActorGroundShadow(x,y,e.boss?1.18:(e.type==="warg"||e.type==="charger"?1.08:.92),e.boss ? .34 : .25);
   drawEnemySprite(e,x,y,t);
   ctx.fillStyle="#25080d";ctx.fillRect(x+3,y+1,TILE-6,3);
   ctx.fillStyle="#cf5163";ctx.fillRect(x+3,y+1,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
@@ -27351,6 +27884,7 @@ function draw(){
    y+=state.visual.attackDy*5*swing;
   }
   const hurt=(state.visual?.damageFrames||0)>0;
+  drawActorGroundShadow(x,y,1,.32);
   drawHeroSprite(x,y,hurt,t);
  }
 
@@ -27361,41 +27895,27 @@ function draw(){
   ctx.globalAlpha=.25+.1*state.visual.flash;
   ctx.fillStyle="#fff";ctx.fillRect(x,y,TILE,TILE);ctx.globalAlpha=1;
  }
- for(let i=0;i<10;i++){
-  const bx=((i*91+t*.18)%(canvas.width+40))-20;
-  const by=((i*57+t*.11)%(canvas.height+40))-20;
-  if(currentBiomeKey()==="furnace"){
-   ctx.globalAlpha=.09;ctx.fillStyle="#ff7a42";ctx.fillRect(bx,by,2,2);
-  }else if(currentBiomeKey()==="frost"){
-   ctx.globalAlpha=.08;ctx.fillStyle="#d8f1ff";ctx.fillRect(bx,by,2,2);
-  }else if(currentBiomeKey()==="fungal"){
-   ctx.globalAlpha=.06;ctx.fillStyle="#a8e28f";ctx.beginPath();ctx.arc(bx,by,2,0,Math.PI*2);ctx.fill();
-  }
- }
- for(let i=0;i<18;i++){
-  const fx=((i*73+t*.28)%(canvas.width+60))-30;
-  const fy=((i*41+Math.sin(t*.02+i)*30)%(canvas.height+40))-20;
-  ctx.globalAlpha=.035+(i%3)*.012;
-  ctx.fillStyle="#d5c7e0";
-  ctx.beginPath();ctx.ellipse(fx,fy,22+(i%4)*7,5+(i%3)*2,0,0,Math.PI*2);ctx.fill();
- }
+ // v4.25: atmosphere/motes are rendered by drawModernAtmosphere at 2x backing resolution.
  ctx.globalAlpha=1;
 
  // ミニマップは暗闇処理後に最前面へ描画する。
 
- // 動的ライティング
+ // 動的ライティング：ドット絵の輪郭は保ち、光だけは現代的な滑らかな階調を重ねる。
  ctx.save();
  ctx.globalCompositeOperation="multiply";
  const lightPixels=Math.max(46,visionRadius()*TILE*.82);
  const darkness=ctx.createRadialGradient(
-  sx(state.player.x)+TILE/2,sy(state.player.y)+TILE/2,22,
+  sx(state.player.x)+TILE/2,sy(state.player.y)+TILE/2,16,
   sx(state.player.x)+TILE/2,sy(state.player.y)+TILE/2,lightPixels
  );
  darkness.addColorStop(0,"rgba(255,255,255,0)");
- darkness.addColorStop(.48,currentLight().color);
- darkness.addColorStop(1,"rgba(0,0,0,.72)");
- ctx.fillStyle=darkness;ctx.fillRect(0,0,canvas.width,canvas.height);
+ darkness.addColorStop(.52,"rgba(214,207,220,.08)");
+ darkness.addColorStop(1,"rgba(4,3,8,.78)");
+ ctx.fillStyle=darkness;ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
  ctx.restore();
+
+ drawWorldRelicLights(sx,sy,inView,t);
+ drawHeroLanternBloom(sx,sy,t);
 
  ctx.save();
  ctx.globalCompositeOperation="screen";
@@ -27600,8 +28120,8 @@ canvas.addEventListener("click",event=>{
  if(canvasTouchMoved){canvasTouchMoved=false;return}
  if(!state||!$("inspectOverlay").classList.contains("hidden"))return;
  const rect=canvas.getBoundingClientRect();
- const px=(event.clientX-rect.left)*(canvas.width/rect.width);
- const py=(event.clientY-rect.top)*(canvas.height/rect.height);
+ const px=(event.clientX-rect.left)*(CANVAS_W/rect.width);
+ const py=(event.clientY-rect.top)*(CANVAS_H/rect.height);
  const cam=cameraOrigin();
  const x=cam.x+Math.floor(px/TILE),y=cam.y+Math.floor(py/TILE);
  inspectTileAt(x,y);
