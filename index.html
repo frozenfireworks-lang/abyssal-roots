@@ -2610,6 +2610,26 @@ body{
 
 
 /* v3.10.8 APPEARANCE 104 */
+.appearancePresetGrid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:6px;
+ margin:6px 0 10px;
+}
+.appearancePreset{
+ min-height:62px;
+ padding:8px;
+ border:1px solid #4c4057;
+ border-radius:8px;
+ background:linear-gradient(145deg,#1b1623,#0e0c13);
+ color:#eee6f1;
+ text-align:left;
+}
+.appearancePreset b{display:block;color:#f3e7ff;font-size:12.5px}
+.appearancePreset small{display:block;margin-top:3px;color:#a99eb1;font-size:11px;line-height:1.35}
+.appearancePreset.selected{border-color:#7ddfff;box-shadow:inset 0 0 14px rgba(84,199,255,.13)}
+.appearanceFreeChoices{grid-template-columns:repeat(2,minmax(0,1fr))}
+.appearanceFreeChoices .appearanceChoice{min-height:54px}
 .appearancePreviewWrap{
  position:sticky;
  top:-1px;
@@ -5835,7 +5855,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.28 HERO RESOLUTION</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.29 APPEARANCE FORGE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5960,18 +5980,26 @@ body,button,input,select,textarea{font-size:12px}
 <div class="overlay hidden" id="appearanceOverlay">
   <div class="card appearanceCard">
     <h2>探索者の姿</h2>
-    <p>姿は <b>外套色48色</b>・<b>輪郭32種</b>・<b>紋章24種</b>、合計104種の部品で構成されます。最大36,864通りを自由に組み合わせられます。高額な恒久解放、条件シークレット、番人の純運激レア枠があります。</p>
+    <p>若い細身体型を基準に、<b>基本衣装4種</b>・<b>髪4種</b>・<b>魔導具4種</b>を自由に混ぜられます。既存の<b>魔力色48色</b>・<b>追加装飾32種</b>・<b>紋章24種</b>もそのまま重ねられます。</p>
     <div class="appearancePreviewWrap">
       <canvas id="appearancePreview" width="96" height="96" aria-label="探索者アイコンのプレビュー"></canvas>
       <div id="appearanceSummary"></div>
     </div>
-    <h3>外套の色</h3>
+    <h3>基本プリセット</h3>
+    <div id="appearancePresets" class="appearancePresetGrid"></div>
+    <h3>基本衣装</h3>
+    <div id="appearanceFoundations" class="appearanceChoices appearanceFreeChoices"></div>
+    <h3>髪</h3>
+    <div id="appearanceHairs" class="appearanceChoices appearanceFreeChoices"></div>
+    <h3>魔導具</h3>
+    <div id="appearanceFocuses" class="appearanceChoices appearanceFreeChoices"></div>
+    <h3>魔力色</h3>
     <div id="appearanceColors" class="appearanceChoices"></div>
-    <h3>輪郭</h3>
+    <h3>追加装飾</h3>
     <div id="appearanceShapes" class="appearanceChoices"></div>
     <h3>紋章</h3>
     <div id="appearanceSigils" class="appearanceChoices"></div>
-    <p class="note">変更は探索画面のキャラアイコンと盤面上の姿へ同時に反映されます。能力には影響しません。秘密条件を満たすと、伏せられていた姿が一覧へ姿を現すことがあります。</p>
+    <p class="note">姿・髪・魔導具・儀礼刃は外見だけの変更です。攻撃範囲や装備性能には影響しません。変更はキャラアイコンと盤面へ同時に反映されます。</p>
     <button type="button" class="modalBtn" id="closeAppearance">閉じる</button>
   </div>
 </div>
@@ -8301,6 +8329,31 @@ const weaponData={
 };
 
 
+const appearanceFoundationData={
+ guide:{label:"月導の細衣",desc:"短い非対称外套と高い襟。灯火が映える軽快な基礎衣装。",body:"#111722",body2:"#25334a",lining:"#204f83",metal:"#b8c9d8"},
+ spellblade:{label:"星骸の長衣",desc:"細い腰と二枚の長い裾。魔晶と儀礼刃を引き立てる。",body:"#14131e",body2:"#2c2940",lining:"#503280",metal:"#c2b9d6"},
+ hunter:{label:"深根の猟装",desc:"羽状の肩布と流れる帯。二刀でも読みやすい軽装。",body:"#101b1d",body2:"#17454a",lining:"#176c70",metal:"#8fbfc1"},
+ pilgrim:{label:"白夜の巡礼衣",desc:"白い前垂れと割れた長衣。細身の王道主人公シルエット。",body:"#111722",body2:"#29364d",lining:"#d8e4ef",metal:"#c9d8e8"}
+};
+const appearanceHairData={
+ silver:{label:"月銀の短髪",desc:"軽く流れる銀髪。顔周りを明るく見せる。",base:"#c8d5e2",light:"#f2f7fb",shadow:"#78899c"},
+ night:{label:"星夜の黒髪",desc:"紫の反射を持つ黒髪。魔剣士向けの鋭い輪郭。",base:"#171725",light:"#595078",shadow:"#080910"},
+ teal:{label:"深根の青緑髪",desc:"長めの青緑髪。帯と一緒に動く影狩人の髪。",base:"#123a41",light:"#2b7c81",shadow:"#07171d"},
+ white:{label:"白夜の長髪",desc:"頬へ落ちる白髪。青い魔導光を強く拾う。",base:"#d6e1eb",light:"#ffffff",shadow:"#7d91aa"}
+};
+const appearanceFocusData={
+ lantern:{label:"浮遊深淵灯",desc:"鎖から解放された青い魔導灯。探索者の象徴。",core:"#ecffff",mid:"#58dfff",glow:"rgba(53,203,255,.38)"},
+ prism:{label:"星骸魔晶",desc:"手元を周回する紫の結晶。魔剣士らしい鋭い光。",core:"#f2dcff",mid:"#aa62ff",glow:"rgba(157,74,255,.38)"},
+ wisp:{label:"深根の鬼火",desc:"形を変える青緑の小精霊。軽装と相性が良い。",core:"#e3fff5",mid:"#38e7d5",glow:"rgba(45,225,202,.36)"},
+ orbit:{label:"白夜晶環",desc:"小結晶が静かに公転する、端正な魔導環。",core:"#effaff",mid:"#75bfff",glow:"rgba(94,168,255,.38)"}
+};
+const appearancePresetData={
+ moonGuide:{label:"1　銀月の導灯士",desc:"銀髪・細衣・浮遊深淵灯",foundation:"guide",hair:"silver",focus:"lantern"},
+ starBlade:{label:"2　星骸の魔剣士",desc:"黒髪・長衣・紫魔晶",foundation:"spellblade",hair:"night",focus:"prism"},
+ rootHunter:{label:"3　深根の影狩人",desc:"青緑髪・猟装・鬼火",foundation:"hunter",hair:"teal",focus:"wisp"},
+ whitePilgrim:{label:"4　白夜の巡礼者",desc:"白髪・巡礼衣・晶環",foundation:"pilgrim",hair:"white",focus:"orbit"}
+};
+
 const appearanceColorData={
  ash:{label:"煤灰",cost:0,body:"#b7a88f",cloak:"#5d5362",trim:"#d7c9af",aura:"rgba(215,201,175,.22)"},
  rust:{label:"錆朱",cost:3,body:"#b8674f",cloak:"#65343a",trim:"#efb07a",aura:"rgba(239,176,122,.22)"},
@@ -8478,6 +8531,9 @@ function appearanceRequirementLabel(requirementId){
 }
 function defaultAppearance(){
  return{
+  foundation:"guide",
+  hair:"silver",
+  focus:"lantern",
   shape:"common",
   color:"ash",
   sigil:"none",
@@ -8498,6 +8554,9 @@ function ensureAppearanceMeta(meta){
  if(!a.unlockedShapes.includes("common"))a.unlockedShapes.unshift("common");
  if(!a.unlockedColors.includes("ash"))a.unlockedColors.unshift("ash");
  if(!a.unlockedSigils.includes("none"))a.unlockedSigils.unshift("none");
+ if(!appearanceFoundationData[a.foundation])a.foundation="guide";
+ if(!appearanceHairData[a.hair])a.hair="silver";
+ if(!appearanceFocusData[a.focus])a.focus="lantern";
  if(!appearanceShapeData[a.shape]||!a.unlockedShapes.includes(a.shape))a.shape="common";
  if(!appearanceColorData[a.color]||!a.unlockedColors.includes(a.color))a.color="ash";
  if(!appearanceSigilData[a.sigil]||!a.unlockedSigils.includes(a.sigil))a.sigil="none";
@@ -8508,6 +8567,15 @@ function currentAppearance(){
 }
 function appearanceColor(){
  return appearanceColorData[currentAppearance().color]||appearanceColorData.ash;
+}
+function appearanceFoundation(){
+ return appearanceFoundationData[currentAppearance().foundation]||appearanceFoundationData.guide;
+}
+function appearanceHair(){
+ return appearanceHairData[currentAppearance().hair]||appearanceHairData.silver;
+}
+function appearanceFocus(){
+ return appearanceFocusData[currentAppearance().focus]||appearanceFocusData.lantern;
 }
 function appearanceLockedLabel(data,unlocked){
  if(unlocked)return "";
@@ -8525,7 +8593,7 @@ function appearanceEntryVisibleName(data,unlocked){
 function appearanceEntryVisibleDesc(data,unlocked){
  return data.hidden&&!unlocked&&!appearanceRequirementMet(data.requirement,state?.meta)
   ?"解放条件は秘匿されている。"
-  :data.desc;
+  :(data.desc||"魔力の発光色と縁取りへ反映される。");
 }
 function appearanceCanBuy(data,collection,id){
  const unlocked=collection.includes(id);
@@ -8953,6 +9021,20 @@ function renderAppearanceCategory(targetId,dataMap,selectedId,unlockedList,keyNa
  }).join("");
  $(targetId).innerHTML=html;
 }
+function renderFreeAppearanceCategory(targetId,dataMap,selectedId,keyName){
+ $(targetId).innerHTML=Object.entries(dataMap).map(([id,data])=>`<button type="button" class="appearanceChoice ${selectedId===id?"selected":""}" data-${keyName}="${id}">
+  <b>${data.label}</b><small>${selectedId===id?"選択中":"使用する"}<br>${data.desc}</small>
+ </button>`).join("");
+}
+function currentAppearancePresetId(appearance=currentAppearance()){
+ return Object.entries(appearancePresetData).find(([,preset])=>preset.foundation===appearance.foundation&&preset.hair===appearance.hair&&preset.focus===appearance.focus)?.[0]||"";
+}
+function renderAppearancePresets(appearance=currentAppearance()){
+ const selected=currentAppearancePresetId(appearance);
+ $("appearancePresets").innerHTML=Object.entries(appearancePresetData).map(([id,preset])=>`<button type="button" class="appearancePreset ${selected===id?"selected":""}" data-appearance-preset="${id}">
+  <b>${preset.label}</b><small>${selected===id?"プリセット選択中":"3部品をまとめて適用"}<br>${preset.desc}</small>
+ </button>`).join("");
+}
 function requestAppearancePurchase(kind,id,data,collectionKey,selectionKey){
  const label=appearanceEntryVisibleName(data,false),cost=Math.max(0,data?.cost||0),shards=Math.max(0,state.meta.shards||0);
  if(shards<cost){const missing=cost-shards;addLog(`${kind}「${label}」の解放にはあと${missing}欠片必要。`);showCombatToast("欠片が足りない",`${shards}/${cost}・あと${missing}`,"miss");renderAppearance();return false}
@@ -8967,23 +9049,40 @@ function requestAppearancePurchase(kind,id,data,collectionKey,selectionKey){
 function renderAppearance(){
  updateAppearanceSecretReveals();
  const a=currentAppearance();
+ const foundation=appearanceFoundationData[a.foundation];
+ const hair=appearanceHairData[a.hair];
+ const focus=appearanceFocusData[a.focus];
  const color=appearanceColorData[a.color];
  const shape=appearanceShapeData[a.shape];
  const sigil=appearanceSigilData[a.sigil];
+ const freeParts=Object.keys(appearanceFoundationData).length*Object.keys(appearanceHairData).length*Object.keys(appearanceFocusData).length;
+ const unlockedCombinations=freeParts*a.unlockedColors.length*a.unlockedShapes.length*a.unlockedSigils.length;
+ const totalCombinations=freeParts*Object.keys(appearanceColorData).length*Object.keys(appearanceShapeData).length*Object.keys(appearanceSigilData).length;
  $("appearanceSummary").innerHTML=
-  `<b>${shape.label}</b><br>`+
-  `色：${color.label}<br>`+
+  `<b>${foundation.label}</b><br>`+
+  `髪：${hair.label}<br>`+
+  `魔導具：${focus.label}<br>`+
+  `魔力色：${color.label}<br>`+
+  `追加装飾：${shape.label}<br>`+
   `紋章：${sigil.label}<br>`+
   `深淵の欠片：${state.meta.shards||0}<br>`+
-  `解放済み：色 ${a.unlockedColors.length}/${Object.keys(appearanceColorData).length} / 輪郭 ${a.unlockedShapes.length}/${Object.keys(appearanceShapeData).length} / 紋章 ${a.unlockedSigils.length}/${Object.keys(appearanceSigilData).length}<br>`+
-  `現在可能な組合せ：${(a.unlockedColors.length*a.unlockedShapes.length*a.unlockedSigils.length).toLocaleString()}通り / 全36,864通り`;
+  `解放済み：魔力色 ${a.unlockedColors.length}/${Object.keys(appearanceColorData).length} / 装飾 ${a.unlockedShapes.length}/${Object.keys(appearanceShapeData).length} / 紋章 ${a.unlockedSigils.length}/${Object.keys(appearanceSigilData).length}<br>`+
+  `現在可能な組合せ：${unlockedCombinations.toLocaleString()}通り / 全${totalCombinations.toLocaleString()}通り`;
 
- renderAppearanceCategory("appearanceColors",appearanceColorData,a.color,a.unlockedColors,"color","外套色");
- renderAppearanceCategory("appearanceShapes",appearanceShapeData,a.shape,a.unlockedShapes,"shape","輪郭");
+ renderAppearancePresets(a);
+ renderFreeAppearanceCategory("appearanceFoundations",appearanceFoundationData,a.foundation,"foundation");
+ renderFreeAppearanceCategory("appearanceHairs",appearanceHairData,a.hair,"hair");
+ renderFreeAppearanceCategory("appearanceFocuses",appearanceFocusData,a.focus,"focus");
+ renderAppearanceCategory("appearanceColors",appearanceColorData,a.color,a.unlockedColors,"color","魔力色");
+ renderAppearanceCategory("appearanceShapes",appearanceShapeData,a.shape,a.unlockedShapes,"shape","追加装飾");
  renderAppearanceCategory("appearanceSigils",appearanceSigilData,a.sigil,a.unlockedSigils,"sigil","紋章");
 
- $("appearanceColors").querySelectorAll("[data-color]").forEach(button=>{button.onclick=()=>{const id=button.dataset.color,data=appearanceColorData[id],appearance=currentAppearance();if(!appearance.unlockedColors.includes(id)){requestAppearancePurchase("外套色",id,data,"unlockedColors","color");return}appearance.color=id;saveMeta();saveGame();renderAppearance();render()}});
- $("appearanceShapes").querySelectorAll("[data-shape]").forEach(button=>{button.onclick=()=>{const id=button.dataset.shape,data=appearanceShapeData[id],appearance=currentAppearance();if(!appearance.unlockedShapes.includes(id)){if(data.unlockType!=="cost"||!appearanceRequirementMet(data.requirement,state.meta))return;requestAppearancePurchase("輪郭",id,data,"unlockedShapes","shape");return}appearance.shape=id;saveMeta();saveGame();renderAppearance();render()}});
+ $("appearancePresets").querySelectorAll("[data-appearance-preset]").forEach(button=>{button.onclick=()=>{const preset=appearancePresetData[button.dataset.appearancePreset],appearance=currentAppearance();if(!preset)return;appearance.foundation=preset.foundation;appearance.hair=preset.hair;appearance.focus=preset.focus;saveMeta();saveGame();renderAppearance();render()}});
+ $("appearanceFoundations").querySelectorAll("[data-foundation]").forEach(button=>{button.onclick=()=>{currentAppearance().foundation=button.dataset.foundation;saveMeta();saveGame();renderAppearance();render()}});
+ $("appearanceHairs").querySelectorAll("[data-hair]").forEach(button=>{button.onclick=()=>{currentAppearance().hair=button.dataset.hair;saveMeta();saveGame();renderAppearance();render()}});
+ $("appearanceFocuses").querySelectorAll("[data-focus]").forEach(button=>{button.onclick=()=>{currentAppearance().focus=button.dataset.focus;saveMeta();saveGame();renderAppearance();render()}});
+ $("appearanceColors").querySelectorAll("[data-color]").forEach(button=>{button.onclick=()=>{const id=button.dataset.color,data=appearanceColorData[id],appearance=currentAppearance();if(!appearance.unlockedColors.includes(id)){requestAppearancePurchase("魔力色",id,data,"unlockedColors","color");return}appearance.color=id;saveMeta();saveGame();renderAppearance();render()}});
+ $("appearanceShapes").querySelectorAll("[data-shape]").forEach(button=>{button.onclick=()=>{const id=button.dataset.shape,data=appearanceShapeData[id],appearance=currentAppearance();if(!appearance.unlockedShapes.includes(id)){if(data.unlockType!=="cost"||!appearanceRequirementMet(data.requirement,state.meta))return;requestAppearancePurchase("追加装飾",id,data,"unlockedShapes","shape");return}appearance.shape=id;saveMeta();saveGame();renderAppearance();render()}});
  $("appearanceSigils").querySelectorAll("[data-sigil]").forEach(button=>{button.onclick=()=>{const id=button.dataset.sigil,data=appearanceSigilData[id],appearance=currentAppearance();if(!appearance.unlockedSigils.includes(id)){if(data.unlockType!=="cost"||!appearanceRequirementMet(data.requirement,state.meta))return;requestAppearancePurchase("紋章",id,data,"unlockedSigils","sigil");return}appearance.sigil=id;saveMeta();saveGame();renderAppearance();render()}});
  drawAppearancePreview();
 }
@@ -24573,7 +24672,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.28",
+  version:"4.29",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -26625,76 +26724,121 @@ function drawHeroSprite(x,y,hurt,t){
  drawHighResolutionExplorer(ctx,x-7,y-18,1,hurt,bob,t,true);
 }
 function drawHighResolutionExplorer(g,x,y,scale=1,hurt=false,bob=0,t=0,showAura=true){
- const appearance=currentAppearance(),palette=appearanceColor(),shape=appearance.shape,sigil=appearance.sigil;
- const light=explorerLanternVisual(),dark="#100d15",ink="#09070c",skin=hurt?"#ff9a9f":"#e3c8bc";
- const step=Math.sin(t*.18)*.7,cloth=Math.sin(t*.10)*.8,lanternSwing=Math.sin(t*.075)*.8;
+ const appearance=currentAppearance(),accent=appearanceColor(),foundation=appearanceFoundation(),hair=appearanceHair(),focus=appearanceFocus(),shape=appearance.shape,sigil=appearance.sigil;
+ const palette={...accent,body:foundation.body2,cloak:foundation.body,trim:accent.trim},dark="#090b12",ink="#06070b",skin=hurt?"#ff9a9f":"#e6c6b7",skinShadow=hurt?"#cc5f70":"#b98273";
+ const lightOn=!!(state?.light?.on&&state?.light?.fuel>0),light=lightOn?focus:{core:"#67606f",mid:"#35303e",glow:"rgba(0,0,0,0)"};
+ const step=Math.sin(t*.18)*.55,cloth=Math.sin(t*.10)*.85,focusFloat=Math.sin(t*.075)*1.1;
  const attack=Math.max(0,state.visual?.attackFrames||0),attackLift=attack?Math.sin((1-attack/6)*Math.PI)*3:0;
  g.save();g.translate(x,y);g.scale(scale,scale);g.lineJoin="miter";g.lineCap="square";
 
  if(showAura){
-  const aura=g.createRadialGradient(18,22,2,18,22,24);aura.addColorStop(0,palette.aura);aura.addColorStop(1,"rgba(0,0,0,0)");
-  g.fillStyle=aura;g.fillRect(-7,-3,50,48);
+  const aura=g.createRadialGradient(18,21,2,18,21,25);aura.addColorStop(0,light.glow);aura.addColorStop(.52,palette.aura);aura.addColorStop(1,"rgba(0,0,0,0)");
+  g.fillStyle=aura;g.fillRect(-8,-5,52,51);
  }
- g.globalAlpha=.32;g.fillStyle="#000";g.beginPath();g.ellipse(18,38,11,3.2,0,0,Math.PI*2);g.fill();g.globalAlpha=1;
+ g.globalAlpha=.32;g.fillStyle="#000";g.beginPath();g.ellipse(19,39,10.5,2.8,0,0,Math.PI*2);g.fill();g.globalAlpha=1;
 
- // Back silhouette: layered, asymmetric cloth replaces the old square body.
- g.fillStyle=dark;g.beginPath();g.moveTo(9,15+bob);g.lineTo(27,14+bob);g.lineTo(32,28+bob);g.lineTo(29+cloth,35+bob);g.lineTo(25,32+bob);g.lineTo(22,39+bob);g.lineTo(18,35+bob);g.lineTo(14,39+bob);g.lineTo(11,33+bob);g.lineTo(6-cloth,36+bob);g.lineTo(8,26+bob);g.closePath();g.fill();
- g.fillStyle=palette.cloak;g.beginPath();g.moveTo(8,15+bob);g.lineTo(28,14+bob);g.lineTo(30,26+bob);g.lineTo(28+cloth,33+bob);g.lineTo(24,30+bob);g.lineTo(21,37+bob);g.lineTo(18,33+bob);g.lineTo(14,37+bob);g.lineTo(12,31+bob);g.lineTo(7-cloth,34+bob);g.lineTo(9,25+bob);g.closePath();g.fill();
- g.strokeStyle=palette.trim;g.globalAlpha=.48;g.lineWidth=.75;g.beginPath();g.moveTo(9,17+bob);g.lineTo(13,27+bob);g.lineTo(12,34+bob);g.moveTo(27,16+bob);g.lineTo(23,28+bob);g.lineTo(21,36+bob);g.stroke();g.globalAlpha=1;
+ // Four free foundation silhouettes. All share one foot anchor and collision tile.
+ g.fillStyle=ink;
+ if(appearance.foundation==="guide"){
+  g.beginPath();g.moveTo(9,16+bob);g.lineTo(27,15+bob);g.lineTo(30,24+bob);g.lineTo(27+cloth,35+bob);g.lineTo(23,31+bob);g.lineTo(19,37+bob);g.lineTo(15,31+bob);g.lineTo(8-cloth,34+bob);g.closePath();g.fill();
+  g.fillStyle=foundation.body;g.beginPath();g.moveTo(10,16+bob);g.lineTo(27,16+bob);g.lineTo(28,24+bob);g.lineTo(25+cloth,33+bob);g.lineTo(21,29+bob);g.lineTo(18,35+bob);g.lineTo(15,29+bob);g.lineTo(9-cloth,32+bob);g.closePath();g.fill();
+  g.fillStyle=foundation.lining;g.beginPath();g.moveTo(10,18+bob);g.lineTo(13,20+bob);g.lineTo(10-cloth,31+bob);g.lineTo(14,28+bob);g.closePath();g.fill();
+ }else if(appearance.foundation==="spellblade"){
+  g.beginPath();g.moveTo(8,16+bob);g.lineTo(29,16+bob);g.lineTo(31,25+bob);g.lineTo(29+cloth,39+bob);g.lineTo(22,32+bob);g.lineTo(19,40+bob);g.lineTo(15,32+bob);g.lineTo(7-cloth,38+bob);g.closePath();g.fill();
+  g.fillStyle=foundation.body;g.beginPath();g.moveTo(9,16+bob);g.lineTo(28,16+bob);g.lineTo(29,25+bob);g.lineTo(27+cloth,37+bob);g.lineTo(22,30+bob);g.lineTo(19,38+bob);g.lineTo(15,30+bob);g.lineTo(9-cloth,36+bob);g.closePath();g.fill();
+  g.fillStyle=foundation.lining;g.beginPath();g.moveTo(25,21+bob);g.lineTo(27,36+bob);g.lineTo(22,30+bob);g.lineTo(21,22+bob);g.closePath();g.fill();
+ }else if(appearance.foundation==="hunter"){
+  g.beginPath();g.moveTo(7,16+bob);g.lineTo(29,15+bob);g.lineTo(32,21+bob);g.lineTo(28,25+bob);g.lineTo(31+cloth,34+bob);g.lineTo(24,29+bob);g.lineTo(20,37+bob);g.lineTo(15,29+bob);g.lineTo(7-cloth,33+bob);g.closePath();g.fill();
+  g.fillStyle=foundation.body;g.beginPath();g.moveTo(8,16+bob);g.lineTo(28,16+bob);g.lineTo(30,20+bob);g.lineTo(26,23+bob);g.lineTo(29+cloth,32+bob);g.lineTo(23,28+bob);g.lineTo(19,35+bob);g.lineTo(15,28+bob);g.lineTo(9-cloth,31+bob);g.closePath();g.fill();
+  g.fillStyle=foundation.lining;g.beginPath();g.moveTo(11,16+bob);g.lineTo(7,12+bob);g.lineTo(14,15+bob);g.lineTo(17,12+bob);g.lineTo(20,16+bob);g.lineTo(25,12+bob);g.lineTo(28,17+bob);g.closePath();g.fill();
+  g.fillStyle=foundation.body2;g.beginPath();g.moveTo(11,17+bob);g.lineTo(30+cloth,14+bob);g.lineTo(27+cloth,18+bob);g.lineTo(34+cloth,24+bob);g.lineTo(25,20+bob);g.closePath();g.fill();
+ }else{
+  g.beginPath();g.moveTo(8,15+bob);g.lineTo(29,15+bob);g.lineTo(31,24+bob);g.lineTo(28+cloth,40+bob);g.lineTo(21,33+bob);g.lineTo(18,40+bob);g.lineTo(14,33+bob);g.lineTo(7-cloth,39+bob);g.closePath();g.fill();
+  g.fillStyle=foundation.body;g.beginPath();g.moveTo(9,16+bob);g.lineTo(28,16+bob);g.lineTo(29,24+bob);g.lineTo(26+cloth,38+bob);g.lineTo(21,31+bob);g.lineTo(18,38+bob);g.lineTo(14,31+bob);g.lineTo(9-cloth,37+bob);g.closePath();g.fill();
+  g.fillStyle=foundation.lining;g.beginPath();g.moveTo(16,17+bob);g.lineTo(22,17+bob);g.lineTo(23,36+bob);g.lineTo(19,31+bob);g.lineTo(16,36+bob);g.closePath();g.fill();
+ }
+ g.strokeStyle=palette.trim;g.globalAlpha=.5;g.lineWidth=.65;g.beginPath();g.moveTo(10,18+bob);g.lineTo(13,28+bob);g.moveTo(27,18+bob);g.lineTo(24,29+bob);g.stroke();g.globalAlpha=1;
 
- // Legs and boots retain the one-tile foot anchor.
- g.fillStyle="#1a1620";g.fillRect(12,27+bob+step,6,9);g.fillRect(20,27+bob-step,6,9);
- g.fillStyle="#2d2527";g.fillRect(11,33+bob+step,7,5);g.fillRect(20,33+bob-step,7,5);
- g.fillStyle="#0b090e";g.fillRect(10,37+bob+step,9,2);g.fillRect(20,37+bob-step,9,2);
- g.fillStyle="#9b7650";g.fillRect(12,34+bob+step,5,.75);g.fillRect(22,34+bob-step,5,.75);
- g.fillStyle="#d0a358";g.fillRect(15,33.5+bob+step,1,1.5);g.fillRect(23,33.5+bob-step,1,1.5);
+ // Slim legs, narrow boots, and a one-tile foot anchor.
+ g.fillStyle="#11141c";g.fillRect(13,27+bob+step,5,10);g.fillRect(20,27+bob-step,5,10);
+ g.fillStyle="#252b35";g.fillRect(12,33+bob+step,6,5);g.fillRect(20,33+bob-step,6,5);
+ g.fillStyle=foundation.metal;g.globalAlpha=.52;g.fillRect(13,34+bob+step,5,.75);g.fillRect(21,34+bob-step,5,.75);g.globalAlpha=1;
+ g.fillStyle="#07090e";g.fillRect(11,37+bob+step,8,2);g.fillRect(20,37+bob-step,8,2);
 
- // Tunic, sleeves and compact readable proportions.
- g.fillStyle=palette.body;g.beginPath();g.moveTo(12,17+bob);g.lineTo(24,17+bob);g.lineTo(27,29+bob);g.lineTo(10,29+bob);g.closePath();g.fill();
- g.fillStyle="#e6ded2";g.fillRect(14,17+bob,8,9);g.fillStyle="#c7beb5";g.fillRect(15,22+bob,6,4);
- g.fillStyle="#30272a";g.fillRect(8,18+bob,6,10);g.fillRect(23,18+bob,6,10);
- g.fillStyle="#9b7650";g.fillRect(8,23+bob,5,1);g.fillRect(24,23+bob,5,1);
- g.fillStyle="#171219";g.fillRect(7,26+bob,5,3);g.fillRect(26,26+bob,5,3);
+ // Fitted torso and arms avoid the old square adventurer proportions.
+ g.fillStyle=foundation.body2;g.beginPath();g.moveTo(13,16+bob);g.lineTo(24,16+bob);g.lineTo(26,28+bob);g.lineTo(11,28+bob);g.closePath();g.fill();
+ g.fillStyle=foundation.lining;g.globalAlpha=.72;g.beginPath();g.moveTo(17,16+bob);g.lineTo(21,16+bob);g.lineTo(22,27+bob);g.lineTo(16,27+bob);g.closePath();g.fill();g.globalAlpha=1;
+ g.fillStyle=foundation.body2;g.beginPath();g.moveTo(12,17+bob);g.lineTo(8,20+bob);g.lineTo(9,28+bob);g.lineTo(12,27+bob);g.closePath();g.fill();g.beginPath();g.moveTo(24,17+bob);g.lineTo(29,20+bob);g.lineTo(28,28+bob);g.lineTo(25,27+bob);g.closePath();g.fill();
+ g.fillStyle="#1b1820";g.fillRect(10,27+bob,17,1.5);g.fillStyle=foundation.metal;g.fillRect(18,26.5+bob,2,2.5);
+ g.strokeStyle="#746777";g.lineWidth=.75;g.beginPath();g.moveTo(14,18+bob);g.lineTo(23,27+bob);g.stroke();
 
- // Hood, friendly face and separated hair clusters.
- g.fillStyle=ink;g.beginPath();g.arc(18,12+bob,10,Math.PI,0);g.lineTo(27,17+bob);g.lineTo(9,17+bob);g.closePath();g.fill();
- g.fillStyle=palette.cloak;g.beginPath();g.moveTo(7,13+bob);g.quadraticCurveTo(9,2+bob,18,2+bob);g.quadraticCurveTo(28,3+bob,29,14+bob);g.lineTo(24,18+bob);g.lineTo(11,18+bob);g.closePath();g.fill();
- g.strokeStyle=palette.trim;g.lineWidth=.75;g.globalAlpha=.72;g.beginPath();g.moveTo(8,13+bob);g.quadraticCurveTo(10,4+bob,18,3+bob);g.quadraticCurveTo(26,4+bob,28,13+bob);g.stroke();g.globalAlpha=1;
- g.fillStyle=skin;g.beginPath();g.ellipse(18,13+bob,6.5,5.5,0,0,Math.PI*2);g.fill();
- g.fillStyle="#35252a";g.beginPath();g.moveTo(11,10+bob);g.lineTo(14,6+bob);g.lineTo(16,11+bob);g.lineTo(19,7+bob);g.lineTo(21,11+bob);g.lineTo(25,8+bob);g.lineTo(24,13+bob);g.lineTo(12,13+bob);g.closePath();g.fill();
- g.fillStyle=hurt?"#681b2c":"#21151b";g.fillRect(14,13+bob,1.5,1);g.fillRect(20.5,13+bob,1.5,1);
- if(!hurt){g.fillStyle="#fff1d6";g.fillRect(14.5,13+bob,.5,.5);g.fillRect(21,13+bob,.5,.5);g.fillStyle="#bd735e";g.fillRect(17.5,16+bob,2,1)}
- else{g.strokeStyle="#7a2738";g.lineWidth=.75;g.beginPath();g.moveTo(14,13+bob);g.lineTo(16,14+bob);g.moveTo(22,13+bob);g.lineTo(20,14+bob);g.stroke()}
+ // Young, narrow face with four independently selectable hairstyles.
+ g.fillStyle=ink;g.beginPath();g.ellipse(18.5,10.5+bob,7,6.8,0,0,Math.PI*2);g.fill();
+ g.fillStyle=skin;g.beginPath();g.moveTo(14,8+bob);g.quadraticCurveTo(18.5,5+bob,23,8+bob);g.lineTo(22.5,13+bob);g.lineTo(19,16+bob);g.lineTo(15,13+bob);g.closePath();g.fill();
+ g.fillStyle=skinShadow;g.globalAlpha=.55;g.fillRect(15,12.5+bob,1,1.5);g.fillRect(21.5,10+bob,.75,3);g.globalAlpha=1;
+ g.fillStyle=hurt?"#761b30":"#202436";g.fillRect(15.5,10.5+bob,1.5,.75);g.fillRect(20.5,10.5+bob,1.5,.75);
+ if(!hurt){g.fillStyle=light.core;g.fillRect(16,10.5+bob,.5,.5);g.fillRect(21,10.5+bob,.5,.5)}
+ g.fillStyle=hair.shadow;g.beginPath();g.moveTo(12,9+bob);g.lineTo(14,4+bob);g.lineTo(19,2+bob);g.lineTo(24,4+bob);g.lineTo(26,9+bob);g.lineTo(23,8+bob);g.lineTo(22,13+bob);g.lineTo(19,8+bob);g.lineTo(17,13+bob);g.lineTo(15,8+bob);g.closePath();g.fill();
+ g.fillStyle=hair.base;
+ if(appearance.hair==="silver"){
+  g.beginPath();g.moveTo(13,8+bob);g.lineTo(15,3+bob);g.lineTo(18,5+bob);g.lineTo(20,1+bob);g.lineTo(21,5+bob);g.lineTo(25,3+bob);g.lineTo(23,9+bob);g.lineTo(20,7+bob);g.lineTo(18,12+bob);g.lineTo(17,7+bob);g.lineTo(14,11+bob);g.closePath();g.fill();
+ }else if(appearance.hair==="night"){
+  g.beginPath();g.moveTo(12,8+bob);g.lineTo(14,4+bob);g.lineTo(17,5+bob);g.lineTo(19,1+bob);g.lineTo(21,5+bob);g.lineTo(25,3+bob);g.lineTo(24,9+bob);g.lineTo(21,8+bob);g.lineTo(19,13+bob);g.lineTo(17,8+bob);g.lineTo(14,11+bob);g.closePath();g.fill();
+ }else if(appearance.hair==="teal"){
+  g.beginPath();g.moveTo(12,8+bob);g.lineTo(14,3+bob);g.lineTo(19,1+bob);g.lineTo(24,4+bob);g.lineTo(25,10+bob);g.lineTo(27,17+bob);g.lineTo(23,13+bob);g.lineTo(21,8+bob);g.lineTo(18,13+bob);g.lineTo(16,8+bob);g.lineTo(13,13+bob);g.closePath();g.fill();
+ }else{
+  g.beginPath();g.moveTo(12,8+bob);g.lineTo(14,3+bob);g.lineTo(18,4+bob);g.lineTo(20,1+bob);g.lineTo(22,5+bob);g.lineTo(25,3+bob);g.lineTo(24,11+bob);g.lineTo(27,17+bob);g.lineTo(23,15+bob);g.lineTo(21,8+bob);g.lineTo(18,13+bob);g.lineTo(16,8+bob);g.lineTo(13,14+bob);g.closePath();g.fill();
+ }
+ g.fillStyle=hair.light;g.globalAlpha=.78;g.fillRect(16,4+bob,3,.75);g.fillRect(21,5+bob,2,.75);g.globalAlpha=1;
 
- // Scarf, harness, belt and brass hardware.
- g.fillStyle="#24202b";g.beginPath();g.moveTo(10,17+bob);g.lineTo(26,16+bob);g.lineTo(23,22+bob);g.lineTo(13,22+bob);g.closePath();g.fill();
- g.strokeStyle="#80644f";g.lineWidth=1;g.beginPath();g.moveTo(12,19+bob);g.lineTo(24,29+bob);g.moveTo(24,19+bob);g.lineTo(13,29+bob);g.stroke();
- g.fillStyle="#35282a";g.fillRect(10,27+bob,17,2);g.fillStyle="#d8a94f";g.fillRect(17,26.5+bob,3,3);g.fillStyle="#17131a";g.fillRect(18,27+bob,1,2);
- g.fillStyle="#4a3530";g.fillRect(7,26+bob,5,6);g.fillRect(26,25+bob,5,5);g.fillStyle="#b58a55";g.fillRect(8,27+bob,3,.75);g.fillRect(27,26+bob,3,.75);
-
- // Preserve every existing sigil by reusing its exact motif at the higher body scale.
- g.save();g.translate(1,2+bob);g.scale(1.45,1.45);drawAppearanceSigil(g,sigil,palette,dark,0);g.restore();
+ // High collar, layered harness, and existing collectible sigil.
+ g.fillStyle=foundation.body;g.beginPath();g.moveTo(11,16+bob);g.lineTo(14,12+bob);g.lineTo(18,17+bob);g.lineTo(23,12+bob);g.lineTo(27,17+bob);g.lineTo(23,20+bob);g.lineTo(14,20+bob);g.closePath();g.fill();
+ g.strokeStyle=palette.trim;g.globalAlpha=.5;g.beginPath();g.moveTo(14,19+bob);g.lineTo(23,27+bob);g.moveTo(23,19+bob);g.lineTo(14,27+bob);g.stroke();g.globalAlpha=1;
+ g.save();g.translate(4,3+bob);g.scale(1.25,1.25);drawAppearanceSigil(g,sigil,palette,dark,0);g.restore();
  drawHighResolutionShapeAccent(g,shape,palette,bob,t);
+ drawHeroMagicFocus(g,appearance.focus,light,bob,focusFloat,showAura);
+ drawHeroCeremonialWeapon(g,appearance.foundation,light,bob,attackLift);
 
- // Lantern: larger glass chamber, chain, animated flame and local reflected light.
- g.save();g.translate(lanternSwing,0);
- if(showAura&&light.glow!=="rgba(0,0,0,0)"){
-  const glow=g.createRadialGradient(4,28+bob,1,4,28+bob,12);glow.addColorStop(0,light.glow);glow.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=glow;g.fillRect(-9,15+bob,25,26);
- }
- g.strokeStyle="#a88a60";g.lineWidth=1;g.beginPath();g.moveTo(9,20+bob);g.quadraticCurveTo(4,16+bob,1,22+bob);g.stroke();
- g.fillStyle="#1a171b";g.fillRect(0,22+bob,8,12);g.strokeStyle="#b28e5c";g.strokeRect(.5,22.5+bob,7,11);
- g.fillStyle="#d2ad6e";g.fillRect(-1,21+bob,10,2);g.fillRect(-1,33+bob,10,2);
- g.fillStyle=light.mid;g.fillRect(2,25+bob,4,6);g.fillStyle=light.core;g.fillRect(3,25+bob,2,5);g.fillStyle="#fff9dc";g.fillRect(3.5,26+bob,1,2);
+ // Fine rim separates a dark costume from walls without making it bulky.
+ g.strokeStyle=light.core;g.globalAlpha=.42;g.lineWidth=.5;g.beginPath();g.moveTo(13,7+bob);g.lineTo(15,3+bob);g.lineTo(20,1.5+bob);g.lineTo(24,4+bob);g.moveTo(27,16+bob);g.lineTo(29,26+bob);g.stroke();g.globalAlpha=1;
  g.restore();
-
- // Sword and attack pose use the same gameplay animation timing.
- g.save();g.translate(0,-attackLift);g.strokeStyle="#171319";g.lineWidth=3;g.beginPath();g.moveTo(27,21+bob);g.lineTo(34,36+bob-attackLift);g.stroke();
- g.strokeStyle="#cbd3d8";g.lineWidth=1.5;g.beginPath();g.moveTo(27,21+bob);g.lineTo(34,36+bob-attackLift);g.stroke();
- g.strokeStyle=light.core;g.globalAlpha=.78;g.lineWidth=.5;g.beginPath();g.moveTo(27.5,21+bob);g.lineTo(34.5,36+bob-attackLift);g.stroke();g.globalAlpha=1;
- g.strokeStyle="#d6a85c";g.lineWidth=1.5;g.beginPath();g.moveTo(25,22+bob);g.lineTo(30,20+bob);g.stroke();g.restore();
-
- // One physical-pixel rim separates the hero from equally dark walls.
- g.strokeStyle=state.light?.type==="arcane"?"#85ddff":"#e8b866";g.globalAlpha=.34;g.lineWidth=.5;g.beginPath();g.moveTo(9,8+bob);g.lineTo(12,4+bob);g.lineTo(18,2.5+bob);g.lineTo(24,5+bob);g.moveTo(29,16+bob);g.lineTo(31,27+bob);g.stroke();
+}
+function drawHeroMagicFocus(g,focusId,light,bob,float,showAura){
+ g.save();g.translate(0,float);
+ if(showAura&&light.glow!=="rgba(0,0,0,0)"){
+  const glow=g.createRadialGradient(4,20+bob,1,4,20+bob,10);glow.addColorStop(0,light.glow);glow.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=glow;g.fillRect(-7,8+bob,22,24);
+ }
+ if(focusId==="lantern"){
+  g.strokeStyle="#91a8b7";g.lineWidth=.75;g.beginPath();g.arc(4,14+bob,3,Math.PI,0);g.stroke();
+  g.fillStyle="#101923";g.beginPath();g.moveTo(0,15+bob);g.lineTo(8,15+bob);g.lineTo(7,25+bob);g.lineTo(1,25+bob);g.closePath();g.fill();
+  g.strokeStyle="#8bb8ca";g.strokeRect(1.5,16.5+bob,5,7);g.fillStyle=light.mid;g.fillRect(2.5,18+bob,3,4);g.fillStyle=light.core;g.fillRect(3.5,18.5+bob,1,3);
+  g.fillStyle="#9bb8c6";g.fillRect(0,14+bob,8,1);g.fillRect(0,25+bob,8,1);
+ }else if(focusId==="prism"){
+  g.fillStyle=light.mid;g.beginPath();g.moveTo(4,12+bob);g.lineTo(8,18+bob);g.lineTo(4,26+bob);g.lineTo(0,18+bob);g.closePath();g.fill();
+  g.fillStyle=light.core;g.beginPath();g.moveTo(4,13+bob);g.lineTo(5,19+bob);g.lineTo(3,24+bob);g.lineTo(2,18+bob);g.closePath();g.fill();
+  g.strokeStyle=light.mid;g.globalAlpha=.7;g.beginPath();g.ellipse(4,19+bob,8,3,0,0,Math.PI*2);g.stroke();g.globalAlpha=1;
+ }else if(focusId==="wisp"){
+  g.fillStyle=light.mid;g.beginPath();g.moveTo(4,12+bob);g.lineTo(7,17+bob);g.lineTo(6,22+bob);g.lineTo(3,26+bob);g.lineTo(0,22+bob);g.lineTo(1,18+bob);g.lineTo(3,16+bob);g.closePath();g.fill();
+  g.fillStyle=light.core;g.beginPath();g.moveTo(4,16+bob);g.lineTo(5,20+bob);g.lineTo(3,23+bob);g.lineTo(2,20+bob);g.closePath();g.fill();
+  g.strokeStyle=light.mid;g.globalAlpha=.65;g.beginPath();g.moveTo(7,15+bob);g.quadraticCurveTo(11,11+bob,8,8+bob);g.stroke();g.globalAlpha=1;
+ }else{
+  g.strokeStyle=light.mid;g.globalAlpha=.8;g.beginPath();g.ellipse(4,19+bob,8,5,-.3,0,Math.PI*2);g.stroke();g.globalAlpha=1;
+  [[0,16],[8,14],[10,21],[2,24]].forEach(([x,y],i)=>{g.fillStyle=i===1?light.core:light.mid;g.beginPath();g.moveTo(x,y-2+bob);g.lineTo(x+1.5,y+bob);g.lineTo(x,y+2+bob);g.lineTo(x-1.5,y+bob);g.closePath();g.fill()});
+ }
+ g.restore();
+}
+function drawHeroCeremonialWeapon(g,foundationId,light,bob,attackLift){
+ g.save();g.translate(0,-attackLift);g.lineCap="square";
+ if(foundationId==="hunter"){
+  g.strokeStyle="#080a0f";g.lineWidth=2.5;g.beginPath();g.moveTo(9,23+bob);g.lineTo(3,33+bob);g.moveTo(28,22+bob);g.lineTo(35,32+bob);g.stroke();
+  g.strokeStyle=light.mid;g.lineWidth=1;g.beginPath();g.moveTo(9,23+bob);g.lineTo(3,33+bob);g.moveTo(28,22+bob);g.lineTo(35,32+bob);g.stroke();
+ }else{
+  const long=foundationId==="pilgrim"?17:foundationId==="spellblade"?15:13;
+  g.strokeStyle="#080a0f";g.lineWidth=3;g.beginPath();g.moveTo(27,21+bob);g.lineTo(27+long*.48,21+long+bob);g.stroke();
+  g.strokeStyle=foundationId==="spellblade"?light.mid:"#cdd9e3";g.lineWidth=1.25;g.beginPath();g.moveTo(27,21+bob);g.lineTo(27+long*.48,21+long+bob);g.stroke();
+  g.strokeStyle=light.core;g.globalAlpha=.72;g.lineWidth=.5;g.beginPath();g.moveTo(27.5,21+bob);g.lineTo(27.5+long*.48,21+long+bob);g.stroke();g.globalAlpha=1;
+  g.strokeStyle="#b8a36f";g.lineWidth=1.5;g.beginPath();g.moveTo(25,22+bob);g.lineTo(30,20+bob);g.stroke();
+ }
  g.restore();
 }
 function drawHighResolutionShapeAccent(g,shape,palette,bob,t){
