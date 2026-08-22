@@ -296,7 +296,7 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
 
 #game{
   width:100%;
-  aspect-ratio:374/462;
+  aspect-ratio:286/374;
   display:block;
   image-rendering:pixelated;
   image-rendering:crisp-edges;
@@ -5859,11 +5859,11 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.30 FANTASY FORGE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.31 CINEMATIC SPRITE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
-<canvas id="game" width="748" height="924" aria-label="ダンジョン"></canvas>
+<canvas id="game" width="572" height="748" aria-label="ダンジョン"></canvas>
 <div id="impactOverlay" aria-hidden="true"></div>
 <div id="combatToast" aria-live="polite"></div>
 <div class="floorGoal" id="floorGoal"><b>探索目標</b><br>深淵へ踏み出す。</div>
@@ -6729,12 +6729,28 @@ body,button,input,select,textarea{font-size:12px}
 
 <script>
 "use strict";
-const COLS=35, ROWS=39, VIEW_COLS=17, VIEW_ROWS=21, TILE=22;
+const COLS=35, ROWS=39, VIEW_COLS=13, VIEW_ROWS=17, TILE=22;
 const CANVAS_W=VIEW_COLS*TILE,CANVAS_H=VIEW_ROWS*TILE,RENDER_SCALE=2;
 const canvas=document.getElementById("game"), ctx=canvas.getContext("2d");
 ctx.imageSmoothingEnabled=false;
 ctx.setTransform(RENDER_SCALE,0,0,RENDER_SCALE,0,0);
 const $=id=>document.getElementById(id);
+const visualAssets={};
+function loadVisualAsset(id,src){
+ const image=new Image();
+ const record=visualAssets[id]={id,src,image,ready:false,failed:false};
+ image.decoding="async";
+ image.onload=()=>{
+  record.ready=true;
+  requestAnimationFrame(()=>{try{render()}catch(_){}});
+ };
+ image.onerror=()=>{record.failed=true;console.warn(`Visual asset failed: ${id}`)};
+ image.src=src;
+ return record;
+}
+loadVisualAsset("heroMoonGuide","./assets/hero-moon-guide-v1.png");
+loadVisualAsset("cryptFloor","./assets/dungeon-floor-crypt-v1.png");
+window.__ABYSS_VISUAL_ASSETS__=visualAssets;
 const FLOOR_GOAL_EXPANDED_KEY="abyssal-roots-floor-goal-expanded";
 let floorGoalExpanded=false;
 try{floorGoalExpanded=localStorage.getItem(FLOOR_GOAL_EXPANDED_KEY)==="1"}catch(_){}
@@ -9052,7 +9068,9 @@ function drawAppearancePreview(){
  const bg=g.createLinearGradient(0,0,0,c.height);
  bg.addColorStop(0,"#17101f");bg.addColorStop(1,"#070509");
  g.fillStyle=bg;g.fillRect(0,0,c.width,c.height);
- drawHighResolutionExplorer(g,12,7,2,false,0,state.visual?.time||0,true);
+ if(!drawCinematicHeroImage(g,c.width/2,c.height-3,88,false,state.visual?.time||0,true)){
+  drawHighResolutionExplorer(g,12,7,2,false,0,state.visual?.time||0,true);
+ }
 }
 function appearanceUnlockMicroHint(data,keyName,unlocked){
  if(unlocked||keyName==="color"||!data)return"";
@@ -24756,7 +24774,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.30",
+  version:"4.31",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -26665,6 +26683,20 @@ function drawFloorTile(px,py,x,y,vis){
  const floor=vis?biome.floor:"#0d0a11";
  ctx.fillStyle=floor;ctx.fillRect(px,py,TILE,TILE);
 
+ // Production raster patch: the generated 384px texture spans a 3x3 tile block.
+ // Map coordinates select a stable source cell, so procedural rooms retain their exact geometry.
+ const floorAsset=visualAssets.cryptFloor;
+ if(currentBiomeKey()==="crypt"&&floorAsset?.ready&&floorAsset.image.naturalWidth){
+  const patchCells=3,sourceSize=Math.floor(floorAsset.image.naturalWidth/patchCells);
+  const sourceX=((x%patchCells)+patchCells)%patchCells*sourceSize;
+  const sourceY=((y%patchCells)+patchCells)%patchCells*sourceSize;
+  ctx.save();
+  ctx.imageSmoothingEnabled=false;
+  ctx.globalAlpha=vis?.86:.28;
+  ctx.drawImage(floorAsset.image,sourceX,sourceY,sourceSize,sourceSize,px,py,TILE,TILE);
+  ctx.restore();
+ }
+
  // slab frame
  ctx.fillStyle=vis?"rgba(255,255,255,.045)":"rgba(255,255,255,.02)";
  ctx.fillRect(px+1,py+1,TILE-2,1);
@@ -26833,7 +26865,41 @@ function drawActorGroundShadow(x,y,scale=1,alpha=.28){
  ctx.beginPath();ctx.ellipse(x+11,y+18.5,7*scale,2.3*scale,0,0,Math.PI*2);ctx.fill();
  ctx.restore();
 }
+function drawCinematicHeroImage(g,centerX,footY,height,hurt,t,showGlow=true){
+ const appearance=currentAppearance(),asset=visualAssets.heroMoonGuide;
+ if(
+  appearance.foundation!=="guide"||
+  appearance.hair!=="silver"||
+  appearance.focus!=="lantern"||
+  !asset?.ready||!asset.image.naturalWidth
+ )return false;
+
+ const bob=Math.sin(t*.12)*.65;
+ const width=height*(asset.image.naturalWidth/asset.image.naturalHeight);
+ const left=centerX-width/2,top=footY-height+bob;
+ g.save();
+ g.imageSmoothingEnabled=false;
+ if(showGlow&&state?.light?.on&&state.light.fuel>0){
+  g.globalCompositeOperation="screen";
+  const lanternX=left+width*.84,lanternY=top+height*.25;
+  const glowRadius=height*.265;
+  const glow=g.createRadialGradient(lanternX,lanternY,1,lanternX,lanternY,glowRadius);
+  glow.addColorStop(0,"rgba(195,250,255,.34)");
+  glow.addColorStop(.35,"rgba(69,202,255,.17)");
+  glow.addColorStop(1,"rgba(0,0,0,0)");
+  g.fillStyle=glow;g.fillRect(lanternX-glowRadius,lanternY-glowRadius,glowRadius*2,glowRadius*2);
+  g.globalCompositeOperation="source-over";
+ }
+ if(hurt)g.filter="sepia(1) saturate(2.4) hue-rotate(302deg) brightness(1.18)";
+ g.drawImage(asset.image,Math.round(left),Math.round(top),Math.round(width),height);
+ g.restore();
+ return true;
+}
+function drawCinematicHeroAsset(x,y,hurt,t){
+ return drawCinematicHeroImage(ctx,x+TILE/2,y+TILE-1,68,hurt,t,true);
+}
 function drawHeroSprite(x,y,hurt,t){
+ if(drawCinematicHeroAsset(x,y,hurt,t))return;
  const bob=Math.sin(t*.12)*.65;
  drawHighResolutionExplorer(ctx,x-7,y-18,1,hurt,bob,t,true);
 }
