@@ -2610,6 +2610,9 @@ body{
 
 
 /* v3.10.8 APPEARANCE 104 */
+#game{filter:saturate(1.12) contrast(1.06) brightness(1.05)}
+#gameWrap{border-color:#586a86;box-shadow:0 0 0 1px #101827 inset,0 0 24px rgba(62,136,185,.09),0 12px 34px #000b}
+.mobileCompactHero{border-color:#4d5f77;background:linear-gradient(180deg,#172131,#11131d)}
 .appearancePresetGrid{
  display:grid;
  grid-template-columns:repeat(2,minmax(0,1fr));
@@ -2628,6 +2631,7 @@ body{
 .appearancePreset b{display:block;color:#f3e7ff;font-size:12.5px}
 .appearancePreset small{display:block;margin-top:3px;color:#a99eb1;font-size:11px;line-height:1.35}
 .appearancePreset.selected{border-color:#7ddfff;box-shadow:inset 0 0 14px rgba(84,199,255,.13)}
+.appearanceRandomBtn{width:100%;margin:0 0 10px;border-color:#507789;background:linear-gradient(145deg,#16252d,#11151d);color:#d9f7ff}
 .appearanceFreeChoices{grid-template-columns:repeat(2,minmax(0,1fr))}
 .appearanceFreeChoices .appearanceChoice{min-height:54px}
 .appearancePreviewWrap{
@@ -5855,7 +5859,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.29 APPEARANCE FORGE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.30 FANTASY FORGE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5980,13 +5984,14 @@ body,button,input,select,textarea{font-size:12px}
 <div class="overlay hidden" id="appearanceOverlay">
   <div class="card appearanceCard">
     <h2>探索者の姿</h2>
-    <p>若い細身体型を基準に、<b>基本衣装4種</b>・<b>髪4種</b>・<b>魔導具4種</b>を自由に混ぜられます。既存の<b>魔力色48色</b>・<b>追加装飾32種</b>・<b>紋章24種</b>もそのまま重ねられます。</p>
+    <p>若い細身体型を基準に、<b>基本衣装30種</b>・<b>髪30種</b>・<b>魔導具30種</b>を自由に混ぜられます。既存の<b>魔力色48色</b>・<b>追加装飾32種</b>・<b>紋章24種</b>もそのまま重ねられます。</p>
     <div class="appearancePreviewWrap">
       <canvas id="appearancePreview" width="96" height="96" aria-label="探索者アイコンのプレビュー"></canvas>
       <div id="appearanceSummary"></div>
     </div>
     <h3>基本プリセット</h3>
     <div id="appearancePresets" class="appearancePresetGrid"></div>
+    <button type="button" id="appearanceRandomize" class="appearanceRandomBtn">30×3部品からランダムコーデ</button>
     <h3>基本衣装</h3>
     <div id="appearanceFoundations" class="appearanceChoices appearanceFreeChoices"></div>
     <h3>髪</h3>
@@ -8330,22 +8335,100 @@ const weaponData={
 
 
 const appearanceFoundationData={
- guide:{label:"月導の細衣",desc:"短い非対称外套と高い襟。灯火が映える軽快な基礎衣装。",body:"#111722",body2:"#25334a",lining:"#204f83",metal:"#b8c9d8"},
- spellblade:{label:"星骸の長衣",desc:"細い腰と二枚の長い裾。魔晶と儀礼刃を引き立てる。",body:"#14131e",body2:"#2c2940",lining:"#503280",metal:"#c2b9d6"},
- hunter:{label:"深根の猟装",desc:"羽状の肩布と流れる帯。二刀でも読みやすい軽装。",body:"#101b1d",body2:"#17454a",lining:"#176c70",metal:"#8fbfc1"},
- pilgrim:{label:"白夜の巡礼衣",desc:"白い前垂れと割れた長衣。細身の王道主人公シルエット。",body:"#111722",body2:"#29364d",lining:"#d8e4ef",metal:"#c9d8e8"}
+ guide:{label:"月導の細衣",desc:"短い非対称外套と高い襟。",silhouette:"guide",body:"#111722",body2:"#25334a",lining:"#204f83",metal:"#b8c9d8"},
+ spellblade:{label:"星骸の長衣",desc:"細い腰と二枚の長い裾。",silhouette:"spellblade",body:"#14131e",body2:"#2c2940",lining:"#503280",metal:"#c2b9d6"},
+ hunter:{label:"深根の猟装",desc:"羽状の肩布と流れる帯。",silhouette:"hunter",body:"#101b1d",body2:"#17454a",lining:"#176c70",metal:"#8fbfc1"},
+ pilgrim:{label:"白夜の巡礼衣",desc:"白い前垂れと割れた長衣。",silhouette:"pilgrim",body:"#111722",body2:"#29364d",lining:"#d8e4ef",metal:"#c9d8e8"},
+ moondancer:{label:"月影の舞衣",desc:"月光を引く軽い片裾。",silhouette:"guide",body:"#151828",body2:"#343a58",lining:"#718fc2",metal:"#d4e2ee"},
+ duskduelist:{label:"黄昏の決闘衣",desc:"葡萄色の裏地を持つ細衣。",silhouette:"spellblade",body:"#19131b",body2:"#382438",lining:"#7e365c",metal:"#c8a4b7"},
+ arcaneweaver:{label:"秘術織りの法衣",desc:"青紫の術式布を重ねた長衣。",silhouette:"pilgrim",body:"#111326",body2:"#292d59",lining:"#7276d7",metal:"#c5c9f0"},
+ crystalknight:{label:"晶騎士の軽甲",desc:"結晶縁を持つ俊敏な甲衣。",silhouette:"guide",body:"#101a24",body2:"#29485b",lining:"#67cbe7",metal:"#d9f4ff"},
+ ravenmantle:{label:"鴉羽の外套",desc:"黒羽のように割れた肩布。",silhouette:"hunter",body:"#090b12",body2:"#222431",lining:"#49415c",metal:"#9b93ac"},
+ frostseeker:{label:"霜追いの旅衣",desc:"冷光を帯びた細身の防寒衣。",silhouette:"guide",body:"#14202a",body2:"#3a5264",lining:"#a7dcf1",metal:"#eefbff"},
+ embercoat:{label:"残火の戦衣",desc:"赤熱した裏地を隠す黒衣。",silhouette:"spellblade",body:"#171012",body2:"#49231f",lining:"#b54c32",metal:"#e2b08a"},
+ rootdancer:{label:"翠根の舞装",desc:"根脈色の帯が流れる軽装。",silhouette:"hunter",body:"#0e1915",body2:"#294b38",lining:"#65a55c",metal:"#b7d0a7"},
+ voidcleric:{label:"虚祈りの聖衣",desc:"空隙色の前垂れを持つ法衣。",silhouette:"pilgrim",body:"#090a15",body2:"#24223c",lining:"#65488e",metal:"#b8a9d4"},
+ moonassassin:{label:"月刃の隠れ装",desc:"短い片布と暗い脚衣。",silhouette:"hunter",body:"#0b111b",body2:"#26364b",lining:"#586e9a",metal:"#b9c8dc"},
+ auroraguard:{label:"極光の護衣",desc:"緑青と金の縁を持つ守衣。",silhouette:"pilgrim",body:"#102022",body2:"#28545a",lining:"#d1c66e",metal:"#eaf2cb"},
+ stormscribe:{label:"嵐記の術衣",desc:"雷線を刻んだ短い術衣。",silhouette:"guide",body:"#121923",body2:"#364558",lining:"#729cc5",metal:"#d3e4ee"},
+ phantomtail:{label:"幽尾の長衣",desc:"透けるような二枚裾。",silhouette:"spellblade",body:"#11131a",body2:"#313a46",lining:"#6f98a8",metal:"#cce9ee"},
+ cathedral:{label:"青堂の祭衣",desc:"高い襟と端正な白布。",silhouette:"pilgrim",body:"#121722",body2:"#293a50",lining:"#b9cce3",metal:"#e3edf8"},
+ glasswanderer:{label:"玻璃渡りの旅衣",desc:"透明感のある青い片外套。",silhouette:"guide",body:"#0d1720",body2:"#23465d",lining:"#53b6d0",metal:"#c5f3ff"},
+ thornblade:{label:"荊刃の猟衣",desc:"棘色の肩布と細い帯。",silhouette:"hunter",body:"#121612",body2:"#35422c",lining:"#8a6d4c",metal:"#cdbf9b"},
+ astralcoat:{label:"星路の長外套",desc:"星図色の二枚裾。",silhouette:"spellblade",body:"#0e1020",body2:"#262c55",lining:"#4f6fc0",metal:"#d2dcff"},
+ graveprince:{label:"墓王子の礼衣",desc:"骨白の縁を持つ黒い礼装。",silhouette:"spellblade",body:"#0b0c10",body2:"#25262c",lining:"#b7b09e",metal:"#e4dfd3"},
+ tidecaller:{label:"潮呼びの装衣",desc:"深海色の帯が波打つ装束。",silhouette:"hunter",body:"#0c171d",body2:"#1d4451",lining:"#4da1b6",metal:"#bce4eb"},
+ sunsworn:{label:"暁誓の巡礼衣",desc:"金白の前垂れを持つ長衣。",silhouette:"pilgrim",body:"#1b1712",body2:"#4d3b23",lining:"#d5a94e",metal:"#fff0b3"},
+ nightoracle:{label:"夜星の託宣衣",desc:"夜空色の静かな術衣。",silhouette:"pilgrim",body:"#0c0d1a",body2:"#292645",lining:"#6961a7",metal:"#c5bee3"},
+ silvernomad:{label:"銀砂の旅装",desc:"灰銀の布を幾重にも巻く。",silhouette:"guide",body:"#17181b",body2:"#42434a",lining:"#8f8273",metal:"#d4cfc7"},
+ bloomwitch:{label:"花葬の魔衣",desc:"薔薇灰の裾を持つ細衣。",silhouette:"spellblade",body:"#181117",body2:"#4c2e42",lining:"#b45f87",metal:"#e6b9cd"},
+ echohunter:{label:"遺響狩りの軽装",desc:"青い残響線を引く狩装。",silhouette:"hunter",body:"#0b1418",body2:"#263d46",lining:"#3b91a6",metal:"#aadae5"},
+ prismatic:{label:"万華の典礼衣",desc:"多色光を受ける暗い祭衣。",silhouette:"pilgrim",body:"#10121a",body2:"#34334a",lining:"#846aa0",metal:"#ece0ff"},
+ abyssal:{label:"深淵王の細礼装",desc:"最深部の青黒い主人公礼装。",silhouette:"spellblade",body:"#060910",body2:"#17243b",lining:"#295f91",metal:"#aacbe8"}
 };
 const appearanceHairData={
- silver:{label:"月銀の短髪",desc:"軽く流れる銀髪。顔周りを明るく見せる。",base:"#c8d5e2",light:"#f2f7fb",shadow:"#78899c"},
- night:{label:"星夜の黒髪",desc:"紫の反射を持つ黒髪。魔剣士向けの鋭い輪郭。",base:"#171725",light:"#595078",shadow:"#080910"},
- teal:{label:"深根の青緑髪",desc:"長めの青緑髪。帯と一緒に動く影狩人の髪。",base:"#123a41",light:"#2b7c81",shadow:"#07171d"},
- white:{label:"白夜の長髪",desc:"頬へ落ちる白髪。青い魔導光を強く拾う。",base:"#d6e1eb",light:"#ffffff",shadow:"#7d91aa"}
+ silver:{label:"月銀の短髪",desc:"軽く流れる銀髪。",shape:"silver",base:"#c8d5e2",light:"#f2f7fb",shadow:"#78899c"},
+ night:{label:"星夜の黒髪",desc:"紫を拾う鋭い黒髪。",shape:"night",base:"#171725",light:"#595078",shadow:"#080910"},
+ teal:{label:"深根の青緑髪",desc:"帯と動く長めの青緑髪。",shape:"teal",base:"#123a41",light:"#2b7c81",shadow:"#07171d"},
+ white:{label:"白夜の長髪",desc:"青い光を拾う白髪。",shape:"white",base:"#d6e1eb",light:"#ffffff",shadow:"#7d91aa"},
+ ash:{label:"灰月の短髪",desc:"静かな灰色の短髪。",shape:"silver",base:"#8f929b",light:"#d4d6dc",shadow:"#4b4e58"},
+ violet:{label:"紫晶の乱髪",desc:"紫光を帯びた黒髪。",shape:"night",base:"#29203d",light:"#8f69c5",shadow:"#0e0a17"},
+ cobalt:{label:"群青の流髪",desc:"深い青の流れる髪。",shape:"teal",base:"#17274c",light:"#526fc1",shadow:"#091126"},
+ ember:{label:"残火の赤髪",desc:"毛先だけ赤く燃える髪。",shape:"night",base:"#3b1918",light:"#c15a42",shadow:"#160909"},
+ frost:{label:"氷晶の長髪",desc:"淡青の冷たい長髪。",shape:"white",base:"#a9d3e2",light:"#effcff",shadow:"#587a8d"},
+ raven:{label:"鴉羽の長髪",desc:"羽のような漆黒髪。",shape:"white",base:"#10131b",light:"#4a5367",shadow:"#05060a"},
+ sea:{label:"海淵の流髪",desc:"海色の長い横髪。",shape:"teal",base:"#123849",light:"#3f9ab2",shadow:"#071923"},
+ jade:{label:"翡翠の短髪",desc:"緑青の軽い短髪。",shape:"silver",base:"#286c5d",light:"#71c3a7",shadow:"#10352e"},
+ pearl:{label:"真珠の柔髪",desc:"柔らかな薄灰髪。",shape:"silver",base:"#c9c4cc",light:"#fffaff",shadow:"#817985"},
+ smoke:{label:"煙晶の乱髪",desc:"煙色の尖った髪。",shape:"night",base:"#41434a",light:"#8b8e99",shadow:"#18191e"},
+ wine:{label:"葡萄夜の長髪",desc:"暗い葡萄色の長髪。",shape:"white",base:"#452135",light:"#9e5678",shadow:"#190b13"},
+ copper:{label:"赤銅の短髪",desc:"金属光を持つ赤茶髪。",shape:"silver",base:"#7d3e2b",light:"#ce7954",shadow:"#35190f"},
+ gold:{label:"金葉の流髪",desc:"暗金色の流れる髪。",shape:"teal",base:"#74622d",light:"#d2b960",shadow:"#302610"},
+ aurora:{label:"極光の長髪",desc:"青緑から白へ光る髪。",shape:"white",base:"#5da6a2",light:"#d5fff2",shadow:"#245052"},
+ indigo:{label:"藍晶の短髪",desc:"藍色の端正な短髪。",shape:"silver",base:"#303763",light:"#7682ca",shadow:"#12162f"},
+ rose:{label:"虚薔薇の乱髪",desc:"灰紫の不規則な髪。",shape:"night",base:"#51273f",light:"#a85f89",shadow:"#1d0c16"},
+ root:{label:"根森の長髪",desc:"深緑の重なる長髪。",shape:"teal",base:"#1f412e",light:"#60875a",shadow:"#0b1d12"},
+ lunar:{label:"蒼月の長髪",desc:"青白い長髪。",shape:"white",base:"#9db8d8",light:"#edf5ff",shadow:"#506783"},
+ comet:{label:"彗星の跳ね髪",desc:"白青の跳ねた短髪。",shape:"night",base:"#b7c9dc",light:"#ffffff",shadow:"#5b718b"},
+ dusk:{label:"黄昏の流髪",desc:"紫灰の流れる髪。",shape:"teal",base:"#51405e",light:"#a78cb0",shadow:"#211928"},
+ dawn:{label:"暁光の短髪",desc:"淡い橙金の短髪。",shape:"silver",base:"#b97850",light:"#f4c28e",shadow:"#5c3020"},
+ phantom:{label:"幽世の長髪",desc:"青灰の透ける長髪。",shape:"white",base:"#77929b",light:"#d7ffff",shadow:"#344b55"},
+ crystal:{label:"晶雪の乱髪",desc:"結晶のような白髪。",shape:"night",base:"#c0dcea",light:"#ffffff",shadow:"#688ca1"},
+ abyss:{label:"深淵星の流髪",desc:"青黒に光点を持つ髪。",shape:"teal",base:"#101a38",light:"#6278c8",shadow:"#05091c"},
+ mint:{label:"薄荷の短髪",desc:"淡緑の軽い短髪。",shape:"silver",base:"#72a994",light:"#cffff0",shadow:"#355b50"},
+ crimson:{label:"緋月の長髪",desc:"深紅の長い髪。",shape:"white",base:"#5e1f2c",light:"#bf5265",shadow:"#210911"}
 };
 const appearanceFocusData={
- lantern:{label:"浮遊深淵灯",desc:"鎖から解放された青い魔導灯。探索者の象徴。",core:"#ecffff",mid:"#58dfff",glow:"rgba(53,203,255,.38)"},
- prism:{label:"星骸魔晶",desc:"手元を周回する紫の結晶。魔剣士らしい鋭い光。",core:"#f2dcff",mid:"#aa62ff",glow:"rgba(157,74,255,.38)"},
- wisp:{label:"深根の鬼火",desc:"形を変える青緑の小精霊。軽装と相性が良い。",core:"#e3fff5",mid:"#38e7d5",glow:"rgba(45,225,202,.36)"},
- orbit:{label:"白夜晶環",desc:"小結晶が静かに公転する、端正な魔導環。",core:"#effaff",mid:"#75bfff",glow:"rgba(94,168,255,.38)"}
+ lantern:{label:"浮遊深淵灯",desc:"青い探索魔導灯。",kind:"lantern",core:"#ecffff",mid:"#58dfff",glow:"rgba(53,203,255,.38)"},
+ prism:{label:"星骸魔晶",desc:"紫の周回結晶。",kind:"prism",core:"#f2dcff",mid:"#aa62ff",glow:"rgba(157,74,255,.38)"},
+ wisp:{label:"深根の鬼火",desc:"青緑の小精霊。",kind:"wisp",core:"#e3fff5",mid:"#38e7d5",glow:"rgba(45,225,202,.36)"},
+ orbit:{label:"白夜晶環",desc:"青い公転晶片。",kind:"orbit",core:"#effaff",mid:"#75bfff",glow:"rgba(94,168,255,.38)"},
+ emberLantern:{label:"残火浮灯",desc:"琥珀色の浮遊灯。",kind:"lantern",core:"#fff3bd",mid:"#ffad45",glow:"rgba(255,153,49,.36)"},
+ frostLantern:{label:"霜晶浮灯",desc:"氷青の静かな灯。",kind:"lantern",core:"#f1ffff",mid:"#8be2ff",glow:"rgba(105,208,255,.34)"},
+ moonLantern:{label:"月白浮灯",desc:"白銀の月灯。",kind:"lantern",core:"#ffffff",mid:"#b9cfff",glow:"rgba(167,190,255,.34)"},
+ voidLantern:{label:"虚無浮灯",desc:"紫黒の反転灯。",kind:"lantern",core:"#e6c9ff",mid:"#72459a",glow:"rgba(103,61,153,.34)"},
+ tideLantern:{label:"潮汐浮灯",desc:"海青の揺れる灯。",kind:"lantern",core:"#dcffff",mid:"#47b9cf",glow:"rgba(57,175,201,.34)"},
+ jadeLantern:{label:"翡翠浮灯",desc:"緑青の導き灯。",kind:"lantern",core:"#eaffd8",mid:"#56c895",glow:"rgba(75,194,136,.34)"},
+ violetPrism:{label:"紫極魔晶",desc:"濃紫の鋭い晶体。",kind:"prism",core:"#f4d5ff",mid:"#8d42e8",glow:"rgba(128,52,224,.37)"},
+ crimsonPrism:{label:"血月魔晶",desc:"赤い危険な晶体。",kind:"prism",core:"#ffd9df",mid:"#e54f69",glow:"rgba(220,55,81,.36)"},
+ auroraPrism:{label:"極光魔晶",desc:"青緑の多面晶。",kind:"prism",core:"#edfff6",mid:"#62d6bd",glow:"rgba(72,207,179,.36)"},
+ goldPrism:{label:"金葉魔晶",desc:"黄金の希少晶。",kind:"prism",core:"#fff6c7",mid:"#e2bd4d",glow:"rgba(220,178,52,.35)"},
+ obsidianPrism:{label:"黒曜魔晶",desc:"黒紫の吸光晶。",kind:"prism",core:"#d8cced",mid:"#514763",glow:"rgba(77,65,101,.34)"},
+ frostPrism:{label:"氷華魔晶",desc:"雪色の六面晶。",kind:"prism",core:"#ffffff",mid:"#7dd8ef",glow:"rgba(99,201,229,.35)"},
+ mintWisp:{label:"薄荷の鬼火",desc:"淡緑の優しい精霊。",kind:"wisp",core:"#efffe7",mid:"#82e6b2",glow:"rgba(100,221,160,.34)"},
+ emberWisp:{label:"残火の鬼火",desc:"橙赤の荒い精霊。",kind:"wisp",core:"#fff2bd",mid:"#ff7c42",glow:"rgba(255,91,49,.35)"},
+ frostWisp:{label:"霜銀の鬼火",desc:"冷たい白青精霊。",kind:"wisp",core:"#f4ffff",mid:"#76dfff",glow:"rgba(83,204,255,.35)"},
+ bloodWisp:{label:"血契の鬼火",desc:"紅い契約精霊。",kind:"wisp",core:"#ffe2e8",mid:"#e84a65",glow:"rgba(220,51,79,.35)"},
+ phantomWisp:{label:"幽世の鬼火",desc:"青灰の半透明精霊。",kind:"wisp",core:"#e6ffff",mid:"#7eb7c7",glow:"rgba(100,169,188,.34)"},
+ venomWisp:{label:"毒蛍の鬼火",desc:"黄緑の危険精霊。",kind:"wisp",core:"#f1ffc4",mid:"#93da4b",glow:"rgba(126,203,51,.35)"},
+ starOrbit:{label:"星晶環",desc:"白紫の星晶軌道。",kind:"orbit",core:"#fff4ff",mid:"#bd8cff",glow:"rgba(174,113,255,.36)"},
+ eclipseOrbit:{label:"蝕月晶環",desc:"金と黒の月環。",kind:"orbit",core:"#fff0ae",mid:"#a08038",glow:"rgba(180,139,46,.34)"},
+ sunOrbit:{label:"暁輝晶環",desc:"小さな太陽軌道。",kind:"orbit",core:"#fff8c9",mid:"#ffcf55",glow:"rgba(255,190,58,.36)"},
+ rootOrbit:{label:"根脈晶環",desc:"緑の根晶軌道。",kind:"orbit",core:"#f0ffd5",mid:"#8bc861",glow:"rgba(117,187,73,.34)"},
+ stormOrbit:{label:"嵐鉄晶環",desc:"雷青の高速晶環。",kind:"orbit",core:"#f0fbff",mid:"#72aee5",glow:"rgba(84,151,222,.35)"},
+ mirrorOrbit:{label:"鏡界晶環",desc:"左右反転する白晶。",kind:"orbit",core:"#ffffff",mid:"#a7d8ed",glow:"rgba(139,205,233,.35)"},
+ crownOrbit:{label:"王冠晶環",desc:"金青の冠状軌道。",kind:"orbit",core:"#fff5c8",mid:"#7aa8e8",glow:"rgba(99,151,225,.35)"},
+ deepCore:{label:"最深核環",desc:"深淵核を囲む青環。",kind:"orbit",core:"#e7ffff",mid:"#347fc4",glow:"rgba(37,112,189,.38)"}
 };
 const appearancePresetData={
  moonGuide:{label:"1　銀月の導灯士",desc:"銀髪・細衣・浮遊深淵灯",foundation:"guide",hair:"silver",focus:"lantern"},
@@ -9078,6 +9161,7 @@ function renderAppearance(){
  renderAppearanceCategory("appearanceSigils",appearanceSigilData,a.sigil,a.unlockedSigils,"sigil","紋章");
 
  $("appearancePresets").querySelectorAll("[data-appearance-preset]").forEach(button=>{button.onclick=()=>{const preset=appearancePresetData[button.dataset.appearancePreset],appearance=currentAppearance();if(!preset)return;appearance.foundation=preset.foundation;appearance.hair=preset.hair;appearance.focus=preset.focus;saveMeta();saveGame();renderAppearance();render()}});
+ $("appearanceRandomize").onclick=()=>{const appearance=currentAppearance(),pick=map=>{const ids=Object.keys(map);return ids[Math.floor(Math.random()*ids.length)]};appearance.foundation=pick(appearanceFoundationData);appearance.hair=pick(appearanceHairData);appearance.focus=pick(appearanceFocusData);saveMeta();saveGame();renderAppearance();render()};
  $("appearanceFoundations").querySelectorAll("[data-foundation]").forEach(button=>{button.onclick=()=>{currentAppearance().foundation=button.dataset.foundation;saveMeta();saveGame();renderAppearance();render()}});
  $("appearanceHairs").querySelectorAll("[data-hair]").forEach(button=>{button.onclick=()=>{currentAppearance().hair=button.dataset.hair;saveMeta();saveGame();renderAppearance();render()}});
  $("appearanceFocuses").querySelectorAll("[data-focus]").forEach(button=>{button.onclick=()=>{currentAppearance().focus=button.dataset.focus;saveMeta();saveGame();renderAppearance();render()}});
@@ -24672,7 +24756,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.29",
+  version:"4.30",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -26601,7 +26685,7 @@ function drawFloorTile(px,py,x,y,vis){
  ctx.globalAlpha=1;
 
  // biome-specific ground motif
- if(vis&&currentBiomeKey()==="crypt"){
+ if(vis&&currentBiomeKey()==="crypt"&&(x*3+y*5)%5===0){
    ctx.strokeStyle="rgba(177,167,194,.26)";
    ctx.beginPath();ctx.moveTo(px+6,py+16);ctx.lineTo(px+11,py+6);ctx.lineTo(px+16,py+16);ctx.stroke();
  }else if(vis&&currentBiomeKey()==="fungal"){
@@ -26687,6 +26771,25 @@ function drawBiomeFloorDecoration(px,py,x,y,t,vis){
    ctx.beginPath();ctx.moveTo(px+10,py+17);ctx.quadraticCurveTo(px+15,py+13,px+18,py+9);ctx.stroke();
   }
  }
+
+ // Shared cathedral-dungeon language: cracked slabs, roots and sparse blue crystals.
+ if(seed%7===0){
+  ctx.strokeStyle="rgba(151,163,184,.16)";
+  ctx.beginPath();ctx.moveTo(px+4,py+6);ctx.lineTo(px+8,py+9);ctx.lineTo(px+7,py+14);ctx.lineTo(px+12,py+17);ctx.stroke();
+ }
+ if(biome!=="furnace"&&seed%9===0){
+  ctx.strokeStyle="rgba(35,24,31,.58)";ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(px-1,py+18);ctx.bezierCurveTo(px+5,py+11,px+10,py+17,px+16,py+8);ctx.stroke();
+  ctx.strokeStyle="rgba(81,101,78,.25)";ctx.lineWidth=.5;
+  ctx.beginPath();ctx.moveTo(px+5,py+14);ctx.lineTo(px+3,py+9);ctx.moveTo(px+11,py+13);ctx.lineTo(px+16,py+15);ctx.stroke();
+ }
+ if(seed%17===0){
+  const crystal=biome==="furnace"?"255,132,69":biome==="fungal"?"115,224,167":"73,199,255";
+  ctx.save();ctx.globalCompositeOperation="screen";
+  const glow=ctx.createRadialGradient(px+15,py+14,1,px+15,py+14,9);glow.addColorStop(0,`rgba(${crystal},${.12+.08*pulse})`);glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(px+6,py+5,18,18);
+  ctx.fillStyle=`rgba(${crystal},${.50+.18*pulse})`;ctx.beginPath();ctx.moveTo(px+13,py+18);ctx.lineTo(px+15,py+8);ctx.lineTo(px+17,py+18);ctx.fill();ctx.beginPath();ctx.moveTo(px+9,py+18);ctx.lineTo(px+11,py+12);ctx.lineTo(px+13,py+18);ctx.fill();
+  ctx.fillStyle="rgba(235,252,255,.72)";ctx.fillRect(px+14.5,py+10,.5,4);ctx.restore();
+ }
  ctx.restore();
 }
 function drawBiomeWallDecoration(px,py,x,y,t,vis){
@@ -26711,6 +26814,17 @@ function drawBiomeWallDecoration(px,py,x,y,t,vis){
   ctx.strokeStyle="rgba(98,151,81,.31)";ctx.lineWidth=1;
   ctx.beginPath();ctx.moveTo(px+3,py+2);ctx.bezierCurveTo(px+9,py+7,px+4,py+14,px+13,py+20);ctx.stroke();
   ctx.fillStyle=`rgba(137,218,113,${.20+.10*pulse})`;ctx.fillRect(px+8,py+9,1,1);ctx.fillRect(px+13,py+16,.5,.5);
+ }
+ if(seed%9===0){
+  ctx.strokeStyle=biome==="furnace"?"rgba(92,48,38,.48)":"rgba(35,25,34,.62)";ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(px+1,py-1);ctx.bezierCurveTo(px+8,py+4,px+4,py+12,px+13,py+20);ctx.stroke();
+  ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(px+7,py+8);ctx.lineTo(px+13,py+6);ctx.moveTo(px+9,py+13);ctx.lineTo(px+4,py+17);ctx.stroke();
+ }
+ if(seed%19===0){
+  const c=biome==="furnace"?"#ff9c52":"#65d5ff";
+  ctx.strokeStyle="rgba(10,12,18,.88)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+11,py+4);ctx.lineTo(px+11,py+16);ctx.stroke();
+  ctx.fillStyle=c;ctx.globalAlpha=.42+.20*pulse;ctx.beginPath();ctx.moveTo(px+8,py+12);ctx.lineTo(px+11,py+6);ctx.lineTo(px+14,py+12);ctx.lineTo(px+11,py+17);ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+  ctx.fillStyle="#e9fbff";ctx.fillRect(px+10.5,py+8,.5,4);
  }
  ctx.restore();
 }
@@ -26739,15 +26853,15 @@ function drawHighResolutionExplorer(g,x,y,scale=1,hurt=false,bob=0,t=0,showAura=
 
  // Four free foundation silhouettes. All share one foot anchor and collision tile.
  g.fillStyle=ink;
- if(appearance.foundation==="guide"){
+ if(foundation.silhouette==="guide"){
   g.beginPath();g.moveTo(9,16+bob);g.lineTo(27,15+bob);g.lineTo(30,24+bob);g.lineTo(27+cloth,35+bob);g.lineTo(23,31+bob);g.lineTo(19,37+bob);g.lineTo(15,31+bob);g.lineTo(8-cloth,34+bob);g.closePath();g.fill();
   g.fillStyle=foundation.body;g.beginPath();g.moveTo(10,16+bob);g.lineTo(27,16+bob);g.lineTo(28,24+bob);g.lineTo(25+cloth,33+bob);g.lineTo(21,29+bob);g.lineTo(18,35+bob);g.lineTo(15,29+bob);g.lineTo(9-cloth,32+bob);g.closePath();g.fill();
   g.fillStyle=foundation.lining;g.beginPath();g.moveTo(10,18+bob);g.lineTo(13,20+bob);g.lineTo(10-cloth,31+bob);g.lineTo(14,28+bob);g.closePath();g.fill();
- }else if(appearance.foundation==="spellblade"){
+ }else if(foundation.silhouette==="spellblade"){
   g.beginPath();g.moveTo(8,16+bob);g.lineTo(29,16+bob);g.lineTo(31,25+bob);g.lineTo(29+cloth,39+bob);g.lineTo(22,32+bob);g.lineTo(19,40+bob);g.lineTo(15,32+bob);g.lineTo(7-cloth,38+bob);g.closePath();g.fill();
   g.fillStyle=foundation.body;g.beginPath();g.moveTo(9,16+bob);g.lineTo(28,16+bob);g.lineTo(29,25+bob);g.lineTo(27+cloth,37+bob);g.lineTo(22,30+bob);g.lineTo(19,38+bob);g.lineTo(15,30+bob);g.lineTo(9-cloth,36+bob);g.closePath();g.fill();
   g.fillStyle=foundation.lining;g.beginPath();g.moveTo(25,21+bob);g.lineTo(27,36+bob);g.lineTo(22,30+bob);g.lineTo(21,22+bob);g.closePath();g.fill();
- }else if(appearance.foundation==="hunter"){
+ }else if(foundation.silhouette==="hunter"){
   g.beginPath();g.moveTo(7,16+bob);g.lineTo(29,15+bob);g.lineTo(32,21+bob);g.lineTo(28,25+bob);g.lineTo(31+cloth,34+bob);g.lineTo(24,29+bob);g.lineTo(20,37+bob);g.lineTo(15,29+bob);g.lineTo(7-cloth,33+bob);g.closePath();g.fill();
   g.fillStyle=foundation.body;g.beginPath();g.moveTo(8,16+bob);g.lineTo(28,16+bob);g.lineTo(30,20+bob);g.lineTo(26,23+bob);g.lineTo(29+cloth,32+bob);g.lineTo(23,28+bob);g.lineTo(19,35+bob);g.lineTo(15,28+bob);g.lineTo(9-cloth,31+bob);g.closePath();g.fill();
   g.fillStyle=foundation.lining;g.beginPath();g.moveTo(11,16+bob);g.lineTo(7,12+bob);g.lineTo(14,15+bob);g.lineTo(17,12+bob);g.lineTo(20,16+bob);g.lineTo(25,12+bob);g.lineTo(28,17+bob);g.closePath();g.fill();
@@ -26780,11 +26894,11 @@ function drawHighResolutionExplorer(g,x,y,scale=1,hurt=false,bob=0,t=0,showAura=
  if(!hurt){g.fillStyle=light.core;g.fillRect(16,10.5+bob,.5,.5);g.fillRect(21,10.5+bob,.5,.5)}
  g.fillStyle=hair.shadow;g.beginPath();g.moveTo(12,9+bob);g.lineTo(14,4+bob);g.lineTo(19,2+bob);g.lineTo(24,4+bob);g.lineTo(26,9+bob);g.lineTo(23,8+bob);g.lineTo(22,13+bob);g.lineTo(19,8+bob);g.lineTo(17,13+bob);g.lineTo(15,8+bob);g.closePath();g.fill();
  g.fillStyle=hair.base;
- if(appearance.hair==="silver"){
+ if(hair.shape==="silver"){
   g.beginPath();g.moveTo(13,8+bob);g.lineTo(15,3+bob);g.lineTo(18,5+bob);g.lineTo(20,1+bob);g.lineTo(21,5+bob);g.lineTo(25,3+bob);g.lineTo(23,9+bob);g.lineTo(20,7+bob);g.lineTo(18,12+bob);g.lineTo(17,7+bob);g.lineTo(14,11+bob);g.closePath();g.fill();
- }else if(appearance.hair==="night"){
+ }else if(hair.shape==="night"){
   g.beginPath();g.moveTo(12,8+bob);g.lineTo(14,4+bob);g.lineTo(17,5+bob);g.lineTo(19,1+bob);g.lineTo(21,5+bob);g.lineTo(25,3+bob);g.lineTo(24,9+bob);g.lineTo(21,8+bob);g.lineTo(19,13+bob);g.lineTo(17,8+bob);g.lineTo(14,11+bob);g.closePath();g.fill();
- }else if(appearance.hair==="teal"){
+ }else if(hair.shape==="teal"){
   g.beginPath();g.moveTo(12,8+bob);g.lineTo(14,3+bob);g.lineTo(19,1+bob);g.lineTo(24,4+bob);g.lineTo(25,10+bob);g.lineTo(27,17+bob);g.lineTo(23,13+bob);g.lineTo(21,8+bob);g.lineTo(18,13+bob);g.lineTo(16,8+bob);g.lineTo(13,13+bob);g.closePath();g.fill();
  }else{
   g.beginPath();g.moveTo(12,8+bob);g.lineTo(14,3+bob);g.lineTo(18,4+bob);g.lineTo(20,1+bob);g.lineTo(22,5+bob);g.lineTo(25,3+bob);g.lineTo(24,11+bob);g.lineTo(27,17+bob);g.lineTo(23,15+bob);g.lineTo(21,8+bob);g.lineTo(18,13+bob);g.lineTo(16,8+bob);g.lineTo(13,14+bob);g.closePath();g.fill();
@@ -26796,8 +26910,8 @@ function drawHighResolutionExplorer(g,x,y,scale=1,hurt=false,bob=0,t=0,showAura=
  g.strokeStyle=palette.trim;g.globalAlpha=.5;g.beginPath();g.moveTo(14,19+bob);g.lineTo(23,27+bob);g.moveTo(23,19+bob);g.lineTo(14,27+bob);g.stroke();g.globalAlpha=1;
  g.save();g.translate(4,3+bob);g.scale(1.25,1.25);drawAppearanceSigil(g,sigil,palette,dark,0);g.restore();
  drawHighResolutionShapeAccent(g,shape,palette,bob,t);
- drawHeroMagicFocus(g,appearance.focus,light,bob,focusFloat,showAura);
- drawHeroCeremonialWeapon(g,appearance.foundation,light,bob,attackLift);
+ drawHeroMagicFocus(g,focus.kind,light,bob,focusFloat,showAura);
+ drawHeroCeremonialWeapon(g,foundation.silhouette,light,bob,attackLift);
 
  // Fine rim separates a dark costume from walls without making it bulky.
  g.strokeStyle=light.core;g.globalAlpha=.42;g.lineWidth=.5;g.beginPath();g.moveTo(13,7+bob);g.lineTo(15,3+bob);g.lineTo(20,1.5+bob);g.lineTo(24,4+bob);g.moveTo(27,16+bob);g.lineTo(29,26+bob);g.stroke();g.globalAlpha=1;
@@ -26917,6 +27031,31 @@ function drawModernEnemyDetails(e,x,y,bob,accent,t){
  ctx.globalAlpha=1;
  ctx.restore();
 }
+function drawFantasyEnemyFinish(e,x,y,bob,accent,t){
+ const pulse=(Math.sin(t*.12+e.x*.43+e.y*.61)+1)*.5;
+ ctx.save();ctx.lineCap="square";ctx.lineJoin="miter";ctx.lineWidth=.75;
+ if(e.type==="skeleton"){
+  ctx.strokeStyle="rgba(242,237,221,.56)";ctx.beginPath();ctx.moveTo(x+9,y+12+bob);ctx.lineTo(x+14,y+12+bob);ctx.moveTo(x+8,y+14+bob);ctx.lineTo(x+15,y+14+bob);ctx.moveTo(x+10,y+10+bob);ctx.lineTo(x+10,y+18+bob);ctx.stroke();
+  ctx.fillStyle="rgba(19,15,23,.78)";ctx.beginPath();ctx.moveTo(x+6,y+10+bob);ctx.lineTo(x+3,y+18+bob);ctx.lineTo(x+8,y+16+bob);ctx.closePath();ctx.fill();
+ }else if(e.type==="mage"){
+  ctx.fillStyle="rgba(28,20,39,.92)";ctx.beginPath();ctx.moveTo(x+5,y+10+bob);ctx.lineTo(x+11,y+1+bob);ctx.lineTo(x+17,y+10+bob);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=accent;ctx.globalAlpha=.58;ctx.beginPath();ctx.moveTo(x+6,y+10+bob);ctx.lineTo(x+11,y+2+bob);ctx.lineTo(x+16,y+10+bob);ctx.stroke();ctx.globalAlpha=1;
+ }else if(e.type==="warg"||e.type==="charger"){
+  ctx.strokeStyle="rgba(244,210,202,.42)";ctx.beginPath();ctx.moveTo(x+5,y+10+bob);ctx.lineTo(x+8,y+6+bob);ctx.lineTo(x+11,y+9+bob);ctx.lineTo(x+14,y+5+bob);ctx.lineTo(x+17,y+10+bob);ctx.stroke();
+  ctx.fillStyle="#171016";ctx.fillRect(x+15.5,y+8+bob,1.5,1);ctx.fillStyle=`rgba(255,104,93,${.72+.22*pulse})`;ctx.fillRect(x+16,y+8+bob,.5,.5);
+ }else if(e.type==="bomber"){
+  ctx.strokeStyle=`rgba(255,207,100,${.55+.3*pulse})`;ctx.beginPath();ctx.moveTo(x+13,y+4+bob);ctx.lineTo(x+17,y+1+bob);ctx.lineTo(x+19,y+3+bob);ctx.stroke();ctx.fillStyle="#fff1a8";ctx.fillRect(x+18.5,y+2+bob,.5,.5);
+ }else if(e.type==="priest"){
+  ctx.strokeStyle=`rgba(236,209,130,${.46+.22*pulse})`;ctx.beginPath();ctx.ellipse(x+11,y+3+bob,5,1.8,0,0,Math.PI*2);ctx.stroke();
+  ctx.strokeStyle="rgba(228,217,233,.42)";ctx.beginPath();ctx.moveTo(x+8,y+12+bob);ctx.lineTo(x+11,y+10+bob);ctx.lineTo(x+14,y+12+bob);ctx.stroke();
+ }else if(e.type==="leech"){
+  ctx.strokeStyle=accent;ctx.globalAlpha=.58;ctx.beginPath();ctx.moveTo(x+6,y+14+bob);ctx.quadraticCurveTo(x+1,y+17+bob,x+3,y+21+bob);ctx.moveTo(x+16,y+14+bob);ctx.quadraticCurveTo(x+21,y+17+bob,x+19,y+21+bob);ctx.stroke();ctx.globalAlpha=1;
+ }else{
+  ctx.fillStyle="rgba(11,9,14,.78)";ctx.beginPath();ctx.moveTo(x+4,y+8+bob);ctx.lineTo(x+1,y+15+bob);ctx.lineTo(x+6,y+13+bob);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(x+18,y+8+bob);ctx.lineTo(x+21,y+15+bob);ctx.lineTo(x+16,y+13+bob);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=e.bossAccent||accent;ctx.globalAlpha=.62;ctx.beginPath();ctx.moveTo(x+7,y+5+bob);ctx.lineTo(x+11,y+1+bob);ctx.lineTo(x+15,y+5+bob);ctx.stroke();ctx.globalAlpha=1;
+ }
+ ctx.strokeStyle=accent;ctx.globalAlpha=.38;ctx.beginPath();ctx.moveTo(x+5,y+18.5+bob);ctx.lineTo(x+17,y+18.5+bob);ctx.stroke();ctx.restore();
+}
 function drawEnemySprite(e,x,y,t){
  const bob=Math.sin(t*.1+e.x*.7+e.y)*.65;
  const base=e.bossColor||{skeleton:"#d5d8e1",warg:"#c76673",mage:"#9a84e4",bomber:"#e2a24d",priest:"#d2b7df",charger:"#bd705e",leech:"#70a47d",warden:"#dbc45b"}[e.type]||"#ddd";
@@ -26981,6 +27120,7 @@ function drawEnemySprite(e,x,y,t){
  }
 
  drawModernEnemyDetails(e,x,y,bob,accent,t);
+ drawFantasyEnemyFinish(e,x,y,bob,accent,t);
  if(e.elite){
   ctx.strokeStyle=eliteColor(e)||"#f0d37a";
   ctx.lineWidth=2;
