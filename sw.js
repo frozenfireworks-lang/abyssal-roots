@@ -1,4 +1,4 @@
-const CACHE='abyssal-roots-v4-27-abyssal-illumination';
+const CACHE='abyssal-roots-v4-28-hero-resolution';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png','./abyssal-cathedral-title.png'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));
