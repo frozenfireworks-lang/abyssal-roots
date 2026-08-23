@@ -5859,7 +5859,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.30 FANTASY FORGE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.33 TRUE MOTION</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6735,6 +6735,24 @@ const canvas=document.getElementById("game"), ctx=canvas.getContext("2d");
 ctx.imageSmoothingEnabled=false;
 ctx.setTransform(RENDER_SCALE,0,0,RENDER_SCALE,0,0);
 const $=id=>document.getElementById(id);
+const heroMotionAsset={
+ image:new Image(),ready:false,failed:false,src:"./assets/hero-motion-base-v1.png"
+};
+heroMotionAsset.image.decoding="async";
+heroMotionAsset.image.onload=()=>{
+ heroMotionAsset.ready=true;
+ heroMotionAsset.failed=false;
+ document.documentElement.dataset.heroMotion="ready";
+ clearHeroMotionCache?.();
+ requestAnimationFrame(()=>{try{render()}catch(_){}});
+};
+heroMotionAsset.image.onerror=()=>{
+ heroMotionAsset.failed=true;
+ document.documentElement.dataset.heroMotion="failed";
+ console.warn("Hero motion sprite sheet failed to load; using procedural fallback.");
+};
+heroMotionAsset.image.src=heroMotionAsset.src;
+window.__ABYSS_HERO_MOTION_ASSET__=heroMotionAsset;
 const FLOOR_GOAL_EXPANDED_KEY="abyssal-roots-floor-goal-expanded";
 let floorGoalExpanded=false;
 try{floorGoalExpanded=localStorage.getItem(FLOOR_GOAL_EXPANDED_KEY)==="1"}catch(_){}
@@ -9042,7 +9060,9 @@ function drawHeroPortrait(){
  const g=c.getContext("2d");
  g.clearRect(0,0,c.width,c.height);
  g.imageSmoothingEnabled=false;
- drawHighResolutionExplorer(g,3.8,1.5,.91,false,0,state.visual?.time||0,true);
+ if(!drawHybridHeroMotion(g,c.width/2,c.height-2,1.16,false,state.visual?.time||0,"down",true)){
+  drawHighResolutionExplorer(g,3.8,1.5,.91,false,0,state.visual?.time||0,true);
+ }
 }
 function drawAppearancePreview(){
  const c=$("appearancePreview");if(!c||!state)return;
@@ -9052,7 +9072,10 @@ function drawAppearancePreview(){
  const bg=g.createLinearGradient(0,0,0,c.height);
  bg.addColorStop(0,"#17101f");bg.addColorStop(1,"#070509");
  g.fillStyle=bg;g.fillRect(0,0,c.width,c.height);
- drawHighResolutionExplorer(g,12,7,2,false,0,state.visual?.time||0,true);
+ const time=state.visual?.time||0,previewPose=heroMotionPreviewPose(time);
+ if(!drawHybridHeroMotion(g,c.width/2,c.height-5,2.15,false,time,previewPose.direction,true,previewPose)){
+  drawHighResolutionExplorer(g,12,7,2,false,0,state.visual?.time||0,true);
+ }
 }
 function appearanceUnlockMicroHint(data,keyName,unlocked){
  if(unlocked||keyName==="color"||!data)return"";
@@ -21934,15 +21957,26 @@ function endTurn(){
 function ensureVisualState(){
  state.visual=state.visual||{};
  if(!Array.isArray(state.visual.effects))state.visual.effects=[];
+ if(!["down","left","right","up"].includes(state.visual.facing))state.visual.facing="down";
  return state.visual;
+}
+const HERO_MOVE_ANIMATION_FRAMES=12;
+const HERO_ATTACK_ANIMATION_FRAMES=12;
+function heroFacingFromVector(dx,dy,fallback="down"){
+ if(Math.abs(dx)>Math.abs(dy))return dx<0?"left":"right";
+ if(dy<0)return"up";
+ if(dy>0)return"down";
+ return fallback;
 }
 function startMoveAnim(dx,dy){
  const v=ensureVisualState();
- v.moveDx=dx;v.moveDy=dy;v.moveFrames=0;
+ v.moveDx=dx;v.moveDy=dy;v.moveFrames=HERO_MOVE_ANIMATION_FRAMES;
+ v.facing=heroFacingFromVector(dx,dy,v.facing);
 }
 function startAttackAnim(dx,dy){
  const v=ensureVisualState();
- v.attackDx=dx;v.attackDy=dy;v.attackFrames=6;
+ v.attackDx=dx;v.attackDy=dy;v.attackFrames=HERO_ATTACK_ANIMATION_FRAMES;
+ v.facing=heroFacingFromVector(dx,dy,v.facing);
 }
 function startDamageAnim(){
  const v=ensureVisualState();
@@ -22121,6 +22155,7 @@ function tickContinuousAnimation(){
    tickRealtimeCombat(realtimeNow());
    updateVisualEffects();
    draw();
+   if(!$("appearanceOverlay").classList.contains("hidden"))drawAppearancePreview();
   }
   visualLoopErrorReported=false;
  }catch(error){
@@ -22499,10 +22534,10 @@ function move(dx,dy){
  const target=directionTarget(dx,dy);
  if(target?.blocked){addLog("近すぎて弓を引けない。距離を取る必要がある。");return}
  if(target?.enemy){
+  const cost=weaponData[weaponType()].cost;if(!spendStamina(cost))return;
   startAttackAnim(dx,dy);gainMastery(weaponType(),1);
   if(weaponType()==="sword"||weaponType()==="spear")gainTraining("strength",2);else gainTraining("focus",2);
   recordUsage(weaponType());if(equippedElement())recordUsage(equippedElement());sfx(weaponType()==="staff"?"magic":"attack");
-  const cost=weaponData[weaponType()].cost;if(!spendStamina(cost))return;
   state.lastAction=weaponType()==="bow"?"bow_attack":"attack";
   weaponAttack(target.enemy,dx,dy,target.distance);endTurn();return;
  }
@@ -24756,7 +24791,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.30",
+  version:"4.33",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -26833,7 +26868,203 @@ function drawActorGroundShadow(x,y,scale=1,alpha=.28){
  ctx.beginPath();ctx.ellipse(x+11,y+18.5,7*scale,2.3*scale,0,0,Math.PI*2);ctx.fill();
  ctx.restore();
 }
+const HERO_MOTION_COLS=4,HERO_MOTION_ROWS=4,HERO_MOTION_FRAME_W=48,HERO_MOTION_FRAME_H=32;
+const HERO_MOTION_DIRECTIONS={down:0,left:1,right:2,up:3};
+const heroMotionFrameCache=new Map();
+let heroMotionAppearanceCacheKey="";
+function clearHeroMotionCache(){
+ heroMotionFrameCache.clear();
+ heroMotionAppearanceCacheKey="";
+}
+function heroMotionAppearanceKey(){
+ const a=currentAppearance();
+ return[a.foundation,a.hair,a.focus,a.color,a.shape,a.sigil].join("|");
+}
+function heroMotionRgb(hex,fallback=[255,255,255]){
+ const value=String(hex||"").trim();
+ const short=/^#([0-9a-f]{3})$/i.exec(value);
+ if(short)return short[1].split("").map(v=>parseInt(v+v,16));
+ const full=/^#([0-9a-f]{6})$/i.exec(value);
+ if(!full)return fallback;
+ return[parseInt(full[1].slice(0,2),16),parseInt(full[1].slice(2,4),16),parseInt(full[1].slice(4,6),16)];
+}
+function heroMotionTintPixel(data,index,target,sourceLight){
+ const rgb=heroMotionRgb(target),peak=Math.max(1,...rgb);
+ const factor=clamp((sourceLight+14)/peak,.3,3.25);
+ data[index]=clamp(Math.round(rgb[0]*factor),0,255);
+ data[index+1]=clamp(Math.round(rgb[1]*factor),0,255);
+ data[index+2]=clamp(Math.round(rgb[2]*factor),0,255);
+}
+function removeHeroMotionCheckerboard(data,width,height){
+ const visited=new Uint8Array(width*height),stack=[];
+ const isBackground=index=>{
+  const p=index*4,r=data[p],g=data[p+1],b=data[p+2];
+  return Math.min(r,g,b)>230&&Math.max(r,g,b)-Math.min(r,g,b)<14;
+ };
+ const add=index=>{if(index>=0&&index<visited.length&&!visited[index]&&isBackground(index)){visited[index]=1;stack.push(index)}};
+ for(let x=0;x<width;x++){add(x);add((height-1)*width+x)}
+ for(let y=0;y<height;y++){add(y*width);add(y*width+width-1)}
+ while(stack.length){
+  const index=stack.pop(),x=index%width,y=Math.floor(index/width);
+  data[index*4+3]=0;
+  if(x>0)add(index-1);if(x<width-1)add(index+1);if(y>0)add(index-width);if(y<height-1)add(index+width);
+ }
+}
+function recolorHeroMotionFrame(data,width,height){
+ const foundation=appearanceFoundation(),hair=appearanceHair(),focus=appearanceFocus(),accent=appearanceColor();
+ for(let y=0;y<height;y++)for(let x=0;x<width;x++){
+  const index=(y*width+x)*4;if(data[index+3]===0)continue;
+  const r=data[index],g=data[index+1],b=data[index+2],max=Math.max(r,g,b),min=Math.min(r,g,b),chroma=max-min;
+  const light=Math.round(r*.299+g*.587+b*.114);
+  const cyan=b>78&&g>58&&b>r*1.28&&g>r*1.18;
+  const warm=r>48&&r>g*1.08&&g>b*1.12;
+  const silverHair=y<13&&light>62&&chroma<70&&b>=r*.78;
+  const darkCloth=b>r*1.05&&b>=g*.88&&light<118;
+  if(cyan){heroMotionTintPixel(data,index,light>150?focus.core:focus.mid,light);continue}
+  if(silverHair){
+   const tone=light>185?hair.light:light>105?hair.base:hair.shadow;
+   heroMotionTintPixel(data,index,tone,light);continue;
+  }
+  if(warm){heroMotionTintPixel(data,index,light>105?foundation.metal:accent.trim,light);continue}
+  if(darkCloth){heroMotionTintPixel(data,index,light>48?foundation.body2:foundation.body,light)}
+ }
+}
+function buildHeroMotionFrame(direction,frame){
+ if(!heroMotionAsset.ready||!heroMotionAsset.image.naturalWidth)return null;
+ const appearanceKey=heroMotionAppearanceKey();
+ if(heroMotionAppearanceCacheKey!==appearanceKey){heroMotionFrameCache.clear();heroMotionAppearanceCacheKey=appearanceKey}
+ const row=HERO_MOTION_DIRECTIONS[direction]??0,column=clamp(frame|0,0,HERO_MOTION_COLS-1),key=`${row}:${column}`;
+ if(heroMotionFrameCache.has(key))return heroMotionFrameCache.get(key);
+ const c=document.createElement("canvas");c.width=HERO_MOTION_FRAME_W;c.height=HERO_MOTION_FRAME_H;
+ const g=c.getContext("2d",{willReadFrequently:true});g.imageSmoothingEnabled=false;
+ const sourceW=heroMotionAsset.image.naturalWidth/HERO_MOTION_COLS,sourceH=heroMotionAsset.image.naturalHeight/HERO_MOTION_ROWS;
+ g.drawImage(heroMotionAsset.image,column*sourceW,row*sourceH,sourceW,sourceH,0,0,c.width,c.height);
+ try{
+  const pixels=g.getImageData(0,0,c.width,c.height);
+  removeHeroMotionCheckerboard(pixels.data,c.width,c.height);
+  recolorHeroMotionFrame(pixels.data,c.width,c.height);
+  g.clearRect(0,0,c.width,c.height);g.putImageData(pixels,0,0);
+  document.documentElement.dataset.heroMotionProcessed="true";
+ }catch(error){
+  console.warn("Hero motion frame processing failed; using procedural fallback.",error);
+  heroMotionAsset.failed=true;return null;
+ }
+ heroMotionFrameCache.set(key,c);return c;
+}
+function primeHeroMotionFrames(){
+ if(!heroMotionAsset.ready||heroMotionAsset.failed)return false;
+ if(heroMotionAppearanceCacheKey!==heroMotionAppearanceKey()){heroMotionFrameCache.clear();heroMotionAppearanceCacheKey=""}
+ for(const direction of Object.keys(HERO_MOTION_DIRECTIONS)){
+  for(let frame=0;frame<HERO_MOTION_COLS;frame++)if(!buildHeroMotionFrame(direction,frame))return false;
+ }
+ document.documentElement.dataset.heroMotionFrames=String(heroMotionFrameCache.size);
+ return true;
+}
+function heroMotionPose(t,directionOverride=null){
+ const v=state?.visual||{},direction=directionOverride||v.facing||"down";
+ const attackFrames=Math.max(0,v.attackFrames||0),moveFrames=Math.max(0,v.moveFrames||0);
+ if(attackFrames>0){
+  const progress=1-clamp(attackFrames/HERO_ATTACK_ANIMATION_FRAMES,0,1);
+  return{direction,frame:3,attack:true,progress,bounce:-Math.sin(progress*Math.PI)*.6};
+ }
+ if(moveFrames>0){
+  const progress=1-clamp(moveFrames/HERO_MOVE_ANIMATION_FRAMES,0,1),cycle=[0,1,2,1];
+  return{direction,frame:cycle[Math.min(3,Math.floor(progress*4))],move:true,progress,bounce:-Math.abs(Math.sin(progress*Math.PI*2))*.75};
+ }
+ return{direction,frame:0,progress:0,bounce:Math.sin(t*.075)*.18};
+}
+function heroMotionPreviewPose(t){
+ const directions=["down","right","up","left"],segment=Math.floor(t/72)%directions.length,local=t%72;
+ if(local>=54){
+  const progress=(local-54)/18;
+  return{direction:directions[segment],frame:3,attack:true,progress,bounce:-Math.sin(progress*Math.PI)*.6};
+ }
+ const cycle=[0,1,2,1],progress=local/54;
+ return{direction:directions[segment],frame:cycle[Math.min(3,Math.floor(progress*4))],move:true,progress,bounce:-Math.abs(Math.sin(progress*Math.PI*2))*.75};
+}
+function drawHybridHairDetail(g,centerX,footY,scale,direction,hair){
+ const index=Math.max(0,Object.keys(appearanceHairData).indexOf(currentAppearance().hair)),variant=index%6;
+ const hx=centerX+(direction==="left"?1:direction==="right"?-1:0)*scale,hy=footY-24*scale;
+ g.save();g.fillStyle=hair.base;g.strokeStyle=hair.light;g.lineWidth=Math.max(1,scale*.65);g.globalAlpha=.88;
+ if(hair.shape==="teal"||hair.shape==="white"){
+  const side=direction==="left"?1:direction==="right"?-1:variant%2?1:-1;
+  g.beginPath();g.moveTo(hx+side*4*scale,hy+2*scale);g.quadraticCurveTo(hx+side*7*scale,hy+8*scale,hx+side*4*scale,hy+13*scale);g.stroke();
+ }
+ if(variant===1||variant===4){g.fillRect(hx-5*scale,hy-4*scale,2*scale,2*scale)}
+ else if(variant===2||variant===5){g.beginPath();g.moveTo(hx-2*scale,hy-4*scale);g.lineTo(hx+1*scale,hy-8*scale);g.lineTo(hx+2*scale,hy-3*scale);g.closePath();g.fill()}
+ g.restore();
+}
+function drawHybridFoundationDetail(g,centerX,footY,scale,direction){
+ const foundation=appearanceFoundation(),index=Math.max(0,Object.keys(appearanceFoundationData).indexOf(currentAppearance().foundation)),variant=index%6;
+ const lateral=direction==="left"?-1:direction==="right"?1:0;
+ g.save();g.fillStyle=foundation.body;g.strokeStyle=foundation.lining;g.lineWidth=Math.max(1,scale*.55);g.globalAlpha=.9;g.lineJoin="miter";
+ if(foundation.silhouette==="guide"){
+  const side=direction==="left"?1:-1;g.beginPath();g.moveTo(centerX+side*5*scale,footY-16*scale);g.lineTo(centerX+side*11*scale,footY-7*scale);g.lineTo(centerX+side*4*scale,footY-10*scale);g.closePath();g.fill();
+ }else if(foundation.silhouette==="spellblade"){
+  g.beginPath();g.moveTo(centerX-4*scale,footY-11*scale);g.lineTo(centerX-6*scale,footY+1*scale);g.lineTo(centerX-1*scale,footY-4*scale);g.lineTo(centerX+3*scale,footY+1*scale);g.lineTo(centerX+5*scale,footY-11*scale);g.closePath();g.fill();
+ }else if(foundation.silhouette==="hunter"){
+  const side=lateral||1;g.beginPath();g.moveTo(centerX-side*5*scale,footY-20*scale);g.lineTo(centerX-side*11*scale,footY-17*scale);g.lineTo(centerX-side*6*scale,footY-14*scale);g.closePath();g.fill();
+  g.beginPath();g.moveTo(centerX-side*4*scale,footY-15*scale);g.lineTo(centerX-side*13*scale,footY-9*scale);g.stroke();
+ }else{
+  g.fillStyle=foundation.body;g.beginPath();g.moveTo(centerX-2.5*scale,footY-15*scale);g.lineTo(centerX+2.5*scale,footY-15*scale);g.lineTo(centerX+1.5*scale,footY-3*scale);g.lineTo(centerX,footY-5*scale);g.lineTo(centerX-1.5*scale,footY-3*scale);g.closePath();g.fill();g.stroke();
+  g.strokeStyle=foundation.lining;g.globalAlpha=.72;g.beginPath();g.moveTo(centerX,footY-14*scale);g.lineTo(centerX,footY-5*scale);g.stroke();
+ }
+ g.strokeStyle=foundation.metal;g.globalAlpha=.68;
+ if(variant===1||variant===4){g.beginPath();g.moveTo(centerX-5*scale,footY-12*scale);g.lineTo(centerX+5*scale,footY-12*scale);g.stroke()}
+ else if(variant===2||variant===5){g.fillStyle=foundation.metal;g.fillRect(centerX-1*scale,footY-14*scale,2*scale,2*scale)}
+ g.restore();
+}
+function drawHybridFocus(g,centerX,footY,scale,direction,t){
+ const focus=appearanceFocus(),index=Math.max(0,Object.keys(appearanceFocusData).indexOf(currentAppearance().focus));
+ const side=direction==="left"?1:direction==="right"?-1:-1;
+ const x=centerX+side*(11+(index%3))*scale,y=footY-(15+Math.sin(t*.09+index)*1.2)*scale,pulse=.72+.22*Math.sin(t*.13+index);
+ g.save();g.translate(x,y);g.scale(scale,scale);g.lineJoin="miter";g.lineCap="square";
+ const glow=g.createRadialGradient(0,0,.5,0,0,7);glow.addColorStop(0,focus.glow);glow.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=glow;g.globalAlpha=pulse;g.fillRect(-8,-8,16,16);g.globalAlpha=1;
+ g.fillStyle=focus.mid;g.strokeStyle=focus.core;g.lineWidth=.8;
+ if(focus.kind==="lantern"){
+  g.fillStyle="#111722";g.fillRect(-3,-3,6,7);g.strokeRect(-3.5,-3.5,7,8);g.fillStyle=focus.mid;g.fillRect(-2,-2,4,5);g.fillStyle=focus.core;g.fillRect(-.6,-1.5,1.2,4);g.beginPath();g.arc(0,-4,2.4,Math.PI,0);g.stroke();
+ }else if(focus.kind==="prism"){
+  g.beginPath();g.moveTo(0,-5);g.lineTo(4,0);g.lineTo(0,6);g.lineTo(-4,0);g.closePath();g.fill();g.stroke();g.fillStyle=focus.core;g.fillRect(-.6,-3,1.2,6);
+ }else if(focus.kind==="wisp"){
+  g.beginPath();g.moveTo(0,-5);g.bezierCurveTo(5,-1,3,4,0,6);g.bezierCurveTo(-4,3,-3,-2,0,-5);g.fill();g.fillStyle=focus.core;g.fillRect(-.7,-1.5,1.4,3);
+ }else{
+  g.beginPath();g.ellipse(0,0,5,2.6,-.25,0,Math.PI*2);g.stroke();
+  [[-4,-1],[3,-3],[5,2],[-1,3]].forEach(([dx,dy],i)=>{g.fillStyle=i===1?focus.core:focus.mid;g.fillRect(dx-.7,dy-.7,1.4,1.4)});
+ }
+ g.restore();
+}
+function drawHybridShapeAndSigil(g,centerX,footY,scale,direction){
+ const a=currentAppearance(),palette=appearanceColor(),shape=a.shape;
+ g.save();g.strokeStyle=palette.trim;g.fillStyle=palette.body;g.lineWidth=Math.max(1,scale*.65);g.globalAlpha=.88;
+ if(["root","thorn","warden","antler","beast","drake","frostborn","bone"].includes(shape)){
+  const y=footY-27*scale;g.beginPath();g.moveTo(centerX-4*scale,y+2*scale);g.lineTo(centerX-7*scale,y-3*scale);g.moveTo(centerX+4*scale,y+2*scale);g.lineTo(centerX+7*scale,y-3*scale);g.stroke();
+ }
+ if(["eclipse","monarch","saint"].includes(shape)){g.globalAlpha=.62;g.beginPath();g.ellipse(centerX,footY-31*scale,6*scale,1.8*scale,0,0,Math.PI*2);g.stroke()}
+ if(a.sigil!=="none"){
+  g.globalAlpha=.82;g.fillStyle=palette.trim;const chestX=centerX+(direction==="left"?-2:direction==="right"?2:0)*scale,chestY=footY-17*scale;
+  g.beginPath();g.moveTo(chestX,chestY-1.7*scale);g.lineTo(chestX+1.7*scale,chestY);g.lineTo(chestX,chestY+1.7*scale);g.lineTo(chestX-1.7*scale,chestY);g.closePath();g.fill();
+ }
+ g.restore();
+}
+function drawHybridHeroMotion(g,centerX,footY,scale=1,hurt=false,t=0,directionOverride=null,showFocus=true,poseOverride=null){
+ if(!heroMotionAsset.ready||heroMotionAsset.failed)return false;
+ if(heroMotionFrameCache.size<HERO_MOTION_COLS*HERO_MOTION_ROWS&&!primeHeroMotionFrames())return false;
+ const pose=poseOverride||heroMotionPose(t,directionOverride),frame=buildHeroMotionFrame(pose.direction,pose.frame);if(!frame)return false;
+ const attackPush=pose.attack?Math.sin(pose.progress*Math.PI)*2.2*scale:0;
+ const dx=pose.direction==="left"?-attackPush:pose.direction==="right"?attackPush:0;
+ const dy=pose.direction==="up"?-attackPush:pose.direction==="down"?attackPush:0;
+ g.save();g.imageSmoothingEnabled=false;
+ if(hurt)g.filter="sepia(1) saturate(3) hue-rotate(305deg) brightness(1.15)";
+ g.drawImage(frame,centerX-30*scale+dx,footY-29*scale+pose.bounce*scale,HERO_MOTION_FRAME_W*scale,HERO_MOTION_FRAME_H*scale);
+ g.restore();
+ drawHybridFoundationDetail(g,centerX+dx,footY+dy,scale,pose.direction);
+ const hair=appearanceHair();drawHybridHairDetail(g,centerX+dx,footY+dy,scale,pose.direction,hair);
+ drawHybridShapeAndSigil(g,centerX+dx,footY+dy,scale,pose.direction);
+ if(showFocus)drawHybridFocus(g,centerX+dx,footY+dy,scale,pose.direction,t);
+ return true;
+}
 function drawHeroSprite(x,y,hurt,t){
+ if(drawHybridHeroMotion(ctx,x+TILE/2,y+TILE-1,1,hurt,t,null,true))return;
  const bob=Math.sin(t*.12)*.65;
  drawHighResolutionExplorer(ctx,x-7,y-18,1,hurt,bob,t,true);
 }
@@ -28269,11 +28500,18 @@ function draw(){
 
  if(inView(state.player.x,state.player.y)){
   let x=sx(state.player.x),y=sy(state.player.y);
+  const mf=Math.max(0,state.visual?.moveFrames||0);
+  if(mf>0){
+   const remaining=clamp(mf/HERO_MOVE_ANIMATION_FRAMES,0,1);
+   const eased=remaining*remaining*(3-2*remaining);
+   x-=(state.visual.moveDx||0)*TILE*eased;
+   y-=(state.visual.moveDy||0)*TILE*eased;
+  }
   const af=state.visual?.attackFrames||0;
   if(af>0){
-   const swing=Math.sin((1-af/6)*Math.PI);
-   x+=state.visual.attackDx*5*swing;
-   y+=state.visual.attackDy*5*swing;
+   const swing=Math.sin((1-af/HERO_ATTACK_ANIMATION_FRAMES)*Math.PI);
+   x+=(state.visual.attackDx||0)*2.5*swing;
+   y+=(state.visual.attackDy||0)*2.5*swing;
   }
   const hurt=(state.visual?.damageFrames||0)>0;
   drawActorGroundShadow(x,y,1,.32);
