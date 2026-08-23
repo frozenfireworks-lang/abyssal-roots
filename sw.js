@@ -1,5 +1,5 @@
-const CACHE='abyssal-roots-v4-33-true-motion';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png','./abyssal-cathedral-title.png','./assets/hero-motion-base-v1.png'];
+const CACHE='abyssal-roots-v4-34-native-pixel';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png','./abyssal-cathedral-title.png'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));
 });

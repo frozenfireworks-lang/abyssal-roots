@@ -5859,7 +5859,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.33 TRUE MOTION</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.34 NATIVE PIXEL</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5984,7 +5984,7 @@ body,button,input,select,textarea{font-size:12px}
 <div class="overlay hidden" id="appearanceOverlay">
   <div class="card appearanceCard">
     <h2>探索者の姿</h2>
-    <p>若い細身体型を基準に、<b>基本衣装30種</b>・<b>髪30種</b>・<b>魔導具30種</b>を自由に混ぜられます。既存の<b>魔力色48色</b>・<b>追加装飾32種</b>・<b>紋章24種</b>もそのまま重ねられます。</p>
+    <p>ゲーム内上限と同じ<b>32×36px</b>の若い細身体型を基準に、<b>基本衣装30種</b>・<b>髪30種</b>・<b>魔導具30種</b>を自由に混ぜられます。既存の<b>魔力色48色</b>・<b>追加装飾32種</b>・<b>紋章24種</b>も同じ整数px規格で重ねられます。</p>
     <div class="appearancePreviewWrap">
       <canvas id="appearancePreview" width="96" height="96" aria-label="探索者アイコンのプレビュー"></canvas>
       <div id="appearanceSummary"></div>
@@ -6004,7 +6004,7 @@ body,button,input,select,textarea{font-size:12px}
     <div id="appearanceShapes" class="appearanceChoices"></div>
     <h3>紋章</h3>
     <div id="appearanceSigils" class="appearanceChoices"></div>
-    <p class="note">姿・髪・魔導具・儀礼刃は外見だけの変更です。攻撃範囲や装備性能には影響しません。変更はキャラアイコンと盤面へ同時に反映されます。</p>
+    <p class="note">姿・髪・魔導具は外見だけの変更です。装備中の剣・槍・弓・杖も実際の武器種で表示しますが、攻撃範囲や装備性能には影響しません。変更は同じ32×36px素体からキャラアイコンと盤面へ同時に反映されます。</p>
     <button type="button" class="modalBtn" id="closeAppearance">閉じる</button>
   </div>
 </div>
@@ -6735,24 +6735,6 @@ const canvas=document.getElementById("game"), ctx=canvas.getContext("2d");
 ctx.imageSmoothingEnabled=false;
 ctx.setTransform(RENDER_SCALE,0,0,RENDER_SCALE,0,0);
 const $=id=>document.getElementById(id);
-const heroMotionAsset={
- image:new Image(),ready:false,failed:false,src:"./assets/hero-motion-base-v1.png"
-};
-heroMotionAsset.image.decoding="async";
-heroMotionAsset.image.onload=()=>{
- heroMotionAsset.ready=true;
- heroMotionAsset.failed=false;
- document.documentElement.dataset.heroMotion="ready";
- clearHeroMotionCache?.();
- requestAnimationFrame(()=>{try{render()}catch(_){}});
-};
-heroMotionAsset.image.onerror=()=>{
- heroMotionAsset.failed=true;
- document.documentElement.dataset.heroMotion="failed";
- console.warn("Hero motion sprite sheet failed to load; using procedural fallback.");
-};
-heroMotionAsset.image.src=heroMotionAsset.src;
-window.__ABYSS_HERO_MOTION_ASSET__=heroMotionAsset;
 const FLOOR_GOAL_EXPANDED_KEY="abyssal-roots-floor-goal-expanded";
 let floorGoalExpanded=false;
 try{floorGoalExpanded=localStorage.getItem(FLOOR_GOAL_EXPANDED_KEY)==="1"}catch(_){}
@@ -9060,9 +9042,7 @@ function drawHeroPortrait(){
  const g=c.getContext("2d");
  g.clearRect(0,0,c.width,c.height);
  g.imageSmoothingEnabled=false;
- if(!drawHybridHeroMotion(g,c.width/2,c.height-2,1.16,false,state.visual?.time||0,"down",true)){
-  drawHighResolutionExplorer(g,3.8,1.5,.91,false,0,state.visual?.time||0,true);
- }
+ drawNativeHeroScaled(g,4,2,1,"down","idle",false);
 }
 function drawAppearancePreview(){
  const c=$("appearancePreview");if(!c||!state)return;
@@ -9072,10 +9052,8 @@ function drawAppearancePreview(){
  const bg=g.createLinearGradient(0,0,0,c.height);
  bg.addColorStop(0,"#17101f");bg.addColorStop(1,"#070509");
  g.fillStyle=bg;g.fillRect(0,0,c.width,c.height);
- const time=state.visual?.time||0,previewPose=heroMotionPreviewPose(time);
- if(!drawHybridHeroMotion(g,c.width/2,c.height-5,2.15,false,time,previewPose.direction,true,previewPose)){
-  drawHighResolutionExplorer(g,12,7,2,false,0,state.visual?.time||0,true);
- }
+ const preview=nativeHeroPreviewPose(state.visual?.time||0);
+ drawNativeHeroScaled(g,16,12,2,preview.facing,preview.pose,false);
 }
 function appearanceUnlockMicroHint(data,keyName,unlocked){
  if(unlocked||keyName==="color"||!data)return"";
@@ -21957,30 +21935,27 @@ function endTurn(){
 function ensureVisualState(){
  state.visual=state.visual||{};
  if(!Array.isArray(state.visual.effects))state.visual.effects=[];
- if(!["down","left","right","up"].includes(state.visual.facing))state.visual.facing="down";
+ if(!["down","up","left","right"].includes(state.visual.facing))state.visual.facing="down";
  return state.visual;
 }
-const HERO_MOVE_ANIMATION_FRAMES=12;
-const HERO_ATTACK_ANIMATION_FRAMES=12;
 function heroFacingFromVector(dx,dy,fallback="down"){
  if(Math.abs(dx)>Math.abs(dy))return dx<0?"left":"right";
- if(dy<0)return"up";
- if(dy>0)return"down";
+ if(dy)return dy<0?"up":"down";
  return fallback;
 }
 function startMoveAnim(dx,dy){
  const v=ensureVisualState();
- v.moveDx=dx;v.moveDy=dy;v.moveFrames=HERO_MOVE_ANIMATION_FRAMES;
+ v.moveDx=dx;v.moveDy=dy;v.moveFrames=NATIVE_HERO_MOVE_FRAMES;
  v.facing=heroFacingFromVector(dx,dy,v.facing);
 }
 function startAttackAnim(dx,dy){
  const v=ensureVisualState();
- v.attackDx=dx;v.attackDy=dy;v.attackFrames=HERO_ATTACK_ANIMATION_FRAMES;
+ v.attackDx=dx;v.attackDy=dy;v.attackFrames=NATIVE_HERO_ATTACK_FRAMES;
  v.facing=heroFacingFromVector(dx,dy,v.facing);
 }
 function startDamageAnim(){
  const v=ensureVisualState();
- v.damageFrames=6;
+ v.damageFrames=NATIVE_HERO_HURT_FRAMES;
 }
 function addVisualEffect(effect){
  const v=ensureVisualState();
@@ -24791,7 +24766,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.33",
+  version:"4.34",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -26868,206 +26843,251 @@ function drawActorGroundShadow(x,y,scale=1,alpha=.28){
  ctx.beginPath();ctx.ellipse(x+11,y+18.5,7*scale,2.3*scale,0,0,Math.PI*2);ctx.fill();
  ctx.restore();
 }
-const HERO_MOTION_COLS=4,HERO_MOTION_ROWS=4,HERO_MOTION_FRAME_W=48,HERO_MOTION_FRAME_H=32;
-const HERO_MOTION_DIRECTIONS={down:0,left:1,right:2,up:3};
-const heroMotionFrameCache=new Map();
-let heroMotionAppearanceCacheKey="";
-function clearHeroMotionCache(){
- heroMotionFrameCache.clear();
- heroMotionAppearanceCacheKey="";
+// The explorer is authored at the exact in-game ceiling. Every part and every
+// animation frame lives on this 32 x 36 integer grid; nothing is downsampled.
+const NATIVE_HERO_W=32,NATIVE_HERO_H=36;
+const NATIVE_HERO_MOVE_FRAMES=12,NATIVE_HERO_ATTACK_FRAMES=14,NATIVE_HERO_HURT_FRAMES=8;
+const nativeHeroFrameCache=new Map();
+function nativeFill(g,color,rects){
+ g.fillStyle=color;
+ for(const r of rects)g.fillRect(r[0]|0,r[1]|0,Math.max(1,r[2]|0),Math.max(1,r[3]|0));
 }
-function heroMotionAppearanceKey(){
+function nativePixelLine(g,color,x0,y0,x1,y1,width=1){
+ x0=Math.round(x0);y0=Math.round(y0);x1=Math.round(x1);y1=Math.round(y1);
+ const dx=Math.abs(x1-x0),sx=x0<x1?1:-1,dy=-Math.abs(y1-y0),sy=y0<y1?1:-1,half=Math.floor(width/2);let err=dx+dy;
+ g.fillStyle=color;
+ while(true){g.fillRect(x0-half,y0-half,width,width);if(x0===x1&&y0===y1)break;const e2=2*err;if(e2>=dy){err+=dy;x0+=sx}if(e2<=dx){err+=dx;y0+=sy}}
+}
+function nativeMapIndex(map,id){const i=Object.keys(map).indexOf(id);return Math.max(0,i)}
+function nativeHeroPose(){
+ const v=ensureVisualState();
+ if((v.damageFrames||0)>0)return "hurt";
+ if((v.attackFrames||0)>0){
+  const elapsed=NATIVE_HERO_ATTACK_FRAMES-v.attackFrames;
+  return elapsed<4?"attackWindup":elapsed<9?"attackStrike":"attackRecover";
+ }
+ if((v.moveFrames||0)>0){
+  const phase=Math.floor((NATIVE_HERO_MOVE_FRAMES-v.moveFrames)/3)%4;
+  return ["idle","walkA","walkB","walkA"][phase];
+ }
+ return "idle";
+}
+function nativeHeroPreviewPose(t){
+ const directions=["down","right","up","left"],segment=Math.floor(t/64)%directions.length,local=t%64;
+ if(local<40)return{facing:directions[segment],pose:["idle","walkA","walkB","walkA"][Math.floor(local/10)%4]};
+ return{facing:directions[segment],pose:local<48?"attackWindup":local<57?"attackStrike":"attackRecover"};
+}
+function nativeHeroFrameKey(facing,pose,hurt){
  const a=currentAppearance();
- return[a.foundation,a.hair,a.focus,a.color,a.shape,a.sigil].join("|");
+ return [a.foundation,a.hair,a.focus,a.color,a.shape,a.sigil,weaponType(),state?.light?.on&&state?.light?.fuel>0?1:0,facing,pose,hurt?1:0].join("|");
 }
-function heroMotionRgb(hex,fallback=[255,255,255]){
- const value=String(hex||"").trim();
- const short=/^#([0-9a-f]{3})$/i.exec(value);
- if(short)return short[1].split("").map(v=>parseInt(v+v,16));
- const full=/^#([0-9a-f]{6})$/i.exec(value);
- if(!full)return fallback;
- return[parseInt(full[1].slice(0,2),16),parseInt(full[1].slice(2,4),16),parseInt(full[1].slice(4,6),16)];
+function nativeHeroFrame(facing="down",pose="idle",hurt=false){
+ const safeFacing=["down","up","left","right"].includes(facing)?facing:"down";
+ const key=nativeHeroFrameKey(safeFacing,pose,hurt);
+ if(nativeHeroFrameCache.has(key))return nativeHeroFrameCache.get(key);
+ if(nativeHeroFrameCache.size>384)nativeHeroFrameCache.clear();
+ const c=document.createElement("canvas");c.width=NATIVE_HERO_W;c.height=NATIVE_HERO_H;
+ const g=c.getContext("2d");g.imageSmoothingEnabled=false;
+ if(safeFacing==="right"){g.translate(NATIVE_HERO_W,0);g.scale(-1,1);drawNativeHeroPixels(g,"left",pose,hurt)}
+ else drawNativeHeroPixels(g,safeFacing,pose,hurt);
+ nativeHeroFrameCache.set(key,c);return c;
 }
-function heroMotionTintPixel(data,index,target,sourceLight){
- const rgb=heroMotionRgb(target),peak=Math.max(1,...rgb);
- const factor=clamp((sourceLight+14)/peak,.3,3.25);
- data[index]=clamp(Math.round(rgb[0]*factor),0,255);
- data[index+1]=clamp(Math.round(rgb[1]*factor),0,255);
- data[index+2]=clamp(Math.round(rgb[2]*factor),0,255);
-}
-function removeHeroMotionCheckerboard(data,width,height){
- const visited=new Uint8Array(width*height),stack=[];
- const isBackground=index=>{
-  const p=index*4,r=data[p],g=data[p+1],b=data[p+2];
-  return Math.min(r,g,b)>230&&Math.max(r,g,b)-Math.min(r,g,b)<14;
- };
- const add=index=>{if(index>=0&&index<visited.length&&!visited[index]&&isBackground(index)){visited[index]=1;stack.push(index)}};
- for(let x=0;x<width;x++){add(x);add((height-1)*width+x)}
- for(let y=0;y<height;y++){add(y*width);add(y*width+width-1)}
- while(stack.length){
-  const index=stack.pop(),x=index%width,y=Math.floor(index/width);
-  data[index*4+3]=0;
-  if(x>0)add(index-1);if(x<width-1)add(index+1);if(y>0)add(index-width);if(y<height-1)add(index+width);
- }
-}
-function recolorHeroMotionFrame(data,width,height){
- const foundation=appearanceFoundation(),hair=appearanceHair(),focus=appearanceFocus(),accent=appearanceColor();
- for(let y=0;y<height;y++)for(let x=0;x<width;x++){
-  const index=(y*width+x)*4;if(data[index+3]===0)continue;
-  const r=data[index],g=data[index+1],b=data[index+2],max=Math.max(r,g,b),min=Math.min(r,g,b),chroma=max-min;
-  const light=Math.round(r*.299+g*.587+b*.114);
-  const cyan=b>78&&g>58&&b>r*1.28&&g>r*1.18;
-  const warm=r>48&&r>g*1.08&&g>b*1.12;
-  const silverHair=y<13&&light>62&&chroma<70&&b>=r*.78;
-  const darkCloth=b>r*1.05&&b>=g*.88&&light<118;
-  if(cyan){heroMotionTintPixel(data,index,light>150?focus.core:focus.mid,light);continue}
-  if(silverHair){
-   const tone=light>185?hair.light:light>105?hair.base:hair.shadow;
-   heroMotionTintPixel(data,index,tone,light);continue;
-  }
-  if(warm){heroMotionTintPixel(data,index,light>105?foundation.metal:accent.trim,light);continue}
-  if(darkCloth){heroMotionTintPixel(data,index,light>48?foundation.body2:foundation.body,light)}
- }
-}
-function buildHeroMotionFrame(direction,frame){
- if(!heroMotionAsset.ready||!heroMotionAsset.image.naturalWidth)return null;
- const appearanceKey=heroMotionAppearanceKey();
- if(heroMotionAppearanceCacheKey!==appearanceKey){heroMotionFrameCache.clear();heroMotionAppearanceCacheKey=appearanceKey}
- const row=HERO_MOTION_DIRECTIONS[direction]??0,column=clamp(frame|0,0,HERO_MOTION_COLS-1),key=`${row}:${column}`;
- if(heroMotionFrameCache.has(key))return heroMotionFrameCache.get(key);
- const c=document.createElement("canvas");c.width=HERO_MOTION_FRAME_W;c.height=HERO_MOTION_FRAME_H;
- const g=c.getContext("2d",{willReadFrequently:true});g.imageSmoothingEnabled=false;
- const sourceW=heroMotionAsset.image.naturalWidth/HERO_MOTION_COLS,sourceH=heroMotionAsset.image.naturalHeight/HERO_MOTION_ROWS;
- g.drawImage(heroMotionAsset.image,column*sourceW,row*sourceH,sourceW,sourceH,0,0,c.width,c.height);
- try{
-  const pixels=g.getImageData(0,0,c.width,c.height);
-  removeHeroMotionCheckerboard(pixels.data,c.width,c.height);
-  recolorHeroMotionFrame(pixels.data,c.width,c.height);
-  g.clearRect(0,0,c.width,c.height);g.putImageData(pixels,0,0);
-  document.documentElement.dataset.heroMotionProcessed="true";
- }catch(error){
-  console.warn("Hero motion frame processing failed; using procedural fallback.",error);
-  heroMotionAsset.failed=true;return null;
- }
- heroMotionFrameCache.set(key,c);return c;
-}
-function primeHeroMotionFrames(){
- if(!heroMotionAsset.ready||heroMotionAsset.failed)return false;
- if(heroMotionAppearanceCacheKey!==heroMotionAppearanceKey()){heroMotionFrameCache.clear();heroMotionAppearanceCacheKey=""}
- for(const direction of Object.keys(HERO_MOTION_DIRECTIONS)){
-  for(let frame=0;frame<HERO_MOTION_COLS;frame++)if(!buildHeroMotionFrame(direction,frame))return false;
- }
- document.documentElement.dataset.heroMotionFrames=String(heroMotionFrameCache.size);
- return true;
-}
-function heroMotionPose(t,directionOverride=null){
- const v=state?.visual||{},direction=directionOverride||v.facing||"down";
- const attackFrames=Math.max(0,v.attackFrames||0),moveFrames=Math.max(0,v.moveFrames||0);
- if(attackFrames>0){
-  const progress=1-clamp(attackFrames/HERO_ATTACK_ANIMATION_FRAMES,0,1);
-  return{direction,frame:3,attack:true,progress,bounce:-Math.sin(progress*Math.PI)*.6};
- }
- if(moveFrames>0){
-  const progress=1-clamp(moveFrames/HERO_MOVE_ANIMATION_FRAMES,0,1),cycle=[0,1,2,1];
-  return{direction,frame:cycle[Math.min(3,Math.floor(progress*4))],move:true,progress,bounce:-Math.abs(Math.sin(progress*Math.PI*2))*.75};
- }
- return{direction,frame:0,progress:0,bounce:Math.sin(t*.075)*.18};
-}
-function heroMotionPreviewPose(t){
- const directions=["down","right","up","left"],segment=Math.floor(t/72)%directions.length,local=t%72;
- if(local>=54){
-  const progress=(local-54)/18;
-  return{direction:directions[segment],frame:3,attack:true,progress,bounce:-Math.sin(progress*Math.PI)*.6};
- }
- const cycle=[0,1,2,1],progress=local/54;
- return{direction:directions[segment],frame:cycle[Math.min(3,Math.floor(progress*4))],move:true,progress,bounce:-Math.abs(Math.sin(progress*Math.PI*2))*.75};
-}
-function drawHybridHairDetail(g,centerX,footY,scale,direction,hair){
- const index=Math.max(0,Object.keys(appearanceHairData).indexOf(currentAppearance().hair)),variant=index%6;
- const hx=centerX+(direction==="left"?1:direction==="right"?-1:0)*scale,hy=footY-24*scale;
- g.save();g.fillStyle=hair.base;g.strokeStyle=hair.light;g.lineWidth=Math.max(1,scale*.65);g.globalAlpha=.88;
- if(hair.shape==="teal"||hair.shape==="white"){
-  const side=direction==="left"?1:direction==="right"?-1:variant%2?1:-1;
-  g.beginPath();g.moveTo(hx+side*4*scale,hy+2*scale);g.quadraticCurveTo(hx+side*7*scale,hy+8*scale,hx+side*4*scale,hy+13*scale);g.stroke();
- }
- if(variant===1||variant===4){g.fillRect(hx-5*scale,hy-4*scale,2*scale,2*scale)}
- else if(variant===2||variant===5){g.beginPath();g.moveTo(hx-2*scale,hy-4*scale);g.lineTo(hx+1*scale,hy-8*scale);g.lineTo(hx+2*scale,hy-3*scale);g.closePath();g.fill()}
- g.restore();
-}
-function drawHybridFoundationDetail(g,centerX,footY,scale,direction){
- const foundation=appearanceFoundation(),index=Math.max(0,Object.keys(appearanceFoundationData).indexOf(currentAppearance().foundation)),variant=index%6;
- const lateral=direction==="left"?-1:direction==="right"?1:0;
- g.save();g.fillStyle=foundation.body;g.strokeStyle=foundation.lining;g.lineWidth=Math.max(1,scale*.55);g.globalAlpha=.9;g.lineJoin="miter";
- if(foundation.silhouette==="guide"){
-  const side=direction==="left"?1:-1;g.beginPath();g.moveTo(centerX+side*5*scale,footY-16*scale);g.lineTo(centerX+side*11*scale,footY-7*scale);g.lineTo(centerX+side*4*scale,footY-10*scale);g.closePath();g.fill();
- }else if(foundation.silhouette==="spellblade"){
-  g.beginPath();g.moveTo(centerX-4*scale,footY-11*scale);g.lineTo(centerX-6*scale,footY+1*scale);g.lineTo(centerX-1*scale,footY-4*scale);g.lineTo(centerX+3*scale,footY+1*scale);g.lineTo(centerX+5*scale,footY-11*scale);g.closePath();g.fill();
- }else if(foundation.silhouette==="hunter"){
-  const side=lateral||1;g.beginPath();g.moveTo(centerX-side*5*scale,footY-20*scale);g.lineTo(centerX-side*11*scale,footY-17*scale);g.lineTo(centerX-side*6*scale,footY-14*scale);g.closePath();g.fill();
-  g.beginPath();g.moveTo(centerX-side*4*scale,footY-15*scale);g.lineTo(centerX-side*13*scale,footY-9*scale);g.stroke();
- }else{
-  g.fillStyle=foundation.body;g.beginPath();g.moveTo(centerX-2.5*scale,footY-15*scale);g.lineTo(centerX+2.5*scale,footY-15*scale);g.lineTo(centerX+1.5*scale,footY-3*scale);g.lineTo(centerX,footY-5*scale);g.lineTo(centerX-1.5*scale,footY-3*scale);g.closePath();g.fill();g.stroke();
-  g.strokeStyle=foundation.lining;g.globalAlpha=.72;g.beginPath();g.moveTo(centerX,footY-14*scale);g.lineTo(centerX,footY-5*scale);g.stroke();
- }
- g.strokeStyle=foundation.metal;g.globalAlpha=.68;
- if(variant===1||variant===4){g.beginPath();g.moveTo(centerX-5*scale,footY-12*scale);g.lineTo(centerX+5*scale,footY-12*scale);g.stroke()}
- else if(variant===2||variant===5){g.fillStyle=foundation.metal;g.fillRect(centerX-1*scale,footY-14*scale,2*scale,2*scale)}
- g.restore();
-}
-function drawHybridFocus(g,centerX,footY,scale,direction,t){
- const focus=appearanceFocus(),index=Math.max(0,Object.keys(appearanceFocusData).indexOf(currentAppearance().focus));
- const side=direction==="left"?1:direction==="right"?-1:-1;
- const x=centerX+side*(11+(index%3))*scale,y=footY-(15+Math.sin(t*.09+index)*1.2)*scale,pulse=.72+.22*Math.sin(t*.13+index);
- g.save();g.translate(x,y);g.scale(scale,scale);g.lineJoin="miter";g.lineCap="square";
- const glow=g.createRadialGradient(0,0,.5,0,0,7);glow.addColorStop(0,focus.glow);glow.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=glow;g.globalAlpha=pulse;g.fillRect(-8,-8,16,16);g.globalAlpha=1;
- g.fillStyle=focus.mid;g.strokeStyle=focus.core;g.lineWidth=.8;
- if(focus.kind==="lantern"){
-  g.fillStyle="#111722";g.fillRect(-3,-3,6,7);g.strokeRect(-3.5,-3.5,7,8);g.fillStyle=focus.mid;g.fillRect(-2,-2,4,5);g.fillStyle=focus.core;g.fillRect(-.6,-1.5,1.2,4);g.beginPath();g.arc(0,-4,2.4,Math.PI,0);g.stroke();
- }else if(focus.kind==="prism"){
-  g.beginPath();g.moveTo(0,-5);g.lineTo(4,0);g.lineTo(0,6);g.lineTo(-4,0);g.closePath();g.fill();g.stroke();g.fillStyle=focus.core;g.fillRect(-.6,-3,1.2,6);
- }else if(focus.kind==="wisp"){
-  g.beginPath();g.moveTo(0,-5);g.bezierCurveTo(5,-1,3,4,0,6);g.bezierCurveTo(-4,3,-3,-2,0,-5);g.fill();g.fillStyle=focus.core;g.fillRect(-.7,-1.5,1.4,3);
- }else{
-  g.beginPath();g.ellipse(0,0,5,2.6,-.25,0,Math.PI*2);g.stroke();
-  [[-4,-1],[3,-3],[5,2],[-1,3]].forEach(([dx,dy],i)=>{g.fillStyle=i===1?focus.core:focus.mid;g.fillRect(dx-.7,dy-.7,1.4,1.4)});
- }
- g.restore();
-}
-function drawHybridShapeAndSigil(g,centerX,footY,scale,direction){
- const a=currentAppearance(),palette=appearanceColor(),shape=a.shape;
- g.save();g.strokeStyle=palette.trim;g.fillStyle=palette.body;g.lineWidth=Math.max(1,scale*.65);g.globalAlpha=.88;
- if(["root","thorn","warden","antler","beast","drake","frostborn","bone"].includes(shape)){
-  const y=footY-27*scale;g.beginPath();g.moveTo(centerX-4*scale,y+2*scale);g.lineTo(centerX-7*scale,y-3*scale);g.moveTo(centerX+4*scale,y+2*scale);g.lineTo(centerX+7*scale,y-3*scale);g.stroke();
- }
- if(["eclipse","monarch","saint"].includes(shape)){g.globalAlpha=.62;g.beginPath();g.ellipse(centerX,footY-31*scale,6*scale,1.8*scale,0,0,Math.PI*2);g.stroke()}
- if(a.sigil!=="none"){
-  g.globalAlpha=.82;g.fillStyle=palette.trim;const chestX=centerX+(direction==="left"?-2:direction==="right"?2:0)*scale,chestY=footY-17*scale;
-  g.beginPath();g.moveTo(chestX,chestY-1.7*scale);g.lineTo(chestX+1.7*scale,chestY);g.lineTo(chestX,chestY+1.7*scale);g.lineTo(chestX-1.7*scale,chestY);g.closePath();g.fill();
- }
- g.restore();
-}
-function drawHybridHeroMotion(g,centerX,footY,scale=1,hurt=false,t=0,directionOverride=null,showFocus=true,poseOverride=null){
- if(!heroMotionAsset.ready||heroMotionAsset.failed)return false;
- if(heroMotionFrameCache.size<HERO_MOTION_COLS*HERO_MOTION_ROWS&&!primeHeroMotionFrames())return false;
- const pose=poseOverride||heroMotionPose(t,directionOverride),frame=buildHeroMotionFrame(pose.direction,pose.frame);if(!frame)return false;
- const attackPush=pose.attack?Math.sin(pose.progress*Math.PI)*2.2*scale:0;
- const dx=pose.direction==="left"?-attackPush:pose.direction==="right"?attackPush:0;
- const dy=pose.direction==="up"?-attackPush:pose.direction==="down"?attackPush:0;
+function drawNativeHeroScaled(g,x,y,scale=1,facing="down",pose="idle",hurt=false){
  g.save();g.imageSmoothingEnabled=false;
- if(hurt)g.filter="sepia(1) saturate(3) hue-rotate(305deg) brightness(1.15)";
- g.drawImage(frame,centerX-30*scale+dx,footY-29*scale+pose.bounce*scale,HERO_MOTION_FRAME_W*scale,HERO_MOTION_FRAME_H*scale);
+ g.drawImage(nativeHeroFrame(facing,pose,hurt),Math.round(x),Math.round(y),NATIVE_HERO_W*scale,NATIVE_HERO_H*scale);
  g.restore();
- drawHybridFoundationDetail(g,centerX+dx,footY+dy,scale,pose.direction);
- const hair=appearanceHair();drawHybridHairDetail(g,centerX+dx,footY+dy,scale,pose.direction,hair);
- drawHybridShapeAndSigil(g,centerX+dx,footY+dy,scale,pose.direction);
- if(showFocus)drawHybridFocus(g,centerX+dx,footY+dy,scale,pose.direction,t);
- return true;
+}
+function nativeHeroPalette(hurt){
+ const accent=appearanceColor(),foundation=appearanceFoundation(),hair=appearanceHair(),focus=appearanceFocus();
+ const lightOn=!!(state?.light?.on&&state?.light?.fuel>0);
+ return{
+  ink:"#05070b",outline:"#0a0c12",cloth:foundation.body,cloth2:foundation.body2,lining:foundation.lining,metal:foundation.metal,
+  trim:accent.trim,skin:hurt?"#f47b85":"#e5b9a5",skinShade:hurt?"#b64052":"#ae7469",eye:hurt?"#6c1729":"#253047",
+  hair:hair.base,hairLight:hair.light,hairShade:hair.shadow,
+  focusCore:lightOn?focus.core:"#6b6574",focusMid:lightOn?focus.mid:"#34313b",focusGlow:lightOn?focus.glow:"rgba(0,0,0,0)",
+  accent,foundation,hairData:hair,focusData:focus,lightOn
+ };
+}
+function nativeDrawAura(g,p,fx,fy,variation){
+ if(!p.lightOn)return;
+ g.save();g.globalAlpha=.34;g.fillStyle=p.focusCore;
+ const motes=[[fx-3,fy-4],[fx+4,fy-2],[fx-4,fy+3],[fx+3,fy+5],[fx+(variation%3)-1,fy-7]];
+ for(const [x,y] of motes)g.fillRect(x,y,1,1);
+ g.globalAlpha=.18;g.fillRect(fx-4,fy-4,9,9);g.restore();
+}
+function nativeDrawLegs(g,p,facing,pose){
+ const stride=pose==="walkA"?-1:pose==="walkB"?1:0;
+ if(facing==="left"){
+  nativeFill(g,p.outline,[[13+stride,24,5,10],[17-stride,25,5,9],[11+stride,32,8,3],[16-stride,32,8,3]]);
+  nativeFill(g,"#202530",[[14+stride,25,3,7],[18-stride,26,3,6]]);
+  nativeFill(g,p.metal,[[13+stride,29,4,1],[18-stride,30,4,1]]);
+ }else{
+  nativeFill(g,p.outline,[[10+stride,24,7,10],[17-stride,24,7,10],[8+stride,32,9,3],[17-stride,32,9,3]]);
+  nativeFill(g,"#202530",[[12+stride,25,4,7],[19-stride,25,4,7]]);
+  nativeFill(g,p.metal,[[11+stride,29,5,1],[19-stride,29,5,1]]);
+ }
+}
+function nativeDrawCape(g,p,facing,pose,foundationIndex){
+ const style=p.foundation.silhouette,step=pose==="walkA"?-1:pose==="walkB"?1:0,trim=p.trim;
+ if(facing==="left"){
+  nativeFill(g,p.ink,[[12,12,13,15],[18,25,8,5],[20,29,5,3]]);
+  nativeFill(g,p.cloth,[[13,13,11,13],[18,25,7,4],[20,29,4,2]]);
+  if(style==="spellblade"||style==="pilgrim")nativeFill(g,p.cloth,[[20,29,3,3],[17,27,3,4]]);
+  if(style==="hunter")nativeFill(g,p.cloth2,[[20,13,7,4],[23,16,5,3]]);
+  nativeFill(g,trim,[[22,15,1,10],[21,28,3,1]]);
+ }else{
+  if(style==="guide"){
+   nativeFill(g,p.ink,[[6,13,20,13],[7+step,25,7,4],[18-step,25,8,5],[7+step,29,5,2]]);
+   nativeFill(g,p.cloth,[[7,14,18,11],[8+step,25,5,3],[19-step,25,6,4],[8+step,28,4,2]]);
+  }else if(style==="spellblade"){
+   nativeFill(g,p.ink,[[6,13,20,14],[7+step,26,8,6],[18-step,26,8,7]]);
+   nativeFill(g,p.cloth,[[7,14,18,12],[8+step,26,6,5],[19-step,26,6,6]]);
+   nativeFill(g,p.lining,[[19-step,27,4,5]]);
+  }else if(style==="hunter"){
+   nativeFill(g,p.ink,[[5,12,22,12],[7+step,23,8,5],[19-step,22,9,5]]);
+   nativeFill(g,p.cloth,[[6,13,20,10],[8+step,23,6,4],[20-step,22,7,4]]);
+   nativeFill(g,p.cloth2,[[5,12,7,4],[23,12,6,5]]);
+  }else{
+   nativeFill(g,p.ink,[[6,12,20,15],[7+step,26,9,7],[17-step,26,9,7]]);
+   nativeFill(g,p.cloth,[[7,13,18,13],[8+step,26,7,6],[18-step,26,7,6]]);
+   nativeFill(g,p.lining,[[14,15,5,16]]);
+  }
+  const pattern=foundationIndex%6;
+  if(pattern===0)nativeFill(g,trim,[[8,23,16,1],[11,27,1,2],[22,27,1,2]]);
+  if(pattern===1)nativeFill(g,trim,[[8,15,1,9],[24,15,1,9],[15,25,3,1]]);
+  if(pattern===2)nativeFill(g,trim,[[10,16,1,1],[13,19,1,1],[20,19,1,1],[23,16,1,1]]);
+  if(pattern===3)nativeFill(g,trim,[[9,24,5,1],[20,24,5,1],[12,27,1,2],[21,27,1,2]]);
+  if(pattern===4)nativeFill(g,trim,[[16,14,2,12],[10,25,4,1],[20,25,4,1]]);
+  if(pattern===5)nativeFill(g,trim,[[8,18,4,1],[22,18,3,1],[13,23,8,1]]);
+ }
+}
+function nativeDrawTorsoAndArms(g,p,facing,pose,foundationIndex){
+ const wind=pose==="attackWindup",strike=pose==="attackStrike",recover=pose==="attackRecover";
+ if(facing==="left"){
+  nativeFill(g,p.outline,[[11,12,13,15],[9,14,5,10]]);nativeFill(g,p.cloth2,[[12,13,11,13],[10,15,4,8]]);
+  if(wind)nativeFill(g,p.outline,[[10,9,5,9],[8,8,4,4]]);
+  else if(strike)nativeFill(g,p.outline,[[5,16,10,5],[4,17,4,4]]);
+  else nativeFill(g,p.outline,[[9,15,5,10],[8,22,5,4]]);
+  nativeFill(g,p.cloth2,wind?[[11,10,3,7]]:strike?[[6,17,8,3]]:[[10,16,3,8]]);
+  nativeFill(g,p.metal,[[11,23,3,1],[16,25,7,1]]);
+ }else{
+  nativeFill(g,p.outline,[[9,12,16,15]]);nativeFill(g,p.cloth2,[[10,13,14,13]]);
+  nativeFill(g,p.lining,[[15,14,4,11]]);
+  nativeFill(g,p.outline,[[6,14,5,11]]);nativeFill(g,p.cloth2,[[7,15,3,9]]);
+  if(wind){nativeFill(g,p.outline,[[22,10,5,10],[24,7,4,5]]);nativeFill(g,p.cloth2,[[23,11,3,8]])}
+  else if(strike){nativeFill(g,p.outline,[[22,16,8,6],[27,19,4,5]]);nativeFill(g,p.cloth2,[[23,17,6,4]])}
+  else{nativeFill(g,p.outline,[[23,14,5,11]]);nativeFill(g,p.cloth2,[[24,15,3,9]])}
+  nativeFill(g,p.metal,[[8,22,3,1],[24,22,3,1],[10,25,14,2]]);
+  if(foundationIndex%5===0)nativeFill(g,p.trim,[[12,15,1,8],[21,15,1,8]]);
+  else if(foundationIndex%5===1)nativeFill(g,p.trim,[[11,15,11,1],[16,16,1,8]]);
+  else if(foundationIndex%5===2)nativeFill(g,p.trim,[[12,17,10,1],[13,21,8,1]]);
+  else if(foundationIndex%5===3)nativeFill(g,p.trim,[[12,15,1,1],[21,15,1,1],[16,19,2,2]]);
+  else nativePixelLine(g,p.trim,12,15,21,23,1);
+ }
+}
+function nativeDrawFaceAndHair(g,p,facing,hurt,hairIndex){
+ const shape=p.hairData.shape,variant=hairIndex%6;
+ if(facing==="left"){
+  nativeFill(g,p.ink,[[11,4,11,11],[9,7,4,6]]);nativeFill(g,p.skin,[[12,6,8,7],[11,9,2,3]]);nativeFill(g,p.skinShade,[[18,11,2,2]]);
+  nativeFill(g,p.eye,[[11,9,2,1]]);if(!hurt)nativeFill(g,p.focusCore,[[11,9,1,1]]);
+  nativeFill(g,p.hairShade,[[10,3,11,6],[18,6,5,8],[9,6,4,3]]);
+  nativeFill(g,p.hair,[[11,2,7,2],[9,4,11,3],[18,5,4,5],[10,6,4,2]]);
+  if(shape==="teal"||shape==="white")nativeFill(g,p.hair,[[19,9,4,7],[21,14,3,5]]);
+  if(shape==="silver")nativeFill(g,p.hair,[[9,3,3,2],[15,1,2,3],[19,2,3,3]]);
+  if(shape==="night")nativeFill(g,p.hair,[[8,5,5,2],[12,2,7,2]]);
+  nativeFill(g,p.hairLight,[[12,3,4,1],[10,5,2,1]]);
+  if(variant===1||variant===4)nativeFill(g,p.trim,[[21,11,2,2]]);
+  if(variant===2||variant===5)nativeFill(g,p.hair,[[20,14,2,6]]);
+ }else if(facing==="up"){
+  nativeFill(g,p.ink,[[10,4,14,11]]);nativeFill(g,p.skinShade,[[13,11,8,3]]);
+  nativeFill(g,p.hairShade,[[9,4,16,10],[11,2,12,4]]);nativeFill(g,p.hair,[[10,3,14,9],[12,1,5,3],[18,2,5,3]]);
+  nativeFill(g,p.hairLight,[[12,3,5,1],[19,4,3,1]]);
+  if(shape==="teal"||shape==="white")nativeFill(g,p.hair,[[9,9,4,8],[22,9,4,8]]);
+  if(variant===2||variant===5)nativeFill(g,p.hair,[[22,12,3,7]]);
+ }else{
+  nativeFill(g,p.ink,[[10,4,14,11]]);nativeFill(g,p.skin,[[12,6,10,8]]);nativeFill(g,p.skinShade,[[12,12,10,2]]);
+  nativeFill(g,p.eye,[[13,9,2,1],[19,9,2,1]]);if(!hurt)nativeFill(g,p.focusCore,[[14,9,1,1],[20,9,1,1]]);
+  nativeFill(g,p.hairShade,[[9,4,16,6],[10,2,13,4],[9,8,4,5],[21,7,4,6]]);
+  nativeFill(g,p.hair,[[10,3,14,5],[12,1,5,3],[18,2,5,3],[10,7,5,3],[19,6,5,3]]);
+  if(shape==="silver")nativeFill(g,p.hair,[[8,5,4,2],[14,0,2,3],[22,3,4,2],[15,7,2,5]]);
+  if(shape==="night")nativeFill(g,p.hair,[[8,6,5,2],[11,2,10,2],[18,6,3,5]]);
+  if(shape==="teal")nativeFill(g,p.hair,[[9,8,4,8],[22,8,4,9],[24,14,3,5]]);
+  if(shape==="white")nativeFill(g,p.hair,[[9,8,4,9],[22,8,4,9],[7,12,3,5]]);
+  nativeFill(g,p.hairLight,[[12,3,5,1],[19,4,3,1]]);
+  if(variant===1)nativeFill(g,p.trim,[[9,10,2,2]]);
+  if(variant===2||variant===5)nativeFill(g,p.hair,[[23,13,2,7]]);
+  if(variant===3)nativeFill(g,p.hairLight,[[16,1,1,5]]);
+  if(variant===4)nativeFill(g,p.trim,[[23,11,2,2]]);
+ }
+}
+function nativeDrawFocus(g,p,facing,focusIndex){
+ let x=facing==="left"?24:facing==="up"?26:4,y=20;
+ nativeDrawAura(g,p,x+2,y+3,focusIndex);
+ const kind=p.focusData.kind;
+ if(kind==="lantern"){
+  nativeFill(g,p.metal,[[x+1,y-2,3,1],[x,y-1,5,1],[x,y+6,5,1]]);nativeFill(g,p.outline,[[x,y,5,6]]);nativeFill(g,p.focusMid,[[x+1,y+1,3,4]]);nativeFill(g,p.focusCore,[[x+2,y+1,1,4]]);
+ }else if(kind==="prism"){
+  nativeFill(g,p.focusMid,[[x+2,y-1,1,1],[x+1,y,3,1],[x,y+1,5,3],[x+1,y+4,3,1],[x+2,y+5,1,1]]);nativeFill(g,p.focusCore,[[x+2,y,1,4]]);
+ }else if(kind==="wisp"){
+  nativeFill(g,p.focusMid,[[x+2,y-2,1,2],[x+1,y,3,2],[x,y+2,5,2],[x+1,y+4,3,2],[x+2,y+6,1,1]]);nativeFill(g,p.focusCore,[[x+2,y+1,1,4]]);
+ }else{
+  nativeFill(g,p.focusMid,[[x,y,1,1],[x+4,y,1,1],[x-1,y+3,1,1],[x+5,y+3,1,1],[x+1,y+6,1,1],[x+4,y+5,1,1]]);nativeFill(g,p.focusCore,[[x+2,y+2,2,2]]);
+ }
+ const variant=focusIndex%6;if(variant===1)nativeFill(g,p.trim,[[x-1,y+5,1,1]]);if(variant===2)nativeFill(g,p.focusCore,[[x+5,y-2,1,1]]);if(variant===3)nativePixelLine(g,p.metal,x+2,y-3,x+2,y-1);if(variant===4)nativeFill(g,p.trim,[[x-2,y+2,1,1],[x+6,y+2,1,1]]);if(variant===5)nativeFill(g,p.focusCore,[[x,y-3,1,1],[x+4,y-2,1,1]]);
+}
+function nativeWeaponEndpoints(facing,pose,type){
+ const wind=pose==="attackWindup",strike=pose==="attackStrike";
+ if(facing==="left")return wind?[11,12,16,3]:strike?[9,18,type==="spear"?0:2,18]:[10,20,3,31];
+ if(facing==="up")return wind?[23,15,29,9]:strike?[22,15,24,type==="spear"?0:3]:[23,19,29,31];
+ return wind?[24,13,29,5]:strike?[25,19,type==="staff"?29:31,type==="spear"?33:29]:[24,20,29,32];
+}
+function nativeDrawWeapon(g,p,facing,pose,type){
+ const [hx,hy,tx,ty]=nativeWeaponEndpoints(facing,pose,type),attacking=pose.startsWith("attack");
+ if(type==="bow"){
+  const vertical=facing!=="left";nativePixelLine(g,p.metal,hx,hy,vertical?tx-2:tx,vertical?ty-5:ty-5,1);nativePixelLine(g,p.metal,hx,hy,vertical?tx+1:tx,vertical?ty:ty+5,1);nativePixelLine(g,p.trim,vertical?tx-2:tx,vertical?ty-5:ty-5,vertical?tx+1:tx,vertical?ty:ty+5,1);
+  if(attacking)nativePixelLine(g,"#d9d4c2",hx,hy,facing==="left"?0:hx+(facing==="up"?1:6),facing==="up"?0:hy,1);
+ }else{
+  nativePixelLine(g,p.ink,hx,hy,tx,ty,type==="staff"?3:2);
+  nativePixelLine(g,type==="staff"?p.metal:"#c7d4dd",hx,hy,tx,ty,1);
+  if(type==="sword"){nativePixelLine(g,p.trim,hx-2,hy+1,hx+2,hy-1,1);nativeFill(g,p.focusCore,[[tx,ty,1,1]])}
+  if(type==="spear"){nativeFill(g,"#dce7ed",[[tx-1,ty,3,1],[tx,Math.max(0,ty-2),1,3]])}
+  if(type==="staff"){nativeFill(g,p.focusMid,[[tx-2,ty-2,5,5]]);nativeFill(g,p.focusCore,[[tx-1,ty-1,3,3]])}
+ }
+}
+function nativeDrawAccessories(g,p,facing,shapeIndex,sigilIndex){
+ const shape=currentAppearance().shape,sigil=currentAppearance().sigil;
+ if(["root","thorn","warden","antler","beast","drake","frostborn","bone"].includes(shape)){
+  const c=shape==="frostborn"?"#bdeaff":shape==="bone"?"#ddd4c2":p.trim;nativePixelLine(g,c,11,5,7,1);nativePixelLine(g,c,23,5,27,1);
+ }
+ if(["mask","mourner","executioner","raven","bone"].includes(shape)&&facing==="down")nativeFill(g,shape==="raven"?"#17131b":"#d8d0c5",[[12,8,10,4]]);
+ if(["eclipse","monarch","saint"].includes(shape))nativeFill(g,shape==="saint"?"#fff0ac":"#d9be72",[[12,0,10,1],[10,1,2,1],[22,1,2,1]]);
+ if(["mask","warden","sentinel","shell","executioner","cathedral","drake"].includes(shape))nativeFill(g,p.metal,[[6,14,5,3],[24,14,5,3]]);
+ if(["alchemist","lantern","shell"].includes(shape))nativeFill(g,"#64473b",[[25,18,5,7]]);
+ if(shapeIndex%4===1)nativeFill(g,p.trim,[[6,18,1,1],[27,18,1,1]]);
+ if(shapeIndex%4===2)nativeFill(g,p.metal,[[8,13,2,2],[24,13,2,2]]);
+ if(shapeIndex%4===3)nativeFill(g,p.focusCore,[[16,13,2,1]]);
+ if(sigil!=="none"&&facing!=="up"){
+  const x=facing==="left"?17:16,y=18,kind=sigilIndex%6;nativeFill(g,p.focusCore,[[x,y,2,2]]);
+  if(kind===0)nativeFill(g,p.trim,[[x-1,y+1,1,1],[x+2,y+1,1,1]]);
+  if(kind===1)nativeFill(g,p.trim,[[x,y-2,1,2],[x,y+2,1,2]]);
+  if(kind===2)nativeFill(g,p.trim,[[x-1,y-1,1,1],[x+2,y-1,1,1],[x-1,y+2,1,1],[x+2,y+2,1,1]]);
+  if(kind===3)nativePixelLine(g,p.trim,x-1,y+3,x+3,y-1,1);
+  if(kind===4)nativeFill(g,p.trim,[[x-2,y,2,1],[x+2,y,2,1]]);
+  if(kind===5)nativeFill(g,p.trim,[[x-1,y-2,4,1],[x-1,y+3,4,1]]);
+ }
+}
+function drawNativeHeroPixels(g,facing,pose,hurt){
+ const p=nativeHeroPalette(hurt),a=currentAppearance();
+ const foundationIndex=nativeMapIndex(appearanceFoundationData,a.foundation),hairIndex=nativeMapIndex(appearanceHairData,a.hair),focusIndex=nativeMapIndex(appearanceFocusData,a.focus),shapeIndex=nativeMapIndex(appearanceShapeData,a.shape),sigilIndex=nativeMapIndex(appearanceSigilData,a.sigil);
+ nativeDrawLegs(g,p,facing,pose);nativeDrawCape(g,p,facing,pose,foundationIndex);nativeDrawTorsoAndArms(g,p,facing,pose,foundationIndex);
+ nativeDrawFocus(g,p,facing,focusIndex);nativeDrawWeapon(g,p,facing,pose,weaponType());nativeDrawFaceAndHair(g,p,facing,hurt,hairIndex);nativeDrawAccessories(g,p,facing,shapeIndex,sigilIndex);
+ if(hurt){g.save();g.globalAlpha=.24;nativeFill(g,"#ff405e",[[7,3,20,29]]);g.restore()}
 }
 function drawHeroSprite(x,y,hurt,t){
- if(drawHybridHeroMotion(ctx,x+TILE/2,y+TILE-1,1,hurt,t,null,true))return;
- const bob=Math.sin(t*.12)*.65;
- drawHighResolutionExplorer(ctx,x-7,y-18,1,hurt,bob,t,true);
+ const v=ensureVisualState(),facing=v.facing||"down",pose=nativeHeroPose();
+ drawNativeHeroScaled(ctx,x+Math.floor(TILE/2)-16,y+TILE-NATIVE_HERO_H,1,facing,pose,hurt);
 }
+/* v4.34: retired high-resolution vector/downsample renderer.
 function drawHighResolutionExplorer(g,x,y,scale=1,hurt=false,bob=0,t=0,showAura=true){
  const appearance=currentAppearance(),accent=appearanceColor(),foundation=appearanceFoundation(),hair=appearanceHair(),focus=appearanceFocus(),shape=appearance.shape,sigil=appearance.sigil;
  const palette={...accent,body:foundation.body2,cloak:foundation.body,trim:accent.trim},dark="#090b12",ink="#06070b",skin=hurt?"#ff9a9f":"#e6c6b7",skinShadow=hurt?"#cc5f70":"#b98273";
@@ -27211,6 +27231,7 @@ function drawHighResolutionShapeAccent(g,shape,palette,bob,t){
  if(["oracle","seeker"].includes(shape)){const pulse=(Math.sin(t*.12)+1)*.5;g.fillStyle=`rgba(125,224,255,${.55+.3*pulse})`;g.fillRect(17,4+bob,2,2)}
  if(shape==="voidwalker"){g.fillStyle="#050409";g.globalAlpha=.72;g.fillRect(27,9+bob,4,5);g.fillRect(8,29+bob,5,4);g.strokeStyle="#a68cff";g.globalAlpha=.55;g.strokeRect(27.5,9.5+bob,3,4);g.globalAlpha=1}
 }
+*/
 function drawModernEnemyDetails(e,x,y,bob,accent,t){
  ctx.save();
  ctx.lineWidth=.5;
@@ -28500,18 +28521,11 @@ function draw(){
 
  if(inView(state.player.x,state.player.y)){
   let x=sx(state.player.x),y=sy(state.player.y);
-  const mf=Math.max(0,state.visual?.moveFrames||0);
+  const mf=state.visual?.moveFrames||0;
   if(mf>0){
-   const remaining=clamp(mf/HERO_MOVE_ANIMATION_FRAMES,0,1);
-   const eased=remaining*remaining*(3-2*remaining);
-   x-=(state.visual.moveDx||0)*TILE*eased;
-   y-=(state.visual.moveDy||0)*TILE*eased;
-  }
-  const af=state.visual?.attackFrames||0;
-  if(af>0){
-   const swing=Math.sin((1-af/HERO_ATTACK_ANIMATION_FRAMES)*Math.PI);
-   x+=(state.visual.attackDx||0)*2.5*swing;
-   y+=(state.visual.attackDy||0)*2.5*swing;
+   const progress=clamp(1-mf/NATIVE_HERO_MOVE_FRAMES,0,1),ease=progress*progress*(3-2*progress);
+   x-=(state.visual.moveDx||0)*TILE*(1-ease);
+   y-=(state.visual.moveDy||0)*TILE*(1-ease);
   }
   const hurt=(state.visual?.damageFrames||0)>0;
   drawActorGroundShadow(x,y,1,.32);
