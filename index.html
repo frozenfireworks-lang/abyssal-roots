@@ -16,16 +16,6 @@
   --text:#f2edf7;--muted:#b7a9c1;--gold:#e1b85b;--danger:#d86171;
   --good:#71c79a;--magic:#79a9ff;--rare:#d583ff;--legend:#ffad4d;
 }
-
-/* v4.27 ABYSSAL ILLUMINATION — concept-art atmosphere without changing play rules */
-#titleOverlay{background:linear-gradient(180deg,rgba(2,5,9,.34),rgba(3,4,8,.86)),radial-gradient(circle at 50% 34%,transparent 0 18%,rgba(2,3,7,.72) 78%),url("abyssal-cathedral-title.png") center/cover no-repeat;backdrop-filter:none;align-items:center}
-#titleOverlay>.card{position:relative;overflow:hidden;border-color:rgba(147,118,82,.76);background:linear-gradient(180deg,rgba(9,14,20,.82),rgba(8,7,12,.94));box-shadow:0 24px 90px #000,inset 0 0 46px rgba(61,157,195,.055);backdrop-filter:blur(9px) saturate(.85)}
-#titleOverlay>.card::before{content:"";position:absolute;inset:0;pointer-events:none;border:1px solid rgba(255,203,115,.09);border-radius:15px;background:linear-gradient(90deg,rgba(255,181,74,.05),transparent 32%,transparent 70%,rgba(73,194,231,.045))}
-#titleOverlay h2{color:#fff0cb;text-shadow:0 2px 18px #000,0 0 24px rgba(255,187,82,.16);letter-spacing:.09em}
-#titleOverlay .sub{color:#9cdced;text-shadow:0 1px 10px #000}
-#titleOverlay .legend>div{padding:6px 7px;border:1px solid rgba(92,120,132,.42);border-radius:7px;background:rgba(5,9,13,.58)}
-#titleOverlay .modalBtn{border-color:#8e7049;background:linear-gradient(180deg,rgba(80,57,30,.96),rgba(32,25,18,.98));color:#fff0c3}
-@media(max-width:600px){#titleOverlay{background-position:58% center}#titleOverlay>.card{margin:auto 0}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0,#292034 0,#100d16 48%,#09070d 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;overscroll-behavior:none}
 body{display:flex;justify-content:center}
@@ -2610,30 +2600,6 @@ body{
 
 
 /* v3.10.8 APPEARANCE 104 */
-#game{filter:saturate(1.12) contrast(1.06) brightness(1.05)}
-#gameWrap{border-color:#586a86;box-shadow:0 0 0 1px #101827 inset,0 0 24px rgba(62,136,185,.09),0 12px 34px #000b}
-.mobileCompactHero{border-color:#4d5f77;background:linear-gradient(180deg,#172131,#11131d)}
-.appearancePresetGrid{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:6px;
- margin:6px 0 10px;
-}
-.appearancePreset{
- min-height:62px;
- padding:8px;
- border:1px solid #4c4057;
- border-radius:8px;
- background:linear-gradient(145deg,#1b1623,#0e0c13);
- color:#eee6f1;
- text-align:left;
-}
-.appearancePreset b{display:block;color:#f3e7ff;font-size:12.5px}
-.appearancePreset small{display:block;margin-top:3px;color:#a99eb1;font-size:11px;line-height:1.35}
-.appearancePreset.selected{border-color:#7ddfff;box-shadow:inset 0 0 14px rgba(84,199,255,.13)}
-.appearanceRandomBtn{width:100%;margin:0 0 10px;border-color:#507789;background:linear-gradient(145deg,#16252d,#11151d);color:#d9f7ff}
-.appearanceFreeChoices{grid-template-columns:repeat(2,minmax(0,1fr))}
-.appearanceFreeChoices .appearanceChoice{min-height:54px}
 .appearancePreviewWrap{
  position:sticky;
  top:-1px;
@@ -5859,7 +5825,7 @@ body,button,input,select,textarea{font-size:12px}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.34 NATIVE PIXEL</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.26.1 WORLD DEPTH HOTFIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -5984,27 +5950,18 @@ body,button,input,select,textarea{font-size:12px}
 <div class="overlay hidden" id="appearanceOverlay">
   <div class="card appearanceCard">
     <h2>探索者の姿</h2>
-    <p>ゲーム内上限と同じ<b>32×36px</b>の若い細身体型を基準に、<b>基本衣装30種</b>・<b>髪30種</b>・<b>魔導具30種</b>を自由に混ぜられます。既存の<b>魔力色48色</b>・<b>追加装飾32種</b>・<b>紋章24種</b>も同じ整数px規格で重ねられます。</p>
+    <p>姿は <b>外套色48色</b>・<b>輪郭32種</b>・<b>紋章24種</b>、合計104種の部品で構成されます。最大36,864通りを自由に組み合わせられます。高額な恒久解放、条件シークレット、番人の純運激レア枠があります。</p>
     <div class="appearancePreviewWrap">
       <canvas id="appearancePreview" width="96" height="96" aria-label="探索者アイコンのプレビュー"></canvas>
       <div id="appearanceSummary"></div>
     </div>
-    <h3>基本プリセット</h3>
-    <div id="appearancePresets" class="appearancePresetGrid"></div>
-    <button type="button" id="appearanceRandomize" class="appearanceRandomBtn">30×3部品からランダムコーデ</button>
-    <h3>基本衣装</h3>
-    <div id="appearanceFoundations" class="appearanceChoices appearanceFreeChoices"></div>
-    <h3>髪</h3>
-    <div id="appearanceHairs" class="appearanceChoices appearanceFreeChoices"></div>
-    <h3>魔導具</h3>
-    <div id="appearanceFocuses" class="appearanceChoices appearanceFreeChoices"></div>
-    <h3>魔力色</h3>
+    <h3>外套の色</h3>
     <div id="appearanceColors" class="appearanceChoices"></div>
-    <h3>追加装飾</h3>
+    <h3>輪郭</h3>
     <div id="appearanceShapes" class="appearanceChoices"></div>
     <h3>紋章</h3>
     <div id="appearanceSigils" class="appearanceChoices"></div>
-    <p class="note">姿・髪・魔導具は外見だけの変更です。装備中の剣・槍・弓・杖も実際の武器種で表示しますが、攻撃範囲や装備性能には影響しません。変更は同じ32×36px素体からキャラアイコンと盤面へ同時に反映されます。</p>
+    <p class="note">変更は探索画面のキャラアイコンと盤面上の姿へ同時に反映されます。能力には影響しません。秘密条件を満たすと、伏せられていた姿が一覧へ姿を現すことがあります。</p>
     <button type="button" class="modalBtn" id="closeAppearance">閉じる</button>
   </div>
 </div>
@@ -8334,109 +8291,6 @@ const weaponData={
 };
 
 
-const appearanceFoundationData={
- guide:{label:"月導の細衣",desc:"短い非対称外套と高い襟。",silhouette:"guide",body:"#111722",body2:"#25334a",lining:"#204f83",metal:"#b8c9d8"},
- spellblade:{label:"星骸の長衣",desc:"細い腰と二枚の長い裾。",silhouette:"spellblade",body:"#14131e",body2:"#2c2940",lining:"#503280",metal:"#c2b9d6"},
- hunter:{label:"深根の猟装",desc:"羽状の肩布と流れる帯。",silhouette:"hunter",body:"#101b1d",body2:"#17454a",lining:"#176c70",metal:"#8fbfc1"},
- pilgrim:{label:"白夜の巡礼衣",desc:"白い前垂れと割れた長衣。",silhouette:"pilgrim",body:"#111722",body2:"#29364d",lining:"#d8e4ef",metal:"#c9d8e8"},
- moondancer:{label:"月影の舞衣",desc:"月光を引く軽い片裾。",silhouette:"guide",body:"#151828",body2:"#343a58",lining:"#718fc2",metal:"#d4e2ee"},
- duskduelist:{label:"黄昏の決闘衣",desc:"葡萄色の裏地を持つ細衣。",silhouette:"spellblade",body:"#19131b",body2:"#382438",lining:"#7e365c",metal:"#c8a4b7"},
- arcaneweaver:{label:"秘術織りの法衣",desc:"青紫の術式布を重ねた長衣。",silhouette:"pilgrim",body:"#111326",body2:"#292d59",lining:"#7276d7",metal:"#c5c9f0"},
- crystalknight:{label:"晶騎士の軽甲",desc:"結晶縁を持つ俊敏な甲衣。",silhouette:"guide",body:"#101a24",body2:"#29485b",lining:"#67cbe7",metal:"#d9f4ff"},
- ravenmantle:{label:"鴉羽の外套",desc:"黒羽のように割れた肩布。",silhouette:"hunter",body:"#090b12",body2:"#222431",lining:"#49415c",metal:"#9b93ac"},
- frostseeker:{label:"霜追いの旅衣",desc:"冷光を帯びた細身の防寒衣。",silhouette:"guide",body:"#14202a",body2:"#3a5264",lining:"#a7dcf1",metal:"#eefbff"},
- embercoat:{label:"残火の戦衣",desc:"赤熱した裏地を隠す黒衣。",silhouette:"spellblade",body:"#171012",body2:"#49231f",lining:"#b54c32",metal:"#e2b08a"},
- rootdancer:{label:"翠根の舞装",desc:"根脈色の帯が流れる軽装。",silhouette:"hunter",body:"#0e1915",body2:"#294b38",lining:"#65a55c",metal:"#b7d0a7"},
- voidcleric:{label:"虚祈りの聖衣",desc:"空隙色の前垂れを持つ法衣。",silhouette:"pilgrim",body:"#090a15",body2:"#24223c",lining:"#65488e",metal:"#b8a9d4"},
- moonassassin:{label:"月刃の隠れ装",desc:"短い片布と暗い脚衣。",silhouette:"hunter",body:"#0b111b",body2:"#26364b",lining:"#586e9a",metal:"#b9c8dc"},
- auroraguard:{label:"極光の護衣",desc:"緑青と金の縁を持つ守衣。",silhouette:"pilgrim",body:"#102022",body2:"#28545a",lining:"#d1c66e",metal:"#eaf2cb"},
- stormscribe:{label:"嵐記の術衣",desc:"雷線を刻んだ短い術衣。",silhouette:"guide",body:"#121923",body2:"#364558",lining:"#729cc5",metal:"#d3e4ee"},
- phantomtail:{label:"幽尾の長衣",desc:"透けるような二枚裾。",silhouette:"spellblade",body:"#11131a",body2:"#313a46",lining:"#6f98a8",metal:"#cce9ee"},
- cathedral:{label:"青堂の祭衣",desc:"高い襟と端正な白布。",silhouette:"pilgrim",body:"#121722",body2:"#293a50",lining:"#b9cce3",metal:"#e3edf8"},
- glasswanderer:{label:"玻璃渡りの旅衣",desc:"透明感のある青い片外套。",silhouette:"guide",body:"#0d1720",body2:"#23465d",lining:"#53b6d0",metal:"#c5f3ff"},
- thornblade:{label:"荊刃の猟衣",desc:"棘色の肩布と細い帯。",silhouette:"hunter",body:"#121612",body2:"#35422c",lining:"#8a6d4c",metal:"#cdbf9b"},
- astralcoat:{label:"星路の長外套",desc:"星図色の二枚裾。",silhouette:"spellblade",body:"#0e1020",body2:"#262c55",lining:"#4f6fc0",metal:"#d2dcff"},
- graveprince:{label:"墓王子の礼衣",desc:"骨白の縁を持つ黒い礼装。",silhouette:"spellblade",body:"#0b0c10",body2:"#25262c",lining:"#b7b09e",metal:"#e4dfd3"},
- tidecaller:{label:"潮呼びの装衣",desc:"深海色の帯が波打つ装束。",silhouette:"hunter",body:"#0c171d",body2:"#1d4451",lining:"#4da1b6",metal:"#bce4eb"},
- sunsworn:{label:"暁誓の巡礼衣",desc:"金白の前垂れを持つ長衣。",silhouette:"pilgrim",body:"#1b1712",body2:"#4d3b23",lining:"#d5a94e",metal:"#fff0b3"},
- nightoracle:{label:"夜星の託宣衣",desc:"夜空色の静かな術衣。",silhouette:"pilgrim",body:"#0c0d1a",body2:"#292645",lining:"#6961a7",metal:"#c5bee3"},
- silvernomad:{label:"銀砂の旅装",desc:"灰銀の布を幾重にも巻く。",silhouette:"guide",body:"#17181b",body2:"#42434a",lining:"#8f8273",metal:"#d4cfc7"},
- bloomwitch:{label:"花葬の魔衣",desc:"薔薇灰の裾を持つ細衣。",silhouette:"spellblade",body:"#181117",body2:"#4c2e42",lining:"#b45f87",metal:"#e6b9cd"},
- echohunter:{label:"遺響狩りの軽装",desc:"青い残響線を引く狩装。",silhouette:"hunter",body:"#0b1418",body2:"#263d46",lining:"#3b91a6",metal:"#aadae5"},
- prismatic:{label:"万華の典礼衣",desc:"多色光を受ける暗い祭衣。",silhouette:"pilgrim",body:"#10121a",body2:"#34334a",lining:"#846aa0",metal:"#ece0ff"},
- abyssal:{label:"深淵王の細礼装",desc:"最深部の青黒い主人公礼装。",silhouette:"spellblade",body:"#060910",body2:"#17243b",lining:"#295f91",metal:"#aacbe8"}
-};
-const appearanceHairData={
- silver:{label:"月銀の短髪",desc:"軽く流れる銀髪。",shape:"silver",base:"#c8d5e2",light:"#f2f7fb",shadow:"#78899c"},
- night:{label:"星夜の黒髪",desc:"紫を拾う鋭い黒髪。",shape:"night",base:"#171725",light:"#595078",shadow:"#080910"},
- teal:{label:"深根の青緑髪",desc:"帯と動く長めの青緑髪。",shape:"teal",base:"#123a41",light:"#2b7c81",shadow:"#07171d"},
- white:{label:"白夜の長髪",desc:"青い光を拾う白髪。",shape:"white",base:"#d6e1eb",light:"#ffffff",shadow:"#7d91aa"},
- ash:{label:"灰月の短髪",desc:"静かな灰色の短髪。",shape:"silver",base:"#8f929b",light:"#d4d6dc",shadow:"#4b4e58"},
- violet:{label:"紫晶の乱髪",desc:"紫光を帯びた黒髪。",shape:"night",base:"#29203d",light:"#8f69c5",shadow:"#0e0a17"},
- cobalt:{label:"群青の流髪",desc:"深い青の流れる髪。",shape:"teal",base:"#17274c",light:"#526fc1",shadow:"#091126"},
- ember:{label:"残火の赤髪",desc:"毛先だけ赤く燃える髪。",shape:"night",base:"#3b1918",light:"#c15a42",shadow:"#160909"},
- frost:{label:"氷晶の長髪",desc:"淡青の冷たい長髪。",shape:"white",base:"#a9d3e2",light:"#effcff",shadow:"#587a8d"},
- raven:{label:"鴉羽の長髪",desc:"羽のような漆黒髪。",shape:"white",base:"#10131b",light:"#4a5367",shadow:"#05060a"},
- sea:{label:"海淵の流髪",desc:"海色の長い横髪。",shape:"teal",base:"#123849",light:"#3f9ab2",shadow:"#071923"},
- jade:{label:"翡翠の短髪",desc:"緑青の軽い短髪。",shape:"silver",base:"#286c5d",light:"#71c3a7",shadow:"#10352e"},
- pearl:{label:"真珠の柔髪",desc:"柔らかな薄灰髪。",shape:"silver",base:"#c9c4cc",light:"#fffaff",shadow:"#817985"},
- smoke:{label:"煙晶の乱髪",desc:"煙色の尖った髪。",shape:"night",base:"#41434a",light:"#8b8e99",shadow:"#18191e"},
- wine:{label:"葡萄夜の長髪",desc:"暗い葡萄色の長髪。",shape:"white",base:"#452135",light:"#9e5678",shadow:"#190b13"},
- copper:{label:"赤銅の短髪",desc:"金属光を持つ赤茶髪。",shape:"silver",base:"#7d3e2b",light:"#ce7954",shadow:"#35190f"},
- gold:{label:"金葉の流髪",desc:"暗金色の流れる髪。",shape:"teal",base:"#74622d",light:"#d2b960",shadow:"#302610"},
- aurora:{label:"極光の長髪",desc:"青緑から白へ光る髪。",shape:"white",base:"#5da6a2",light:"#d5fff2",shadow:"#245052"},
- indigo:{label:"藍晶の短髪",desc:"藍色の端正な短髪。",shape:"silver",base:"#303763",light:"#7682ca",shadow:"#12162f"},
- rose:{label:"虚薔薇の乱髪",desc:"灰紫の不規則な髪。",shape:"night",base:"#51273f",light:"#a85f89",shadow:"#1d0c16"},
- root:{label:"根森の長髪",desc:"深緑の重なる長髪。",shape:"teal",base:"#1f412e",light:"#60875a",shadow:"#0b1d12"},
- lunar:{label:"蒼月の長髪",desc:"青白い長髪。",shape:"white",base:"#9db8d8",light:"#edf5ff",shadow:"#506783"},
- comet:{label:"彗星の跳ね髪",desc:"白青の跳ねた短髪。",shape:"night",base:"#b7c9dc",light:"#ffffff",shadow:"#5b718b"},
- dusk:{label:"黄昏の流髪",desc:"紫灰の流れる髪。",shape:"teal",base:"#51405e",light:"#a78cb0",shadow:"#211928"},
- dawn:{label:"暁光の短髪",desc:"淡い橙金の短髪。",shape:"silver",base:"#b97850",light:"#f4c28e",shadow:"#5c3020"},
- phantom:{label:"幽世の長髪",desc:"青灰の透ける長髪。",shape:"white",base:"#77929b",light:"#d7ffff",shadow:"#344b55"},
- crystal:{label:"晶雪の乱髪",desc:"結晶のような白髪。",shape:"night",base:"#c0dcea",light:"#ffffff",shadow:"#688ca1"},
- abyss:{label:"深淵星の流髪",desc:"青黒に光点を持つ髪。",shape:"teal",base:"#101a38",light:"#6278c8",shadow:"#05091c"},
- mint:{label:"薄荷の短髪",desc:"淡緑の軽い短髪。",shape:"silver",base:"#72a994",light:"#cffff0",shadow:"#355b50"},
- crimson:{label:"緋月の長髪",desc:"深紅の長い髪。",shape:"white",base:"#5e1f2c",light:"#bf5265",shadow:"#210911"}
-};
-const appearanceFocusData={
- lantern:{label:"浮遊深淵灯",desc:"青い探索魔導灯。",kind:"lantern",core:"#ecffff",mid:"#58dfff",glow:"rgba(53,203,255,.38)"},
- prism:{label:"星骸魔晶",desc:"紫の周回結晶。",kind:"prism",core:"#f2dcff",mid:"#aa62ff",glow:"rgba(157,74,255,.38)"},
- wisp:{label:"深根の鬼火",desc:"青緑の小精霊。",kind:"wisp",core:"#e3fff5",mid:"#38e7d5",glow:"rgba(45,225,202,.36)"},
- orbit:{label:"白夜晶環",desc:"青い公転晶片。",kind:"orbit",core:"#effaff",mid:"#75bfff",glow:"rgba(94,168,255,.38)"},
- emberLantern:{label:"残火浮灯",desc:"琥珀色の浮遊灯。",kind:"lantern",core:"#fff3bd",mid:"#ffad45",glow:"rgba(255,153,49,.36)"},
- frostLantern:{label:"霜晶浮灯",desc:"氷青の静かな灯。",kind:"lantern",core:"#f1ffff",mid:"#8be2ff",glow:"rgba(105,208,255,.34)"},
- moonLantern:{label:"月白浮灯",desc:"白銀の月灯。",kind:"lantern",core:"#ffffff",mid:"#b9cfff",glow:"rgba(167,190,255,.34)"},
- voidLantern:{label:"虚無浮灯",desc:"紫黒の反転灯。",kind:"lantern",core:"#e6c9ff",mid:"#72459a",glow:"rgba(103,61,153,.34)"},
- tideLantern:{label:"潮汐浮灯",desc:"海青の揺れる灯。",kind:"lantern",core:"#dcffff",mid:"#47b9cf",glow:"rgba(57,175,201,.34)"},
- jadeLantern:{label:"翡翠浮灯",desc:"緑青の導き灯。",kind:"lantern",core:"#eaffd8",mid:"#56c895",glow:"rgba(75,194,136,.34)"},
- violetPrism:{label:"紫極魔晶",desc:"濃紫の鋭い晶体。",kind:"prism",core:"#f4d5ff",mid:"#8d42e8",glow:"rgba(128,52,224,.37)"},
- crimsonPrism:{label:"血月魔晶",desc:"赤い危険な晶体。",kind:"prism",core:"#ffd9df",mid:"#e54f69",glow:"rgba(220,55,81,.36)"},
- auroraPrism:{label:"極光魔晶",desc:"青緑の多面晶。",kind:"prism",core:"#edfff6",mid:"#62d6bd",glow:"rgba(72,207,179,.36)"},
- goldPrism:{label:"金葉魔晶",desc:"黄金の希少晶。",kind:"prism",core:"#fff6c7",mid:"#e2bd4d",glow:"rgba(220,178,52,.35)"},
- obsidianPrism:{label:"黒曜魔晶",desc:"黒紫の吸光晶。",kind:"prism",core:"#d8cced",mid:"#514763",glow:"rgba(77,65,101,.34)"},
- frostPrism:{label:"氷華魔晶",desc:"雪色の六面晶。",kind:"prism",core:"#ffffff",mid:"#7dd8ef",glow:"rgba(99,201,229,.35)"},
- mintWisp:{label:"薄荷の鬼火",desc:"淡緑の優しい精霊。",kind:"wisp",core:"#efffe7",mid:"#82e6b2",glow:"rgba(100,221,160,.34)"},
- emberWisp:{label:"残火の鬼火",desc:"橙赤の荒い精霊。",kind:"wisp",core:"#fff2bd",mid:"#ff7c42",glow:"rgba(255,91,49,.35)"},
- frostWisp:{label:"霜銀の鬼火",desc:"冷たい白青精霊。",kind:"wisp",core:"#f4ffff",mid:"#76dfff",glow:"rgba(83,204,255,.35)"},
- bloodWisp:{label:"血契の鬼火",desc:"紅い契約精霊。",kind:"wisp",core:"#ffe2e8",mid:"#e84a65",glow:"rgba(220,51,79,.35)"},
- phantomWisp:{label:"幽世の鬼火",desc:"青灰の半透明精霊。",kind:"wisp",core:"#e6ffff",mid:"#7eb7c7",glow:"rgba(100,169,188,.34)"},
- venomWisp:{label:"毒蛍の鬼火",desc:"黄緑の危険精霊。",kind:"wisp",core:"#f1ffc4",mid:"#93da4b",glow:"rgba(126,203,51,.35)"},
- starOrbit:{label:"星晶環",desc:"白紫の星晶軌道。",kind:"orbit",core:"#fff4ff",mid:"#bd8cff",glow:"rgba(174,113,255,.36)"},
- eclipseOrbit:{label:"蝕月晶環",desc:"金と黒の月環。",kind:"orbit",core:"#fff0ae",mid:"#a08038",glow:"rgba(180,139,46,.34)"},
- sunOrbit:{label:"暁輝晶環",desc:"小さな太陽軌道。",kind:"orbit",core:"#fff8c9",mid:"#ffcf55",glow:"rgba(255,190,58,.36)"},
- rootOrbit:{label:"根脈晶環",desc:"緑の根晶軌道。",kind:"orbit",core:"#f0ffd5",mid:"#8bc861",glow:"rgba(117,187,73,.34)"},
- stormOrbit:{label:"嵐鉄晶環",desc:"雷青の高速晶環。",kind:"orbit",core:"#f0fbff",mid:"#72aee5",glow:"rgba(84,151,222,.35)"},
- mirrorOrbit:{label:"鏡界晶環",desc:"左右反転する白晶。",kind:"orbit",core:"#ffffff",mid:"#a7d8ed",glow:"rgba(139,205,233,.35)"},
- crownOrbit:{label:"王冠晶環",desc:"金青の冠状軌道。",kind:"orbit",core:"#fff5c8",mid:"#7aa8e8",glow:"rgba(99,151,225,.35)"},
- deepCore:{label:"最深核環",desc:"深淵核を囲む青環。",kind:"orbit",core:"#e7ffff",mid:"#347fc4",glow:"rgba(37,112,189,.38)"}
-};
-const appearancePresetData={
- moonGuide:{label:"1　銀月の導灯士",desc:"銀髪・細衣・浮遊深淵灯",foundation:"guide",hair:"silver",focus:"lantern"},
- starBlade:{label:"2　星骸の魔剣士",desc:"黒髪・長衣・紫魔晶",foundation:"spellblade",hair:"night",focus:"prism"},
- rootHunter:{label:"3　深根の影狩人",desc:"青緑髪・猟装・鬼火",foundation:"hunter",hair:"teal",focus:"wisp"},
- whitePilgrim:{label:"4　白夜の巡礼者",desc:"白髪・巡礼衣・晶環",foundation:"pilgrim",hair:"white",focus:"orbit"}
-};
-
 const appearanceColorData={
  ash:{label:"煤灰",cost:0,body:"#b7a88f",cloak:"#5d5362",trim:"#d7c9af",aura:"rgba(215,201,175,.22)"},
  rust:{label:"錆朱",cost:3,body:"#b8674f",cloak:"#65343a",trim:"#efb07a",aura:"rgba(239,176,122,.22)"},
@@ -8614,9 +8468,6 @@ function appearanceRequirementLabel(requirementId){
 }
 function defaultAppearance(){
  return{
-  foundation:"guide",
-  hair:"silver",
-  focus:"lantern",
   shape:"common",
   color:"ash",
   sigil:"none",
@@ -8637,9 +8488,6 @@ function ensureAppearanceMeta(meta){
  if(!a.unlockedShapes.includes("common"))a.unlockedShapes.unshift("common");
  if(!a.unlockedColors.includes("ash"))a.unlockedColors.unshift("ash");
  if(!a.unlockedSigils.includes("none"))a.unlockedSigils.unshift("none");
- if(!appearanceFoundationData[a.foundation])a.foundation="guide";
- if(!appearanceHairData[a.hair])a.hair="silver";
- if(!appearanceFocusData[a.focus])a.focus="lantern";
  if(!appearanceShapeData[a.shape]||!a.unlockedShapes.includes(a.shape))a.shape="common";
  if(!appearanceColorData[a.color]||!a.unlockedColors.includes(a.color))a.color="ash";
  if(!appearanceSigilData[a.sigil]||!a.unlockedSigils.includes(a.sigil))a.sigil="none";
@@ -8650,15 +8498,6 @@ function currentAppearance(){
 }
 function appearanceColor(){
  return appearanceColorData[currentAppearance().color]||appearanceColorData.ash;
-}
-function appearanceFoundation(){
- return appearanceFoundationData[currentAppearance().foundation]||appearanceFoundationData.guide;
-}
-function appearanceHair(){
- return appearanceHairData[currentAppearance().hair]||appearanceHairData.silver;
-}
-function appearanceFocus(){
- return appearanceFocusData[currentAppearance().focus]||appearanceFocusData.lantern;
 }
 function appearanceLockedLabel(data,unlocked){
  if(unlocked)return "";
@@ -8676,7 +8515,7 @@ function appearanceEntryVisibleName(data,unlocked){
 function appearanceEntryVisibleDesc(data,unlocked){
  return data.hidden&&!unlocked&&!appearanceRequirementMet(data.requirement,state?.meta)
   ?"解放条件は秘匿されている。"
-  :(data.desc||"魔力の発光色と縁取りへ反映される。");
+  :data.desc;
 }
 function appearanceCanBuy(data,collection,id){
  const unlocked=collection.includes(id);
@@ -9042,7 +8881,7 @@ function drawHeroPortrait(){
  const g=c.getContext("2d");
  g.clearRect(0,0,c.width,c.height);
  g.imageSmoothingEnabled=false;
- drawNativeHeroScaled(g,4,2,1,"down","idle",false);
+ drawExplorerFigure(g,1.5,1.5,1.68,false,0,true);
 }
 function drawAppearancePreview(){
  const c=$("appearancePreview");if(!c||!state)return;
@@ -9052,8 +8891,7 @@ function drawAppearancePreview(){
  const bg=g.createLinearGradient(0,0,0,c.height);
  bg.addColorStop(0,"#17101f");bg.addColorStop(1,"#070509");
  g.fillStyle=bg;g.fillRect(0,0,c.width,c.height);
- const preview=nativeHeroPreviewPose(state.visual?.time||0);
- drawNativeHeroScaled(g,16,12,2,preview.facing,preview.pose,false);
+ drawExplorerFigure(g,4,4,4,false,0,true);
 }
 function appearanceUnlockMicroHint(data,keyName,unlocked){
  if(unlocked||keyName==="color"||!data)return"";
@@ -9105,20 +8943,6 @@ function renderAppearanceCategory(targetId,dataMap,selectedId,unlockedList,keyNa
  }).join("");
  $(targetId).innerHTML=html;
 }
-function renderFreeAppearanceCategory(targetId,dataMap,selectedId,keyName){
- $(targetId).innerHTML=Object.entries(dataMap).map(([id,data])=>`<button type="button" class="appearanceChoice ${selectedId===id?"selected":""}" data-${keyName}="${id}">
-  <b>${data.label}</b><small>${selectedId===id?"選択中":"使用する"}<br>${data.desc}</small>
- </button>`).join("");
-}
-function currentAppearancePresetId(appearance=currentAppearance()){
- return Object.entries(appearancePresetData).find(([,preset])=>preset.foundation===appearance.foundation&&preset.hair===appearance.hair&&preset.focus===appearance.focus)?.[0]||"";
-}
-function renderAppearancePresets(appearance=currentAppearance()){
- const selected=currentAppearancePresetId(appearance);
- $("appearancePresets").innerHTML=Object.entries(appearancePresetData).map(([id,preset])=>`<button type="button" class="appearancePreset ${selected===id?"selected":""}" data-appearance-preset="${id}">
-  <b>${preset.label}</b><small>${selected===id?"プリセット選択中":"3部品をまとめて適用"}<br>${preset.desc}</small>
- </button>`).join("");
-}
 function requestAppearancePurchase(kind,id,data,collectionKey,selectionKey){
  const label=appearanceEntryVisibleName(data,false),cost=Math.max(0,data?.cost||0),shards=Math.max(0,state.meta.shards||0);
  if(shards<cost){const missing=cost-shards;addLog(`${kind}「${label}」の解放にはあと${missing}欠片必要。`);showCombatToast("欠片が足りない",`${shards}/${cost}・あと${missing}`,"miss");renderAppearance();return false}
@@ -9133,41 +8957,23 @@ function requestAppearancePurchase(kind,id,data,collectionKey,selectionKey){
 function renderAppearance(){
  updateAppearanceSecretReveals();
  const a=currentAppearance();
- const foundation=appearanceFoundationData[a.foundation];
- const hair=appearanceHairData[a.hair];
- const focus=appearanceFocusData[a.focus];
  const color=appearanceColorData[a.color];
  const shape=appearanceShapeData[a.shape];
  const sigil=appearanceSigilData[a.sigil];
- const freeParts=Object.keys(appearanceFoundationData).length*Object.keys(appearanceHairData).length*Object.keys(appearanceFocusData).length;
- const unlockedCombinations=freeParts*a.unlockedColors.length*a.unlockedShapes.length*a.unlockedSigils.length;
- const totalCombinations=freeParts*Object.keys(appearanceColorData).length*Object.keys(appearanceShapeData).length*Object.keys(appearanceSigilData).length;
  $("appearanceSummary").innerHTML=
-  `<b>${foundation.label}</b><br>`+
-  `髪：${hair.label}<br>`+
-  `魔導具：${focus.label}<br>`+
-  `魔力色：${color.label}<br>`+
-  `追加装飾：${shape.label}<br>`+
+  `<b>${shape.label}</b><br>`+
+  `色：${color.label}<br>`+
   `紋章：${sigil.label}<br>`+
   `深淵の欠片：${state.meta.shards||0}<br>`+
-  `解放済み：魔力色 ${a.unlockedColors.length}/${Object.keys(appearanceColorData).length} / 装飾 ${a.unlockedShapes.length}/${Object.keys(appearanceShapeData).length} / 紋章 ${a.unlockedSigils.length}/${Object.keys(appearanceSigilData).length}<br>`+
-  `現在可能な組合せ：${unlockedCombinations.toLocaleString()}通り / 全${totalCombinations.toLocaleString()}通り`;
+  `解放済み：色 ${a.unlockedColors.length}/${Object.keys(appearanceColorData).length} / 輪郭 ${a.unlockedShapes.length}/${Object.keys(appearanceShapeData).length} / 紋章 ${a.unlockedSigils.length}/${Object.keys(appearanceSigilData).length}<br>`+
+  `現在可能な組合せ：${(a.unlockedColors.length*a.unlockedShapes.length*a.unlockedSigils.length).toLocaleString()}通り / 全36,864通り`;
 
- renderAppearancePresets(a);
- renderFreeAppearanceCategory("appearanceFoundations",appearanceFoundationData,a.foundation,"foundation");
- renderFreeAppearanceCategory("appearanceHairs",appearanceHairData,a.hair,"hair");
- renderFreeAppearanceCategory("appearanceFocuses",appearanceFocusData,a.focus,"focus");
- renderAppearanceCategory("appearanceColors",appearanceColorData,a.color,a.unlockedColors,"color","魔力色");
- renderAppearanceCategory("appearanceShapes",appearanceShapeData,a.shape,a.unlockedShapes,"shape","追加装飾");
+ renderAppearanceCategory("appearanceColors",appearanceColorData,a.color,a.unlockedColors,"color","外套色");
+ renderAppearanceCategory("appearanceShapes",appearanceShapeData,a.shape,a.unlockedShapes,"shape","輪郭");
  renderAppearanceCategory("appearanceSigils",appearanceSigilData,a.sigil,a.unlockedSigils,"sigil","紋章");
 
- $("appearancePresets").querySelectorAll("[data-appearance-preset]").forEach(button=>{button.onclick=()=>{const preset=appearancePresetData[button.dataset.appearancePreset],appearance=currentAppearance();if(!preset)return;appearance.foundation=preset.foundation;appearance.hair=preset.hair;appearance.focus=preset.focus;saveMeta();saveGame();renderAppearance();render()}});
- $("appearanceRandomize").onclick=()=>{const appearance=currentAppearance(),pick=map=>{const ids=Object.keys(map);return ids[Math.floor(Math.random()*ids.length)]};appearance.foundation=pick(appearanceFoundationData);appearance.hair=pick(appearanceHairData);appearance.focus=pick(appearanceFocusData);saveMeta();saveGame();renderAppearance();render()};
- $("appearanceFoundations").querySelectorAll("[data-foundation]").forEach(button=>{button.onclick=()=>{currentAppearance().foundation=button.dataset.foundation;saveMeta();saveGame();renderAppearance();render()}});
- $("appearanceHairs").querySelectorAll("[data-hair]").forEach(button=>{button.onclick=()=>{currentAppearance().hair=button.dataset.hair;saveMeta();saveGame();renderAppearance();render()}});
- $("appearanceFocuses").querySelectorAll("[data-focus]").forEach(button=>{button.onclick=()=>{currentAppearance().focus=button.dataset.focus;saveMeta();saveGame();renderAppearance();render()}});
- $("appearanceColors").querySelectorAll("[data-color]").forEach(button=>{button.onclick=()=>{const id=button.dataset.color,data=appearanceColorData[id],appearance=currentAppearance();if(!appearance.unlockedColors.includes(id)){requestAppearancePurchase("魔力色",id,data,"unlockedColors","color");return}appearance.color=id;saveMeta();saveGame();renderAppearance();render()}});
- $("appearanceShapes").querySelectorAll("[data-shape]").forEach(button=>{button.onclick=()=>{const id=button.dataset.shape,data=appearanceShapeData[id],appearance=currentAppearance();if(!appearance.unlockedShapes.includes(id)){if(data.unlockType!=="cost"||!appearanceRequirementMet(data.requirement,state.meta))return;requestAppearancePurchase("追加装飾",id,data,"unlockedShapes","shape");return}appearance.shape=id;saveMeta();saveGame();renderAppearance();render()}});
+ $("appearanceColors").querySelectorAll("[data-color]").forEach(button=>{button.onclick=()=>{const id=button.dataset.color,data=appearanceColorData[id],appearance=currentAppearance();if(!appearance.unlockedColors.includes(id)){requestAppearancePurchase("外套色",id,data,"unlockedColors","color");return}appearance.color=id;saveMeta();saveGame();renderAppearance();render()}});
+ $("appearanceShapes").querySelectorAll("[data-shape]").forEach(button=>{button.onclick=()=>{const id=button.dataset.shape,data=appearanceShapeData[id],appearance=currentAppearance();if(!appearance.unlockedShapes.includes(id)){if(data.unlockType!=="cost"||!appearanceRequirementMet(data.requirement,state.meta))return;requestAppearancePurchase("輪郭",id,data,"unlockedShapes","shape");return}appearance.shape=id;saveMeta();saveGame();renderAppearance();render()}});
  $("appearanceSigils").querySelectorAll("[data-sigil]").forEach(button=>{button.onclick=()=>{const id=button.dataset.sigil,data=appearanceSigilData[id],appearance=currentAppearance();if(!appearance.unlockedSigils.includes(id)){if(data.unlockType!=="cost"||!appearanceRequirementMet(data.requirement,state.meta))return;requestAppearancePurchase("紋章",id,data,"unlockedSigils","sigil");return}appearance.sigil=id;saveMeta();saveGame();renderAppearance();render()}});
  drawAppearancePreview();
 }
@@ -10369,7 +10175,9 @@ function departureWeaponPreview(meta=state?.meta){
  if(stored)return{kind:"stored",label:gearLabel(stored),weaponType:stored.weaponType,gear:stored};
  const starter=selectedDepartureStarter(meta);
  if(starter)return{kind:"starter",label:makeStarterWeapon(starter).name,weaponType:starter,gear:null};
- return null;
+ // HOTFIX: 武器を全て失っても進行不能にしない。無料の一時剣を出発候補として扱う。
+ const fallback="sword";
+ return{kind:"fallback",label:makeStarterWeapon(fallback).name,weaponType:fallback,gear:null};
 }
 function setLighthouseGuideAdvanced(show){
  const guide=ensureLighthouseOnboardingMeta(state.meta);
@@ -10429,7 +10237,7 @@ function renderLighthouseOnboarding(meta=state.meta){
    <div class="lighthouseGuideSteps">
     <div class="lighthouseGuideStep ${preview?"ready":"current"}">
      <span class="stepNumber">1</span>
-     <span><b>${first?"最初の武器を決める":"出発する武器を確認"}</b><small>${first?"剣・槍・弓・杖から無料の初期武器を選びます。":"倉庫装備を設定するか、装備が無ければ初期武器を選びます。"}</small></span>
+     <span><b>${first?"最初の武器を決める":"出発する武器を確認"}</b><small>${first?"剣・槍・弓・杖から無料の初期武器を選びます。":"倉庫装備を設定するか、装備が無ければ無料の旅人の剣が自動支給されます。"}</small></span>
      <span class="lighthouseGuideState ${preview?"ready":""}">${preview?selectedLabel:"選択が必要"}</span>
     </div>
     <div class="lighthouseGuideStep ready">
@@ -10439,7 +10247,7 @@ function renderLighthouseOnboarding(meta=state.meta){
     </div>
     <div class="lighthouseGuideStep ${preview?"current":""}">
      <span class="stepNumber">3</span>
-     <span><b>探索を開始する</b><small>${preview?`${selectedLabel}で第1層へ向かえます。`:"武器を選ぶと出発ボタンが緑色に変わります。"}</small></span>
+     <span><b>探索を開始する</b><small>${preview?`${selectedLabel}で第1層へ向かえます。`:"武器が無い場合も無料の旅人の剣で出発できます。"}</small></span>
      <span class="lighthouseGuideState ${preview?"ready":""}">${preview?"出発可能":"準備中"}</span>
     </div>
    </div>
@@ -21935,27 +21743,19 @@ function endTurn(){
 function ensureVisualState(){
  state.visual=state.visual||{};
  if(!Array.isArray(state.visual.effects))state.visual.effects=[];
- if(!["down","up","left","right"].includes(state.visual.facing))state.visual.facing="down";
  return state.visual;
-}
-function heroFacingFromVector(dx,dy,fallback="down"){
- if(Math.abs(dx)>Math.abs(dy))return dx<0?"left":"right";
- if(dy)return dy<0?"up":"down";
- return fallback;
 }
 function startMoveAnim(dx,dy){
  const v=ensureVisualState();
- v.moveDx=dx;v.moveDy=dy;v.moveFrames=NATIVE_HERO_MOVE_FRAMES;
- v.facing=heroFacingFromVector(dx,dy,v.facing);
+ v.moveDx=dx;v.moveDy=dy;v.moveFrames=0;
 }
 function startAttackAnim(dx,dy){
  const v=ensureVisualState();
- v.attackDx=dx;v.attackDy=dy;v.attackFrames=NATIVE_HERO_ATTACK_FRAMES;
- v.facing=heroFacingFromVector(dx,dy,v.facing);
+ v.attackDx=dx;v.attackDy=dy;v.attackFrames=6;
 }
 function startDamageAnim(){
  const v=ensureVisualState();
- v.damageFrames=NATIVE_HERO_HURT_FRAMES;
+ v.damageFrames=6;
 }
 function addVisualEffect(effect){
  const v=ensureVisualState();
@@ -22130,7 +21930,6 @@ function tickContinuousAnimation(){
    tickRealtimeCombat(realtimeNow());
    updateVisualEffects();
    draw();
-   if(!$("appearanceOverlay").classList.contains("hidden"))drawAppearancePreview();
   }
   visualLoopErrorReported=false;
  }catch(error){
@@ -22509,10 +22308,10 @@ function move(dx,dy){
  const target=directionTarget(dx,dy);
  if(target?.blocked){addLog("近すぎて弓を引けない。距離を取る必要がある。");return}
  if(target?.enemy){
-  const cost=weaponData[weaponType()].cost;if(!spendStamina(cost))return;
   startAttackAnim(dx,dy);gainMastery(weaponType(),1);
   if(weaponType()==="sword"||weaponType()==="spear")gainTraining("strength",2);else gainTraining("focus",2);
   recordUsage(weaponType());if(equippedElement())recordUsage(equippedElement());sfx(weaponType()==="staff"?"magic":"attack");
+  const cost=weaponData[weaponType()].cost;if(!spendStamina(cost))return;
   state.lastAction=weaponType()==="bow"?"bow_attack":"attack";
   weaponAttack(target.enemy,dx,dy,target.distance);endTurn();return;
  }
@@ -24766,7 +24565,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.34",
+  version:"4.26.1",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -25150,12 +24949,13 @@ function startFreshRunFromHub(){
   return false;
  }
  const guide=ensureLighthouseOnboardingMeta(meta);
- const starterType=selectedDepartureStarter(meta);
+ let starterType=selectedDepartureStarter(meta);
  const storedWeapon=nextLoadoutGear(meta,"weapon");
 
+ // HOTFIX: 倉庫・次回装備・初期武器が全て空でも無料の旅人の剣で出撃可能にする。
  if(!storedWeapon&&!starterType){
-  openStarterSelection();
-  return false;
+  starterType="sword";
+  guide.departureStarterWeapon=starterType;
  }
 
  const preparation=prepareDepartureProtection(meta);
@@ -26695,7 +26495,7 @@ function drawFloorTile(px,py,x,y,vis){
  ctx.globalAlpha=1;
 
  // biome-specific ground motif
- if(vis&&currentBiomeKey()==="crypt"&&(x*3+y*5)%5===0){
+ if(vis&&currentBiomeKey()==="crypt"){
    ctx.strokeStyle="rgba(177,167,194,.26)";
    ctx.beginPath();ctx.moveTo(px+6,py+16);ctx.lineTo(px+11,py+6);ctx.lineTo(px+16,py+16);ctx.stroke();
  }else if(vis&&currentBiomeKey()==="fungal"){
@@ -26781,25 +26581,6 @@ function drawBiomeFloorDecoration(px,py,x,y,t,vis){
    ctx.beginPath();ctx.moveTo(px+10,py+17);ctx.quadraticCurveTo(px+15,py+13,px+18,py+9);ctx.stroke();
   }
  }
-
- // Shared cathedral-dungeon language: cracked slabs, roots and sparse blue crystals.
- if(seed%7===0){
-  ctx.strokeStyle="rgba(151,163,184,.16)";
-  ctx.beginPath();ctx.moveTo(px+4,py+6);ctx.lineTo(px+8,py+9);ctx.lineTo(px+7,py+14);ctx.lineTo(px+12,py+17);ctx.stroke();
- }
- if(biome!=="furnace"&&seed%9===0){
-  ctx.strokeStyle="rgba(35,24,31,.58)";ctx.lineWidth=1.2;
-  ctx.beginPath();ctx.moveTo(px-1,py+18);ctx.bezierCurveTo(px+5,py+11,px+10,py+17,px+16,py+8);ctx.stroke();
-  ctx.strokeStyle="rgba(81,101,78,.25)";ctx.lineWidth=.5;
-  ctx.beginPath();ctx.moveTo(px+5,py+14);ctx.lineTo(px+3,py+9);ctx.moveTo(px+11,py+13);ctx.lineTo(px+16,py+15);ctx.stroke();
- }
- if(seed%17===0){
-  const crystal=biome==="furnace"?"255,132,69":biome==="fungal"?"115,224,167":"73,199,255";
-  ctx.save();ctx.globalCompositeOperation="screen";
-  const glow=ctx.createRadialGradient(px+15,py+14,1,px+15,py+14,9);glow.addColorStop(0,`rgba(${crystal},${.12+.08*pulse})`);glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(px+6,py+5,18,18);
-  ctx.fillStyle=`rgba(${crystal},${.50+.18*pulse})`;ctx.beginPath();ctx.moveTo(px+13,py+18);ctx.lineTo(px+15,py+8);ctx.lineTo(px+17,py+18);ctx.fill();ctx.beginPath();ctx.moveTo(px+9,py+18);ctx.lineTo(px+11,py+12);ctx.lineTo(px+13,py+18);ctx.fill();
-  ctx.fillStyle="rgba(235,252,255,.72)";ctx.fillRect(px+14.5,py+10,.5,4);ctx.restore();
- }
  ctx.restore();
 }
 function drawBiomeWallDecoration(px,py,x,y,t,vis){
@@ -26825,17 +26606,6 @@ function drawBiomeWallDecoration(px,py,x,y,t,vis){
   ctx.beginPath();ctx.moveTo(px+3,py+2);ctx.bezierCurveTo(px+9,py+7,px+4,py+14,px+13,py+20);ctx.stroke();
   ctx.fillStyle=`rgba(137,218,113,${.20+.10*pulse})`;ctx.fillRect(px+8,py+9,1,1);ctx.fillRect(px+13,py+16,.5,.5);
  }
- if(seed%9===0){
-  ctx.strokeStyle=biome==="furnace"?"rgba(92,48,38,.48)":"rgba(35,25,34,.62)";ctx.lineWidth=1.2;
-  ctx.beginPath();ctx.moveTo(px+1,py-1);ctx.bezierCurveTo(px+8,py+4,px+4,py+12,px+13,py+20);ctx.stroke();
-  ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(px+7,py+8);ctx.lineTo(px+13,py+6);ctx.moveTo(px+9,py+13);ctx.lineTo(px+4,py+17);ctx.stroke();
- }
- if(seed%19===0){
-  const c=biome==="furnace"?"#ff9c52":"#65d5ff";
-  ctx.strokeStyle="rgba(10,12,18,.88)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+11,py+4);ctx.lineTo(px+11,py+16);ctx.stroke();
-  ctx.fillStyle=c;ctx.globalAlpha=.42+.20*pulse;ctx.beginPath();ctx.moveTo(px+8,py+12);ctx.lineTo(px+11,py+6);ctx.lineTo(px+14,py+12);ctx.lineTo(px+11,py+17);ctx.closePath();ctx.fill();ctx.globalAlpha=1;
-  ctx.fillStyle="#e9fbff";ctx.fillRect(px+10.5,py+8,.5,4);
- }
  ctx.restore();
 }
 function drawActorGroundShadow(x,y,scale=1,alpha=.28){
@@ -26843,395 +26613,10 @@ function drawActorGroundShadow(x,y,scale=1,alpha=.28){
  ctx.beginPath();ctx.ellipse(x+11,y+18.5,7*scale,2.3*scale,0,0,Math.PI*2);ctx.fill();
  ctx.restore();
 }
-// The explorer is authored at the exact in-game ceiling. Every part and every
-// animation frame lives on this 32 x 36 integer grid; nothing is downsampled.
-const NATIVE_HERO_W=32,NATIVE_HERO_H=36;
-const NATIVE_HERO_MOVE_FRAMES=12,NATIVE_HERO_ATTACK_FRAMES=14,NATIVE_HERO_HURT_FRAMES=8;
-const nativeHeroFrameCache=new Map();
-function nativeFill(g,color,rects){
- g.fillStyle=color;
- for(const r of rects)g.fillRect(r[0]|0,r[1]|0,Math.max(1,r[2]|0),Math.max(1,r[3]|0));
-}
-function nativePixelLine(g,color,x0,y0,x1,y1,width=1){
- x0=Math.round(x0);y0=Math.round(y0);x1=Math.round(x1);y1=Math.round(y1);
- const dx=Math.abs(x1-x0),sx=x0<x1?1:-1,dy=-Math.abs(y1-y0),sy=y0<y1?1:-1,half=Math.floor(width/2);let err=dx+dy;
- g.fillStyle=color;
- while(true){g.fillRect(x0-half,y0-half,width,width);if(x0===x1&&y0===y1)break;const e2=2*err;if(e2>=dy){err+=dy;x0+=sx}if(e2<=dx){err+=dx;y0+=sy}}
-}
-function nativeMapIndex(map,id){const i=Object.keys(map).indexOf(id);return Math.max(0,i)}
-function nativeHeroPose(){
- const v=ensureVisualState();
- if((v.damageFrames||0)>0)return "hurt";
- if((v.attackFrames||0)>0){
-  const elapsed=NATIVE_HERO_ATTACK_FRAMES-v.attackFrames;
-  return elapsed<4?"attackWindup":elapsed<9?"attackStrike":"attackRecover";
- }
- if((v.moveFrames||0)>0){
-  const phase=Math.floor((NATIVE_HERO_MOVE_FRAMES-v.moveFrames)/3)%4;
-  return ["idle","walkA","walkB","walkA"][phase];
- }
- return "idle";
-}
-function nativeHeroPreviewPose(t){
- const directions=["down","right","up","left"],segment=Math.floor(t/64)%directions.length,local=t%64;
- if(local<40)return{facing:directions[segment],pose:["idle","walkA","walkB","walkA"][Math.floor(local/10)%4]};
- return{facing:directions[segment],pose:local<48?"attackWindup":local<57?"attackStrike":"attackRecover"};
-}
-function nativeHeroFrameKey(facing,pose,hurt){
- const a=currentAppearance();
- return [a.foundation,a.hair,a.focus,a.color,a.shape,a.sigil,weaponType(),state?.light?.on&&state?.light?.fuel>0?1:0,facing,pose,hurt?1:0].join("|");
-}
-function nativeHeroFrame(facing="down",pose="idle",hurt=false){
- const safeFacing=["down","up","left","right"].includes(facing)?facing:"down";
- const key=nativeHeroFrameKey(safeFacing,pose,hurt);
- if(nativeHeroFrameCache.has(key))return nativeHeroFrameCache.get(key);
- if(nativeHeroFrameCache.size>384)nativeHeroFrameCache.clear();
- const c=document.createElement("canvas");c.width=NATIVE_HERO_W;c.height=NATIVE_HERO_H;
- const g=c.getContext("2d");g.imageSmoothingEnabled=false;
- if(safeFacing==="right"){g.translate(NATIVE_HERO_W,0);g.scale(-1,1);drawNativeHeroPixels(g,"left",pose,hurt)}
- else drawNativeHeroPixels(g,safeFacing,pose,hurt);
- nativeHeroFrameCache.set(key,c);return c;
-}
-function drawNativeHeroScaled(g,x,y,scale=1,facing="down",pose="idle",hurt=false){
- g.save();g.imageSmoothingEnabled=false;
- g.drawImage(nativeHeroFrame(facing,pose,hurt),Math.round(x),Math.round(y),NATIVE_HERO_W*scale,NATIVE_HERO_H*scale);
- g.restore();
-}
-function nativeHeroPalette(hurt){
- const accent=appearanceColor(),foundation=appearanceFoundation(),hair=appearanceHair(),focus=appearanceFocus();
- const lightOn=!!(state?.light?.on&&state?.light?.fuel>0);
- return{
-  ink:"#05070b",outline:"#0a0c12",cloth:foundation.body,cloth2:foundation.body2,lining:foundation.lining,metal:foundation.metal,
-  trim:accent.trim,skin:hurt?"#f47b85":"#e5b9a5",skinShade:hurt?"#b64052":"#ae7469",eye:hurt?"#6c1729":"#253047",
-  hair:hair.base,hairLight:hair.light,hairShade:hair.shadow,
-  focusCore:lightOn?focus.core:"#6b6574",focusMid:lightOn?focus.mid:"#34313b",focusGlow:lightOn?focus.glow:"rgba(0,0,0,0)",
-  accent,foundation,hairData:hair,focusData:focus,lightOn
- };
-}
-function nativeDrawAura(g,p,fx,fy,variation){
- if(!p.lightOn)return;
- g.save();g.globalAlpha=.34;g.fillStyle=p.focusCore;
- const motes=[[fx-3,fy-4],[fx+4,fy-2],[fx-4,fy+3],[fx+3,fy+5],[fx+(variation%3)-1,fy-7]];
- for(const [x,y] of motes)g.fillRect(x,y,1,1);
- g.globalAlpha=.18;g.fillRect(fx-4,fy-4,9,9);g.restore();
-}
-function nativeDrawLegs(g,p,facing,pose){
- const stride=pose==="walkA"?-1:pose==="walkB"?1:0;
- if(facing==="left"){
-  nativeFill(g,p.outline,[[13+stride,24,5,10],[17-stride,25,5,9],[11+stride,32,8,3],[16-stride,32,8,3]]);
-  nativeFill(g,"#202530",[[14+stride,25,3,7],[18-stride,26,3,6]]);
-  nativeFill(g,p.metal,[[13+stride,29,4,1],[18-stride,30,4,1]]);
- }else{
-  nativeFill(g,p.outline,[[10+stride,24,7,10],[17-stride,24,7,10],[8+stride,32,9,3],[17-stride,32,9,3]]);
-  nativeFill(g,"#202530",[[12+stride,25,4,7],[19-stride,25,4,7]]);
-  nativeFill(g,p.metal,[[11+stride,29,5,1],[19-stride,29,5,1]]);
- }
-}
-function nativeDrawCape(g,p,facing,pose,foundationIndex){
- const style=p.foundation.silhouette,step=pose==="walkA"?-1:pose==="walkB"?1:0,trim=p.trim;
- if(facing==="left"){
-  nativeFill(g,p.ink,[[12,12,13,15],[18,25,8,5],[20,29,5,3]]);
-  nativeFill(g,p.cloth,[[13,13,11,13],[18,25,7,4],[20,29,4,2]]);
-  if(style==="spellblade"||style==="pilgrim")nativeFill(g,p.cloth,[[20,29,3,3],[17,27,3,4]]);
-  if(style==="hunter")nativeFill(g,p.cloth2,[[20,13,7,4],[23,16,5,3]]);
-  nativeFill(g,trim,[[22,15,1,10],[21,28,3,1]]);
- }else{
-  if(style==="guide"){
-   nativeFill(g,p.ink,[[6,13,20,13],[7+step,25,7,4],[18-step,25,8,5],[7+step,29,5,2]]);
-   nativeFill(g,p.cloth,[[7,14,18,11],[8+step,25,5,3],[19-step,25,6,4],[8+step,28,4,2]]);
-  }else if(style==="spellblade"){
-   nativeFill(g,p.ink,[[6,13,20,14],[7+step,26,8,6],[18-step,26,8,7]]);
-   nativeFill(g,p.cloth,[[7,14,18,12],[8+step,26,6,5],[19-step,26,6,6]]);
-   nativeFill(g,p.lining,[[19-step,27,4,5]]);
-  }else if(style==="hunter"){
-   nativeFill(g,p.ink,[[5,12,22,12],[7+step,23,8,5],[19-step,22,9,5]]);
-   nativeFill(g,p.cloth,[[6,13,20,10],[8+step,23,6,4],[20-step,22,7,4]]);
-   nativeFill(g,p.cloth2,[[5,12,7,4],[23,12,6,5]]);
-  }else{
-   nativeFill(g,p.ink,[[6,12,20,15],[7+step,26,9,7],[17-step,26,9,7]]);
-   nativeFill(g,p.cloth,[[7,13,18,13],[8+step,26,7,6],[18-step,26,7,6]]);
-   nativeFill(g,p.lining,[[14,15,5,16]]);
-  }
-  const pattern=foundationIndex%6;
-  if(pattern===0)nativeFill(g,trim,[[8,23,16,1],[11,27,1,2],[22,27,1,2]]);
-  if(pattern===1)nativeFill(g,trim,[[8,15,1,9],[24,15,1,9],[15,25,3,1]]);
-  if(pattern===2)nativeFill(g,trim,[[10,16,1,1],[13,19,1,1],[20,19,1,1],[23,16,1,1]]);
-  if(pattern===3)nativeFill(g,trim,[[9,24,5,1],[20,24,5,1],[12,27,1,2],[21,27,1,2]]);
-  if(pattern===4)nativeFill(g,trim,[[16,14,2,12],[10,25,4,1],[20,25,4,1]]);
-  if(pattern===5)nativeFill(g,trim,[[8,18,4,1],[22,18,3,1],[13,23,8,1]]);
- }
-}
-function nativeDrawTorsoAndArms(g,p,facing,pose,foundationIndex){
- const wind=pose==="attackWindup",strike=pose==="attackStrike",recover=pose==="attackRecover";
- if(facing==="left"){
-  nativeFill(g,p.outline,[[11,12,13,15],[9,14,5,10]]);nativeFill(g,p.cloth2,[[12,13,11,13],[10,15,4,8]]);
-  if(wind)nativeFill(g,p.outline,[[10,9,5,9],[8,8,4,4]]);
-  else if(strike)nativeFill(g,p.outline,[[5,16,10,5],[4,17,4,4]]);
-  else nativeFill(g,p.outline,[[9,15,5,10],[8,22,5,4]]);
-  nativeFill(g,p.cloth2,wind?[[11,10,3,7]]:strike?[[6,17,8,3]]:[[10,16,3,8]]);
-  nativeFill(g,p.metal,[[11,23,3,1],[16,25,7,1]]);
- }else{
-  nativeFill(g,p.outline,[[9,12,16,15]]);nativeFill(g,p.cloth2,[[10,13,14,13]]);
-  nativeFill(g,p.lining,[[15,14,4,11]]);
-  nativeFill(g,p.outline,[[6,14,5,11]]);nativeFill(g,p.cloth2,[[7,15,3,9]]);
-  if(wind){nativeFill(g,p.outline,[[22,10,5,10],[24,7,4,5]]);nativeFill(g,p.cloth2,[[23,11,3,8]])}
-  else if(strike){nativeFill(g,p.outline,[[22,16,8,6],[27,19,4,5]]);nativeFill(g,p.cloth2,[[23,17,6,4]])}
-  else{nativeFill(g,p.outline,[[23,14,5,11]]);nativeFill(g,p.cloth2,[[24,15,3,9]])}
-  nativeFill(g,p.metal,[[8,22,3,1],[24,22,3,1],[10,25,14,2]]);
-  if(foundationIndex%5===0)nativeFill(g,p.trim,[[12,15,1,8],[21,15,1,8]]);
-  else if(foundationIndex%5===1)nativeFill(g,p.trim,[[11,15,11,1],[16,16,1,8]]);
-  else if(foundationIndex%5===2)nativeFill(g,p.trim,[[12,17,10,1],[13,21,8,1]]);
-  else if(foundationIndex%5===3)nativeFill(g,p.trim,[[12,15,1,1],[21,15,1,1],[16,19,2,2]]);
-  else nativePixelLine(g,p.trim,12,15,21,23,1);
- }
-}
-function nativeDrawFaceAndHair(g,p,facing,hurt,hairIndex){
- const shape=p.hairData.shape,variant=hairIndex%6;
- if(facing==="left"){
-  nativeFill(g,p.ink,[[11,4,11,11],[9,7,4,6]]);nativeFill(g,p.skin,[[12,6,8,7],[11,9,2,3]]);nativeFill(g,p.skinShade,[[18,11,2,2]]);
-  nativeFill(g,p.eye,[[11,9,2,1]]);if(!hurt)nativeFill(g,p.focusCore,[[11,9,1,1]]);
-  nativeFill(g,p.hairShade,[[10,3,11,6],[18,6,5,8],[9,6,4,3]]);
-  nativeFill(g,p.hair,[[11,2,7,2],[9,4,11,3],[18,5,4,5],[10,6,4,2]]);
-  if(shape==="teal"||shape==="white")nativeFill(g,p.hair,[[19,9,4,7],[21,14,3,5]]);
-  if(shape==="silver")nativeFill(g,p.hair,[[9,3,3,2],[15,1,2,3],[19,2,3,3]]);
-  if(shape==="night")nativeFill(g,p.hair,[[8,5,5,2],[12,2,7,2]]);
-  nativeFill(g,p.hairLight,[[12,3,4,1],[10,5,2,1]]);
-  if(variant===1||variant===4)nativeFill(g,p.trim,[[21,11,2,2]]);
-  if(variant===2||variant===5)nativeFill(g,p.hair,[[20,14,2,6]]);
- }else if(facing==="up"){
-  nativeFill(g,p.ink,[[10,4,14,11]]);nativeFill(g,p.skinShade,[[13,11,8,3]]);
-  nativeFill(g,p.hairShade,[[9,4,16,10],[11,2,12,4]]);nativeFill(g,p.hair,[[10,3,14,9],[12,1,5,3],[18,2,5,3]]);
-  nativeFill(g,p.hairLight,[[12,3,5,1],[19,4,3,1]]);
-  if(shape==="teal"||shape==="white")nativeFill(g,p.hair,[[9,9,4,8],[22,9,4,8]]);
-  if(variant===2||variant===5)nativeFill(g,p.hair,[[22,12,3,7]]);
- }else{
-  nativeFill(g,p.ink,[[10,4,14,11]]);nativeFill(g,p.skin,[[12,6,10,8]]);nativeFill(g,p.skinShade,[[12,12,10,2]]);
-  nativeFill(g,p.eye,[[13,9,2,1],[19,9,2,1]]);if(!hurt)nativeFill(g,p.focusCore,[[14,9,1,1],[20,9,1,1]]);
-  nativeFill(g,p.hairShade,[[9,4,16,6],[10,2,13,4],[9,8,4,5],[21,7,4,6]]);
-  nativeFill(g,p.hair,[[10,3,14,5],[12,1,5,3],[18,2,5,3],[10,7,5,3],[19,6,5,3]]);
-  if(shape==="silver")nativeFill(g,p.hair,[[8,5,4,2],[14,0,2,3],[22,3,4,2],[15,7,2,5]]);
-  if(shape==="night")nativeFill(g,p.hair,[[8,6,5,2],[11,2,10,2],[18,6,3,5]]);
-  if(shape==="teal")nativeFill(g,p.hair,[[9,8,4,8],[22,8,4,9],[24,14,3,5]]);
-  if(shape==="white")nativeFill(g,p.hair,[[9,8,4,9],[22,8,4,9],[7,12,3,5]]);
-  nativeFill(g,p.hairLight,[[12,3,5,1],[19,4,3,1]]);
-  if(variant===1)nativeFill(g,p.trim,[[9,10,2,2]]);
-  if(variant===2||variant===5)nativeFill(g,p.hair,[[23,13,2,7]]);
-  if(variant===3)nativeFill(g,p.hairLight,[[16,1,1,5]]);
-  if(variant===4)nativeFill(g,p.trim,[[23,11,2,2]]);
- }
-}
-function nativeDrawFocus(g,p,facing,focusIndex){
- let x=facing==="left"?24:facing==="up"?26:4,y=20;
- nativeDrawAura(g,p,x+2,y+3,focusIndex);
- const kind=p.focusData.kind;
- if(kind==="lantern"){
-  nativeFill(g,p.metal,[[x+1,y-2,3,1],[x,y-1,5,1],[x,y+6,5,1]]);nativeFill(g,p.outline,[[x,y,5,6]]);nativeFill(g,p.focusMid,[[x+1,y+1,3,4]]);nativeFill(g,p.focusCore,[[x+2,y+1,1,4]]);
- }else if(kind==="prism"){
-  nativeFill(g,p.focusMid,[[x+2,y-1,1,1],[x+1,y,3,1],[x,y+1,5,3],[x+1,y+4,3,1],[x+2,y+5,1,1]]);nativeFill(g,p.focusCore,[[x+2,y,1,4]]);
- }else if(kind==="wisp"){
-  nativeFill(g,p.focusMid,[[x+2,y-2,1,2],[x+1,y,3,2],[x,y+2,5,2],[x+1,y+4,3,2],[x+2,y+6,1,1]]);nativeFill(g,p.focusCore,[[x+2,y+1,1,4]]);
- }else{
-  nativeFill(g,p.focusMid,[[x,y,1,1],[x+4,y,1,1],[x-1,y+3,1,1],[x+5,y+3,1,1],[x+1,y+6,1,1],[x+4,y+5,1,1]]);nativeFill(g,p.focusCore,[[x+2,y+2,2,2]]);
- }
- const variant=focusIndex%6;if(variant===1)nativeFill(g,p.trim,[[x-1,y+5,1,1]]);if(variant===2)nativeFill(g,p.focusCore,[[x+5,y-2,1,1]]);if(variant===3)nativePixelLine(g,p.metal,x+2,y-3,x+2,y-1);if(variant===4)nativeFill(g,p.trim,[[x-2,y+2,1,1],[x+6,y+2,1,1]]);if(variant===5)nativeFill(g,p.focusCore,[[x,y-3,1,1],[x+4,y-2,1,1]]);
-}
-function nativeWeaponEndpoints(facing,pose,type){
- const wind=pose==="attackWindup",strike=pose==="attackStrike";
- if(facing==="left")return wind?[11,12,16,3]:strike?[9,18,type==="spear"?0:2,18]:[10,20,3,31];
- if(facing==="up")return wind?[23,15,29,9]:strike?[22,15,24,type==="spear"?0:3]:[23,19,29,31];
- return wind?[24,13,29,5]:strike?[25,19,type==="staff"?29:31,type==="spear"?33:29]:[24,20,29,32];
-}
-function nativeDrawWeapon(g,p,facing,pose,type){
- const [hx,hy,tx,ty]=nativeWeaponEndpoints(facing,pose,type),attacking=pose.startsWith("attack");
- if(type==="bow"){
-  const vertical=facing!=="left";nativePixelLine(g,p.metal,hx,hy,vertical?tx-2:tx,vertical?ty-5:ty-5,1);nativePixelLine(g,p.metal,hx,hy,vertical?tx+1:tx,vertical?ty:ty+5,1);nativePixelLine(g,p.trim,vertical?tx-2:tx,vertical?ty-5:ty-5,vertical?tx+1:tx,vertical?ty:ty+5,1);
-  if(attacking)nativePixelLine(g,"#d9d4c2",hx,hy,facing==="left"?0:hx+(facing==="up"?1:6),facing==="up"?0:hy,1);
- }else{
-  nativePixelLine(g,p.ink,hx,hy,tx,ty,type==="staff"?3:2);
-  nativePixelLine(g,type==="staff"?p.metal:"#c7d4dd",hx,hy,tx,ty,1);
-  if(type==="sword"){nativePixelLine(g,p.trim,hx-2,hy+1,hx+2,hy-1,1);nativeFill(g,p.focusCore,[[tx,ty,1,1]])}
-  if(type==="spear"){nativeFill(g,"#dce7ed",[[tx-1,ty,3,1],[tx,Math.max(0,ty-2),1,3]])}
-  if(type==="staff"){nativeFill(g,p.focusMid,[[tx-2,ty-2,5,5]]);nativeFill(g,p.focusCore,[[tx-1,ty-1,3,3]])}
- }
-}
-function nativeDrawAccessories(g,p,facing,shapeIndex,sigilIndex){
- const shape=currentAppearance().shape,sigil=currentAppearance().sigil;
- if(["root","thorn","warden","antler","beast","drake","frostborn","bone"].includes(shape)){
-  const c=shape==="frostborn"?"#bdeaff":shape==="bone"?"#ddd4c2":p.trim;nativePixelLine(g,c,11,5,7,1);nativePixelLine(g,c,23,5,27,1);
- }
- if(["mask","mourner","executioner","raven","bone"].includes(shape)&&facing==="down")nativeFill(g,shape==="raven"?"#17131b":"#d8d0c5",[[12,8,10,4]]);
- if(["eclipse","monarch","saint"].includes(shape))nativeFill(g,shape==="saint"?"#fff0ac":"#d9be72",[[12,0,10,1],[10,1,2,1],[22,1,2,1]]);
- if(["mask","warden","sentinel","shell","executioner","cathedral","drake"].includes(shape))nativeFill(g,p.metal,[[6,14,5,3],[24,14,5,3]]);
- if(["alchemist","lantern","shell"].includes(shape))nativeFill(g,"#64473b",[[25,18,5,7]]);
- if(shapeIndex%4===1)nativeFill(g,p.trim,[[6,18,1,1],[27,18,1,1]]);
- if(shapeIndex%4===2)nativeFill(g,p.metal,[[8,13,2,2],[24,13,2,2]]);
- if(shapeIndex%4===3)nativeFill(g,p.focusCore,[[16,13,2,1]]);
- if(sigil!=="none"&&facing!=="up"){
-  const x=facing==="left"?17:16,y=18,kind=sigilIndex%6;nativeFill(g,p.focusCore,[[x,y,2,2]]);
-  if(kind===0)nativeFill(g,p.trim,[[x-1,y+1,1,1],[x+2,y+1,1,1]]);
-  if(kind===1)nativeFill(g,p.trim,[[x,y-2,1,2],[x,y+2,1,2]]);
-  if(kind===2)nativeFill(g,p.trim,[[x-1,y-1,1,1],[x+2,y-1,1,1],[x-1,y+2,1,1],[x+2,y+2,1,1]]);
-  if(kind===3)nativePixelLine(g,p.trim,x-1,y+3,x+3,y-1,1);
-  if(kind===4)nativeFill(g,p.trim,[[x-2,y,2,1],[x+2,y,2,1]]);
-  if(kind===5)nativeFill(g,p.trim,[[x-1,y-2,4,1],[x-1,y+3,4,1]]);
- }
-}
-function drawNativeHeroPixels(g,facing,pose,hurt){
- const p=nativeHeroPalette(hurt),a=currentAppearance();
- const foundationIndex=nativeMapIndex(appearanceFoundationData,a.foundation),hairIndex=nativeMapIndex(appearanceHairData,a.hair),focusIndex=nativeMapIndex(appearanceFocusData,a.focus),shapeIndex=nativeMapIndex(appearanceShapeData,a.shape),sigilIndex=nativeMapIndex(appearanceSigilData,a.sigil);
- nativeDrawLegs(g,p,facing,pose);nativeDrawCape(g,p,facing,pose,foundationIndex);nativeDrawTorsoAndArms(g,p,facing,pose,foundationIndex);
- nativeDrawFocus(g,p,facing,focusIndex);nativeDrawWeapon(g,p,facing,pose,weaponType());nativeDrawFaceAndHair(g,p,facing,hurt,hairIndex);nativeDrawAccessories(g,p,facing,shapeIndex,sigilIndex);
- if(hurt){g.save();g.globalAlpha=.24;nativeFill(g,"#ff405e",[[7,3,20,29]]);g.restore()}
-}
 function drawHeroSprite(x,y,hurt,t){
- const v=ensureVisualState(),facing=v.facing||"down",pose=nativeHeroPose();
- drawNativeHeroScaled(ctx,x+Math.floor(TILE/2)-16,y+TILE-NATIVE_HERO_H,1,facing,pose,hurt);
+ const bob=Math.sin(t*.12)*.65;
+ drawExplorerFigure(ctx,x,y,1,hurt,bob,true);
 }
-/* v4.34: retired high-resolution vector/downsample renderer.
-function drawHighResolutionExplorer(g,x,y,scale=1,hurt=false,bob=0,t=0,showAura=true){
- const appearance=currentAppearance(),accent=appearanceColor(),foundation=appearanceFoundation(),hair=appearanceHair(),focus=appearanceFocus(),shape=appearance.shape,sigil=appearance.sigil;
- const palette={...accent,body:foundation.body2,cloak:foundation.body,trim:accent.trim},dark="#090b12",ink="#06070b",skin=hurt?"#ff9a9f":"#e6c6b7",skinShadow=hurt?"#cc5f70":"#b98273";
- const lightOn=!!(state?.light?.on&&state?.light?.fuel>0),light=lightOn?focus:{core:"#67606f",mid:"#35303e",glow:"rgba(0,0,0,0)"};
- const step=Math.sin(t*.18)*.55,cloth=Math.sin(t*.10)*.85,focusFloat=Math.sin(t*.075)*1.1;
- const attack=Math.max(0,state.visual?.attackFrames||0),attackLift=attack?Math.sin((1-attack/6)*Math.PI)*3:0;
- g.save();g.translate(x,y);g.scale(scale,scale);g.lineJoin="miter";g.lineCap="square";
-
- if(showAura){
-  const aura=g.createRadialGradient(18,21,2,18,21,25);aura.addColorStop(0,light.glow);aura.addColorStop(.52,palette.aura);aura.addColorStop(1,"rgba(0,0,0,0)");
-  g.fillStyle=aura;g.fillRect(-8,-5,52,51);
- }
- g.globalAlpha=.32;g.fillStyle="#000";g.beginPath();g.ellipse(19,39,10.5,2.8,0,0,Math.PI*2);g.fill();g.globalAlpha=1;
-
- // Four free foundation silhouettes. All share one foot anchor and collision tile.
- g.fillStyle=ink;
- if(foundation.silhouette==="guide"){
-  g.beginPath();g.moveTo(9,16+bob);g.lineTo(27,15+bob);g.lineTo(30,24+bob);g.lineTo(27+cloth,35+bob);g.lineTo(23,31+bob);g.lineTo(19,37+bob);g.lineTo(15,31+bob);g.lineTo(8-cloth,34+bob);g.closePath();g.fill();
-  g.fillStyle=foundation.body;g.beginPath();g.moveTo(10,16+bob);g.lineTo(27,16+bob);g.lineTo(28,24+bob);g.lineTo(25+cloth,33+bob);g.lineTo(21,29+bob);g.lineTo(18,35+bob);g.lineTo(15,29+bob);g.lineTo(9-cloth,32+bob);g.closePath();g.fill();
-  g.fillStyle=foundation.lining;g.beginPath();g.moveTo(10,18+bob);g.lineTo(13,20+bob);g.lineTo(10-cloth,31+bob);g.lineTo(14,28+bob);g.closePath();g.fill();
- }else if(foundation.silhouette==="spellblade"){
-  g.beginPath();g.moveTo(8,16+bob);g.lineTo(29,16+bob);g.lineTo(31,25+bob);g.lineTo(29+cloth,39+bob);g.lineTo(22,32+bob);g.lineTo(19,40+bob);g.lineTo(15,32+bob);g.lineTo(7-cloth,38+bob);g.closePath();g.fill();
-  g.fillStyle=foundation.body;g.beginPath();g.moveTo(9,16+bob);g.lineTo(28,16+bob);g.lineTo(29,25+bob);g.lineTo(27+cloth,37+bob);g.lineTo(22,30+bob);g.lineTo(19,38+bob);g.lineTo(15,30+bob);g.lineTo(9-cloth,36+bob);g.closePath();g.fill();
-  g.fillStyle=foundation.lining;g.beginPath();g.moveTo(25,21+bob);g.lineTo(27,36+bob);g.lineTo(22,30+bob);g.lineTo(21,22+bob);g.closePath();g.fill();
- }else if(foundation.silhouette==="hunter"){
-  g.beginPath();g.moveTo(7,16+bob);g.lineTo(29,15+bob);g.lineTo(32,21+bob);g.lineTo(28,25+bob);g.lineTo(31+cloth,34+bob);g.lineTo(24,29+bob);g.lineTo(20,37+bob);g.lineTo(15,29+bob);g.lineTo(7-cloth,33+bob);g.closePath();g.fill();
-  g.fillStyle=foundation.body;g.beginPath();g.moveTo(8,16+bob);g.lineTo(28,16+bob);g.lineTo(30,20+bob);g.lineTo(26,23+bob);g.lineTo(29+cloth,32+bob);g.lineTo(23,28+bob);g.lineTo(19,35+bob);g.lineTo(15,28+bob);g.lineTo(9-cloth,31+bob);g.closePath();g.fill();
-  g.fillStyle=foundation.lining;g.beginPath();g.moveTo(11,16+bob);g.lineTo(7,12+bob);g.lineTo(14,15+bob);g.lineTo(17,12+bob);g.lineTo(20,16+bob);g.lineTo(25,12+bob);g.lineTo(28,17+bob);g.closePath();g.fill();
-  g.fillStyle=foundation.body2;g.beginPath();g.moveTo(11,17+bob);g.lineTo(30+cloth,14+bob);g.lineTo(27+cloth,18+bob);g.lineTo(34+cloth,24+bob);g.lineTo(25,20+bob);g.closePath();g.fill();
- }else{
-  g.beginPath();g.moveTo(8,15+bob);g.lineTo(29,15+bob);g.lineTo(31,24+bob);g.lineTo(28+cloth,40+bob);g.lineTo(21,33+bob);g.lineTo(18,40+bob);g.lineTo(14,33+bob);g.lineTo(7-cloth,39+bob);g.closePath();g.fill();
-  g.fillStyle=foundation.body;g.beginPath();g.moveTo(9,16+bob);g.lineTo(28,16+bob);g.lineTo(29,24+bob);g.lineTo(26+cloth,38+bob);g.lineTo(21,31+bob);g.lineTo(18,38+bob);g.lineTo(14,31+bob);g.lineTo(9-cloth,37+bob);g.closePath();g.fill();
-  g.fillStyle=foundation.lining;g.beginPath();g.moveTo(16,17+bob);g.lineTo(22,17+bob);g.lineTo(23,36+bob);g.lineTo(19,31+bob);g.lineTo(16,36+bob);g.closePath();g.fill();
- }
- g.strokeStyle=palette.trim;g.globalAlpha=.5;g.lineWidth=.65;g.beginPath();g.moveTo(10,18+bob);g.lineTo(13,28+bob);g.moveTo(27,18+bob);g.lineTo(24,29+bob);g.stroke();g.globalAlpha=1;
-
- // Slim legs, narrow boots, and a one-tile foot anchor.
- g.fillStyle="#11141c";g.fillRect(13,27+bob+step,5,10);g.fillRect(20,27+bob-step,5,10);
- g.fillStyle="#252b35";g.fillRect(12,33+bob+step,6,5);g.fillRect(20,33+bob-step,6,5);
- g.fillStyle=foundation.metal;g.globalAlpha=.52;g.fillRect(13,34+bob+step,5,.75);g.fillRect(21,34+bob-step,5,.75);g.globalAlpha=1;
- g.fillStyle="#07090e";g.fillRect(11,37+bob+step,8,2);g.fillRect(20,37+bob-step,8,2);
-
- // Fitted torso and arms avoid the old square adventurer proportions.
- g.fillStyle=foundation.body2;g.beginPath();g.moveTo(13,16+bob);g.lineTo(24,16+bob);g.lineTo(26,28+bob);g.lineTo(11,28+bob);g.closePath();g.fill();
- g.fillStyle=foundation.lining;g.globalAlpha=.72;g.beginPath();g.moveTo(17,16+bob);g.lineTo(21,16+bob);g.lineTo(22,27+bob);g.lineTo(16,27+bob);g.closePath();g.fill();g.globalAlpha=1;
- g.fillStyle=foundation.body2;g.beginPath();g.moveTo(12,17+bob);g.lineTo(8,20+bob);g.lineTo(9,28+bob);g.lineTo(12,27+bob);g.closePath();g.fill();g.beginPath();g.moveTo(24,17+bob);g.lineTo(29,20+bob);g.lineTo(28,28+bob);g.lineTo(25,27+bob);g.closePath();g.fill();
- g.fillStyle="#1b1820";g.fillRect(10,27+bob,17,1.5);g.fillStyle=foundation.metal;g.fillRect(18,26.5+bob,2,2.5);
- g.strokeStyle="#746777";g.lineWidth=.75;g.beginPath();g.moveTo(14,18+bob);g.lineTo(23,27+bob);g.stroke();
-
- // Young, narrow face with four independently selectable hairstyles.
- g.fillStyle=ink;g.beginPath();g.ellipse(18.5,10.5+bob,7,6.8,0,0,Math.PI*2);g.fill();
- g.fillStyle=skin;g.beginPath();g.moveTo(14,8+bob);g.quadraticCurveTo(18.5,5+bob,23,8+bob);g.lineTo(22.5,13+bob);g.lineTo(19,16+bob);g.lineTo(15,13+bob);g.closePath();g.fill();
- g.fillStyle=skinShadow;g.globalAlpha=.55;g.fillRect(15,12.5+bob,1,1.5);g.fillRect(21.5,10+bob,.75,3);g.globalAlpha=1;
- g.fillStyle=hurt?"#761b30":"#202436";g.fillRect(15.5,10.5+bob,1.5,.75);g.fillRect(20.5,10.5+bob,1.5,.75);
- if(!hurt){g.fillStyle=light.core;g.fillRect(16,10.5+bob,.5,.5);g.fillRect(21,10.5+bob,.5,.5)}
- g.fillStyle=hair.shadow;g.beginPath();g.moveTo(12,9+bob);g.lineTo(14,4+bob);g.lineTo(19,2+bob);g.lineTo(24,4+bob);g.lineTo(26,9+bob);g.lineTo(23,8+bob);g.lineTo(22,13+bob);g.lineTo(19,8+bob);g.lineTo(17,13+bob);g.lineTo(15,8+bob);g.closePath();g.fill();
- g.fillStyle=hair.base;
- if(hair.shape==="silver"){
-  g.beginPath();g.moveTo(13,8+bob);g.lineTo(15,3+bob);g.lineTo(18,5+bob);g.lineTo(20,1+bob);g.lineTo(21,5+bob);g.lineTo(25,3+bob);g.lineTo(23,9+bob);g.lineTo(20,7+bob);g.lineTo(18,12+bob);g.lineTo(17,7+bob);g.lineTo(14,11+bob);g.closePath();g.fill();
- }else if(hair.shape==="night"){
-  g.beginPath();g.moveTo(12,8+bob);g.lineTo(14,4+bob);g.lineTo(17,5+bob);g.lineTo(19,1+bob);g.lineTo(21,5+bob);g.lineTo(25,3+bob);g.lineTo(24,9+bob);g.lineTo(21,8+bob);g.lineTo(19,13+bob);g.lineTo(17,8+bob);g.lineTo(14,11+bob);g.closePath();g.fill();
- }else if(hair.shape==="teal"){
-  g.beginPath();g.moveTo(12,8+bob);g.lineTo(14,3+bob);g.lineTo(19,1+bob);g.lineTo(24,4+bob);g.lineTo(25,10+bob);g.lineTo(27,17+bob);g.lineTo(23,13+bob);g.lineTo(21,8+bob);g.lineTo(18,13+bob);g.lineTo(16,8+bob);g.lineTo(13,13+bob);g.closePath();g.fill();
- }else{
-  g.beginPath();g.moveTo(12,8+bob);g.lineTo(14,3+bob);g.lineTo(18,4+bob);g.lineTo(20,1+bob);g.lineTo(22,5+bob);g.lineTo(25,3+bob);g.lineTo(24,11+bob);g.lineTo(27,17+bob);g.lineTo(23,15+bob);g.lineTo(21,8+bob);g.lineTo(18,13+bob);g.lineTo(16,8+bob);g.lineTo(13,14+bob);g.closePath();g.fill();
- }
- g.fillStyle=hair.light;g.globalAlpha=.78;g.fillRect(16,4+bob,3,.75);g.fillRect(21,5+bob,2,.75);g.globalAlpha=1;
-
- // High collar, layered harness, and existing collectible sigil.
- g.fillStyle=foundation.body;g.beginPath();g.moveTo(11,16+bob);g.lineTo(14,12+bob);g.lineTo(18,17+bob);g.lineTo(23,12+bob);g.lineTo(27,17+bob);g.lineTo(23,20+bob);g.lineTo(14,20+bob);g.closePath();g.fill();
- g.strokeStyle=palette.trim;g.globalAlpha=.5;g.beginPath();g.moveTo(14,19+bob);g.lineTo(23,27+bob);g.moveTo(23,19+bob);g.lineTo(14,27+bob);g.stroke();g.globalAlpha=1;
- g.save();g.translate(4,3+bob);g.scale(1.25,1.25);drawAppearanceSigil(g,sigil,palette,dark,0);g.restore();
- drawHighResolutionShapeAccent(g,shape,palette,bob,t);
- drawHeroMagicFocus(g,focus.kind,light,bob,focusFloat,showAura);
- drawHeroCeremonialWeapon(g,foundation.silhouette,light,bob,attackLift);
-
- // Fine rim separates a dark costume from walls without making it bulky.
- g.strokeStyle=light.core;g.globalAlpha=.42;g.lineWidth=.5;g.beginPath();g.moveTo(13,7+bob);g.lineTo(15,3+bob);g.lineTo(20,1.5+bob);g.lineTo(24,4+bob);g.moveTo(27,16+bob);g.lineTo(29,26+bob);g.stroke();g.globalAlpha=1;
- g.restore();
-}
-function drawHeroMagicFocus(g,focusId,light,bob,float,showAura){
- g.save();g.translate(0,float);
- if(showAura&&light.glow!=="rgba(0,0,0,0)"){
-  const glow=g.createRadialGradient(4,20+bob,1,4,20+bob,10);glow.addColorStop(0,light.glow);glow.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=glow;g.fillRect(-7,8+bob,22,24);
- }
- if(focusId==="lantern"){
-  g.strokeStyle="#91a8b7";g.lineWidth=.75;g.beginPath();g.arc(4,14+bob,3,Math.PI,0);g.stroke();
-  g.fillStyle="#101923";g.beginPath();g.moveTo(0,15+bob);g.lineTo(8,15+bob);g.lineTo(7,25+bob);g.lineTo(1,25+bob);g.closePath();g.fill();
-  g.strokeStyle="#8bb8ca";g.strokeRect(1.5,16.5+bob,5,7);g.fillStyle=light.mid;g.fillRect(2.5,18+bob,3,4);g.fillStyle=light.core;g.fillRect(3.5,18.5+bob,1,3);
-  g.fillStyle="#9bb8c6";g.fillRect(0,14+bob,8,1);g.fillRect(0,25+bob,8,1);
- }else if(focusId==="prism"){
-  g.fillStyle=light.mid;g.beginPath();g.moveTo(4,12+bob);g.lineTo(8,18+bob);g.lineTo(4,26+bob);g.lineTo(0,18+bob);g.closePath();g.fill();
-  g.fillStyle=light.core;g.beginPath();g.moveTo(4,13+bob);g.lineTo(5,19+bob);g.lineTo(3,24+bob);g.lineTo(2,18+bob);g.closePath();g.fill();
-  g.strokeStyle=light.mid;g.globalAlpha=.7;g.beginPath();g.ellipse(4,19+bob,8,3,0,0,Math.PI*2);g.stroke();g.globalAlpha=1;
- }else if(focusId==="wisp"){
-  g.fillStyle=light.mid;g.beginPath();g.moveTo(4,12+bob);g.lineTo(7,17+bob);g.lineTo(6,22+bob);g.lineTo(3,26+bob);g.lineTo(0,22+bob);g.lineTo(1,18+bob);g.lineTo(3,16+bob);g.closePath();g.fill();
-  g.fillStyle=light.core;g.beginPath();g.moveTo(4,16+bob);g.lineTo(5,20+bob);g.lineTo(3,23+bob);g.lineTo(2,20+bob);g.closePath();g.fill();
-  g.strokeStyle=light.mid;g.globalAlpha=.65;g.beginPath();g.moveTo(7,15+bob);g.quadraticCurveTo(11,11+bob,8,8+bob);g.stroke();g.globalAlpha=1;
- }else{
-  g.strokeStyle=light.mid;g.globalAlpha=.8;g.beginPath();g.ellipse(4,19+bob,8,5,-.3,0,Math.PI*2);g.stroke();g.globalAlpha=1;
-  [[0,16],[8,14],[10,21],[2,24]].forEach(([x,y],i)=>{g.fillStyle=i===1?light.core:light.mid;g.beginPath();g.moveTo(x,y-2+bob);g.lineTo(x+1.5,y+bob);g.lineTo(x,y+2+bob);g.lineTo(x-1.5,y+bob);g.closePath();g.fill()});
- }
- g.restore();
-}
-function drawHeroCeremonialWeapon(g,foundationId,light,bob,attackLift){
- g.save();g.translate(0,-attackLift);g.lineCap="square";
- if(foundationId==="hunter"){
-  g.strokeStyle="#080a0f";g.lineWidth=2.5;g.beginPath();g.moveTo(9,23+bob);g.lineTo(3,33+bob);g.moveTo(28,22+bob);g.lineTo(35,32+bob);g.stroke();
-  g.strokeStyle=light.mid;g.lineWidth=1;g.beginPath();g.moveTo(9,23+bob);g.lineTo(3,33+bob);g.moveTo(28,22+bob);g.lineTo(35,32+bob);g.stroke();
- }else{
-  const long=foundationId==="pilgrim"?17:foundationId==="spellblade"?15:13;
-  g.strokeStyle="#080a0f";g.lineWidth=3;g.beginPath();g.moveTo(27,21+bob);g.lineTo(27+long*.48,21+long+bob);g.stroke();
-  g.strokeStyle=foundationId==="spellblade"?light.mid:"#cdd9e3";g.lineWidth=1.25;g.beginPath();g.moveTo(27,21+bob);g.lineTo(27+long*.48,21+long+bob);g.stroke();
-  g.strokeStyle=light.core;g.globalAlpha=.72;g.lineWidth=.5;g.beginPath();g.moveTo(27.5,21+bob);g.lineTo(27.5+long*.48,21+long+bob);g.stroke();g.globalAlpha=1;
-  g.strokeStyle="#b8a36f";g.lineWidth=1.5;g.beginPath();g.moveTo(25,22+bob);g.lineTo(30,20+bob);g.stroke();
- }
- g.restore();
-}
-function drawHighResolutionShapeAccent(g,shape,palette,bob,t){
- const horned=["root","thorn","warden","antler","beast","drake","frostborn","bone"].includes(shape);
- const armored=["mask","warden","sentinel","shell","executioner","cathedral","drake"].includes(shape);
- if(horned){
-  g.strokeStyle=shape==="frostborn"?"#bdeaff":shape==="bone"?"#e6dfcf":palette.trim;g.lineWidth=1.5;g.beginPath();
-  g.moveTo(11,7+bob);g.lineTo(7,2+bob);g.lineTo(5,5+bob);g.moveTo(25,7+bob);g.lineTo(29,2+bob);g.lineTo(31,5+bob);g.stroke();
- }
- if(armored){g.fillStyle="#665e66";g.fillRect(7,17+bob,6,4);g.fillRect(24,17+bob,6,4);g.fillStyle="#aaa0a5";g.fillRect(8,17.5+bob,4,.5);g.fillRect(25,17.5+bob,4,.5)}
- if(["mask","mourner","executioner","raven","bone"].includes(shape)){
-  g.fillStyle=shape==="raven"?"#17131b":"#e4ded8";g.globalAlpha=shape==="mourner"?.62:.9;g.fillRect(13,11+bob,10,5);g.globalAlpha=1;g.fillStyle="#20171d";g.fillRect(15,13+bob,2,1);g.fillRect(20,13+bob,2,1);
- }
- if(["eclipse","monarch","saint"].includes(shape)){
-  g.strokeStyle=shape==="saint"?"#fff0ac":"#d9be72";g.globalAlpha=.72;g.lineWidth=1;g.beginPath();g.ellipse(18,1+bob,7,2,0,0,Math.PI*2);g.stroke();g.globalAlpha=1;
- }
- if(shape==="duelist"){g.strokeStyle="#efe2c7";g.lineWidth=1;g.beginPath();g.moveTo(25,6+bob);g.quadraticCurveTo(34,1+bob,31,12+bob);g.stroke()}
- if(shape==="jester"){
-  g.fillStyle=palette.cloak;g.beginPath();g.moveTo(10,7+bob);g.lineTo(5,1+bob);g.lineTo(16,5+bob);g.lineTo(24,1+bob);g.lineTo(27,8+bob);g.closePath();g.fill();
-  g.fillStyle="#e5b858";g.fillRect(4.5,1+bob,1.5,1.5);g.fillRect(23.5,1+bob,1.5,1.5);
- }
- if(["alchemist","lantern","shell"].includes(shape)){
-  g.fillStyle="#4a3530";g.fillRect(25,12+bob,7,11);g.strokeStyle="#a57e4f";g.strokeRect(25.5,12.5+bob,6,10);
- }
- if(["oracle","seeker"].includes(shape)){const pulse=(Math.sin(t*.12)+1)*.5;g.fillStyle=`rgba(125,224,255,${.55+.3*pulse})`;g.fillRect(17,4+bob,2,2)}
- if(shape==="voidwalker"){g.fillStyle="#050409";g.globalAlpha=.72;g.fillRect(27,9+bob,4,5);g.fillRect(8,29+bob,5,4);g.strokeStyle="#a68cff";g.globalAlpha=.55;g.strokeRect(27.5,9.5+bob,3,4);g.globalAlpha=1}
-}
-*/
 function drawModernEnemyDetails(e,x,y,bob,accent,t){
  ctx.save();
  ctx.lineWidth=.5;
@@ -27282,31 +26667,6 @@ function drawModernEnemyDetails(e,x,y,bob,accent,t){
  ctx.beginPath();ctx.moveTo(x+6,y+18.5+bob);ctx.lineTo(x+17,y+18.5+bob);ctx.stroke();
  ctx.globalAlpha=1;
  ctx.restore();
-}
-function drawFantasyEnemyFinish(e,x,y,bob,accent,t){
- const pulse=(Math.sin(t*.12+e.x*.43+e.y*.61)+1)*.5;
- ctx.save();ctx.lineCap="square";ctx.lineJoin="miter";ctx.lineWidth=.75;
- if(e.type==="skeleton"){
-  ctx.strokeStyle="rgba(242,237,221,.56)";ctx.beginPath();ctx.moveTo(x+9,y+12+bob);ctx.lineTo(x+14,y+12+bob);ctx.moveTo(x+8,y+14+bob);ctx.lineTo(x+15,y+14+bob);ctx.moveTo(x+10,y+10+bob);ctx.lineTo(x+10,y+18+bob);ctx.stroke();
-  ctx.fillStyle="rgba(19,15,23,.78)";ctx.beginPath();ctx.moveTo(x+6,y+10+bob);ctx.lineTo(x+3,y+18+bob);ctx.lineTo(x+8,y+16+bob);ctx.closePath();ctx.fill();
- }else if(e.type==="mage"){
-  ctx.fillStyle="rgba(28,20,39,.92)";ctx.beginPath();ctx.moveTo(x+5,y+10+bob);ctx.lineTo(x+11,y+1+bob);ctx.lineTo(x+17,y+10+bob);ctx.closePath();ctx.fill();
-  ctx.strokeStyle=accent;ctx.globalAlpha=.58;ctx.beginPath();ctx.moveTo(x+6,y+10+bob);ctx.lineTo(x+11,y+2+bob);ctx.lineTo(x+16,y+10+bob);ctx.stroke();ctx.globalAlpha=1;
- }else if(e.type==="warg"||e.type==="charger"){
-  ctx.strokeStyle="rgba(244,210,202,.42)";ctx.beginPath();ctx.moveTo(x+5,y+10+bob);ctx.lineTo(x+8,y+6+bob);ctx.lineTo(x+11,y+9+bob);ctx.lineTo(x+14,y+5+bob);ctx.lineTo(x+17,y+10+bob);ctx.stroke();
-  ctx.fillStyle="#171016";ctx.fillRect(x+15.5,y+8+bob,1.5,1);ctx.fillStyle=`rgba(255,104,93,${.72+.22*pulse})`;ctx.fillRect(x+16,y+8+bob,.5,.5);
- }else if(e.type==="bomber"){
-  ctx.strokeStyle=`rgba(255,207,100,${.55+.3*pulse})`;ctx.beginPath();ctx.moveTo(x+13,y+4+bob);ctx.lineTo(x+17,y+1+bob);ctx.lineTo(x+19,y+3+bob);ctx.stroke();ctx.fillStyle="#fff1a8";ctx.fillRect(x+18.5,y+2+bob,.5,.5);
- }else if(e.type==="priest"){
-  ctx.strokeStyle=`rgba(236,209,130,${.46+.22*pulse})`;ctx.beginPath();ctx.ellipse(x+11,y+3+bob,5,1.8,0,0,Math.PI*2);ctx.stroke();
-  ctx.strokeStyle="rgba(228,217,233,.42)";ctx.beginPath();ctx.moveTo(x+8,y+12+bob);ctx.lineTo(x+11,y+10+bob);ctx.lineTo(x+14,y+12+bob);ctx.stroke();
- }else if(e.type==="leech"){
-  ctx.strokeStyle=accent;ctx.globalAlpha=.58;ctx.beginPath();ctx.moveTo(x+6,y+14+bob);ctx.quadraticCurveTo(x+1,y+17+bob,x+3,y+21+bob);ctx.moveTo(x+16,y+14+bob);ctx.quadraticCurveTo(x+21,y+17+bob,x+19,y+21+bob);ctx.stroke();ctx.globalAlpha=1;
- }else{
-  ctx.fillStyle="rgba(11,9,14,.78)";ctx.beginPath();ctx.moveTo(x+4,y+8+bob);ctx.lineTo(x+1,y+15+bob);ctx.lineTo(x+6,y+13+bob);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(x+18,y+8+bob);ctx.lineTo(x+21,y+15+bob);ctx.lineTo(x+16,y+13+bob);ctx.closePath();ctx.fill();
-  ctx.strokeStyle=e.bossAccent||accent;ctx.globalAlpha=.62;ctx.beginPath();ctx.moveTo(x+7,y+5+bob);ctx.lineTo(x+11,y+1+bob);ctx.lineTo(x+15,y+5+bob);ctx.stroke();ctx.globalAlpha=1;
- }
- ctx.strokeStyle=accent;ctx.globalAlpha=.38;ctx.beginPath();ctx.moveTo(x+5,y+18.5+bob);ctx.lineTo(x+17,y+18.5+bob);ctx.stroke();ctx.restore();
 }
 function drawEnemySprite(e,x,y,t){
  const bob=Math.sin(t*.1+e.x*.7+e.y)*.65;
@@ -27372,7 +26732,6 @@ function drawEnemySprite(e,x,y,t){
  }
 
  drawModernEnemyDetails(e,x,y,bob,accent,t);
- drawFantasyEnemyFinish(e,x,y,bob,accent,t);
  if(e.elite){
   ctx.strokeStyle=eliteColor(e)||"#f0d37a";
   ctx.lineWidth=2;
@@ -28521,11 +27880,11 @@ function draw(){
 
  if(inView(state.player.x,state.player.y)){
   let x=sx(state.player.x),y=sy(state.player.y);
-  const mf=state.visual?.moveFrames||0;
-  if(mf>0){
-   const progress=clamp(1-mf/NATIVE_HERO_MOVE_FRAMES,0,1),ease=progress*progress*(3-2*progress);
-   x-=(state.visual.moveDx||0)*TILE*(1-ease);
-   y-=(state.visual.moveDy||0)*TILE*(1-ease);
+  const af=state.visual?.attackFrames||0;
+  if(af>0){
+   const swing=Math.sin((1-af/6)*Math.PI);
+   x+=state.visual.attackDx*5*swing;
+   y+=state.visual.attackDy*5*swing;
   }
   const hurt=(state.visual?.damageFrames||0)>0;
   drawActorGroundShadow(x,y,1,.32);
