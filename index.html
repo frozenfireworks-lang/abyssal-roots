@@ -738,36 +738,55 @@ body{
 }
 
 
-/* v3.8.3 Explorer icon identity */
+/* v4.30 PLAYABLE PROTAGONIST REDESIGN — actual in-game pixel builds */
 .member.hasPortrait{min-height:52px;padding-left:52px}
 .heroPortrait{
  position:absolute;left:7px;top:7px;width:38px;height:38px;
- border:1px solid #6f5b7d;border-radius:7px;background:#0c0910;
- image-rendering:pixelated;box-shadow:inset 0 0 10px rgba(0,0,0,.65)
+ border:1px solid #79657f;border-radius:8px;background:#0a0a10;
+ image-rendering:pixelated;box-shadow:inset 0 0 0 1px rgba(229,202,136,.12),inset 0 0 14px rgba(0,0,0,.72)
 }
-.appearanceCard{max-width:520px}
+.appearanceCard{max-width:680px;border-color:#5d493f;box-shadow:0 18px 42px rgba(0,0,0,.62)}
 .appearancePreviewWrap{
- display:grid;grid-template-columns:104px minmax(0,1fr);gap:10px;align-items:center;
- margin:8px 0;padding:8px;border:1px solid #4b3a53;border-radius:9px;background:#0d0a12
+ display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;align-items:center;
+ margin:10px 0;padding:10px;border:1px solid #5b4738;border-radius:10px;
+ background:linear-gradient(180deg,rgba(18,15,21,.98),rgba(9,8,13,.98));
+ box-shadow:inset 0 0 0 1px rgba(219,185,122,.08)
 }
 #appearancePreview{
- width:96px;height:96px;border:1px solid #786487;border-radius:9px;
- background:#09070d;image-rendering:pixelated
+ width:96px;height:96px;border:1px solid #856a54;border-radius:9px;
+ background:#08070c;image-rendering:pixelated;box-shadow:inset 0 0 0 1px rgba(168,223,255,.08)
 }
-#appearanceSummary{font-size:12px;line-height:1.6;color:#d8cce0}
+#appearanceSummary{font-size:12px;line-height:1.65;color:#dfd3c5}
+#appearanceSummary .accent{color:#efd18b}
+#appearanceSummary .appearanceBuildBadge{
+ display:inline-flex;align-items:center;gap:5px;margin-top:4px;padding:2px 7px;
+ border:1px solid #75604b;border-radius:999px;background:rgba(38,28,22,.72);color:#f1dca2;font-size:11px
+}
+.appearancePresetGrid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:8px 0 14px
+}
+.appearancePresetBtn{
+ min-height:62px;padding:8px 9px;border:1px solid #675141;border-radius:9px;background:#120f15;
+ color:#ede3d8;text-align:left;font-size:12px;box-shadow:inset 0 0 0 1px rgba(161,216,255,.05)
+}
+.appearancePresetBtn b{display:block;margin-bottom:3px;font-size:13px;color:#f0d8a5}
+.appearancePresetBtn small{display:block;color:#b6a89a;line-height:1.38}
+.appearancePresetBtn.active{border-color:#a9dfff;box-shadow:0 0 0 1px rgba(169,223,255,.55) inset}
+.appearancePresetBtn.blocked{border-style:dashed;opacity:.84}
 .appearanceChoices{
  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:6px 0 12px
 }
 .appearanceChoice{
- min-height:52px;padding:7px;border:1px solid #584765;border-radius:8px;
- background:#17111e;color:#e7ddeb;text-align:left;font-size:12px
+ min-height:54px;padding:7px 8px;border:1px solid #5c4940;border-radius:8px;
+ background:#121017;color:#e7ddd2;text-align:left;font-size:12px;
+ box-shadow:inset 0 0 0 1px rgba(162,216,255,.04)
 }
-.appearanceChoice b{display:block;margin-bottom:3px;font-size:12.8px}
-.appearanceChoice small{display:block;color:#aa9bb4;line-height:1.35}
+.appearanceChoice b{display:block;margin-bottom:3px;font-size:12.8px;color:#eed6a0}
+.appearanceChoice small{display:block;color:#b8ab9f;line-height:1.38}
 .appearanceChoice.selected{border-color:#f0d37a;box-shadow:0 0 0 1px #f0d37a inset}
 .appearanceChoice.locked{opacity:.72;border-style:dashed}
 .appearanceSwatch{
- display:inline-block;width:12px;height:12px;margin-right:5px;border:1px solid #d9cde0;
+ display:inline-block;width:12px;height:12px;margin-right:5px;border:1px solid #eadab6;
  border-radius:3px;vertical-align:-2px
 }
 @media (max-width:600px){
@@ -776,9 +795,10 @@ body{
  .appearanceCard{max-height:90dvh;overflow:auto}
  .appearancePreviewWrap{grid-template-columns:84px minmax(0,1fr);gap:7px;padding:6px}
  #appearancePreview{width:78px;height:78px}
+ .appearancePresetGrid{grid-template-columns:1fr;gap:5px}
  .appearanceChoices{gap:4px}
- .appearanceChoice{min-height:46px;padding:6px;font-size:12px}
- .appearanceChoice b{font-size:12px}
+ .appearanceChoice,.appearancePresetBtn{min-height:46px;padding:6px;font-size:12px}
+ .appearanceChoice b,.appearancePresetBtn b{font-size:12px}
 }
 
 
@@ -5822,7 +5842,7 @@ body,button,input,select,textarea{font-size:12px}
 .stairDecisionTemptation.claimed b{color:#e6b8ff}
 
 
-/* v4.29 DENSITY PASS II — 28px tile baseline + higher-density actors, colored lights, refined HUD */
+/* v4.30 PLAYABLE PROTAGONIST REDESIGN — 28px tile baseline + in-game sprite redesign + preset builds */
 :root{
  --abyss-brass:#c9a35b;
  --abyss-brass-hi:#f0d58a;
@@ -5900,7 +5920,7 @@ header .ver{color:#b9a98f;letter-spacing:.025em}
 @media(prefers-reduced-motion:reduce){#game{filter:none}}
 
 
-/* v4.29 DENSITY PASS II HUD polish */
+/* v4.30 protagonist / appearance HUD polish */
 #game{border:1px solid #4f473d;box-shadow:0 0 0 1px rgba(255,255,255,.035),0 12px 28px rgba(0,0,0,.45),0 0 36px rgba(71,201,223,.05)}
 .wrap{filter:drop-shadow(0 8px 18px rgba(0,0,0,.18))}
 header,.panel,.card,#log{box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 6px 14px rgba(0,0,0,.10)}
@@ -5912,7 +5932,7 @@ button:hover{filter:brightness(1.04)}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.29 DENSITY PASS II</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.30 PLAYABLE PROTAGONIST REDESIGN</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6037,18 +6057,20 @@ button:hover{filter:brightness(1.04)}
 <div class="overlay hidden" id="appearanceOverlay">
   <div class="card appearanceCard">
     <h2>探索者の姿</h2>
-    <p>姿は <b>外套色48色</b>・<b>輪郭32種</b>・<b>紋章24種</b>、合計104種の部品で構成されます。最大36,864通りを自由に組み合わせられます。高額な恒久解放、条件シークレット、番人の純運激レア枠があります。</p>
+    <p>ここで表示される案はすべて <b>実際に盤面とHUDで使われる28px設計</b> です。姿は <b>外套色48色</b>・<b>輪郭32種</b>・<b>紋章24種</b> で構成され、実機上の可読性を保ったまま深淵寄りの主人公へ寄せています。</p>
     <div class="appearancePreviewWrap">
       <canvas id="appearancePreview" width="96" height="96" aria-label="探索者アイコンのプレビュー"></canvas>
       <div id="appearanceSummary"></div>
     </div>
+    <h3>推奨ビルド</h3>
+    <div id="appearancePresets" class="appearancePresetGrid"></div>
     <h3>外套の色</h3>
     <div id="appearanceColors" class="appearanceChoices"></div>
     <h3>輪郭</h3>
     <div id="appearanceShapes" class="appearanceChoices"></div>
     <h3>紋章</h3>
     <div id="appearanceSigils" class="appearanceChoices"></div>
-    <p class="note">変更は探索画面のキャラアイコンと盤面上の姿へ同時に反映されます。能力には影響しません。秘密条件を満たすと、伏せられていた姿が一覧へ姿を現すことがあります。</p>
+    <p class="note">変更は探索画面のキャラアイコンと盤面上の姿へ即時反映されます。能力には影響しません。推奨ビルドは未解放部品がある場合のみ一括解放確認を挟み、ドロップ限定部品は条件を満たすまで適用できません。</p>
     <button type="button" class="modalBtn" id="closeAppearance">閉じる</button>
   </div>
 </div>
@@ -8542,6 +8564,14 @@ const appearanceSigilData={
  comet:{label:"彗星紋",source:"深層番人の超激レア紋片",desc:"肩から後方へ彗星の尾を引く。",unlockType:"drop",requirement:"best30",hidden:true,dropTier:"ultra",draw:"comet"},
  void:{label:"虚孔紋",source:"最深部番人の神話級紋片",desc:"胸元に小さな空白の穴が浮かぶ。",unlockType:"drop",requirement:"kills600",hidden:true,dropTier:"mythic",draw:"void"}
 };
+const appearanceBuildData={
+ abyssalPilgrim:{label:"深淵巡礼者",shape:"common",color:"abyss",sigil:"star",desc:"白髪と青晶の残光を持つ、基準となる探索者。"},
+ brassJudicator:{label:"古銅判決者",shape:"sentinel",color:"bronze",sigil:"crown",desc:"重めの肩甲と真鍮装飾で近接寄りの判決者を再現。"},
+ voidWeaver:{label:"虚影編織者",shape:"oracle",color:"violet",sigil:"spiral",desc:"頭布、紫晶、詠唱紋で術者シルエットを強化。"},
+ crimsonExecutor:{label:"血呪執行者",shape:"executioner",color:"bloodmoon",sigil:"eye",desc:"赤裏地の長マントと鋭い短剣を持つ執行者型。"},
+ frostbonePriest:{label:"霜骨祭司",shape:"bone",color:"frost",sigil:"frost",desc:"骨白の祭服に青い冷光を差した、聖職者寄りの装束。"},
+ lumenWarden:{label:"淡光守望者",shape:"saint",color:"ivory",sigil:"sun",desc:"象牙色の法衣と細い光輪で守護者らしさを出したビルド。"}
+};
 const appearanceRelicMilestones={5:"hood",10:"mask",15:"mantle",20:"root"};
 
 function appearanceResearchLevel(meta){
@@ -8576,10 +8606,10 @@ function appearanceRequirementLabel(requirementId){
 function defaultAppearance(){
  return{
   shape:"common",
-  color:"ash",
+  color:"abyss",
   sigil:"none",
   unlockedShapes:["common"],
-  unlockedColors:["ash"],
+  unlockedColors:["ash","abyss"],
   unlockedSigils:["none"],
   revealedSecrets:[]
  };
@@ -8589,14 +8619,15 @@ function ensureAppearanceMeta(meta){
  if(!meta.appearance)meta.appearance=defaultAppearance();
  const a=meta.appearance;
  if(!Array.isArray(a.unlockedShapes))a.unlockedShapes=["common"];
- if(!Array.isArray(a.unlockedColors))a.unlockedColors=["ash"];
+ if(!Array.isArray(a.unlockedColors))a.unlockedColors=["ash","abyss"];
  if(!Array.isArray(a.unlockedSigils))a.unlockedSigils=["none"];
  if(!Array.isArray(a.revealedSecrets))a.revealedSecrets=[];
  if(!a.unlockedShapes.includes("common"))a.unlockedShapes.unshift("common");
  if(!a.unlockedColors.includes("ash"))a.unlockedColors.unshift("ash");
+ if(!a.unlockedColors.includes("abyss"))a.unlockedColors.push("abyss");
  if(!a.unlockedSigils.includes("none"))a.unlockedSigils.unshift("none");
  if(!appearanceShapeData[a.shape]||!a.unlockedShapes.includes(a.shape))a.shape="common";
- if(!appearanceColorData[a.color]||!a.unlockedColors.includes(a.color))a.color="ash";
+ if(!appearanceColorData[a.color]||!a.unlockedColors.includes(a.color))a.color="abyss";
  if(!appearanceSigilData[a.sigil]||!a.unlockedSigils.includes(a.sigil))a.sigil="none";
  return a;
 }
@@ -8674,50 +8705,114 @@ function appearanceDropTierLabel(tier){
  return"激レア・完全運";
 }
 function drawBaseExplorer(g,palette,dark,skin,hurt,bob){
- g.fillStyle=dark;g.fillRect(8,4+bob,7,4);
- g.fillStyle=skin;g.fillRect(9,6+bob,5,4);
- g.fillStyle=hurt?"#ff7d8d":palette.body;g.fillRect(7,10+bob,9,6);
- g.fillStyle=palette.cloak;g.fillRect(6,13+bob,11,6);
+ g.fillStyle="#09080d";g.globalAlpha=.44;
+ g.beginPath();g.ellipse(11,20,7.5,2.5,0,0,Math.PI*2);g.fill();
+ g.globalAlpha=1;
+
+ g.fillStyle=palette.cloak;
+ g.fillRect(5,10+bob,12,8);
+ g.fillRect(4,13+bob,4,6);g.fillRect(14,13+bob,5,6);
+ g.fillRect(7,17+bob,3,2);g.fillRect(13,17+bob,3,2);
+ g.fillStyle=dark;
+ g.fillRect(8,4+bob,6,4);
+ g.fillStyle=skin;
+ g.fillRect(9,6+bob,4,3);
+ g.fillStyle=hurt?"#ff8597":palette.body;
+ g.fillRect(8,10+bob,6,6);
+ g.fillStyle="#201922";
+ g.fillRect(7,10+bob,1,7);g.fillRect(14,10+bob,1,7);
+ g.fillRect(8,16+bob,2,4);g.fillRect(12,16+bob,2,4);
+ g.fillStyle="#0f0e14";
+ g.fillRect(7,19+bob,3,2);g.fillRect(12,19+bob,3,2);
 }
 function explorerLanternVisual(){
  const type=state?.light?.on&&state?.light?.fuel>0?state.light.type:"none";
- if(type==="arcane")return{core:"#d8fbff",mid:"#68cfff",glow:"rgba(84,194,255,.34)"};
- if(type==="lantern")return{core:"#fff2bd",mid:"#ffc66d",glow:"rgba(255,188,82,.32)"};
- if(type==="torch")return{core:"#fff0a0",mid:"#ff9b45",glow:"rgba(255,130,50,.30)"};
- return{core:"#4d4656",mid:"#312a39",glow:"rgba(0,0,0,0)"};
+ if(type==="arcane")return{core:"#e8ffff",mid:"#71d8ff",glow:"rgba(93,212,255,.38)"};
+ if(type==="lantern")return{core:"#fff5c5",mid:"#ffc976",glow:"rgba(255,195,96,.35)"};
+ if(type==="torch")return{core:"#fff0aa",mid:"#ffab54",glow:"rgba(255,146,67,.32)"};
+ return{core:"#5b5264",mid:"#382f45",glow:"rgba(0,0,0,0)"};
+}
+function explorerWeaponKind(){
+ try{return typeof weaponType==="function"?weaponType():(state?.weapon?.weaponType||state?.meta?.onboarding?.departureStarterWeapon||"sword");}
+ catch{return "sword"}
+}
+function drawExplorerRelic(g,shape,sigil,palette,bob){
+ const relicShapes=["root","oracle","saint","voidwalker","eclipse","common","mask"];
+ const relicSigils=["star","moon","shard","mirror","sun","void","comet"];
+ if(!relicShapes.includes(shape)&&!relicSigils.includes(sigil))return;
+ const tint=sigil==="sun"?"#ffe28a":sigil==="void"?"#b89dff":sigil==="moon"?"#d7e6ff":palette.trim;
+ g.globalAlpha=.95;
+ g.strokeStyle=tint;g.lineWidth=.5;
+ g.strokeRect(16.5,5.5+bob,2,2);g.strokeRect(17,6+bob,1,1);
+ g.beginPath();g.moveTo(17.5,4+bob);g.lineTo(17.5,5.5+bob);g.moveTo(17.5,8+bob);g.lineTo(17.5,9+bob);g.stroke();
+ g.fillStyle=tint;g.globalAlpha=.35;g.fillRect(16,5+bob,3,4);g.globalAlpha=1;
+}
+function drawExplorerWeapon(g,kind,accent,bob){
+ g.save();
+ g.lineWidth=.75;
+ if(kind==="spear"){
+  g.strokeStyle="#7c6757";g.beginPath();g.moveTo(15.5,10+bob);g.lineTo(20.5,18.5+bob);g.stroke();
+  g.fillStyle=accent;g.fillRect(19,17+bob,2,2);g.fillRect(18.5,16.5+bob,1,1);
+ }else if(kind==="bow"){
+  g.strokeStyle="#6f5748";g.beginPath();g.moveTo(16,10+bob);g.quadraticCurveTo(21,14+bob,17.5,18+bob);g.stroke();
+  g.strokeStyle="#d7dce3";g.beginPath();g.moveTo(16.4,10.4+bob);g.lineTo(17.4,17.9+bob);g.stroke();
+  g.fillStyle=accent;g.fillRect(17,14+bob,3,.5);
+ }else if(kind==="staff"){
+  g.strokeStyle="#6b584b";g.beginPath();g.moveTo(17.5,10+bob);g.lineTo(19.5,18+bob);g.stroke();
+  g.fillStyle=accent;g.fillRect(17,9+bob,3,3);g.fillRect(18,8+bob,1,1);g.fillRect(18,12+bob,1,1);
+ }else{
+  g.strokeStyle="#dbdfe6";g.beginPath();g.moveTo(16.5,10+bob);g.lineTo(19.5,17.5+bob);g.stroke();
+  g.fillStyle="#6f5a4a";g.fillRect(15.5,10+bob,2,2);g.fillRect(14.5,11+bob,2,1);
+  g.strokeStyle=accent;g.globalAlpha=.55;g.beginPath();g.moveTo(17,11+bob);g.lineTo(19,16+bob);g.stroke();g.globalAlpha=1;
+ }
+ g.restore();
 }
 function drawModernExplorerDetails(g,palette,dark,skin,bob,showAura){
  const light=explorerLanternVisual();
+ const shape=currentAppearance().shape;
+ const sigil=currentAppearance().sigil;
+ const hooded=["hood","pilgrim","oracle","nomad","phantom","voidwalker"].includes(shape);
+ const masked=["mask","warden","shell","bone","saint","cathedral","eclipse","monarch"].includes(shape);
+ const beast=["beast","drake","raven"].includes(shape);
+ const hairColor=beast?"#22252d":["mourner","phantom","voidwalker"].includes(shape)?"#cfd5e7":"#e8e7ef";
+ const eyeColor=sigil==="eye"?"#ff7d7d":sigil==="void"?"#c79dff":palette.trim;
  const lanternSwing=Math.sin((state.visual?.time||0)*.075)*.75;
+ const accent=sigil==="frost"?"#aeeaff":sigil==="eye"?"#ff8c8c":sigil==="sun"?"#ffe796":palette.trim;
 
- // 現代的な高密度ドット：0.5 logical px = backing canvas 1 physical px.
  g.save();
  g.lineWidth=.5;
+ if(hooded){
+  g.fillStyle="#18131c";g.fillRect(8,5+bob,6,4);
+  g.fillStyle=palette.cloak;g.fillRect(7,3+bob,8,5);
+  g.fillStyle=palette.trim;g.globalAlpha=.45;g.fillRect(7.5,3.5+bob,7,.5);g.globalAlpha=1;
+  g.fillStyle=eyeColor;g.fillRect(10,7+bob,2,1);
+ }else if(masked){
+  g.fillStyle="#efe7da";g.fillRect(8,5+bob,6,5);
+  g.fillStyle="#1c1820";g.fillRect(9,7+bob,1,1);g.fillRect(12,7+bob,1,1);
+  g.fillStyle=palette.trim;g.globalAlpha=.42;g.fillRect(10,5+bob,2,1);g.globalAlpha=1;
+ }else{
+  g.fillStyle=hairColor;
+  g.fillRect(8,4+bob,7,3);g.fillRect(7,6+bob,2,2);g.fillRect(13,6+bob,2,2);
+  g.fillRect(9,7+bob,1,1);g.fillRect(12,7+bob,1,1);
+  g.fillStyle=skin;g.fillRect(9,6+bob,4,3);
+  g.fillStyle="#1f1a20";g.fillRect(9,7+bob,1,1);g.fillRect(12,7+bob,1,1);
+  g.fillStyle=eyeColor;g.globalAlpha=.55;g.fillRect(10,7+bob,2,.5);g.globalAlpha=1;
+ }
 
- // face/hair separation
- g.fillStyle="#241b28";g.fillRect(8.5,4.5+bob,6,.5);
- g.fillStyle="#efe1d8";g.fillRect(9.5,6.5+bob,4,.5);
- g.fillStyle=palette.trim;g.globalAlpha=.82;g.fillRect(12.5,7+bob,.5,.5);g.globalAlpha=1;
-
- // layered leather harness + belt hardware
- g.fillStyle="#352a31";g.fillRect(7.5,11.5+bob,9,.5);
- g.fillRect(8.5,14.5+bob,7,.5);
- g.strokeStyle="#8d776b";
- g.beginPath();g.moveTo(8,10.5+bob);g.lineTo(15.5,16.5+bob);
- g.moveTo(15.5,10.5+bob);g.lineTo(8.5,16.5+bob);g.stroke();
+ g.fillStyle="#241e26";g.fillRect(8,9+bob,6,2);
+ g.fillStyle=palette.trim;g.globalAlpha=.52;g.fillRect(8.5,10+bob,5,.5);g.globalAlpha=1;
+ g.fillStyle="#302731";g.fillRect(8,11+bob,7,1);g.fillRect(9,14+bob,5,1);
+ g.strokeStyle="#8d786a";
+ g.beginPath();g.moveTo(8,11+bob);g.lineTo(14.5,16+bob);g.moveTo(15,11+bob);g.lineTo(9.5,16+bob);g.stroke();
  g.fillStyle="#d1ad65";g.fillRect(11,14+bob,1.5,1);
- g.fillStyle="#55423c";g.fillRect(6,15+bob,2,2);g.fillRect(15.5,15.5+bob,2,1.5);
+ g.fillStyle="#4b3d39";g.fillRect(6,15+bob,2,2);g.fillRect(15.5,15+bob,2,2);
+ g.fillStyle=palette.trim;g.globalAlpha=.38;
+ g.fillRect(4,18+bob,2,.5);g.fillRect(7,19+bob,1,.5);g.fillRect(15,18.5+bob,2,.5);g.fillRect(17,19+bob,1,.5);
+ g.globalAlpha=1;
+ g.fillStyle="#7b6a61";g.fillRect(7,19+bob,2,.5);g.fillRect(12.5,19+bob,2,.5);
 
- // ragged cloak micro edge
- g.fillStyle=palette.trim;g.globalAlpha=.42;
- g.fillRect(5,18.5+bob,2,.5);g.fillRect(8,19+bob,1.5,.5);
- g.fillRect(16,18.5+bob,2,.5);g.globalAlpha=1;
+ drawExplorerRelic(g,shape,sigil,palette,bob);
 
- // boots / metal buckles
- g.fillStyle="#0d0b10";g.fillRect(6.5,18+bob,4,3);g.fillRect(13.5,18+bob,4,3);
- g.fillStyle="#7d6c66";g.fillRect(7,19+bob,3,.5);g.fillRect(14,19+bob,3,.5);
-
- // lantern in the off hand: a visual identity anchor from the approved concepts.
  g.save();g.translate(lanternSwing,0);
  if(showAura&&light.glow!=="rgba(0,0,0,0)"){
   const glow=g.createRadialGradient(4.5,12+bob,.5,4.5,12+bob,8);
@@ -8733,10 +8828,7 @@ function drawModernExplorerDetails(g,palette,dark,skin,bob,showAura){
  g.fillStyle="#d0b47b";g.fillRect(3,8+bob,3,.5);g.fillRect(3,13.5+bob,3,.5);
  g.restore();
 
- // sword edge catches lantern light
- g.strokeStyle=light.core;g.globalAlpha=.72;
- g.beginPath();g.moveTo(18,11+bob);g.lineTo(20,17+bob);g.stroke();
- g.globalAlpha=1;
+ drawExplorerWeapon(g,explorerWeaponKind(),accent,bob);
  g.restore();
 }
 function drawAppearanceSigil(g,sigil,palette,dark,bob){
@@ -8974,11 +9066,6 @@ function drawExplorerFigure(g,x,y,scale=1,hurt=false,bob=0,showAura=true){
  drawModernExplorerDetails(g,palette,dark,skin,bob,showAura);
  drawAppearanceSigil(g,sigil,palette,dark,bob);
 
- g.fillStyle=dark;
- g.fillRect(7,19+bob,3,3);g.fillRect(14,19+bob,3,3);
- g.fillStyle=metal;
- g.fillRect(16,10+bob,2,8);g.fillRect(14,11+bob,6,2);
-
  g.strokeStyle=hurt?"#ff6a7d":palette.trim;
  g.globalAlpha=.34;g.strokeRect(2.5,2.5,17,17);g.globalAlpha=1;
  g.restore();
@@ -8996,10 +9083,19 @@ function drawAppearancePreview(){
  g.clearRect(0,0,c.width,c.height);
  g.imageSmoothingEnabled=false;
  const bg=g.createLinearGradient(0,0,0,c.height);
- bg.addColorStop(0,"#17101f");bg.addColorStop(1,"#070509");
+ bg.addColorStop(0,"#171220");bg.addColorStop(.55,"#0b0d17");bg.addColorStop(1,"#08070b");
  g.fillStyle=bg;g.fillRect(0,0,c.width,c.height);
- drawExplorerFigure(g,4,4,4,false,0,true);
+ g.fillStyle="#11243a";g.globalAlpha=.55;g.fillRect(9,20,18,42);g.fillRect(67,20,18,42);g.globalAlpha=1;
+ g.fillStyle="#173b5f";g.fillRect(14,28,8,26);g.fillRect(72,28,8,26);
+ g.fillStyle="#274f79";g.fillRect(44,18,8,44);
+ g.fillStyle="#0d1520";g.fillRect(18,62,60,18);
+ g.fillStyle="#153f62";g.fillRect(16,58,6,10);g.fillRect(74,58,6,10);g.fillRect(45,52,6,12);
+ g.fillStyle="#82dfff";g.globalAlpha=.7;g.fillRect(17,57,4,6);g.fillRect(75,57,4,6);g.fillRect(46,51,4,8);g.globalAlpha=1;
+ g.strokeStyle="rgba(255,218,152,.18)";g.strokeRect(26.5,19.5,44,58);
+ g.strokeRect(32.5,66.5,32,10);
+ drawExplorerFigure(g,36,22,2.25,false,0,true);
 }
+
 function appearanceUnlockMicroHint(data,keyName,unlocked){
  if(unlocked||keyName==="color"||!data)return"";
  if(data.unlockType==="milestone")return"ヒント：より深く潜る";
@@ -9022,6 +9118,100 @@ function appearanceUnlockMicroHint(data,keyName,unlocked){
  if(requirement.startsWith("adaptation"))return"ヒント：深層へ適応する";
  return"";
 }
+function appearanceBuildEntries(){
+ return Object.entries(appearanceBuildData);
+}
+function appearanceBuildParts(build){
+ return[
+  {kind:"外套色",key:"color",collection:"unlockedColors",dataMap:appearanceColorData,id:build.color},
+  {kind:"輪郭",key:"shape",collection:"unlockedShapes",dataMap:appearanceShapeData,id:build.shape},
+  {kind:"紋章",key:"sigil",collection:"unlockedSigils",dataMap:appearanceSigilData,id:build.sigil}
+ ];
+}
+function activeAppearanceBuildId(appearance=currentAppearance()){
+ for(const [id,build] of appearanceBuildEntries()){
+  if(appearance.shape===build.shape&&appearance.color===build.color&&appearance.sigil===build.sigil)return id;
+ }
+ return null;
+}
+function appearanceBuildPlan(build,appearance=currentAppearance()){
+ const buyParts=[];
+ const blocked=[];
+ let totalCost=0;
+ for(const part of appearanceBuildParts(build)){
+  const data=part.dataMap[part.id];
+  if(!data)continue;
+  const unlocked=Array.isArray(appearance[part.collection])&&appearance[part.collection].includes(part.id);
+  if(unlocked)continue;
+  if(data.unlockType==="cost"&&appearanceRequirementMet(data.requirement,state?.meta)){
+   buyParts.push({...part,data});
+   totalCost+=Math.max(0,data.cost||0);
+   continue;
+  }
+  blocked.push({...part,data,reason:appearanceLockedLabel(data,false)});
+ }
+ return{buyParts,blocked,totalCost};
+}
+function applyAppearanceBuild(buildId){
+ const build=appearanceBuildData[buildId];
+ if(!build)return false;
+ const appearance=currentAppearance();
+ const plan=appearanceBuildPlan(build,appearance);
+ if(plan.blocked.length){
+  const detail=plan.blocked.map(part=>`${part.kind}:${part.data?.label||part.id}`).join(" / ");
+  addLog(`${build.label}は未解放部品があり適用できない。 ${detail}`);
+  showCombatToast("未解放の部品あり",detail,"miss");
+  renderAppearance();
+  return false;
+ }
+ const finish=()=>{
+  if(plan.totalCost>0){
+   const shards=Math.max(0,state.meta.shards||0);
+   if(shards<plan.totalCost){
+    addLog(`${build.label}に必要な欠片が足りない。`);
+    showCombatToast("欠片が足りない",`${shards}/${plan.totalCost}`,"miss");
+    renderAppearance();
+    return false;
+   }
+   state.meta.shards-=plan.totalCost;
+   for(const part of plan.buyParts){
+    const collection=appearance[part.collection];
+    if(Array.isArray(collection)&&!collection.includes(part.id))collection.push(part.id);
+   }
+  }
+  appearance.color=build.color;
+  appearance.shape=build.shape;
+  appearance.sigil=build.sigil;
+  saveMeta();saveGame();renderAppearance();render();
+  addLog(`${build.label}を適用した。`);
+  return true;
+ };
+ if(plan.totalCost<=0)return finish();
+ const detail=plan.buyParts.map(part=>`${part.kind}「${part.data.label}」`).join(" / ");
+ return openActionConfirm({
+  title:`推奨ビルドを一括解放`,tone:plan.totalCost>=100?"warning":"purchase",confirmLabel:`${plan.totalCost}欠片で適用`,
+  body:`<div class="actionConfirmLead"><b>${build.label}</b>を現在の探索者へ適用します。</div><div class="actionConfirmMetrics"><div class="actionConfirmMetric"><b>${plan.totalCost}</b><small>必要な欠片</small></div><div class="actionConfirmMetric"><b>${Math.max(0,state.meta.shards||0)}→${Math.max(0,state.meta.shards||0)-plan.totalCost}</b><small>適用後の欠片</small></div><div class="actionConfirmMetric"><b>${plan.buyParts.length}</b><small>同時解放部品</small></div></div><div class="actionConfirmDetail">${build.desc}<br>${detail}<br>ドロップ限定部品はこの確認には含まれません。</div>`,
+  onConfirm:()=>finish()
+ });
+}
+function renderAppearancePresets(){
+ const target=$("appearancePresets");if(!target)return;
+ const appearance=currentAppearance();
+ const activeId=activeAppearanceBuildId(appearance);
+ target.innerHTML=appearanceBuildEntries().map(([id,build])=>{
+  const plan=appearanceBuildPlan(build,appearance);
+  const color=appearanceColorData[build.color],shape=appearanceShapeData[build.shape],sigil=appearanceSigilData[build.sigil];
+  const active=activeId===id;
+  const status=plan.blocked.length
+   ?`未解放: ${plan.blocked.map(part=>part.data?.label||part.id).join(" / ")}`
+   :plan.totalCost>0
+    ?`${plan.totalCost}欠片で一括適用`
+    :active?"現在適用中":"すぐ適用できる";
+  return `<button type="button" class="appearancePresetBtn ${active?"active":""} ${plan.blocked.length?"blocked":""}" data-appearance-build="${id}"><b>${build.label}</b><small>${build.desc}<br>色:${color?.label||build.color} / 輪郭:${shape?.label||build.shape} / 紋章:${sigil?.label||build.sigil}<br>${status}</small></button>`;
+ }).join("");
+ target.querySelectorAll("[data-appearance-build]").forEach(button=>button.onclick=()=>applyAppearanceBuild(button.dataset.appearanceBuild));
+}
+
 function renderAppearanceCategory(targetId,dataMap,selectedId,unlockedList,keyName,unlockTypeName){
  const entries=appearanceCollectionSort(dataMap,selectedId,unlockedList);
  const html=entries.map(([id,data])=>{
@@ -9067,14 +9257,18 @@ function renderAppearance(){
  const color=appearanceColorData[a.color];
  const shape=appearanceShapeData[a.shape];
  const sigil=appearanceSigilData[a.sigil];
+ const activeBuildId=activeAppearanceBuildId(a);
+ const buildBadge=activeBuildId?`<div class="appearanceBuildBadge">推奨ビルド: ${appearanceBuildData[activeBuildId].label}</div>`:"";
  $("appearanceSummary").innerHTML=
   `<b>${shape.label}</b><br>`+
-  `色：${color.label}<br>`+
-  `紋章：${sigil.label}<br>`+
+  `<span class="accent">色</span>：${color.label}<br>`+
+  `<span class="accent">紋章</span>：${sigil.label}<br>`+
   `深淵の欠片：${state.meta.shards||0}<br>`+
   `解放済み：色 ${a.unlockedColors.length}/${Object.keys(appearanceColorData).length} / 輪郭 ${a.unlockedShapes.length}/${Object.keys(appearanceShapeData).length} / 紋章 ${a.unlockedSigils.length}/${Object.keys(appearanceSigilData).length}<br>`+
-  `現在可能な組合せ：${(a.unlockedColors.length*a.unlockedShapes.length*a.unlockedSigils.length).toLocaleString()}通り / 全36,864通り`;
+  `現在可能な組合せ：${(a.unlockedColors.length*a.unlockedShapes.length*a.unlockedSigils.length).toLocaleString()}通り / 全36,864通り`+
+  buildBadge;
 
+ renderAppearancePresets();
  renderAppearanceCategory("appearanceColors",appearanceColorData,a.color,a.unlockedColors,"color","外套色");
  renderAppearanceCategory("appearanceShapes",appearanceShapeData,a.shape,a.unlockedShapes,"shape","輪郭");
  renderAppearanceCategory("appearanceSigils",appearanceSigilData,a.sigil,a.unlockedSigils,"sigil","紋章");
@@ -9084,6 +9278,7 @@ function renderAppearance(){
  $("appearanceSigils").querySelectorAll("[data-sigil]").forEach(button=>{button.onclick=()=>{const id=button.dataset.sigil,data=appearanceSigilData[id],appearance=currentAppearance();if(!appearance.unlockedSigils.includes(id)){if(data.unlockType!=="cost"||!appearanceRequirementMet(data.requirement,state.meta))return;requestAppearancePurchase("紋章",id,data,"unlockedSigils","sigil");return}appearance.sigil=id;saveMeta();saveGame();renderAppearance();render()}});
  drawAppearancePreview();
 }
+
 function appearanceDropTierRoll(){
  const floor=Math.max(1,state?.floor||1);
  const rare=.04+Math.min(.03,floor*.0015);
@@ -24672,7 +24867,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.29",
+  version:"4.30",
   missing,
   missingFunctions,
   issueCount:issues.length,
