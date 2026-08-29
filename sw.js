@@ -1,4 +1,4 @@
-const CACHE='abyssal-roots-v4-28-pixel-density-28';
+const CACHE='abyssal-roots-v4-29-density-pass-ii';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));
