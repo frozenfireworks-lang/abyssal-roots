@@ -286,7 +286,7 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
 
 #game{
   width:100%;
-  aspect-ratio:374/462;
+  aspect-ratio:476/588;
   display:block;
   image-rendering:pixelated;
   image-rendering:crisp-edges;
@@ -5822,7 +5822,7 @@ body,button,input,select,textarea{font-size:12px}
 .stairDecisionTemptation.claimed b{color:#e6b8ff}
 
 
-/* v4.27 VISUAL DEPTH SAMPLE — main dungeon screen only */
+/* v4.28 PIXEL DENSITY 28 — 28px tile baseline + matching canvas buffer */
 :root{
  --abyss-brass:#c9a35b;
  --abyss-brass-hi:#f0d58a;
@@ -5903,11 +5903,11 @@ header .ver{color:#b9a98f;letter-spacing:.025em}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.27 VISUAL DEPTH SAMPLE</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.28 PIXEL DENSITY 28</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
-<canvas id="game" width="748" height="924" aria-label="ダンジョン"></canvas>
+<canvas id="game" width="952" height="1176" aria-label="ダンジョン"></canvas>
 <div id="impactOverlay" aria-hidden="true"></div>
 <div id="combatToast" aria-live="polite"></div>
 <div class="floorGoal" id="floorGoal"><b>探索目標</b><br>深淵へ踏み出す。</div>
@@ -6764,16 +6764,19 @@ header .ver{color:#b9a98f;letter-spacing:.025em}
 
 <script>
 "use strict";
-const COLS=35, ROWS=39, VIEW_COLS=17, VIEW_ROWS=21, TILE=22;
+const COLS=35, ROWS=39, VIEW_COLS=17, VIEW_ROWS=21, TILE=28;
 const CANVAS_W=VIEW_COLS*TILE,CANVAS_H=VIEW_ROWS*TILE,RENDER_SCALE=2;
 const canvas=document.getElementById("game"), ctx=canvas.getContext("2d",{alpha:false,desynchronized:true});
+canvas.width=CANVAS_W*RENDER_SCALE;
+canvas.height=CANVAS_H*RENDER_SCALE;
+canvas.style.aspectRatio=`${CANVAS_W}/${CANVAS_H}`;
 ctx.imageSmoothingEnabled=false;
 ctx.setTransform(RENDER_SCALE,0,0,RENDER_SCALE,0,0);
 const VISUAL_QUALITY_KEY="abyssal-roots-visual-quality";
 const VISUAL_QUALITY_PROFILES={
- low:{microDetail:false,motes:8,foregroundDepth:false,lightBounce:false},
- balanced:{microDetail:true,motes:16,foregroundDepth:true,lightBounce:true},
- high:{microDetail:true,motes:24,foregroundDepth:true,lightBounce:true}
+ low:{microDetail:false,motes:6,foregroundDepth:false,lightBounce:false},
+ balanced:{microDetail:true,motes:12,foregroundDepth:true,lightBounce:true},
+ high:{microDetail:true,motes:18,foregroundDepth:true,lightBounce:true}
 };
 function visualQualityLevel(){
  try{const v=localStorage.getItem(VISUAL_QUALITY_KEY);if(VISUAL_QUALITY_PROFILES[v])return v}catch(_){}
@@ -24660,7 +24663,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.27",
+  version:"4.28",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -24889,7 +24892,7 @@ function hubHomeSummaryHtml(meta=state?.meta){
  if(ensureRecoveryAssistMeta(meta).pending)alerts.push({tone:"good",title:"再起支援",text:"次の探索で発動"});
  const ready=!hasPendingReturnOverflow(meta)&&!!departureWeaponPreview(meta);
  return`<div class="hubFocusHome">
-  <div class="hubFocusHead"><div><b>${ready?"出発準備":"灯台"}</b><small>${ready?"必要なら装備だけ確認して出発できます。":"必要な項目だけ確認してください。"}</small></div><strong>${ready?"READY":"CHECK"}</strong></div>
+  <div class="hubFocusHead"><div><b>${ready?"出発準備":"灯台"}</b><small>${ready?"必要なら装備だけ確認して出発できます。現在は28pxタイル描画です。":"必要な項目だけ確認してください。"}</small></div><strong>${ready?"READY":"CHECK"}</strong></div>
   <div class="hubFocusMetrics">
    <div><b>${meta.shards||0}</b><small>欠片</small></div>
    <div><b>${meta.bestFloor||1}</b><small>最高層</small></div>
