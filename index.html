@@ -5821,11 +5821,89 @@ body,button,input,select,textarea{font-size:12px}
 }
 .stairDecisionTemptation.claimed b{color:#e6b8ff}
 
+
+/* v4.27 VISUAL DEPTH SAMPLE — main dungeon screen only */
+:root{
+ --abyss-brass:#c9a35b;
+ --abyss-brass-hi:#f0d58a;
+ --abyss-cyan:#73c8dc;
+ --abyss-panel:#120f16;
+ --abyss-panel-hi:#201824;
+}
+header{
+ border-color:rgba(134,105,75,.72);
+ background:
+  linear-gradient(180deg,rgba(36,28,38,.98),rgba(15,12,18,.98)),
+  linear-gradient(90deg,rgba(201,163,91,.08),transparent 35%,rgba(115,200,220,.045));
+ box-shadow:inset 0 1px 0 rgba(255,240,207,.055),0 8px 22px rgba(0,0,0,.46);
+}
+header h1{letter-spacing:.075em;color:#f4ead9}
+header .ver{color:#b9a98f;letter-spacing:.025em}
+#stats{gap:4px}
+.stat,.member{
+ border-color:rgba(92,74,101,.74);
+ background:
+  linear-gradient(180deg,rgba(39,30,44,.96),rgba(17,13,21,.98)),
+  linear-gradient(90deg,rgba(201,163,91,.035),transparent 42%,rgba(115,200,220,.025));
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 3px 10px rgba(0,0,0,.28);
+}
+.stat b{color:#e8c875;text-shadow:0 1px 8px rgba(225,184,91,.13)}
+#gameWrap{
+ border-color:rgba(132,104,83,.82);
+ background:#030306;
+ box-shadow:
+  0 0 0 1px rgba(5,4,7,.95),
+  0 16px 46px rgba(0,0,0,.58),
+  inset 0 1px 0 rgba(255,226,176,.075),
+  inset 0 0 28px rgba(92,137,155,.035);
+}
+#gameWrap::before{
+ content:"";position:absolute;inset:1px;z-index:3;pointer-events:none;
+ border:1px solid rgba(231,197,128,.055);border-radius:9px;
+ box-shadow:inset 0 0 18px rgba(0,0,0,.32);
+}
+#gameWrap::after{
+ background:
+  radial-gradient(circle at 50% 44%,transparent 0 40%,rgba(2,2,5,.12) 67%,rgba(0,0,0,.42) 100%),
+  linear-gradient(180deg,rgba(108,153,169,.025),transparent 22%,transparent 78%,rgba(10,4,13,.18));
+ mix-blend-mode:multiply;
+}
+#game{
+ image-rendering:pixelated;
+ image-rendering:crisp-edges;
+ filter:contrast(1.035) saturate(1.035);
+}
+#log{
+ border-color:rgba(82,66,91,.82);
+ background:linear-gradient(180deg,rgba(17,13,21,.98),rgba(8,7,11,.99));
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.025),inset 0 0 18px rgba(0,0,0,.24);
+}
+.ctrl,.skill,.miniBtn{
+ border-color:rgba(111,89,120,.86);
+ background:
+  linear-gradient(180deg,rgba(54,41,62,.98),rgba(25,19,30,.99));
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 3px 0 rgba(7,5,9,.85),0 5px 12px rgba(0,0,0,.25);
+}
+.skill span{color:#aa9db1}
+.skill:not(:disabled):hover,.miniBtn:not(:disabled):hover{border-color:rgba(156,127,163,.92)}
+#floorGoal{
+ border-color:rgba(141,111,81,.74);
+ background:linear-gradient(180deg,rgba(22,17,24,.92),rgba(10,8,13,.94));
+ box-shadow:inset 0 1px 0 rgba(255,227,174,.045),0 4px 14px rgba(0,0,0,.26);
+}
+#floorGoal b{color:#e8ca7a}
+@media(max-width:600px){
+ header,.stat,.member,#log{box-shadow:none}
+ #gameWrap{box-shadow:0 8px 26px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,226,176,.06)}
+ #game{filter:contrast(1.025) saturate(1.025)}
+}
+@media(prefers-reduced-motion:reduce){#game{filter:none}}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.26.1 WORLD DEPTH HOTFIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.27 VISUAL DEPTH SAMPLE</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6688,9 +6766,26 @@ body,button,input,select,textarea{font-size:12px}
 "use strict";
 const COLS=35, ROWS=39, VIEW_COLS=17, VIEW_ROWS=21, TILE=22;
 const CANVAS_W=VIEW_COLS*TILE,CANVAS_H=VIEW_ROWS*TILE,RENDER_SCALE=2;
-const canvas=document.getElementById("game"), ctx=canvas.getContext("2d");
+const canvas=document.getElementById("game"), ctx=canvas.getContext("2d",{alpha:false,desynchronized:true});
 ctx.imageSmoothingEnabled=false;
 ctx.setTransform(RENDER_SCALE,0,0,RENDER_SCALE,0,0);
+const VISUAL_QUALITY_KEY="abyssal-roots-visual-quality";
+const VISUAL_QUALITY_PROFILES={
+ low:{microDetail:false,motes:8,foregroundDepth:false,lightBounce:false},
+ balanced:{microDetail:true,motes:16,foregroundDepth:true,lightBounce:true},
+ high:{microDetail:true,motes:24,foregroundDepth:true,lightBounce:true}
+};
+function visualQualityLevel(){
+ try{const v=localStorage.getItem(VISUAL_QUALITY_KEY);if(VISUAL_QUALITY_PROFILES[v])return v}catch(_){}
+ return"balanced";
+}
+const VISUAL_QUALITY=visualQualityLevel();
+const VISUAL_FX=VISUAL_QUALITY_PROFILES[VISUAL_QUALITY];
+window.setAbyssVisualQuality=level=>{
+ if(!VISUAL_QUALITY_PROFILES[level])return false;
+ try{localStorage.setItem(VISUAL_QUALITY_KEY,level)}catch(_){}
+ location.reload();return true;
+};
 const $=id=>document.getElementById(id);
 const FLOOR_GOAL_EXPANDED_KEY="abyssal-roots-floor-goal-expanded";
 let floorGoalExpanded=false;
@@ -24565,7 +24660,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.26.1",
+  version:"4.27",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -26608,6 +26703,94 @@ function drawBiomeWallDecoration(px,py,x,y,t,vis){
  }
  ctx.restore();
 }
+
+function drawTileMaterialDepth(px,py,x,y,t,vis,isWall){
+ if(!vis)return;
+ const seed=visualTileSeed(x,y,isWall?31:23);
+ ctx.save();
+ if(!isWall){
+  // Contact occlusion is painted on the floor side only, preserving collision/map logic.
+  ctx.fillStyle="rgba(0,0,0,.18)";
+  if(tile(x,y-1)===0)ctx.fillRect(px,py,TILE,2);
+  if(tile(x-1,y)===0)ctx.fillRect(px,py,2,TILE);
+  ctx.fillStyle="rgba(0,0,0,.10)";
+  if(tile(x,y+1)===0)ctx.fillRect(px,py+TILE-2,TILE,2);
+  if(tile(x+1,y)===0)ctx.fillRect(px+TILE-2,py,2,TILE);
+  if(VISUAL_FX.microDetail){
+   const biome=currentBiomeKey();
+   const dust=biome==="furnace"?"rgba(244,145,93,.20)":biome==="frost"?"rgba(190,236,255,.22)":biome==="fungal"?"rgba(151,203,119,.18)":"rgba(191,176,205,.16)";
+   ctx.fillStyle=dust;
+   for(let i=0;i<2+(seed%2);i++){
+    const dx=3+((seed>>(i*4))%16),dy=4+((seed>>(i*5+3))%14);
+    ctx.fillRect(px+dx+.5,py+dy+.5,.5,.5);
+   }
+   if(seed%19===0){
+    ctx.strokeStyle="rgba(224,211,226,.13)";ctx.lineWidth=.5;
+    ctx.beginPath();ctx.moveTo(px+4.5,py+15.5);ctx.lineTo(px+8.5,py+12.5);ctx.lineTo(px+11.5,py+13.5);ctx.lineTo(px+16.5,py+8.5);ctx.stroke();
+   }
+  }
+ }else if(VISUAL_FX.microDetail){
+  // Sparse masonry seams reduce repeated-tile appearance without adding sprites/assets.
+  ctx.globalAlpha=.22;
+  ctx.fillStyle="#000";
+  const y1=5+(seed%7);ctx.fillRect(px+3,py+y1,TILE-6,.5);
+  if(seed%3===0)ctx.fillRect(px+8+(seed%6),py+3,.5,TILE-7);
+  ctx.globalAlpha=1;
+  ctx.fillStyle="rgba(236,222,215,.055)";
+  if(seed%11===0)ctx.fillRect(px+4.5,py+4.5,6,.5);
+ }
+ ctx.restore();
+}
+function drawMidgroundDepth(t){
+ if(!VISUAL_FX.foregroundDepth)return;
+ const profile=visualBiomeProfile(),drift=Math.sin(t*.012)*10;
+ ctx.save();
+ // Very low-opacity diagonal shafts separate the map plane from the atmosphere.
+ ctx.globalCompositeOperation="screen";
+ ctx.globalAlpha=currentBiomeKey()==="frost"?.055:.032;
+ const shaft=ctx.createLinearGradient(0,0,CANVAS_W,CANVAS_H);
+ shaft.addColorStop(0,"rgba(255,255,255,.18)");shaft.addColorStop(.42,"rgba(255,255,255,0)");shaft.addColorStop(1,"rgba(255,255,255,.08)");
+ ctx.fillStyle=shaft;
+ ctx.beginPath();ctx.moveTo(20+drift,0);ctx.lineTo(120+drift,0);ctx.lineTo(300+drift,CANVAS_H);ctx.lineTo(205+drift,CANVAS_H);ctx.closePath();ctx.fill();
+ ctx.restore();
+}
+function drawLocalLightBounce(sx,sy,inView,t){
+ if(!VISUAL_FX.lightBounce)return;
+ const pulse=(Math.sin(t*.08)+1)*.5;
+ ctx.save();ctx.globalCompositeOperation="screen";
+ let count=0;
+ for(const o of state.environment||[]){
+  if(count>=6)break;
+  if(!o.active||!o.burning||!inView(o.x,o.y))continue;
+  count++;
+  const x=sx(o.x),y=sy(o.y),a=.035+.02*pulse;
+  ctx.fillStyle=`rgba(255,143,64,${a})`;ctx.fillRect(x+1,y+1,TILE-2,TILE-2);
+  ctx.fillStyle=`rgba(255,118,51,${a*.46})`;
+  for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+   const nx=o.x+dx,ny=o.y+dy;if(!inView(nx,ny)||!state.visible[key(nx,ny)])continue;
+   ctx.fillRect(sx(nx)+2,sy(ny)+2,TILE-4,TILE-4);
+  }
+ }
+ ctx.restore();
+}
+function drawForegroundDepth(t){
+ if(!VISUAL_FX.foregroundDepth)return;
+ const profile=visualBiomeProfile(),phase=t*.008;
+ ctx.save();
+ // Edge-only silhouettes create a foreground plane while leaving tactical center clear.
+ ctx.globalAlpha=.095;ctx.strokeStyle=profile.glow;ctx.lineWidth=2.25;
+ for(let i=0;i<3;i++){
+  const y=72+i*132+Math.sin(phase+i)*8;
+  ctx.beginPath();ctx.moveTo(-8,y);ctx.bezierCurveTo(18,y+18,5,y+48,30,y+78);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(CANVAS_W+8,y+31);ctx.bezierCurveTo(CANVAS_W-20,y+50,CANVAS_W-4,y+76,CANVAS_W-32,y+100);ctx.stroke();
+ }
+ // Subtle lower fog shelf, kept below most readable action.
+ const fog=ctx.createLinearGradient(0,CANVAS_H*.72,0,CANVAS_H);
+ fog.addColorStop(0,"rgba(0,0,0,0)");fog.addColorStop(1,profile.mist.replace(/\.0\d+\)/,".12)"));
+ ctx.fillStyle=fog;ctx.globalAlpha=.7;ctx.fillRect(0,CANVAS_H*.72,CANVAS_W,CANVAS_H*.28);
+ ctx.restore();
+}
+
 function drawActorGroundShadow(x,y,scale=1,alpha=.28){
  ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle="#000";
  ctx.beginPath();ctx.ellipse(x+11,y+18.5,7*scale,2.3*scale,0,0,Math.PI*2);ctx.fill();
@@ -26616,6 +26799,14 @@ function drawActorGroundShadow(x,y,scale=1,alpha=.28){
 function drawHeroSprite(x,y,hurt,t){
  const bob=Math.sin(t*.12)*.65;
  drawExplorerFigure(ctx,x,y,1,hurt,bob,true);
+ // One-backing-pixel rim accents keep the hero readable against dense terrain.
+ if(state?.light?.on&&state.light.fuel>0){
+  const light=explorerLanternVisual();
+  ctx.save();ctx.strokeStyle=light.core;ctx.globalAlpha=.50;ctx.lineWidth=.5;
+  ctx.beginPath();ctx.moveTo(x+7.5,y+10.5+bob);ctx.lineTo(x+6,y+15.5+bob);ctx.moveTo(x+15.5,y+10.5+bob);ctx.lineTo(x+17,y+15+bob);ctx.stroke();
+  ctx.fillStyle=light.core;ctx.globalAlpha=.58;ctx.fillRect(x+8.5,y+4.5+bob,.5,.5);ctx.fillRect(x+14.5,y+5+bob,.5,.5);
+  ctx.restore();
+ }
 }
 function drawModernEnemyDetails(e,x,y,bob,accent,t){
  ctx.save();
@@ -27602,7 +27793,7 @@ function drawModernAtmosphere(t){
  ctx.fillStyle=top;ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
 
  // drifting high-resolution pixel motes
- for(let i=0;i<24;i++){
+ for(let i=0;i<VISUAL_FX.motes;i++){
   const mx=((i*83+t*.16)%(CANVAS_W+50))-25;
   const my=((i*47+t*.09+Math.sin(t*.018+i)*18)%(CANVAS_H+30))-15;
   const alpha=.035+(i%5)*.012;
@@ -27692,13 +27883,16 @@ function draw(){
   if(tile(x,y)===0){
    drawWallTile(px,py,x,y,vis);
    drawBiomeWallDecoration(px,py,x,y,t,vis);
+   drawTileMaterialDepth(px,py,x,y,t,vis,true);
   }else{
    drawFloorTile(px,py,x,y,vis);
    drawBiomeFloorDecoration(px,py,x,y,t,vis);
+   drawTileMaterialDepth(px,py,x,y,t,vis,false);
   }
  }
 
  drawModernAtmosphere(t);
+ drawMidgroundDepth(t);
 
  const drawText=(t,x,y,color,size=15)=>{
   if(!inView(x,y))return;
@@ -27917,6 +28111,7 @@ function draw(){
  ctx.fillStyle=darkness;ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
  ctx.restore();
 
+ drawLocalLightBounce(sx,sy,inView,t);
  drawWorldRelicLights(sx,sy,inView,t);
  drawHeroLanternBloom(sx,sy,t);
 
@@ -27934,6 +28129,7 @@ function draw(){
  }
  ctx.restore();
 
+ drawForegroundDepth(t);
  ctx.restore();
  drawMiniMap();
 }
