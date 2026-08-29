@@ -286,7 +286,7 @@ h1{font-size:17px;text-shadow:0 2px 4px #000}
 
 #game{
   width:100%;
-  aspect-ratio:476/588;
+  aspect-ratio:576/832;
   display:block;
   image-rendering:pixelated;
   image-rendering:crisp-edges;
@@ -5842,7 +5842,7 @@ body,button,input,select,textarea{font-size:12px}
 .stairDecisionTemptation.claimed b{color:#e6b8ff}
 
 
-/* v4.30 PLAYABLE PROTAGONIST REDESIGN — 28px tile baseline + in-game sprite redesign + preset builds */
+/* v4.32 CHAMBER ROUTE 64 — 9x13 tactical chamber + native 64px render path */
 :root{
  --abyss-brass:#c9a35b;
  --abyss-brass-hi:#f0d58a;
@@ -5928,15 +5928,30 @@ header,.panel,.card,#log{box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 6px
 button{box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 3px 8px rgba(0,0,0,.15)}
 button:hover{filter:brightness(1.04)}
 
+
+/* v4.32 CHAMBER ROUTE — node choice / hazards */
+#chamberNodeOverlay{z-index:94;overscroll-behavior:contain}
+.chamberNodeCard{max-width:540px;border-color:#745c43;background:linear-gradient(180deg,#17131a,#0b0a0f)}
+.chamberNodeLead{padding:8px 9px;border:1px solid #4f4238;border-radius:8px;background:#100d12;color:#d7c8b6;font-size:12px;line-height:1.48}
+.chamberNodeProgress{display:flex;gap:4px;margin:9px 0 10px}
+.chamberNodeProgress i{display:block;height:5px;flex:1;border-radius:99px;background:#2a222a;border:1px solid #433641}
+.chamberNodeProgress i.done{background:#6bb7c3;border-color:#8dd8df}.chamberNodeProgress i.current{background:#d2ac61;border-color:#f0d48b}
+.chamberNodeChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:8px}
+.chamberNodeChoice{min-height:92px;padding:9px;border:1px solid #5a493f;border-radius:9px;background:linear-gradient(180deg,#18131b,#0f0d12);color:#e7ddd2;text-align:left}
+.chamberNodeChoice b{display:block;color:#f0d291;font-size:13px;margin-bottom:4px}.chamberNodeChoice span{display:block;color:#c5b6a6;font-size:11.5px;line-height:1.4}.chamberNodeChoice small{display:block;margin-top:5px;color:#82cbd9;font-size:10.5px}
+.chamberNodeChoice.danger{border-color:#75404e}.chamberNodeChoice.reward{border-color:#75653e}.chamberNodeChoice.arcane{border-color:#514b79}
+.chamberNodeCancel{margin-top:9px}
+@media(max-width:600px){.chamberNodeChoices{grid-template-columns:1fr}.chamberNodeChoice{min-height:74px}}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.30 PLAYABLE PROTAGONIST REDESIGN</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.32 CHAMBER ROUTE 64</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
-<canvas id="game" width="952" height="1176" aria-label="ダンジョン"></canvas>
+<canvas id="game" width="1152" height="1664" aria-label="ダンジョン"></canvas>
 <div id="impactOverlay" aria-hidden="true"></div>
 <div id="combatToast" aria-live="polite"></div>
 <div class="floorGoal" id="floorGoal"><b>探索目標</b><br>深淵へ踏み出す。</div>
@@ -6023,8 +6038,8 @@ button:hover{filter:brightness(1.04)}
 <div class="overlay" id="titleOverlay">
   <div class="card">
     <h2>深淵樹迷宮</h2>
-    <p class="sub">リアルタイム戦闘 × 武器戦術 × ラン中ビルド × 敵利用</p>
-    <p>戦闘は全階層リアルタイムです。止まって考えるのではなく、予兆を読み、回避・武技・敵利用・その探索だけのビルドで深淵を突破してください。</p>
+    <p class="sub">64px Tactical Chamber × リアルタイム戦闘 × 武器戦術 × 敵利用</p>
+    <p>戦闘は9×13の圧縮戦場で進みます。制圧点を奪い、外周から迫る深淵圧力を逆に敵への拘束として利用しながら突破してください。</p>
     <div class="legend">
       <div>世界樹：視界・探索・成長選択</div><div>シレン：グリッド・空腹・自動生成</div>
       <div>Wizardry：暗闇・罠・死の重さ</div><div>Diablo：武器ビルド・接辞装備</div>
@@ -6057,7 +6072,7 @@ button:hover{filter:brightness(1.04)}
 <div class="overlay hidden" id="appearanceOverlay">
   <div class="card appearanceCard">
     <h2>探索者の姿</h2>
-    <p>ここで表示される案はすべて <b>実際に盤面とHUDで使われる28px設計</b> です。姿は <b>外套色48色</b>・<b>輪郭32種</b>・<b>紋章24種</b> で構成され、実機上の可読性を保ったまま深淵寄りの主人公へ寄せています。</p>
+    <p>ここで表示される案はすべて <b>実際に盤面とHUDで使われる64px設計</b> です。姿は <b>外套色48色</b>・<b>輪郭32種</b>・<b>紋章24種</b> で構成され、実機上の可読性を保ったまま深淵寄りの主人公へ寄せています。</p>
     <div class="appearancePreviewWrap">
       <canvas id="appearancePreview" width="96" height="96" aria-label="探索者アイコンのプレビュー"></canvas>
       <div id="appearanceSummary"></div>
@@ -6072,6 +6087,16 @@ button:hover{filter:brightness(1.04)}
     <div id="appearanceSigils" class="appearanceChoices"></div>
     <p class="note">変更は探索画面のキャラアイコンと盤面上の姿へ即時反映されます。能力には影響しません。推奨ビルドは未解放部品がある場合のみ一括解放確認を挟み、ドロップ限定部品は条件を満たすまで適用できません。</p>
     <button type="button" class="modalBtn" id="closeAppearance">閉じる</button>
+  </div>
+</div>
+
+
+<div class="overlay hidden" id="chamberNodeOverlay">
+  <div class="card chamberNodeCard" role="dialog" aria-modal="true" aria-labelledby="chamberNodeTitle">
+    <h2 id="chamberNodeTitle">次の区画</h2>
+    <div id="chamberNodeBody"></div>
+    <div id="chamberNodeChoices" class="chamberNodeChoices"></div>
+    <button type="button" class="modalBtn chamberNodeCancel" id="cancelChamberNode">戦場へ戻る</button>
   </div>
 </div>
 
@@ -6795,7 +6820,8 @@ button:hover{filter:brightness(1.04)}
 
 <script>
 "use strict";
-const COLS=35, ROWS=39, VIEW_COLS=17, VIEW_ROWS=21, TILE=28;
+const CHAMBER_MODE=true;
+const COLS=9, ROWS=13, VIEW_COLS=9, VIEW_ROWS=13, TILE=64;
 const CANVAS_W=VIEW_COLS*TILE,CANVAS_H=VIEW_ROWS*TILE,RENDER_SCALE=2;
 const canvas=document.getElementById("game"), ctx=canvas.getContext("2d",{alpha:false,desynchronized:true});
 canvas.width=CANVAS_W*RENDER_SCALE;
@@ -6806,8 +6832,8 @@ ctx.setTransform(RENDER_SCALE,0,0,RENDER_SCALE,0,0);
 const VISUAL_QUALITY_KEY="abyssal-roots-visual-quality";
 const VISUAL_QUALITY_PROFILES={
  low:{microDetail:false,motes:6,foregroundDepth:false,lightBounce:false},
- balanced:{microDetail:true,motes:12,foregroundDepth:true,lightBounce:true},
- high:{microDetail:true,motes:20,foregroundDepth:true,lightBounce:true}
+ balanced:{microDetail:true,motes:8,foregroundDepth:true,lightBounce:true},
+ high:{microDetail:true,motes:14,foregroundDepth:true,lightBounce:true}
 };
 function visualQualityLevel(){
  try{const v=localStorage.getItem(VISUAL_QUALITY_KEY);if(VISUAL_QUALITY_PROFILES[v])return v}catch(_){}
@@ -12365,7 +12391,7 @@ function freshState(){
   hunger:840,maxHunger:840,provisions:0,expeditionEnded:false,crit:.08,weapon:null,armor:null,equipment:{shield:null,head:null,body:null,arms:null,legs:null,ring:null,charm:null},inventory:[],sealedRelics:[],consumables:{potion:1,identify:0,purify:0,bomb:1,retreat:0,oil:1},
   hero:{name:"無名の探索者",role:"武器なき放浪者",hp:48,maxHp:48,atk:7,def:2,stamina:10,maxStamina:10,talents:[],perception:0,boneLastStandUsed:false,lastStandUsed:false,lastStandArmed:false,lastStandInvulnerable:false,lastStandTriggeredThisTurn:false,lastStandRechargePending:false,exhaustedTurns:0},
   cooldowns:{guard:0,volley:0,heal:0,search:0},guardTurns:0,lastAction:"start",hungerStageId:"fed",hungerRecoveryBuffer:0,fieldScrap:0,packExpansion:0,fieldForgeAtk:0,fieldForgeDef:0,inventorySort:"score",protectionContract:null,combatStats:{dodges:0,guards:0,breaks:0,counters:0,crits:0,lastStands:0},
-  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],terrainFeatures:[],terrainKnowledge:{},secretWalls:[],shortcuts:[],events:[],roomEncounters:[],tacticalPacks:[],remains:[],stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],floorFork:null,forkHistory:[],floorPhenomenon:null,phenomenonHistory:[],labyrinthReaction:null,reactionApplied:false,runWhisper:null,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
+  map:[],rooms:[],visited:{},visible:{},enemies:[],items:[],traps:[],specialTiles:[],environment:[],terrainFeatures:[],terrainKnowledge:{},secretWalls:[],shortcuts:[],events:[],roomEncounters:[],tacticalPacks:[],remains:[],chamberRoute:null,chamberHazards:[],chamberControl:null,stairs:{x:1,y:1},bossDefeated:false,floorMutation:null,floorStats:null,floorObjective:null,routePlan:null,routeHistory:[],floorFork:null,forkHistory:[],floorPhenomenon:null,phenomenonHistory:[],labyrinthReaction:null,reactionApplied:false,runWhisper:null,ecology:{spawnClock:0,totalRespawns:0,killsThisFloor:0},
   player:{x:1,y:1},log:["ひとりで迷宮の入口に立った。"],gameOver:false,light:{type:"torch",fuel:80,on:true},meta:{shards:0,bestFloor:1,totalKills:0,upgrades:{vitality:0,focus:0,pack:0,supply:0},codex:{},stash:[],heirloom:null,nextLoadout:null,lastReturnLoadout:null,lastExpeditionReport:null,nemesis:null,nemesisHistory:[],usage:{sword:0,spear:0,bow:0,staff:0,guard:0,bomb:0,heal:0,fire:0,frost:0,storm:0,venom:0,blood:0},adaptation:null,eventHistory:[],factionEcology:{version:1,undead:100,beast:100,aberration:100,history:[]},marks:{mercy:0,greed:0,defiance:0,curiosity:0},mastery:{sword:0,spear:0,bow:0,staff:0},routeMastery:{hunt:0,archive:0,supply:0},weaponOath:{gearId:null,swornAt:0,spentShards:0,history:[]},insurancePlan:{mode:"none",slots:[]},soulAnchors:0,deathEcho:null,deathEchoHistory:[],pendingEchoRecovery:null,deathEchoRecoveryHistory:[],pendingReaction:null,reactionHistory:[],onboarding:{version:1,firstDepartureComplete:false,departureStarterWeapon:null,advancedHubShown:false,guideMode:"full",firstDepartureAt:0},balanceMigrations:{hungerV31042:true,gearAttunementV3105:true},bodyTraining:{endurance:0,strength:0,focus:0,perception:0},abyssAdaptations:[],adaptationPoints:0,adaptationMilestone:0,research:{points:0,levels:{anatomy:0,ecology:0,arcana:0,survival:0},observations:{enemy:0,trap:0,item:0,event:0,biome:0}},abyssWhisper:{cycle:0,options:[],selectedId:null,history:[]},sealedRelics:[],relicFortune:{misses:0,totalOpened:0,legendaryOpened:0,jackpots:0,firstFound:false,history:[]}},audio:{enabled:true,started:false,bgmEnabled:true,sfxEnabled:true,bgmVolume:.38,sfxVolume:.62},visual:{flash:0,shake:0,hitX:null,hitY:null,time:0,moveDx:0,moveDy:0,attackDx:0,attackDy:0,attackFrames:0,damageFrames:0,showRange:false,effects:[]}
  };
  newState.audio=normalizeAudioSettings(newState.audio);
@@ -12387,7 +12413,9 @@ function randomFloorCell(minDist=0){
   const x=rint(1,COLS-2),y=rint(1,ROWS-2);
   if(tile(x,y)===1 && Math.abs(x-state.player.x)+Math.abs(y-state.player.y)>=minDist &&
      !state.enemies.some(e=>e.x===x&&e.y===y) && !state.items.some(i=>i.x===x&&i.y===y) &&
-     !(state.stairs.x===x&&state.stairs.y===y)) return{x,y};
+     !(state.stairs.x===x&&state.stairs.y===y) &&
+     !(CHAMBER_MODE&&(state.chamberControl?.points||[]).some(point=>point.x===x&&point.y===y)) &&
+     !(CHAMBER_MODE&&(state.chamberHazards||[]).some(h=>h.x===x&&h.y===y))) return{x,y};
  }
  return null;
 }
@@ -12429,6 +12457,7 @@ function roomEncounterAt(x,y){
  })||null;
 }
 function roomEncounterCountForFloor(){
+ if(CHAMBER_MODE)return 0;
  if(state.floor<=1||state.floor%5===0||isRestFloor())return 0;
  let count=1;
  if(state.floor>=8)count++;
@@ -12576,6 +12605,7 @@ function makeTacticalPackEnemy(type,p,pack,index){
  return enemy;
 }
 function tacticalPackCountForFloor(){
+ if(CHAMBER_MODE)return 0;
  if(state.floor<7||state.floor%5===0||isRestFloor())return 0;
  const base=Math.min(3,(state.floor>=16&&state.rooms.length>=8?2:1)+deepCycleValue("packBonus"));
  return floorPulseTacticalPackCount(base);
@@ -13335,6 +13365,7 @@ function spawnFloorBoss(recovery=false){
 }
 function ensureBossProgressIntegrity(source="turn"){
  if(!state||state.gameOver||state.expeditionEnded||state.floor%5!==0)return false;
+ if(CHAMBER_MODE&&!chamberRouteFinal())return false;
 
  // 目標達成済みなら旧データの撃破フラグだけを補正する。
  if(state.floorObjective?.type==="boss"&&state.floorObjective.completed){
@@ -14072,7 +14103,7 @@ function tacticalTerrainTypeForFloor(){
 function tacticalTerrainSeedCell(){
  for(let tries=0;tries<160;tries++){
   const x=rint(1,COLS-2),y=rint(1,ROWS-2);
-  if(Math.abs(x-state.player.x)+Math.abs(y-state.player.y)<5)continue;
+  if(Math.abs(x-state.player.x)+Math.abs(y-state.player.y)<(CHAMBER_MODE?3:5))continue;
   if(tacticalTerrainPlacementBlocked(x,y))continue;
   return{x,y};
  }
@@ -14098,11 +14129,11 @@ function addTacticalTerrainCluster(type,size,clusterId){
 function addTacticalTerrain(){
  state.terrainFeatures=state.terrainFeatures||[];
  if(state.floor<=1||state.floor%5===0)return 0;
- const clusterCount=1+(state.floor>=7?1:0)+(state.floor>=14?1:0);
+ const clusterCount=CHAMBER_MODE?1:1+(state.floor>=7?1:0)+(state.floor>=14?1:0);
  let total=0;
  for(let i=0;i<clusterCount;i++){
   const type=tacticalTerrainTypeForFloor();
-  const size=rint(3,Math.min(6,3+Math.floor(state.floor/6)));
+  const size=CHAMBER_MODE?rint(2,3):rint(3,Math.min(6,3+Math.floor(state.floor/6)));
   total+=addTacticalTerrainCluster(type,size,`terrain-${state.floor}-${i}`);
  }
  return total;
@@ -14186,7 +14217,7 @@ function envAt(x,y,type=null){
 }
 function addEnvironmentObjects(){
  let biomeEnv=currentBiomeKey()==="furnace"?3:currentBiomeKey()==="fungal"?1:0;
- const count=Math.max(0,2+Math.floor(state.floor/2)+(mutation()?.environmentBonus||0)+biomeEnv-(state.meta?.adaptation==="anti_bomb"?2:0)+reactionValue("environmentBonus"));
+ const count=CHAMBER_MODE?clamp(1+Math.floor(state.floor/6)+biomeEnv,1,3):Math.max(0,2+Math.floor(state.floor/2)+(mutation()?.environmentBonus||0)+biomeEnv-(state.meta?.adaptation==="anti_bomb"?2:0)+reactionValue("environmentBonus"));
  for(let i=0;i<count;i++){
   const p=randomFloorCell(3);
   if(!p)break;
@@ -14393,7 +14424,7 @@ function prepareFloorPhenomenon(){
  const pulseChance=clamp(currentFloorPulse()?.phenomenonChance??.68,0,1);
  if(seed%100>=Math.round(pulseChance*100))return null;
  const biome=currentBiomeKey();
- const pool=["gloom","tremor","stillness","migration","flare"];
+ const pool=CHAMBER_MODE?["gloom","tremor","stillness","flare"]:["gloom","tremor","stillness","migration","flare"];
  if(biome==="crypt")pool.push("gloom","migration");
  if(biome==="furnace")pool.push("flare","tremor");
  if(biome==="frost")pool.push("gloom","stillness");
@@ -14795,6 +14826,7 @@ function repairShortcutStairOverlap(writeLog=true){
 }
 function addSecretsAndShortcuts(){
  state.secretWalls=[];state.shortcuts=[];
+ if(CHAMBER_MODE)return;
  const candidates=[];
  for(let y=2;y<ROWS-2;y++)for(let x=2;x<COLS-2;x++){
   if(tile(x,y)!==0)continue;
@@ -14895,26 +14927,19 @@ function activeRunMapIsUsable(){
  return floorCount>=12;
 }
 function rebuildEmergencyFloor(reason="terrain"){
- state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
- carveRoom(state.map,2,2,8,8);
- carveRoom(state.map,COLS-11,ROWS-11,8,8);
- carveLine(state.map,{x:6,y:6},{x:COLS-7,y:ROWS-7});
- state.rooms=[
-  {x:2,y:2,w:8,h:8,cx:6,cy:6},
-  {x:COLS-11,y:ROWS-11,w:8,h:8,cx:COLS-7,cy:ROWS-7}
- ];
- state.player={x:6,y:6};
- state.stairs={x:COLS-7,y:ROWS-7};
+ if(CHAMBER_MODE){
+  buildTacticalChamber();
+ }else{
+  state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
+  carveRoom(state.map,2,2,8,8);carveRoom(state.map,COLS-11,ROWS-11,8,8);carveLine(state.map,{x:6,y:6},{x:COLS-7,y:ROWS-7});
+  state.rooms=[{x:2,y:2,w:8,h:8,cx:6,cy:6},{x:COLS-11,y:ROWS-11,w:8,h:8,cx:COLS-7,cy:ROWS-7}];
+  state.player={x:6,y:6};state.stairs={x:COLS-7,y:ROWS-7};
+ }
  state.enemies=[];state.items=[];state.traps=[];state.specialTiles=[];state.environment=[];state.terrainFeatures=[];state.terrainKnowledge={};
  state.secretWalls=[];state.shortcuts=[];state.events=[];state.roomEncounters=[];state.tacticalPacks=[];state.remains=[];
  state.visited={};state.visible={};state.bossDefeated=false;
- state.floorStats=createFloorStats();
- state.floorObjective={...createFloorObjective(),floor:state.floor};
- updateVision();
- if(!state.progressionRecoveryLogged){
-  state.progressionRecoveryLogged=true;
-  addLog(`保存内の迷宮地形を安全な通路へ再構築した（${reason}）。装備・荷物・階層は維持した。`);
- }
+ state.floorStats=createFloorStats();state.floorObjective={...createFloorObjective(),floor:state.floor};updateVision();
+ if(!state.progressionRecoveryLogged){state.progressionRecoveryLogged=true;addLog(`保存内の迷宮地形を戦術部屋へ再構築した（${reason}）。装備・荷物・階層は維持した。`)}
  return true;
 }
 function repairActiveRunProgressionState(source="render"){
@@ -14927,7 +14952,8 @@ function repairActiveRunProgressionState(source="render"){
  if(state.floorFork&&state.floorFork.targetFloor!==state.floor){state.floorFork=null;changed=true}
  if(state.floorPhenomenon&&state.floorPhenomenon.floor!==state.floor){state.floorPhenomenon=null;changed=true}
  normalizeFloorPhenomenonState();
- const arrays=["enemies","items","inventory","sealedRelics","traps","specialTiles","environment","terrainFeatures","secretWalls","shortcuts","events","roomEncounters","tacticalPacks","remains","rooms"];
+ if(CHAMBER_MODE){const beforeRoute=state.chamberRoute;ensureChamberRoute();if(beforeRoute!==state.chamberRoute)changed=true}
+ const arrays=["enemies","items","inventory","sealedRelics","traps","specialTiles","environment","terrainFeatures","secretWalls","shortcuts","events","roomEncounters","tacticalPacks","remains","rooms","chamberHazards"];
  for(const keyName of arrays){if(!Array.isArray(state[keyName])){state[keyName]=[];changed=true}}
  if(!state.visual||typeof state.visual!=="object"){state.visual={};changed=true}
  if(!Array.isArray(state.visual.effects)){state.visual.effects=[];changed=true}
@@ -14955,7 +14981,7 @@ function repairActiveRunProgressionState(source="render"){
  }
 
  const onFloor=e=>e&&Number.isFinite(e.x)&&Number.isFinite(e.y)&&inside(e.x,e.y)&&tile(e.x,e.y)===1;
- for(const keyName of ["enemies","items","traps","specialTiles","environment","terrainFeatures","events","remains"]){
+ for(const keyName of ["enemies","items","traps","specialTiles","environment","terrainFeatures","events","remains","chamberHazards"]){
   const before=state[keyName].length;
   state[keyName]=state[keyName].filter(onFloor);
   if(state[keyName].length!==before)changed=true;
@@ -16595,6 +16621,7 @@ const realtimeSiegeDirections={
  east:{label:"→",dx:1,dy:0},west:{label:"←",dx:-1,dy:0}
 };
 function realtimeSiegeEligible(){
+ if(CHAMBER_MODE)return false;
  return!!state&&state.floor>=8&&state.floor%5!==0&&!isRestFloor()&&floorPulsePhaseId(state.floor)==="pressure";
 }
 function realtimeSiegeDirectionPair(){
@@ -17699,16 +17726,19 @@ function tickRealtimeGreedChest(now=realtimeNow()){
  return true;
 }
 function plannedEnemyCount(){
+ if(CHAMBER_MODE){
+  const authored=firstDepthEnemyBudget();
+  const base=authored!==null?Math.ceil(authored*.48):2+Math.floor((state.floor-1)/4);
+  const pressure=(currentBiomeKey()==="furnace"||currentBiomeKey()==="crypt")?1:0;
+  const route=Math.sign(routeValue("enemyBonus")+reactionValue("enemyBonus")+floorForkValue("enemyBonus"));
+  const bossFloor=state.floor%5===0;
+  return clamp(base+pressure+route+(bossFloor?-1:0),2,bossFloor?4:7);
+ }
  const siegeOffset=state?.realtimeIncident?.type==="siege"?-2:0;
  const authored=firstDepthEnemyBudget();
  if(authored!==null){
   const biomePressure=(currentBiomeKey()==="furnace"||currentBiomeKey()==="crypt")?1:0;
-  const dynamic=
-   biomePressure+
-   routeValue("enemyBonus")+
-   resonanceBonus("enemyCount")+
-   reactionValue("enemyBonus")+
-   floorForkValue("enemyBonus");
+  const dynamic=biomePressure+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+floorForkValue("enemyBonus");
   const upper=authored+(isRestFloor()?2:5);
   return clamp(authored+dynamic+siegeOffset,Math.max(2,authored-2),upper);
  }
@@ -17716,10 +17746,7 @@ function plannedEnemyCount(){
  const biomePressure=(currentBiomeKey()==="furnace"||currentBiomeKey()==="crypt")?1:0;
  const pulse=floorPulseValue("enemyBonus");
  const cap=floorPlan().boss?20:28;
- return Math.max(3,Math.min(
-  cap+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+Math.max(0,floorForkValue("enemyBonus"))+Math.max(0,deepCycleValue("enemyBonus"))+Math.max(0,pulse),
-  base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+floorForkValue("enemyBonus")+deepCycleValue("enemyBonus")+pulse+siegeOffset
- ));
+ return Math.max(3,Math.min(cap+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+Math.max(0,floorForkValue("enemyBonus"))+Math.max(0,deepCycleValue("enemyBonus"))+Math.max(0,pulse),base+biomePressure+(isRestFloor()?-4:0)+(floorPlan().boss?-3:0)+routeValue("enemyBonus")+resonanceBonus("enemyCount")+reactionValue("enemyBonus")+floorForkValue("enemyBonus")+deepCycleValue("enemyBonus")+pulse+siegeOffset));
 }
 function floorLivingDensityLabel(count=plannedEnemyCount()){
  if(state.floor%5===0)return`番人層・通常個体 ${count}`;
@@ -17728,10 +17755,19 @@ function floorLivingDensityLabel(count=plannedEnemyCount()){
  return`通常個体 ${count}`;
 }
 function plannedTrapCount(){
+ if(CHAMBER_MODE){
+  if(state.floor<=1)return 0;
+  const base=isRestFloor()?0:1+Math.floor(state.floor/8);
+  return clamp(base+Math.sign(routeValue("trapBonus")+floorForkValue("trapBonus")),0,3);
+ }
  const base=isRestFloor()?1:Math.min(10,2+Math.floor(state.floor/3));
  return clamp(base+routeValue("trapBonus")+reactionValue("trapBonus")+floorForkValue("trapBonus")+floorPulseValue("trapBonus"),0,16);
 }
 function plannedItemCount(){
+ if(CHAMBER_MODE){
+  const base=state.floor===1?3:2+(isRestFloor()?1:0)+(state.floor>=10?1:0);
+  return clamp(base+Math.sign(routeValue("itemBonus")+reactionValue("itemBonus")),2,4);
+ }
  const normal=4+Math.floor(state.floor/2)+(mutation()?.itemBonus||0)+(hasTalent("scavenger")?1:0)+(runGrowthHas("explore",4)?1:0)+routeValue("itemBonus")+reactionValue("itemBonus")+floorForkValue("itemBonus")+deepCycleValue("itemBonus")+recoveryAssistValue("itemBonus")+floorPulseValue("itemBonus");
  return state.floor===1?7:Math.max(2,normal);
 }
@@ -17976,6 +18012,247 @@ function bindFloorGoalToggle(){
 }
 bindFloorGoalToggle();
 
+const CHAMBER_PRESSURE_WARN_PULSE=90;
+const CHAMBER_PRESSURE_STAGE2_PULSE=180;
+const CHAMBER_CONTROL_CAPTURE_TICKS=3;
+const CHAMBER_ROUTE_ROOM_COUNT=8;
+const chamberNodeData={
+ entry:{label:"侵入口",tone:"",desc:"最初の戦闘区画。地形と制圧点の読み方を確認する。",risk:"標準戦闘"},
+ battle:{label:"交戦区",tone:"",desc:"敵数は標準。制圧点を利用すると次区画へ早く抜けられる。",risk:"敵 3〜4"},
+ cache:{label:"遺物庫",tone:"reward",desc:"戦闘は軽め。装備や物資が多いが、部屋中央へ踏み込む必要がある。",risk:"戦利品↑"},
+ shrine:{label:"灯火礼拝堂",tone:"arcane",desc:"祭壇と灯火が残る区画。回復・探索資源を得やすい。",risk:"補給 / 祭壇"},
+ hazard:{label:"崩落回廊",tone:"danger",desc:"穴と火床が混じる。押し出しで敵を落とすと戦闘を短縮できる。",risk:"穴 / 火床"},
+ elite:{label:"番兵区画",tone:"danger",desc:"変異個体が待つ代わりに高品質装備が出やすい。",risk:"エリート"},
+ supply:{label:"物資回廊",tone:"reward",desc:"敵が少なく、灯油・食料・薬を拾いやすい立て直し区画。",risk:"物資↑"},
+ final:{label:"階層門",tone:"danger",desc:"この階の最終区画。階層目標を満たして出口を開く。",risk:"最終戦"}
+};
+function chamberInteriorCell(x,y){return x>=1&&x<=COLS-2&&y>=1&&y<=ROWS-2}
+function initChamberRoute(){
+ state.chamberRoute={floor:state.floor,index:0,total:CHAMBER_ROUTE_ROOM_COUNT,current:"entry",history:["entry"],pendingOptions:null,completedRooms:0};
+ return state.chamberRoute;
+}
+function ensureChamberRoute(){
+ if(!CHAMBER_MODE)return null;
+ if(!state.chamberRoute||state.chamberRoute.floor!==state.floor||!Number.isFinite(state.chamberRoute.index))return initChamberRoute();
+ state.chamberRoute.total=Math.max(2,state.chamberRoute.total||CHAMBER_ROUTE_ROOM_COUNT);
+ state.chamberRoute.index=clamp(Math.floor(state.chamberRoute.index||0),0,state.chamberRoute.total-1);
+ if(!chamberNodeData[state.chamberRoute.current])state.chamberRoute.current=state.chamberRoute.index===0?"entry":state.chamberRoute.index>=state.chamberRoute.total-1?"final":"battle";
+ if(!Array.isArray(state.chamberRoute.history))state.chamberRoute.history=[state.chamberRoute.current];
+ return state.chamberRoute;
+}
+function chamberRouteFinal(){const route=ensureChamberRoute();return !route||route.index>=route.total-1}
+function chamberCurrentNode(){const route=ensureChamberRoute();return chamberNodeData[route?.current]||chamberNodeData.entry}
+function chamberRouteProgressText(){const route=ensureChamberRoute();return route?`${route.index+1}/${route.total}`:"1/1"}
+function chamberPressureDepth(){
+ if(!CHAMBER_MODE||!realtimeCombatActive())return 0;
+ if(!Number.isFinite(state.chamberControl?.startedPulse))state.chamberControl.startedPulse=realtimePulse();
+ const start=state.chamberControl.startedPulse;
+ const elapsed=Math.max(0,realtimePulse()-start);
+ if(elapsed>=CHAMBER_PRESSURE_STAGE2_PULSE)return 2;
+ if(elapsed>=CHAMBER_PRESSURE_WARN_PULSE)return 1;
+ return 0;
+}
+function chamberPressureCell(x,y,depth=chamberPressureDepth()){
+ if(!CHAMBER_MODE||depth<=0||!chamberInteriorCell(x,y))return false;
+ const edge=Math.min(x-1,(COLS-2)-x,y-1,(ROWS-2)-y);
+ return edge<depth;
+}
+function chamberLayoutCells(layout){
+ const cells=[];
+ const add=(x,y)=>{if(chamberInteriorCell(x,y)&&!(x===4&&[1,2,10,11].includes(y)))cells.push({x,y})};
+ if(layout===0){[[2,5],[6,5],[2,7],[6,7]].forEach(([x,y])=>add(x,y));}
+ else if(layout===1){[[4,5],[4,7],[2,6],[6,6]].forEach(([x,y])=>add(x,y));}
+ else if(layout===2){[[3,4],[3,5],[5,7],[5,8],[2,8],[6,4]].forEach(([x,y])=>add(x,y));}
+ else if(layout===3){[[3,5],[5,5],[3,7],[5,7],[4,4],[4,8]].forEach(([x,y])=>add(x,y));}
+ else {[[2,4],[3,5],[6,8],[5,7],[6,4],[2,8]].forEach(([x,y])=>add(x,y));}
+ return cells;
+}
+function buildTacticalChamber(){
+ const route=ensureChamberRoute();
+ state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
+ for(let y=1;y<ROWS-1;y++)for(let x=1;x<COLS-1;x++)state.map[y][x]=1;
+ const layout=(state.floor+(route?.index||0)*2+Math.floor(rng()*5))%5;
+ for(const cell of chamberLayoutCells(layout))state.map[cell.y][cell.x]=0;
+ for(let y=1;y<ROWS-1;y++)state.map[y][4]=1;
+ state.rooms=[{x:1,y:1,w:COLS-2,h:ROWS-2,cx:4,cy:6,large:true,chamber:true}];
+ const entrySide=((state.floor+(route?.index||0))%2===0)?-1:1;
+ state.player=entrySide>0?{x:4,y:10}:{x:4,y:2};
+ state.stairs=entrySide>0?{x:4,y:2}:{x:4,y:10};
+ const controlPool=entrySide>0
+  ?[{x:2,y:4},{x:6,y:4},{x:4,y:7}]
+  :[{x:2,y:8},{x:6,y:8},{x:4,y:5}];
+ const points=controlPool.filter(p=>tile(p.x,p.y)===1&&!(p.x===state.player.x&&p.y===state.player.y)&&!(p.x===state.stairs.x&&p.y===state.stairs.y));
+ state.chamberControl={layout,points:points.map((p,i)=>({...p,id:`c${state.floor}-${route?.index||0}-${i}`,captured:false,progress:0})),controlled:false,lastPressureDepth:0,startedPulse:realtimePulse()};
+ state.chamberHazards=[];
+}
+function chamberLiveEnemies(){return(state.enemies||[]).filter(e=>e&&e.hp>0&&!e.encounterDormant)}
+function chamberSegmentCleared(){
+ if(!CHAMBER_MODE)return true;
+ if(chamberRouteFinal()&&floorPlan().boss&&!state.bossDefeated)return false;
+ return chamberLiveEnemies().length===0||!!state.chamberControl?.controlled;
+}
+function chamberEnemyBudget(nodeId=ensureChamberRoute()?.current||"entry",fallback=plannedEnemyCount()){
+ const base={entry:2,battle:3,cache:2,shrine:1,hazard:2,elite:2,supply:1,final:3}[nodeId]??fallback;
+ return clamp(base+(state.floor>=12&&["battle","elite","final"].includes(nodeId)?1:0),1,5);
+}
+function chamberItemBudget(nodeId=ensureChamberRoute()?.current||"entry",fallback=plannedItemCount()){
+ return clamp(({entry:2,battle:1,cache:4,shrine:2,hazard:1,elite:2,supply:4,final:2}[nodeId]??fallback),0,5);
+}
+function chamberTrapBudget(nodeId=ensureChamberRoute()?.current||"entry",fallback=plannedTrapCount()){
+ return clamp(({entry:0,battle:1,cache:1,shrine:0,hazard:2,elite:1,supply:0,final:1}[nodeId]??fallback),0,3);
+}
+function forceChamberElite(enemy){
+ if(!enemy||enemy.boss||enemy.elite)return enemy;
+ const pool=eliteMutationPoolFor(enemy);const affix=pool.length?choice(pool):"brutal";
+ enemy.elite=affix;const data=eliteMutationData[affix];if(data?.prefix)enemy.name=data.prefix+enemy.name;applyEliteMutationEffect(enemy,affix);enemy.xp+=5;return enemy;
+}
+function chamberHazardAt(x,y){return(state.chamberHazards||[]).find(h=>h.x===x&&h.y===y)||null}
+function chamberHazardCellAvailable(x,y){
+ if(!chamberInteriorCell(x,y)||tile(x,y)!==1)return false;
+ if((x===state.player.x&&y===state.player.y)||(x===state.stairs.x&&y===state.stairs.y))return false;
+ if((state.chamberControl?.points||[]).some(p=>p.x===x&&p.y===y))return false;
+ if((state.chamberHazards||[]).some(h=>h.x===x&&h.y===y))return false;
+ return true;
+}
+function addChamberHazard(type,count=1){
+ state.chamberHazards=state.chamberHazards||[];
+ for(let i=0;i<count;i++){
+  let point=null;
+  for(let tries=0;tries<100;tries++){const x=rint(1,COLS-2),y=rint(2,ROWS-3);if(chamberHazardCellAvailable(x,y)){point={x,y};break}}
+  if(point)state.chamberHazards.push({...point,type,id:`h${state.floor}-${ensureChamberRoute()?.index||0}-${state.chamberHazards.length}`});
+ }
+}
+function populateChamberHazards(nodeId=ensureChamberRoute()?.current||"entry"){
+ state.chamberHazards=[];
+ if(nodeId==="hazard"){addChamberHazard("pit",2);addChamberHazard("fire",2)}
+ else if(nodeId==="elite"){addChamberHazard("fire",1)}
+ else if(nodeId==="final"&&state.floor>=10){addChamberHazard("pit",1)}
+}
+function nearestSafeChamberCell(fromX,fromY){
+ const cells=[];for(let y=1;y<ROWS-1;y++)for(let x=1;x<COLS-1;x++)if(tile(x,y)===1&&!chamberHazardAt(x,y)&&!enemyAt(x,y))cells.push({x,y,d:Math.abs(x-fromX)+Math.abs(y-fromY)});
+ cells.sort((a,b)=>a.d-b.d);return cells[0]||{x:4,y:6};
+}
+function triggerChamberHeroHazard(prevX,prevY){
+ if(!CHAMBER_MODE)return false;const h=chamberHazardAt(state.player.x,state.player.y);if(!h)return false;
+ if(h.type==="fire"){
+  const dmg=Math.max(1,Math.ceil(state.hero.maxHp*.07));state.hero.hp=Math.max(1,state.hero.hp-dmg);spawnHeroEffect?.("hurt");addLog(`火床を踏み、${dmg}ダメージ。`);showCombatToast("FIRE FLOOR",`HP -${dmg}`,"warning");return true;
+ }
+ if(h.type==="pit"){
+  const dmg=Math.max(2,Math.ceil(state.hero.maxHp*.16));state.hero.hp=Math.max(1,state.hero.hp-dmg);const safe=(inside(prevX,prevY)&&tile(prevX,prevY)===1&&!chamberHazardAt(prevX,prevY))?{x:prevX,y:prevY}:nearestSafeChamberCell(state.player.x,state.player.y);state.player={x:safe.x,y:safe.y};spawnHeroEffect?.("hurt");addLog(`崩落穴へ落ちかけ、${dmg}ダメージを受けて縁へ戻った。`);showCombatToast("PIT",`HP -${dmg}・押し戻し`,"warning");return true;
+ }
+ return false;
+}
+function chamberPushEnemy(enemy,dx,dy,steps=1){
+ if(!CHAMBER_MODE||!enemy||enemy.boss||enemy.echoGuard||!state.enemies.includes(enemy))return false;
+ let moved=false;
+ for(let step=0;step<steps;step++){
+  const nx=enemy.x+Math.sign(dx),ny=enemy.y+Math.sign(dy),hazard=chamberHazardAt(nx,ny),other=enemyAt(nx,ny);
+  if(hazard?.type==="pit"){
+   addLog(`${enemy.name}を崩落穴へ突き落とした！`);spawnTileEffect(nx,ny,"bomb",16);enemy.x=nx;enemy.y=ny;enemy.hp=0;defeatEnemy(enemy);return true;
+  }
+  if(tile(nx,ny)!==1){damageEnemy(enemy,2,"壁衝突");spawnTileEffect(enemy.x,enemy.y,"hit",12);return moved}
+  if(other&&other!==enemy){damageEnemy(enemy,2,"衝突");if(state.enemies.includes(other))damageEnemy(other,2,"衝突");return moved}
+  if(nx===state.player.x&&ny===state.player.y)return moved;
+  enemy.x=nx;enemy.y=ny;moved=true;
+  if(hazard?.type==="fire"){
+   enemy.status=enemy.status||{};enemy.status.burning=Math.max(enemy.status.burning||0,3);damageEnemy(enemy,2,"火床");addLog(`${enemy.name}を火床へ押し込んだ。`);return true;
+  }
+ }
+ return moved;
+}
+function chamberNodeOptionPool(){
+ const route=ensureChamberRoute();if(!route)return[];
+ if(route.index>=route.total-2)return["final"];
+ const last=route.current;let pool=["battle","cache","shrine","hazard","elite","supply"].filter(id=>id!==last);
+ if(route.index<2)pool=pool.filter(id=>id!=="elite");
+ const a=choice(pool);pool=pool.filter(id=>id!==a);const b=choice(pool);return[a,b];
+}
+function chamberNodeOptions(){
+ const route=ensureChamberRoute();if(!route)return[];
+ if(!Array.isArray(route.pendingOptions)||!route.pendingOptions.length)route.pendingOptions=chamberNodeOptionPool();
+ return route.pendingOptions;
+}
+function closeChamberNodeChoice(){const overlay=$("chamberNodeOverlay");if(overlay)overlay.classList.add("hidden")}
+function openChamberNodeChoice(){
+ const route=ensureChamberRoute();if(!route||chamberRouteFinal())return false;
+ if(!chamberSegmentCleared()){showCombatToast("区画門は封鎖中","敵を排除するか制圧点を全確保","miss");addLog("区画門は封鎖されている。敵を排除するかROOM CONTROLを完了する必要がある。");return false}
+ const options=chamberNodeOptions();
+ $("chamberNodeTitle").textContent=`第${state.floor}層・次の区画`;
+ $("chamberNodeBody").innerHTML=`<div class="chamberNodeLead"><b>${chamberCurrentNode().label}</b>を突破した。次の区画を選ぶ。<br>この階は ${route.total} 区画構成。最終区画で階層目標と出口を判定する。</div><div class="chamberNodeProgress">${Array.from({length:route.total},(_,i)=>`<i class="${i<route.index?"done":i===route.index?"current":""}"></i>`).join("")}</div>`;
+ $("chamberNodeChoices").innerHTML=options.map(id=>{const data=chamberNodeData[id];return`<button type="button" class="chamberNodeChoice ${data.tone||""}" data-chamber-node="${id}"><b>${data.label}</b><span>${data.desc}</span><small>${data.risk}</small></button>`}).join("");
+ $("chamberNodeChoices").querySelectorAll("[data-chamber-node]").forEach(button=>button.onclick=()=>chooseChamberNode(button.dataset.chamberNode));
+ $("chamberNodeOverlay").classList.remove("hidden");return true;
+}
+function spawnChamberEnemy(index=0,forceElite=false){
+ const p=randomFloorCell(3);if(!p)return null;const type=chooseLivingEnemyType();const base={skeleton:{name:"盾骸兵",hp:14,atk:4,def:3,xp:7},warg:{name:"穴獣",hp:9,atk:5,def:0,xp:6},mage:{name:"骨術師",hp:8,atk:6,def:0,xp:8},bomber:{name:"爆ぜ虫",hp:6,atk:8,def:0,xp:7},priest:{name:"墓鐘司祭",hp:10,atk:5,def:1,xp:10},charger:{name:"穿ち獣",hp:12,atk:7,def:1,xp:9},leech:{name:"灯喰らい",hp:9,atk:6,def:1,xp:10}}[type];
+ const enemyLevel=rollEnemyLevel(false);const enemy={id:`c-e-${state.floor}-${ensureChamberRoute()?.index||0}-${index}-${Math.floor(rng()*9999)}`,x:p.x,y:p.y,type,name:base.name,level:enemyLevel,hp:base.hp+enemyLevel*3,maxHp:base.hp+enemyLevel*3,atk:base.atk+Math.floor(enemyLevel*.8)+(mutation()?.enemyAtk||0)+routeValue("enemyAtk"),def:base.def+Math.floor(enemyLevel/5),xp:base.xp+enemyLevel*2,intent:null,stagger:0,guarding:false,alert:0,lastSeen:null,faction:enemyFaction(type),home:{x:p.x,y:p.y},patrol:0,rivalId:null};
+ applyEliteMutation(enemy);if(forceElite)forceChamberElite(enemy);state.enemies.push(enemy);return enemy;
+}
+function spawnChamberItem(index=0,nodeId=ensureChamberRoute()?.current||"entry"){
+ const p=randomFloorCell(2);if(!p)return;
+ let type="gear";
+ if(nodeId==="supply")type=choice(["food","potion","oil","oil","bomb"]);
+ else if(nodeId==="shrine")type=choice(["potion","oil","identify"]);
+ else if(nodeId==="cache")type=rng()<.62?"gear":choice(["identify","purify","potion"]);
+ else type=rng()<.42?"gear":choice(["food","potion","oil","bomb"]);
+ if(type==="gear")state.items.push({x:p.x,y:p.y,type:"gear",gear:rollGear()});
+ else state.items.push({x:p.x,y:p.y,type,name:{food:"乾燥肉",potion:"治癒薬",oil:"灯油",bomb:"火炎壺",identify:"鑑定紙片",purify:"解呪の灰"}[type]||type});
+}
+function populateChamberNodeSpecials(nodeId=ensureChamberRoute()?.current||"entry"){
+ if(nodeId==="shrine"){
+  const p=randomFloorCell(2);if(p)state.specialTiles.push({x:p.x,y:p.y,type:"shrine",used:false});
+ }
+ if(nodeId==="cache"){
+  const p=randomFloorCell(2);if(p){state.specialTiles.push({x:p.x,y:p.y,type:"treasure",used:false});state.items.push({x:p.x,y:p.y,type:"gear",gear:rollGear(floorTargetLevel())})}
+ }
+ if(nodeId==="hazard"||nodeId==="elite"){
+  const p=randomFloorCell(2);if(p)state.environment.push({x:p.x,y:p.y,type:"brazier",active:true,burning:true,timer:0});
+ }
+}
+function resetChamberLocalState(){
+ state.visual=state.visual||{};state.visual.moveFrames=0;state.visual.attackFrames=0;state.visual.damageFrames=0;state.visual.flash=0;state.visual.shake=0;state.visual.hitX=null;state.visual.hitY=null;state.visual.effects=[];
+ state.enemies=[];state.items=[];state.remains=[];state.traps=[];state.specialTiles=[];state.environment=[];state.terrainFeatures=[];state.terrainKnowledge={};state.secretWalls=[];state.shortcuts=[];state.events=[];state.roomEncounters=[];state.tacticalPacks=[];state.visited={};state.visible={};state.chamberHazards=[];
+}
+function enterChamberSegment(nodeId){
+ const route=ensureChamberRoute();if(!route)return false;
+ route.index=Math.min(route.total-1,route.index+1);route.current=route.index>=route.total-1?"final":nodeId;route.history.push(route.current);route.pendingOptions=null;route.completedRooms=Math.max(route.completedRooms||0,route.index);
+ resetChamberLocalState();buildTacticalChamber();populateChamberHazards(route.current);
+ const count=chamberEnemyBudget(route.current,plannedEnemyCount());for(let i=0;i<count;i++)spawnChamberEnemy(i,route.current==="elite"&&i===0);
+ const items=chamberItemBudget(route.current,plannedItemCount());for(let i=0;i<items;i++)spawnChamberItem(i,route.current);
+ for(let i=0;i<chamberTrapBudget(route.current,plannedTrapCount());i++){const p=randomFloorCell(2);if(p)state.traps.push({x:p.x,y:p.y,revealed:false,spent:false})}
+ populateChamberNodeSpecials(route.current);addEnvironmentObjects();addTacticalTerrain();
+ if(route.current==="final"){
+  prepareRouteFinaleFloor();if(floorPlan().boss)spawnFloorBoss();ensureBossProgressIntegrity("chamber-final");
+ }
+ updateVision();updateFloorObjective();renderFloorGoal();showFloorBanner();saveGame();render();
+ showCombatToast(route.current==="final"?"FINAL CHAMBER":"CHAMBER ROUTE",`${route.index+1}/${route.total}・${chamberCurrentNode().label}`,route.current==="elite"||route.current==="final"?"warning":"objective");
+ return true;
+}
+function chooseChamberNode(nodeId){
+ if(!chamberNodeData[nodeId])return false;closeChamberNodeChoice();return enterChamberSegment(nodeId);
+}
+function updateChamberControl(){
+ if(!CHAMBER_MODE||!state?.chamberControl)return;
+ const chamber=state.chamberControl;
+ for(const point of chamber.points||[]){
+  if(point.captured)continue;
+  const contested=state.enemies.some(e=>e.x===point.x&&e.y===point.y);
+  const onPoint=state.player.x===point.x&&state.player.y===point.y;
+  if(contested){point.progress=Math.max(0,(point.progress||0)-1);continue}
+  if(onPoint){point.progress=(point.progress||0)+1;if(point.progress>=CHAMBER_CONTROL_CAPTURE_TICKS){point.captured=true;point.progress=CHAMBER_CONTROL_CAPTURE_TICKS;const before=state.hero.stamina||0;recoverStamina(2);addLog(`制圧点を確保した。気力 ${before}→${state.hero.stamina}。`);showCombatToast("制圧点 確保","区画門の封鎖解除へ前進","objective")}}
+  else point.progress=Math.max(0,(point.progress||0)-1);
+ }
+ const all=(chamber.points||[]).length>0&&(chamber.points||[]).every(p=>p.captured);
+ if(all&&!chamber.controlled){chamber.controlled=true;addLog("戦場を完全制圧した。区画門を開けられる。");showCombatToast("ROOM CONTROL","全制圧・区画門解放","critical")}
+}
+function applyChamberPressure(){
+ if(!CHAMBER_MODE||!state?.chamberControl)return;const depth=chamberPressureDepth();
+ if(depth!==state.chamberControl.lastPressureDepth){state.chamberControl.lastPressureDepth=depth;if(depth===1){addLog("深淵圧力：外周から根が侵食を始めた。敵を押し込めば足止めできる。");showCombatToast("深淵圧力 I","外周1マスが侵食","warning")}if(depth===2){addLog("深淵圧力：侵食が二層目へ到達した。松明なら圧力を一段抑えられる。");showCombatToast("深淵圧力 II","安全域がさらに縮小","warning")}}
+ if(depth<=0)return;let heroDepth=depth;if(state.light?.on&&state.light.fuel>0&&state.light.type==="torch")heroDepth=Math.max(0,depth-1);
+ if(chamberPressureCell(state.player.x,state.player.y,heroDepth)){if((state.hero.stamina||0)>0){state.hero.stamina=Math.max(0,state.hero.stamina-1);pulseResourceBar?.("stamina-loss",240)}else{state.hero.hp=Math.max(1,state.hero.hp-1);spawnHeroEffect?.("hurt")}}
+ for(const enemy of state.enemies||[]){if(enemy.boss||enemy.echoGuard)continue;if(chamberPressureCell(enemy.x,enemy.y,depth))applyRealtimeEnemyControl(enemy,"root",1)}
+}
+
 function generateFloor(){
  normalizeAbyssForkForCurrentFloor();
  maintainRoutePlanForCurrentFloor(true);
@@ -17985,57 +18262,11 @@ function generateFloor(){
  prepareFloorPulse();
  prepareRealtimePressureWave();
  prepareRealtimeBroadcastIncident();
- state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
- state.rooms=[];
-
- // 深度に応じて迷宮規模を拡張する。
- const targetRooms=Math.min(18,10+Math.floor(state.floor/3));
- const maxRoomAttempts=260;
- let attempts=0;
- while(state.rooms.length<targetRooms && attempts<maxRoomAttempts){
-  attempts++;
-  const large=rng()<.18;
-  const w=large?rint(7,10):rint(4,7);
-  const h=large?rint(6,9):rint(4,7);
-  const x=rint(1,COLS-w-2),y=rint(1,ROWS-h-2);
-  const room={x,y,w,h,cx:x+Math.floor(w/2),cy:y+Math.floor(h/2),large};
-  const overlaps=state.rooms.some(r=>x<r.x+r.w+2&&x+w+2>r.x&&y<r.y+r.h+2&&y+h+2>r.y);
-  if(overlaps)continue;
-  carveRoom(state.map,x,y,w,h);
-  state.rooms.push(room);
- }
-
- // 全部屋を最近傍接続し、追加接続でループを作る。
- for(let i=1;i<state.rooms.length;i++){
-  const room=state.rooms[i];
-  let nearest=state.rooms[0],best=9999;
-  for(let j=0;j<i;j++){
-   const other=state.rooms[j];
-   const d=Math.abs(room.cx-other.cx)+Math.abs(room.cy-other.cy);
-   if(d<best){best=d;nearest=other}
-  }
-  carveLine(state.map,{x:nearest.cx,y:nearest.cy},{x:room.cx,y:room.cy});
- }
- const extraLinks=Math.max(3,Math.floor(state.rooms.length/3));
- for(let i=0;i<extraLinks;i++){
-  const a=choice(state.rooms),b=choice(state.rooms);
-  if(a!==b)carveLine(state.map,{x:a.cx,y:a.cy},{x:b.cx,y:b.cy});
- }
-
- if(state.rooms.length<2){
-  state.map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
-  carveRoom(state.map,2,2,7,7);
-  carveRoom(state.map,COLS-10,ROWS-10,7,7);
-  carveLine(state.map,{x:5,y:5},{x:COLS-7,y:ROWS-7});
-  state.rooms=[
-   {x:2,y:2,w:7,h:7,cx:5,cy:5},
-   {x:COLS-10,y:ROWS-10,w:7,h:7,cx:COLS-7,cy:ROWS-7}
-  ];
- }
- const start=state.rooms[0],end=state.rooms[state.rooms.length-1];
- state.player={x:start.cx,y:start.cy};state.stairs={x:end.cx,y:end.cy};
+ initChamberRoute();
+ buildTacticalChamber();
  state.visual=state.visual||{};state.visual.moveFrames=0;state.visual.attackFrames=0;state.visual.damageFrames=0;state.visual.flash=0;state.visual.shake=0;state.visual.hitX=null;state.visual.hitY=null;state.visual.effects=[];state.enemies=[];state.items=[];state.remains=[];state.ecology={spawnClock:0,totalRespawns:0,killsThisFloor:0};state.traps=[];state.specialTiles=[];state.environment=[];state.terrainFeatures=[];state.terrainKnowledge={};state.secretWalls=[];state.shortcuts=[];state.events=[];state.roomEncounters=[];state.visited={};state.visible={};state.bossDefeated=false;state.wardenAfterglow=null;state.wardenMastery=null;state.floorStats=null;state.floorObjective=null;state.floorPhenomenon=null;
- const enemyCount=plannedEnemyCount();
+ if(CHAMBER_MODE)populateChamberHazards(ensureChamberRoute()?.current);
+ const enemyCount=CHAMBER_MODE?chamberEnemyBudget(ensureChamberRoute()?.current,plannedEnemyCount()):plannedEnemyCount();
  const densityStats=ensureRunStats();
  densityStats.initialEnemyPopulation=(densityStats.initialEnemyPopulation||0)+enemyCount;
  densityStats.peakInitialFloorPopulation=Math.max(densityStats.peakInitialFloorPopulation||0,enemyCount);
@@ -18065,7 +18296,7 @@ function generateFloor(){
   state.enemies.push(enemy);
  }
  armRiseAdaptationEnemy();
- const itemCount=plannedItemCount();
+ const itemCount=CHAMBER_MODE?chamberItemBudget(ensureChamberRoute()?.current,plannedItemCount()):plannedItemCount();
  for(let i=0;i<itemCount;i++){
   const p=randomFloorCell(3);
   if(!p)break;
@@ -18090,11 +18321,12 @@ function generateFloor(){
   else if(itemRoll<.53)state.items.push({x:p.x,y:p.y,type:"oil",name:"灯油"});
   else state.items.push({x:p.x,y:p.y,type:"gear",gear:rollGear()});
  }
- for(let i=0;i<plannedTrapCount();i++){
+ for(let i=0;i<(CHAMBER_MODE?chamberTrapBudget(ensureChamberRoute()?.current,plannedTrapCount()):plannedTrapCount());i++){
   const p=randomFloorCell(3);
   if(!p)break;
   state.traps.push({x:p.x,y:p.y,revealed:false,spent:false});
  }
+ if(CHAMBER_MODE)populateChamberNodeSpecials(ensureChamberRoute()?.current);
  addSpecialRoom();
  addSecretsAndShortcuts();
  addFloorEvents();
@@ -18107,7 +18339,7 @@ function generateFloor(){
  applyFloorPacingRewards();
  prepareFloorPhenomenon();
  prepareRouteFinaleFloor();
- spawnFloorBoss();
+ if(!CHAMBER_MODE||chamberRouteFinal())spawnFloorBoss();
  ensureBossProgressIntegrity("generation");
  spawnNemesis();
  spawnDeathEchoFloor();
@@ -21073,9 +21305,10 @@ function weaponAttack(e,dx,dy,distance){
  }
  if(wt==="spear"){
   spawnPlayerAttackCells(normalizeCells([{x:e.x,y:e.y},{x:e.x+dx,y:e.y+dy}]),"player_zone",16);
-  damageEnemy(e,Math.round(base*.92),label||"刺突");
   const behind=enemyAt(e.x+dx,e.y+dy);
-  if(behind&&state.enemies.includes(behind))damageEnemy(behind,Math.max(1,Math.floor(base*.55)),"貫通");
+  damageEnemy(e,Math.round(base*.92),label||"刺突");
+  if(behind&&behind!==e&&state.enemies.includes(behind))damageEnemy(behind,Math.max(1,Math.floor(base*.55)),"貫通");
+  if(CHAMBER_MODE&&state.enemies.includes(e))chamberPushEnemy(e,dx,dy,1);
   return;
  }
  if(wt==="bow"){
@@ -21087,6 +21320,7 @@ function weaponAttack(e,dx,dy,distance){
  spawnPlayerAttackCells([{x:e.x,y:e.y}],"player_zone",14);
  const wasAlive=e.hp>0;
  damageEnemy(e,Math.round(base),label||"斬撃");
+ if(CHAMBER_MODE&&state.enemies.includes(e))chamberPushEnemy(e,dx,dy,1);
  if(wasAlive&&e.hp<=0&&hasTalent("bloodRush")){
   recoverStamina(2);
   addLog("勝ち筋を掴み、気力が戻った。");
@@ -21140,11 +21374,13 @@ function bomberExplosion(e){
 
 
 function floorEnemyCap(){
+ if(CHAMBER_MODE)return 8;
  const base=7+Math.floor(state.floor*1.6);
  const roomBonus=Math.floor((state.rooms?.length||8)/4);
  return Math.max(4,Math.min(30,base+roomBonus+resonanceBonus("enemyCount")+floorPulseValue("respawnBonus")));
 }
 function respawnBudget(){
+ if(CHAMBER_MODE)return 0;
  // 1階あたりの再出現総数。深層ほど多いが無限ではなく、五層周期でも呼吸する。
  return Math.max(1,Math.min(24,5+Math.floor(state.floor*.9)+resonanceBonus("respawns")+floorPulseValue("respawnBonus")));
 }
@@ -22526,6 +22762,7 @@ function chooseShortcutFromOverlap(){
 }
 
 function attemptStairDescent(dx=0,dy=0,nx=state.stairs.x,ny=state.stairs.y){
+ if(CHAMBER_MODE&&!chamberRouteFinal())return openChamberNodeChoice();
  ensureBossProgressIntegrity("stairs");
  updateFloorObjective();
 
@@ -22641,8 +22878,10 @@ function move(dx,dy){
  }
 
  startMoveAnim(dx,dy);sfx("step");gainTraining("endurance",1);
+ const prevX=state.player.x,prevY=state.player.y;
  state.player.x=nx;state.player.y=ny;state.lastAction="move";
  recordFloorStep();
+ if(CHAMBER_MODE)triggerChamberHeroHazard(prevX,prevY);
  revealNearbyTraps();pickup();triggerTrap();triggerSpecialTile();triggerEvent();useShortcutIfPresent();triggerRoomEncounterEntry();
  if(state.gameOver){render();return}
  endTurn();
@@ -22711,8 +22950,10 @@ function waitTurn(){
 function tryMoveEnemy(e,options){
  for(const [dx,dy] of options){
   const nx=e.x+dx,ny=e.y+dy;
-  if(tile(nx,ny)===1&&!enemyAt(nx,ny)&&!(nx===state.player.x&&ny===state.player.y)){
-   e.x=nx;e.y=ny;triggerEnemyTacticalTerrainEntry(e);return true;
+  if(tile(nx,ny)===1&&!enemyAt(nx,ny)&&!(nx===state.player.x&&ny===state.player.y)&&!(CHAMBER_MODE&&chamberHazardAt(nx,ny)?.type==="pit")){
+   e.x=nx;e.y=ny;
+   if(CHAMBER_MODE){const h=chamberHazardAt(nx,ny);if(h?.type==="pit"&&!e.boss&&!e.echoGuard){addLog(`${e.name}が崩落穴へ落ちた。`);e.hp=0;defeatEnemy(e);return true}if(h?.type==="fire"){e.status=e.status||{};e.status.burning=Math.max(e.status.burning||0,3)}}
+   triggerEnemyTacticalTerrainEntry(e);return true;
   }
  }
  return false;
@@ -22748,6 +22989,7 @@ function combatSideOccupancy(e,side){
 }
 function combatFormationCellSafe(e,x,y){
  if(tile(x,y)!==1||enemyAt(x,y)||(x===state.player.x&&y===state.player.y))return false;
+ if(CHAMBER_MODE&&chamberHazardAt(x,y)?.type==="pit")return false;
  const trap=activeTrapAt(x,y);
  if(trap?.revealed)return false;
  const env=envAt(x,y);
@@ -24867,7 +25109,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.30",
+  version:"4.32",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -25515,6 +25757,7 @@ function realtimeEnemyCadencePulses(enemy){
  if(enemy.boss){
   cadence=4;
  }
+ if(CHAMBER_MODE&&state?.chamberControl?.controlled&&!enemy.boss)cadence+=1;
  if(typeof eliteHas==="function"&&eliteHas(enemy,"swift")&&!enemy.boss)cadence=Math.max(2,cadence-1);
  return cadence;
 }
@@ -25662,6 +25905,8 @@ function realtimeWorldStep(now=realtimeNow()){
 
   // AIは150ms刻みだが、資源・状態・CDは平均約0.63秒の独立契約を維持する。
   if(state.turn%2===0&&!realtimeResourcePulse())return false;
+  updateChamberControl();
+  applyChamberPressure();
   applyLightUtility();
   updateStatuses();
   updateRemains();
@@ -25856,7 +26101,7 @@ function updateRealtimePrototypeUi(now=realtimeNow()){
  updateRealtimeBossUi(now);
 }
 
-function actionSceneClear(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("weaponArtOverlay").classList.contains("hidden")&&$("threatOverlay").classList.contains("hidden")&&$("actionConfirmOverlay").classList.contains("hidden")&&$("stairShortcutOverlay").classList.contains("hidden")&&$("returnConfirmOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("routeOverlay").classList.contains("hidden")&&$("forkOverlay").classList.contains("hidden")&&$("firstTwentyMilestoneOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("audioOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
+function actionSceneClear(){return state&&!state.gameOver&&!state.expeditionEnded&&$("titleOverlay").classList.contains("hidden")&&$("starterOverlay").classList.contains("hidden")&&$("eventOverlay").classList.contains("hidden")&&$("inspectOverlay").classList.contains("hidden")&&$("bondOverlay").classList.contains("hidden")&&$("adaptOverlay").classList.contains("hidden")&&$("researchOverlay").classList.contains("hidden")&&$("levelOverlay").classList.contains("hidden")&&$("inventoryOverlay").classList.contains("hidden")&&$("weaponArtOverlay").classList.contains("hidden")&&$("threatOverlay").classList.contains("hidden")&&$("actionConfirmOverlay").classList.contains("hidden")&&$("chamberNodeOverlay").classList.contains("hidden")&&$("stairShortcutOverlay").classList.contains("hidden")&&$("returnConfirmOverlay").classList.contains("hidden")&&$("lastStandOverlay").classList.contains("hidden")&&$("fieldSalvageOverlay").classList.contains("hidden")&&$("routeOverlay").classList.contains("hidden")&&$("forkOverlay").classList.contains("hidden")&&$("firstTwentyMilestoneOverlay").classList.contains("hidden")&&$("helpOverlay").classList.contains("hidden")&&$("audioOverlay").classList.contains("hidden")&&$("appearanceOverlay").classList.contains("hidden")}
 function canAct(){return actionSceneClear()&&!realtimeFloorIntroVisible()&&!realtimeGreedChestChanneling()&&realtimePlayerReady()}
 let saveTimer=null;
 let lastActiveSaveResult=null;
@@ -28119,12 +28364,12 @@ function drawWorldRelicLights(sx,sy,inView,t){
  };
 
  if(state?.stairs&&floorObjectiveComplete()&&inView(state.stairs.x,state.stairs.y)&&state.visible[key(state.stairs.x,state.stairs.y)]){
-  add(sx(state.stairs.x)+11,sy(state.stairs.y)+11,`rgba(255,211,117,${.10+.06*pulse})`,28);
+  add(sx(state.stairs.x)+TILE/2,sy(state.stairs.y)+TILE/2,`rgba(255,211,117,${.10+.06*pulse})`,CHAMBER_MODE?54:28);
  }
 
  for(const tileData of state.specialTiles||[]){
   if(tileData.used||!inView(tileData.x,tileData.y)||!state.visible[key(tileData.x,tileData.y)])continue;
-  const gx=sx(tileData.x)+11,gy=sy(tileData.y)+11;
+  const gx=sx(tileData.x)+TILE/2,gy=sy(tileData.y)+TILE/2;
   if(tileData.type==="shrine")add(gx,gy,`rgba(255,221,130,${.11+.05*pulse})`,25);
   else if(tileData.type==="treasure")add(gx,gy,`rgba(255,194,81,${.10+.05*pulse})`,23);
   else if(tileData.type==="greed_chest"&&!tileData.sealed)add(gx,gy,`rgba(255,91,70,${.11+.06*pulse})`,25);
@@ -28140,7 +28385,7 @@ function drawWorldRelicLights(sx,sy,inView,t){
    :item.type==="gear"&&(rarityOrder[item.gear?.rarity]||0)>=4
     ?`rgba(255,210,103,${.08+.05*pulse})`
     :`rgba(135,173,255,${.07+.04*pulse})`;
-  add(sx(item.x)+11,sy(item.y)+11,color,data.radius+10);
+  add(sx(item.x)+TILE/2,sy(item.y)+TILE/2,color,CHAMBER_MODE?Math.max(30,data.radius*2):data.radius+10);
  }
  ctx.restore();
 }
@@ -28161,6 +28406,228 @@ function drawHeroLanternBloom(sx,sy,t){
  ctx.fillStyle=glow;ctx.fillRect(x-radius,y-radius,radius*2,radius*2);
  ctx.restore();
 }
+function chamberPalette64(){
+ const biome=currentBiomeKey();
+ if(biome==="furnace")return{floor:"#21161a",floor2:"#38231f",wall:"#27171b",wall2:"#47251e",accent:"#d15b3f",moss:"#7d3e2f",glow:"#ff8750"};
+ if(biome==="frost")return{floor:"#121d25",floor2:"#1c3240",wall:"#14232e",wall2:"#294556",accent:"#75c7e9",moss:"#6d9eb1",glow:"#b5f1ff"};
+ if(biome==="fungal")return{floor:"#121b17",floor2:"#203027",wall:"#142019",wall2:"#2a3d2e",accent:"#79b969",moss:"#426f43",glow:"#a8f08b"};
+ if(biome==="crypt")return{floor:"#17141c",floor2:"#25202d",wall:"#19151e",wall2:"#312738",accent:"#9f8aac",moss:"#655a70",glow:"#d7c0e2"};
+ return{floor:"#12191a",floor2:"#202a26",wall:"#151b1b",wall2:"#29322e",accent:"#6c9a78",moss:"#526e50",glow:"#b3dab9"};
+}
+function drawFloorTile64(px,py,x,y,vis,t){
+ const p=chamberPalette64(),seed=visualTileSeed(x,y,81),pulse=(Math.sin(t*.045+x*.8+y*.35)+1)*.5;
+ ctx.fillStyle=vis?p.floor:"#08080c";ctx.fillRect(px,py,TILE,TILE);
+ // large stone slabs: 2px/4px geometry at native 64px, not scaled 22px art.
+ ctx.fillStyle=vis?p.floor2:"#0d0b11";ctx.globalAlpha=vis?.62:.28;
+ const split=30+((seed%3)-1)*4;
+ ctx.fillRect(px+2,py+2,TILE-4,split-4);
+ ctx.fillRect(px+2,py+split+2,TILE-4,TILE-split-4);
+ ctx.globalAlpha=1;
+ ctx.fillStyle="rgba(255,255,255,.045)";ctx.fillRect(px+2,py+2,TILE-4,2);ctx.fillRect(px+2,py+2,2,TILE-4);
+ ctx.fillStyle="rgba(0,0,0,.26)";ctx.fillRect(px+2,py+TILE-4,TILE-4,2);ctx.fillRect(px+TILE-4,py+2,2,TILE-4);
+ // slab seams
+ ctx.fillStyle="rgba(0,0,0,.24)";ctx.fillRect(px+4,py+split,TILE-8,2);
+ if(seed%2===0)ctx.fillRect(px+31,py+4,2,split-6);else ctx.fillRect(px+23,py+split+2,2,TILE-split-7);
+ // deterministic chips / cracks
+ ctx.strokeStyle=vis?"rgba(214,205,220,.18)":"rgba(80,74,88,.10)";ctx.lineWidth=1;
+ if(seed%3===0){ctx.beginPath();ctx.moveTo(px+11,py+17);ctx.lineTo(px+20,py+24);ctx.lineTo(px+17,py+34);ctx.lineTo(px+29,py+42);ctx.stroke()}
+ if(seed%5===0){ctx.beginPath();ctx.moveTo(px+47,py+9);ctx.lineTo(px+41,py+20);ctx.lineTo(px+49,py+27);ctx.stroke()}
+ ctx.fillStyle=vis?p.accent:"#211b27";ctx.globalAlpha=.16;
+ for(let i=0;i<3;i++){const dx=8+((seed>>(i*5))%46),dy=8+((seed>>(i*7+2))%46);ctx.fillRect(px+dx,py+dy,2,2)}
+ ctx.globalAlpha=1;
+ if(!vis)return;
+ const biome=currentBiomeKey();
+ if(biome==="frost"&&seed%4===0){ctx.strokeStyle=`rgba(154,229,255,${.28+.08*pulse})`;ctx.beginPath();ctx.moveTo(px+10,py+50);ctx.lineTo(px+25,py+32);ctx.lineTo(px+34,py+38);ctx.lineTo(px+51,py+18);ctx.stroke()}
+ else if(biome==="furnace"&&seed%4===0){ctx.strokeStyle=`rgba(255,100,61,${.28+.12*pulse})`;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+7,py+48);ctx.lineTo(px+19,py+39);ctx.lineTo(px+30,py+44);ctx.lineTo(px+51,py+19);ctx.stroke();ctx.fillStyle=`rgba(255,187,91,${.13+.08*pulse})`;ctx.fillRect(px+29,py+42,3,2)}
+ else if(biome==="fungal"&&seed%3===0){ctx.fillStyle=`rgba(129,205,111,${.28+.09*pulse})`;ctx.beginPath();ctx.arc(px+17,py+45,7,Math.PI,0);ctx.fill();ctx.fillRect(px+15,py+45,4,9);ctx.beginPath();ctx.arc(px+46,py+29,5,Math.PI,0);ctx.fill();ctx.fillRect(px+44,py+29,4,7)}
+ else if(biome==="crypt"&&seed%4===0){ctx.strokeStyle="rgba(181,158,199,.25)";ctx.strokeRect(px+16,py+17,31,31);ctx.beginPath();ctx.moveTo(px+32,py+20);ctx.lineTo(px+32,py+44);ctx.moveTo(px+21,py+32);ctx.lineTo(px+43,py+32);ctx.stroke()}
+ else if(seed%5===0){ctx.strokeStyle="rgba(111,151,90,.22)";ctx.beginPath();ctx.moveTo(px+5,py+52);ctx.bezierCurveTo(px+18,py+42,px+14,py+28,px+37,py+21);ctx.stroke()}
+}
+function drawWallTile64(px,py,x,y,vis,t){
+ const p=chamberPalette64(),seed=visualTileSeed(x,y,97);
+ ctx.fillStyle=vis?p.wall:"#09080d";ctx.fillRect(px,py,TILE,TILE);
+ // masonry blocks in 16px bands
+ for(let row=0;row<4;row++){
+  const yy=py+row*16,offset=(row%2)*8;
+  ctx.fillStyle=vis?(row%2?p.wall2:p.wall):"#0e0c12";ctx.fillRect(px,yy,TILE,15);
+  ctx.fillStyle="rgba(255,255,255,.035)";ctx.fillRect(px+2,yy+2,TILE-4,2);
+  ctx.fillStyle="rgba(0,0,0,.34)";ctx.fillRect(px,yy+14,TILE,2);
+  for(let xx=-offset;xx<TILE;xx+=24){ctx.fillRect(px+xx,yy,2,16)}
+ }
+ const north=tile(x,y-1)===1,south=tile(x,y+1)===1,west=tile(x-1,y)===1,east=tile(x+1,y)===1;
+ ctx.fillStyle=vis?p.accent:"#28202d";ctx.globalAlpha=vis?.46:.20;
+ if(north)ctx.fillRect(px,py,TILE,4);if(west)ctx.fillRect(px,py,4,TILE);
+ ctx.globalAlpha=vis?.24:.12;if(south)ctx.fillRect(px,py+TILE-4,TILE,4);if(east)ctx.fillRect(px+TILE-4,py,4,TILE);ctx.globalAlpha=1;
+ // heavy contact shadows for tactical readability
+ ctx.fillStyle="rgba(0,0,0,.43)";if(north)ctx.fillRect(px,py+4,TILE,5);if(west)ctx.fillRect(px+4,py,5,TILE);if(south)ctx.fillRect(px,py+TILE-9,TILE,5);if(east)ctx.fillRect(px+TILE-9,py,5,TILE);
+ if(vis&&seed%3===0){ctx.strokeStyle="rgba(215,202,219,.12)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+13,py+11);ctx.lineTo(px+20,py+21);ctx.lineTo(px+16,py+34);ctx.lineTo(px+29,py+44);ctx.stroke()}
+ if(vis&&seed%5===0){ctx.fillStyle=p.moss;ctx.globalAlpha=.24;ctx.fillRect(px+7,py+48,18,4);ctx.fillRect(px+11,py+52,5,7);ctx.globalAlpha=1}
+}
+function chamberActorDirection(){
+ const dir=realtimeCombatRuntime?.lastDir||[0,1];
+ if(Math.abs(dir[0])>Math.abs(dir[1]))return dir[0]<0?"left":"right";
+ return dir[1]<0?"up":"down";
+}
+function drawHeroSprite64(x,y,hurt,t){
+ const a=currentAppearance(),p=appearanceColor(),dir=chamberActorDirection(),light=explorerLanternVisual();
+ const bob=Math.round(Math.sin(t*.11)*1.4),cx=x+32,top=y+8+bob;
+ ctx.save();
+ // contact shadow
+ ctx.fillStyle="rgba(0,0,0,.42)";ctx.beginPath();ctx.ellipse(cx,y+55,19,6,0,0,Math.PI*2);ctx.fill();
+ // cloak silhouette
+ ctx.fillStyle=p.cloak;ctx.fillRect(cx-14,top+20,28,26);ctx.fillRect(cx-19,top+28,8,18);ctx.fillRect(cx+11,top+28,9,18);
+ ctx.fillStyle="#17131b";ctx.fillRect(cx-10,top+42,8,9);ctx.fillRect(cx+3,top+42,8,9);
+ ctx.fillStyle="#0b0a0e";ctx.fillRect(cx-11,top+49,9,4);ctx.fillRect(cx+3,top+49,9,4);
+ // torso layers / straps
+ ctx.fillStyle=hurt?"#d65b69":p.body;ctx.fillRect(cx-10,top+20,20,20);
+ ctx.fillStyle="#30262d";ctx.fillRect(cx-11,top+25,22,3);ctx.fillRect(cx-7,top+34,14,3);
+ ctx.strokeStyle="#9a7c62";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx-9,top+22);ctx.lineTo(cx+8,top+39);ctx.moveTo(cx+9,top+22);ctx.lineTo(cx-6,top+39);ctx.stroke();
+ ctx.fillStyle="#d7b06d";ctx.fillRect(cx-2,top+34,5,4);
+ // head design: actual pixel silhouette, no concept-only detail
+ const hooded=["hood","pilgrim","oracle","nomad","phantom","voidwalker"].includes(a.shape);
+ const masked=["mask","warden","shell","bone","saint","cathedral","eclipse","monarch"].includes(a.shape);
+ if(dir==="up"){
+  ctx.fillStyle=hooded?p.cloak:"#e7e5ed";ctx.fillRect(cx-10,top+4,20,16);ctx.fillRect(cx-13,top+8,5,11);ctx.fillRect(cx+8,top+8,5,11);
+  ctx.fillStyle="#23202a";ctx.fillRect(cx-7,top+16,14,4);
+ }else if(masked){
+  ctx.fillStyle="#eee7db";ctx.fillRect(cx-9,top+5,18,15);ctx.fillStyle="#1c1820";ctx.fillRect(cx-6,top+11,4,3);ctx.fillRect(cx+3,top+11,4,3);ctx.fillStyle=p.trim;ctx.fillRect(cx-2,top+7,5,2);
+ }else if(hooded){
+  ctx.fillStyle=p.cloak;ctx.fillRect(cx-11,top+3,22,16);ctx.fillStyle="#17131b";ctx.fillRect(cx-7,top+8,14,11);ctx.fillStyle=p.trim;ctx.fillRect(cx-4,top+12,8,2);
+ }else{
+  ctx.fillStyle="#e8e6ef";ctx.fillRect(cx-9,top+3,18,10);ctx.fillRect(cx-12,top+7,5,10);ctx.fillRect(cx+7,top+7,5,10);
+  ctx.fillStyle="#d7beb5";ctx.fillRect(cx-7,top+10,14,10);
+  if(dir==="left"||dir==="right"){
+   const eyeX=dir==="left"?cx-5:cx+3;ctx.fillStyle="#16131a";ctx.fillRect(eyeX,top+13,3,2);
+  }else{ctx.fillStyle="#16131a";ctx.fillRect(cx-5,top+13,3,2);ctx.fillRect(cx+3,top+13,3,2)}
+  ctx.fillStyle=p.trim;ctx.fillRect(cx-1,top+14,3,2);
+ }
+ // high collar
+ ctx.fillStyle="#211a23";ctx.fillRect(cx-11,top+18,22,5);ctx.fillStyle=p.trim;ctx.globalAlpha=.55;ctx.fillRect(cx-8,top+19,16,2);ctx.globalAlpha=1;
+ // lantern left
+ const lx=cx-23,ly=top+27;
+ if(state.light?.on&&state.light.fuel>0){ctx.globalCompositeOperation="screen";const glow=ctx.createRadialGradient(lx,ly,2,lx,ly,18);glow.addColorStop(0,light.glow);glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(lx-18,ly-18,36,36);ctx.globalCompositeOperation="source-over"}
+ ctx.strokeStyle="#9f8465";ctx.lineWidth=2;ctx.strokeRect(lx-5,ly-7,10,14);ctx.fillStyle="#211b20";ctx.fillRect(lx-4,ly-6,8,12);ctx.fillStyle=light.mid;ctx.fillRect(lx-2,ly-2,5,6);ctx.fillStyle=light.core;ctx.fillRect(lx,ly-1,2,3);ctx.beginPath();ctx.arc(lx,ly-8,5,Math.PI,0);ctx.stroke();
+ // weapon right
+ const kind=weaponType(),wx=cx+16,wy=top+24;ctx.lineWidth=2;
+ if(kind==="spear"){ctx.strokeStyle="#846b56";ctx.beginPath();ctx.moveTo(wx-2,wy-7);ctx.lineTo(wx+13,wy+27);ctx.stroke();ctx.fillStyle=p.trim;ctx.fillRect(wx+10,wy+22,5,8)}
+ else if(kind==="bow"){ctx.strokeStyle="#85664d";ctx.beginPath();ctx.moveTo(wx,wy-7);ctx.quadraticCurveTo(wx+15,wy+7,wx+1,wy+26);ctx.stroke();ctx.strokeStyle="#e1dde3";ctx.beginPath();ctx.moveTo(wx+1,wy-6);ctx.lineTo(wx+2,wy+25);ctx.stroke()}
+ else if(kind==="staff"){ctx.strokeStyle="#806a57";ctx.beginPath();ctx.moveTo(wx,wy-3);ctx.lineTo(wx+6,wy+28);ctx.stroke();ctx.fillStyle=p.trim;ctx.fillRect(wx-3,wy-9,10,9);ctx.fillStyle="#effcff";ctx.fillRect(wx,wy-6,4,4)}
+ else{ctx.strokeStyle="#d7dce4";ctx.beginPath();ctx.moveTo(wx,wy-5);ctx.lineTo(wx+10,wy+23);ctx.stroke();ctx.fillStyle="#7f6650";ctx.fillRect(wx-3,wy-2,9,3);ctx.fillStyle=p.trim;ctx.fillRect(wx+7,wy+17,3,7)}
+ // floating relic for magic/sigil-heavy builds
+ if(["star","moon","shard","mirror","sun","void","comet"].includes(a.sigil)||["oracle","saint","voidwalker"].includes(a.shape)){
+  const rx=cx+20,ry=top+8;ctx.strokeStyle=p.trim;ctx.lineWidth=2;ctx.strokeRect(rx-4,ry-4,8,8);ctx.fillStyle=p.trim;ctx.globalAlpha=.3;ctx.fillRect(rx-7,ry-7,14,14);ctx.globalAlpha=1;
+ }
+ ctx.restore();
+}
+function enemyAccent64(e){return e.realtimeRelicRunner?"#f5d566":e.echoGuard?"#75e2f0":e.nemesis?"#ff5874":(e.bossColor||eliteColor(e)||{skeleton:"#d7d6cd",warg:"#c66a73",mage:"#9e8be8",bomber:"#e7a557",priest:"#d4bce2",charger:"#c37a62",leech:"#78b17f",warden:"#e0ca64"}[e.type]||"#ddd")}
+function drawEnemySprite64(e,x,y,t){
+ const accent=enemyAccent64(e),pulse=(Math.sin(t*.12+e.x+e.y)+1)*.5,bob=Math.round(Math.sin(t*.09+e.x*.7+e.y)*1.2),cx=x+32,top=y+9+bob;
+ ctx.save();ctx.fillStyle="rgba(0,0,0,.38)";ctx.beginPath();ctx.ellipse(cx,y+55,e.boss?23:18,e.boss?7:5,0,0,Math.PI*2);ctx.fill();
+ if(e.type==="skeleton"){
+  ctx.fillStyle="#ebe8df";ctx.fillRect(cx-10,top+4,20,14);ctx.fillStyle="#27232a";ctx.fillRect(cx-6,top+9,4,4);ctx.fillRect(cx+3,top+9,4,4);ctx.fillStyle="#d4cbbc";ctx.fillRect(cx-4,top+18,8,5);
+  ctx.fillStyle=accent;ctx.fillRect(cx-13,top+23,26,23);ctx.fillStyle="#6f6274";ctx.fillRect(cx-18,top+24,7,23);ctx.fillStyle="#cfd4d7";ctx.fillRect(cx+12,top+27,7,6);
+  ctx.strokeStyle="#f1d78e";ctx.lineWidth=2;ctx.strokeRect(cx-14,top+22,28,26);
+ }else if(e.type==="warg"){
+  ctx.fillStyle=accent;ctx.fillRect(cx-18,top+24,36,18);ctx.fillRect(cx-12,top+12,25,16);ctx.fillStyle="#44252a";ctx.fillRect(cx-17,top+41,8,10);ctx.fillRect(cx+9,top+41,8,10);ctx.fillStyle="#f1c8bf";ctx.fillRect(cx+10,top+17,10,7);ctx.fillStyle="#211419";ctx.fillRect(cx+16,top+17,4,4);
+ }else if(e.type==="mage"){
+  ctx.fillStyle="#ded8e5";ctx.fillRect(cx-9,top+5,18,14);ctx.fillStyle="#3e334b";ctx.fillRect(cx-5,top+10,3,3);ctx.fillRect(cx+3,top+10,3,3);ctx.fillStyle=accent;ctx.fillRect(cx-15,top+20,30,30);ctx.fillStyle="#d0baff";ctx.fillRect(cx+13,top+17,5,30);
+  ctx.globalCompositeOperation="screen";const g=ctx.createRadialGradient(cx+18,top+13,2,cx+18,top+13,15);g.addColorStop(0,`rgba(150,226,255,${.45+.25*pulse})`);g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(cx+3,top-2,30,30);ctx.globalCompositeOperation="source-over";ctx.fillStyle="#dffbff";ctx.fillRect(cx+15,top+10,7,7);
+ }else if(e.type==="bomber"){
+  ctx.fillStyle=accent;ctx.beginPath();ctx.arc(cx,top+30,19,0,Math.PI*2);ctx.fill();ctx.fillStyle="#36272b";ctx.fillRect(cx-8,top+18,5,5);ctx.fillRect(cx+4,top+18,5,5);ctx.fillRect(cx-7,top+36,14,7);ctx.fillStyle="#ffd679";ctx.fillRect(cx-4,top+4,8,15);ctx.strokeStyle="#fff0af";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,top+4);ctx.lineTo(cx+10,top-2);ctx.stroke();
+ }else if(e.type==="priest"){
+  ctx.fillStyle="#e8e0ea";ctx.fillRect(cx-9,top+5,18,13);ctx.fillStyle="#33283b";ctx.fillRect(cx-5,top+10,4,3);ctx.fillRect(cx+3,top+10,4,3);ctx.fillStyle=accent;ctx.fillRect(cx-15,top+19,30,31);ctx.fillStyle="#caa6d8";ctx.fillRect(cx-4,top+21,8,25);ctx.strokeStyle="#f3d790";ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,top+7,14,Math.PI,0);ctx.stroke();ctx.fillRect(cx+16,top+14,4,31);
+ }else if(e.type==="charger"){
+  ctx.fillStyle=accent;ctx.fillRect(cx-20,top+24,40,20);ctx.fillRect(cx-12,top+12,25,16);ctx.fillStyle="#3e2726";ctx.fillRect(cx-18,top+42,8,10);ctx.fillRect(cx+10,top+42,8,10);ctx.fillStyle="#f0d4bb";ctx.beginPath();ctx.moveTo(cx+10,top+15);ctx.lineTo(cx+29,top+8);ctx.lineTo(cx+17,top+25);ctx.fill();ctx.fillStyle="#27191a";ctx.fillRect(cx+9,top+17,4,4);
+ }else if(e.type==="leech"){
+  ctx.fillStyle=accent;ctx.beginPath();ctx.ellipse(cx,top+30,18,25,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#15271c";ctx.beginPath();ctx.arc(cx,top+25,11,0,Math.PI*2);ctx.fill();ctx.fillStyle="#e8ffc0";ctx.fillRect(cx-6,top+22,3,5);ctx.fillRect(cx+4,top+22,3,5);ctx.strokeStyle="#afd985";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx-8,top+8);ctx.lineTo(cx-18,top-1);ctx.moveTo(cx+8,top+8);ctx.lineTo(cx+18,top-1);ctx.stroke();
+ }else{
+  const scale=e.boss?1.15:1;ctx.translate(cx,top+6);ctx.scale(scale,scale);ctx.translate(-cx,-top-6);
+  ctx.fillStyle=accent;ctx.fillRect(cx-18,top+8,36,42);ctx.fillStyle="#332b32";ctx.fillRect(cx-12,top+8,24,9);ctx.fillStyle="#201b22";ctx.fillRect(cx-10,top+17,20,10);ctx.fillStyle=e.bossAccent||"#ffe581";ctx.fillRect(cx-6,top+20,4,4);ctx.fillRect(cx+3,top+20,4,4);ctx.fillRect(cx-3,top+31,6,12);ctx.strokeStyle="#fff0a8";ctx.lineWidth=2;ctx.strokeRect(cx-20,top+5,40,48);
+ }
+ if(e.elite||e.boss){ctx.strokeStyle=accent;ctx.globalAlpha=.55;ctx.lineWidth=2;ctx.strokeRect(x+8,y+7,TILE-16,TILE-14);ctx.globalAlpha=1}
+ ctx.restore();
+}
+function drawItemSprite64(item,x,y,t){
+ if(!item)return;const pulse=(Math.sin(t*.12+x*.04+y*.03)+1)*.5,cx=x+32,cy=y+35,gear=item.gear||null,rarityColor=gear?(rarityData[gear.rarity]?.color||"#ccc"):"#dfd1b2";
+ ctx.save();ctx.globalCompositeOperation="screen";const gg=ctx.createRadialGradient(cx,cy,2,cx,cy,20);gg.addColorStop(0,`${rarityColor}32`);gg.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=gg;ctx.fillRect(cx-22,cy-22,44,44);ctx.globalCompositeOperation="source-over";
+ if(item.type==="gear"){ctx.strokeStyle=rarityColor;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(cx,cy-17);ctx.lineTo(cx,cy+14);ctx.stroke();ctx.fillStyle=rarityColor;ctx.fillRect(cx-8,cy+8,17,6);ctx.fillRect(cx-7,cy-8,14,5)}
+ else if(item.type==="potion"){ctx.fillStyle="#f17f99";ctx.fillRect(cx-9,cy-10,18,23);ctx.fillStyle="#fff0f6";ctx.fillRect(cx-4,cy-17,8,8);ctx.fillStyle="#ffd4dc";ctx.fillRect(cx-5,cy-5,5,11)}
+ else if(item.type==="food"){ctx.fillStyle="#75c895";ctx.beginPath();ctx.arc(cx,cy,12,0,Math.PI*2);ctx.fill();ctx.fillStyle="#294c2e";ctx.fillRect(cx-2,cy-15,5,6);ctx.fillStyle="#d7ffd9";ctx.fillRect(cx+5,cy-12,6,5)}
+ else if(item.type==="bomb"){ctx.fillStyle="#302a31";ctx.beginPath();ctx.arc(cx,cy+3,13,0,Math.PI*2);ctx.fill();ctx.fillStyle="#ff955d";ctx.fillRect(cx+2,cy-17,5,11);ctx.strokeStyle="#ffe0a0";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx+4,cy-17);ctx.lineTo(cx+12,cy-23);ctx.stroke()}
+ else if(item.type==="oil"){ctx.fillStyle="#b47939";ctx.fillRect(cx-8,cy-11,17,24);ctx.fillStyle="#efcf8a";ctx.fillRect(cx-4,cy-18,8,8);ctx.fillStyle="#ffd56d";ctx.fillRect(cx-4,cy-2,8,11)}
+ else if(item.type==="sealed_relic"){ctx.strokeStyle="#c699f0";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(cx,cy-20);ctx.lineTo(cx+15,cy);ctx.lineTo(cx,cy+20);ctx.lineTo(cx-15,cy);ctx.closePath();ctx.stroke();ctx.fillStyle=`rgba(213,164,255,${.22+.12*pulse})`;ctx.fill()}
+ else{ctx.fillStyle=rarityColor;ctx.fillRect(cx-10,cy-10,20,20);ctx.strokeStyle="#fff3d3";ctx.strokeRect(cx-11,cy-11,22,22)}
+ ctx.restore();
+}
+function drawTrapTile64(x,y,t){ctx.save();const p=(Math.sin(t*.13)+1)*.5;ctx.fillStyle=`rgba(255,75,98,${.08+.04*p})`;ctx.fillRect(x+6,y+6,TILE-12,TILE-12);ctx.strokeStyle="#ff748a";ctx.lineWidth=3;for(let i=0;i<3;i++){const xx=x+13+i*16;ctx.beginPath();ctx.moveTo(xx,y+49);ctx.lineTo(xx+7,y+25);ctx.lineTo(xx+14,y+49);ctx.stroke()}ctx.strokeStyle="#ffd18c";ctx.lineWidth=2;ctx.strokeRect(x+7,y+7,TILE-14,TILE-14);ctx.restore()}
+function drawEnvironmentSprite64(o,x,y,t){
+ ctx.save();const cx=x+32,cy=y+36;
+ if(o.type==="barrel"){ctx.fillStyle="#70482f";ctx.fillRect(cx-13,cy-19,26,38);ctx.fillStyle="#b47744";ctx.fillRect(cx-15,cy-12,30,5);ctx.fillRect(cx-15,cy+10,30,5);ctx.fillStyle="#392518";ctx.fillRect(cx-3,cy-18,6,36)}
+ else{ctx.fillStyle=o.burning?"#5f3a24":"#3d3541";ctx.beginPath();ctx.ellipse(cx,cy+6,18,12,0,0,Math.PI*2);ctx.fill();if(o.burning){const f=Math.round(Math.sin(t*.22+o.x)*4);ctx.fillStyle="#ffd35e";ctx.fillRect(cx-5,cy-19+f,10,22);ctx.fillStyle="#ff773d";ctx.fillRect(cx-12,cy-11-f,7,15);ctx.fillRect(cx+7,cy-12+f,7,16)}}
+ ctx.restore();
+}
+function drawStairsTile64(x,y,t){
+ const route=ensureChamberRoute(),isGate=CHAMBER_MODE&&route&&!chamberRouteFinal(),unlocked=isGate?chamberSegmentCleared():floorObjectiveComplete(),pulse=(Math.sin(t*.09)+1)*.5,cx=x+32;
+ ctx.save();
+ if(isGate){
+  ctx.fillStyle=unlocked?"#17252a":"#27151c";ctx.fillRect(x+12,y+8,40,49);ctx.strokeStyle=unlocked?`rgba(119,216,225,${.58+.25*pulse})`:`rgba(206,78,112,${.46+.18*pulse})`;ctx.lineWidth=4;ctx.strokeRect(x+10,y+6,44,53);ctx.fillStyle=unlocked?"#6ccbd4":"#703146";ctx.fillRect(x+30,y+12,4,39);ctx.fillRect(x+20,y+26,24,4);ctx.fillStyle=unlocked?"#e6ffff":"#d591a4";ctx.fillRect(cx-3,y+16,6,6);
+  ctx.font="bold 9px system-ui,sans-serif";ctx.textAlign="center";ctx.fillStyle=unlocked?"#bfeaf0":"#d590a1";ctx.fillText("GATE",cx,y+61);
+ }else{
+  ctx.fillStyle=unlocked?"#443925":"#311824";ctx.fillRect(x+10,y+13,44,42);ctx.fillStyle=unlocked?"#8e7741":"#6b3046";for(let i=0;i<4;i++)ctx.fillRect(x+13+i*5,y+18+i*8,38-i*10,5);ctx.strokeStyle=unlocked?`rgba(255,223,144,${.55+.25*pulse})`:`rgba(220,91,132,${.42+.18*pulse})`;ctx.lineWidth=3;ctx.strokeRect(x+8,y+10,48,48);if(unlocked){ctx.fillStyle="#fff0b3";ctx.fillRect(cx-3,y+8,6,6)}
+ }
+ ctx.restore();
+}
+
+function drawSpecialTileSprite64(tileData,x,y,t){
+ const cx=x+32,cy=y+34,p=(Math.sin(t*.16+tileData.x)+1)*.5;ctx.save();
+ if(tileData.type==="shrine"){ctx.fillStyle="#69583a";ctx.fillRect(cx-18,cy+10,36,10);ctx.fillStyle="#d7b765";ctx.fillRect(cx-8,cy-24,16,35);ctx.fillRect(cx-19,cy-10,38,9);ctx.fillStyle="#fff0b9";ctx.fillRect(cx-3,cy-30,6,8)}
+ else if(["treasure","greed_chest"].includes(tileData.type)){ctx.fillStyle="#65462d";ctx.fillRect(cx-21,cy-5,42,26);ctx.fillStyle=tileData.sealed?"#685b54":"#d0a64c";ctx.fillRect(cx-21,cy-13,42,12);ctx.fillStyle="#ffe08a";ctx.fillRect(cx-4,cy+3,8,11);ctx.strokeStyle=tileData.sealed?"#786b63":`rgba(255,205,94,${.55+.3*p})`;ctx.lineWidth=3;ctx.strokeRect(cx-23,cy-15,46,38)}
+ else if(tileData.type==="temptation_cache"){ctx.fillStyle="#26152e";ctx.fillRect(cx-16,cy+6,32,15);ctx.fillStyle=`rgba(255,214,104,${.68+.25*p})`;ctx.beginPath();ctx.moveTo(cx,cy-28);ctx.lineTo(cx+16,cy-8);ctx.lineTo(cx,cy+8);ctx.lineTo(cx-16,cy-8);ctx.closePath();ctx.fill();ctx.strokeStyle="#d694ff";ctx.lineWidth=3;ctx.strokeRect(cx-22,cy-24,44,44)}
+ else if(tileData.type==="death_echo"){ctx.globalCompositeOperation="screen";ctx.fillStyle=`rgba(118,229,255,${.14+.1*p})`;ctx.beginPath();ctx.arc(cx,cy,24,0,Math.PI*2);ctx.fill();ctx.globalCompositeOperation="source-over";ctx.fillStyle="#415563";ctx.fillRect(cx-14,cy-13,28,34);ctx.fillStyle="#85ddea";ctx.fillRect(cx-4,cy-27,8,39);ctx.fillRect(cx-18,cy-10,36,8)}
+ else{ctx.fillStyle="#5f5367";ctx.fillRect(cx-14,cy-14,28,28);ctx.strokeStyle="#d9c7e7";ctx.lineWidth=2;ctx.strokeRect(cx-16,cy-16,32,32)}
+ ctx.restore();
+}
+function drawTacticalTerrainSprite64(feature,x,y,t){
+ const p=(Math.sin(t*.12+feature.x)+1)*.5;ctx.save();
+ if(feature.type==="water"){ctx.fillStyle=`rgba(67,139,174,${.17+.05*p})`;ctx.fillRect(x+4,y+16,56,42);ctx.strokeStyle="#89d6ed";ctx.lineWidth=2;for(let i=0;i<4;i++){const yy=y+23+i*9;ctx.beginPath();ctx.moveTo(x+8,yy);ctx.quadraticCurveTo(x+22,yy-7,x+35,yy);ctx.quadraticCurveTo(x+49,yy+7,x+57,yy);ctx.stroke()}}
+ else if(feature.type==="roots"){ctx.strokeStyle="#7ea05f";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x+3,y+57);ctx.bezierCurveTo(x+24,y+48,x+16,y+25,x+43,y+9);ctx.stroke();ctx.strokeStyle="#6f5438";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+22,y+62);ctx.quadraticCurveTo(x+39,y+40,x+61,y+34);ctx.stroke()}
+ else{ctx.fillStyle="#77747e";ctx.fillRect(x+8,y+38,18,14);ctx.fillRect(x+32,y+22,22,18);ctx.fillRect(x+39,y+44,16,13);ctx.strokeStyle="#c7c1ca";ctx.lineWidth=2;ctx.strokeRect(x+32,y+22,22,18)}ctx.restore();
+}
+function drawEventTileSprite64(x,y,t){const cx=x+32,cy=y+32,p=(Math.sin(t*.15)+1)*.5;ctx.save();ctx.globalCompositeOperation="screen";const g=ctx.createRadialGradient(cx,cy,3,cx,cy,24);g.addColorStop(0,`rgba(214,164,255,${.20+.08*p})`);g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(x+6,y+6,52,52);ctx.globalCompositeOperation="source-over";ctx.strokeStyle="#c79aea";ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,cy,14,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#fff0ff";ctx.fillRect(cx-3,cy-12,6,24);ctx.fillRect(cx-10,cy-3,20,6);ctx.restore()}
+function drawRemainSprite64(r,x,y,t){const cx=x+32,cy=y+41;ctx.save();ctx.globalAlpha=.8;ctx.fillStyle="#c8c0b5";ctx.fillRect(cx-14,cy-4,11,5);ctx.fillRect(cx+4,cy-9,13,5);ctx.fillRect(cx-4,cy-14,6,17);ctx.strokeStyle="#766e69";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx-18,cy+7);ctx.lineTo(cx+18,cy-8);ctx.moveTo(cx-17,cy-8);ctx.lineTo(cx+17,cy+8);ctx.stroke();ctx.globalAlpha=1;ctx.restore()}
+
+function drawChamberHazards64(t){
+ if(!CHAMBER_MODE)return;const pulse=(Math.sin(t*.15)+1)*.5;
+ for(const h of state.chamberHazards||[]){const x=h.x*TILE,y=h.y*TILE,cx=x+32,cy=y+34;ctx.save();
+  if(h.type==="pit"){
+   ctx.fillStyle="#030309";ctx.beginPath();ctx.ellipse(cx,cy,24,18,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle=`rgba(132,98,165,${.48+.16*pulse})`;ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(cx,cy,27,21,0,0,Math.PI*2);ctx.stroke();ctx.strokeStyle="rgba(62,45,73,.75)";ctx.lineWidth=2;for(let i=0;i<6;i++){const a=i*Math.PI/3;ctx.beginPath();ctx.moveTo(cx+Math.cos(a)*27,cy+Math.sin(a)*20);ctx.lineTo(cx+Math.cos(a)*19,cy+Math.sin(a)*13);ctx.stroke()}
+  }else{
+   ctx.globalCompositeOperation="screen";const g=ctx.createRadialGradient(cx,cy,4,cx,cy,28);g.addColorStop(0,`rgba(255,164,70,${.25+.12*pulse})`);g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(x+3,y+3,58,58);ctx.globalCompositeOperation="source-over";ctx.fillStyle="rgba(105,34,25,.45)";ctx.fillRect(x+8,y+16,48,38);ctx.fillStyle="#ff8b42";for(const [dx,dy,w,hg] of [[15,30,8,17],[28,19,9,28],[41,27,7,19]])ctx.fillRect(x+dx,y+dy+Math.round((pulse-.5)*3),w,hg);ctx.fillStyle="#ffd26d";ctx.fillRect(x+31,y+24,4,15)
+  }
+  ctx.restore();
+ }
+}
+function drawControlPoints64(t){
+ if(!CHAMBER_MODE||!state?.chamberControl)return;const pulse=(Math.sin(t*.12)+1)*.5;
+ for(const point of state.chamberControl.points||[]){
+  const x=point.x*TILE,y=point.y*TILE,cx=x+32,cy=y+32,ratio=Math.min(1,(point.progress||0)/CHAMBER_CONTROL_CAPTURE_TICKS);
+  ctx.save();ctx.globalCompositeOperation="screen";const color=point.captured?"rgba(115,226,216,.18)":"rgba(108,151,220,.12)";const glow=ctx.createRadialGradient(cx,cy,4,cx,cy,27);glow.addColorStop(0,color);glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(x+5,y+5,54,54);ctx.globalCompositeOperation="source-over";
+  ctx.strokeStyle=point.captured?"#85e2d5":"#6f98cf";ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,18,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.arc(cx,cy,10,0,Math.PI*2);ctx.stroke();
+  if(!point.captured&&ratio>0){ctx.strokeStyle="#f0d883";ctx.lineWidth=4;ctx.beginPath();ctx.arc(cx,cy,22,-Math.PI/2,-Math.PI/2+Math.PI*2*ratio);ctx.stroke()}
+  ctx.fillStyle=point.captured?"#d7fff7":"#b9d8ff";ctx.globalAlpha=.7+.25*pulse;ctx.fillRect(cx-3,cy-3,6,6);ctx.globalAlpha=1;ctx.restore();
+ }
+}
+function drawChamberPressure64(t){
+ if(!CHAMBER_MODE)return;const depth=chamberPressureDepth();if(depth<=0)return;const pulse=(Math.sin(t*.14)+1)*.5;
+ ctx.save();for(let y=1;y<ROWS-1;y++)for(let x=1;x<COLS-1;x++){
+  if(!chamberPressureCell(x,y,depth)||tile(x,y)!==1)continue;const px=x*TILE,py=y*TILE;
+  ctx.fillStyle=`rgba(76,30,92,${.10+.035*pulse})`;ctx.fillRect(px+2,py+2,TILE-4,TILE-4);ctx.strokeStyle=`rgba(193,92,222,${.30+.18*pulse})`;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+4,py+58);ctx.bezierCurveTo(px+20,py+44,px+9,py+25,px+38,py+7);ctx.moveTo(px+60,py+52);ctx.bezierCurveTo(px+45,py+42,px+51,py+27,px+27,py+12);ctx.stroke();
+ }ctx.restore();
+}
+function drawChamberStatus64(){
+ if(!CHAMBER_MODE||!state?.chamberControl)return;const points=state.chamberControl.points||[],captured=points.filter(p=>p.captured).length,depth=chamberPressureDepth();ctx.save();ctx.font="bold 12px system-ui,sans-serif";ctx.textAlign="left";ctx.textBaseline="top";ctx.fillStyle="rgba(7,7,11,.78)";ctx.fillRect(8,8,250,36);ctx.strokeStyle="rgba(227,198,127,.34)";ctx.strokeRect(8.5,8.5,249,35);ctx.fillStyle="#ead79d";ctx.fillText(`CHAMBER ${chamberRouteProgressText()} · ${chamberCurrentNode().label}`,16,14);ctx.fillStyle=depth?"#e68be5":"#9cc9d5";ctx.fillText(`CONTROL ${captured}/${points.length} · ${depth?`PRESSURE ${depth}/2`:"PRESSURE STABLE"}`,16,29);ctx.restore();
+}
+
 function draw(){
  const cam=cameraOrigin();
  const t=(state.visual?.time||0);
@@ -28180,13 +28647,11 @@ function draw(){
    ctx.fillStyle="#040306";ctx.fillRect(px,py,TILE,TILE);continue;
   }
   if(tile(x,y)===0){
-   drawWallTile(px,py,x,y,vis);
-   drawBiomeWallDecoration(px,py,x,y,t,vis);
-   drawTileMaterialDepth(px,py,x,y,t,vis,true);
+   if(CHAMBER_MODE)drawWallTile64(px,py,x,y,vis,t);
+   else{drawWallTile(px,py,x,y,vis);drawBiomeWallDecoration(px,py,x,y,t,vis);drawTileMaterialDepth(px,py,x,y,t,vis,true)}
   }else{
-   drawFloorTile(px,py,x,y,vis);
-   drawBiomeFloorDecoration(px,py,x,y,t,vis);
-   drawTileMaterialDepth(px,py,x,y,t,vis,false);
+   if(CHAMBER_MODE)drawFloorTile64(px,py,x,y,vis,t);
+   else{drawFloorTile(px,py,x,y,vis);drawBiomeFloorDecoration(px,py,x,y,t,vis);drawTileMaterialDepth(px,py,x,y,t,vis,false)}
   }
  }
 
@@ -28201,8 +28666,9 @@ function draw(){
 
  for(const feature of state.terrainFeatures||[]){
   const k=key(feature.x,feature.y);if(!state.visited[k]||!inView(feature.x,feature.y))continue;
-  ctx.save();ctx.globalAlpha=state.visible[k]?1:.34;drawTacticalTerrainSprite(feature,sx(feature.x),sy(feature.y),t);ctx.restore();
+  ctx.save();ctx.globalAlpha=state.visible[k]?1:.34;(CHAMBER_MODE?drawTacticalTerrainSprite64:drawTacticalTerrainSprite)(feature,sx(feature.x),sy(feature.y),t);ctx.restore();
  }
+ if(CHAMBER_MODE){drawChamberHazards64(t);drawChamberPressure64(t);drawControlPoints64(t)}
 
  // 武器射程プレビュー
  const rangePulse=(Math.sin(t*.20)+1)*.5;
@@ -28306,11 +28772,11 @@ function draw(){
 
  if(state.visible[key(state.stairs.x,state.stairs.y)]){
   const x=sx(state.stairs.x),y=sy(state.stairs.y);
-  drawStairsTile(x,y,t);
+  (CHAMBER_MODE?drawStairsTile64:drawStairsTile)(x,y,t);
  }
 
  state.traps.forEach(t=>{if(t.revealed&&!t.spent&&state.visible[key(t.x,t.y)]){
-  const x=sx(t.x),y=sy(t.y);drawTrapTile(x,y,t)
+  const x=sx(t.x),y=sy(t.y);(CHAMBER_MODE?drawTrapTile64:drawTrapTile)(x,y,t)
  }});
 
  state.secretWalls.forEach(w=>{if(w.revealed&&state.visible[key(w.x,w.y)])drawText("·",w.x,w.y,"#bfaad0",14)});
@@ -28327,48 +28793,43 @@ function draw(){
  });
 
  state.events.forEach(ev=>{if(!ev.used&&state.visible[key(ev.x,ev.y)]){
-  const x=sx(ev.x),y=sy(ev.y);drawEventTileSprite(x,y,t);
+  const x=sx(ev.x),y=sy(ev.y);(CHAMBER_MODE?drawEventTileSprite64:drawEventTileSprite)(x,y,t);
  }});
  state.specialTiles.forEach(tileData=>{if(state.visible[key(tileData.x,tileData.y)]){
   const x=sx(tileData.x),y=sy(tileData.y);
-  drawSpecialTileSprite(tileData,x,y,t);
+  (CHAMBER_MODE?drawSpecialTileSprite64:drawSpecialTileSprite)(tileData,x,y,t);
  }});
 
  state.environment.forEach(o=>{if(o.active&&state.visible[key(o.x,o.y)]){
   const x=sx(o.x),y=sy(o.y);
-  drawEnvironmentSprite(o,x,y,t);
+  (CHAMBER_MODE?drawEnvironmentSprite64:drawEnvironmentSprite)(o,x,y,t);
  }});
 
  state.remains.forEach(r=>{if(state.visible[key(r.x,r.y)]){
   const x=sx(r.x),y=sy(r.y);
-  drawRemainSprite(r,x,y,t);
+  (CHAMBER_MODE?drawRemainSprite64:drawRemainSprite)(r,x,y,t);
  }});
  state.items.forEach(i=>{if(state.visible[key(i.x,i.y)]){
   const x=sx(i.x),y=sy(i.y);
-  drawItemGroundGlow(i,x,y,t);
-  drawItemSprite(i,x,y,t);
+  if(!CHAMBER_MODE)drawItemGroundGlow(i,x,y,t);
+  (CHAMBER_MODE?drawItemSprite64:drawItemSprite)(i,x,y,t);
  }});
 
  state.enemies.forEach(e=>{if(state.visible[key(e.x,e.y)]){
   const x=sx(e.x),y=sy(e.y);
-  drawActorGroundShadow(x,y,e.boss?1.18:(e.type==="warg"||e.type==="charger"?1.08:.92),e.boss ? .34 : .25);
-  drawEnemySprite(e,x,y,t);
-  ctx.fillStyle="#25080d";ctx.fillRect(x+3,y+1,TILE-6,3);
-  ctx.fillStyle="#cf5163";ctx.fillRect(x+3,y+1,(TILE-6)*clamp(e.hp/e.maxHp,0,1),3);
-  if(e.status?.burning>0){ctx.fillStyle="#ff7a3d";ctx.fillRect(x+3,y+5,3,3)}
-  if(e.status?.poison>0){ctx.fillStyle="#79c76b";ctx.fillRect(x+7,y+5,3,3)}
-  if(e.status?.frozen>0){ctx.fillStyle="#86d4ff";ctx.fillRect(x+11,y+5,3,3)}
-  if((e.alert||0)>0&&!e.intent){ctx.fillStyle="#f0d36b";ctx.fillRect(x+16,y+5,3,3)}
-  else if((e.suspicion||0)>=28&&!e.intent){
-   ctx.fillStyle="#f0d36b";ctx.font="bold 9px system-ui,sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
-   ctx.fillText("?",x+18,y+7);
-  }
-  if(counterWindowActive(e)){
-   ctx.strokeStyle="#f3d06b";ctx.lineWidth=1;
-   ctx.strokeRect(x+1.5,y+1.5,TILE-3,TILE-3);
-   ctx.fillStyle="#ffe39b";ctx.fillRect(x+17,y+5,3,3);
-  }
-  ctx.fillStyle=factionData[e.faction]?.color||"#aaa";ctx.fillRect(x+3,y+19,4,2);
+  if(!CHAMBER_MODE)drawActorGroundShadow(x,y,e.boss?1.18:(e.type==="warg"||e.type==="charger"?1.08:.92),e.boss ? .34 : .25);
+  (CHAMBER_MODE?drawEnemySprite64:drawEnemySprite)(e,x,y,t);
+  const hpH=CHAMBER_MODE?5:3,hpY=CHAMBER_MODE?4:1,hpPad=CHAMBER_MODE?8:3;
+  ctx.fillStyle="#25080d";ctx.fillRect(x+hpPad,y+hpY,TILE-hpPad*2,hpH);
+  ctx.fillStyle="#cf5163";ctx.fillRect(x+hpPad,y+hpY,(TILE-hpPad*2)*clamp(e.hp/e.maxHp,0,1),hpH);
+  const statusY=CHAMBER_MODE?11:5,statusSize=CHAMBER_MODE?6:3,statusGap=CHAMBER_MODE?9:4;
+  if(e.status?.burning>0){ctx.fillStyle="#ff7a3d";ctx.fillRect(x+hpPad,y+statusY,statusSize,statusSize)}
+  if(e.status?.poison>0){ctx.fillStyle="#79c76b";ctx.fillRect(x+hpPad+statusGap,y+statusY,statusSize,statusSize)}
+  if(e.status?.frozen>0){ctx.fillStyle="#86d4ff";ctx.fillRect(x+hpPad+statusGap*2,y+statusY,statusSize,statusSize)}
+  if((e.alert||0)>0&&!e.intent){ctx.fillStyle="#f0d36b";ctx.fillRect(x+TILE-hpPad-statusSize,y+statusY,statusSize,statusSize)}
+  else if((e.suspicion||0)>=28&&!e.intent){ctx.fillStyle="#f0d36b";ctx.font=`bold ${CHAMBER_MODE?16:9}px system-ui,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("?",x+TILE-hpPad-3,y+statusY+4)}
+  if(counterWindowActive(e)){ctx.strokeStyle="#f3d06b";ctx.lineWidth=CHAMBER_MODE?3:1;ctx.strokeRect(x+3,y+3,TILE-6,TILE-6);ctx.fillStyle="#ffe39b";ctx.fillRect(x+TILE-15,y+12,8,8)}
+  ctx.fillStyle=factionData[e.faction]?.color||"#aaa";ctx.fillRect(x+hpPad,y+TILE-(CHAMBER_MODE?8:3),CHAMBER_MODE?10:4,CHAMBER_MODE?4:2);
  }});
 
  if(inView(state.player.x,state.player.y)){
@@ -28376,12 +28837,12 @@ function draw(){
   const af=state.visual?.attackFrames||0;
   if(af>0){
    const swing=Math.sin((1-af/6)*Math.PI);
-   x+=state.visual.attackDx*5*swing;
-   y+=state.visual.attackDy*5*swing;
+   x+=state.visual.attackDx*(CHAMBER_MODE?11:5)*swing;
+   y+=state.visual.attackDy*(CHAMBER_MODE?11:5)*swing;
   }
   const hurt=(state.visual?.damageFrames||0)>0;
-  drawActorGroundShadow(x,y,1,.32);
-  drawHeroSprite(x,y,hurt,t);
+  if(!CHAMBER_MODE)drawActorGroundShadow(x,y,1,.32);
+  (CHAMBER_MODE?drawHeroSprite64:drawHeroSprite)(x,y,hurt,t);
  }
 
  drawVisualEffects(cam);
@@ -28429,8 +28890,9 @@ function draw(){
  ctx.restore();
 
  drawForegroundDepth(t);
+ if(CHAMBER_MODE)drawChamberStatus64();
  ctx.restore();
- drawMiniMap();
+ if(!CHAMBER_MODE)drawMiniMap();
 }
 function renderSkills(){
  const waitButton=$("wait");
@@ -28438,9 +28900,11 @@ function renderSkills(){
   const stairInfo=stairInteractionInfo();
   waitButton.textContent=stairInfo.pending
    ?`回収 ${stairInfo.pending}`
-   :stairInfo.shortcut
-    ?"階段/昇降路"
-    :"階段";
+   :CHAMBER_MODE&&!chamberRouteFinal()
+    ?"区画門"
+    :stairInfo.shortcut
+     ?"階段/昇降路"
+     :"階段";
   waitButton.title=stairInfo.pending
    ?`階段上の${stairInteractionSummary(stairInfo)}を処理する`
    :stairInfo.shortcut
@@ -28608,6 +29072,7 @@ $("closeInventory").onclick=()=>{
 };
 $("cancelFieldSalvage").onclick=closeFieldSalvageConfirm;
 $("confirmFieldSalvage").onclick=confirmFieldSalvage;
+$("cancelChamberNode").onclick=()=>closeChamberNodeChoice();
 function openAppearanceEditor(){if(!state)return false;ensureAppearanceMeta(state.meta);renderAppearance();$("appearanceOverlay").classList.remove("hidden");return true}
 $("closeAppearance").onclick=()=>{$("appearanceOverlay").classList.add("hidden");if(state?.expeditionEnded)renderHub()};
 
