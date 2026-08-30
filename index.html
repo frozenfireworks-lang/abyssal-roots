@@ -6045,7 +6045,7 @@ header .ver{font-family:Georgia,serif;color:#9ec8d2!important}
 
 
 
-/* v4.36.1 SINGLE FILE ART — asset integration / readability / local light */
+/* v4.37 OPTIMIZED 128 ART — 128px sources / 96px render footprint / cached chamber terrain */
 :root{--art-cyan:#79e0f5;--art-amber:#ffc66f;--art-red:#ef6174}
 #game{filter:contrast(1.075) saturate(1.095) brightness(1.005)!important}
 #gameWrap{box-shadow:0 0 0 1px #030305,0 0 0 3px rgba(186,143,76,.16),0 20px 54px rgba(0,0,0,.68),inset 0 0 44px rgba(63,157,188,.055)!important}
@@ -6056,6 +6056,10 @@ header .ver{font-family:Georgia,serif;color:#9ec8d2!important}
 #appearancePreview{image-rendering:auto!important;filter:contrast(1.04) saturate(1.06)!important}
 @media(max-width:600px){#game{filter:contrast(1.06) saturate(1.08) brightness(1.01)!important}}
 
+
+/* Rendering performance: source assets stay detailed while the game canvas stays light. */
+#game{image-rendering:auto!important;will-change:transform;transform:translateZ(0)}
+@media(max-width:600px){#game{filter:contrast(1.055) saturate(1.075) brightness(1.01)!important}}
 @media(min-width:1120px) and (min-height:720px){
  body{display:block}
  #app{
@@ -6094,7 +6098,7 @@ header .ver{font-family:Georgia,serif;color:#9ec8d2!important}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.36.1 SINGLE FILE ART</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.37 OPTIMIZED 128 ART</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6103,7 +6107,7 @@ header .ver{font-family:Georgia,serif;color:#9ec8d2!important}
   <span class="chamberHudChip control"><b>CONTROL</b><i id="chamberHudControl">0/3</i></span>
   <span class="chamberHudChip pressure" id="chamberHudPressureChip"><b>PRESSURE</b><i id="chamberHudPressure">STABLE</i></span>
 </div>
-<canvas id="game" width="1152" height="1664" aria-label="ダンジョン"></canvas>
+<canvas id="game" width="864" height="1248" aria-label="ダンジョン"></canvas>
 <div id="impactOverlay" aria-hidden="true"></div>
 <div id="combatToast" aria-live="polite"></div>
 <div class="floorGoal" id="floorGoal"><b>探索目標</b><br>深淵へ踏み出す。</div>
@@ -6974,16 +6978,25 @@ header .ver{font-family:Georgia,serif;color:#9ec8d2!important}
 "use strict";
 const CHAMBER_MODE=true;
 const COLS=9, ROWS=13, VIEW_COLS=9, VIEW_ROWS=13, TILE=64;
-const PIXEL_DENSITY=2;
+const PIXEL_DENSITY=1.5;
 const CANVAS_W=VIEW_COLS*TILE,CANVAS_H=VIEW_ROWS*TILE;
-const DISPLAY_W=CANVAS_W*PIXEL_DENSITY,DISPLAY_H=CANVAS_H*PIXEL_DENSITY;
-const RENDER_SCALE=Math.min(2,Math.max(1,Math.round(window.devicePixelRatio||1.5)));
-const canvas=document.getElementById("game"), ctx=canvas.getContext("2d",{alpha:false,desynchronized:true});
-canvas.width=DISPLAY_W*RENDER_SCALE;
-canvas.height=DISPLAY_H*RENDER_SCALE;
-canvas.style.aspectRatio=`${DISPLAY_W}/${DISPLAY_H}`;
-ctx.imageSmoothingEnabled=false;
-ctx.setTransform(RENDER_SCALE*PIXEL_DENSITY,0,0,RENDER_SCALE*PIXEL_DENSITY,0,0);
+const DISPLAY_W=Math.round(CANVAS_W*PIXEL_DENSITY),DISPLAY_H=Math.round(CANVAS_H*PIXEL_DENSITY);
+// 128px source art is intentionally presented at a 96px backing footprint per logical tile.
+// A single render scale is enough for the responsive iPhone layout and avoids multi-million-pixel framebuffers.
+const RENDER_SCALE=1;
+const canvas=document.getElementById("game");
+let ctx=canvas.getContext("2d",{alpha:false,desynchronized:true});
+canvas.width=DISPLAY_W;
+canvas.height=DISPLAY_H;
+canvas.style.aspectRatio=`${CANVAS_W}/${CANVAS_H}`;
+ctx.imageSmoothingEnabled=true;
+ctx.imageSmoothingQuality="high";
+ctx.setTransform(PIXEL_DENSITY,0,0,PIXEL_DENSITY,0,0);
+const CHAMBER_STATIC_CANVAS=document.createElement("canvas");
+CHAMBER_STATIC_CANVAS.width=CANVAS_W;CHAMBER_STATIC_CANVAS.height=CANVAS_H;
+const CHAMBER_STATIC_CTX=CHAMBER_STATIC_CANVAS.getContext("2d",{alpha:false});
+CHAMBER_STATIC_CTX.imageSmoothingEnabled=true;CHAMBER_STATIC_CTX.imageSmoothingQuality="high";
+let chamberStaticCacheKey="";
 const VISUAL_QUALITY_KEY="abyssal-roots-visual-quality";
 const VISUAL_QUALITY_PROFILES={
  low:{microDetail:false,motes:6,foregroundDepth:false,lightBounce:false},
@@ -22448,9 +22461,22 @@ function ensureVisualState(){
  if(!Array.isArray(state.visual.effects))state.visual.effects=[];
  return state.visual;
 }
+const MOVE_ANIM_FRAMES=8;
+function easeMove01(t){return t*t*(3-2*t)}
+function currentHeroVisualWorld(){
+ const v=state?.visual||{};
+ if((v.moveFrames||0)>0&&Number.isFinite(v.moveFromX)&&Number.isFinite(v.moveToX)){
+  const p=1-clamp(v.moveFrames/MOVE_ANIM_FRAMES,0,1),e=easeMove01(p);
+  return{x:v.moveFromX+(v.moveToX-v.moveFromX)*e,y:v.moveFromY+(v.moveToY-v.moveFromY)*e};
+ }
+ return{x:state.player.x,y:state.player.y};
+}
 function startMoveAnim(dx,dy){
- const v=ensureVisualState();
- v.moveDx=dx;v.moveDy=dy;v.moveFrames=0;
+ const v=ensureVisualState(),from=currentHeroVisualWorld();
+ v.moveDx=dx;v.moveDy=dy;
+ v.moveFromX=from.x;v.moveFromY=from.y;
+ v.moveToX=state.player.x+dx;v.moveToY=state.player.y+dy;
+ v.moveFrames=MOVE_ANIM_FRAMES;
 }
 function startAttackAnim(dx,dy){
  const v=ensureVisualState();
@@ -22626,13 +22652,18 @@ function drawVisualEffects(cam){
   ctx.restore();
  }
 }
-let visualLoopErrorReported=false;
-function tickContinuousAnimation(){
+let visualLoopErrorReported=false,lastVisualFrameAt=0;
+function visualHighMotion(){
+ const v=state?.visual||{};
+ return (v.moveFrames||0)>0||(v.attackFrames||0)>0||(v.damageFrames||0)>0||(v.shake||0)>0||(v.flash||0)>0||(v.effects||[]).length>0||realtimeCombatActive();
+}
+function tickContinuousAnimation(now=performance.now()){
  try{
   if(state){
    tickRealtimeCombat(realtimeNow());
    updateVisualEffects();
-   draw();
+   const targetMs=visualHighMotion()?16.5:33;
+   if(now-lastVisualFrameAt>=targetMs){draw();lastVisualFrameAt=now}
   }
   visualLoopErrorReported=false;
  }catch(error){
@@ -25274,7 +25305,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.36",
+  version:"4.37",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -28563,7 +28594,8 @@ function drawHeroLanternBloom(sx,sy,t){
   :type==="lantern"
    ?{inner:`rgba(255,242,186,${.24+.04*pulse})`,mid:`rgba(255,190,96,${.12+.04*pulse})`,edge:'rgba(115,76,38,.045)'}
    :{inner:`rgba(255,224,153,${.26+.05*pulse})`,mid:`rgba(255,126,60,${.13+.04*pulse})`,edge:'rgba(134,63,28,.05)'};
- const x=sx(state.player.x)+TILE/2,y=sy(state.player.y)+TILE/2;
+ const hp=CHAMBER_MODE&&typeof currentHeroVisualWorld==="function"?currentHeroVisualWorld():{x:state.player.x,y:state.player.y};
+ const x=sx(hp.x)+TILE/2,y=sy(hp.y)+TILE/2;
  const radius=Math.max(42,visionRadius()*TILE*.43);
  ctx.save();ctx.globalCompositeOperation="screen";
  const glow=ctx.createRadialGradient(x,y,2,x,y,radius);
@@ -28850,6 +28882,7 @@ function hero64ActionRow(hurt){
  const v=state?.visual||{};
  if(hurt||(v.damageFrames||0)>0)return HERO64_STATE_ROWS.hurt;
  if((v.attackFrames||0)>0)return HERO64_STATE_ROWS.attack;
+ if((v.moveFrames||0)>0)return HERO64_STATE_ROWS.walk;
  return HERO64_STATE_ROWS.idle;
 }
 function drawHeroProduction64(g,x,y,hurt,t,opts={}){
@@ -29061,6 +29094,37 @@ function drawChamberStatus64(){
  if(pressure)pressure.textContent=depth?`LV.${depth}`:"STABLE";
  if(chip)chip.classList.toggle("rising",depth>0);
 }
+function chamberStaticFingerprint(){
+ if(!CHAMBER_MODE)return"";
+ const mapSig=(state.map||[]).map(row=>(row||[]).join("")).join("/");
+ const propSig=Object.values(GOTHIC_PROPS||{}).filter(img=>img?.complete&&img?.naturalWidth).length;
+ return `${state.floor}|${currentBiomeKey()}|${mapSig}|${propSig}`;
+}
+function rebuildChamberStaticTerrain(cam){
+ const previousCtx=ctx;
+ try{
+  ctx=CHAMBER_STATIC_CTX;
+  ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.globalCompositeOperation="source-over";
+  ctx.fillStyle="#050407";ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+  for(let vy=0;vy<VIEW_ROWS;vy++)for(let vx=0;vx<VIEW_COLS;vx++){
+   const x=cam.x+vx,y=cam.y+vy,px=vx*TILE,py=vy*TILE;
+   if(tile(x,y)===0)drawWallTile64(px,py,x,y,true,0);else drawFloorTile64(px,py,x,y,true,0);
+  }
+  drawChamberArchitecture64(0);
+ }finally{ctx=previousCtx}
+ chamberStaticCacheKey=chamberStaticFingerprint();
+}
+function drawCachedChamberTerrain(cam){
+ const keyNow=chamberStaticFingerprint();
+ if(keyNow!==chamberStaticCacheKey)rebuildChamberStaticTerrain(cam);
+ ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.drawImage(CHAMBER_STATIC_CANVAS,0,0,CANVAS_W,CANVAS_H);ctx.restore();
+ // Fog of war stays dynamic even though the expensive stonework is cached.
+ for(let vy=0;vy<VIEW_ROWS;vy++)for(let vx=0;vx<VIEW_COLS;vx++){
+  const x=cam.x+vx,y=cam.y+vy,k=key(x,y),px=vx*TILE,py=vy*TILE;
+  if(!state.visited[k]){ctx.fillStyle="rgba(2,3,7,.70)";ctx.fillRect(px,py,TILE,TILE)}
+  else if(!state.visible[k]){ctx.fillStyle="rgba(3,4,8,.43)";ctx.fillRect(px,py,TILE,TILE)}
+ }
+}
 function draw(){
  const cam=cameraOrigin();
  const t=(state.visual?.time||0);
@@ -29073,28 +29137,17 @@ function draw(){
  const sx=x=>(x-cam.x)*TILE,sy=y=>(y-cam.y)*TILE;
  const inView=(x,y)=>x>=cam.x&&x<cam.x+VIEW_COLS&&y>=cam.y&&y<cam.y+VIEW_ROWS;
 
- for(let vy=0;vy<VIEW_ROWS;vy++)for(let vx=0;vx<VIEW_COLS;vx++){
-  const x=cam.x+vx,y=cam.y+vy,k=key(x,y),vis=state.visible[k],seen=state.visited[k];
-  const px=vx*TILE,py=vy*TILE;
-  if(!seen){
-   if(CHAMBER_MODE){
-    // Chamber mode keeps the battlefield architecture faintly readable, while actors/items still obey visibility.
-    ctx.save();ctx.globalAlpha=.42;
-    if(tile(x,y)===0)drawWallTile64(px,py,x,y,false,t);else drawFloorTile64(px,py,x,y,false,t);
-    ctx.fillStyle="rgba(2,3,7,.34)";ctx.fillRect(px,py,TILE,TILE);ctx.restore();
-   }else{ctx.fillStyle="#040306";ctx.fillRect(px,py,TILE,TILE)}
-   continue;
-  }
-  if(tile(x,y)===0){
-   if(CHAMBER_MODE)drawWallTile64(px,py,x,y,vis,t);
-   else{drawWallTile(px,py,x,y,vis);drawBiomeWallDecoration(px,py,x,y,t,vis);drawTileMaterialDepth(px,py,x,y,t,vis,true)}
-  }else{
-   if(CHAMBER_MODE)drawFloorTile64(px,py,x,y,vis,t);
+ if(CHAMBER_MODE){
+  drawCachedChamberTerrain(cam);
+  drawChamberTacticalGrid64(t);
+ }else{
+  for(let vy=0;vy<VIEW_ROWS;vy++)for(let vx=0;vx<VIEW_COLS;vx++){
+   const x=cam.x+vx,y=cam.y+vy,k=key(x,y),vis=state.visible[k],seen=state.visited[k],px=vx*TILE,py=vy*TILE;
+   if(!seen){ctx.fillStyle="#040306";ctx.fillRect(px,py,TILE,TILE);continue}
+   if(tile(x,y)===0){drawWallTile(px,py,x,y,vis);drawBiomeWallDecoration(px,py,x,y,t,vis);drawTileMaterialDepth(px,py,x,y,t,vis,true)}
    else{drawFloorTile(px,py,x,y,vis);drawBiomeFloorDecoration(px,py,x,y,t,vis);drawTileMaterialDepth(px,py,x,y,t,vis,false)}
   }
  }
- if(CHAMBER_MODE){drawChamberArchitecture64(t);drawChamberTacticalGrid64(t)}
-
  drawModernAtmosphere(t);
  drawMidgroundDepth(t);
 
@@ -29273,7 +29326,8 @@ function draw(){
  }});
 
  if(inView(state.player.x,state.player.y)){
-  let x=sx(state.player.x),y=sy(state.player.y);
+  const visualPos=CHAMBER_MODE?currentHeroVisualWorld():{x:state.player.x,y:state.player.y};
+  let x=(visualPos.x-cam.x)*TILE,y=(visualPos.y-cam.y)*TILE;
   const af=state.visual?.attackFrames||0;
   if(af>0){
    const swing=Math.sin((1-af/6)*Math.PI);
@@ -29303,9 +29357,11 @@ function draw(){
  const lightPixels=CHAMBER_MODE
   ?Math.max(CANVAS_W,CANVAS_H)*.92
   :Math.max(46,visionRadius()*TILE*.82);
+ const heroLightPos=CHAMBER_MODE?currentHeroVisualWorld():{x:state.player.x,y:state.player.y};
+ const heroLightX=(heroLightPos.x-cam.x)*TILE+TILE/2,heroLightY=(heroLightPos.y-cam.y)*TILE+TILE/2;
  const darkness=ctx.createRadialGradient(
-  sx(state.player.x)+TILE/2,sy(state.player.y)+TILE/2,CHAMBER_MODE?42:16,
-  sx(state.player.x)+TILE/2,sy(state.player.y)+TILE/2,lightPixels
+  heroLightX,heroLightY,CHAMBER_MODE?42:16,
+  heroLightX,heroLightY,lightPixels
  );
  darkness.addColorStop(0,"rgba(255,255,255,0)");
  darkness.addColorStop(CHAMBER_MODE?.62:.52,CHAMBER_MODE?"rgba(207,215,225,.035)":"rgba(214,207,220,.08)");
@@ -29527,8 +29583,8 @@ canvas.addEventListener("click",event=>{
  if(canvasTouchMoved){canvasTouchMoved=false;return}
  if(!state||!$("inspectOverlay").classList.contains("hidden"))return;
  const rect=canvas.getBoundingClientRect();
- const px=((event.clientX-rect.left)*(DISPLAY_W/rect.width))/PIXEL_DENSITY;
- const py=((event.clientY-rect.top)*(DISPLAY_H/rect.height))/PIXEL_DENSITY;
+ const px=(event.clientX-rect.left)*(CANVAS_W/rect.width);
+ const py=(event.clientY-rect.top)*(CANVAS_H/rect.height);
  const cam=cameraOrigin();
  const x=cam.x+Math.floor(px/TILE),y=cam.y+Math.floor(py/TILE);
  inspectTileAt(x,y);
