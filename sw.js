@@ -1,4 +1,4 @@
-const CACHE='abyssal-roots-v4-38-1-layer-align-fix';
+const CACHE='abyssal-roots-v4-38-2-actor-visibility-fix';
 const ASSETS=["./","./index.html"];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});

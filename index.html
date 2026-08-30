@@ -6116,16 +6116,27 @@ header .ver{font-family:Georgia,serif;color:#9ec8d2!important}
 .actorEntity.elite .actorEliteRing,.actorEntity.boss .actorEliteRing{display:block}
 @media(max-width:600px){.actorHpDom{height:3px}.actorStatusDom i{width:4px;height:4px}}
 
-/* v4.38.1 — layer alignment / Safari actor visibility hotfix */
+/* v4.38.2 — actor visibility / absolute-layer containment fix */
 #game{width:100%!important;height:auto!important;max-height:none!important;object-fit:fill!important;border:0!important;box-shadow:none!important;position:relative!important;z-index:2!important}
-#terrainLayer,#propLayer{inset:auto!important;left:0;top:0;width:100%;height:100%;max-height:none!important;object-fit:fill!important}
+#terrainLayer,#propLayer,#actorLayer{
+  position:absolute!important;
+  inset:auto!important;
+  left:var(--layer-left,0px)!important;
+  top:var(--layer-top,0px)!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:var(--layer-width,100%)!important;
+  height:var(--layer-height,100%)!important;
+  max-height:none!important;
+  object-fit:fill!important;
+}
 #terrainLayer{z-index:0!important}
 #propLayer{z-index:1!important}
-#actorLayer{inset:auto!important;left:0;top:0;width:100%;height:100%;z-index:4!important;overflow:hidden!important}
-#gameWrap::before,#gameWrap::after{z-index:5!important}
-.actorEntity{z-index:1}
-.actorFace{overflow:hidden!important;background-image:none!important}
-.actorSpriteImg{position:absolute;display:block;left:0;top:0;max-width:none!important;max-height:none!important;width:auto;height:auto;pointer-events:none;user-select:none;-webkit-user-drag:none;transform:translateZ(0);backface-visibility:hidden}
+#actorLayer{z-index:4!important;overflow:hidden!important;contain:layout paint style!important;transform:translateZ(0)}
+#gameWrap::before,#gameWrap::after{z-index:5!important;pointer-events:none!important}
+.actorEntity{z-index:1;min-width:1px;min-height:1px;overflow:visible!important}
+.actorFace{overflow:hidden!important;background-image:none!important;width:100%!important;height:100%!important;display:block!important}
+.actorSpriteImg{position:absolute;display:block!important;left:0;top:0;max-width:none!important;max-height:none!important;width:auto;height:auto;pointer-events:none;user-select:none;-webkit-user-drag:none;transform:translateZ(0);backface-visibility:hidden;opacity:1!important;visibility:visible!important}
 .actorEntity.enemy{z-index:2}
 .actorEntity.hero{z-index:3}
 @media(max-width:600px){#game{max-height:none!important}}
@@ -6134,7 +6145,7 @@ header .ver{font-family:Georgia,serif;color:#9ec8d2!important}
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.38.1 LAYER ALIGN FIX</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.38.2 ACTOR VISIBILITY FIX</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -7076,7 +7087,7 @@ function drawPropImage(name,dx,dy,dw,dh,alpha=1){const img=GOTHIC_PROPS[name];if
 const $=id=>document.getElementById(id);
 
 const ACTOR_DOM_CACHE=new Map();
-let actorLayerW=0,actorLayerH=0,actorDomSeq=0;
+let actorLayerW=0,actorLayerH=0,actorDomSeq=0,ACTOR_DOM_HEALTHY=false;
 function actorDomKey(enemy){
  if(!enemy)return"hero";
  if(enemy.id!==undefined&&enemy.id!==null)return`enemy:${enemy.id}`;
@@ -7088,6 +7099,8 @@ function ensureActorDom(key,type="hero"){
  let el=ACTOR_DOM_CACHE.get(key);if(el)return el;
  el=document.createElement("div");el.className=`actorEntity ${type}`;el.dataset.actorKey=key;
  el.innerHTML='<div class="actorFace"><img class="actorSpriteImg" draggable="false" alt=""></div><div class="actorHpDom"><i></i></div><div class="actorStatusDom"></div><div class="actorEliteRing"></div>';
+ const w=actorLayerW>0?actorLayerW/VIEW_COLS:0,h=actorLayerH>0?actorLayerH/VIEW_ROWS:0;
+ if(w>0&&h>0){el.style.width=`${w}px`;el.style.height=`${h}px`}
  actorLayer.appendChild(el);ACTOR_DOM_CACHE.set(key,el);return el;
 }
 function setActorFrame(face,isHero,col,row=0){
@@ -7100,35 +7113,53 @@ function setActorFrame(face,isHero,col,row=0){
 function heroDomRow(){const v=state?.visual||{};if((v.damageFrames||0)>0)return HERO64_STATE_ROWS.hurt;if((v.attackFrames||0)>0)return HERO64_STATE_ROWS.attack;if((v.moveFrames||0)>0)return HERO64_STATE_ROWS.walk;return HERO64_STATE_ROWS.idle}
 function syncRenderLayerGeometry(){
  if(!canvas||!actorLayer)return{w:CANVAS_W,h:CANVAS_H};
- const cr=canvas.getBoundingClientRect(),wr=canvas.parentElement.getBoundingClientRect();
- const left=cr.left-wr.left,top=cr.top-wr.top,w=cr.width||CANVAS_W,h=cr.height||CANVAS_H;
- for(const layer of [terrainLayer,propLayer,actorLayer]){if(!layer)continue;layer.style.left=`${left}px`;layer.style.top=`${top}px`;layer.style.width=`${w}px`;layer.style.height=`${h}px`}
- if(Math.abs(w-actorLayerW)>.25||Math.abs(h-actorLayerH)>.25){actorLayerW=w;actorLayerH=h;for(const el of ACTOR_DOM_CACHE.values()){el.style.width=`${w/VIEW_COLS}px`;el.style.height=`${h/VIEW_ROWS}px`;el.classList.add("noTransition");requestAnimationFrame(()=>el.classList.remove("noTransition"))}}
+ const cr=canvas.getBoundingClientRect(),parent=canvas.parentElement,wr=parent.getBoundingClientRect(),ws=getComputedStyle(parent);
+ const borderLeft=parseFloat(ws.borderLeftWidth)||0,borderTop=parseFloat(ws.borderTopWidth)||0;
+ const left=cr.left-wr.left-borderLeft,top=cr.top-wr.top-borderTop,w=cr.width||CANVAS_W,h=cr.height||CANVAS_H;
+ for(const layer of [terrainLayer,propLayer,actorLayer]){
+  if(!layer)continue;
+  layer.style.setProperty("--layer-left",`${left}px`);
+  layer.style.setProperty("--layer-top",`${top}px`);
+  layer.style.setProperty("--layer-width",`${w}px`);
+  layer.style.setProperty("--layer-height",`${h}px`);
+ }
+ const changed=Math.abs(w-actorLayerW)>.25||Math.abs(h-actorLayerH)>.25;
+ actorLayerW=w;actorLayerH=h;
+ if(changed){for(const el of ACTOR_DOM_CACHE.values()){el.style.width=`${w/VIEW_COLS}px`;el.style.height=`${h/VIEW_ROWS}px`;el.classList.add("noTransition");requestAnimationFrame(()=>el.classList.remove("noTransition"))}}
  return{w,h};
 }
 if(window.ResizeObserver&&canvas){new ResizeObserver(()=>syncRenderLayerGeometry()).observe(canvas)}
 window.addEventListener("resize",()=>requestAnimationFrame(syncRenderLayerGeometry),{passive:true});
 function actorLayerMetrics(){if(actorLayerW>0&&actorLayerH>0)return{w:actorLayerW,h:actorLayerH};return syncRenderLayerGeometry()}
+function actorDomRendererHealthy(){
+ if(!actorLayer||!canvas||!state)return false;
+ const ar=actorLayer.getBoundingClientRect(),cr=canvas.getBoundingClientRect(),hero=ACTOR_DOM_CACHE.get("hero");
+ if(!hero)return false;const hr=hero.getBoundingClientRect(),img=hero.querySelector(".actorSpriteImg");
+ return Math.abs(ar.left-cr.left)<2.5&&Math.abs(ar.top-cr.top)<2.5&&Math.abs(ar.width-cr.width)<2.5&&Math.abs(ar.height-cr.height)<2.5&&hr.width>8&&hr.height>8&&!!img&&img.naturalWidth>0&&getComputedStyle(hero).display!=="none";
+}
 function syncActorLayer(){
- if(!CHAMBER_MODE||!state||!actorLayer)return;
+ if(!CHAMBER_MODE||!state||!actorLayer){ACTOR_DOM_HEALTHY=false;return}
  syncRenderLayerGeometry();
  const cam=cameraOrigin(),m=actorLayerMetrics(),cellW=m.w/VIEW_COLS,cellH=m.h/VIEW_ROWS,seen=new Set();
- const place=(el,gx,gy)=>{const x=(gx-cam.x)*cellW,y=(gy-cam.y)*cellH,tf=`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0)`;if(el.dataset.tf!==tf){el.dataset.tf=tf;el.style.transform=tf}};
+ const size=(el)=>{if(!el)return;const w=`${cellW}px`,h=`${cellH}px`;if(el.style.width!==w)el.style.width=w;if(el.style.height!==h)el.style.height=h};
+ const place=(el,gx,gy)=>{size(el);const x=(gx-cam.x)*cellW,y=(gy-cam.y)*cellH,tf=`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0)`;if(el.dataset.tf!==tf){el.dataset.tf=tf;el.style.transform=tf}};
  const inView=(x,y)=>x>=cam.x&&x<cam.x+VIEW_COLS&&y>=cam.y&&y<cam.y+VIEW_ROWS;
  if(inView(state.player.x,state.player.y)){
-  const k="hero",el=ensureActorDom(k,"hero"),face=el.querySelector(".actorFace"),dir=chamberActorDirection(),col=HERO64_DIR_COLS[dir]??0,row=heroDomRow();seen.add(k);el.style.display="block";el.dataset.shown="1";setActorFrame(face,true,col,row);
+  const k="hero",el=ensureActorDom(k,"hero"),face=el.querySelector(".actorFace"),dir=chamberActorDirection(),col=HERO64_DIR_COLS[dir]??0,row=heroDomRow();seen.add(k);size(el);el.style.display="block";el.dataset.shown="1";setActorFrame(face,true,col,row);
   place(el,state.player.x,state.player.y);el.querySelector(".actorHpDom").style.display="none";el.querySelector(".actorStatusDom").innerHTML="";
  }
  for(const e of state.enemies||[]){
   const kvis=key(e.x,e.y);if(!inView(e.x,e.y)||!state.visible[kvis]||e.hp<=0)continue;
-  const k=actorDomKey(e),el=ensureActorDom(k,`enemy ${e.type||"warden"}`),face=el.querySelector(".actorFace"),col=ENEMY64_COLS[e.type]!==undefined?ENEMY64_COLS[e.type]:ENEMY64_COLS.warden;seen.add(k);el.style.display="block";el.dataset.shown="1";setActorFrame(face,false,col,0);place(el,e.x,e.y);
+  const k=actorDomKey(e),el=ensureActorDom(k,`enemy ${e.type||"warden"}`),face=el.querySelector(".actorFace"),col=ENEMY64_COLS[e.type]!==undefined?ENEMY64_COLS[e.type]:ENEMY64_COLS.warden;seen.add(k);size(el);el.style.display="block";el.dataset.shown="1";setActorFrame(face,false,col,0);place(el,e.x,e.y);
   const eliteTag=`${!!e.elite}:${!!e.boss}`;if(el.dataset.eliteTag!==eliteTag){el.dataset.eliteTag=eliteTag;el.classList.toggle("elite",!!e.elite);el.classList.toggle("boss",!!e.boss);el.style.setProperty("--actor-accent",actorAccentCss(e))}
   const hpRatio=clamp(e.hp/e.maxHp,0,1).toFixed(3);if(el.dataset.hp!==hpRatio){el.dataset.hp=hpRatio;el.querySelector(".actorHpDom>i").style.transform=`scaleX(${hpRatio})`}
   const tagKey=`${e.status?.burning>0?1:0}${e.status?.poison>0?1:0}${e.status?.frozen>0?1:0}${(e.alert||0)>0&&!e.intent?1:0}`;if(el.dataset.tags!==tagKey){el.dataset.tags=tagKey;const tags=[];if(e.status?.burning>0)tags.push('<i class="burn"></i>');if(e.status?.poison>0)tags.push('<i class="poison"></i>');if(e.status?.frozen>0)tags.push('<i class="frozen"></i>');if((e.alert||0)>0&&!e.intent)tags.push('<i class="alert"></i>');el.querySelector(".actorStatusDom").innerHTML=tags.join("")}
  }
  for(const [k,el] of ACTOR_DOM_CACHE){if(!seen.has(k)){el.dataset.shown="0";el.style.display="none"}}
+ ACTOR_DOM_HEALTHY=actorDomRendererHealthy();
+ actorLayer.style.visibility=ACTOR_DOM_HEALTHY?"visible":"hidden";
 }
-function clearActorLayer(){for(const el of ACTOR_DOM_CACHE.values())el.remove();ACTOR_DOM_CACHE.clear();actorLayerW=actorLayerH=0}
+function clearActorLayer(){for(const el of ACTOR_DOM_CACHE.values())el.remove();ACTOR_DOM_CACHE.clear();actorLayerW=actorLayerH=0;ACTOR_DOM_HEALTHY=false;if(actorLayer)actorLayer.style.visibility="visible"}
 const GLOW_TEXTURE_CACHE=new Map();
 function cachedGlowTexture(keyName,stops){
  if(GLOW_TEXTURE_CACHE.has(keyName))return GLOW_TEXTURE_CACHE.get(keyName);const c=document.createElement("canvas");c.width=c.height=192;const g=c.getContext("2d");const r=g.createRadialGradient(96,96,3,96,96,94);for(const [p,c0] of stops)r.addColorStop(p,c0);g.fillStyle=r;g.fillRect(0,0,192,192);GLOW_TEXTURE_CACHE.set(keyName,c);return c
@@ -25425,7 +25456,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.38.1",
+  version:"4.38.2",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -29203,9 +29234,15 @@ function drawCachedChamberTerrain(cam){syncChamberTerrainLayer(cam);syncChamberP
  const neighborKnown=(x,y)=>[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>{const nx=x+dx,ny=y+dy;return inside(nx,ny)&&tile(nx,ny)===1&&(state.visible[key(nx,ny)]||state.visited[key(nx,ny)])});
  for(let vy=0;vy<VIEW_ROWS;vy++)for(let vx=0;vx<VIEW_COLS;vx++){
   const x=cam.x+vx,y=cam.y+vy,k=key(x,y),px=vx*TILE,py=vy*TILE,isWall=tile(x,y)===0;
-  if(!state.visited[k]){ctx.fillStyle=isWall&&neighborKnown(x,y)?"rgba(2,3,7,.18)":"rgba(2,3,7,.62)";ctx.fillRect(px,py,TILE,TILE)}
-  else if(!state.visible[k]){ctx.fillStyle=isWall?"rgba(3,4,8,.18)":"rgba(3,4,8,.39)";ctx.fillRect(px,py,TILE,TILE)}
+  if(!state.visited[k]){ctx.fillStyle=isWall&&neighborKnown(x,y)?"rgba(2,3,7,.08)":"rgba(2,3,7,.62)";ctx.fillRect(px,py,TILE,TILE)}
+  else if(!state.visible[k]){ctx.fillStyle=isWall?"rgba(3,4,8,.08)":"rgba(3,4,8,.39)";ctx.fillRect(px,py,TILE,TILE)}
+  if(isWall&&neighborKnown(x,y)){ctx.strokeStyle="rgba(126,154,163,.11)";ctx.lineWidth=1;ctx.strokeRect(px+.5,py+.5,TILE-1,TILE-1)}
  }
+}
+function drawChamberActorsCanvasFallback(cam,t,sx,sy,inView){
+ if(!CHAMBER_MODE||ACTOR_DOM_HEALTHY)return;
+ for(const e of state.enemies||[]){if(e.hp<=0||!inView(e.x,e.y)||!state.visible[key(e.x,e.y)])continue;const x=sx(e.x),y=sy(e.y);drawEnemySprite64(e,x,y,t);const pad=8,h=5;ctx.fillStyle="#25080d";ctx.fillRect(x+pad,y+4,TILE-pad*2,h);ctx.fillStyle="#cf5163";ctx.fillRect(x+pad,y+4,(TILE-pad*2)*clamp(e.hp/e.maxHp,0,1),h)}
+ if(inView(state.player.x,state.player.y)){const visualPos=currentHeroVisualWorld(),x=(visualPos.x-cam.x)*TILE,y=(visualPos.y-cam.y)*TILE,hurt=(state.visual?.damageFrames||0)>0;drawActorGroundShadow(x,y,1,.30);drawHeroSprite64(x,y,hurt,t)}
 }
 function draw(){
  const cam=cameraOrigin();
@@ -29425,6 +29462,7 @@ function draw(){
   if(!CHAMBER_MODE){drawActorGroundShadow(x,y,1,.32);drawHeroSprite(x,y,hurt,t)}
  }
 
+ if(CHAMBER_MODE)drawChamberActorsCanvasFallback(cam,t,sx,sy,inView);
  drawVisualEffects(cam);
 
  if(state.visual?.flash>0&&state.visual.hitX!==null&&state.visual.hitY!==null&&inView(state.visual.hitX,state.visual.hitY)){
