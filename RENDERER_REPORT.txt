@@ -1,0 +1,23 @@
+v4.38 Renderer changes
+
+Persistent layers:
+1. terrainLayer: floor/wall/architecture; redraw only when chamber fingerprint changes.
+2. propLayer: stairs, traps, events, special props, environment props, remains and items; checked at 10 Hz and redrawn only on state changes.
+3. game canvas: telegraphs, fog, hazards, pressure, control progress and dynamic FX.
+4. actorLayer: hero/enemy sprites and enemy HP/status; GPU-friendly DOM transforms.
+
+Frame policy:
+- Enemy presence alone no longer forces 60 fps rendering.
+- Idle/combat baseline: ~30 fps Canvas.
+- Movement: ~45 fps Canvas.
+- Short attack/damage/impact windows: ~60 fps Canvas.
+- Actor CSS transitions remain compositor-driven between Canvas frames.
+
+Lighting:
+- Hero lantern, crystal, fire, gold and purple glow textures are generated once and reused.
+- Chamber depth and darkness overlays use cached textures where practical.
+
+Validation:
+- JavaScript syntax checked with Node.js --check: PASS.
+- Required layer IDs and embedded assets verified statically.
+- Browser automation is unavailable in this container environment, so final iPhone runtime performance must be verified on device.

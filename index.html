@@ -6045,7 +6045,7 @@ header .ver{font-family:Georgia,serif;color:#9ec8d2!important}
 
 
 
-/* v4.37 OPTIMIZED 128 ART — 128px sources / 96px render footprint / cached chamber terrain */
+/* v4.38 GPU LAYERED RENDERER — persistent terrain/prop layers + GPU DOM actors */
 :root{--art-cyan:#79e0f5;--art-amber:#ffc66f;--art-red:#ef6174}
 #game{filter:contrast(1.075) saturate(1.095) brightness(1.005)!important}
 #gameWrap{box-shadow:0 0 0 1px #030305,0 0 0 3px rgba(186,143,76,.16),0 20px 54px rgba(0,0,0,.68),inset 0 0 44px rgba(63,157,188,.055)!important}
@@ -6094,11 +6094,33 @@ header .ver{font-family:Georgia,serif;color:#9ec8d2!important}
  .chamberTopHud{width:460px;height:32px;top:8px}.chamberHudChip{font-size:9px}.chamberHudChip i{font-size:11px}
 }
 
+
+/* v4.38 layered renderer */
+#terrainLayer,#propLayer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:block}
+#terrainLayer{z-index:0;background:#050407}
+#propLayer{z-index:1;background:transparent}
+#game{position:relative;z-index:2;background:transparent!important}
+#actorLayer{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;contain:layout paint style;transform:translateZ(0)}
+.actorEntity{position:absolute;left:0;top:0;pointer-events:none;will-change:transform;contain:layout paint style;transition:transform 128ms cubic-bezier(.2,.72,.25,1);transform:translate3d(0,0,0)}
+.actorEntity.noTransition{transition:none!important}
+.actorFace{position:absolute;inset:0;background-repeat:no-repeat;image-rendering:auto;filter:contrast(1.035) saturate(1.055);transform-origin:50% 70%;will-change:background-position,transform}
+.actorEntity.enemy .actorFace{filter:contrast(1.045) saturate(1.07)}
+.actorEntity.warg .actorFace,.actorEntity.charger .actorFace{transform:scale(1.08)}
+.actorEntity.warden .actorFace{transform:scale(1.08)}
+.actorHpDom{position:absolute;left:12%;right:12%;top:4%;height:4px;border:1px solid rgba(0,0,0,.72);background:#25080d;box-shadow:0 1px 4px rgba(0,0,0,.65);overflow:hidden}
+.actorHpDom>i{display:block;height:100%;background:#cf5163;transform-origin:left center}
+.actorStatusDom{position:absolute;left:13%;top:12%;display:flex;gap:3px}
+.actorStatusDom i{display:block;width:5px;height:5px;border-radius:1px;box-shadow:0 0 3px #000}
+.actorStatusDom .burn{background:#ff7a3d}.actorStatusDom .poison{background:#79c76b}.actorStatusDom .frozen{background:#86d4ff}.actorStatusDom .alert{background:#f0d36b}
+.actorEliteRing{position:absolute;inset:8%;border:2px solid var(--actor-accent,#efd36e);opacity:.52;display:none;box-shadow:0 0 7px color-mix(in srgb,var(--actor-accent,#efd36e) 35%,transparent)}
+.actorEntity.elite .actorEliteRing,.actorEntity.boss .actorEliteRing{display:block}
+@media(max-width:600px){.actorHpDom{height:3px}.actorStatusDom i{width:4px;height:4px}}
+
 </style>
 </head>
 <body>
 <div id="app">
-<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.37 OPTIMIZED 128 ART</span></header>
+<header><div><h1>深淵樹迷宮 <small>ABYSSAL ROOTS</small></h1></div><span class="ver">正式版 4.38 GPU LAYERED RENDERER</span></header>
 <section id="stats"></section>
 <section id="hero"></section>
 <div id="gameWrap">
@@ -6107,7 +6129,10 @@ header .ver{font-family:Georgia,serif;color:#9ec8d2!important}
   <span class="chamberHudChip control"><b>CONTROL</b><i id="chamberHudControl">0/3</i></span>
   <span class="chamberHudChip pressure" id="chamberHudPressureChip"><b>PRESSURE</b><i id="chamberHudPressure">STABLE</i></span>
 </div>
+<canvas id="terrainLayer" width="864" height="1248" aria-hidden="true"></canvas>
+<canvas id="propLayer" width="864" height="1248" aria-hidden="true"></canvas>
 <canvas id="game" width="864" height="1248" aria-label="ダンジョン"></canvas>
+<div id="actorLayer" aria-hidden="true"></div>
 <div id="impactOverlay" aria-hidden="true"></div>
 <div id="combatToast" aria-live="polite"></div>
 <div class="floorGoal" id="floorGoal"><b>探索目標</b><br>深淵へ踏み出す。</div>
@@ -6985,18 +7010,25 @@ const DISPLAY_W=Math.round(CANVAS_W*PIXEL_DENSITY),DISPLAY_H=Math.round(CANVAS_H
 // A single render scale is enough for the responsive iPhone layout and avoids multi-million-pixel framebuffers.
 const RENDER_SCALE=1;
 const canvas=document.getElementById("game");
-let ctx=canvas.getContext("2d",{alpha:false,desynchronized:true});
-canvas.width=DISPLAY_W;
-canvas.height=DISPLAY_H;
-canvas.style.aspectRatio=`${CANVAS_W}/${CANVAS_H}`;
-ctx.imageSmoothingEnabled=true;
-ctx.imageSmoothingQuality="high";
-ctx.setTransform(PIXEL_DENSITY,0,0,PIXEL_DENSITY,0,0);
+const terrainLayer=document.getElementById("terrainLayer");
+const propLayer=document.getElementById("propLayer");
+const actorLayer=document.getElementById("actorLayer");
+let ctx=canvas.getContext("2d",{alpha:true,desynchronized:true});
+const terrainLayerCtx=terrainLayer.getContext("2d",{alpha:false,desynchronized:true});
+const propLayerCtx=propLayer.getContext("2d",{alpha:true,desynchronized:true});
+for(const layer of [canvas,terrainLayer,propLayer]){layer.width=DISPLAY_W;layer.height=DISPLAY_H;layer.style.aspectRatio=`${CANVAS_W}/${CANVAS_H}`}
+ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.setTransform(PIXEL_DENSITY,0,0,PIXEL_DENSITY,0,0);
+terrainLayerCtx.imageSmoothingEnabled=true;terrainLayerCtx.imageSmoothingQuality="high";terrainLayerCtx.setTransform(PIXEL_DENSITY,0,0,PIXEL_DENSITY,0,0);
+propLayerCtx.imageSmoothingEnabled=true;propLayerCtx.imageSmoothingQuality="high";propLayerCtx.setTransform(PIXEL_DENSITY,0,0,PIXEL_DENSITY,0,0);
 const CHAMBER_STATIC_CANVAS=document.createElement("canvas");
 CHAMBER_STATIC_CANVAS.width=CANVAS_W;CHAMBER_STATIC_CANVAS.height=CANVAS_H;
 const CHAMBER_STATIC_CTX=CHAMBER_STATIC_CANVAS.getContext("2d",{alpha:false});
 CHAMBER_STATIC_CTX.imageSmoothingEnabled=true;CHAMBER_STATIC_CTX.imageSmoothingQuality="high";
-let chamberStaticCacheKey="";
+const CHAMBER_PROP_CANVAS=document.createElement("canvas");
+CHAMBER_PROP_CANVAS.width=CANVAS_W;CHAMBER_PROP_CANVAS.height=CANVAS_H;
+const CHAMBER_PROP_CTX=CHAMBER_PROP_CANVAS.getContext("2d",{alpha:true});
+CHAMBER_PROP_CTX.imageSmoothingEnabled=true;CHAMBER_PROP_CTX.imageSmoothingQuality="high";
+let chamberStaticCacheKey="",chamberTerrainLayerKey="",chamberPropCacheKey="",chamberPropLayerKey="",lastPropLayerCheckAt=0;
 const VISUAL_QUALITY_KEY="abyssal-roots-visual-quality";
 const VISUAL_QUALITY_PROFILES={
  low:{microDetail:false,motes:6,foregroundDepth:false,lightBounce:false},
@@ -7028,6 +7060,61 @@ for(const [k,src] of Object.entries(GOTHIC_PROP_ASSETS)){const img=new Image();i
 function propReady(name){const img=GOTHIC_PROPS[name];return !!(img&&img.complete&&img.naturalWidth)}
 function drawPropImage(name,dx,dy,dw,dh,alpha=1){const img=GOTHIC_PROPS[name];if(!propReady(name))return false;ctx.save();ctx.imageSmoothingEnabled=true;ctx.globalAlpha=alpha;ctx.drawImage(img,dx,dy,dw,dh);ctx.restore();return true}
 const $=id=>document.getElementById(id);
+
+const ACTOR_DOM_CACHE=new Map();
+let actorLayerW=0,actorLayerH=0;
+function actorDomKey(enemy){return enemy?`enemy:${enemy.id||enemy.type+":"+enemy.x+":"+enemy.y}`:"hero"}
+function actorAccentCss(e){return typeof enemyAccent64==="function"?enemyAccent64(e):"#efd36e"}
+function ensureActorDom(key,type="hero"){
+ let el=ACTOR_DOM_CACHE.get(key);if(el)return el;
+ el=document.createElement("div");el.className=`actorEntity ${type}`;el.dataset.actorKey=key;
+ el.innerHTML='<div class="actorFace"></div><div class="actorHpDom"><i></i></div><div class="actorStatusDom"></div><div class="actorEliteRing"></div>';
+ actorLayer.appendChild(el);ACTOR_DOM_CACHE.set(key,el);return el;
+}
+function setActorFrame(face,isHero,col,row=0){
+ const tag=`${isHero?"h":"e"}:${col}:${row}`;if(face.dataset.frame===tag)return;face.dataset.frame=tag;
+ if(isHero){face.style.backgroundImage=`url("${HERO64_SHEET.src}")`;face.style.backgroundSize="400% 400%";face.style.backgroundPosition=`${col*(100/3)}% ${row*(100/3)}%`}
+ else{face.style.backgroundImage=`url("${ENEMY64_SHEET.src}")`;face.style.backgroundSize="800% 100%";face.style.backgroundPosition=`${col*(100/7)}% 0%`}
+}
+function heroDomRow(){const v=state?.visual||{};if((v.damageFrames||0)>0)return HERO64_STATE_ROWS.hurt;if((v.attackFrames||0)>0)return HERO64_STATE_ROWS.attack;if((v.moveFrames||0)>0)return HERO64_STATE_ROWS.walk;return HERO64_STATE_ROWS.idle}
+function applyActorLayerMetrics(w,h){if(!w||!h||w===actorLayerW&&h===actorLayerH)return;actorLayerW=w;actorLayerH=h;for(const el of ACTOR_DOM_CACHE.values()){el.style.width=`${w/VIEW_COLS}px`;el.style.height=`${h/VIEW_ROWS}px`;el.classList.add("noTransition");requestAnimationFrame(()=>el.classList.remove("noTransition"))}}
+if(window.ResizeObserver&&actorLayer){new ResizeObserver(entries=>{const r=entries[0]?.contentRect;if(r)applyActorLayerMetrics(r.width,r.height)}).observe(actorLayer)}
+function actorLayerMetrics(){if(actorLayerW>0&&actorLayerH>0)return{w:actorLayerW,h:actorLayerH};const r=canvas.getBoundingClientRect();applyActorLayerMetrics(r.width||CANVAS_W,r.height||CANVAS_H);return{w:actorLayerW||CANVAS_W,h:actorLayerH||CANVAS_H}}
+function syncActorLayer(){
+ if(!CHAMBER_MODE||!state||!actorLayer)return;
+ const cam=cameraOrigin(),m=actorLayerMetrics(),cellW=m.w/VIEW_COLS,cellH=m.h/VIEW_ROWS,seen=new Set();
+ const place=(el,gx,gy)=>{const x=(gx-cam.x)*cellW,y=(gy-cam.y)*cellH,tf=`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0)`;if(el.dataset.tf!==tf){el.dataset.tf=tf;el.style.transform=tf}};
+ const inView=(x,y)=>x>=cam.x&&x<cam.x+VIEW_COLS&&y>=cam.y&&y<cam.y+VIEW_ROWS;
+ if(inView(state.player.x,state.player.y)){
+  const key="hero",el=ensureActorDom(key,"hero"),face=el.querySelector(".actorFace"),dir=chamberActorDirection(),col=HERO64_DIR_COLS[dir]??0,row=heroDomRow();seen.add(key);if(el.dataset.shown!=="1"){el.dataset.shown="1";el.style.display="block"}setActorFrame(face,true,col,row);place(el,state.player.x,state.player.y);el.querySelector(".actorHpDom").style.display="none";el.querySelector(".actorStatusDom").innerHTML="";
+ }
+ for(const e of state.enemies||[]){
+  const kvis=key(e.x,e.y);if(!inView(e.x,e.y)||!state.visible[kvis]||e.hp<=0)continue;
+  const k=actorDomKey(e),el=ensureActorDom(k,`enemy ${e.type||"warden"}`),face=el.querySelector(".actorFace"),col=ENEMY64_COLS[e.type]!==undefined?ENEMY64_COLS[e.type]:ENEMY64_COLS.warden;seen.add(k);if(el.dataset.shown!=="1"){el.dataset.shown="1";el.style.display="block"}setActorFrame(face,false,col,0);place(el,e.x,e.y);
+  const eliteTag=`${!!e.elite}:${!!e.boss}`;if(el.dataset.eliteTag!==eliteTag){el.dataset.eliteTag=eliteTag;el.classList.toggle("elite",!!e.elite);el.classList.toggle("boss",!!e.boss);el.style.setProperty("--actor-accent",actorAccentCss(e))}
+  const hpRatio=clamp(e.hp/e.maxHp,0,1).toFixed(3);if(el.dataset.hp!==hpRatio){el.dataset.hp=hpRatio;el.querySelector(".actorHpDom>i").style.transform=`scaleX(${hpRatio})`}
+  const tagKey=`${e.status?.burning>0?1:0}${e.status?.poison>0?1:0}${e.status?.frozen>0?1:0}${(e.alert||0)>0&&!e.intent?1:0}`;if(el.dataset.tags!==tagKey){el.dataset.tags=tagKey;const tags=[];if(e.status?.burning>0)tags.push('<i class="burn"></i>');if(e.status?.poison>0)tags.push('<i class="poison"></i>');if(e.status?.frozen>0)tags.push('<i class="frozen"></i>');if((e.alert||0)>0&&!e.intent)tags.push('<i class="alert"></i>');el.querySelector(".actorStatusDom").innerHTML=tags.join("")}
+ }
+ for(const [k,el] of ACTOR_DOM_CACHE){if(!seen.has(k)&&el.dataset.shown!=="0"){el.dataset.shown="0";el.style.display="none"}}
+}
+function clearActorLayer(){for(const el of ACTOR_DOM_CACHE.values())el.remove();ACTOR_DOM_CACHE.clear()}
+const GLOW_TEXTURE_CACHE=new Map();
+function cachedGlowTexture(keyName,stops){
+ if(GLOW_TEXTURE_CACHE.has(keyName))return GLOW_TEXTURE_CACHE.get(keyName);const c=document.createElement("canvas");c.width=c.height=192;const g=c.getContext("2d");const r=g.createRadialGradient(96,96,3,96,96,94);for(const [p,c0] of stops)r.addColorStop(p,c0);g.fillStyle=r;g.fillRect(0,0,192,192);GLOW_TEXTURE_CACHE.set(keyName,c);return c
+}
+const GLOW_PRESETS={
+ lantern:()=>cachedGlowTexture("lantern",[[0,"rgba(255,242,186,.34)"],[.34,"rgba(255,190,96,.17)"],[.76,"rgba(115,76,38,.05)"],[1,"rgba(0,0,0,0)"]]),
+ torch:()=>cachedGlowTexture("torch",[[0,"rgba(255,224,153,.35)"],[.35,"rgba(255,126,60,.17)"],[.76,"rgba(134,63,28,.05)"],[1,"rgba(0,0,0,0)"]]),
+ arcane:()=>cachedGlowTexture("arcane",[[0,"rgba(205,245,255,.34)"],[.35,"rgba(78,170,255,.18)"],[.76,"rgba(36,76,134,.05)"],[1,"rgba(0,0,0,0)"]]),
+ cyan:()=>cachedGlowTexture("cyan",[[0,"rgba(91,218,255,.28)"],[.4,"rgba(44,151,222,.13)"],[1,"rgba(0,0,0,0)"]]),
+ fire:()=>cachedGlowTexture("fire",[[0,"rgba(255,200,100,.31)"],[.42,"rgba(255,94,40,.14)"],[1,"rgba(0,0,0,0)"]]),
+ gold:()=>cachedGlowTexture("gold",[[0,"rgba(255,220,130,.25)"],[.45,"rgba(255,170,75,.10)"],[1,"rgba(0,0,0,0)"]]),
+ purple:()=>cachedGlowTexture("purple",[[0,"rgba(213,132,255,.25)"],[.45,"rgba(130,72,200,.11)"],[1,"rgba(0,0,0,0)"]])
+};
+function drawCachedGlowPreset(name,x,y,r,alpha=1){const tex=(GLOW_PRESETS[name]||GLOW_PRESETS.cyan)();ctx.save();ctx.globalCompositeOperation="screen";ctx.globalAlpha=alpha;ctx.drawImage(tex,x-r,y-r,r*2,r*2);ctx.restore()}
+const DARKNESS_TEXTURE=(()=>{const c=document.createElement("canvas");c.width=c.height=384;const g=c.getContext("2d"),r=g.createRadialGradient(192,192,20,192,192,190);r.addColorStop(0,"rgba(0,0,0,0)");r.addColorStop(.62,"rgba(8,9,14,.035)");r.addColorStop(1,"rgba(2,2,7,.48)");g.fillStyle=r;g.fillRect(0,0,384,384);return c})();
+function drawCachedDarkness(x,y,r){ctx.save();ctx.globalCompositeOperation="source-over";ctx.drawImage(DARKNESS_TEXTURE,x-r,y-r,r*2,r*2);ctx.restore()}
+const CHAMBER_DEPTH_TEXTURE=(()=>{const c=document.createElement("canvas");c.width=CANVAS_W;c.height=CANVAS_H;const g=c.getContext("2d");const shade=g.createRadialGradient(CANVAS_W*.5,CANVAS_H*.48,80,CANVAS_W*.5,CANVAS_H*.48,CANVAS_H*.62);shade.addColorStop(0,"rgba(0,0,0,0)");shade.addColorStop(.72,"rgba(5,6,10,.035)");shade.addColorStop(1,"rgba(8,5,15,.30)");g.fillStyle=shade;g.fillRect(0,0,CANVAS_W,CANVAS_H);const shaft=g.createLinearGradient(CANVAS_W*.22,0,CANVAS_W*.68,CANVAS_H);shaft.addColorStop(0,"rgba(64,142,193,.035)");shaft.addColorStop(.48,"rgba(40,93,147,.018)");shaft.addColorStop(1,"rgba(0,0,0,0)");g.globalCompositeOperation="screen";g.fillStyle=shaft;g.fillRect(0,0,CANVAS_W,CANVAS_H);return c})();
 const FLOOR_GOAL_EXPANDED_KEY="abyssal-roots-floor-goal-expanded";
 let floorGoalExpanded=false;
 try{floorGoalExpanded=localStorage.getItem(FLOOR_GOAL_EXPANDED_KEY)==="1"}catch(_){}
@@ -22655,14 +22742,16 @@ function drawVisualEffects(cam){
 let visualLoopErrorReported=false,lastVisualFrameAt=0;
 function visualHighMotion(){
  const v=state?.visual||{};
- return (v.moveFrames||0)>0||(v.attackFrames||0)>0||(v.damageFrames||0)>0||(v.shake||0)>0||(v.flash||0)>0||(v.effects||[]).length>0||realtimeCombatActive();
+ return (v.moveFrames||0)>0||(v.attackFrames||0)>0||(v.damageFrames||0)>0||(v.shake||0)>0||(v.flash||0)>0||(v.effects||[]).length>0;
 }
+function visualCriticalMotion(){const v=state?.visual||{};return (v.attackFrames||0)>0||(v.damageFrames||0)>0||(v.shake||0)>0||(v.flash||0)>0}
 function tickContinuousAnimation(now=performance.now()){
  try{
   if(state){
    tickRealtimeCombat(realtimeNow());
    updateVisualEffects();
-   const targetMs=visualHighMotion()?16.5:33;
+   syncActorLayer();
+   const targetMs=visualCriticalMotion()?16.5:visualHighMotion()?22.2:33.3;
    if(now-lastVisualFrameAt>=targetMs){draw();lastVisualFrameAt=now}
   }
   visualLoopErrorReported=false;
@@ -25305,7 +25394,7 @@ function runAbyssClientHealthCheck(context="runtime"){
  const snapshot={
   ok:missing.length===0&&missingFunctions.length===0,
   context,
-  version:"4.37",
+  version:"4.38",
   missing,
   missingFunctions,
   issueCount:issues.length,
@@ -28551,57 +28640,13 @@ function drawModernAtmosphere(t){
  ctx.restore();
 }
 function drawWorldRelicLights(sx,sy,inView,t){
- ctx.save();ctx.globalCompositeOperation="screen";
- const pulse=(Math.sin(t*.085)+1)*.5;
- const add=(gx,gy,color,radius)=>{
-  const grad=ctx.createRadialGradient(gx,gy,1,gx,gy,radius);
-  grad.addColorStop(0,color);grad.addColorStop(1,"rgba(0,0,0,0)");
-  ctx.fillStyle=grad;ctx.fillRect(gx-radius,gy-radius,radius*2,radius*2);
- };
-
- if(state?.stairs&&floorObjectiveComplete()&&inView(state.stairs.x,state.stairs.y)&&state.visible[key(state.stairs.x,state.stairs.y)]){
-  add(sx(state.stairs.x)+TILE/2,sy(state.stairs.y)+TILE/2,`rgba(255,211,117,${.10+.06*pulse})`,CHAMBER_MODE?54:28);
- }
-
- for(const tileData of state.specialTiles||[]){
-  if(tileData.used||!inView(tileData.x,tileData.y)||!state.visible[key(tileData.x,tileData.y)])continue;
-  const gx=sx(tileData.x)+TILE/2,gy=sy(tileData.y)+TILE/2;
-  if(tileData.type==="shrine")add(gx,gy,`rgba(255,221,130,${.11+.05*pulse})`,25);
-  else if(tileData.type==="treasure")add(gx,gy,`rgba(255,194,81,${.10+.05*pulse})`,23);
-  else if(tileData.type==="greed_chest"&&!tileData.sealed)add(gx,gy,`rgba(255,91,70,${.11+.06*pulse})`,25);
-  else if(tileData.type==="temptation_cache")add(gx,gy,`rgba(213,132,255,${.13+.07*pulse})`,29);
-  else if(tileData.type==="death_echo")add(gx,gy,`rgba(105,225,255,${.12+.06*pulse})`,28);
- }
-
- for(const item of state.items||[]){
-  if(!inView(item.x,item.y)||!state.visible[key(item.x,item.y)])continue;
-  const data=itemVisualGlow(item);if(!data)continue;
-  const color=item.type==="sealed_relic"
-   ?`rgba(190,120,255,${.08+.05*pulse})`
-   :item.type==="gear"&&(rarityOrder[item.gear?.rarity]||0)>=4
-    ?`rgba(255,210,103,${.08+.05*pulse})`
-    :`rgba(135,173,255,${.07+.04*pulse})`;
-  add(sx(item.x)+TILE/2,sy(item.y)+TILE/2,color,CHAMBER_MODE?Math.max(30,data.radius*2):data.radius+10);
- }
- ctx.restore();
+ const pulse=(Math.sin(t*.085)+1)*.5,add=(gx,gy,preset,radius,alpha)=>drawCachedGlowPreset(preset,gx,gy,radius,alpha);
+ if(state?.stairs&&floorObjectiveComplete()&&inView(state.stairs.x,state.stairs.y)&&state.visible[key(state.stairs.x,state.stairs.y)])add(sx(state.stairs.x)+TILE/2,sy(state.stairs.y)+TILE/2,"gold",CHAMBER_MODE?54:28,.62+.22*pulse);
+ for(const d of state.specialTiles||[]){if(d.used||!inView(d.x,d.y)||!state.visible[key(d.x,d.y)])continue;const gx=sx(d.x)+TILE/2,gy=sy(d.y)+TILE/2;if(d.type==="shrine"||d.type==="treasure")add(gx,gy,"gold",d.type==="shrine"?25:23,.56+.18*pulse);else if(d.type==="greed_chest"&&!d.sealed)add(gx,gy,"fire",25,.58+.20*pulse);else if(d.type==="temptation_cache")add(gx,gy,"purple",29,.62+.20*pulse);else if(d.type==="death_echo")add(gx,gy,"cyan",28,.60+.18*pulse)}
+ for(const item of state.items||[]){if(!inView(item.x,item.y)||!state.visible[key(item.x,item.y)])continue;const data=itemVisualGlow(item);if(!data)continue;const preset=item.type==="sealed_relic"?"purple":item.type==="gear"&&(rarityOrder[item.gear?.rarity]||0)>=4?"gold":"cyan";add(sx(item.x)+TILE/2,sy(item.y)+TILE/2,preset,CHAMBER_MODE?Math.max(30,data.radius*2):data.radius+10,.42+.16*pulse)}
 }
 function drawHeroLanternBloom(sx,sy,t){
- if(!state?.light?.on||state.light.fuel<=0)return;
- const type=state.light.type;
- const pulse=(Math.sin(t*.13)+1)*.5;
- const profile=type==="arcane"
-  ?{inner:`rgba(205,245,255,${.27+.04*pulse})`,mid:`rgba(78,170,255,${.14+.04*pulse})`,edge:'rgba(36,76,134,.05)'}
-  :type==="lantern"
-   ?{inner:`rgba(255,242,186,${.24+.04*pulse})`,mid:`rgba(255,190,96,${.12+.04*pulse})`,edge:'rgba(115,76,38,.045)'}
-   :{inner:`rgba(255,224,153,${.26+.05*pulse})`,mid:`rgba(255,126,60,${.13+.04*pulse})`,edge:'rgba(134,63,28,.05)'};
- const hp=CHAMBER_MODE&&typeof currentHeroVisualWorld==="function"?currentHeroVisualWorld():{x:state.player.x,y:state.player.y};
- const x=sx(hp.x)+TILE/2,y=sy(hp.y)+TILE/2;
- const radius=Math.max(42,visionRadius()*TILE*.43);
- ctx.save();ctx.globalCompositeOperation="screen";
- const glow=ctx.createRadialGradient(x,y,2,x,y,radius);
- glow.addColorStop(0,profile.inner);glow.addColorStop(.32,profile.mid);glow.addColorStop(.75,profile.edge);glow.addColorStop(1,"rgba(0,0,0,0)");
- ctx.fillStyle=glow;ctx.fillRect(x-radius,y-radius,radius*2,radius*2);
- ctx.restore();
+ if(!state?.light?.on||state.light.fuel<=0)return;const hp=CHAMBER_MODE&&typeof currentHeroVisualWorld==="function"?currentHeroVisualWorld():{x:state.player.x,y:state.player.y};const x=sx(hp.x)+TILE/2,y=sy(hp.y)+TILE/2,radius=Math.max(42,visionRadius()*TILE*.43),pulse=(Math.sin(t*.13)+1)*.5;drawCachedGlowPreset(state.light.type==="arcane"?"arcane":state.light.type==="lantern"?"lantern":"torch",x,y,radius,.90+.10*pulse)
 }
 function chamberPalette64(){
  const biome=currentBiomeKey();
@@ -28741,23 +28786,8 @@ function chamberCrystalLightPoints64(){
  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)if(chamberDecorCrystal64(x,y))pts.push({x:x*TILE+32,y:y*TILE+30});
  return pts.slice(0,10);
 }
-function drawChamberAmbientLight64(t){
- if(!CHAMBER_MODE)return;
- const pulse=(Math.sin(t*.10)+1)*.5;
- ctx.save();ctx.globalCompositeOperation="screen";
- for(const pt of chamberCrystalLightPoints64()){
-  const r=52+pulse*7,g=ctx.createRadialGradient(pt.x,pt.y,3,pt.x,pt.y,r);g.addColorStop(0,`rgba(91,218,255,${.19+.06*pulse})`);g.addColorStop(.35,`rgba(44,151,222,${.10+.03*pulse})`);g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(pt.x-r,pt.y-r,r*2,r*2);
- }
- for(const h of state.chamberHazards||[]){if(h.type!=="fire")continue;const cx=h.x*TILE+32,cy=h.y*TILE+34,r=54;const g=ctx.createRadialGradient(cx,cy,4,cx,cy,r);g.addColorStop(0,`rgba(255,183,82,${.20+.07*pulse})`);g.addColorStop(.4,`rgba(255,88,39,${.09+.04*pulse})`);g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(cx-r,cy-r,r*2,r*2)}
- ctx.restore();
-}
-function drawChamberDepthOverlay64(t){
- if(!CHAMBER_MODE)return;
- ctx.save();
- ctx.globalCompositeOperation="multiply";const shade=ctx.createRadialGradient(CANVAS_W*.5,CANVAS_H*.48,80,CANVAS_W*.5,CANVAS_H*.48,CANVAS_H*.62);shade.addColorStop(0,"rgba(255,255,255,1)");shade.addColorStop(.72,"rgba(190,197,210,.94)");shade.addColorStop(1,"rgba(21,18,29,.62)");ctx.fillStyle=shade;ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
- ctx.globalCompositeOperation="screen";const shaft=ctx.createLinearGradient(CANVAS_W*.22,0,CANVAS_W*.68,CANVAS_H);shaft.addColorStop(0,"rgba(64,142,193,.035)");shaft.addColorStop(.48,"rgba(40,93,147,.018)");shaft.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=shaft;ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
- ctx.restore();
-}
+function drawChamberAmbientLight64(t){if(!CHAMBER_MODE)return;const pulse=(Math.sin(t*.10)+1)*.5;for(const pt of chamberCrystalLightPoints64())drawCachedGlowPreset("cyan",pt.x,pt.y,52+pulse*7,.72+.16*pulse);for(const h of state.chamberHazards||[])if(h.type==="fire")drawCachedGlowPreset("fire",h.x*TILE+32,h.y*TILE+34,54,.78+.15*pulse)}
+function drawChamberDepthOverlay64(t){if(!CHAMBER_MODE)return;ctx.save();ctx.globalAlpha=.92;ctx.drawImage(CHAMBER_DEPTH_TEXTURE,0,0,CANVAS_W,CANVAS_H);ctx.restore()}
 
 function chamberActorDirection(){
  const dir=realtimeCombatRuntime?.lastDir||[0,1];
@@ -29112,27 +29142,43 @@ function rebuildChamberStaticTerrain(cam){
   }
   drawChamberArchitecture64(0);
  }finally{ctx=previousCtx}
- chamberStaticCacheKey=chamberStaticFingerprint();
+ chamberStaticCacheKey=chamberStaticFingerprint();chamberTerrainLayerKey="";
 }
-function drawCachedChamberTerrain(cam){
- const keyNow=chamberStaticFingerprint();
- if(keyNow!==chamberStaticCacheKey)rebuildChamberStaticTerrain(cam);
- ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.drawImage(CHAMBER_STATIC_CANVAS,0,0,CANVAS_W,CANVAS_H);ctx.restore();
- // Fog of war stays dynamic even though the expensive stonework is cached.
- for(let vy=0;vy<VIEW_ROWS;vy++)for(let vx=0;vx<VIEW_COLS;vx++){
-  const x=cam.x+vx,y=cam.y+vy,k=key(x,y),px=vx*TILE,py=vy*TILE;
-  if(!state.visited[k]){ctx.fillStyle="rgba(2,3,7,.70)";ctx.fillRect(px,py,TILE,TILE)}
-  else if(!state.visible[k]){ctx.fillStyle="rgba(3,4,8,.43)";ctx.fillRect(px,py,TILE,TILE)}
- }
+function syncChamberTerrainLayer(cam){
+ const keyNow=chamberStaticFingerprint();if(keyNow!==chamberStaticCacheKey)rebuildChamberStaticTerrain(cam);
+ if(chamberTerrainLayerKey===chamberStaticCacheKey)return;terrainLayerCtx.setTransform(1,0,0,1,0,0);terrainLayerCtx.fillStyle="#050407";terrainLayerCtx.fillRect(0,0,terrainLayer.width,terrainLayer.height);terrainLayerCtx.imageSmoothingEnabled=true;terrainLayerCtx.drawImage(CHAMBER_STATIC_CANVAS,0,0,terrainLayer.width,terrainLayer.height);terrainLayerCtx.setTransform(PIXEL_DENSITY,0,0,PIXEL_DENSITY,0,0);chamberTerrainLayerKey=chamberStaticCacheKey;
+}
+function chamberPropFingerprint(){
+ if(!CHAMBER_MODE||!state)return"";const visible=Object.keys(state.visible||{}).filter(k=>state.visible[k]).sort().join(",");
+ const items=(state.items||[]).map(i=>`${i.type}:${i.x}:${i.y}:${i.gear?.rarity||""}`).join("|");
+ const special=(state.specialTiles||[]).map(i=>`${i.type}:${i.x}:${i.y}:${!!i.used}:${!!i.sealed}`).join("|");
+ const env=(state.environment||[]).map(i=>`${i.type}:${i.x}:${i.y}:${!!i.active}:${!!i.burning}`).join("|");
+ const remains=(state.remains||[]).map(i=>`${i.x}:${i.y}`).join("|");const traps=(state.traps||[]).map(i=>`${i.x}:${i.y}:${!!i.revealed}:${!!i.spent}`).join("|");const events=(state.events||[]).map(i=>`${i.x}:${i.y}:${!!i.used}`).join("|");
+ return `${state.floor}|${state.stairs?.x},${state.stairs?.y}|${floorObjectiveComplete()}|${chamberSegmentCleared?.()||false}|${visible}|${items}|${special}|${env}|${remains}|${traps}|${events}`;
+}
+function rebuildChamberPropCache(cam){
+ const previousCtx=ctx;try{ctx=CHAMBER_PROP_CTX;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,CANVAS_W,CANVAS_H);const sx=x=>(x-cam.x)*TILE,sy=y=>(y-cam.y)*TILE,vis=(x,y)=>state.visible[key(x,y)];
+  if(state.stairs&&vis(state.stairs.x,state.stairs.y))drawStairsTile64(sx(state.stairs.x),sy(state.stairs.y),0);
+  for(const t0 of state.traps||[])if(t0.revealed&&!t0.spent&&vis(t0.x,t0.y))drawTrapTile64(sx(t0.x),sy(t0.y),0);
+  for(const ev of state.events||[])if(!ev.used&&vis(ev.x,ev.y))drawEventTileSprite64(sx(ev.x),sy(ev.y),0);
+  for(const d of state.specialTiles||[])if(vis(d.x,d.y))drawSpecialTileSprite64(d,sx(d.x),sy(d.y),0);
+  for(const o of state.environment||[])if(o.active&&vis(o.x,o.y))drawEnvironmentSprite64(o,sx(o.x),sy(o.y),0);
+  for(const r of state.remains||[])if(vis(r.x,r.y))drawRemainSprite64(r,sx(r.x),sy(r.y),0);
+  for(const i of state.items||[])if(vis(i.x,i.y))drawItemSprite64(i,sx(i.x),sy(i.y),0);
+ }finally{ctx=previousCtx}chamberPropCacheKey=chamberPropFingerprint();
+}
+function syncChamberPropLayer(cam){const now=performance.now();if(chamberPropLayerKey&&now-lastPropLayerCheckAt<100)return;lastPropLayerCheckAt=now;const keyNow=chamberPropFingerprint();if(keyNow!==chamberPropCacheKey)rebuildChamberPropCache(cam);if(chamberPropLayerKey===chamberPropCacheKey)return;propLayerCtx.setTransform(1,0,0,1,0,0);propLayerCtx.clearRect(0,0,propLayer.width,propLayer.height);propLayerCtx.imageSmoothingEnabled=true;propLayerCtx.drawImage(CHAMBER_PROP_CANVAS,0,0,propLayer.width,propLayer.height);propLayerCtx.setTransform(PIXEL_DENSITY,0,0,PIXEL_DENSITY,0,0);chamberPropLayerKey=chamberPropCacheKey}
+function drawCachedChamberTerrain(cam){syncChamberTerrainLayer(cam);syncChamberPropLayer(cam);
+ for(let vy=0;vy<VIEW_ROWS;vy++)for(let vx=0;vx<VIEW_COLS;vx++){const x=cam.x+vx,y=cam.y+vy,k=key(x,y),px=vx*TILE,py=vy*TILE;if(!state.visited[k]){ctx.fillStyle="rgba(2,3,7,.70)";ctx.fillRect(px,py,TILE,TILE)}else if(!state.visible[k]){ctx.fillStyle="rgba(3,4,8,.43)";ctx.fillRect(px,py,TILE,TILE)}}
 }
 function draw(){
  const cam=cameraOrigin();
  const t=(state.visual?.time||0);
  const shakeAmount=Math.min(3,state.visual?.shake||0);
  const shake=shakeAmount>0?((state.visual.time%2===0?1:-1)*shakeAmount):0;
- ctx.save();
- ctx.translate(shake,shake);
- ctx.fillStyle="#050407";ctx.fillRect(-8,-8,CANVAS_W+16,CANVAS_H+16);
+ ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.setTransform(PIXEL_DENSITY,0,0,PIXEL_DENSITY,0,0);
+ ctx.save();ctx.translate(shake,shake);
+ if(!CHAMBER_MODE){ctx.fillStyle="#050407";ctx.fillRect(-8,-8,CANVAS_W+16,CANVAS_H+16)}
 
  const sx=x=>(x-cam.x)*TILE,sy=y=>(y-cam.y)*TILE;
  const inView=(x,y)=>x>=cam.x&&x<cam.x+VIEW_COLS&&y>=cam.y&&y<cam.y+VIEW_ROWS;
@@ -29263,6 +29309,7 @@ function draw(){
   if(wardenVisual)drawWardenTelegraphInstruction(e,t,sx,sy,inView);
  }
 
+ if(!CHAMBER_MODE){
  if(state.visible[key(state.stairs.x,state.stairs.y)]){
   const x=sx(state.stairs.x),y=sy(state.stairs.y);
   (CHAMBER_MODE?drawStairsTile64:drawStairsTile)(x,y,t);
@@ -29308,6 +29355,9 @@ function draw(){
   (CHAMBER_MODE?drawItemSprite64:drawItemSprite)(i,x,y,t);
  }});
 
+ }
+
+ if(!CHAMBER_MODE){
  state.enemies.forEach(e=>{if(state.visible[key(e.x,e.y)]){
   const x=sx(e.x),y=sy(e.y);
   if(!CHAMBER_MODE)drawActorGroundShadow(x,y,e.boss?1.18:(e.type==="warg"||e.type==="charger"?1.08:.92),e.boss ? .34 : .25);
@@ -29324,6 +29374,7 @@ function draw(){
   if(counterWindowActive(e)){ctx.strokeStyle="#f3d06b";ctx.lineWidth=CHAMBER_MODE?3:1;ctx.strokeRect(x+3,y+3,TILE-6,TILE-6);ctx.fillStyle="#ffe39b";ctx.fillRect(x+TILE-15,y+12,8,8)}
   ctx.fillStyle=factionData[e.faction]?.color||"#aaa";ctx.fillRect(x+hpPad,y+TILE-(CHAMBER_MODE?8:3),CHAMBER_MODE?10:4,CHAMBER_MODE?4:2);
  }});
+ }
 
  if(inView(state.player.x,state.player.y)){
   const visualPos=CHAMBER_MODE?currentHeroVisualWorld():{x:state.player.x,y:state.player.y};
@@ -29335,8 +29386,7 @@ function draw(){
    y+=state.visual.attackDy*(CHAMBER_MODE?11:5)*swing;
   }
   const hurt=(state.visual?.damageFrames||0)>0;
-  if(!CHAMBER_MODE)drawActorGroundShadow(x,y,1,.32);
-  (CHAMBER_MODE?drawHeroSprite64:drawHeroSprite)(x,y,hurt,t);
+  if(!CHAMBER_MODE){drawActorGroundShadow(x,y,1,.32);drawHeroSprite(x,y,hurt,t)}
  }
 
  drawVisualEffects(cam);
@@ -29351,23 +29401,11 @@ function draw(){
 
  // ミニマップは暗闇処理後に最前面へ描画する。
 
- // 動的ライティング：ドット絵の輪郭は保ち、光だけは現代的な滑らかな階調を重ねる。
- ctx.save();
- ctx.globalCompositeOperation="multiply";
- const lightPixels=CHAMBER_MODE
-  ?Math.max(CANVAS_W,CANVAS_H)*.92
-  :Math.max(46,visionRadius()*TILE*.82);
+ // 動的ライティング：重いグラデーション生成はキャッシュ済みテクスチャへ置換。
+ const lightPixels=CHAMBER_MODE?Math.max(CANVAS_W,CANVAS_H)*.92:Math.max(46,visionRadius()*TILE*.82);
  const heroLightPos=CHAMBER_MODE?currentHeroVisualWorld():{x:state.player.x,y:state.player.y};
  const heroLightX=(heroLightPos.x-cam.x)*TILE+TILE/2,heroLightY=(heroLightPos.y-cam.y)*TILE+TILE/2;
- const darkness=ctx.createRadialGradient(
-  heroLightX,heroLightY,CHAMBER_MODE?42:16,
-  heroLightX,heroLightY,lightPixels
- );
- darkness.addColorStop(0,"rgba(255,255,255,0)");
- darkness.addColorStop(CHAMBER_MODE?.62:.52,CHAMBER_MODE?"rgba(207,215,225,.035)":"rgba(214,207,220,.08)");
- darkness.addColorStop(1,CHAMBER_MODE?"rgba(4,5,10,.48)":"rgba(4,3,8,.78)");
- ctx.fillStyle=darkness;ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
- ctx.restore();
+ drawCachedDarkness(heroLightX,heroLightY,lightPixels);
 
  if(CHAMBER_MODE)drawChamberDepthOverlay64(t);
  drawLocalLightBounce(sx,sy,inView,t);
@@ -29375,19 +29413,8 @@ function draw(){
  drawHeroLanternBloom(sx,sy,t);
  if(CHAMBER_MODE)drawChamberAmbientLight64(t);
 
- ctx.save();
- ctx.globalCompositeOperation="screen";
  const pulse=(Math.sin(t*.09)+1)*.5;
- for(const o of state.environment){
-  if(!o.active||!o.burning||!inView(o.x,o.y))continue;
-  const lx=sx(o.x)+TILE/2,ly=sy(o.y)+TILE/2;
-  const glow=ctx.createRadialGradient(lx,ly,2,lx,ly,38+pulse*8);
-  glow.addColorStop(0,"rgba(255,210,90,.38)");
-  glow.addColorStop(.5,"rgba(255,100,40,.16)");
-  glow.addColorStop(1,"rgba(255,60,20,0)");
-  ctx.fillStyle=glow;ctx.fillRect(lx-50,ly-50,100,100);
- }
- ctx.restore();
+ for(const o of state.environment){if(!o.active||!o.burning||!inView(o.x,o.y))continue;drawCachedGlowPreset("fire",sx(o.x)+TILE/2,sy(o.y)+TILE/2,42+pulse*6,.72+.15*pulse)}
 
  drawForegroundDepth(t);
  if(CHAMBER_MODE)drawChamberStatus64();
@@ -29500,6 +29527,7 @@ function render(){
  safeRenderPart("goal",()=>renderFloorGoal());
  safeRenderPart("return",()=>renderReturnAccess());
  safeRenderPart("map",()=>draw());
+ safeRenderPart("actors",()=>syncActorLayer());
  safeRenderPart("audioButton",()=>renderAudioButton());
  safeRenderPart("music",()=>updateMusicScene());
  safeRenderPart("realtimePrototype",()=>updateRealtimePrototypeUi());
