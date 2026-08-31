@@ -1,0 +1,16 @@
+v4.40 SQUARE DUNGEON POLISH
+
+Renderer policy:
+- Logical grid: 9 x 13 / TILE 64
+- 128px source actor art retained
+- Persistent terrain / prop layers retained
+- DOM/GPU actor renderer retained
+- No new external assets required
+- Static square-grid props remain cached
+- Dynamic effects are limited to the FX layer
+
+Validation:
+- JavaScript syntax: PASS (node --check)
+- Patched renderer functions synthetic invocation: PASS
+- Page error during direct renderer-function validation: 0
+- Full localStorage boot cannot be reproduced in opaque set_content origin; real GitHub Pages origin is required for final device check.
